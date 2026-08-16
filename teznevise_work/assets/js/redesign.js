@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---- Mobile drawer (RTL: from the right) ----
   var toggle = document.querySelector('[data-menu-toggle]');
   var menu = document.querySelector('[data-mobile-menu]');
   var menuIcon = document.querySelector('[data-menu-icon]');
@@ -48,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // ---- FAQ: smooth open/close ----
   document.querySelectorAll('.faq-q').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var item = btn.closest('.faq-item');
@@ -67,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // ---- SEO smooth expand (fixed) ----
   document.querySelectorAll('[data-seo-toggle]').forEach(function (seoToggle) {
     var targetId = seoToggle.getAttribute('aria-controls');
     var seoMore = targetId ? document.getElementById(targetId) : null;
@@ -76,19 +73,16 @@ document.addEventListener('DOMContentLoaded', function () {
       if (seoMore) seoMore = seoMore.querySelector('.seo-more-content');
     }
     if (!seoMore) return;
-
     seoMore.hidden = false;
     seoMore.removeAttribute('hidden');
     seoMore.classList.remove('is-open');
     seoToggle.setAttribute('aria-expanded', 'false');
-
     seoToggle.addEventListener('click', function (e) {
       e.preventDefault();
       var isOpen = seoToggle.getAttribute('aria-expanded') === 'true';
       var next = !isOpen;
       seoToggle.setAttribute('aria-expanded', String(next));
       seoMore.classList.toggle('is-open', next);
-
       var label = seoToggle.querySelector('.seo-more-text');
       var mark = seoToggle.querySelector('.seo-more-mark');
       if (label) label.textContent = next ? 'مشاهده کمتر' : 'مشاهده بیشتر';
@@ -96,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // ---- Scroll reveal ----
   if (!prefersReduced && 'IntersectionObserver' in window) {
     var revealObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -115,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ---- Counters ----
   function animateValue(el, end, duration, suffix) {
     if (prefersReduced) {
       el.textContent = end + (suffix || '');
@@ -126,8 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function tick(now) {
       var progress = Math.min((now - startTime) / duration, 1);
       var eased = 1 - Math.pow(1 - progress, 3);
-      var value = Math.round(start + (end - start) * eased);
-      el.textContent = value + (suffix || '');
+      el.textContent = Math.round(start + (end - start) * eased) + (suffix || '');
       if (progress < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -148,4 +139,46 @@ document.addEventListener('DOMContentLoaded', function () {
       counterObs.observe(el);
     });
   }
+
+  // Desktop FAB
+  var fab = document.getElementById('tzFab');
+  var fabToggle = document.getElementById('tzFabToggle');
+  var fabMenu = document.getElementById('tzFabMenu');
+  if (fab && fabToggle && fabMenu) {
+    fabToggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      var open = fab.classList.toggle('is-open');
+      fabToggle.setAttribute('aria-expanded', String(open));
+      fabMenu.hidden = !open;
+      var icon = fabToggle.querySelector('[data-fab-icon]');
+      if (icon) icon.className = open ? 'fa-solid fa-xmark' : 'fa-regular fa-comments';
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && fab.classList.contains('is-open')) {
+        fab.classList.remove('is-open');
+        fabToggle.setAttribute('aria-expanded', 'false');
+        fabMenu.hidden = true;
+      }
+    });
+    document.addEventListener('click', function (e) {
+      if (fab.classList.contains('is-open') && !fab.contains(e.target)) {
+        fab.classList.remove('is-open');
+        fabToggle.setAttribute('aria-expanded', 'false');
+        fabMenu.hidden = true;
+      }
+    });
+  }
+
+  document.querySelectorAll('.mobile-nav-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var group = btn.closest('.mobile-nav-group');
+      if (!group) return;
+      var was = group.classList.contains('open');
+      document.querySelectorAll('.mobile-nav-group.open').forEach(function (g) {
+        if (g !== group) g.classList.remove('open');
+      });
+      group.classList.toggle('open', !was);
+      btn.setAttribute('aria-expanded', String(!was));
+    });
+  });
 });
