@@ -1,83 +1,493 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="fa"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<html dir="rtl" lang="fa"><head><meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://cdn.jsdelivr.net" rel="preconnect"/>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.rtl.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+<link href="assets/css/redesign.css" rel="stylesheet"/>
+<link href="assets/css/layout-refinements.css" rel="stylesheet"/>
+<link href="assets/css/motion.css" rel="stylesheet"/>
+<link href="assets/css/batch-fixes.css" rel="stylesheet"/>
+<link href="assets/css/ui-round2.css" rel="stylesheet"/>
+<link href="assets/img/logo.jpg" rel="icon" type="image/jpeg"/>
 <title>آموزش نگارش فصل اول پایان‌نامه: تبدیل پروپوزال به فصل اول | تزنویسه</title>
 <meta content="راهنمای گام‌به‌گام تبدیل پروپوزال به فصل اول پایان‌نامه." name="description"/>
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"/>
-<link href="assets/css/styles.css" rel="stylesheet"/><link href="assets/css/site-polish.css" rel="stylesheet"/>
-<link href="assets/css/layout-refinements.css" rel="stylesheet"/>
-<link href="assets/img/logo.jpg" rel="icon" type="image/jpeg"/>
+<style>
+.post-hero {
+  padding: 40px 0 28px;
+  background: linear-gradient(180deg, #f4f9f7 0%, #fff 100%);
+  text-align: center;
+}
+.post-hero h1 {
+  margin: 0 auto 12px;
+  max-width: 28ch;
+  font-size: clamp(26px, 3.6vw, 38px);
+  line-height: 1.4;
+  color: #172d26;
+  font-weight: 850;
+}
+.post-subheading {
+  margin: 0 auto 18px;
+  max-width: 52ch;
+  color: #7a8a84;
+  font-size: 16px;
+  line-height: 1.85;
+}
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 18px;
+  margin: 0 0 16px;
+  color: #5a6b64;
+  font-size: 13.5px;
+  font-weight: 650;
+}
+.post-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.post-meta i { color: #145D4A; opacity: 0.85; }
+.post-meta a { color: #145D4A; text-decoration: none; font-weight: 750; }
+.post-meta a:hover { text-decoration: underline; }
+.post-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #8a9892;
+}
+.post-breadcrumb a { color: #145D4A; text-decoration: none; }
+.post-breadcrumb a:hover { text-decoration: underline; }
+.post-breadcrumb .sep { opacity: 0.5; }
+.post-breadcrumb .current { color: #5a6b64; font-weight: 700; }
+
+.post-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 32px;
+  align-items: start;
+  padding: 28px 0 48px;
+}
+.post-main { min-width: 0; }
+.post-featured {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  background: #eef4f1;
+  aspect-ratio: 16 / 9;
+}
+.post-featured img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.article-body {
+  color: #2f3f38;
+  font-size: 15.5px;
+  line-height: 1.95;
+}
+.article-body h2 {
+  margin: 28px 0 12px;
+  font-size: 22px;
+  color: #172d26;
+  font-weight: 850;
+}
+.article-body p { margin: 0 0 14px; }
+.article-body a { color: #145D4A; font-weight: 700; }
+
+.post-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 96px;
+}
+.post-widget {
+  background: #fff;
+  border: 1px solid rgba(20, 93, 74, 0.12);
+  border-radius: 16px;
+  padding: 18px 16px;
+  box-shadow: 0 8px 24px rgba(9, 40, 32, 0.04);
+}
+.post-widget h4 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 850;
+  color: #172d26;
+}
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toc-list a {
+  text-decoration: none;
+  color: #4a5f56;
+  font-size: 13.5px;
+  font-weight: 650;
+}
+.toc-list a:hover { color: #145D4A; }
+.post-widget-cta {
+  background: linear-gradient(145deg, #145D4A, #0f4a3c);
+  color: #fff;
+  text-align: center;
+  border: none;
+}
+.post-widget-cta h4 { color: #fff; }
+.post-widget-cta p {
+  margin: 0 0 14px;
+  color: rgba(255,255,255,0.88);
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+.post-comments {
+  margin: 8px 0 40px;
+  padding: 28px 24px;
+  background: #fff;
+  border: 1px solid rgba(20, 93, 74, 0.12);
+  border-radius: 18px;
+}
+.post-comments h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  color: #172d26;
+}
+.post-comments > p {
+  margin: 0 0 18px;
+  color: #62736d;
+  font-size: 14px;
+}
+.comment-form .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.comment-form .field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #3d4f48;
+}
+.comment-form .field input,
+.comment-form .field textarea {
+  width: 100%;
+  border: 1px solid rgba(20, 93, 74, 0.18);
+  border-radius: 12px;
+  padding: 11px 12px;
+  font-family: inherit;
+  font-size: 14px;
+}
+.comment-form .field.full { grid-column: 1 / -1; }
+.comment-form .field textarea { min-height: 120px; resize: vertical; }
+.comment-list {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.comment-item {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #f6faf8;
+  border: 1px solid rgba(20, 93, 74, 0.08);
+}
+.comment-item strong { color: #172d26; }
+.comment-item .comment-date {
+  margin-inline-start: 8px;
+  color: #8a9892;
+  font-size: 12px;
+  font-weight: 600;
+}
+.comment-item p {
+  margin: 8px 0 0;
+  color: #3d4f48;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.related-posts {
+  padding: 8px 0 48px;
+}
+.related-posts h2 {
+  margin: 0 0 18px;
+  font-size: 22px;
+  color: #172d26;
+  text-align: center;
+}
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.related-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border: 1px solid rgba(20, 93, 74, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.related-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(9, 40, 32, 0.08);
+}
+.related-card .thumb {
+  aspect-ratio: 16 / 10;
+  background: #e8f0ec;
+  display: grid;
+  place-items: center;
+  color: #145D4A;
+  font-size: 28px;
+}
+.related-card .body {
+  padding: 14px 14px 16px;
+}
+.related-card .cat {
+  font-size: 12px;
+  font-weight: 800;
+  color: #145D4A;
+  margin-bottom: 6px;
+}
+.related-card h3 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #172d26;
+  font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .post-layout {
+    grid-template-columns: 1fr;
+  }
+  .post-sidebar { position: static; }
+  .related-grid { grid-template-columns: 1fr; }
+  .comment-form .form-grid { grid-template-columns: 1fr; }
+}
+</style>
 </head><body>
-<header class="site-header">
-<div class="top-bar"><div class="container">
-<div class="top-bar-contact"><a href="tel:+989302822091">۰۹۳۰۲۸۲۲۰۹۱</a></div>
-<div class="top-bar-links"><a href="privacy.html">حریم خصوصی</a><a href="team.html">نظرات مشتریان</a></div>
-</div></div>
-<div class="container"><nav class="nav-wrapper" aria-label="منوی اصلی">
-<a class="site-logo" href="index.html"><img alt="تزنویسه" src="assets/img/logo.jpg"/></a>
-<ul class="nav-menu" role="list">
-<li><a class="nav-link" href="index.html">خانه</a></li>
-<li><a class="nav-link" href="service-thesis.html">پایان‌نامه</a></li>
-<li><a class="nav-link" href="service-proposal.html">پروپوزال</a></li>
-<li><a class="nav-link" href="service-statistics.html">تحلیل آماری</a></li>
-<li><a class="nav-link" href="tools.html">ابزارها</a></li>
-<li><a class="nav-link active" href="blog.html">بلاگ</a></li>
-</ul>
-<div class="nav-actions"><button aria-label="منو" class="menu-toggle"><svg><use href="#icon-menu"></use></svg></button></div>
-</nav></div>
+<header class="site-header-new">
+<div class="announcement">
+  <div class="announcement-inner">
+    <div class="announcement-items">
+      <span class="announce-pill"><i class="fa-solid fa-phone"></i> <strong>۰۹۳۰۲۸۲۲۰۹۱</strong></span>
+      <span class="announce-pill announce-desktop"><i class="fa-regular fa-clock"></i> شنبه تا پنجشنبه، ۹ تا ۲۱</span>
+      <span class="announce-pill announce-desktop"><i class="fa-solid fa-lock"></i> مشاوره محرمانه و تخصصی</span>
+    </div>
+    <div class="utility-links announce-desktop" aria-label="لینک‌های راهنما">
+      <a href="privacy.html">حریم خصوصی</a>
+      <a href="team.html">نظرات مشتریان</a>
+      <a href="privacy.html">بازگشت هزینه</a>
+    </div>
+  </div>
+</div>
+<nav aria-label="منوی اصلی" class="main-nav">
+  <a class="brand" href="index.html"><img alt="تزنویسه" src="assets/img/logo.jpg"/></a>
+  <ul class="nav-links">
+    <li><a href="index.html">خانه</a></li>
+    <li>
+      <a href="service-thesis.html">خدمات <i class="fa-solid fa-chevron-down nav-chevron"></i></a>
+      <ul class="nav-dropdown">
+        <li><a href="service-thesis.html">پایان‌نامه</a></li>
+        <li><a href="service-proposal.html">پروپوزال</a></li>
+        <li><a href="service-statistics.html">تحلیل آماری</a></li>
+        <li><a href="service-simulation.html">شبیه‌سازی</a></li>
+      </ul>
+    </li>
+    <li><a href="tools.html">ابزارها</a></li>
+    <li><a href="blog.html">بلاگ</a></li>
+    <li><a href="about.html">درباره ما</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button type="button" class="nav-search-btn" aria-label="جستجو" data-search-open><i class="fa-solid fa-magnifying-glass"></i></button>
+    <div class="nav-quick-actions desktop-cta-group">
+      <a class="nav-cta nav-cta-outline" href="about.html"><i class="fa-regular fa-circle-question"></i><span>درباره ما</span></a>
+      <a class="nav-cta nav-cta-solid" href="inquiry.html"><i class="fa-solid fa-pen-to-square"></i><span>ثبت درخواست</span></a>
+    </div>
+  </div>
+  <button aria-label="باز کردن منو" aria-expanded="false" class="menu-btn" data-menu-toggle type="button"><i class="fa-solid fa-bars" data-menu-icon></i></button>
+</nav>
 </header>
-<div class="mobile-nav" role="dialog"><div class="mobile-nav-panel">
-<div class="mobile-nav-header"><img alt="تزنویسه" src="assets/img/logo.jpg" style="height:36px"/><button class="icon-btn mobile-nav-close" aria-label="بستن"><svg><use href="#icon-close"></use></svg></button></div>
-<div class="mobile-nav-links">
-<a class="mobile-nav-link" href="index.html">خانه</a>
-<a class="mobile-nav-link" href="blog.html">بلاگ</a>
-<a class="mobile-nav-link" href="tools.html">ابزارها</a>
-<a class="mobile-nav-link" href="contact.html">تماس</a>
-</div></div></div>
+<div aria-label="منوی موبایل" class="mobile-nav" data-mobile-menu role="dialog">
+  <div class="mobile-nav-panel">
+    <div class="mobile-nav-header">
+      <img alt="تزنویسه" src="assets/img/logo.jpg"/>
+      <button aria-label="بستن منو" class="mobile-nav-close" data-menu-close type="button"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="mobile-nav-links">
+      <a class="mobile-nav-link" href="index.html"><i class="fa-solid fa-house"></i> خانه</a>
+      <a class="mobile-nav-link" href="service-thesis.html"><i class="fa-solid fa-graduation-cap"></i> انجام پایان‌نامه</a>
+      <a class="mobile-nav-link" href="service-proposal.html"><i class="fa-solid fa-file-lines"></i> انجام پروپوزال</a>
+      <a class="mobile-nav-link" href="service-statistics.html"><i class="fa-solid fa-chart-line"></i> تحلیل آماری</a>
+      <a class="mobile-nav-link" href="tools.html"><i class="fa-solid fa-calculator"></i> ابزارهای آنلاین</a>
+      <a class="mobile-nav-link active" href="blog.html"><i class="fa-solid fa-book-open"></i> بلاگ</a>
+      <a class="mobile-nav-link" href="about.html"><i class="fa-regular fa-circle-question"></i> درباره ما</a>
+      <a class="mobile-nav-link" href="contact.html"><i class="fa-solid fa-phone"></i> تماس با ما</a>
+    </div>
+    <div class="mobile-nav-cta">
+      <a class="btn-tz btn-primary-tz" href="inquiry.html"><i class="fa-solid fa-pen-to-square"></i> ثبت درخواست مشاوره</a>
+      <a class="btn-tz btn-outline-tz" href="https://wa.me/989302822091"><i class="fa-brands fa-whatsapp"></i> گفتگو در واتساپ</a>
+    </div>
+  </div>
+</div>
+
 <main>
-<section class="page-hero"><div class="container">
-<nav class="breadcrumbs"><a href="index.html">خانه</a> / <a href="blog.html">بلاگ</a> / <span>فصل اول</span></nav>
-<span class="badge">مسیر پایان‌نامه</span>
-<h1 class="page-hero-title">آموزش نگارش فصل اول پایان‌نامه: تبدیل پروپوزال به فصل اول</h1>
-<p class="page-hero-desc">پس از تصویب پروپوزال، نخستین گام جدی تدوین فصل کلیات پژوهش است.</p>
-</div></section>
-<section class="section"><div class="container">
-<div class="blog-layout">
-<article class="article-content">
-<p>در این راهنما ساختار بیان مسئله، اهداف، سوالات و فرضیه‌ها را مرور می‌کنیم. هدف این است که ارتباط منطقی میان عنوان، بیان مسئله، پیشینه و روش از ابتدا شفاف باشد.</p>
-<h2 id="s1">مقدمه: چرا فصل اول مهم است؟</h2>
-<p>فصل اول چارچوب کلی پژوهش را مشخص می‌کند و مسیر فصل‌های بعدی را روشن می‌سازد.</p>
-<h2 id="s2">ساختار فصل اول پایان‌نامه</h2>
-<p>معمولاً شامل مقدمه، بیان مسئله، اهمیت پژوهش، اهداف، سوالات یا فرضیه‌ها و تعریف مفاهیم است.</p>
-<h2 id="s3">گام اول: تبدیل بیان مسئله</h2>
-<p>بیان مسئله باید از پروپوزال به متنی کامل‌تر و قابل دفاع در جلسه گسترش یابد.</p>
-<p>آماده نگارش فصل اول هستید؟ <a href="inquiry.html">ثبت سفارش</a></p>
-</article>
-<aside class="blog-sidebar">
-<div class="widget">
-<h4 class="widget-title">فهرست مطالب</h4>
-<ol class="toc-list" style="border:none;padding:0;list-style:none">
-<li><a href="#s1">مقدمه</a></li>
-<li><a href="#s2">ساختار فصل اول</a></li>
-<li><a href="#s3">گام اول</a></li>
-</ol>
-</div>
-<div class="widget" style="background:var(--color-primary-gradient);color:#fff;text-align:center">
-<h4 style="color:#fff">نیاز به مشاوره داری؟</h4>
-<p style="color:rgba(255,255,255,0.85);font-size:0.9rem">کارشناسان تزنویسه در نگارش فصل اول همراه تو هستند.</p>
-<a class="btn btn-light btn-block btn-sm cta-order-btn" href="inquiry.html">ثبت سفارش</a>
-</div>
-</aside>
-</div></div></section>
+  <!-- Title block: single column -->
+  <section class="post-hero">
+    <div class="container">
+      <h1>آموزش نگارش فصل اول پایان‌نامه: تبدیل پروپوزال به فصل اول</h1>
+      <p class="post-subheading">پس از تصویب پروپوزال، نخستین گام جدی تدوین فصل کلیات پژوهش است؛ از بیان مسئله تا اهداف و فرضیه‌ها.</p>
+      <div class="post-meta">
+        <span><i class="fa-regular fa-user"></i> نویسنده: تیم تزنویسه</span>
+        <span><i class="fa-regular fa-folder"></i> دسته: <a href="blog.html">مسیر پایان‌نامه</a></span>
+        <span><i class="fa-regular fa-calendar"></i> ۱۵ مرداد ۱۴۰۵</span>
+      </div>
+      <nav class="post-breadcrumb" aria-label="مسیر صفحه">
+        <a href="index.html">خانه</a>
+        <span class="sep">/</span>
+        <a href="blog.html">بلاگ</a>
+        <span class="sep">/</span>
+        <a href="blog.html">مسیر پایان‌نامه</a>
+        <span class="sep">/</span>
+        <span class="current">فصل اول پایان‌نامه</span>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Two columns: content + sidebar -->
+  <section>
+    <div class="container">
+      <div class="post-layout">
+        <div class="post-main">
+          <div class="post-featured" aria-hidden="true">
+            <img src="assets/img/logo.jpg" alt="تصویر شاخص مقاله"/>
+          </div>
+          <article class="article-body">
+            <p>در این راهنما ساختار بیان مسئله، اهداف، سوالات و فرضیه‌ها را مرور می‌کنیم. هدف این است که ارتباط منطقی میان عنوان، بیان مسئله، پیشینه و روش از ابتدا شفاف باشد.</p>
+
+            <h2 id="s1">مقدمه: چرا فصل اول مهم است؟</h2>
+            <p>فصل اول چارچوب کلی پژوهش را مشخص می‌کند و مسیر فصل‌های بعدی را روشن می‌سازد. اگر مسئله، اهداف و روش در این فصل هم‌راستا نباشند، بازنویسی‌های بعدی اجتناب‌ناپذیر می‌شوند.</p>
+
+            <h2 id="s2">ساختار فصل اول پایان‌نامه</h2>
+            <p>معمولاً شامل مقدمه، بیان مسئله، اهمیت پژوهش، اهداف، سوالات یا فرضیه‌ها و تعریف مفاهیم است. ترتیب دقیق ممکن است بر اساس قالب دانشگاه شما کمی متفاوت باشد.</p>
+
+            <h2 id="s3">گام اول: تبدیل بیان مسئله</h2>
+            <p>بیان مسئله باید از پروپوزال به متنی کامل‌تر و قابل دفاع در جلسه گسترش یابد. شکاف پژوهشی، ضرورت مطالعه و چارچوب مسئله را شفاف بنویسید.</p>
+
+            <p>آماده نگارش فصل اول هستید؟ <a href="inquiry.html">ثبت سفارش مشاوره</a></p>
+          </article>
+        </div>
+
+        <aside class="post-sidebar">
+          <div class="post-widget">
+            <h4>فهرست مطالب</h4>
+            <ol class="toc-list">
+              <li><a href="#s1">مقدمه</a></li>
+              <li><a href="#s2">ساختار فصل اول</a></li>
+              <li><a href="#s3">گام اول</a></li>
+            </ol>
+          </div>
+          <div class="post-widget post-widget-cta">
+            <h4>نیاز به مشاوره داری؟</h4>
+            <p>کارشناسان تزنویسه در نگارش فصل اول همراه تو هستند.</p>
+            <a class="btn-tz btn-light-tz" href="inquiry.html">ثبت سفارش</a>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Comments -->
+      <section class="post-comments" id="comments" aria-labelledby="commentsTitle">
+        <h2 id="commentsTitle">نظرات</h2>
+        <p>نظر خود را بنویسید. دیدگاه‌ها پس از بررسی منتشر می‌شوند.</p>
+        <form class="comment-form" action="#" method="post">
+          <div class="form-grid">
+            <div class="field"><label>نام</label><input type="text" name="name" placeholder="نام شما" required/></div>
+            <div class="field"><label>ایمیل</label><input type="email" name="email" placeholder="email@example.com" required/></div>
+            <div class="field full"><label>متن نظر</label><textarea name="comment" placeholder="نظر شما..." required></textarea></div>
+          </div>
+          <button class="btn-tz btn-primary-tz" type="submit" style="margin-top:12px">ارسال نظر</button>
+        </form>
+        <div class="comment-list">
+          <div class="comment-item">
+            <strong>سارا م.</strong><span class="comment-date">۱۰ مرداد ۱۴۰۵</span>
+            <p>توضیح ساختار فصل اول خیلی کاربردی بود؛ ممنون.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Related posts same category -->
+      <section class="related-posts" aria-labelledby="relatedTitle">
+        <h2 id="relatedTitle">پست‌های پیشنهادی از همین دسته</h2>
+        <div class="related-grid">
+          <a class="related-card" href="post-sample.html">
+            <div class="thumb"><i class="fa-solid fa-book-open"></i></div>
+            <div class="body">
+              <div class="cat">مسیر پایان‌نامه</div>
+              <h3>چگونه موضوع پایان‌نامه را انتخاب کنیم؟</h3>
+            </div>
+          </a>
+          <a class="related-card" href="post-sample.html">
+            <div class="thumb"><i class="fa-solid fa-pen-nib"></i></div>
+            <div class="body">
+              <div class="cat">مسیر پایان‌نامه</div>
+              <h3>نگارش بیان مسئله بدون کلی‌گویی</h3>
+            </div>
+          </a>
+          <a class="related-card" href="post-sample.html">
+            <div class="thumb"><i class="fa-solid fa-list-check"></i></div>
+            <div class="body">
+              <div class="cat">مسیر پایان‌نامه</div>
+              <h3>اهداف، سوال‌ها و فرضیه‌ها در فصل اول</h3>
+            </div>
+          </a>
+        </div>
+      </section>
+    </div>
+  </section>
 </main>
-<footer class="site-footer"><div class="container">
+
+<footer class="footer-new">
+<div class="container">
 <div class="footer-grid">
-<div class="footer-about"><img alt="تزنویسه" src="assets/img/logo.jpg" style="height:40px;margin-bottom:1rem"/><p>تزنویسه همراه پژوهشی دانشجویان و پژوهشگران.</p></div>
-<div class="footer-col"><h4>خدمات</h4><ul class="footer-links" role="list"><li><a href="service-thesis.html">پایان‌نامه</a></li><li><a href="blog.html">بلاگ</a></li></ul></div>
-<div class="footer-col"><h4>دسترسی</h4><ul class="footer-links" role="list"><li><a href="about.html">درباره ما</a></li><li><a href="contact.html">تماس</a></li></ul></div>
-<div class="footer-col"><h4>ارتباط</h4><ul class="footer-links" role="list"><li><a href="tel:+989302822091">۰۹۳۰۲۸۲۲۰۹۱</a></li><li><a href="privacy.html">حریم خصوصی</a></li></ul></div>
+<div class="footer-brand"><img alt="تزنویسه" src="assets/img/logo.jpg"/><p>تزنویسه همراه پژوهشی دانشجویان و پژوهشگران.</p></div>
+<div class="footer-col"><h4>خدمات</h4><a href="service-thesis.html">انجام پایان‌نامه</a><a href="service-proposal.html">انجام پروپوزال</a><a href="service-statistics.html">تحلیل آماری</a><a href="tools.html">ابزارهای آنلاین</a></div>
+<div class="footer-col"><h4>دسترسی سریع</h4><a href="blog.html">مرکز دانش</a><a href="about.html">درباره ما</a><a href="contact.html">تماس با ما</a><a href="privacy.html">حریم خصوصی</a></div>
+<div class="footer-col"><h4>ارتباط با ما</h4><a href="tel:+989302822091">۰۹۳۰۲۸۲۲۰۹۱</a><a href="mailto:teznevisan@gmail.com">teznevisan@gmail.com</a></div>
 </div>
-<div class="footer-bottom"><p class="footer-copyright">© ۱۴۰۵ تزنویسه</p>
-<div class="footer-bottom-links"><a href="privacy.html">حریم خصوصی</a><a href="privacy.html">شرایط استفاده</a></div></div>
-</div></footer>
-<script src="assets/js/main.js"></script>
+<div class="footer-bottom"><span>© ۱۴۰۵ تزنویسه</span></div>
+</div>
+</footer>
+
+<div class="tz-fab-wrap" id="tzFab">
+  <div class="tz-fab-menu" id="tzFabMenu" hidden>
+    <a class="tz-fab-item" href="https://t.me/Teznevise" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i><span>تلگرام</span></a>
+    <a class="tz-fab-item" href="https://wa.me/989302822091" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i><span>واتساپ</span></a>
+    <a class="tz-fab-item" href="https://ble.ir/teznevise" target="_blank" rel="noopener"><span class="tz-fab-bale">بله</span><span>بله</span></a>
+    <a class="tz-fab-item" href="tel:+989302822091"><i class="fa-solid fa-phone"></i><span>تماس</span></a>
+  </div>
+  <button type="button" class="tz-fab-toggle" id="tzFabToggle" aria-haspopup="true" aria-expanded="false" aria-controls="tzFabMenu" aria-label="راه‌های ارتباطی"><i class="fa-regular fa-comments" data-fab-icon></i></button>
+</div>
+<nav aria-label="منوی پایین موبایل" class="bottom-nav">
+  <a class="bottom-nav-item" href="index.html"><i class="fa-solid fa-house"></i><span>خانه</span></a>
+  <a class="bottom-nav-item" href="tools.html"><i class="fa-solid fa-calculator"></i><span>ابزارها</span></a>
+  <a class="bottom-nav-item active" href="blog.html"><i class="fa-solid fa-book-open"></i><span>بلاگ</span></a>
+  <a class="bottom-nav-item" href="contact.html"><i class="fa-solid fa-phone"></i><span>تماس</span></a>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/redesign.js"></script>
 </body></html>
