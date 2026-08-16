@@ -3,46 +3,206 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="https://cdn.jsdelivr.net" rel="preconnect"/>
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"/>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.rtl.min.css" rel="stylesheet"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
-<link href="assets/css/redesign.css" rel="stylesheet"/><link href="assets/css/layout-refinements.css" rel="stylesheet"/><link href="assets/css/site-polish.css" rel="stylesheet"/>
-<link href="assets/img/logo.jpg" rel="icon" type="image/jpeg"/><title>بلاگ تزنویسه | مقالات پایان‌نامه، روش تحقیق و تحلیل آماری</title><meta content="مقالات تخصصی پایان‌نامه، روش تحقیق، تحلیل آماری و نگارش آکادمیک." name="description"/></head><body><header class="site-header-new">
-<div class="announcement"><div class="container announcement-wrap"><div class="announcement-items"><span class="announce-pill">☎ <strong>۰۹۳۰۲۸۲۲۰۹۱</strong></span><span class="announce-pill">⏱ شنبه تا پنجشنبه، ۹ تا ۲۱</span><span class="announce-pill">🔒 مشاوره محرمانه و تخصصی</span></div><div aria-label="لینک‌های راهنما" class="utility-links">
-<a href="privacy.html">سیاست حریم خصوصی</a>
-<a href="team.html">نظرات مشتریان</a>
-<a href="privacy.html">سیاست بازگشت هزینه</a>
-</div></div></div>
-<div class="container">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.rtl.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+<link href="assets/css/redesign.css" rel="stylesheet"/>
+<link href="assets/css/layout-refinements.css" rel="stylesheet"/>
+<link href="assets/css/motion.css" rel="stylesheet"/>
+<link href="assets/css/batch-fixes.css" rel="stylesheet"/>
+<link href="assets/css/ui-round2.css" rel="stylesheet"/>
+<link href="assets/img/logo.jpg" rel="icon" type="image/jpeg"/>
+<title>بلاگ و مرکز دانش | تزنویسه</title>
+<meta content="مقالات آموزشی پایان‌نامه، پروپوزال و تحلیل آماری." name="description"/>
+<style>
+.blog-hero{padding:40px 0 24px;background:linear-gradient(180deg,#f4f9f7 0%,#fff 100%);text-align:center}
+.blog-hero h1{margin:10px 0 10px;font-size:clamp(26px,3.5vw,36px);color:#172d26;font-weight:850;line-height:1.4}
+.blog-hero p{margin:0 auto;max-width:48ch;color:#62736d;font-size:15px;line-height:1.85}
+.blog-layout{display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:start;padding:12px 0 48px}
+.blog-posts{display:flex;flex-direction:column;gap:18px}
+.blog-card{display:grid;grid-template-columns:200px 1fr;gap:18px;background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;box-shadow:0 8px 24px rgba(9,40,32,.04);transition:transform .2s ease,box-shadow .2s ease}
+.blog-card:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(9,40,32,.08);color:inherit}
+.blog-card .thumb{background:#e8f0ec;min-height:140px;display:grid;place-items:center;color:#145D4A;font-size:28px}
+.blog-card .body{padding:16px 16px 16px 0;display:flex;flex-direction:column}
+.blog-card .cat{font-size:12px;font-weight:800;color:#145D4A;margin-bottom:6px}
+.blog-card h2{margin:0 0 8px;font-size:17px;line-height:1.5;color:#172d26;font-weight:800}
+.blog-card p{margin:0 0 10px;font-size:13.5px;line-height:1.75;color:#62736d;flex:1}
+.blog-card .meta{font-size:12.5px;color:#8a9892;font-weight:650}
+.blog-sidebar{display:flex;flex-direction:column;gap:14px;position:sticky;top:96px}
+.blog-widget{background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:16px;padding:16px;box-shadow:0 8px 22px rgba(9,40,32,.04)}
+.blog-widget h3{margin:0 0 12px;font-size:15px;font-weight:850;color:#172d26}
+.blog-widget a{display:block;padding:6px 0;color:#3d534a;text-decoration:none;font-size:13.5px;font-weight:650}
+.blog-widget a:hover{color:#145D4A}
+.blog-search{display:flex;gap:8px}
+.blog-search input{flex:1;border:1px solid rgba(20,93,74,.18);border-radius:12px;padding:10px 12px;font-family:inherit;font-size:14px}
+.blog-search button{border:none;border-radius:12px;padding:10px 14px;background:#145D4A;color:#fff;cursor:pointer}
+@media (max-width:900px){
+  .blog-layout{grid-template-columns:1fr}
+  .blog-sidebar{position:static}
+  .blog-card{grid-template-columns:1fr}
+  .blog-card .thumb{min-height:120px;aspect-ratio:16/9}
+  .blog-card .body{padding:14px}
+}
+</style>
+</head><body>
+<header class="site-header-new">
+<div class="announcement">
+  <div class="announcement-inner">
+    <div class="announcement-items">
+      <span class="announce-pill"><i class="fa-solid fa-phone"></i> <strong>۰۹۳۰۲۸۲۲۰۹۱</strong></span>
+      <span class="announce-pill announce-desktop"><i class="fa-regular fa-clock"></i> شنبه تا پنجشنبه، ۹ تا ۲۱</span>
+      <span class="announce-pill announce-desktop"><i class="fa-solid fa-lock"></i> مشاوره محرمانه و تخصصی</span>
+    </div>
+    <div class="utility-links announce-desktop" aria-label="لینک‌های راهنما">
+      <a href="privacy.html">حریم خصوصی</a>
+      <a href="team.html">نظرات مشتریان</a>
+      <a href="privacy.html">بازگشت هزینه</a>
+    </div>
+  </div>
+</div>
 <nav aria-label="منوی اصلی" class="main-nav">
-<a class="brand" href="index.html"><img alt="تزنویسه" src="assets/img/logo.jpg"/></a>
-<ul class="nav-links"><li><a href="index.html">خانه</a></li><li><a href="service-thesis.html">پایان‌نامه</a></li><li><a href="service-proposal.html">پروپوزال</a></li><li><a href="service-statistics.html">تحلیل آماری</a></li><li><a href="tools.html">ابزارها</a></li><li><a class="active" href="blog.html">بلاگ</a></li></ul>
-<div class="nav-actions">
-<div class="nav-quick-actions desktop-cta-group">
-<a class="nav-cta nav-cta-outline" href="about.html"><i class="fa-regular fa-circle-question"></i><span>درباره ما</span></a>
-<a class="nav-cta nav-cta-solid" href="contact.html"><i class="fa-regular fa-envelope"></i><span>تماس با ما</span></a>
-</div>
-<button aria-label="باز کردن منو" class="menu-btn" data-menu-toggle type="button">☰</button>
-</div>
+  <a class="brand" href="index.html"><img alt="تزنویسه" src="assets/img/logo.jpg"/></a>
+  <ul class="nav-links">
+    <li><a href="index.html">خانه</a></li>
+    <li>
+      <a href="service-thesis.html">خدمات <i class="fa-solid fa-chevron-down nav-chevron"></i></a>
+      <ul class="nav-dropdown">
+        <li><a href="service-thesis.html">پایان‌نامه</a></li>
+        <li><a href="service-proposal.html">پروپوزال</a></li>
+        <li><a href="service-statistics.html">تحلیل آماری</a></li>
+        <li><a href="service-simulation.html">شبیه‌سازی</a></li>
+      </ul>
+    </li>
+    <li><a href="tools.html">ابزارها</a></li>
+    <li><a href="blog.html">بلاگ</a></li>
+    <li><a href="about.html">درباره ما</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button type="button" class="nav-search-btn" aria-label="جستجو" data-search-open><i class="fa-solid fa-magnifying-glass"></i></button>
+    <div class="nav-quick-actions desktop-cta-group">
+      <a class="nav-cta nav-cta-outline" href="about.html"><i class="fa-regular fa-circle-question"></i><span>درباره ما</span></a>
+      <a class="nav-cta nav-cta-solid" href="inquiry.html"><i class="fa-solid fa-pen-to-square"></i><span>ثبت درخواست</span></a>
+    </div>
+  </div>
+  <button aria-label="باز کردن منو" aria-expanded="false" class="menu-btn" data-menu-toggle type="button"><i class="fa-solid fa-bars" data-menu-icon></i></button>
 </nav>
-<div class="mobile-menu" data-mobile-menu><a href="index.html">خانه</a><a href="service-thesis.html">پایان‌نامه</a><a href="service-proposal.html">پروپوزال</a><a href="service-statistics.html">تحلیل آماری</a><a href="tools.html">ابزارها</a><a href="blog.html">بلاگ</a><div class="mobile-menu-actions"><a class="nav-cta nav-cta-outline" href="about.html"><i class="fa-regular fa-circle-question"></i><span>درباره ما</span></a><a class="nav-cta nav-cta-solid" href="contact.html"><i class="fa-regular fa-envelope"></i><span>تماس با ما</span></a><a class="btn-tz btn-primary-tz" href="inquiry.html">ثبت درخواست مشاوره</a></div></div>
+</header>
+<div aria-label="منوی موبایل" class="mobile-nav" data-mobile-menu role="dialog">
+  <div class="mobile-nav-panel">
+    <div class="mobile-nav-header">
+      <img alt="تزنویسه" src="assets/img/logo.jpg"/>
+      <button aria-label="بستن منو" class="mobile-nav-close" data-menu-close type="button"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="mobile-nav-links">
+      <a class="mobile-nav-link" href="index.html"><i class="fa-solid fa-house"></i> خانه</a>
+      <a class="mobile-nav-link" href="service-thesis.html"><i class="fa-solid fa-graduation-cap"></i> انجام پایان‌نامه</a>
+      <a class="mobile-nav-link" href="service-proposal.html"><i class="fa-solid fa-file-lines"></i> انجام پروپوزال</a>
+      <a class="mobile-nav-link" href="service-statistics.html"><i class="fa-solid fa-chart-line"></i> تحلیل آماری</a>
+      <a class="mobile-nav-link" href="tools.html"><i class="fa-solid fa-calculator"></i> ابزارهای آنلاین</a>
+      <a class="mobile-nav-link active" href="blog.html"><i class="fa-solid fa-book-open"></i> بلاگ</a>
+      <a class="mobile-nav-link" href="about.html"><i class="fa-regular fa-circle-question"></i> درباره ما</a>
+      <a class="mobile-nav-link" href="contact.html"><i class="fa-solid fa-phone"></i> تماس با ما</a>
+    </div>
+    <div class="mobile-nav-cta">
+      <a class="btn-tz btn-primary-tz" href="inquiry.html"><i class="fa-solid fa-pen-to-square"></i> ثبت درخواست مشاوره</a>
+      <a class="btn-tz btn-outline-tz" href="https://wa.me/989302822091"><i class="fa-brands fa-whatsapp"></i> گفتگو در واتساپ</a>
+    </div>
+  </div>
 </div>
-</header><main><section class="page-hero-new"><div class="container"><div class="inner"><span class="eyebrow">مرکز دانش تزنویسه</span><h1>راهنماهای کاربردی برای پژوهشگران و دانشجویان</h1><p>مقالات تخصصی درباره پایان‌نامه، روش تحقیق، تحلیل آماری، نگارش آکادمیک و ابزارهای نوین پژوهش.</p></div></div></section>
-<section class="section"><div class="container"><div class="blog-layout"><div><div class="post-list">
-<article class="archive-post"><div class="date-badge"><b>۱۲</b><span>مرداد</span></div><div><span class="post-category">مسیر پایان‌نامه</span><h2><a href="post-sample.html">آموزش نگارش فصل اول پایان‌نامه: تبدیل پروپوزال به فصل اول</a></h2><p>پس از تصویب پروپوزال، نخستین گام جدی تدوین فصل کلیات پژوهش است. در این راهنما ساختار بیان مسئله، اهداف، سوالات و فرضیه‌ها را مرور می‌کنیم.</p><div class="post-info"><span>انتشار: ۱۲ مرداد ۱۴۰۵</span><span>زمان مطالعه: ۸ دقیقه</span><a class="read-more-link" href="post-sample.html">ادامه مطلب</a></div></div></article>
-<article class="archive-post"><div class="date-badge"><b>۱۰</b><span>مرداد</span></div><div><span class="post-category">مسیر پایان‌نامه</span><h3>نحوه انتخاب موضوع پایان‌نامه با قابلیت دفاع</h3><p>معیارهای انتخاب موضوعی نو، قابل اجرا و متناسب با زمان، داده‌های در دسترس و گرایش تحصیلی.</p><div class="post-info"><span>انتشار: ۱۰ مرداد ۱۴۰۵</span><span>۷ دقیقه</span><a class="read-more-link" href="#">ادامه مطلب</a></div></div></article>
-<article class="archive-post"><div class="date-badge"><b>۰۷</b><span>مرداد</span></div><div><span class="post-category">تحلیل آماری</span><h3>آموزش گام‌به‌گام آزمون تی مستقل در SPSS</h3><p>آزمون تی مستقل یکی از پرکاربردترین آزمون‌هاست؛ از بررسی پیش‌فرض‌ها تا تفسیر جدول خروجی را با مثال مرور می‌کنیم.</p><div class="post-info"><span>انتشار: ۷ مرداد ۱۴۰۵</span><span>۹ دقیقه</span><a class="read-more-link" href="#">ادامه مطلب</a></div></div></article>
-<article class="archive-post"><div class="date-badge"><b>۰۴</b><span>مرداد</span></div><div><span class="post-category">هوش مصنوعی</span><h3>هوش مصنوعی برای ایده‌یابی موضوع پایان‌نامه</h3><p>چطور برای پیدا کردن ایده، کشف کلیدواژه‌ها و ساخت مسیر جست‌وجوی علمی از AI کمک بگیریم و کنترل علمی را حفظ کنیم.</p><div class="post-info"><span>انتشار: ۴ مرداد ۱۴۰۵</span><span>۶ دقیقه</span><a class="read-more-link" href="#">ادامه مطلب</a></div></div></article>
-<article class="archive-post"><div class="date-badge"><b>۲۹</b><span>تیر</span></div><div><span class="post-category">نگارش آکادمیک</span><h3>چگونه یک مرور ادبیات اصولی بنویسیم؟</h3><p>ساختار فصل دوم، انتخاب منابع، سازمان‌دهی مطالعات و تبدیل فهرست مقاله‌ها به یک روایت تحلیلی منسجم.</p><div class="post-info"><span>انتشار: ۲۹ تیر ۱۴۰۵</span><span>۱۰ دقیقه</span><a class="read-more-link" href="#">ادامه مطلب</a></div></div></article>
-<article class="archive-post"><div class="date-badge"><b>۲۵</b><span>تیر</span></div><div><span class="post-category">تحلیل آماری</span><h3>تفاوت تحلیل عاملی اکتشافی و تاییدی</h3><p>دو رویکرد اصلی تحلیل عاملی چه تفاوتی دارند و هرکدام در چه مرحله‌ای از پژوهش مناسب‌تر هستند؟</p><div class="post-info"><span>انتشار: ۲۵ تیر ۱۴۰۵</span><span>۸ دقیقه</span><a class="read-more-link" href="#">ادامه مطلب</a></div></div></article>
-</div><div class="pagination-new"><span class="active">۱</span><a href="#">۲</a><a href="#">۳</a><a href="#">…</a><a href="#">۵</a></div></div>
-<aside class="sidebar"><div class="side-card"><h3>جستجو در مقالات</h3><form class="search-field"><input placeholder="مثلاً تحلیل آماری" type="search"/><button type="submit" aria-label="جستجو"><i class="fa-solid fa-magnifying-glass"></i></button></form></div><div class="side-card"><h3>دسته‌بندی‌ها</h3><ul class="cat-list"><li><a href="#">مسیر پایان‌نامه <b>۱۸</b></a></li><li><a href="#">تحلیل آماری <b>۲۴</b></a></li><li><a href="#">هوش مصنوعی <b>۹</b></a></li><li><a href="#">روش تحقیق <b>۱۲</b></a></li><li><a href="#">نگارش آکادمیک <b>۷</b></a></li></ul></div><div class="side-card" style="background:linear-gradient(145deg,#0b493a,#145D4A);color:#fff"><h3>سوال پژوهشی دارید؟</h3><p style="font-size:13px;color:rgba(255,255,255,.72)">کارشناسان ما موضوع و نیاز شما را بررسی می‌کنند.</p><a class="btn-tz btn-light-tz" href="inquiry.html" style="width:100%">مشاوره رایگان</a></div></aside>
-</div></div></section><section class="section-sm bg-soft"><div class="container"><div class="cta-band"><div><h2>پروژه پژوهشی‌ات را شروع کن</h2><p>از پروپوزال تا تحلیل آماری و نگارش، مسیر را با یک مشاوره اولیه روشن کن.</p></div><a class="btn-tz btn-light-tz" href="inquiry.html">ثبت درخواست</a></div></div></section></main><footer class="footer-new">
+
+<main>
+<section class="blog-hero">
+  <div class="container">
+    <span class="eyebrow">مرکز دانش</span>
+    <h1>بلاگ تزنویسه</h1>
+    <p>راهنماها و نکات کاربردی برای مسیر پژوهش، از انتخاب موضوع تا تحلیل داده.</p>
+  </div>
+</section>
+<section>
+  <div class="container">
+    <div class="blog-layout">
+      <div class="blog-posts">
+        <a class="blog-card" href="post-sample.html">
+          <div class="thumb"><i class="fa-solid fa-book-open"></i></div>
+          <div class="body">
+            <div class="cat">مسیر پایان‌نامه</div>
+            <h2>آموزش نگارش فصل اول پایان‌نامه</h2>
+            <p>تبدیل پروپوزال به فصل اول با ساختار بیان مسئله، اهداف و فرضیه‌ها.</p>
+            <div class="meta"><i class="fa-regular fa-calendar"></i> ۱۵ مرداد ۱۴۰۵</div>
+          </div>
+        </a>
+        <a class="blog-card" href="post-sample.html">
+          <div class="thumb"><i class="fa-solid fa-lightbulb"></i></div>
+          <div class="body">
+            <div class="cat">مسیر پایان‌نامه</div>
+            <h2>چگونه موضوع پایان‌نامه را انتخاب کنیم؟</h2>
+            <p>معیارهای انتخاب موضوع کاربردی، قابل اجرا و هم‌راستا با علاقه پژوهشی.</p>
+            <div class="meta"><i class="fa-regular fa-calendar"></i> ۸ مرداد ۱۴۰۵</div>
+          </div>
+        </a>
+        <a class="blog-card" href="post-sample.html">
+          <div class="thumb"><i class="fa-solid fa-chart-line"></i></div>
+          <div class="body">
+            <div class="cat">تحلیل آماری</div>
+            <h2>آزمون‌های پارامتریک و ناپارامتریک</h2>
+            <p>راهنمای انتخاب آزمون مناسب بر اساس نوع داده و توزیع.</p>
+            <div class="meta"><i class="fa-regular fa-calendar"></i> ۱ مرداد ۱۴۰۵</div>
+          </div>
+        </a>
+      </div>
+      <aside class="blog-sidebar">
+        <div class="blog-widget">
+          <h3>جستجو</h3>
+          <form class="blog-search" action="#" method="get">
+            <input type="search" name="q" placeholder="جستجو در مقالات..." aria-label="جستجو"/>
+            <button type="submit" aria-label="جستجو"><i class="fa-solid fa-magnifying-glass"></i></button>
+          </form>
+        </div>
+        <div class="blog-widget">
+          <h3>دسته‌بندی‌ها</h3>
+          <a href="blog.html">مسیر پایان‌نامه</a>
+          <a href="blog.html">پروپوزال</a>
+          <a href="blog.html">تحلیل آماری</a>
+          <a href="blog.html">شبیه‌سازی</a>
+        </div>
+        <div class="blog-widget" style="background:linear-gradient(145deg,#145D4A,#0f4a3c);border:none;color:#fff;text-align:center">
+          <h3 style="color:#fff">نیاز به مشاوره؟</h3>
+          <p style="color:rgba(255,255,255,.88);font-size:13px;line-height:1.7;margin:0 0 12px">مسیر پژوهشی‌تان را با کارشناس بررسی کنید.</p>
+          <a class="btn-tz btn-light-tz" href="inquiry.html">ثبت سفارش</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer-new">
 <div class="container">
 <div class="footer-grid">
-<div class="footer-brand"><img alt="تزنویسه" src="assets/img/logo.jpg"/><p>تزنویسه همراه پژوهشی دانشجویان و پژوهشگران؛ از انتخاب موضوع و تدوین پروپوزال تا تحلیل آماری، نگارش و آمادگی دفاع.</p></div>
+<div class="footer-brand"><img alt="تزنویسه" src="assets/img/logo.jpg"/><p>تزنویسه همراه پژوهشی دانشجویان و پژوهشگران.</p></div>
 <div class="footer-col"><h4>خدمات</h4><a href="service-thesis.html">انجام پایان‌نامه</a><a href="service-proposal.html">انجام پروپوزال</a><a href="service-statistics.html">تحلیل آماری</a><a href="tools.html">ابزارهای آنلاین</a></div>
-<div class="footer-col"><h4>دسترسی سریع</h4><a href="blog.html">مرکز دانش</a><a href="about.html">درباره ما</a><a href="team.html">تیم پژوهشگران</a><a href="contact.html">تماس با ما</a><a href="privacy.html">حریم خصوصی</a></div>
-<div class="footer-col"><h4>ارتباط با ما</h4><a href="tel:+989302822091">۰۹۳۰۲۸۲۲۰۹۱</a><a href="mailto:teznevisan@gmail.com">teznevisan@gmail.com</a><p>تهران، انقلاب، خیابان ۱۲ فروردین</p><a href="https://t.me/Teznevise">تلگرام: @Teznevise</a></div>
+<div class="footer-col"><h4>دسترسی سریع</h4><a href="blog.html">مرکز دانش</a><a href="about.html">درباره ما</a><a href="contact.html">تماس با ما</a><a href="privacy.html">حریم خصوصی</a></div>
+<div class="footer-col"><h4>ارتباط با ما</h4><a href="tel:+989302822091">۰۹۳۰۲۸۲۲۰۹۱</a><a href="mailto:teznevisan@gmail.com">teznevisan@gmail.com</a></div>
 </div>
-<div class="footer-bottom"><span>© ۱۴۰۵ تزنویسه — تمامی حقوق محفوظ است.</span><span>طراحی RTL واکنش‌گرا و آماده تبدیل به WordPress/PHP</span></div>
+<div class="footer-bottom"><span>© ۱۴۰۵ تزنویسه</span></div>
 </div>
-</footer><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script><script src="assets/js/redesign.js"></script></body></html>
+</footer>
+
+<div class="tz-fab-wrap" id="tzFab">
+  <div class="tz-fab-menu" id="tzFabMenu" hidden>
+    <a class="tz-fab-item" href="https://t.me/Teznevise" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i><span>تلگرام</span></a>
+    <a class="tz-fab-item" href="https://wa.me/989302822091" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i><span>واتساپ</span></a>
+    <a class="tz-fab-item" href="https://ble.ir/teznevise" target="_blank" rel="noopener"><span class="tz-fab-bale">بله</span><span>بله</span></a>
+    <a class="tz-fab-item" href="tel:+989302822091"><i class="fa-solid fa-phone"></i><span>تماس</span></a>
+  </div>
+  <button type="button" class="tz-fab-toggle" id="tzFabToggle" aria-haspopup="true" aria-expanded="false" aria-controls="tzFabMenu" aria-label="راه‌های ارتباطی"><i class="fa-regular fa-comments" data-fab-icon></i></button>
+</div>
+<nav aria-label="منوی پایین موبایل" class="bottom-nav">
+  <a class="bottom-nav-item" href="index.html"><i class="fa-solid fa-house"></i><span>خانه</span></a>
+  <a class="bottom-nav-item" href="tools.html"><i class="fa-solid fa-calculator"></i><span>ابزارها</span></a>
+  <a class="bottom-nav-item active" href="blog.html"><i class="fa-solid fa-book-open"></i><span>بلاگ</span></a>
+  <a class="bottom-nav-item" href="contact.html"><i class="fa-solid fa-phone"></i><span>تماس</span></a>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/redesign.js"></script>
+</body></html>
