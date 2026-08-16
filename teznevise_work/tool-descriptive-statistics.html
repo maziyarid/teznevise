@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="fa">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ماشین‌حساب آمار توصیفی آنلاین و رایگان | تزنویسه</title>
+<meta content="ماشین‌حساب آنلاین آمار توصیفی: محاسبه میانگین، میانه، مد، انحراف معیار، واریانس، چارک‌ها، کشیدگی و سیری در مرورگر شما؛ بدون ذخیره داده و کاملاً رایگان." name="description"/>
+<meta content="آمار توصیفی, ماشین حساب آمار توصیفی, میانگین, انحراف معیار, واریانس, چارک, کشیدگی, سیری, محاسبه آنلاین" name="keywords"/>
+<!-- Open Graph -->
+<meta content="website" property="og:type"/>
+<meta content="fa_IR" property="og:locale"/>
+<meta content="ماشین‌حساب آمار توصیفی آنلاین و رایگان | تزنویسه" property="og:title"/>
+<meta content="محاسبه میانگین، میانه، مد، انحراف معیار، واریانس، چارک‌ها، کشیدگی و سیری در مرورگر شما؛ بدون ذخیره داده." property="og:description"/>
+<meta content="assets/img/logo.jpg" property="og:image"/>
+<meta content="https://teznevise.ir/tool-descriptive-statistics.html" property="og:url"/>
+<!-- Twitter Card -->
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="ماشین‌حساب آمار توصیفی | تزنویسه" name="twitter:title"/>
+<meta content="محاسبه آنلاین شاخص‌های آمار توصیفی، رایگان و بدون ذخیره داده" name="twitter:description"/>
+<!-- Canonical -->
+<link href="https://teznevise.ir/tool-descriptive-statistics.html" rel="canonical"/>
+<!-- Favicon -->
+<link href="assets/img/logo.jpg" rel="icon" type="image/jpeg"/>
+<!-- Fonts: Vazirmatn (Persian-optimized) -->
+<link href="https://cdn.jsdelivr.net" rel="preconnect"/>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"/>
+<!-- Styles -->
+<link href="assets/css/styles.css" rel="stylesheet"/>
+<!-- SVG Icon Sprite -->
+<link as="image" href="assets/icons/sprite.svg" rel="preload" type="image/svg+xml"/>
+<!-- Structured Data: WebApplication + BreadcrumbList -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ماشین‌حساب آمار توصیفی",
+    "alternateName": "Descriptive Statistics Calculator",
+    "url": "https://teznevise.ir/tool-descriptive-statistics.html",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "inLanguage": "fa",
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "IRR"
+    },
+    "description": "ماشین‌حساب آنلاین آمار توصیفی برای محاسبه میانگین، میانه، مد، انحراف معیار، واریانس، چارک‌ها، کشیدگی و سیری در مرورگر؛ بدون ذخیره داده.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "موسسه پژوهشی تزنویسه",
+      "url": "https://teznevise.ir/"
+    }
+  }
+  </script>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://teznevise.ir/" },
+      { "@type": "ListItem", "position": 2, "name": "ابزارهای آنلاین", "item": "https://teznevise.ir/tools.html" },
+      { "@type": "ListItem", "position": 3, "name": "آمار توصیفی", "item": "https://teznevise.ir/tool-descriptive-statistics.html" }
+    ]
+  }
+  </script>
+<!-- Tool-specific styles -->
+<style>
+    /* Calculator layout: input + results */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .calc-grid { grid-template-columns: 1fr; }
+    }
+    .calc-panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-divider);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+    }
+    .calc-panel h3 {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-lg);
+      font-weight: 700;
+      margin-bottom: var(--space-4);
+    }
+    .calc-panel h3 svg { width: 20px; height: 20px; color: var(--color-primary); }
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--color-divider);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-top: var(--space-2);
+    }
+    .results-table th,
+    .results-table td {
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--color-divider);
+      text-align: start;
+      font-size: var(--text-sm);
+    }
+    .results-table th {
+      background: var(--color-primary-soft);
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+    .results-table td:last-child {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight: 600;
+      direction: ltr;
+      text-align: end;
+    }
+    .results-table tr:nth-child(even) td { background: var(--color-surface-2); }
+    .results-empty {
+      text-align: center;
+      color: var(--color-text-muted);
+      padding: var(--space-8) var(--space-4);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-lg);
+    }
+    .results-empty svg { width: 40px; height: 40px; margin-bottom: var(--space-3); opacity: 0.4; }
+    .calc-actions {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-top: var(--space-4);
+    }
+    .data-example {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      margin-top: var(--space-2);
+      direction: ltr;
+      text-align: start;
+    }
+    .formula-box {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-divider);
+      border-inline-start: 4px solid var(--color-primary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      margin: var(--space-4) 0;
+      direction: ltr;
+      text-align: start;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow-x: auto;
+    }
+    .steps-list {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+    .steps-list li {
+      counter-increment: step;
+      position: relative;
+      padding-inline-start: var(--space-10);
+      margin-bottom: var(--space-5);
+      min-height: 36px;
+    }
+    .steps-list li::before {
+      content: counter(step);
+      position: absolute;
+      inset-inline-start: 0;
+      top: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      background: var(--color-primary-soft);
+      color: var(--color-primary);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-sm);
+    }
+    .related-tools .tool-card { padding: var(--space-4); }
+  </style>
+<link href="assets/css/layout-refinements.css" rel="stylesheet"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/></head>
+<body data-pref-theme="">
+<!-- Skip link for accessibility -->
+<a class="sr-only" href="#main" style="position:absolute;top:0;right:0;z-index:999;background:var(--color-primary);color:#fff;padding:1rem;">پرش به محتوای اصلی</a>
+<!-- SVG Sprite (inline for performance) -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+<symbol fill="none" id="icon-thesis" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M12 4L2 9l10 5 10-5-10-5z"></path><path d="M6 11v4c0 1.5 2.5 3 6 3s6-1.5 6-3v-4"></path><path d="M22 9v5"></path></symbol>
+<symbol fill="none" id="icon-proposal" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M9 15l2 2 4-4"></path></symbol>
+<symbol fill="none" id="icon-statistics" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M3 3v18h18"></path><path d="M7 14l3-4 3 3 4-6"></path><circle cx="7" cy="14" fill="currentColor" r="1.2"></circle><circle cx="10" cy="10" fill="currentColor" r="1.2"></circle><circle cx="13" cy="13" fill="currentColor" r="1.2"></circle><circle cx="17" cy="7" fill="currentColor" r="1.2"></circle></symbol>
+<symbol fill="none" id="icon-article" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M4 4h16v16H4z"></path><path d="M8 8h8M8 12h8M8 16h5"></path></symbol>
+<symbol fill="none" id="icon-tools" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="20" rx="2" width="16" x="4" y="2"></rect><rect height="4" rx="1" width="10" x="7" y="5"></rect><path d="M8 12h0M12 12h0M16 12h0M8 16h0M12 16h0M16 16h0"></path></symbol>
+<symbol fill="none" id="icon-ai" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="14" rx="3" width="12" x="6" y="5"></rect><path d="M9 9h2v6M15 9h-2v4"></path><path d="M12 2v3M12 19v3M3 10h3M3 14h3M18 10h3M18 14h3"></path></symbol>
+<symbol fill="none" id="icon-researcher" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="10" cy="10" r="7"></circle><path d="M21 21l-5-5"></path><path d="M8 10c0-1 1-2 2-2"></path></symbol>
+<symbol fill="none" id="icon-phone" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></symbol>
+<symbol fill="none" id="icon-shield" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></symbol>
+<symbol fill="none" id="icon-download" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></symbol>
+<symbol fill="none" id="icon-team" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></symbol>
+<symbol fill="none" id="icon-blog" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path><path d="M18 14h-8M15 18h-5M10 6h8v4h-8V6z"></path></symbol>
+<symbol fill="none" id="icon-check" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></symbol>
+<symbol fill="none" id="icon-check-circle" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 12l3 3 5-5"></path></symbol>
+<symbol fill="none" id="icon-clock" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></symbol>
+<symbol fill="currentColor" id="icon-star" viewbox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></symbol>
+<symbol fill="none" id="icon-search" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></symbol>
+<symbol fill="none" id="icon-calendar" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></symbol>
+<symbol fill="none" id="icon-user" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></symbol>
+<symbol fill="none" id="icon-comments" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></symbol>
+<symbol fill="none" id="icon-arrow-left" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></symbol>
+<symbol fill="none" id="icon-chevron-down" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></symbol>
+<symbol fill="none" id="icon-menu" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"></path></symbol>
+<symbol fill="none" id="icon-close" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"></path></symbol>
+<symbol fill="none" id="icon-sun" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></symbol>
+<symbol fill="none" id="icon-moon" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></symbol>
+<symbol fill="none" id="icon-mail" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="16" rx="2" width="20" x="2" y="4"></rect><path d="M22 7l-10 7L2 7"></path></symbol>
+<symbol fill="none" id="icon-location" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></symbol>
+<symbol fill="currentColor" id="icon-whatsapp" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path></symbol>
+<symbol fill="currentColor" id="icon-telegram" viewbox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.173-.18 3.073-2.814 3.116-3.073.008-.037.015-.176-.066-.249-.081-.073-.198-.048-.284-.028-.121.028-2.034 1.29-5.738 3.804-.543.373-1.034.555-1.474.546-.486-.01-1.421-.275-2.117-.501-.853-.276-1.53-.422-1.47-.89.032-.286.387-.579 1.066-.878 4.18-1.822 6.967-3.025 8.363-3.611 3.982-1.656 4.81-1.944 5.351-1.953z"></path></symbol>
+<symbol fill="none" id="icon-instagram" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="20" rx="5" width="20" x="2" y="2"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></symbol>
+<symbol fill="none" id="icon-book" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></symbol>
+<symbol fill="none" id="icon-award" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="8" r="7"></circle><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"></path></symbol>
+<symbol fill="none" id="icon-lightning" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></symbol>
+<symbol fill="none" id="icon-target" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></symbol>
+<symbol fill="none" id="icon-globe" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" x2="22" y1="12" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></symbol>
+<symbol fill="none" id="icon-sparkles" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"></path><path d="M19 14l.75 2.25L22 17l-2.25.75L19 20l-.75-2.25L16 17l2.25-.75L19 14z"></path></symbol>
+<symbol fill="none" id="icon-clipboard" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect height="4" rx="1" width="8" x="8" y="2"></rect></symbol>
+<symbol fill="none" id="icon-trending" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M23 6l-9.5 9.5-5-5L1 18"></path><path d="M17 6h6v6"></path></symbol>
+<symbol fill="none" id="icon-folder" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></symbol>
+<symbol fill="none" id="icon-home" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><path d="M9 22V12h6v10"></path></symbol>
+<symbol fill="none" id="icon-arrow-up" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"></path></symbol>
+<symbol fill="none" id="icon-calculator" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="20" rx="2" width="16" x="4" y="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line></symbol>
+<symbol fill="none" id="icon-sigma" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M18 4H6l6 8-6 8h12"></path></symbol>
+<symbol fill="none" id="icon-copy" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="13" rx="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></symbol>
+<symbol fill="none" id="icon-info" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="16" y2="12"></line><line x1="12" x2="12.01" y1="8" y2="8"></line></symbol>
+</svg>
+<!-- ==================== HEADER ==================== -->
+<header class="site-header">
+<!-- Top Bar -->
+<div class="top-bar">
+<div class="container">
+<div class="top-bar-contact">
+<a href="tel:+989302822091"><svg height="14" width="14"><use href="#icon-phone"></use></svg> ۰۹۳۰۲۸۲۲۰۹۱</a>
+<span><svg height="14" width="14"><use href="#icon-telegram"></use></svg> @Teznevise</span>
+<span><svg height="14" width="14"><use href="#icon-clock"></use></svg> شنبه تا پنجشنبه ۹ تا ۲۱</span>
+</div>
+<div aria-label="لینک‌های راهنما" class="top-bar-links utility-links"><a href="privacy.html">سیاست حریم خصوصی</a><a href="team.html">نظرات مشتریان</a><a href="privacy.html">سیاست بازگشت هزینه</a></div>
+</div>
+</div>
+<!-- Main Nav -->
+<div class="container">
+<nav aria-label="منوی اصلی" class="nav-wrapper">
+<a class="site-logo" href="index.html">
+<img alt="تزنویسه — موسسه پژوهشی" loading="eager" src="assets/img/logo.jpg"/>
+</a>
+<ul class="nav-menu" role="list">
+<li><a class="nav-link" href="index.html">خانه</a></li>
+<li><a class="nav-link" href="service-thesis.html">پایان‌نامه</a></li>
+<li><a class="nav-link" href="service-proposal.html">پروپوزال</a></li>
+<li><a class="nav-link" href="service-statistics.html">تحلیل آماری</a></li>
+<li><a class="nav-link active" href="tools.html">ابزارها</a></li>
+<li><a class="nav-link" href="blog.html">بلاگ</a></li>
+</ul>
+<div class="nav-actions">
+<button aria-label="جستجو" class="icon-btn" data-search-open="">
+<svg><use href="#icon-search"></use></svg>
+</button>
+<button aria-label="تغییر تم" class="icon-btn" data-theme-toggle="">
+<svg><use href="#icon-moon"></use></svg>
+</button>
+<button aria-label="منو" class="menu-toggle">
+<svg><use href="#icon-menu"></use></svg>
+</button>
+</div>
+</nav>
+</div>
+</header>
+<!-- ==================== MOILE DRAWER ==================== -->
+<div aria-label="منوی موبایل" class="mobile-nav" role="dialog">
+<div class="mobile-nav-panel">
+<div class="mobile-nav-header">
+<img alt="تزنویسه" src="assets/img/logo.jpg" style="height: 36px;"/>
+<button aria-label="بستن منو" class="icon-btn mobile-nav-close">
+<svg><use href="#icon-close"></use></svg>
+</button>
+</div>
+<div class="mobile-nav-links">
+<a class="mobile-nav-link" href="index.html"><svg><use href="#icon-home"></use></svg> خانه</a>
+<a class="mobile-nav-link" href="service-thesis.html"><svg><use href="#icon-thesis"></use></svg> انجام پایان‌نامه</a>
+<a class="mobile-nav-link" href="service-proposal.html"><svg><use href="#icon-proposal"></use></svg> انجام پروپوزال</a>
+<a class="mobile-nav-link" href="service-statistics.html"><svg><use href="#icon-statistics"></use></svg> تحلیل آماری</a>
+<a class="mobile-nav-link active" href="tools.html"><svg><use href="#icon-tools"></use></svg> ابزارهای آنلاین</a>
+<a class="mobile-nav-link" href="blog.html"><svg><use href="#icon-blog"></use></svg> بلاگ</a>
+<a class="mobile-nav-link" href="team.html"><svg><use href="#icon-team"></use></svg> تیم پژوهشگران</a>
+<a class="mobile-nav-link" href="downloads.html"><svg><use href="#icon-download"></use></svg> دانلودها</a>
+<a class="mobile-nav-link" href="about.html"><svg><use href="#icon-user"></use></svg> درباره ما</a>
+<a class="mobile-nav-link" href="contact.html"><svg><use href="#icon-phone"></use></svg> تماس با ما</a>
+</div>
+<div class="mobile-nav-cta">
+<a class="btn btn-primary btn-block" href="inquiry.html">
+<svg height="18" width="18"><use href="#icon-clipboard"></use></svg>
+          ثبت سفارش
+        </a>
+<a class="btn btn-outline btn-block" href="https://wa.me/989302822091">
+<svg height="18" width="18"><use href="#icon-whatsapp"></use></svg>
+          گفتگو در واتساپ
+        </a>
+</div>
+</div>
+</div>
+<!-- ==================== SEARCH OVERLAY ==================== -->
+<div aria-label="جستجو" class="search-overlay" role="dialog">
+<div class="search-box">
+<div class="search-input-wrap">
+<svg><use href="#icon-search"></use></svg>
+<input aria-label="جستجو" class="search-input" placeholder="جستجو در تزنویسه..." type="search"/>
+<button aria-label="بستن جستجو" class="icon-btn search-close" style="position:absolute;inset-inline-end:8px;">
+<svg><use href="#icon-close"></use></svg>
+</button>
+</div>
+<div class="search-hints">
+<span class="search-hint">پایان‌نامه ارشد</span>
+<span class="search-hint">پروپوزال دکتری</span>
+<span class="search-hint">تحلیل آماری SPSS</span>
+<span class="search-hint">هوش مصنوعی</span>
+</div>
+</div>
+</div>
+<main id="main">
+<!-- ==================== PAGE HERO ==================== -->
+<section class="page-hero">
+<div class="container">
+<nav aria-label="مسیر" class="breadcrumbs">
+<a href="index.html"><svg height="14" width="14"><use href="#icon-home"></use></svg> خانه</a>
+<span class="breadcrumb-sep">/</span>
+<a href="tools.html">ابزارهای آنلاین</a>
+<span class="breadcrumb-sep">/</span>
+<span class="current">آمار توصیفی</span>
+</nav>
+<h1 class="page-hero-title">ماشین‌حساب آمار توصیفی</h1>
+<p class="page-hero-desc">
+          داده‌های عددی خود را وارد کنید تا به‌سرعت میانگین، میانه، مد، انحراف معیار، واریانس، چارک‌ها،
+          دامنه، کشیدگی و سیری محاسبه شود. تمام پردازش در مرورگر شما انجام می‌شود و هیچ داده‌ای ذخیره نمی‌شود.
+        </p>
+</div>
+</section>
+<!-- ==================== CALCULATOR ==================== -->
+<section class="section">
+<div class="container">
+<!-- BACKEND: Calculator tool. Input: array of numbers. Output: descriptive stats.
+             Client-side JS computation. No data stored. Server can render same logic for SSR fallback. -->
+<div class="calc-grid">
+<!-- INPUT PANEL -->
+<div class="calc-panel">
+<h3><svg><use href="#icon-calculator"></use></svg> ورودی داده‌ها</h3>
+<div class="form-group">
+<label class="form-label" for="dataInput">اعداد را وارد کنید <span class="required">*</span></label>
+<!-- BACKEND: Bind to calculator input. Accepts comma, newline, space or tab separated numbers. -->
+<textarea class="form-textarea" id="dataInput" placeholder="مثال:
+12, 15, 18, 22, 25, 28, 30
+یا هر عدد در یک خط" rows="10"></textarea>
+<div class="data-example">2.5, 3.1, 4, 4.8, 5.2, 6, 7.3, 8.1</div>
+</div>
+<div class="calc-actions">
+<button class="btn btn-primary" id="calcBtn" type="button">
+<svg height="18" width="18"><use href="#icon-calculator"></use></svg>
+                محاسبه
+              </button>
+<button class="btn btn-ghost" id="clearBtn" type="button">
+<svg height="18" width="18"><use href="#icon-close"></use></svg>
+                پاک کردن
+              </button>
+<button class="btn btn-ghost" id="sampleBtn" type="button">
+<svg height="18" width="18"><use href="#icon-sparkles"></use></svg>
+                داده نمونه
+              </button>
+</div>
+<p class="form-hint" style="margin-top:var(--space-4);">
+<svg height="12" style="display:inline;vertical-align:middle" width="12"><use href="#icon-shield"></use></svg>
+              داده‌ها فقط در مرورگر شما پردازش می‌شوند و هرگز به سرور ارسال نمی‌شوند.
+            </p>
+</div>
+<!-- RESULTS PANEL -->
+<div class="calc-panel">
+<h3><svg><use href="#icon-statistics"></use></svg> نتایج محاسبه</h3>
+<!-- Empty state -->
+<div class="results-empty" id="resultsEmpty">
+<svg><use href="#icon-statistics"></use></svg>
+<p>داده‌ها را وارد کنید و روی «محاسبه» بزنید تا نتایج نمایش داده شود.</p>
+</div>
+<!-- Results table -->
+<!-- BACKEND: Render rows dynamically from computed stats object.
+                 Each row: label, value. Locale-format numbers to Persian. -->
+<table class="results-table" id="resultsTable" style="display:none;">
+<thead>
+<tr>
+<th>شاخص آماری</th>
+<th>مقدار</th>
+</tr>
+</thead>
+<tbody id="resultsBody">
+<!-- rows injected by JS -->
+</tbody>
+</table>
+<div class="calc-actions" id="resultsActions" style="display:none;">
+<button class="btn btn-outline btn-sm" id="copyBtn" type="button">
+<svg height="16" width="16"><use href="#icon-copy"></use></svg>
+                کپی نتایج
+              </button>
+<button class="btn btn-outline btn-sm" id="downloadBtn" type="button">
+<svg height="16" width="16"><use href="#icon-download"></use></svg>
+                دانلود CSV
+              </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== HOW TO USE ==================== -->
+<section class="section bg-surface-2">
+<div class="container" style="max-width:800px;">
+<div class="text-center mb-8 fade-in">
+<span class="eyebrow"><svg height="16" width="16"><use href="#icon-info"></use></svg> راهنمای استفاده</span>
+<h2 class="section-title">چطور از این ابزار استفاده کنیم؟</h2>
+</div>
+<ol class="steps-list fade-in">
+<li>
+<strong>داده‌ها را وارد کنید.</strong> اعداد را با ویرگول، فاصله، خط جدید یا تب از هم جدا کنید.
+            می‌توانید از داده‌های نمونه با دکمه «داده نمونه» استفاده کنید.
+          </li>
+<li>
+<strong>روی «محاسبه» بزنید.</strong> تمام شاخص‌های آمار توصیفی بلافاصله در جدول نتایج نمایش داده می‌شوند.
+          </li>
+<li>
+<strong>نتایج را ذخیره کنید.</strong> با دکمه «کپی نتایج» مقادیر را در کلیپ‌بورد کپی کنید یا
+            با «دانلود CSV» فایل اکسل‌ساز دریافت کنید.
+          </li>
+<li>
+<strong>تفسیر کنید.</strong> از شاخص‌های میانگین و انحراف معیار برای درک مرکز و پراکندگی،
+            و از چارک‌ها و کشیدگی برای بررسی شکل توزیع بهره ببرید.
+          </li>
+</ol>
+</div>
+</section>
+<!-- ==================== THEORY / FORMULAS ==================== -->
+<section class="section">
+<div class="container" style="max-width:800px;">
+<div class="text-center mb-8 fade-in">
+<span class="eyebrow"><svg height="16" width="16"><use href="#icon-book"></use></svg> مبانی نظری</span>
+<h2 class="section-title">فرمول‌های آمار توصیفی</h2>
+<p class="section-desc" style="margin-inline:auto;">
+            آشنایی با فرمول‌های محاسبه شاخص‌های اصلی آمار توصیفی.
+          </p>
+</div>
+<div class="article-content fade-in">
+<h3>میانگین (Mean)</h3>
+<p>میانگین حسابی، مجموع داده‌ها تقسیم بر تعداد آن‌هاست و شایع‌ترین شاخص گرایش مرکزی است.</p>
+<div class="formula-box">x̄ = ( Σ xᵢ ) / n</div>
+<h3>میانه (Median)</h3>
+<p>میانه، مقدار میانی داده‌های مرتب‌شده است؛ نیمی از داده‌ها از آن کمتر و نیمی بیشتر هستند. میانه در برابر داده‌های پرت مقاوم‌تر از میانگین است.</p>
+<h3>انحراف معیار و واریانس</h3>
+<p>واریانس میانگین مربع فاصله‌ها از میانگین و انحراف معیار ریشه دوم واریانس است. این ابزار انحراف معیار نمونه‌ای (تقسیم بر n−1) را محاسبه می‌کند.</p>
+<div class="formula-box">s² = Σ(xᵢ − x̄)² / (n − 1)   |   s = √(s²)</div>
+<h3>چارک‌ها و دامنه میان‌چارکی</h3>
+<p>چارک اول (Q1) و چارک سوم (Q3) به‌ترتیب صدک ۲۵ و ۷۵ هستند. دامنه میان‌چارکی (IQR) فاصله میان آن‌هاست و معیاری مقاوم برای پراکندگی ارائه می‌دهد.</p>
+<div class="formula-box">IQR = Q3 − Q1</div>
+<h3>کشیدگی و سیری</h3>
+<p>کشیدگی (Skewness) میزان عدم تقارن توزیع و سیری (Kurtosis) میزان کشیدگی دنباله را نشان می‌دهد. کشیدگی صفر نشان‌دهنده تقارن است.</p>
+<div class="formula-box">Skewness = [ n / ((n−1)(n−2)) ] · Σ[(xᵢ − x̄)/s]³</div>
+</div>
+</div>
+</section>
+<!-- ==================== RELATED TOOLS ==================== -->
+<!-- BACKEND: Fetch related tools by shared category 'descriptive' or 'correlation'.
+         Render 3-4 tool-card components. -->
+<section class="section bg-surface-2">
+<div class="container">
+<div class="flex justify-between items-center mb-8 fade-in">
+<div>
+<span class="eyebrow"><svg height="16" width="16"><use href="#icon-tools"></use></svg> ابزارهای مرتبط</span>
+<h2 class="section-title">ابزارهای پیشنهادی</h2>
+</div>
+<a class="btn btn-outline" href="tools.html">
+            همه ابزارها
+            <svg height="18" width="18"><use href="#icon-arrow-left"></use></svg>
+</a>
+</div>
+<div class="grid grid-3 related-tools fade-in">
+<a class="tool-card" href="tool-descriptive-statistics.html">
+<div class="tool-card-icon"><svg><use href="#icon-trending"></use></svg></div>
+<div>
+<div class="tool-card-title">همبستگی پیرسون</div>
+<div class="tool-card-desc">محاسبه ضریب همبستگی پیرسون بین دو متغیر</div>
+</div>
+</a>
+<a class="tool-card" href="tool-descriptive-statistics.html">
+<div class="tool-card-icon"><svg><use href="#icon-check-circle"></use></svg></div>
+<div>
+<div class="tool-card-title">آزمون نرمال بودن</div>
+<div class="tool-card-desc">بررسی نرمال بودن توزیع داده‌ها</div>
+</div>
+</a>
+<a class="tool-card" href="tool-descriptive-statistics.html">
+<div class="tool-card-icon"><svg><use href="#icon-sigma"></use></svg></div>
+<div>
+<div class="tool-card-title">آزمون t-test تک‌نمونه‌ای</div>
+<div class="tool-card-desc">مقایسه میانگین نمونه با مقدار مرجع</div>
+</div>
+</a>
+<a class="tool-card" href="tool-descriptive-statistics.html">
+<div class="tool-card-icon"><svg><use href="#icon-target"></use></svg></div>
+<div>
+<div class="tool-card-title">حجم نمونه</div>
+<div class="tool-card-desc">محاسبه حداقل حجم نمونه مورد نیاز</div>
+</div>
+</a>
+</div>
+</div>
+</section>
+<!-- ==================== CTA ==================== -->
+<section class="section">
+<div class="container">
+<div class="cta-section fade-in">
+<h2 class="cta-title">برای تفسیر نتایج کمک می‌خواهی؟</h2>
+<p class="cta-desc">
+            تیم تحلیل آماری تزنویسه نتایج آمار توصیفی پژوهش تو را تفسیر و در پایان‌نامه‌ات می‌گنجاند.
+          </p>
+<div class="hero-actions" style="justify-content:center;">
+<a class="btn btn-primary btn-lg" href="service-statistics.html">
+<svg height="20" width="20"><use href="#icon-statistics"></use></svg>
+              تحلیل آماری تخصصی
+            </a>
+<a class="btn btn-outline btn-lg" href="https://wa.me/989302822091">
+<svg height="20" width="20"><use href="#icon-whatsapp"></use></svg>
+              گفتگو در واتساپ
+            </a>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- ==================== FOOTER ==================== -->
+<footer class="site-footer">
+<div class="container">
+<div class="footer-grid">
+<!-- About -->
+<div class="footer-about">
+<img alt="تزنویسه" src="assets/img/logo.jpg" style="height:40px;margin-bottom:1rem;"/>
+<p>
+            موسسه پژوهشی تزنویسه؛ مشاوره تخصصی پایان‌نامه، پروپوزال و تحلیل آماری
+            با حفظ کامل محرمانگی، برای مقاطع کارشناسی، ارشد و دکتری.
+          </p>
+<div class="footer-social">
+<a aria-label="واتساپ" href="https://wa.me/989302822091"><svg><use href="#icon-whatsapp"></use></svg></a>
+<a aria-label="تلگرام" href="https://t.me/Teznevise"><svg><use href="#icon-telegram"></use></svg></a>
+<a aria-label="اینستاگرام" href="#"><svg><use href="#icon-instagram"></use></svg></a>
+<a aria-label="ایمیل" href="mailto:teznevisan@gmail.com"><svg><use href="#icon-mail"></use></svg></a>
+</div>
+</div>
+<!-- Services -->
+<div>
+<h4>خدمات</h4>
+<ul class="footer-links">
+<li><a href="service-thesis.html">انجام پایان‌نامه</a></li>
+<li><a href="service-proposal.html">انجام پروپوزال</a></li>
+<li><a href="service-statistics.html">تحلیل آماری</a></li>
+<li><a href="tools.html">ابزارهای آنلاین</a></li>
+<li><a href="blog.html">مرکز دانش</a></li>
+<li><a href="downloads.html">دانلودها</a></li>
+</ul>
+</div>
+<!-- Quick Links -->
+<div>
+<h4>دسترسی سریع</h4>
+<ul class="footer-links">
+<li><a href="inquiry.html">ثبت سفارش</a></li>
+<li><a href="team.html">تیم پژوهشگران</a></li>
+<li><a href="about.html">درباره ما</a></li>
+<li><a href="contact.html">تماس با ما</a></li>
+<li><a href="privacy.html">حریم خصوصی</a></li>
+</ul>
+</div>
+<!-- Institute -->
+<div>
+<h4>موسسه</h4>
+<ul class="footer-links">
+<li><a href="about.html">درباره تزنویسه</a></li>
+<li><a href="privacy.html">تعهدات موسسه</a></li>
+<li><a href="privacy.html">سیاست بازگشت وجه</a></li>
+<li><a href="privacy.html">شرایط استفاده</a></li>
+<li><a href="privacy.html">سیاست کوکی‌ها</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<p class="footer-copyright">© ۱۴۰۵ تزنویسه — تمام حقوق محفوظ است.</p>
+<div class="footer-bottom-links">
+<a href="privacy.html">حریم خصوصی</a>
+<a href="privacy.html">شرایط استفاده</a>
+<span>میانبرها: کلید «؟»</span>
+</div>
+</div>
+</div>
+</footer>
+<!-- ==================== FLOATING ELEMENTS ==================== -->
+<a aria-label="واتساپ" class="whatsapp-float" href="https://wa.me/989302822091">
+<svg><use href="#icon-whatsapp"></use></svg>
+</a>
+<button aria-label="بازگشت به بالا" id="toTop">
+<svg><use href="#icon-arrow-up"></use></svg>
+</button>
+<!-- Mobile Bottom Nav -->
+<nav aria-label="ناوبری موبایل" class="mobile-bottom-nav">
+<a href="index.html"><svg><use href="#icon-home"></use></svg> خانه</a>
+<a class="active" href="tools.html"><svg><use href="#icon-tools"></use></svg> ابزارها</a>
+
+<a href="blog.html"><svg><use href="#icon-blog"></use></svg> بلاگ</a>
+<a href="contact.html"><svg><use href="#icon-phone"></use></svg> تماس</a>
+</nav>
+<!-- Cookie Banner -->
+<div class="cookie-banner" id="cookieBanner">
+<p class="cookie-text">
+      ما از کوکی‌ها برای بهبود تجربه شما استفاده می‌کنیم. با ادامه استفاده از سایت، با سیاست کوکی‌ها موافقت می‌کنید.
+    </p>
+<div class="cookie-actions">
+<button class="btn btn-ghost btn-sm" data-cookie-reject="">رد کردن</button>
+<button class="btn btn-primary btn-sm" data-cookie-accept="">قبول همه</button>
+</div>
+</div>
+<!-- ============================================================
+       CALCULATOR LOGIC: descriptive statistics (client-side, no server)
+       BACKEND: Calculator tool. Input: array of numbers. Output: descriptive stats.
+                Client-side JS computation. No data stored. Mirror logic server-side if SSR needed.
+       ============================================================ -->
+<script>
+  (function () {
+    "use strict";
+
+    var dataInput = document.getElementById('dataInput');
+    var calcBtn   = document.getElementById('calcBtn');
+    var clearBtn  = document.getElementById('clearBtn');
+    var sampleBtn = document.getElementById('sampleBtn');
+    var copyBtn   = document.getElementById('copyBtn');
+    var downloadBtn = document.getElementById('downloadBtn');
+    var resultsEmpty   = document.getElementById('resultsEmpty');
+    var resultsTable   = document.getElementById('resultsTable');
+    var resultsBody    = document.getElementById('resultsBody');
+    var resultsActions = document.getElementById('resultsActions');
+
+    // ---- Helpers --------------------------------------------------------
+
+    // Convert Persian/Arabic digits to English for parsing
+    function normalizeDigits(str) {
+      var persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+      var arabic  = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+      for (var i = 0; i < 10; i++) {
+        str = str.split(persian[i]).join(i).split(arabic[i]).join(i);
+      }
+      return str;
+    }
+
+    // Format a number for display (English digits, fixed precision)
+    function fmt(num, decimals) {
+      if (num === null || num === undefined || isNaN(num)) return '—';
+      if (!isFinite(num)) return '∞';
+      var d = (decimals === undefined) ? 4 : decimals;
+      // Avoid -0
+      var v = Number(num.toFixed(d));
+      if (Object.is(v, -0)) v = 0;
+      return String(v);
+    }
+
+    // Parse raw textarea input into an array of numbers
+    function parseInput(raw) {
+      if (!raw) return [];
+      var normalized = normalizeDigits(raw);
+      // Split on commas, newlines, semicolons, tabs, spaces
+      var tokens = normalized.split(/[\s,;\t]+/).filter(function (t) { return t.length > 0; });
+      var nums = [];
+      for (var i = 0; i < tokens.length; i++) {
+        var n = parseFloat(tokens[i]);
+        if (!isNaN(n) && isFinite(n)) nums.push(n);
+      }
+      return nums;
+    }
+
+    // ---- Core statistics ------------------------------------------------
+
+    function sum(arr) {
+      var s = 0;
+      for (var i = 0; i < arr.length; i++) s += arr[i];
+      return s;
+    }
+
+    function mean(arr) {
+      return sum(arr) / arr.length;
+    }
+
+    function median(sortedArr) {
+      var n = sortedArr.length;
+      var mid = Math.floor(n / 2);
+      if (n % 2 === 0) {
+        return (sortedArr[mid - 1] + sortedArr[mid]) / 2;
+      }
+      return sortedArr[mid];
+    }
+
+    function mode(arr) {
+      var freq = {};
+      var maxFreq = 0;
+      for (var i = 0; i < arr.length; i++) {
+        var k = String(arr[i]);
+        freq[k] = (freq[k] || 0) + 1;
+        if (freq[k] > maxFreq) maxFreq = freq[k];
+      }
+      if (maxFreq === 1) return null; // no repeated value
+      var modes = [];
+      for (var key in freq) {
+        if (freq[key] === maxFreq) modes.push(Number(key));
+      }
+      modes.sort(function (a, b) { return a - b; });
+      return modes;
+    }
+
+    function variance(arr, m) {
+      var n = arr.length;
+      var s = 0;
+      for (var i = 0; i < n; i++) {
+        var d = arr[i] - m;
+        s += d * d;
+      }
+      return s / (n - 1); // sample variance
+    }
+
+    function quantile(sortedArr, q) {
+      // Linear interpolation between closest ranks (type 7, R/SPSS default)
+      var n = sortedArr.length;
+      if (n === 1) return sortedArr[0];
+      var pos = (n - 1) * q;
+      var base = Math.floor(pos);
+      var rest = pos - base;
+      if (base + 1 < n) {
+        return sortedArr[base] + rest * (sortedArr[base + 1] - sortedArr[base]);
+      }
+      return sortedArr[base];
+    }
+
+    function skewness(arr, m, s) {
+      var n = arr.length;
+      if (n < 3 || s === 0) return null;
+      var acc = 0;
+      for (var i = 0; i < n; i++) {
+        acc += Math.pow((arr[i] - m) / s, 3);
+      }
+      return (n / ((n - 1) * (n - 2))) * acc;
+    }
+
+    function kurtosis(arr, m, s) {
+      // Excess kurtosis (Fisher), G2 as in Excel/SPSS
+      var n = arr.length;
+      if (n < 4 || s === 0) return null;
+      var acc = 0;
+      for (var i = 0; i < n; i++) {
+        acc += Math.pow((arr[i] - m) / s, 4);
+      }
+      var g2 = ((n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3))) * acc
+             - (3 * Math.pow(n - 1, 2)) / ((n - 2) * (n - 3));
+      return g2;
+    }
+
+    function computeStats(arr) {
+      var n = arr.length;
+      var sorted = arr.slice().sort(function (a, b) { return a - b; });
+      var m = mean(arr);
+      var v = variance(arr, m);
+      var s = Math.sqrt(v);
+      var q1 = quantile(sorted, 0.25);
+      var q3 = quantile(sorted, 0.75);
+      var modes = mode(arr);
+
+      return {
+        count: n,
+        mean: m,
+        median: median(sorted),
+        mode: modes,
+        std: s,
+        variance: v,
+        min: sorted[0],
+        max: sorted[n - 1],
+        range: sorted[n - 1] - sorted[0],
+        q1: q1,
+        q3: q3,
+        iqr: q3 - q1,
+        skewness: skewness(arr, m, s),
+        kurtosis: kurtosis(arr, m, s)
+      };
+    }
+
+    // ---- Rendering ------------------------------------------------------
+
+    function modeLabel(modes) {
+      if (!modes || modes.length === 0) return 'بدون مد';
+      return modes.map(function (x) { return fmt(x, 4); }).join('، ');
+    }
+
+    function renderResults(stats) {
+      var rows = [
+        ['تعداد داده‌ها (n)', fmt(stats.count, 0)],
+        ['میانگین (Mean)', fmt(stats.mean)],
+        ['میانه (Median)', fmt(stats.median)],
+        ['مد (Mode)', modeLabel(stats.mode)],
+        ['انحراف معیار (Std Dev)', fmt(stats.std)],
+        ['واریانس (Variance)', fmt(stats.variance)],
+        ['کمینه (Min)', fmt(stats.min)],
+        ['بیشینه (Max)', fmt(stats.max)],
+        ['دامنه (Range)', fmt(stats.range)],
+        ['چارک اول (Q1)', fmt(stats.q1)],
+        ['چارک سوم (Q3)', fmt(stats.q3)],
+        ['دامنه میان‌چارکی (IQR)', fmt(stats.iqr)],
+        ['کشیدگی (Skewness)', fmt(stats.skewness)],
+        ['سیری (Kurtosis)', fmt(stats.kurtosis)]
+      ];
+
+      resultsBody.innerHTML = '';
+      for (var i = 0; i < rows.length; i++) {
+        var tr = document.createElement('tr');
+        var td1 = document.createElement('td');
+        td1.textContent = rows[i][0];
+        var td2 = document.createElement('td');
+        td2.textContent = rows[i][1];
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        resultsBody.appendChild(tr);
+      }
+
+      resultsEmpty.style.display = 'none';
+      resultsTable.style.display = '';
+      resultsActions.style.display = 'flex';
+    }
+
+    function showEmpty() {
+      resultsEmpty.style.display = '';
+      resultsTable.style.display = 'none';
+      resultsActions.style.display = 'none';
+      resultsBody.innerHTML = '';
+    }
+
+    function showError(msg) {
+      resultsEmpty.style.display = '';
+      resultsTable.style.display = 'none';
+      resultsActions.style.display = 'none';
+      resultsBody.innerHTML = '';
+      resultsEmpty.innerHTML =
+        '<svg><use href="#icon-info"/></svg><p>' + msg + '</p>';
+    }
+
+    // Cache last results for copy/download
+    var lastStats = null;
+
+    // ---- Event handlers -------------------------------------------------
+
+    calcBtn.addEventListener('click', function () {
+      var arr = parseInput(dataInput.value);
+      if (arr.length < 2) {
+        showError('حداقل دو عدد معتبر وارد کنید.');
+        lastStats = null;
+        return;
+      }
+      lastStats = computeStats(arr);
+      renderResults(lastStats);
+    });
+
+    clearBtn.addEventListener('click', function () {
+      dataInput.value = '';
+      lastStats = null;
+      showEmpty();
+      dataInput.focus();
+    });
+
+    sampleBtn.addEventListener('click', function () {
+      dataInput.value = '12, 15, 18, 22, 25, 28, 30, 30, 33, 36, 38, 41, 45';
+      lastStats = null;
+      showEmpty();
+    });
+
+    copyBtn.addEventListener('click', function () {
+      if (!lastStats) return;
+      var text = 'شاخص,مقدار\n' +
+        'تعداد,' + fmt(lastStats.count, 0) + '\n' +
+        'میانگین,' + fmt(lastStats.mean) + '\n' +
+        'میانه,' + fmt(lastStats.median) + '\n' +
+        'مد,' + modeLabel(lastStats.mode) + '\n' +
+        'انحراف معیار,' + fmt(lastStats.std) + '\n' +
+        'واریانس,' + fmt(lastStats.variance) + '\n' +
+        'کمینه,' + fmt(lastStats.min) + '\n' +
+        'بیشینه,' + fmt(lastStats.max) + '\n' +
+        'دامنه,' + fmt(lastStats.range) + '\n' +
+        'چارک اول,' + fmt(lastStats.q1) + '\n' +
+        'چارک سوم,' + fmt(lastStats.q3) + '\n' +
+        'دامنه میان‌چارکی,' + fmt(lastStats.iqr) + '\n' +
+        'کشیدگی,' + fmt(lastStats.skewness) + '\n' +
+        'سیری,' + fmt(lastStats.kurtosis);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          flash(copyBtn, 'کپی شد!');
+        }, function () { fallbackCopy(text, copyBtn); });
+      } else {
+        fallbackCopy(text, copyBtn);
+      }
+    });
+
+    downloadBtn.addEventListener('click', function () {
+      if (!lastStats) return;
+      var rows = [
+        ['Statistic', 'Value'],
+        ['Count', fmt(lastStats.count, 0)],
+        ['Mean', fmt(lastStats.mean)],
+        ['Median', fmt(lastStats.median)],
+        ['Mode', modeLabel(lastStats.mode)],
+        ['Std Dev', fmt(lastStats.std)],
+        ['Variance', fmt(lastStats.variance)],
+        ['Min', fmt(lastStats.min)],
+        ['Max', fmt(lastStats.max)],
+        ['Range', fmt(lastStats.range)],
+        ['Q1', fmt(lastStats.q1)],
+        ['Q3', fmt(lastStats.q3)],
+        ['IQR', fmt(lastStats.iqr)],
+        ['Skewness', fmt(lastStats.skewness)],
+        ['Kurtosis', fmt(lastStats.kurtosis)]
+      ];
+      var csv = rows.map(function (r) {
+        return r.map(function (cell) {
+          var c = String(cell);
+          if (c.indexOf(',') !== -1 || c.indexOf('"') !== -1) {
+            return '"' + c.replace(/"/g, '""') + '"';
+          }
+          return c;
+        }).join(',');
+      }).join('\n');
+      // BOM for Excel UTF-8 compatibility
+      var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'descriptive-statistics.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // ---- Utilities ------------------------------------------------------
+
+    function fallbackCopy(text, btn) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.top = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); flash(btn, 'کپی شد!'); }
+      catch (e) { flash(btn, 'کپی ناموفق'); }
+      document.body.removeChild(ta);
+    }
+
+    function flash(btn, msg) {
+      var original = btn.innerHTML;
+      btn.innerHTML = '<svg width="16" height="16"><use href="#icon-check"/></svg> ' + msg;
+      setTimeout(function () { btn.innerHTML = original; }, 1800);
+    }
+
+    // Allow Ctrl/Cmd+Enter to compute
+    dataInput.addEventListener('keydown', function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        calcBtn.click();
+      }
+    });
+
+    // Initial empty state
+    showEmpty();
+  })();
+  </script>
+<!-- Scripts -->
+<script src="assets/js/main.js"></script>
+<script data-pplx-inline-edit="">
+(function () {
+  if (window === window.top) return;
+
+  const allowedParentOrigins = ["https://www.perplexity.ai","https://perplexity.ai","https://testing.perplexity.ai","https://staging.perplexity.ai","https://*.preview.i.perplexity.ai","http://perplexity.localhost","http://localhost:1420","http://127.0.0.1:1420","http://localhost:3000","http://127.0.0.1:3000","http://localhost:5173","http://127.0.0.1:5173"];
+  const MAX_FONT_BYTES = 500 * 1024;
+  const MAX_TOTAL_FONT_BYTES = 2 * 1024 * 1024;
+  let scrollForwarding = false;
+  let scrollRaf = 0;
+  let trustedTopOrigin = null;
+
+  // Allow entries like "https://*.preview.i.perplexity.ai" — the wildcard
+  // matches a single DNS label (no dots), so "https://*.foo" cannot stretch
+  // across multiple labels.
+  function matchesAllowedOrigin(origin) {
+    if (!origin) return false;
+    for (const entry of allowedParentOrigins) {
+      if (!entry.includes("*")) {
+        if (entry === origin) return true;
+        continue;
+      }
+      const pattern = new RegExp(
+        "^" +
+          entry.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^.]+") +
+          "$",
+      );
+      if (pattern.test(origin)) return true;
+    }
+    return false;
+  }
+
+  // Trust decision: when the sender is same-origin-visible (event.origin is a
+  // real origin like https://www.perplexity.ai) we trust event.origin directly.
+  // When event.origin is "null" (opaque broker srcdoc), we fall back to the
+  // broker's stamped `parentOrigin` to identify the top window. The fallback
+  // is claim-only — we rely on the browser's native `targetOrigin` enforcement
+  // on the response path (see postToTrustedTop) to ensure replies can't be
+  // delivered to anyone but the actual top window of that claimed origin.
+  function getTrustedParentOrigin(event) {
+    const forwardedParentOrigin =
+      typeof event.data.parentOrigin === "string" ? event.data.parentOrigin : null;
+    const parentOrigin = event.origin === "null" ? forwardedParentOrigin : event.origin;
+    return matchesAllowedOrigin(parentOrigin) ? parentOrigin : null;
+  }
+
+  // All responses go to window.top with targetOrigin = the allowlisted origin.
+  // An attacker that iframes us inside their own null-origin broker can claim
+  // any parentOrigin they like, but the browser will drop the reply whenever
+  // the real top's origin doesn't match — so the screenshot never leaves.
+  function postToTrustedTop(message) {
+    if (!trustedTopOrigin) return;
+    try {
+      window.top.postMessage(message, trustedTopOrigin);
+    } catch (_error) {}
+  }
+
+  function inlineAll(original, clone) {
+    if (original.nodeType !== 1 || clone.nodeType !== 1) return;
+
+    try {
+      const computedStyle = getComputedStyle(original);
+      // cssText on a computed style is the serialized declaration in modern
+      // Chromium/Safari — a single read beats enumerating ~400 longhand
+      // properties. Firefox returns "" here, so we fall back on empty.
+      const serialized = computedStyle.cssText;
+      if (serialized) {
+        clone.style.cssText = serialized;
+      } else {
+        const parts = new Array(computedStyle.length);
+        for (let index = 0; index < computedStyle.length; index += 1) {
+          const property = computedStyle[index];
+          parts[index] = `${property}:${computedStyle.getPropertyValue(property)};`;
+        }
+        clone.style.cssText = parts.join("");
+      }
+    } catch (_error) {}
+
+    const originalChildren = original.children;
+    const clonedChildren = clone.children;
+    for (
+      let index = 0;
+      index < originalChildren.length && index < clonedChildren.length;
+      index += 1
+    ) {
+      inlineAll(originalChildren[index], clonedChildren[index]);
+    }
+  }
+
+  function extractFontUrl(srcValue) {
+    const matches = [
+      ...srcValue.matchAll(
+        /url\(["']?([^"')]+)["']?\)(?:\s*format\(["']?([^"')]+)["']?\))?/gi,
+      ),
+    ];
+    if (matches.length === 0) return null;
+    const woff2 = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff2"));
+    if (woff2) return woff2[1];
+    const woff = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff"));
+    if (woff) return woff[1];
+    return matches[0][1];
+  }
+
+  // Cache resolved font URL -> data URI across captures. Fonts on a page
+  // essentially never change, and a batch run emits multiple captures back to
+  // back — without this we'd refetch + re-base64 every time.
+  const fontDataUriCache = new Map();
+  const SRC_DECLARATION_RE = /src\s*:\s*[^;}]+/i;
+
+  async function fetchAsDataUri(url) {
+    if (fontDataUriCache.has(url)) return fontDataUriCache.get(url);
+    let dataUri = null;
+    try {
+      const response = await fetch(url, { mode: "cors", credentials: "omit" });
+      if (response.ok) {
+        const blob = await response.blob();
+        if (blob.size <= MAX_FONT_BYTES) {
+          dataUri = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () =>
+              resolve(typeof reader.result === "string" ? reader.result : null);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(blob);
+          });
+        }
+      }
+    } catch (_error) {
+      dataUri = null;
+    }
+    fontDataUriCache.set(url, dataUri);
+    return dataUri;
+  }
+
+  function collectFontFaceRuleTexts() {
+    const rules = [];
+    for (const sheet of document.styleSheets) {
+      let cssRules;
+      try {
+        cssRules = sheet.cssRules;
+      } catch (_error) {
+        continue;
+      }
+      if (!cssRules) continue;
+      for (const rule of cssRules) {
+        const cssText = rule.cssText || "";
+        if (cssText.startsWith("@font-face")) rules.push(cssText);
+      }
+    }
+    return rules;
+  }
+
+  async function buildInlinedFontCss() {
+    const ruleTexts = collectFontFaceRuleTexts();
+    if (ruleTexts.length === 0) return null;
+
+    const resolved = ruleTexts.map((cssText) => {
+      if (!SRC_DECLARATION_RE.test(cssText)) return null;
+      const srcMatch = cssText.match(/src\s*:\s*([^;}]+)[;}]/i);
+      if (!srcMatch) return null;
+      const url = extractFontUrl(srcMatch[1]);
+      if (!url) return null;
+      try {
+        return { cssText, url: new URL(url, document.baseURI).href };
+      } catch (_error) {
+        return null;
+      }
+    });
+
+    const dataUris = await Promise.all(
+      resolved.map((entry) => (entry ? fetchAsDataUri(entry.url) : Promise.resolve(null))),
+    );
+
+    const inlined = [];
+    let totalBytes = 0;
+    for (let index = 0; index < resolved.length; index += 1) {
+      const entry = resolved[index];
+      const dataUri = dataUris[index];
+      if (!entry || !dataUri) continue;
+      const approxBytes = dataUri.length * 0.75;
+      if (totalBytes + approxBytes > MAX_TOTAL_FONT_BYTES) break;
+      totalBytes += approxBytes;
+      inlined.push(entry.cssText.replace(SRC_DECLARATION_RE, `src: url("${dataUri}")`));
+    }
+    return inlined.length > 0 ? inlined.join("\n") : null;
+  }
+
+  function stripExternal(clone) {
+    const images = clone.querySelectorAll("img");
+    for (let index = 0; index < images.length; index += 1) {
+      const src = images[index].getAttribute("src");
+      if (src && !src.startsWith("data:")) images[index].removeAttribute("src");
+    }
+
+    const elements = clone.querySelectorAll("*");
+    for (let index = 0; index < elements.length; index += 1) {
+      const style = elements[index].style.cssText;
+      if (style && style.includes("url(")) {
+        elements[index].style.cssText = style.replace(
+          /url\(["']?(?!data:)[^)"']*["']?\)/gi,
+          "none",
+        );
+      }
+    }
+  }
+
+  function emitScroll() {
+    scrollRaf = 0;
+    if (!scrollForwarding) return;
+    postToTrustedTop({
+      type: "INLINE_EDIT_SCROLL",
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+    });
+  }
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (!scrollForwarding || scrollRaf) return;
+      scrollRaf = requestAnimationFrame(emitScroll);
+    },
+    { passive: true, capture: true },
+  );
+
+  async function handleCaptureRequest(event) {
+    const requestId = event.data.requestId;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    function postResult(dataUrl) {
+      postToTrustedTop({
+        type: "INLINE_EDIT_SCREENSHOT_RESULT",
+        requestId,
+        dataUrl,
+        scrollX,
+        scrollY,
+      });
+    }
+
+    try {
+      // Wait for any pending web fonts to resolve so both inline metrics and
+      // the @font-face inlining below see the same loaded faces.
+      if (document.fonts && document.fonts.ready) {
+        try {
+          await document.fonts.ready;
+        } catch (_error) {}
+      }
+
+      const clone = document.documentElement.cloneNode(true);
+      inlineAll(document.documentElement, clone);
+
+      const removedNodes = clone.querySelectorAll("script,link[rel=\"stylesheet\"],style");
+      for (let index = 0; index < removedNodes.length; index += 1) {
+        removedNodes[index].remove();
+      }
+
+      stripExternal(clone);
+
+      // Re-embed web fonts as data-URI @font-face rules so the SVG rasterizer
+      // can resolve them — external font URLs aren't fetched during
+      // foreignObject rendering, which would otherwise force a fallback face
+      // and change text metrics.
+      const inlinedFontCss = await buildInlinedFontCss();
+      if (inlinedFontCss) {
+        const styleEl = document.createElement("style");
+        styleEl.textContent = inlinedFontCss;
+        const head = clone.querySelector("head");
+        if (head) head.appendChild(styleEl);
+        else clone.insertBefore(styleEl, clone.firstChild);
+      }
+
+      const html = new XMLSerializer().serializeToString(clone);
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+        '<foreignObject width="100%" height="100%">' +
+        `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden">` +
+        `<div style="position:relative;left:-${scrollX}px;top:-${scrollY}px">` +
+        html +
+        "</div></div></foreignObject></svg>";
+      const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(image, 0, 0);
+        postResult(canvas.toDataURL("image/png"));
+      };
+      image.onerror = function () {
+        postResult(null);
+      };
+      image.src = svgUrl;
+    } catch (_error) {
+      postResult(null);
+    }
+  }
+
+  window.addEventListener("message", function (event) {
+    if (!event.data) return;
+    // Only accept messages from the direct parent frame. Blocks sibling /
+    // unrelated-window postMessage senders that could otherwise reach us.
+    if (event.source !== window.parent) return;
+
+    const trustedParentOrigin = getTrustedParentOrigin(event);
+    if (!trustedParentOrigin) return;
+    trustedTopOrigin = trustedParentOrigin;
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_START") {
+      scrollForwarding = true;
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_STOP") {
+      scrollForwarding = false;
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      scrollRaf = 0;
+      return;
+    }
+
+    if (event.data.type !== "INLINE_EDIT_CAPTURE_REQUEST") return;
+
+    handleCaptureRequest(event);
+  });
+})();
+
+
+</script></body>
+</html>
