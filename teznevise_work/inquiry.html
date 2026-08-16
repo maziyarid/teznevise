@@ -21,14 +21,22 @@
 .inquiry-grid {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: 32px;
+  grid-template-areas:
+    "title form"
+    "call form"
+    "msg form";
+  gap: 20px 32px;
   align-items: start;
 }
+.inquiry-title-block { grid-area: title; }
+.call-me-card { grid-area: call; }
+.inquiry-messengers { grid-area: msg; }
+.lead-card { grid-area: form; }
+
 .inquiry-messengers {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 18px;
 }
 .inq-msg {
   display: inline-flex;
@@ -55,10 +63,10 @@
 .inq-msg.tg i { color: #2AABEE; }
 .inq-msg.bale i { color: #00A3E0; }
 .inq-msg.rubika i { color: #E1306C; }
+
 .call-me-card {
-  margin-top: 0;
+  margin: 0;
   max-width: none;
-  margin-inline: 0;
   background: #fff;
   border: 1px solid rgba(20, 93, 74, 0.12);
   border-radius: 20px;
@@ -126,15 +134,40 @@
   font-weight: 700;
 }
 .call-me-ok.is-visible { display: block; }
-.call-me-card .inquiry-messengers {
-  justify-content: center;
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(20, 93, 74, 0.1);
-}
+
 @media (max-width: 900px) {
-  .inquiry-grid { grid-template-columns: 1fr; }
-  .call-me-row { flex-direction: column; }
+  .inquiry-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "title"
+      "call"
+      "msg"
+      "form";
+    gap: 20px;
+  }
+  .inquiry-title-block {
+    text-align: center;
+  }
+  .inquiry-title-block .eyebrow {
+    margin-inline: auto;
+    display: inline-flex;
+  }
+  .inquiry-title-block h1 {
+    text-align: center !important;
+  }
+  .inquiry-title-block > p {
+    text-align: center;
+    margin-inline: auto !important;
+  }
+  .inquiry-messengers {
+    justify-content: center;
+  }
+  .call-me-row {
+    flex-direction: column;
+  }
+  .call-me-row button {
+    width: 100%;
+  }
 }
 </style>
 </head><body>
@@ -208,39 +241,30 @@
 <section class="inquiry-hero">
   <div class="container">
     <div class="inquiry-grid">
-      <div>
+      <div class="inquiry-title-block">
         <span class="eyebrow">ثبت سفارش</span>
         <h1 style="font-size:clamp(28px,4vw,40px);line-height:1.35;margin:10px 0 12px;color:#172d26;">ثبت سفارش پروژه پژوهشی</h1>
         <p style="color:#62736d;font-size:15px;line-height:1.85;max-width:48ch;margin:0 0 20px;">فرم رایگان است. پس از بررسی، مسیر، زمان تقریبی و برآورد اولیه اعلام می‌شود. هیچ تعهد مالی پیش از توافق وجود ندارد.</p>
+      </div>
 
-        <div class="call-me-card" id="callMeBox">
-          <h2>با من تماس بگیرید</h2>
-          <p>شماره تماس خود را وارد کنید؛ درخواست تماس برای ما ایمیل می‌شود و در اسرع وقت با شما تماس می‌گیریم.</p>
-          <form id="callMeForm" novalidate>
-            <div class="call-me-row">
-              <input
-                type="tel"
-                id="callMePhone"
-                name="phone"
-                inputmode="numeric"
-                autocomplete="tel"
-                placeholder="09xxxxxxxxx"
-                maxlength="11"
-                aria-describedby="callMeError"
-                required
-              />
-              <button type="submit">درخواست تماس</button>
-            </div>
-            <div class="call-me-error" id="callMeError" role="alert">شماره باید فقط عدد باشد و ۱۰ یا ۱۱ رقم داشته باشد.</div>
-            <div class="call-me-ok" id="callMeOk">درخواست ثبت شد؛ ایمیل تماس باز می‌شود.</div>
-          </form>
-          <div class="inquiry-messengers" aria-label="راه‌های ارتباطی سریع">
-            <a class="inq-msg wa" href="https://wa.me/989302822091" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i><span>واتساپ</span></a>
-            <a class="inq-msg tg" href="https://t.me/Teznevise" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i><span>تلگرام</span></a>
-            <a class="inq-msg bale" href="https://ble.ir/teznevise" target="_blank" rel="noopener"><i class="fa-solid fa-comment-dots"></i><span>بله</span></a>
-            <a class="inq-msg rubika" href="https://rubika.ir/teznevise" target="_blank" rel="noopener"><i class="fa-solid fa-comments"></i><span>روبیکا</span></a>
+      <div class="call-me-card" id="callMeBox">
+        <h2>با من تماس بگیرید</h2>
+        <p>شماره تماس خود را وارد کنید؛ درخواست تماس برای ما ایمیل می‌شود و در اسرع وقت با شما تماس می‌گیریم.</p>
+        <form id="callMeForm" novalidate>
+          <div class="call-me-row">
+            <input type="tel" id="callMePhone" name="phone" inputmode="numeric" autocomplete="tel" placeholder="09xxxxxxxxx" maxlength="11" aria-describedby="callMeError" required />
+            <button type="submit">درخواست تماس</button>
           </div>
-        </div>
+          <div class="call-me-error" id="callMeError" role="alert">شماره باید فقط عدد باشد و ۱۰ یا ۱۱ رقم داشته باشد.</div>
+          <div class="call-me-ok" id="callMeOk">درخواست ثبت شد؛ ایمیل تماس باز می‌شود.</div>
+        </form>
+      </div>
+
+      <div class="inquiry-messengers" aria-label="راه‌های ارتباطی سریع">
+        <a class="inq-msg wa" href="https://wa.me/989302822091" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i><span>واتساپ</span></a>
+        <a class="inq-msg tg" href="https://t.me/Teznevise" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i><span>تلگرام</span></a>
+        <a class="inq-msg bale" href="https://ble.ir/teznevise" target="_blank" rel="noopener"><i class="fa-solid fa-comment-dots"></i><span>بله</span></a>
+        <a class="inq-msg rubika" href="https://rubika.ir/teznevise" target="_blank" rel="noopener"><i class="fa-solid fa-comments"></i><span>روبیکا</span></a>
       </div>
 
       <div class="lead-card" id="orderFormCard">
