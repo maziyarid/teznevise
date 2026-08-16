@@ -58,11 +58,48 @@
   color: #fff;
   border-color: #145D4A;
 }
-.tools-grid.services-grid {
+.tools-grid.services-grid,
+.services-grid.tools-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 16px !important;
   margin-top: 12px;
 }
-.tools-grid .service-card[hidden] {
-  display: none !important;
+.tools-grid .service-card {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 14px 18px !important;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.tools-grid .service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(9, 40, 32, 0.1);
+}
+.tools-grid .service-card h3 {
+  font-size: 15px !important;
+  margin: 10px 0 6px !important;
+}
+.tools-grid .service-card p {
+  font-size: 12.5px !important;
+  line-height: 1.7 !important;
+  margin: 0 !important;
+  color: #62736d;
+}
+.tools-grid .service-card[hidden] { display: none !important; }
+@media (max-width: 1100px) {
+  .tools-grid.services-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 800px) {
+  .tools-grid.services-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 560px) {
+  .tools-grid.services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 }
 </style>
 </head><body>
@@ -88,30 +125,9 @@
     <li>
       <a href="service-thesis.html">خدمات <i class="fa-solid fa-chevron-down nav-chevron"></i></a>
       <ul class="nav-dropdown">
-        <li>
-          <a href="service-thesis.html">پایان‌نامه <i class="fa-solid fa-chevron-left nav-chevron"></i></a>
-          <ul class="nav-dropdown-l3">
-            <li><a href="service-thesis.html">ارشد و دکتری</a></li>
-            <li><a href="service-thesis.html">نگارش فصل‌ها</a></li>
-            <li><a href="service-thesis.html">آمادگی دفاع</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="service-proposal.html">پروپوزال <i class="fa-solid fa-chevron-left nav-chevron"></i></a>
-          <ul class="nav-dropdown-l3">
-            <li><a href="service-proposal.html">بیان مسئله</a></li>
-            <li><a href="service-proposal.html">روش‌شناسی</a></li>
-            <li><a href="service-proposal.html">مرور ادبیات</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="service-statistics.html">تحلیل آماری <i class="fa-solid fa-chevron-left nav-chevron"></i></a>
-          <ul class="nav-dropdown-l3">
-            <li><a href="service-statistics.html">SPSS / R / Python</a></li>
-            <li><a href="service-statistics.html">مدل‌سازی معادلات</a></li>
-            <li><a href="tools.html">ابزارهای آنلاین</a></li>
-          </ul>
-        </li>
+        <li><a href="service-thesis.html">پایان‌نامه</a></li>
+        <li><a href="service-proposal.html">پروپوزال</a></li>
+        <li><a href="service-statistics.html">تحلیل آماری</a></li>
         <li><a href="service-simulation.html">شبیه‌سازی</a></li>
       </ul>
     </li>
@@ -123,14 +139,7 @@
         <li><a href="tools.html">آزمون‌های فرض</a></li>
       </ul>
     </li>
-    <li>
-      <a href="blog.html">بلاگ <i class="fa-solid fa-chevron-down nav-chevron"></i></a>
-      <ul class="nav-dropdown">
-        <li><a href="blog.html">راهنمای پایان‌نامه</a></li>
-        <li><a href="blog.html">روش تحقیق</a></li>
-        <li><a href="blog.html">آمار و نرم‌افزار</a></li>
-      </ul>
-    </li>
+    <li><a href="blog.html">بلاگ</a></li>
     <li><a href="about.html">درباره ما</a></li>
   </ul>
   <div class="nav-actions">
@@ -157,7 +166,6 @@
       <a class="mobile-nav-link" href="service-simulation.html"><i class="fa-solid fa-cube"></i> شبیه‌سازی</a>
       <a class="mobile-nav-link active" href="tools.html"><i class="fa-solid fa-calculator"></i> ابزارهای آنلاین</a>
       <a class="mobile-nav-link" href="blog.html"><i class="fa-solid fa-book-open"></i> بلاگ</a>
-      <a class="mobile-nav-link" href="team.html"><i class="fa-solid fa-user-group"></i> تیم پژوهشگران</a>
       <a class="mobile-nav-link" href="about.html"><i class="fa-regular fa-circle-question"></i> درباره ما</a>
       <a class="mobile-nav-link" href="contact.html"><i class="fa-solid fa-phone"></i> تماس با ما</a>
     </div>
@@ -188,89 +196,41 @@
   <div class="container">
     <div class="services-grid field-as-services tools-grid" id="toolsGrid" data-reveal-stagger>
 
-      <article class="service-card" data-category="descriptive">
-        <div class="icon-box icon-indigo"><i class="fa-solid fa-chart-simple"></i></div>
-        <h3>آمار توصیفی</h3>
-        <p>میانگین، میانه، واریانس، انحراف معیار و شاخص‌های مرکزی و پراکندگی.</p>
-        <a class="link-arrow" href="tool-descriptive-statistics.html">ادامه مطلب</a>
-      </article>
+<a class="service-card" data-category="descriptive" href="tool-descriptive-statistics.html"><div class="icon-box icon-indigo"><i class="fa-solid fa-chart-simple"></i></div><h3>آمار توصیفی</h3><p>میانگین، میانه، واریانس و شاخص‌های توصیفی.</p></a>
 
-      <article class="service-card" data-category="correlation">
-        <div class="icon-box icon-teal"><i class="fa-solid fa-link"></i></div>
-        <h3>همبستگی پیرسون</h3>
-        <p>ضریب همبستگی خطی بین دو متغیر کمی و تفسیر شدت رابطه.</p>
-        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
-      </article>
+<a class="service-card" data-category="correlation" href="tools.html"><div class="icon-box icon-teal"><i class="fa-solid fa-link"></i></div><h3>همبستگی پیرسون</h3><p>ضریب همبستگی خطی بین دو متغیر کمی.</p></a>
 
-      <article class="service-card" data-category="correlation">
-        <div class="icon-box icon-cyan"><i class="fa-solid fa-shuffle"></i></div>
-        <h3>همبستگی اسپیرمن</h3>
-        <p>همبستگی رتبه‌ای ناپارامتریک برای داده‌های ترتیبی یا غیرنرمال.</p>
-        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
-      </article>
+<a class="service-card" data-category="correlation" href="tools.html"><div class="icon-box icon-cyan"><i class="fa-solid fa-shuffle"></i></div><h3>همبستگی اسپیرمن</h3><p>همبستگی رتبه‌ای ناپارامتریک.</p></a>
 
-      <article class="service-card" data-category="parametric">
-        <div class="icon-box icon-amber"><i class="fa-solid fa-not-equal"></i></div>
-        <h3>آزمون تی مستقل</h3>
-        <p>مقایسه میانگین دو گروه مستقل با آزمون t.</p>
-        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
-      </article>
+<a class="service-card" data-category="parametric" href="tools.html"><div class="icon-box icon-amber"><i class="fa-solid fa-not-equal"></i></div><h3>آزمون T-test</h3><p>مقایسه میانگین دو گروه (مستقل یا وابسته).</p></a>
 
-      <article class="service-card" data-category="parametric">
-        <div class="icon-box icon-danger-soft"><i class="fa-solid fa-code-compare"></i></div>
-        <h3>آزمون تی وابسته</h3>
-        <p>مقایسه زوجی میانگین‌ها در طرح‌های وابسته.</p>
-        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
-      </article>
+<a class="service-card" data-category="parametric" href="tools.html"><div class="icon-box icon-purple-soft"><i class="fa-solid fa-layer-group"></i></div><h3>تحلیل واریانس (ANOVA)</h3><p>مقایسه میانگین چند گروه مستقل.</p></a>
 
-      <article class="service-card" data-category="parametric">
-        <div class="icon-box icon-purple-soft"><i class="fa-solid fa-layer-group"></i></div>
-        <h3>ANOVA یک‌راهه</h3>
-        <p>مقایسه میانگین چند گروه مستقل با تحلیل واریانس.</p>
-        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
-      </article>
+<a class="service-card" data-category="nonparametric" href="tools.html"><div class="icon-box icon-teal"><i class="fa-solid fa-scale-balanced"></i></div><h3>آزمون U</h3><p>مان–ویتنی؛ مقایسه ناپارامتریک دو گروه.</p></a>
 
-      <article class="service-card" data-category="parametric">
-        <div class="icon-box icon-indigo"><i class="fa-solid fa-table-cells"></i></div>
-        <h3>خی‌دو</h3>
-        <p>آزمون استقلال و برازش برای داده‌های رده‌ای.</p>
-        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
-      </article>
+<a class="service-card" data-category="nonparametric" href="tools.html"><div class="icon-box icon-cyan"><i class="fa-solid fa-code-compare"></i></div><h3>آزمون Wilcoxon</h3><p>آزمون رتبه‌ای علامت‌دار برای داده‌های زوجی.</p></a>
 
-      <article class="service-card" data-category="nonparametric">
-        <div class="icon-box icon-teal"><i class="fa-solid fa-scale-balanced"></i></div>
-        <h3>مان-ویتنی</h3>
-        <p>مقایسه ناپارامتریک دو گروه مستقل.</p>
-        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
-      </article>
+<a class="service-card" data-category="nonparametric" href="tools.html"><div class="icon-box icon-indigo"><i class="fa-solid fa-bars-staggered"></i></div><h3>آزمون Kruskal-Wallis</h3><p>مقایسه ناپارامتریک چند گروه مستقل.</p></a>
 
-      <article class="service-card" data-category="nonparametric">
-        <div class="icon-box icon-cyan"><i class="fa-solid fa-bars-staggered"></i></div>
-        <h3>کروسکال-والیس</h3>
-        <p>مقایسه ناپارامتریک چند گروه مستقل.</p>
-        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
-      </article>
+<a class="service-card" data-category="descriptive" href="tools.html"><div class="icon-box icon-amber"><i class="fa-solid fa-shield-halved"></i></div><h3>آلفای کرونباخ</h3><p>پایایی درونی ابزار اندازه‌گیری.</p></a>
 
-      <article class="service-card" data-category="descriptive">
-        <div class="icon-box icon-amber"><i class="fa-solid fa-shield-halved"></i></div>
-        <h3>آلفای کرونباخ</h3>
-        <p>محاسبه پایایی درونی ابزار اندازه‌گیری.</p>
-        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
-      </article>
+<a class="service-card" data-category="descriptive" href="tools.html"><div class="icon-box icon-danger-soft"><i class="fa-solid fa-list-check"></i></div><h3>آزمون‌های KR-20 و KR-21</h3><p>پایایی برای آزمون‌های دوگزینه‌ای.</p></a>
 
-      <article class="service-card" data-category="parametric">
-        <div class="icon-box icon-danger-soft"><i class="fa-solid fa-chart-line"></i></div>
-        <h3>رگرسیون خطی</h3>
-        <p>مدل‌سازی رابطه خطی و پیش‌بینی ساده.</p>
-        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
-      </article>
+<a class="service-card" data-category="correlation" href="tools.html"><div class="icon-box icon-teal"><i class="fa-solid fa-handshake"></i></div><h3>ضریب توافق کاپا</h3><p>توافق بین ارزیاب‌ها (Cohen’s Kappa).</p></a>
 
-      <article class="service-card" data-category="descriptive">
-        <div class="icon-box icon-purple-soft"><i class="fa-solid fa-users"></i></div>
-        <h3>حجم نمونه</h3>
-        <p>برآورد اندازه نمونه بر اساس توان و دقت موردنیاز.</p>
-        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
-      </article>
+<a class="service-card" data-category="correlation" href="tools.html"><div class="icon-box icon-cyan"><i class="fa-solid fa-diagram-project"></i></div><h3>ضریب ICC</h3><p>ضریب همبستگی درون‌طبقه‌ای.</p></a>
+
+<a class="service-card" data-category="parametric" href="tools.html"><div class="icon-box icon-purple-soft"><i class="fa-solid fa-chart-line"></i></div><h3>تحلیل رگرسیون</h3><p>مدل‌سازی رابطه و پیش‌بینی خطی.</p></a>
+
+<a class="service-card" data-category="parametric" href="tools.html"><div class="icon-box icon-indigo"><i class="fa-solid fa-table-cells"></i></div><h3>آزمون مجذور کای</h3><p>استقلال و ارتباط برای داده‌های رده‌ای.</p></a>
+
+<a class="service-card" data-category="parametric" href="tools.html"><div class="icon-box icon-amber"><i class="fa-solid fa-check-double"></i></div><h3>آزمون نیکویی برازش</h3><p>برازش توزیع مشاهده‌شده با توزیع مورد انتظار.</p></a>
+
+<a class="service-card" data-category="descriptive" href="tools.html"><div class="icon-box icon-teal"><i class="fa-solid fa-users"></i></div><h3>محاسبه‌گر حجم نمونه</h3><p>برآورد اندازه نمونه بر اساس دقت و توان.</p></a>
+
+<a class="service-card" data-category="descriptive" href="tools.html"><div class="icon-box icon-danger-soft"><i class="fa-solid fa-bolt"></i></div><h3>محاسبه‌گر توان آزمون</h3><p>محاسبه توان آماری (Power).</p></a>
+
+<a class="service-card" data-category="descriptive" href="tools.html"><div class="icon-box icon-cyan"><i class="fa-solid fa-clipboard-check"></i></div><h3>روایی محتوا (CVR/CVI)</h3><p>شاخص روایی محتوا برای گویه‌ها و مقیاس.</p></a>
 
     </div>
   </div>
