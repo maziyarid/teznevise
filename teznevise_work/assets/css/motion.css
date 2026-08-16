@@ -1,0 +1,276 @@
+/* ==========================================================
+   Teznevise Homepage — Motion, Detail & Micro-interactions
+   Adds continuous subtle motion, scroll reveals, counters,
+   and richer hover states while respecting prefers-reduced-motion.
+   ========================================================== */
+
+:root {
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-duration: 0.7s;
+}
+
+/* ---------- Continuous hero motion ---------- */
+.network-ring.ring-one {
+  animation: ring-spin 28s linear infinite;
+}
+.network-ring.ring-two {
+  animation: ring-spin-reverse 42s linear infinite;
+}
+
+@keyframes ring-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes ring-spin-reverse {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+
+/* Floating orbit tags */
+.orbit-tag {
+  animation: float-tag 5.5s ease-in-out infinite;
+  will-change: transform;
+}
+.tag-1 { animation-delay: 0s; }
+.tag-2 { animation-delay: 0.8s; }
+.tag-3 { animation-delay: 1.6s; }
+.tag-4 { animation-delay: 2.4s; }
+
+@keyframes float-tag {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+
+/* Soft pulse + glow on the central order button */
+.hero-order-button {
+  animation: order-pulse 3.2s ease-in-out infinite;
+  transition: transform 0.35s var(--motion-ease), box-shadow 0.35s var(--motion-ease) !important;
+}
+.hero-order-button:hover,
+.hero-order-button:focus-visible {
+  animation-play-state: paused;
+  box-shadow: 0 32px 72px rgba(20, 93, 74, 0.32), inset 0 0 0 12px rgba(255, 255, 255, 0.14) !important;
+}
+
+@keyframes order-pulse {
+  0%, 100% {
+    box-shadow: 0 28px 64px rgba(20, 93, 74, 0.24), inset 0 0 0 12px rgba(255, 255, 255, 0.10);
+  }
+  50% {
+    box-shadow: 0 32px 70px rgba(20, 93, 74, 0.34), 0 0 0 10px rgba(20, 93, 74, 0.08), inset 0 0 0 12px rgba(255, 255, 255, 0.14);
+  }
+}
+
+/* Ink blots gentle drift */
+.ink-blot {
+  animation: blot-drift 12s ease-in-out infinite alternate;
+}
+.blot-two {
+  animation-delay: -4s;
+  animation-duration: 15s;
+}
+@keyframes blot-drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(12px, -18px) scale(1.06); }
+}
+
+/* ---------- Scroll reveal system ---------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--motion-duration) var(--motion-ease-out),
+              transform var(--motion-duration) var(--motion-ease-out);
+  will-change: opacity, transform;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger helpers */
+[data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s var(--motion-ease-out),
+              transform 0.6s var(--motion-ease-out);
+}
+[data-reveal-stagger].is-visible > *:nth-child(1) { transition-delay: 0.05s; }
+[data-reveal-stagger].is-visible > *:nth-child(2) { transition-delay: 0.12s; }
+[data-reveal-stagger].is-visible > *:nth-child(3) { transition-delay: 0.19s; }
+[data-reveal-stagger].is-visible > *:nth-child(4) { transition-delay: 0.26s; }
+[data-reveal-stagger].is-visible > *:nth-child(5) { transition-delay: 0.33s; }
+[data-reveal-stagger].is-visible > *:nth-child(6) { transition-delay: 0.40s; }
+[data-reveal-stagger].is-visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero copy entrance (immediate on load) */
+.hero-copy .eyebrow,
+.hero-copy h1,
+.hero-copy > p,
+.hero-actions,
+.hero-points {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: hero-in 0.85s var(--motion-ease-out) forwards;
+}
+.hero-copy .eyebrow { animation-delay: 0.08s; }
+.hero-copy h1       { animation-delay: 0.18s; }
+.hero-copy > p      { animation-delay: 0.30s; }
+.hero-actions       { animation-delay: 0.42s; }
+.hero-points        { animation-delay: 0.52s; }
+
+@keyframes hero-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Enhanced micro-interactions ---------- */
+.service-card,
+.reason-item,
+.step,
+.article-card {
+  transition: transform 0.35s var(--motion-ease),
+              box-shadow 0.35s var(--motion-ease),
+              border-color 0.35s ease !important;
+}
+.service-card:hover,
+.article-card:hover {
+  transform: translateY(-8px) !important;
+}
+.reason-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(20, 93, 74, 0.08);
+  border-color: rgba(20, 93, 74, 0.18) !important;
+}
+.step:hover {
+  transform: translateY(-5px);
+  border-color: rgba(20, 93, 74, 0.2) !important;
+  box-shadow: 0 14px 36px rgba(20, 93, 74, 0.07);
+}
+
+.btn-tz,
+.nav-cta,
+.link-arrow {
+  transition: transform 0.28s var(--motion-ease),
+              box-shadow 0.28s var(--motion-ease),
+              background 0.28s ease,
+              color 0.28s ease !important;
+}
+.btn-primary-tz:hover {
+  box-shadow: 0 14px 32px rgba(20, 93, 74, 0.28) !important;
+}
+.btn-light-tz:hover {
+  border-color: rgba(20, 93, 74, 0.35) !important;
+  color: var(--tz-primary) !important;
+}
+
+/* Bridge nodes subtle active glow */
+.bridge-node {
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s var(--motion-ease);
+}
+.bridge-node.active {
+  box-shadow: 0 0 0 3px rgba(20, 93, 74, 0.12);
+}
+.bridge-node:hover {
+  transform: translateY(-2px);
+}
+
+/* Stats counter polish */
+.reason-stats b {
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  min-width: 2.4ch;
+}
+
+/* Mobile menu smoother */
+.mobile-menu {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.45s var(--motion-ease),
+              opacity 0.35s ease,
+              padding 0.35s ease;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.mobile-menu.open {
+  max-height: 520px;
+  opacity: 1;
+  padding-top: 8px !important;
+  padding-bottom: 18px !important;
+  display: block !important;
+}
+
+/* CTA band gentle background shift */
+.cta-band {
+  position: relative;
+  overflow: hidden;
+}
+.cta-band::before {
+  content: "";
+  position: absolute;
+  inset: -40% -20%;
+  background: radial-gradient(circle at 30% 40%, rgba(130, 216, 185, 0.22), transparent 55%);
+  animation: cta-glow 8s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes cta-glow {
+  from { transform: translate(0, 0) scale(1); opacity: 0.7; }
+  to   { transform: translate(8%, -6%) scale(1.08); opacity: 1; }
+}
+
+/* Focus visible improvements */
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid rgba(20, 93, 74, 0.35);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .network-ring.ring-one,
+  .network-ring.ring-two,
+  .orbit-tag,
+  .hero-order-button,
+  .ink-blot,
+  .cta-band::before,
+  .hero-copy .eyebrow,
+  .hero-copy h1,
+  .hero-copy > p,
+  .hero-actions,
+  .hero-points {
+    animation: none !important;
+  }
+  [data-reveal],
+  [data-reveal-stagger] > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .service-card:hover,
+  .article-card:hover,
+  .reason-item:hover,
+  .step:hover,
+  .btn-tz:hover {
+    transform: none !important;
+  }
+  .mobile-menu {
+    transition: none !important;
+  }
+}
+
+/* Extra polish for very small screens – keep motion light */
+@media (max-width: 480px) {
+  .orbit-tag {
+    animation-duration: 6.5s;
+  }
+  .network-ring.ring-one {
+    animation-duration: 36s;
+  }
+  .network-ring.ring-two {
+    animation-duration: 52s;
+  }
+}
