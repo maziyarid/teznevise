@@ -14,269 +14,70 @@
 <title>آموزش نگارش فصل اول پایان‌نامه: تبدیل پروپوزال به فصل اول | تزنویسه</title>
 <meta content="راهنمای گام‌به‌گام تبدیل پروپوزال به فصل اول پایان‌نامه." name="description"/>
 <style>
-.post-hero {
-  padding: 40px 0 28px;
-  background: linear-gradient(180deg, #f4f9f7 0%, #fff 100%);
-  text-align: center;
-}
-.post-hero h1 {
-  margin: 0 auto 12px;
-  max-width: 28ch;
-  font-size: clamp(26px, 3.6vw, 38px);
-  line-height: 1.4;
-  color: #172d26;
-  font-weight: 850;
-}
-.post-subheading {
-  margin: 0 auto 18px;
-  max-width: 52ch;
-  color: #7a8a84;
-  font-size: 16px;
-  line-height: 1.85;
-}
-.post-meta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px 18px;
-  margin: 0 0 16px;
-  color: #5a6b64;
-  font-size: 13.5px;
-  font-weight: 650;
-}
-.post-meta span {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.post-meta i { color: #145D4A; opacity: 0.85; }
-.post-meta a { color: #145D4A; text-decoration: none; font-weight: 750; }
-.post-meta a:hover { text-decoration: underline; }
-.post-breadcrumb {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px;
-  font-size: 13px;
-  color: #8a9892;
-}
-.post-breadcrumb a { color: #145D4A; text-decoration: none; }
-.post-breadcrumb a:hover { text-decoration: underline; }
-.post-breadcrumb .sep { opacity: 0.5; }
-.post-breadcrumb .current { color: #5a6b64; font-weight: 700; }
+.post-hero{padding:32px 0 20px;background:linear-gradient(180deg,#f4f9f7 0%,#fff 100%);text-align:center}
+.post-hero h1{margin:0 auto 10px;max-width:36ch;font-size:clamp(22px,2.8vw,28px);line-height:1.55;color:#172d26;font-weight:800}
+.post-subheading{margin:0 auto 14px;max-width:56ch;color:#7a8a84;font-size:14.5px;line-height:1.75}
+.post-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin:0 0 12px;color:#5a6b64;font-size:13px;font-weight:650;line-height:1.5}
+.post-meta span{display:inline-flex;align-items:center;gap:6px}
+.post-meta i{color:#145D4A;opacity:.85;font-size:12px}
+.post-meta a{color:#145D4A;text-decoration:none;font-weight:750}
+.post-breadcrumb{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;font-size:12.5px;color:#8a9892;line-height:1.5}
+.post-breadcrumb a{color:#145D4A;text-decoration:none}
+.post-breadcrumb .sep{opacity:.5}
+.post-breadcrumb .current{color:#5a6b64;font-weight:700}
 
-.post-layout {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 32px;
-  align-items: start;
-  padding: 28px 0 48px;
-}
-.post-main { min-width: 0; }
-.post-featured {
-  width: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-  margin-bottom: 24px;
-  background: #eef4f1;
-  aspect-ratio: 16 / 9;
-}
-.post-featured img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.article-body {
-  color: #2f3f38;
-  font-size: 15.5px;
-  line-height: 1.95;
-}
-.article-body h2 {
-  margin: 28px 0 12px;
-  font-size: 22px;
-  color: #172d26;
-  font-weight: 850;
-}
-.article-body p { margin: 0 0 14px; }
-.article-body a { color: #145D4A; font-weight: 700; }
+.post-layout{display:grid;grid-template-columns:1fr 280px;gap:28px;align-items:start;padding:20px 0 0}
+.post-main{min-width:0}
+.post-featured{width:100%;max-width:420px;max-height:180px;margin:0 auto 16px;border-radius:12px;overflow:hidden;background:#eef4f1;aspect-ratio:16/9}
+.post-featured img{width:100%;height:100%;object-fit:cover;display:block}
+.article-body{color:#2f3f38;font-size:15px;line-height:1.85}
+.article-body h2{margin:22px 0 10px;font-size:18px;line-height:1.5;color:#172d26;font-weight:800}
+.article-body p{margin:0 0 12px;line-height:1.85}
+.article-body a{color:#145D4A;font-weight:700}
 
-.post-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  position: sticky;
-  top: 96px;
-}
-.post-widget {
-  background: #fff;
-  border: 1px solid rgba(20, 93, 74, 0.12);
-  border-radius: 16px;
-  padding: 18px 16px;
-  box-shadow: 0 8px 24px rgba(9, 40, 32, 0.04);
-}
-.post-widget h4 {
-  margin: 0 0 12px;
-  font-size: 15px;
-  font-weight: 850;
-  color: #172d26;
-}
-.toc-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.toc-list a {
-  text-decoration: none;
-  color: #4a5f56;
-  font-size: 13.5px;
-  font-weight: 650;
-}
-.toc-list a:hover { color: #145D4A; }
-.post-widget-cta {
-  background: linear-gradient(145deg, #145D4A, #0f4a3c);
-  color: #fff;
-  text-align: center;
-  border: none;
-}
-.post-widget-cta h4 { color: #fff; }
-.post-widget-cta p {
-  margin: 0 0 14px;
-  color: rgba(255,255,255,0.88);
-  font-size: 13.5px;
-  line-height: 1.7;
-}
+.post-sidebar{display:flex;flex-direction:column;gap:14px;position:sticky;top:96px}
+.post-widget{background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:14px;padding:16px 14px;box-shadow:0 8px 24px rgba(9,40,32,.04)}
+.post-widget h4{margin:0 0 10px;font-size:14px;font-weight:850;color:#172d26;display:flex;align-items:center;gap:8px;line-height:1.4}
+.post-widget h4 i{color:#145D4A;font-size:14px}
+.post-widget-toc{background:linear-gradient(180deg,#eef7f3 0%,#e4f1eb 100%);border:1px solid rgba(20,93,74,.16)}
+.post-widget-toc h4{color:#145D4A}
+.toc-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.toc-list a{text-decoration:none;color:#3d534a;font-size:13px;font-weight:650;line-height:1.5}
+.toc-list a:hover{color:#145D4A}
+.post-widget-cta{background:linear-gradient(145deg,#145D4A,#0f4a3c);color:#fff;text-align:center;border:none}
+.post-widget-cta h4{color:#fff;justify-content:center}
+.post-widget-cta p{margin:0 0 12px;color:rgba(255,255,255,.88);font-size:13px;line-height:1.7}
 
-.post-comments {
-  margin: 8px 0 40px;
-  padding: 28px 24px;
-  background: #fff;
-  border: 1px solid rgba(20, 93, 74, 0.12);
-  border-radius: 18px;
-}
-.post-comments h2 {
-  margin: 0 0 8px;
-  font-size: 22px;
-  color: #172d26;
-}
-.post-comments > p {
-  margin: 0 0 18px;
-  color: #62736d;
-  font-size: 14px;
-}
-.comment-form .form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.comment-form .field label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #3d4f48;
-}
-.comment-form .field input,
-.comment-form .field textarea {
-  width: 100%;
-  border: 1px solid rgba(20, 93, 74, 0.18);
-  border-radius: 12px;
-  padding: 11px 12px;
-  font-family: inherit;
-  font-size: 14px;
-}
-.comment-form .field.full { grid-column: 1 / -1; }
-.comment-form .field textarea { min-height: 120px; resize: vertical; }
-.comment-list {
-  margin-top: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.comment-item {
-  padding: 14px 16px;
-  border-radius: 14px;
-  background: #f6faf8;
-  border: 1px solid rgba(20, 93, 74, 0.08);
-}
-.comment-item strong { color: #172d26; }
-.comment-item .comment-date {
-  margin-inline-start: 8px;
-  color: #8a9892;
-  font-size: 12px;
-  font-weight: 600;
-}
-.comment-item p {
-  margin: 8px 0 0;
-  color: #3d4f48;
-  font-size: 14px;
-  line-height: 1.8;
-}
+.post-comments{margin:24px 0 8px;padding:18px 16px;background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:14px}
+.post-comments h2{margin:0 0 6px;font-size:18px;line-height:1.45;color:#172d26}
+.post-comments>p{margin:0 0 12px;color:#62736d;font-size:13.5px;line-height:1.7}
+.comment-form .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.comment-form .field label{display:block;margin-bottom:5px;font-size:12.5px;font-weight:700;color:#3d4f48}
+.comment-form .field input,.comment-form .field textarea{width:100%;border:1px solid rgba(20,93,74,.18);border-radius:10px;padding:10px 11px;font-family:inherit;font-size:13.5px;line-height:1.5}
+.comment-form .field.full{grid-column:1/-1}
+.comment-form .field textarea{min-height:100px;resize:vertical}
+.comment-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.comment-item{padding:12px 14px;border-radius:12px;background:#f6faf8;border:1px solid rgba(20,93,74,.08)}
+.comment-item strong{color:#172d26;font-size:13.5px}
+.comment-item .comment-date{margin-inline-start:8px;color:#8a9892;font-size:12px;font-weight:600}
+.comment-item p{margin:6px 0 0;color:#3d4f48;font-size:13.5px;line-height:1.75}
 
-.related-posts {
-  padding: 8px 0 48px;
-}
-.related-posts h2 {
-  margin: 0 0 18px;
-  font-size: 22px;
-  color: #172d26;
-  text-align: center;
-}
-.related-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-.related-card {
-  display: flex;
-  flex-direction: column;
-  text-decoration: none;
-  color: inherit;
-  background: #fff;
-  border: 1px solid rgba(20, 93, 74, 0.12);
-  border-radius: 16px;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.related-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(9, 40, 32, 0.08);
-}
-.related-card .thumb {
-  aspect-ratio: 16 / 10;
-  background: #e8f0ec;
-  display: grid;
-  place-items: center;
-  color: #145D4A;
-  font-size: 28px;
-}
-.related-card .body {
-  padding: 14px 14px 16px;
-}
-.related-card .cat {
-  font-size: 12px;
-  font-weight: 800;
-  color: #145D4A;
-  margin-bottom: 6px;
-}
-.related-card h3 {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.55;
-  color: #172d26;
-  font-weight: 800;
-}
+.related-posts{padding:32px 0 48px}
+.related-posts h2{margin:0 0 16px;font-size:18px;line-height:1.45;color:#172d26;text-align:center}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.related-card{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:14px;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease}
+.related-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(9,40,32,.08)}
+.related-card .thumb{aspect-ratio:16/10;max-height:110px;background:#e8f0ec;display:grid;place-items:center;color:#145D4A;font-size:22px}
+.related-card .body{padding:12px}
+.related-card .cat{font-size:11.5px;font-weight:800;color:#145D4A;margin-bottom:5px}
+.related-card h3{margin:0;font-size:14px;line-height:1.55;color:#172d26;font-weight:800}
 
-@media (max-width: 900px) {
-  .post-layout {
-    grid-template-columns: 1fr;
-  }
-  .post-sidebar { position: static; }
-  .related-grid { grid-template-columns: 1fr; }
-  .comment-form .form-grid { grid-template-columns: 1fr; }
+@media (max-width:900px){
+  .post-layout{grid-template-columns:1fr}
+  .post-sidebar{position:static}
+  .post-featured{max-width:100%;max-height:160px}
+  .related-grid{grid-template-columns:1fr}
+  .comment-form .form-grid{grid-template-columns:1fr}
 }
 </style>
 </head><body>
@@ -346,7 +147,6 @@
 </div>
 
 <main>
-  <!-- Title block: single column -->
   <section class="post-hero">
     <div class="container">
       <h1>آموزش نگارش فصل اول پایان‌نامه: تبدیل پروپوزال به فصل اول</h1>
@@ -368,33 +168,47 @@
     </div>
   </section>
 
-  <!-- Two columns: content + sidebar -->
   <section>
     <div class="container">
       <div class="post-layout">
         <div class="post-main">
-          <div class="post-featured" aria-hidden="true">
+          <div class="post-featured">
             <img src="assets/img/logo.jpg" alt="تصویر شاخص مقاله"/>
           </div>
           <article class="article-body">
             <p>در این راهنما ساختار بیان مسئله، اهداف، سوالات و فرضیه‌ها را مرور می‌کنیم. هدف این است که ارتباط منطقی میان عنوان، بیان مسئله، پیشینه و روش از ابتدا شفاف باشد.</p>
-
             <h2 id="s1">مقدمه: چرا فصل اول مهم است؟</h2>
             <p>فصل اول چارچوب کلی پژوهش را مشخص می‌کند و مسیر فصل‌های بعدی را روشن می‌سازد. اگر مسئله، اهداف و روش در این فصل هم‌راستا نباشند، بازنویسی‌های بعدی اجتناب‌ناپذیر می‌شوند.</p>
-
             <h2 id="s2">ساختار فصل اول پایان‌نامه</h2>
             <p>معمولاً شامل مقدمه، بیان مسئله، اهمیت پژوهش، اهداف، سوالات یا فرضیه‌ها و تعریف مفاهیم است. ترتیب دقیق ممکن است بر اساس قالب دانشگاه شما کمی متفاوت باشد.</p>
-
             <h2 id="s3">گام اول: تبدیل بیان مسئله</h2>
             <p>بیان مسئله باید از پروپوزال به متنی کامل‌تر و قابل دفاع در جلسه گسترش یابد. شکاف پژوهشی، ضرورت مطالعه و چارچوب مسئله را شفاف بنویسید.</p>
-
             <p>آماده نگارش فصل اول هستید؟ <a href="inquiry.html">ثبت سفارش مشاوره</a></p>
           </article>
+
+          <section class="post-comments" id="comments" aria-labelledby="commentsTitle">
+            <h2 id="commentsTitle">نظرات</h2>
+            <p>نظر خود را بنویسید. دیدگاه‌ها پس از بررسی منتشر می‌شوند.</p>
+            <form class="comment-form" action="#" method="post">
+              <div class="form-grid">
+                <div class="field"><label>نام</label><input type="text" name="name" placeholder="نام شما" required/></div>
+                <div class="field"><label>ایمیل</label><input type="email" name="email" placeholder="email@example.com" required/></div>
+                <div class="field full"><label>متن نظر</label><textarea name="comment" placeholder="نظر شما..." required></textarea></div>
+              </div>
+              <button class="btn-tz btn-primary-tz" type="submit" style="margin-top:12px">ارسال نظر</button>
+            </form>
+            <div class="comment-list">
+              <div class="comment-item">
+                <strong>سارا م.</strong><span class="comment-date">۱۰ مرداد ۱۴۰۵</span>
+                <p>توضیح ساختار فصل اول خیلی کاربردی بود؛ ممنون.</p>
+              </div>
+            </div>
+          </section>
         </div>
 
         <aside class="post-sidebar">
-          <div class="post-widget">
-            <h4>فهرست مطالب</h4>
+          <div class="post-widget post-widget-toc">
+            <h4><i class="fa-solid fa-list-ul" aria-hidden="true"></i> فهرست مطالب</h4>
             <ol class="toc-list">
               <li><a href="#s1">مقدمه</a></li>
               <li><a href="#s2">ساختار فصل اول</a></li>
@@ -409,27 +223,6 @@
         </aside>
       </div>
 
-      <!-- Comments -->
-      <section class="post-comments" id="comments" aria-labelledby="commentsTitle">
-        <h2 id="commentsTitle">نظرات</h2>
-        <p>نظر خود را بنویسید. دیدگاه‌ها پس از بررسی منتشر می‌شوند.</p>
-        <form class="comment-form" action="#" method="post">
-          <div class="form-grid">
-            <div class="field"><label>نام</label><input type="text" name="name" placeholder="نام شما" required/></div>
-            <div class="field"><label>ایمیل</label><input type="email" name="email" placeholder="email@example.com" required/></div>
-            <div class="field full"><label>متن نظر</label><textarea name="comment" placeholder="نظر شما..." required></textarea></div>
-          </div>
-          <button class="btn-tz btn-primary-tz" type="submit" style="margin-top:12px">ارسال نظر</button>
-        </form>
-        <div class="comment-list">
-          <div class="comment-item">
-            <strong>سارا م.</strong><span class="comment-date">۱۰ مرداد ۱۴۰۵</span>
-            <p>توضیح ساختار فصل اول خیلی کاربردی بود؛ ممنون.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Related posts same category -->
       <section class="related-posts" aria-labelledby="relatedTitle">
         <h2 id="relatedTitle">پست‌های پیشنهادی از همین دسته</h2>
         <div class="related-grid">
