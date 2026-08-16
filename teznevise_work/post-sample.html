@@ -28,7 +28,7 @@
 
 .post-layout{display:grid;grid-template-columns:1fr 280px;gap:28px;align-items:start;padding:20px 0 0}
 .post-main{min-width:0}
-.post-featured{width:100%;max-width:420px;max-height:180px;margin:0 auto 16px;border-radius:12px;overflow:hidden;background:#eef4f1;aspect-ratio:16/9}
+.post-featured{width:100%;max-width:720px;margin:0 auto 18px;border-radius:14px;overflow:hidden;background:#eef4f1;aspect-ratio:16/9}
 .post-featured img{width:100%;height:100%;object-fit:cover;display:block}
 .article-body{color:#2f3f38;font-size:15px;line-height:1.85}
 .article-body h2{margin:22px 0 10px;font-size:18px;line-height:1.5;color:#172d26;font-weight:800}
@@ -37,23 +37,34 @@
 
 .post-sidebar{display:flex;flex-direction:column;gap:14px;position:sticky;top:96px}
 .post-widget{background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:14px;padding:16px 14px;box-shadow:0 8px 24px rgba(9,40,32,.04)}
-.post-widget h4{margin:0 0 10px;font-size:14px;font-weight:850;color:#172d26;display:flex;align-items:center;gap:8px;line-height:1.4}
-.post-widget h4 i{color:#145D4A;font-size:14px}
-.post-widget-toc{background:linear-gradient(180deg,#eef7f3 0%,#e4f1eb 100%);border:1px solid rgba(20,93,74,.16)}
-.post-widget-toc h4{color:#145D4A}
-.toc-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
-.toc-list a{text-decoration:none;color:#3d534a;font-size:13px;font-weight:650;line-height:1.5}
-.toc-list a:hover{color:#145D4A}
 .post-widget-cta{background:linear-gradient(145deg,#145D4A,#0f4a3c);color:#fff;text-align:center;border:none}
-.post-widget-cta h4{color:#fff;justify-content:center}
+.post-widget-cta h4{margin:0 0 10px;color:#fff;font-size:14px;font-weight:850}
 .post-widget-cta p{margin:0 0 12px;color:rgba(255,255,255,.88);font-size:13px;line-height:1.7}
+
+.post-toc-title{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:15px;font-weight:850;color:#172d26}
+.post-toc-title i{color:#145D4A}
+.post-toc-grid{display:flex;flex-direction:column;gap:10px}
+.post-toc-item{display:flex;align-items:center;gap:12px;padding:14px;background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:16px;box-shadow:0 8px 22px rgba(9,40,32,.04);text-decoration:none;color:#172d26;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.post-toc-item:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(9,40,32,.08);border-color:rgba(20,93,74,.22);color:#145D4A}
+.post-toc-item .toc-icon{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;background:rgba(20,93,74,.1);color:#145D4A;font-size:18px}
+.post-toc-item .toc-label{font-size:14px;font-weight:750;line-height:1.45}
+
+.post-toc-mobile{display:none;margin:0 0 18px}
+.post-toc-mobile details{background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:16px;overflow:hidden;box-shadow:0 8px 22px rgba(9,40,32,.04)}
+.post-toc-mobile summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;font-weight:850;font-size:14.5px;color:#145D4A}
+.post-toc-mobile summary::-webkit-details-marker{display:none}
+.post-toc-mobile summary .sum-left{display:flex;align-items:center;gap:8px}
+.post-toc-mobile summary .chev{transition:transform .2s ease;font-size:12px}
+.post-toc-mobile details[open] summary .chev{transform:rotate(180deg)}
+.post-toc-mobile .toc-acc-body{padding:0 12px 12px;display:flex;flex-direction:column;gap:8px}
+.post-toc-mobile .post-toc-item{padding:12px}
 
 .post-comments{margin:24px 0 8px;padding:18px 16px;background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:14px}
 .post-comments h2{margin:0 0 6px;font-size:18px;line-height:1.45;color:#172d26}
 .post-comments>p{margin:0 0 12px;color:#62736d;font-size:13.5px;line-height:1.7}
 .comment-form .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .comment-form .field label{display:block;margin-bottom:5px;font-size:12.5px;font-weight:700;color:#3d4f48}
-.comment-form .field input,.comment-form .field textarea{width:100%;border:1px solid rgba(20,93,74,.18);border-radius:10px;padding:10px 11px;font-family:inherit;font-size:13.5px;line-height:1.5}
+.comment-form .field input,.comment-form .field textarea{width:100%;border:1px solid rgba(20,93,74,.18);border-radius:10px;padding:10px 11px;font-family:inherit;font-size:13.5px}
 .comment-form .field.full{grid-column:1/-1}
 .comment-form .field textarea{min-height:100px;resize:vertical}
 .comment-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
@@ -75,10 +86,13 @@
 @media (max-width:900px){
   .post-layout{grid-template-columns:1fr}
   .post-sidebar{position:static}
-  .post-featured{max-width:100%;max-height:160px}
+  .post-toc-desktop{display:none!important}
+  .post-toc-mobile{display:block}
+  .post-featured{max-width:100%}
   .related-grid{grid-template-columns:1fr}
   .comment-form .form-grid{grid-template-columns:1fr}
 }
+@media (min-width:901px){.post-toc-mobile{display:none!important}}
 </style>
 </head><body>
 <header class="site-header-new">
@@ -157,12 +171,9 @@
         <span><i class="fa-regular fa-calendar"></i> ۱۵ مرداد ۱۴۰۵</span>
       </div>
       <nav class="post-breadcrumb" aria-label="مسیر صفحه">
-        <a href="index.html">خانه</a>
-        <span class="sep">/</span>
-        <a href="blog.html">بلاگ</a>
-        <span class="sep">/</span>
-        <a href="blog.html">مسیر پایان‌نامه</a>
-        <span class="sep">/</span>
+        <a href="index.html">خانه</a><span class="sep">/</span>
+        <a href="blog.html">بلاگ</a><span class="sep">/</span>
+        <a href="blog.html">مسیر پایان‌نامه</a><span class="sep">/</span>
         <span class="current">فصل اول پایان‌نامه</span>
       </nav>
     </div>
@@ -173,8 +184,23 @@
       <div class="post-layout">
         <div class="post-main">
           <div class="post-featured">
-            <img src="assets/img/logo.jpg" alt="تصویر شاخص مقاله"/>
+            <img src="assets/img/logo.jpg" alt="تصویر شاخص مقاله" width="1200" height="675"/>
           </div>
+
+          <div class="post-toc-mobile">
+            <details>
+              <summary>
+                <span class="sum-left"><i class="fa-solid fa-list-ul"></i> فهرست مطالب</span>
+                <i class="fa-solid fa-chevron-down chev" aria-hidden="true"></i>
+              </summary>
+              <div class="toc-acc-body">
+                <a class="post-toc-item" href="#s1"><span class="toc-icon"><i class="fa-solid fa-book-open"></i></span><span class="toc-label">مقدمه: چرا فصل اول مهم است؟</span></a>
+                <a class="post-toc-item" href="#s2"><span class="toc-icon"><i class="fa-solid fa-sitemap"></i></span><span class="toc-label">ساختار فصل اول پایان‌نامه</span></a>
+                <a class="post-toc-item" href="#s3"><span class="toc-icon"><i class="fa-solid fa-pen-to-square"></i></span><span class="toc-label">گام اول: تبدیل بیان مسئله</span></a>
+              </div>
+            </details>
+          </div>
+
           <article class="article-body">
             <p>در این راهنما ساختار بیان مسئله، اهداف، سوالات و فرضیه‌ها را مرور می‌کنیم. هدف این است که ارتباط منطقی میان عنوان، بیان مسئله، پیشینه و روش از ابتدا شفاف باشد.</p>
             <h2 id="s1">مقدمه: چرا فصل اول مهم است؟</h2>
@@ -186,8 +212,8 @@
             <p>آماده نگارش فصل اول هستید؟ <a href="inquiry.html">ثبت سفارش مشاوره</a></p>
           </article>
 
-          <section class="post-comments" id="comments" aria-labelledby="commentsTitle">
-            <h2 id="commentsTitle">نظرات</h2>
+          <section class="post-comments" id="comments">
+            <h2>نظرات</h2>
             <p>نظر خود را بنویسید. دیدگاه‌ها پس از بررسی منتشر می‌شوند.</p>
             <form class="comment-form" action="#" method="post">
               <div class="form-grid">
@@ -207,13 +233,13 @@
         </div>
 
         <aside class="post-sidebar">
-          <div class="post-widget post-widget-toc">
-            <h4><i class="fa-solid fa-list-ul" aria-hidden="true"></i> فهرست مطالب</h4>
-            <ol class="toc-list">
-              <li><a href="#s1">مقدمه</a></li>
-              <li><a href="#s2">ساختار فصل اول</a></li>
-              <li><a href="#s3">گام اول</a></li>
-            </ol>
+          <div class="post-widget post-toc-desktop post-toc-wrap">
+            <div class="post-toc-title"><i class="fa-solid fa-list-ul" aria-hidden="true"></i> فهرست مطالب</div>
+            <div class="post-toc-grid">
+              <a class="post-toc-item" href="#s1"><span class="toc-icon"><i class="fa-solid fa-book-open"></i></span><span class="toc-label">مقدمه: چرا فصل اول مهم است؟</span></a>
+              <a class="post-toc-item" href="#s2"><span class="toc-icon"><i class="fa-solid fa-sitemap"></i></span><span class="toc-label">ساختار فصل اول پایان‌نامه</span></a>
+              <a class="post-toc-item" href="#s3"><span class="toc-icon"><i class="fa-solid fa-pen-to-square"></i></span><span class="toc-label">گام اول: تبدیل بیان مسئله</span></a>
+            </div>
           </div>
           <div class="post-widget post-widget-cta">
             <h4>نیاز به مشاوره داری؟</h4>
@@ -223,29 +249,20 @@
         </aside>
       </div>
 
-      <section class="related-posts" aria-labelledby="relatedTitle">
-        <h2 id="relatedTitle">پست‌های پیشنهادی از همین دسته</h2>
+      <section class="related-posts">
+        <h2>پست‌های پیشنهادی از همین دسته</h2>
         <div class="related-grid">
           <a class="related-card" href="post-sample.html">
             <div class="thumb"><i class="fa-solid fa-book-open"></i></div>
-            <div class="body">
-              <div class="cat">مسیر پایان‌نامه</div>
-              <h3>چگونه موضوع پایان‌نامه را انتخاب کنیم؟</h3>
-            </div>
+            <div class="body"><div class="cat">مسیر پایان‌نامه</div><h3>چگونه موضوع پایان‌نامه را انتخاب کنیم؟</h3></div>
           </a>
           <a class="related-card" href="post-sample.html">
             <div class="thumb"><i class="fa-solid fa-pen-nib"></i></div>
-            <div class="body">
-              <div class="cat">مسیر پایان‌نامه</div>
-              <h3>نگارش بیان مسئله بدون کلی‌گویی</h3>
-            </div>
+            <div class="body"><div class="cat">مسیر پایان‌نامه</div><h3>نگارش بیان مسئله بدون کلی‌گویی</h3></div>
           </a>
           <a class="related-card" href="post-sample.html">
             <div class="thumb"><i class="fa-solid fa-list-check"></i></div>
-            <div class="body">
-              <div class="cat">مسیر پایان‌نامه</div>
-              <h3>اهداف، سوال‌ها و فرضیه‌ها در فصل اول</h3>
-            </div>
+            <div class="body"><div class="cat">مسیر پایان‌نامه</div><h3>اهداف، سوال‌ها و فرضیه‌ها در فصل اول</h3></div>
           </a>
         </div>
       </section>
