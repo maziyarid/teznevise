@@ -1,6 +1,334 @@
-/* BATCH FIXES — loaded last on redesign pages */
+/* =========================================================
+   BATCH FIXES — load last on all pages
+   ========================================================= */
 
-/* Hamburger: defeat layout-refinements display:none */
+/* ----- 1. Footer logo WHITE on dark footers ----- */
+.footer-new .footer-brand img,
+.footer-new img[alt*="تزنویسه"],
+.site-footer .footer-about img,
+.site-footer img[alt*="تزنویسه"] {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  filter: brightness(0) invert(1) !important;
+  mix-blend-mode: normal !important;
+  opacity: 0.95;
+  max-height: 52px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Footer column headings larger */
+.footer-new .footer-col h4,
+.site-footer .footer-col h4,
+.footer-col h4 {
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  margin-bottom: 18px !important;
+  color: #fff !important;
+  letter-spacing: -0.01em;
+}
+
+/* ----- 2. Mobile header: hamburger RIGHT, logo CENTER, search LEFT ----- */
+@media (max-width: 1050px) {
+  .main-nav {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    position: relative !important;
+    gap: 8px !important;
+  }
+  .main-nav .menu-btn {
+    order: 1 !important;
+    display: inline-flex !important;
+    margin: 0 !important;
+  }
+  .main-nav .brand {
+    order: 2 !important;
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+  }
+  .main-nav .brand img {
+    height: 36px !important;
+    width: auto !important;
+  }
+  .main-nav .nav-actions {
+    order: 3 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-inline-start: auto !important;
+  }
+  .main-nav .desktop-cta-group {
+    display: none !important;
+  }
+  .main-nav .nav-search-btn {
+    display: inline-flex !important;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(20, 93, 74, 0.14);
+    background: #fff;
+    border-radius: 12px;
+    color: #145D4A;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    padding: 0;
+    cursor: pointer;
+  }
+}
+
+@media (min-width: 1051px) {
+  .main-nav .nav-search-btn {
+    display: none !important;
+  }
+}
+
+/* Legacy tools/blog header mobile */
+@media (max-width: 1050px) {
+  .site-header .nav-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    position: relative !important;
+  }
+  .site-header .menu-toggle {
+    order: 1 !important;
+  }
+  .site-header .site-logo {
+    order: 2 !important;
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+  .site-header .nav-actions {
+    order: 3 !important;
+    margin-inline-start: auto !important;
+  }
+}
+
+/* ----- 3. Distinct service icon colours (global) ----- */
+.icon-indigo {
+  background: rgba(99, 102, 241, 0.12) !important;
+  color: #4f46e5 !important;
+}
+.icon-indigo i { color: #4f46e5 !important; }
+
+.icon-teal {
+  background: rgba(20, 93, 74, 0.12) !important;
+  color: #145D4A !important;
+}
+.icon-teal i { color: #145D4A !important; }
+
+.icon-cyan {
+  background: rgba(6, 182, 212, 0.12) !important;
+  color: #0891b2 !important;
+}
+.icon-cyan i { color: #0891b2 !important; }
+
+.icon-amber {
+  background: rgba(245, 158, 11, 0.14) !important;
+  color: #d97706 !important;
+}
+.icon-amber i { color: #d97706 !important; }
+
+.icon-danger-soft {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #dc2626 !important;
+}
+.icon-danger-soft i { color: #dc2626 !important; }
+
+.icon-purple-soft {
+  background: rgba(168, 85, 247, 0.12) !important;
+  color: #9333ea !important;
+}
+.icon-purple-soft i { color: #9333ea !important; }
+
+/* Step icons by position */
+.steps .step:nth-child(1) .step-icon {
+  background: rgba(20, 93, 74, 0.12) !important;
+  color: #145D4A !important;
+}
+.steps .step:nth-child(2) .step-icon {
+  background: rgba(99, 102, 241, 0.12) !important;
+  color: #4f46e5 !important;
+}
+.steps .step:nth-child(3) .step-icon {
+  background: rgba(6, 182, 212, 0.12) !important;
+  color: #0891b2 !important;
+}
+.steps .step:nth-child(4) .step-icon {
+  background: rgba(245, 158, 11, 0.14) !important;
+  color: #d97706 !important;
+}
+.steps .step:nth-child(1) .step-icon i { color: #145D4A !important; }
+.steps .step:nth-child(2) .step-icon i { color: #4f46e5 !important; }
+.steps .step:nth-child(3) .step-icon i { color: #0891b2 !important; }
+.steps .step:nth-child(4) .step-icon i { color: #d97706 !important; }
+
+.process-item:nth-child(1) .pnum,
+.process-list > *:nth-child(1) .num-icon {
+  background: rgba(20, 93, 74, 0.12) !important;
+  color: #145D4A !important;
+}
+.process-item:nth-child(2) .pnum,
+.process-list > *:nth-child(2) .num-icon {
+  background: rgba(99, 102, 241, 0.12) !important;
+  color: #4f46e5 !important;
+}
+.process-item:nth-child(3) .pnum,
+.process-list > *:nth-child(3) .num-icon {
+  background: rgba(6, 182, 212, 0.12) !important;
+  color: #0891b2 !important;
+}
+.process-item:nth-child(4) .pnum,
+.process-list > *:nth-child(4) .num-icon {
+  background: rgba(245, 158, 11, 0.14) !important;
+  color: #d97706 !important;
+}
+
+/* ----- 4. Sticky nav: no extra gap above ----- */
+.site-header-new {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.main-nav {
+  margin-top: 8px !important;
+  margin-bottom: 0 !important;
+}
+@media (max-width: 768px) {
+  .main-nav { margin-top: 6px !important; }
+}
+@media (max-width: 480px) {
+  .announcement { display: none !important; }
+  .main-nav { margin-top: 10px !important; }
+}
+
+/* ----- 5. SEO closed: fully collapse empty space ----- */
+.seo-more-content {
+  display: grid !important;
+  grid-template-rows: 0fr !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  transition: grid-template-rows .4s cubic-bezier(.22,1,.36,1), opacity .3s ease, margin .3s ease !important;
+  visibility: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+.seo-more-content > * {
+  min-height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+}
+.seo-more-content.is-open {
+  grid-template-rows: 1fr !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  margin-top: 8px !important;
+}
+.seo-more-content.is-open > * {
+  margin-bottom: 12px !important;
+}
+.seo-disclosure .seo-more-content:not(.is-open) {
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+/* ----- 6. Service cards + steps: center-aligned ----- */
+.service-card {
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+.service-card .icon-box {
+  margin-inline: auto !important;
+}
+.service-card h3,
+.service-card p {
+  text-align: center !important;
+}
+.service-card .link-arrow {
+  margin-inline: auto !important;
+  justify-content: center !important;
+}
+
+.step {
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+.step .step-icon {
+  margin-inline: auto !important;
+}
+.step h3,
+.step p {
+  text-align: center !important;
+}
+
+#services .section-head,
+.section-head.center {
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+#services .section-head > div {
+  text-align: center !important;
+  max-width: 720px;
+  margin-inline: auto;
+}
+#services .section-head .eyebrow {
+  margin-inline: auto;
+}
+
+/* ----- 7. About button: bolder + longer like hero ----- */
+.about-panel .btn-tz,
+.about-panel .btn-light-tz,
+.about-panel .btn-lg-tz {
+  min-height: 56px !important;
+  padding-inline: 32px !important;
+  font-size: 15.5px !important;
+  font-weight: 800 !important;
+  border-radius: 16px !important;
+  margin-top: 24px;
+  align-self: flex-start;
+  background: #fff !important;
+  color: #145D4A !important;
+  border: none !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+.about-panel .btn-tz:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16) !important;
+}
+
+.about-panel .eyebrow,
+.reason-panel .eyebrow {
+  display: inline-flex !important;
+  width: auto !important;
+  max-width: max-content !important;
+  align-self: flex-start !important;
+  font-size: 12.5px !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+}
+
+/* ----- Hamburger drawer ----- */
 @media (max-width: 960px) {
   .mobile-nav {
     display: block !important;
@@ -17,64 +345,12 @@
     visibility: visible !important;
     pointer-events: auto !important;
   }
-  .mobile-nav-panel {
-    max-width: min(320px, calc(100vw - 20px)) !important;
-  }
 }
 
-/* SEO expand: class-only (no :not([hidden]) fight) */
-.seo-more-content {
-  display: grid !important;
-  grid-template-rows: 0fr !important;
-  opacity: 0 !important;
-  overflow: hidden !important;
-  transition: grid-template-rows .45s cubic-bezier(.22,1,.36,1), opacity .35s ease !important;
-  visibility: hidden;
-}
-.seo-more-content > * {
-  min-height: 0 !important;
-  overflow: hidden !important;
-}
-.seo-more-content.is-open {
-  grid-template-rows: 1fr !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-.seo-more-content[hidden] {
-  display: grid !important;
-  grid-template-rows: 0fr !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
-
-/* About: compact pill eyebrow */
-.about-panel .eyebrow,
-.reason-panel .eyebrow {
-  display: inline-flex !important;
-  width: auto !important;
-  max-width: max-content !important;
-  align-self: flex-start !important;
-  font-size: 12.5px !important;
-  padding: 6px 14px !important;
-  border-radius: 999px !important;
-}
-.about-panel .btn-lg-tz {
-  min-height: 52px !important;
-  padding-inline: 28px !important;
-  font-size: 15px !important;
-  border-radius: 16px !important;
-  margin-top: 22px;
-  align-self: flex-start;
-  background: #fff !important;
-  color: #145D4A !important;
-  border: none !important;
-  font-weight: 800;
-}
-
-/* FAQ smooth + separator */
+/* FAQ soft expand */
 .faq-item.open {
-  border-color: rgba(20, 93, 74, .22) !important;
-  box-shadow: 0 10px 28px rgba(20, 93, 74, .06);
+  border-color: rgba(20, 93, 74, 0.22) !important;
+  box-shadow: 0 10px 28px rgba(20, 93, 74, 0.06);
 }
 .faq-a {
   display: block !important;
@@ -82,55 +358,17 @@
   overflow: hidden;
   padding: 0 20px !important;
   opacity: 0;
-  transition: max-height .4s cubic-bezier(.22,1,.36,1), opacity .3s ease, padding .35s ease;
+  transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease, padding 0.35s ease;
 }
 .faq-item.open .faq-a {
   max-height: 320px;
   opacity: 1;
   padding: 0 20px 18px !important;
-  border-top: 1px solid rgba(20, 93, 74, .08);
-}
-.faq-q span:last-child {
-  transition: transform .3s cubic-bezier(.22,1,.36,1) !important;
-}
-
-/* Footer logo: kill white JPG box */
-.footer-new .footer-brand img {
-  background: transparent !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-  mix-blend-mode: multiply;
-  filter: none;
-}
-.site-footer .footer-about img,
-.site-footer img[alt*="تزنویسه"] {
-  background: transparent !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-  filter: brightness(0) invert(1) !important;
-}
-
-/* Header gap tighter */
-.main-nav {
-  margin-top: 8px !important;
-  margin-bottom: 0 !important;
-}
-@media (max-width: 768px) {
-  .main-nav { margin-top: 6px !important; }
-}
-
-/* Hero CTAs wider */
-.hero-actions .btn-lg-tz {
-  min-height: 56px !important;
-  padding-inline: 30px !important;
-  min-width: 200px;
+  border-top: 1px solid rgba(20, 93, 74, 0.08);
 }
 
 /* Breadcrumb on dark heroes */
 .page-hero .breadcrumbs .current,
-.page-hero .breadcrumb-sep,
 .page-hero .breadcrumbs span:last-child {
   color: rgba(255, 255, 255, 0.95) !important;
   font-weight: 700;
@@ -139,20 +377,9 @@
   color: rgba(255, 255, 255, 0.72) !important;
 }
 
-/* Icon colours unified */
-.icon-box,
-.step-icon,
-.process-item .pnum,
-.num-icon,
-.icon-teal,
-.icon-amber,
-.icon-danger-soft,
-.icon-indigo,
-.icon-cyan,
-.icon-purple-soft {
-  background: rgba(20, 93, 74, 0.1) !important;
-  color: #145D4A !important;
-}
-.icon-box i, .step-icon i, .num-icon i {
-  color: #145D4A !important;
+/* Hero CTAs wider */
+.hero-actions .btn-lg-tz {
+  min-height: 56px !important;
+  padding-inline: 30px !important;
+  min-width: 200px;
 }
