@@ -1,0 +1,158 @@
+/* BATCH FIXES — loaded last on redesign pages */
+
+/* Hamburger: defeat layout-refinements display:none */
+@media (max-width: 960px) {
+  .mobile-nav {
+    display: block !important;
+    overflow: visible !important;
+  }
+  .mobile-nav:not(.open) {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  .mobile-nav.open {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+  .mobile-nav-panel {
+    max-width: min(320px, calc(100vw - 20px)) !important;
+  }
+}
+
+/* SEO expand: class-only (no :not([hidden]) fight) */
+.seo-more-content {
+  display: grid !important;
+  grid-template-rows: 0fr !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  transition: grid-template-rows .45s cubic-bezier(.22,1,.36,1), opacity .35s ease !important;
+  visibility: hidden;
+}
+.seo-more-content > * {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+.seo-more-content.is-open {
+  grid-template-rows: 1fr !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.seo-more-content[hidden] {
+  display: grid !important;
+  grid-template-rows: 0fr !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* About: compact pill eyebrow */
+.about-panel .eyebrow,
+.reason-panel .eyebrow {
+  display: inline-flex !important;
+  width: auto !important;
+  max-width: max-content !important;
+  align-self: flex-start !important;
+  font-size: 12.5px !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+}
+.about-panel .btn-lg-tz {
+  min-height: 52px !important;
+  padding-inline: 28px !important;
+  font-size: 15px !important;
+  border-radius: 16px !important;
+  margin-top: 22px;
+  align-self: flex-start;
+  background: #fff !important;
+  color: #145D4A !important;
+  border: none !important;
+  font-weight: 800;
+}
+
+/* FAQ smooth + separator */
+.faq-item.open {
+  border-color: rgba(20, 93, 74, .22) !important;
+  box-shadow: 0 10px 28px rgba(20, 93, 74, .06);
+}
+.faq-a {
+  display: block !important;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 20px !important;
+  opacity: 0;
+  transition: max-height .4s cubic-bezier(.22,1,.36,1), opacity .3s ease, padding .35s ease;
+}
+.faq-item.open .faq-a {
+  max-height: 320px;
+  opacity: 1;
+  padding: 0 20px 18px !important;
+  border-top: 1px solid rgba(20, 93, 74, .08);
+}
+.faq-q span:last-child {
+  transition: transform .3s cubic-bezier(.22,1,.36,1) !important;
+}
+
+/* Footer logo: kill white JPG box */
+.footer-new .footer-brand img {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  mix-blend-mode: multiply;
+  filter: none;
+}
+.site-footer .footer-about img,
+.site-footer img[alt*="تزنویسه"] {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+/* Header gap tighter */
+.main-nav {
+  margin-top: 8px !important;
+  margin-bottom: 0 !important;
+}
+@media (max-width: 768px) {
+  .main-nav { margin-top: 6px !important; }
+}
+
+/* Hero CTAs wider */
+.hero-actions .btn-lg-tz {
+  min-height: 56px !important;
+  padding-inline: 30px !important;
+  min-width: 200px;
+}
+
+/* Breadcrumb on dark heroes */
+.page-hero .breadcrumbs .current,
+.page-hero .breadcrumb-sep,
+.page-hero .breadcrumbs span:last-child {
+  color: rgba(255, 255, 255, 0.95) !important;
+  font-weight: 700;
+}
+.page-hero .breadcrumbs a {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+/* Icon colours unified */
+.icon-box,
+.step-icon,
+.process-item .pnum,
+.num-icon,
+.icon-teal,
+.icon-amber,
+.icon-danger-soft,
+.icon-indigo,
+.icon-cyan,
+.icon-purple-soft {
+  background: rgba(20, 93, 74, 0.1) !important;
+  color: #145D4A !important;
+}
+.icon-box i, .step-icon i, .num-icon i {
+  color: #145D4A !important;
+}
