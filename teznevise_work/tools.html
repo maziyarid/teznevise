@@ -1,91 +1,337 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="fa"><head>
-<meta charset="utf-8"/>
+<html dir="rtl" lang="fa"><head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ابزارهای محاسبه آماری آنلاین | تزنویسه</title>
-<meta content="ابزارهای آماری رایگان برای پژوهشگران: آمار توصیفی، همبستگی، آزمون‌های پارامتریک و ناپارامتریک." name="description"/>
+<link href="https://cdn.jsdelivr.net" rel="preconnect"/>
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"/>
-<link href="assets/css/styles.css" rel="stylesheet"/>
-<link href="assets/css/site-polish.css" rel="stylesheet"/>
-<link href="assets/css/batch-fixes.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.rtl.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+<link href="assets/css/redesign.css" rel="stylesheet"/>
 <link href="assets/css/layout-refinements.css" rel="stylesheet"/>
+<link href="assets/css/motion.css" rel="stylesheet"/>
+<link href="assets/css/batch-fixes.css" rel="stylesheet"/>
+<link href="assets/css/ui-round2.css" rel="stylesheet"/>
+<link href="assets/css/service-thesis.css" rel="stylesheet"/>
 <link href="assets/img/logo.jpg" rel="icon" type="image/jpeg"/>
+<title>ابزارهای محاسبه آماری آنلاین | تزنویسه</title>
+<meta content="ابزارهای آماری رایگان: آمار توصیفی، همبستگی، آزمون‌های پارامتریک و ناپارامتریک." name="description"/>
+<style>
+.tools-hero {
+  padding: 48px 0 28px;
+  text-align: center;
+  background: linear-gradient(180deg, #f4f9f7 0%, #fff 70%);
+}
+.tools-hero h1 {
+  margin: 10px 0 12px;
+  font-size: clamp(28px, 4vw, 40px);
+  color: #172d26;
+  line-height: 1.35;
+}
+.tools-hero p {
+  margin: 0 auto;
+  max-width: 52ch;
+  color: #62736d;
+  font-size: 15px;
+  line-height: 1.85;
+}
+.tools-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 28px 0 8px;
+}
+.tools-filters button {
+  border: 1px solid rgba(20, 93, 74, 0.15);
+  background: #fff;
+  color: #3d4f48;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 750;
+  font-size: 13.5px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.tools-filters button.is-active,
+.tools-filters button:hover {
+  background: #145D4A;
+  color: #fff;
+  border-color: #145D4A;
+}
+.tools-grid.services-grid {
+  margin-top: 12px;
+}
+.tools-grid .service-card[hidden] {
+  display: none !important;
+}
+</style>
 </head><body>
-<header class="site-header">
-<div class="top-bar"><div class="container">
-<div class="top-bar-contact"><a href="tel:+989302822091">۰۹۳۰۲۸۲۲۰۹۱</a><span>شنبه تا پنجشنبه ۹ تا ۲۱</span></div>
-<div class="top-bar-links"><a href="privacy.html">حریم خصوصی</a><a href="team.html">نظرات مشتریان</a></div>
-</div></div>
-<div class="container"><nav class="nav-wrapper" aria-label="منوی اصلی">
-<a class="site-logo" href="index.html"><img alt="تزنویسه" src="assets/img/logo.jpg"/></a>
-<ul class="nav-menu" role="list">
-<li><a class="nav-link" href="index.html">خانه</a></li>
-<li><a class="nav-link" href="service-thesis.html">پایان‌نامه</a></li>
-<li><a class="nav-link" href="service-proposal.html">پروپوزال</a></li>
-<li><a class="nav-link" href="service-statistics.html">تحلیل آماری</a></li>
-<li><a class="nav-link active" href="tools.html">ابزارها</a></li>
-<li><a class="nav-link" href="blog.html">بلاگ</a></li>
-</ul>
-<div class="nav-actions">
-<button aria-label="منو" class="menu-toggle" type="button"><span style="font-size:22px">☰</span></button>
+<header class="site-header-new">
+<div class="announcement">
+  <div class="announcement-inner">
+    <div class="announcement-items">
+      <span class="announce-pill"><i class="fa-solid fa-phone"></i> <strong>۰۹۳۰۲۸۲۲۰۹۱</strong></span>
+      <span class="announce-pill announce-desktop"><i class="fa-regular fa-clock"></i> شنبه تا پنجشنبه، ۹ تا ۲۱</span>
+      <span class="announce-pill announce-desktop"><i class="fa-solid fa-lock"></i> مشاوره محرمانه و تخصصی</span>
+    </div>
+    <div class="utility-links announce-desktop" aria-label="لینک‌های راهنما">
+      <a href="privacy.html">حریم خصوصی</a>
+      <a href="team.html">نظرات مشتریان</a>
+      <a href="privacy.html">بازگشت هزینه</a>
+    </div>
+  </div>
 </div>
-</nav></div>
+<nav aria-label="منوی اصلی" class="main-nav">
+  <a class="brand" href="index.html"><img alt="تزنویسه" src="assets/img/logo.jpg"/></a>
+  <ul class="nav-links">
+    <li><a href="index.html">خانه</a></li>
+    <li>
+      <a href="service-thesis.html">خدمات <i class="fa-solid fa-chevron-down nav-chevron"></i></a>
+      <ul class="nav-dropdown">
+        <li>
+          <a href="service-thesis.html">پایان‌نامه <i class="fa-solid fa-chevron-left nav-chevron"></i></a>
+          <ul class="nav-dropdown-l3">
+            <li><a href="service-thesis.html">ارشد و دکتری</a></li>
+            <li><a href="service-thesis.html">نگارش فصل‌ها</a></li>
+            <li><a href="service-thesis.html">آمادگی دفاع</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="service-proposal.html">پروپوزال <i class="fa-solid fa-chevron-left nav-chevron"></i></a>
+          <ul class="nav-dropdown-l3">
+            <li><a href="service-proposal.html">بیان مسئله</a></li>
+            <li><a href="service-proposal.html">روش‌شناسی</a></li>
+            <li><a href="service-proposal.html">مرور ادبیات</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="service-statistics.html">تحلیل آماری <i class="fa-solid fa-chevron-left nav-chevron"></i></a>
+          <ul class="nav-dropdown-l3">
+            <li><a href="service-statistics.html">SPSS / R / Python</a></li>
+            <li><a href="service-statistics.html">مدل‌سازی معادلات</a></li>
+            <li><a href="tools.html">ابزارهای آنلاین</a></li>
+          </ul>
+        </li>
+        <li><a href="service-simulation.html">شبیه‌سازی</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="tools.html">ابزارها <i class="fa-solid fa-chevron-down nav-chevron"></i></a>
+      <ul class="nav-dropdown">
+        <li><a href="tools.html">آمار توصیفی</a></li>
+        <li><a href="tools.html">همبستگی و رگرسیون</a></li>
+        <li><a href="tools.html">آزمون‌های فرض</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="blog.html">بلاگ <i class="fa-solid fa-chevron-down nav-chevron"></i></a>
+      <ul class="nav-dropdown">
+        <li><a href="blog.html">راهنمای پایان‌نامه</a></li>
+        <li><a href="blog.html">روش تحقیق</a></li>
+        <li><a href="blog.html">آمار و نرم‌افزار</a></li>
+      </ul>
+    </li>
+    <li><a href="about.html">درباره ما</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button type="button" class="nav-search-btn" aria-label="جستجو" data-search-open><i class="fa-solid fa-magnifying-glass"></i></button>
+    <div class="nav-quick-actions desktop-cta-group">
+      <a class="nav-cta nav-cta-outline" href="about.html"><i class="fa-regular fa-circle-question"></i><span>درباره ما</span></a>
+      <a class="nav-cta nav-cta-solid" href="inquiry.html"><i class="fa-solid fa-pen-to-square"></i><span>ثبت درخواست</span></a>
+    </div>
+  </div>
+  <button aria-label="باز کردن منو" aria-expanded="false" class="menu-btn" data-menu-toggle type="button"><i class="fa-solid fa-bars" data-menu-icon></i></button>
+</nav>
 </header>
-<div class="mobile-nav" role="dialog"><div class="mobile-nav-panel">
-<div class="mobile-nav-header"><img alt="تزنویسه" src="assets/img/logo.jpg" style="height:36px"/><button class="icon-btn mobile-nav-close" aria-label="بستن">✕</button></div>
-<div class="mobile-nav-links">
-<a class="mobile-nav-link" href="index.html">خانه</a>
-<a class="mobile-nav-link active" href="tools.html">ابزارها</a>
-<a class="mobile-nav-link" href="blog.html">بلاگ</a>
-<a class="mobile-nav-link" href="contact.html">تماس</a>
+<div aria-label="منوی موبایل" class="mobile-nav" data-mobile-menu role="dialog">
+  <div class="mobile-nav-panel">
+    <div class="mobile-nav-header">
+      <img alt="تزنویسه" src="assets/img/logo.jpg"/>
+      <button aria-label="بستن منو" class="mobile-nav-close" data-menu-close type="button"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="mobile-nav-links">
+      <a class="mobile-nav-link" href="index.html"><i class="fa-solid fa-house"></i> خانه</a>
+      <a class="mobile-nav-link" href="service-thesis.html"><i class="fa-solid fa-graduation-cap"></i> انجام پایان‌نامه</a>
+      <a class="mobile-nav-link" href="service-proposal.html"><i class="fa-solid fa-file-lines"></i> انجام پروپوزال</a>
+      <a class="mobile-nav-link" href="service-statistics.html"><i class="fa-solid fa-chart-line"></i> تحلیل آماری</a>
+      <a class="mobile-nav-link" href="service-simulation.html"><i class="fa-solid fa-cube"></i> شبیه‌سازی</a>
+      <a class="mobile-nav-link active" href="tools.html"><i class="fa-solid fa-calculator"></i> ابزارهای آنلاین</a>
+      <a class="mobile-nav-link" href="blog.html"><i class="fa-solid fa-book-open"></i> بلاگ</a>
+      <a class="mobile-nav-link" href="team.html"><i class="fa-solid fa-user-group"></i> تیم پژوهشگران</a>
+      <a class="mobile-nav-link" href="about.html"><i class="fa-regular fa-circle-question"></i> درباره ما</a>
+      <a class="mobile-nav-link" href="contact.html"><i class="fa-solid fa-phone"></i> تماس با ما</a>
+    </div>
+    <div class="mobile-nav-cta">
+      <a class="btn-tz btn-primary-tz" href="inquiry.html"><i class="fa-solid fa-pen-to-square"></i> ثبت درخواست مشاوره</a>
+      <a class="btn-tz btn-outline-tz" href="https://wa.me/989302822091"><i class="fa-brands fa-whatsapp"></i> گفتگو در واتساپ</a>
+    </div>
+  </div>
 </div>
-<div class="mobile-nav-cta"><a class="btn btn-primary btn-block" href="inquiry.html">ثبت سفارش</a></div>
-</div></div>
+
 <main>
-<section class="page-hero"><div class="container">
-<nav class="breadcrumbs" aria-label="مسیر"><a href="index.html">خانه</a><span class="breadcrumb-sep">/</span><span class="current">ابزارهای آنلاین</span></nav>
-<h1 class="page-hero-title">ابزارهای محاسبه آنلاین</h1>
-<p class="page-hero-desc">ابزارهای آماری رایگان برای پژوهشگران و دانشجویان؛ مجموعه‌ای کامل از ماشین‌حساب‌های آمار توصیفی، همبستگی، آزمون‌های فرض و روش‌های ناپارامتریک که بدون نصب نرم‌افزار و کاملاً آنلاین در دسترس شماست.</p>
-</div></section>
+<section class="tools-hero">
+  <div class="container">
+    <span class="eyebrow">ابزارهای رایگان</span>
+    <h1>ابزارهای محاسبه آنلاین</h1>
+    <p>ماشین‌حساب‌های آماری برای پژوهشگران و دانشجویان؛ بدون نصب نرم‌افزار، کاملاً آنلاین و رایگان.</p>
+    <div class="tools-filters" role="tablist" aria-label="فیلتر ابزارها">
+      <button type="button" class="is-active" data-filter="all">همه</button>
+      <button type="button" data-filter="descriptive">توصیفی</button>
+      <button type="button" data-filter="correlation">همبستگی</button>
+      <button type="button" data-filter="parametric">پارامتریک</button>
+      <button type="button" data-filter="nonparametric">ناپارامتریک</button>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="services-grid field-as-services tools-grid" id="toolsGrid" data-reveal-stagger>
+
+      <article class="service-card" data-category="descriptive">
+        <div class="icon-box icon-indigo"><i class="fa-solid fa-chart-simple"></i></div>
+        <h3>آمار توصیفی</h3>
+        <p>میانگین، میانه، واریانس، انحراف معیار و شاخص‌های مرکزی و پراکندگی.</p>
+        <a class="link-arrow" href="tool-descriptive-statistics.html">ادامه مطلب</a>
+      </article>
+
+      <article class="service-card" data-category="correlation">
+        <div class="icon-box icon-teal"><i class="fa-solid fa-link"></i></div>
+        <h3>همبستگی پیرسون</h3>
+        <p>ضریب همبستگی خطی بین دو متغیر کمی و تفسیر شدت رابطه.</p>
+        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
+      </article>
+
+      <article class="service-card" data-category="correlation">
+        <div class="icon-box icon-cyan"><i class="fa-solid fa-shuffle"></i></div>
+        <h3>همبستگی اسپیرمن</h3>
+        <p>همبستگی رتبه‌ای ناپارامتریک برای داده‌های ترتیبی یا غیرنرمال.</p>
+        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
+      </article>
+
+      <article class="service-card" data-category="parametric">
+        <div class="icon-box icon-amber"><i class="fa-solid fa-not-equal"></i></div>
+        <h3>آزمون تی مستقل</h3>
+        <p>مقایسه میانگین دو گروه مستقل با آزمون t.</p>
+        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
+      </article>
+
+      <article class="service-card" data-category="parametric">
+        <div class="icon-box icon-danger-soft"><i class="fa-solid fa-code-compare"></i></div>
+        <h3>آزمون تی وابسته</h3>
+        <p>مقایسه زوجی میانگین‌ها در طرح‌های وابسته.</p>
+        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
+      </article>
+
+      <article class="service-card" data-category="parametric">
+        <div class="icon-box icon-purple-soft"><i class="fa-solid fa-layer-group"></i></div>
+        <h3>ANOVA یک‌راهه</h3>
+        <p>مقایسه میانگین چند گروه مستقل با تحلیل واریانس.</p>
+        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
+      </article>
+
+      <article class="service-card" data-category="parametric">
+        <div class="icon-box icon-indigo"><i class="fa-solid fa-table-cells"></i></div>
+        <h3>خی‌دو</h3>
+        <p>آزمون استقلال و برازش برای داده‌های رده‌ای.</p>
+        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
+      </article>
+
+      <article class="service-card" data-category="nonparametric">
+        <div class="icon-box icon-teal"><i class="fa-solid fa-scale-balanced"></i></div>
+        <h3>مان-ویتنی</h3>
+        <p>مقایسه ناپارامتریک دو گروه مستقل.</p>
+        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
+      </article>
+
+      <article class="service-card" data-category="nonparametric">
+        <div class="icon-box icon-cyan"><i class="fa-solid fa-bars-staggered"></i></div>
+        <h3>کروسکال-والیس</h3>
+        <p>مقایسه ناپارامتریک چند گروه مستقل.</p>
+        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
+      </article>
+
+      <article class="service-card" data-category="descriptive">
+        <div class="icon-box icon-amber"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3>آلفای کرونباخ</h3>
+        <p>محاسبه پایایی درونی ابزار اندازه‌گیری.</p>
+        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
+      </article>
+
+      <article class="service-card" data-category="parametric">
+        <div class="icon-box icon-danger-soft"><i class="fa-solid fa-chart-line"></i></div>
+        <h3>رگرسیون خطی</h3>
+        <p>مدل‌سازی رابطه خطی و پیش‌بینی ساده.</p>
+        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
+      </article>
+
+      <article class="service-card" data-category="descriptive">
+        <div class="icon-box icon-purple-soft"><i class="fa-solid fa-users"></i></div>
+        <h3>حجم نمونه</h3>
+        <p>برآورد اندازه نمونه بر اساس توان و دقت موردنیاز.</p>
+        <a class="link-arrow" href="tools.html">ادامه مطلب</a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
 <section class="section"><div class="container">
-<div class="filter-tabs" role="tablist">
-<button class="filter-tab active" data-filter="all" type="button">همه</button>
-<button class="filter-tab" data-filter="descriptive" type="button">توصیفی</button>
-<button class="filter-tab" data-filter="correlation" type="button">همبستگی</button>
-<button class="filter-tab" data-filter="parametric" type="button">پارامتریک</button>
-<button class="filter-tab" data-filter="nonparametric" type="button">ناپارامتریک</button>
-</div>
-<div class="grid grid-auto" id="toolsGrid">
-<a class="tool-card" data-category="descriptive" href="tool-descriptive-statistics.html"><div class="tool-card-icon">Σ</div><div><div class="tool-card-title">آمار توصیفی</div><div class="tool-card-desc">میانگین، میانه، واریانس و بیشتر</div></div></a>
-<a class="tool-card" data-category="correlation" href="tools.html"><div class="tool-card-icon">ρ</div><div><div class="tool-card-title">همبستگی پیرسون</div><div class="tool-card-desc">ضریب همبستگی خطی</div></div></a>
-<a class="tool-card" data-category="correlation" href="tools.html"><div class="tool-card-icon">ρs</div><div><div class="tool-card-title">همبستگی اسپیرمن</div><div class="tool-card-desc">رتبه‌ای ناپارامتریک</div></div></a>
-<a class="tool-card" data-category="parametric" href="tools.html"><div class="tool-card-icon">t</div><div><div class="tool-card-title">آزمون تی مستقل</div><div class="tool-card-desc">مقایسه دو گروه مستقل</div></div></a>
-<a class="tool-card" data-category="parametric" href="tools.html"><div class="tool-card-icon">t</div><div><div class="tool-card-title">آزمون تی وابسته</div><div class="tool-card-desc">مقایسه زوجی</div></div></a>
-<a class="tool-card" data-category="parametric" href="tools.html"><div class="tool-card-icon">F</div><div><div class="tool-card-title">ANOVA یک‌راهه</div><div class="tool-card-desc">مقایسه چند گروه</div></div></a>
-<a class="tool-card" data-category="parametric" href="tools.html"><div class="tool-card-icon">χ²</div><div><div class="tool-card-title">خی‌دو</div><div class="tool-card-desc">استقلال و برازش</div></div></a>
-<a class="tool-card" data-category="nonparametric" href="tools.html"><div class="tool-card-icon">U</div><div><div class="tool-card-title">مان-ویتنی</div><div class="tool-card-desc">ناپارامتریک دو گروه</div></div></a>
-<a class="tool-card" data-category="nonparametric" href="tools.html"><div class="tool-card-icon">H</div><div><div class="tool-card-title">کروسکال-والیس</div><div class="tool-card-desc">ناپارامتریک چند گروه</div></div></a>
-<a class="tool-card" data-category="descriptive" href="tools.html"><div class="tool-card-icon">α</div><div><div class="tool-card-title">آلفای کرونباخ</div><div class="tool-card-desc">پایایی درونی</div></div></a>
-<a class="tool-card" data-category="parametric" href="tools.html"><div class="tool-card-icon">β</div><div><div class="tool-card-title">رگرسیون خطی</div><div class="tool-card-desc">پیش‌بینی و مدل</div></div></a>
-<a class="tool-card" data-category="descriptive" href="tools.html"><div class="tool-card-icon">n</div><div><div class="tool-card-title">حجم نمونه</div><div class="tool-card-desc">محاسبه اندازه نمونه</div></div></a>
-</div>
+  <div class="cta-band" data-reveal>
+    <div>
+      <h2>نیاز به تحلیل تخصصی دارید؟</h2>
+      <p>اگر خروجی ابزارها کافی نیست، مسیر تحلیل آماری یا شبیه‌سازی را با مشاور بررسی کنید.</p>
+    </div>
+    <a class="btn-tz btn-light-tz btn-lg-tz" href="inquiry.html">ثبت درخواست مشاوره</a>
+  </div>
 </div></section>
 </main>
-<footer class="site-footer"><div class="container">
+
+<footer class="footer-new">
+<div class="container">
 <div class="footer-grid">
-<div class="footer-about"><img alt="تزنویسه" src="assets/img/logo.jpg" style="height:40px;margin-bottom:1rem"/><p>تزنویسه همراه پژوهشی دانشجویان و پژوهشگران.</p></div>
-<div class="footer-col"><h4>خدمات</h4><ul class="footer-links" role="list"><li><a href="service-thesis.html">پایان‌نامه</a></li><li><a href="tools.html">ابزارها</a></li></ul></div>
-<div class="footer-col"><h4>دسترسی</h4><ul class="footer-links" role="list"><li><a href="blog.html">بلاگ</a></li><li><a href="about.html">درباره ما</a></li><li><a href="contact.html">تماس</a></li></ul></div>
-<div class="footer-col"><h4>ارتباط</h4><ul class="footer-links" role="list"><li><a href="tel:+989302822091">۰۹۳۰۲۸۲۲۰۹۱</a></li><li><a href="privacy.html">حریم خصوصی</a></li></ul></div>
+<div class="footer-brand"><img alt="تزنویسه" src="assets/img/logo.jpg"/><p>تزنویسه همراه پژوهشی دانشجویان و پژوهشگران.</p></div>
+<div class="footer-col"><h4>خدمات</h4><a href="service-thesis.html">انجام پایان‌نامه</a><a href="service-proposal.html">انجام پروپوزال</a><a href="service-statistics.html">تحلیل آماری</a><a href="service-simulation.html">شبیه‌سازی</a><a href="tools.html">ابزارهای آنلاین</a></div>
+<div class="footer-col"><h4>دسترسی سریع</h4><a href="blog.html">مرکز دانش</a><a href="about.html">درباره ما</a><a href="contact.html">تماس با ما</a><a href="privacy.html">حریم خصوصی</a></div>
+<div class="footer-col"><h4>ارتباط با ما</h4><a href="tel:+989302822091">۰۹۳۰۲۸۲۲۰۹۱</a><a href="mailto:teznevisan@gmail.com">teznevisan@gmail.com</a></div>
 </div>
-<div class="footer-bottom"><p class="footer-copyright">© ۱۴۰۵ تزنویسه</p>
-<div class="footer-bottom-links"><a href="privacy.html">حریم خصوصی</a><a href="privacy.html">شرایط استفاده</a></div></div>
-</div></footer>
-<nav aria-label="ناوبری موبایل" class="mobile-bottom-nav">
-<a href="index.html">خانه</a>
-<a class="active" href="tools.html">ابزارها</a>
-<a href="blog.html">بلاگ</a>
-<a href="contact.html">تماس</a>
+<div class="footer-bottom"><span>© ۱۴۰۵ تزنویسه</span></div>
+</div>
+</footer>
+
+<div class="tz-fab-wrap" id="tzFab">
+  <div class="tz-fab-menu" id="tzFabMenu" hidden>
+    <a class="tz-fab-item" href="https://t.me/Teznevise" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i><span>تلگرام</span></a>
+    <a class="tz-fab-item" href="https://wa.me/989302822091" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i><span>واتساپ</span></a>
+    <a class="tz-fab-item" href="https://ble.ir/teznevise" target="_blank" rel="noopener"><span class="tz-fab-bale">بله</span><span>بله</span></a>
+    <a class="tz-fab-item" href="tel:+989302822091"><i class="fa-solid fa-phone"></i><span>تماس</span></a>
+  </div>
+  <button type="button" class="tz-fab-toggle" id="tzFabToggle" aria-haspopup="true" aria-expanded="false" aria-controls="tzFabMenu" aria-label="راه‌های ارتباطی"><i class="fa-regular fa-comments" data-fab-icon></i></button>
+</div>
+<nav aria-label="منوی پایین موبایل" class="bottom-nav">
+  <a class="bottom-nav-item" href="index.html"><i class="fa-solid fa-house"></i><span>خانه</span></a>
+  <a class="bottom-nav-item active" href="tools.html"><i class="fa-solid fa-calculator"></i><span>ابزارها</span></a>
+  <a class="bottom-nav-item" href="blog.html"><i class="fa-solid fa-book-open"></i><span>بلاگ</span></a>
+  <a class="bottom-nav-item" href="contact.html"><i class="fa-solid fa-phone"></i><span>تماس</span></a>
 </nav>
-<script src="assets/js/main.js"></script>
+
+<script>
+(function () {
+  var tabs = document.querySelectorAll('.tools-filters [data-filter]');
+  var cards = document.querySelectorAll('#toolsGrid .service-card');
+  tabs.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      tabs.forEach(function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      var f = btn.getAttribute('data-filter');
+      cards.forEach(function (card) {
+        var cat = card.getAttribute('data-category');
+        card.hidden = !(f === 'all' || cat === f);
+      });
+    });
+  });
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/redesign.js"></script>
 </body></html>
