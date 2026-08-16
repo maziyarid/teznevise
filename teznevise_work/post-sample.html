@@ -25,7 +25,6 @@
 .post-breadcrumb a{color:#145D4A;text-decoration:none}
 .post-breadcrumb .sep{opacity:.5}
 .post-breadcrumb .current{color:#5a6b64;font-weight:700}
-
 .post-layout{display:grid;grid-template-columns:1fr 280px;gap:28px;align-items:start;padding:20px 0 0}
 .post-main{min-width:0}
 .post-featured{width:100%;max-width:720px;margin:0 auto 18px;border-radius:14px;overflow:hidden;background:#eef4f1;aspect-ratio:16/9}
@@ -34,30 +33,29 @@
 .article-body h2{margin:22px 0 10px;font-size:18px;line-height:1.5;color:#172d26;font-weight:800}
 .article-body p{margin:0 0 12px;line-height:1.85}
 .article-body a{color:#145D4A;font-weight:700}
-
 .post-sidebar{display:flex;flex-direction:column;gap:14px;position:sticky;top:96px}
 .post-widget{background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:14px;padding:16px 14px;box-shadow:0 8px 24px rgba(9,40,32,.04)}
 .post-widget-cta{background:linear-gradient(145deg,#145D4A,#0f4a3c);color:#fff;text-align:center;border:none}
 .post-widget-cta h4{margin:0 0 10px;color:#fff;font-size:14px;font-weight:850}
 .post-widget-cta p{margin:0 0 12px;color:rgba(255,255,255,.88);font-size:13px;line-height:1.7}
 
-.post-toc-title{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:15px;font-weight:850;color:#172d26}
+.post-toc-wrap{position:relative;overflow:hidden;background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:16px;padding:16px 14px 20px;box-shadow:0 8px 22px rgba(9,40,32,.04)}
+.post-toc-wrap::after{content:"";position:absolute;bottom:-18px;left:-12px;width:88px;height:56px;background:rgba(20,93,74,.08);border-radius:50% 50% 40% 60%;pointer-events:none;z-index:0}
+.post-toc-title{position:relative;z-index:1;display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:15px;font-weight:850;color:#172d26}
 .post-toc-title i{color:#145D4A}
-.post-toc-grid{display:flex;flex-direction:column;gap:10px}
-.post-toc-item{display:flex;align-items:center;gap:12px;padding:14px;background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:16px;box-shadow:0 8px 22px rgba(9,40,32,.04);text-decoration:none;color:#172d26;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
-.post-toc-item:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(9,40,32,.08);border-color:rgba(20,93,74,.22);color:#145D4A}
-.post-toc-item .toc-icon{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;background:rgba(20,93,74,.1);color:#145D4A;font-size:18px}
-.post-toc-item .toc-label{font-size:14px;font-weight:750;line-height:1.45}
+.post-toc-grid{position:relative;z-index:1;display:flex;flex-direction:column;gap:6px}
+.post-toc-item{display:block;padding:5px 0;text-decoration:none;color:#3d534a;font-size:13.5px;font-weight:650;line-height:1.55;background:none;border:none;box-shadow:none}
+.post-toc-item:hover{color:#145D4A}
 
 .post-toc-mobile{display:none;margin:0 0 18px}
-.post-toc-mobile details{background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:16px;overflow:hidden;box-shadow:0 8px 22px rgba(9,40,32,.04)}
-.post-toc-mobile summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;font-weight:850;font-size:14.5px;color:#145D4A}
+.post-toc-mobile details{position:relative;overflow:hidden;background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:16px;box-shadow:0 8px 22px rgba(9,40,32,.04)}
+.post-toc-mobile details::after{content:"";position:absolute;bottom:-18px;left:-12px;width:88px;height:56px;background:rgba(20,93,74,.08);border-radius:50% 50% 40% 60%;pointer-events:none}
+.post-toc-mobile summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;font-weight:850;font-size:14.5px;color:#145D4A;position:relative;z-index:1}
 .post-toc-mobile summary::-webkit-details-marker{display:none}
 .post-toc-mobile summary .sum-left{display:flex;align-items:center;gap:8px}
 .post-toc-mobile summary .chev{transition:transform .2s ease;font-size:12px}
 .post-toc-mobile details[open] summary .chev{transform:rotate(180deg)}
-.post-toc-mobile .toc-acc-body{padding:0 12px 12px;display:flex;flex-direction:column;gap:8px}
-.post-toc-mobile .post-toc-item{padding:12px}
+.post-toc-mobile .toc-acc-body{position:relative;z-index:1;padding:0 14px 14px;display:flex;flex-direction:column;gap:4px}
 
 .post-comments{margin:24px 0 8px;padding:18px 16px;background:#fff;border:1px solid rgba(20,93,74,.12);border-radius:14px}
 .post-comments h2{margin:0 0 6px;font-size:18px;line-height:1.45;color:#172d26}
@@ -72,7 +70,6 @@
 .comment-item strong{color:#172d26;font-size:13.5px}
 .comment-item .comment-date{margin-inline-start:8px;color:#8a9892;font-size:12px;font-weight:600}
 .comment-item p{margin:6px 0 0;color:#3d4f48;font-size:13.5px;line-height:1.75}
-
 .related-posts{padding:32px 0 48px}
 .related-posts h2{margin:0 0 16px;font-size:18px;line-height:1.45;color:#172d26;text-align:center}
 .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -82,7 +79,6 @@
 .related-card .body{padding:12px}
 .related-card .cat{font-size:11.5px;font-weight:800;color:#145D4A;margin-bottom:5px}
 .related-card h3{margin:0;font-size:14px;line-height:1.55;color:#172d26;font-weight:800}
-
 @media (max-width:900px){
   .post-layout{grid-template-columns:1fr}
   .post-sidebar{position:static}
@@ -194,9 +190,9 @@
                 <i class="fa-solid fa-chevron-down chev" aria-hidden="true"></i>
               </summary>
               <div class="toc-acc-body">
-                <a class="post-toc-item" href="#s1"><span class="toc-icon"><i class="fa-solid fa-book-open"></i></span><span class="toc-label">مقدمه: چرا فصل اول مهم است؟</span></a>
-                <a class="post-toc-item" href="#s2"><span class="toc-icon"><i class="fa-solid fa-sitemap"></i></span><span class="toc-label">ساختار فصل اول پایان‌نامه</span></a>
-                <a class="post-toc-item" href="#s3"><span class="toc-icon"><i class="fa-solid fa-pen-to-square"></i></span><span class="toc-label">گام اول: تبدیل بیان مسئله</span></a>
+                <a class="post-toc-item" href="#s1">مقدمه: چرا فصل اول مهم است؟</a>
+                <a class="post-toc-item" href="#s2">ساختار فصل اول پایان‌نامه</a>
+                <a class="post-toc-item" href="#s3">گام اول: تبدیل بیان مسئله</a>
               </div>
             </details>
           </div>
@@ -233,12 +229,12 @@
         </div>
 
         <aside class="post-sidebar">
-          <div class="post-widget post-toc-desktop post-toc-wrap">
+          <div class="post-toc-desktop post-toc-wrap">
             <div class="post-toc-title"><i class="fa-solid fa-list-ul" aria-hidden="true"></i> فهرست مطالب</div>
             <div class="post-toc-grid">
-              <a class="post-toc-item" href="#s1"><span class="toc-icon"><i class="fa-solid fa-book-open"></i></span><span class="toc-label">مقدمه: چرا فصل اول مهم است؟</span></a>
-              <a class="post-toc-item" href="#s2"><span class="toc-icon"><i class="fa-solid fa-sitemap"></i></span><span class="toc-label">ساختار فصل اول پایان‌نامه</span></a>
-              <a class="post-toc-item" href="#s3"><span class="toc-icon"><i class="fa-solid fa-pen-to-square"></i></span><span class="toc-label">گام اول: تبدیل بیان مسئله</span></a>
+              <a class="post-toc-item" href="#s1">مقدمه: چرا فصل اول مهم است؟</a>
+              <a class="post-toc-item" href="#s2">ساختار فصل اول پایان‌نامه</a>
+              <a class="post-toc-item" href="#s3">گام اول: تبدیل بیان مسئله</a>
             </div>
           </div>
           <div class="post-widget post-widget-cta">
