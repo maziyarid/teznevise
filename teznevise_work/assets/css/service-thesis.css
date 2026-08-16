@@ -1,20 +1,24 @@
-/* Service thesis — process, fields, hero, form */
+/* Service thesis page refinements */
 
 .service-hero-align .service-hero-grid-align {
-  align-items: stretch !important;
+  align-items: flex-start !important;
 }
 .service-hero-align .service-hero-grid-align > div:first-child {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: block;
   padding-top: 0 !important;
   margin-top: 0 !important;
 }
-.service-hero-align .eyebrow { margin-top: 0 !important; }
-.service-hero-align .lead-card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+
+.service-hero-align .eyebrow,
+.service-hero .eyebrow {
+  display: inline-flex !important;
+  width: auto !important;
+  max-width: max-content !important;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  font-size: 12.5px !important;
 }
 
 .lead-card-head {
@@ -43,92 +47,32 @@
 .challenge h3,
 .challenge p { text-align: center !important; }
 
-.field-grid-centered {
+.field-as-services.services-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 }
-.field-card-rich {
-  position: relative;
-  overflow: hidden;
+.field-as-services .service-card {
   text-align: center !important;
-  display: flex !important;
-  flex-direction: column !important;
   align-items: center !important;
-  min-height: 200px;
-  height: 100%;
-  padding: 24px 20px 20px !important;
-  border-radius: 22px !important;
-  background: #fff !important;
-  border: 1.5px solid transparent !important;
-  box-shadow: 0 8px 28px rgba(20, 39, 31, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.field-card-rich::after {
-  content: "";
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  bottom: -60px;
-  left: -40px;
-  pointer-events: none;
+.field-as-services .service-card .icon-box {
+  margin-inline: auto !important;
 }
-.field-card-rich:nth-child(1) { border-color: rgba(99, 102, 241, 0.35) !important; }
-.field-card-rich:nth-child(1)::after { background: rgba(99, 102, 241, 0.08); }
-.field-card-rich:nth-child(2) { border-color: rgba(20, 93, 74, 0.35) !important; }
-.field-card-rich:nth-child(2)::after { background: rgba(20, 93, 74, 0.08); }
-.field-card-rich:nth-child(3) { border-color: rgba(6, 182, 212, 0.4) !important; }
-.field-card-rich:nth-child(3)::after { background: rgba(6, 182, 212, 0.08); }
-.field-card-rich:nth-child(4) { border-color: rgba(245, 158, 11, 0.4) !important; }
-.field-card-rich:nth-child(4)::after { background: rgba(245, 158, 11, 0.1); }
-.field-card-rich:nth-child(5) { border-color: rgba(239, 68, 68, 0.3) !important; }
-.field-card-rich:nth-child(5)::after { background: rgba(239, 68, 68, 0.07); }
-.field-card-rich:nth-child(6) { border-color: rgba(168, 85, 247, 0.35) !important; }
-.field-card-rich:nth-child(6)::after { background: rgba(168, 85, 247, 0.08); }
-.field-card-rich:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 36px rgba(20, 39, 31, 0.08);
-}
-.field-card-rich h3 {
+.field-as-services .service-card h3,
+.field-as-services .service-card p {
   text-align: center !important;
-  margin: 0 0 8px !important;
-  font-size: 17px;
-  font-weight: 850;
-  color: #145D4A;
 }
-.field-card-rich p {
-  text-align: center !important;
-  margin: 0 !important;
-  flex: 1 1 auto;
-  font-size: 13.5px;
-  line-height: 1.75;
-  color: #62736d;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.field-as-services .service-card .link-arrow {
+  margin-inline: auto !important;
+  justify-content: center !important;
 }
-.field-card-rich .field-card-link,
-.field-card-rich .link-arrow {
-  margin-top: auto !important;
-  padding-top: 14px;
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  color: #145D4A !important;
-  font-weight: 800 !important;
-  font-size: 13.5px !important;
-  text-decoration: none;
-  min-height: auto !important;
-  display: inline-flex;
-  align-items: center;
+
+@media (max-width: 1050px) {
+  .field-as-services.services-grid { grid-template-columns: repeat(2, 1fr); }
 }
-@media (max-width: 900px) {
-  .field-grid-centered { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 560px) {
-  .field-grid-centered { grid-template-columns: 1fr; }
+@media (max-width: 720px) {
+  .field-as-services.services-grid { grid-template-columns: 1fr; }
 }
 
 .tz-process-showcase {
