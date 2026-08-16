@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var panels = root.querySelectorAll('[data-panel]');
   var i = 0, timer;
   function go(n) {
-    i = n % steps.length;
+    i = ((n % steps.length) + steps.length) % steps.length;
     steps.forEach(function (el, idx) {
       el.classList.toggle('is-active', idx === i);
       el.setAttribute('aria-selected', idx === i ? 'true' : 'false');
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
   function next() { go(i + 1); }
-  function start() { if (timer) clearInterval(timer); timer = setInterval(next, 5000); }
+  function start() { if (timer) clearInterval(timer); timer = setInterval(next, 3000); }
   function stop() { if (timer) clearInterval(timer); }
   steps.forEach(function (el) {
     el.addEventListener('click', function () {
