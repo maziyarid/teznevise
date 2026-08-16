@@ -5,51 +5,36 @@
 (function () {
   'use strict';
 
+  // --- Inject site-polish.css if missing (tools/post/legacy pages) ---
+  if (!document.querySelector('link[href*="site-polish.css"]')) {
+    var polish = document.createElement('link');
+    polish.rel = 'stylesheet';
+    polish.href = 'assets/css/site-polish.css';
+    document.head.appendChild(polish);
+  }
+
+  // --- Remove irrelevant footer shortcut text ---
+  document.querySelectorAll('.footer-bottom-links span, .footer-bottom span').forEach(function (el) {
+    if (el.textContent && el.textContent.indexOf('میانبر') !== -1) {
+      el.remove();
+    }
+  });
+
   // --- Persian number helper ---
   var FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
   function toFa(num) {
     return String(num).replace(/\d/g, function (d) { return FA_DIGITS[d]; });
   }
 
-  // --- Theme Toggle ---
-  var themeToggle = document.querySelector('[data-theme-toggle]');
+  // --- Theme Toggle DISABLED (force light) ---
   var htmlEl = document.documentElement;
-  var currentTheme = 'light';
-
-  // Check system preference or stored preference
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    currentTheme = 'dark';
-  }
-  // Check if user previously set a theme (via URL param or data attribute)
-  var storedTheme = document.body.getAttribute('data-pref-theme');
-  if (storedTheme) currentTheme = storedTheme;
-
-  htmlEl.setAttribute('data-theme', currentTheme);
-
-  function updateThemeIcon() {
-    if (!themeToggle) return;
-    if (currentTheme === 'dark') {
-      themeToggle.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
-      themeToggle.setAttribute('aria-label', 'حالت روشن');
-    } else {
-      themeToggle.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-      themeToggle.setAttribute('aria-label', 'حالت تاریک');
-    }
-  }
-  updateThemeIcon();
-
-  if (themeToggle) {
-    themeToggle.addEventListener('click', function () {
-      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      htmlEl.setAttribute('data-theme', currentTheme);
-      document.body.setAttribute('data-pref-theme', currentTheme);
-      updateThemeIcon();
-    });
-  }
+  htmlEl.setAttribute('data-theme', 'light');
+  document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+    btn.style.display = 'none';
+  });
 
   // --- Header scroll behavior ---
   var header = document.querySelector('.site-header');
-  var lastScrollY = 0;
 
   function handleScroll() {
     var scrollY = window.scrollY;
@@ -61,7 +46,6 @@
       }
     }
 
-    // Back to top button
     var toTop = document.getElementById('toTop');
     if (toTop) {
       if (scrollY > 400) {
@@ -70,8 +54,6 @@
         toTop.classList.remove('show');
       }
     }
-
-    lastScrollY = scrollY;
   }
 
   window.addEventListener('scroll', handleScroll, { passive: true });
@@ -134,16 +116,7 @@
     });
   }
 
-  // Keyboard shortcut: '/' to open search
   document.addEventListener('keydown', function (e) {
-    if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-      e.preventDefault();
-      if (searchOverlay && !searchOverlay.classList.contains('open')) {
-        searchOverlay.classList.add('open');
-        document.body.style.overflow = 'hidden';
-        if (searchInput) setTimeout(function () { searchInput.focus(); }, 100);
-      }
-    }
     if (e.key === 'Escape') {
       if (searchOverlay && searchOverlay.classList.contains('open')) {
         searchOverlay.classList.remove('open');
@@ -161,16 +134,12 @@
   faqQuestions.forEach(function (q) {
     q.addEventListener('click', function () {
       var item = q.closest('.faq-item');
-      var isOpen = item.classList.contains('open');
-
-      // Close all others in the same group
       var group = item.closest('.faq-group');
       if (group) {
         group.querySelectorAll('.faq-item.open').forEach(function (openItem) {
           if (openItem !== item) openItem.classList.remove('open');
         });
       }
-
       item.classList.toggle('open');
     });
   });
@@ -186,7 +155,6 @@
         }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
     fadeElements.forEach(function (el) { observer.observe(el); });
   } else {
     document.querySelectorAll('.fade-in').forEach(function (el) {
@@ -204,7 +172,6 @@
           var target = parseInt(el.getAttribute('data-counter'), 10);
           var duration = 1500;
           var startTime = null;
-
           function animate(time) {
             if (!startTime) startTime = time;
             var progress = Math.min((time - startTime) / duration, 1);
@@ -221,7 +188,6 @@
         }
       });
     }, { threshold: 0.5 });
-
     counters.forEach(function (el) { counterObserver.observe(el); });
   }
 
@@ -236,12 +202,10 @@
   // --- Cookie banner ---
   var cookieBanner = document.getElementById('cookieBanner');
   if (cookieBanner) {
-    // Show after 2 seconds if not previously dismissed
     setTimeout(function () {
       cookieBanner.classList.add('show');
     }, 2000);
   }
-
   var cookieAccept = document.querySelector('[data-cookie-accept]');
   var cookieReject = document.querySelector('[data-cookie-reject]');
   if (cookieAccept) {
@@ -266,8 +230,6 @@
         });
       }
       tab.classList.add('active');
-
-      // Filter items if data-filter is set
       var filter = tab.getAttribute('data-filter');
       var target = tab.getAttribute('data-filter-target');
       if (filter && target) {
