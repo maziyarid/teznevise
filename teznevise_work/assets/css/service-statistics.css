@@ -158,6 +158,8 @@
   line-height: 1.8;
   max-width: 52ch;
 }
+
+/* All software icons centered */
 .soft-icon-grid {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -171,9 +173,9 @@
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  width: 100%;
+  width: auto;
   max-width: 120px;
-  flex: 0 0 auto;
+  flex: 0 0 110px;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -206,7 +208,8 @@
 }
 .soft-icon-item:hover .soft-icon-name { color: #145D4A; }
 
-/* General & Multivariate: two centered rows (5 + 4) */
+/* 3rd category = آمار عمومی و چندمتغیره → exactly 2 rows (5 + 4) */
+.soft-cat:nth-child(3) .soft-icon-grid,
 .soft-icon-grid-two-rows {
   display: grid !important;
   grid-template-columns: repeat(5, 110px) !important;
@@ -216,8 +219,15 @@
   max-width: 620px;
   margin-inline: auto;
 }
+.soft-cat:nth-child(3) .soft-icon-item,
+.soft-icon-grid-two-rows .soft-icon-item {
+  flex: none;
+  width: 110px;
+  max-width: 110px;
+}
 
 @media (max-width: 720px) {
+  .soft-cat:nth-child(3) .soft-icon-grid,
   .soft-icon-grid-two-rows {
     grid-template-columns: repeat(3, 1fr) !important;
     max-width: 100% !important;
@@ -226,9 +236,11 @@
 
 @media (max-width: 560px) {
   .soft-icon-grid { gap: 14px 8px !important; }
+  .soft-icon-item { flex: 0 0 30%; max-width: 100px; }
   .soft-icon-circle { width: 62px; height: 62px; font-size: 22px; }
   .soft-icon-name { font-size: 11.5px; }
   .soft-cat-title { font-size: 17px; }
+  .soft-cat:nth-child(3) .soft-icon-grid,
   .soft-icon-grid-two-rows {
     grid-template-columns: repeat(3, 1fr) !important;
     max-width: 100% !important;
