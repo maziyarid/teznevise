@@ -235,14 +235,35 @@
   color: #047857;
 }
 
+/* Mobile: text first, image below; steps as carousel */
 @media (max-width: 900px) {
   .tz-process-showcase {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 24px;
   }
+  .tz-process-steps { order: 1; }
   .tz-process-visual {
-    order: -1;
+    order: 2;
     min-height: 280px;
+  }
+  .tz-steps-list {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow: hidden !important;
+    border-radius: 12px;
+    gap: 0 !important;
+  }
+  .tz-step {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    border-bottom: none !important;
+    display: none !important;
+    min-height: 140px;
+  }
+  .tz-step.is-active {
+    display: flex !important;
   }
 }
 
