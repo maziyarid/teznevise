@@ -1,52 +1,42 @@
-# Teznevise WordPress Theme 1.0.0
+# Teznevise
 
-RTL-first WordPress theme for [teznevise.ir](https://teznevise.ir/) — specialized thesis, proposal, and statistical analysis consulting.
+A custom WordPress theme for the Teznevise website.
 
-**Primary brand token:** `#145D4A`  
-**Language:** `fa_IR` (RTL)  
-**Requires:** WordPress 6.4+, PHP 8.0+
+## Version
 
-## Installation
+Current development version: **1.1.0**
 
-1. Upload the **repository root** contents into `wp-content/themes/teznevise/`  
-   (or clone this repo directly as the theme folder).
-2. Activate **Teznevise** under Appearance → Themes.
-3. Set a static front page (Settings → Reading) if desired.
-4. Assign menus under Appearance → Menus (Primary, Footer, Mobile, Bottom).
+## Features
 
-## Structure
+- Responsive WordPress theme structure.
+- Custom homepage, archive, post, page, and 404 templates.
+- Native post-editor controls for blog presentation fields.
+- RTL-ready layout foundation and theme.json configuration.
 
-```
-style.css          Theme header (v1.0.0)
-functions.php      Setup, enqueue, contact helpers, asset resolver
-theme.json         Design tokens
-header.php / footer.php
-front-page.php     Homepage (richest motion)
-index.php / page.php / single.php / 404.php
-template-parts/    mobile-nav, fab, bottom-nav, post-card
-inc/helpers.php
-docs/              CONVERSION-PLAN, REQUIREMENTS, RELEASE_CHECKLIST, CANONICAL
-teznevise_work/    Static HTML reference + CSS/JS/logo assets (loaded as fallback)
-```
+## Blog post fields
 
-## Styles & assets
+The **Teznevise Blog Settings** panel appears on WordPress posts and provides:
 
-All redesign CSS and motion JS live under `teznevise_work/assets/` and are enqueued automatically via `teznevise_resolve_asset()`:
+- Kicker / eyebrow.
+- Subtitle / standfirst.
+- Reading time.
+- Featured label.
+- Table-of-contents visibility.
+- Related-post heading metadata for the next blog-template phase.
 
-- `redesign.css`, `layout-refinements.css`, `motion.css`
-- `batch-fixes.css`, `ui-round2.css`, `site-polish.css`
-- Service-specific CSS when those pages are viewed
-- `redesign.js` (mobile nav, FAQ, SEO toggle, FAB, reveal animations)
-- Logo: `teznevise_work/assets/img/logo.jpg`
+All fields are optional and use safe theme defaults when empty. No custom-field plugin is required.
 
-## Motion
+## Changelog
 
-Homepage uses the full motion system:
+### 1.1.0 — 2026-08-17
 
-- Hero cascade, ink-blots, particles, network rings, orbit tags
-- `data-reveal` / `data-reveal-stagger` IntersectionObserver
-- `prefers-reduced-motion` respected
+- Added native post-editor custom fields for blog presentation controls.
+- Added sanitised, nonce-protected persistence for post metadata.
+- Added single-post template integration for kicker, subtitle, reading time, featured label, and TOC visibility.
+- Added a reusable `teznevise_post_field()` helper.
 
-## Docs
+### 1.0.0 — 2026-08-17
 
-See `docs/CONVERSION-PLAN-1.0.md`, `docs/REQUIREMENTS.md`, and `docs/RELEASE_CHECKLIST.md` for the Fasdent-style completeness gate.
+- Added initial WordPress theme conversion structure.
+- Added responsive header, footer, navigation, homepage, article cards, page, post, and 404 templates.
+- Added asset fallback resolution and deployment configuration.
