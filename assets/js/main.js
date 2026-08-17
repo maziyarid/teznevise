@@ -16,12 +16,12 @@
   }
 
   document.querySelectorAll('.footer-bottom-links span, .footer-bottom span').forEach(function (el) {
-    if (el.textContent && el.textContent.indexOf('میانبر') !== -1) {
+    if (el.textContent && el.textContent.indexOf('\u0645\u06cc\u0627\u0646\u0628\u0631') !== -1) {
       el.remove();
     }
   });
 
-  var FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
+  var FA_DIGITS = '\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9';
   function toFa(num) {
     return String(num).replace(/\d/g, function (d) { return FA_DIGITS[d]; });
   }
@@ -53,7 +53,8 @@
   if (menuToggle && mobileNav) {
     menuToggle.addEventListener('click', function () {
       mobileNav.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 
+'hidden';
     });
   }
   if (mobileNavClose && mobileNav) {
@@ -113,7 +114,8 @@
   document.querySelectorAll('.faq-question').forEach(function (q) {
     q.addEventListener('click', function () {
       var item = q.closest('.faq-item');
-      var group = item.closest('.faq-group');
+      var group = item.closest('.faq-grou
+p');
       if (group) {
         group.querySelectorAll('.faq-item.open').forEach(function (openItem) {
           if (openItem !== item) openItem.classList.remove('open');
