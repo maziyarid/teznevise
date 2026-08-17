@@ -3,14 +3,14 @@
  * Teznevise theme functions and definitions.
  *
  * @package Teznevise
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'TEZNEVISE_VERSION', '1.0.0' );
+define( 'TEZNEVISE_VERSION', '1.1.0' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -43,10 +43,10 @@ function teznevise_setup() {
 	add_theme_support( 'wp-block-styles' );
 
 	register_nav_menus( array(
-		'primary'   => __( 'Primary Menu', 'teznevise' ),
-		'footer'    => __( 'Footer Menu', 'teznevise' ),
-		'mobile'    => __( 'Mobile Menu', 'teznevise' ),
-		'bottom'    => __( 'Bottom Nav (Mobile)', 'teznevise' ),
+		'primary' => __( 'Primary Menu', 'teznevise' ),
+		'footer'  => __( 'Footer Menu', 'teznevise' ),
+		'mobile'  => __( 'Mobile Menu', 'teznevise' ),
+		'bottom'  => __( 'Bottom Nav (Mobile)', 'teznevise' ),
 	) );
 }
 add_action( 'after_setup_theme', 'teznevise_setup' );
@@ -54,7 +54,7 @@ add_action( 'after_setup_theme', 'teznevise_setup' );
 /**
  * Resolve an asset path: theme assets/ first, then teznevise_work/ fallback.
  *
- * @param string $relative_path Path relative to theme root (e.g. assets/css/motion.css).
+ * @param string $relative_path Path relative to theme root.
  * @return array{url:string,ver:string|int}|null
  */
 function teznevise_resolve_asset( $relative_path ) {
@@ -79,8 +79,6 @@ function teznevise_resolve_asset( $relative_path ) {
  * Enqueue scripts and styles.
  */
 function teznevise_enqueue_assets() {
-	$ver = TEZNEVISE_VERSION;
-
 	wp_enqueue_style(
 		'teznevise-vazirmatn',
 		'https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css',
@@ -103,12 +101,12 @@ function teznevise_enqueue_assets() {
 	);
 
 	$css_files = array(
-		'redesign'            => 'assets/css/redesign.css',
-		'layout-refinements'  => 'assets/css/layout-refinements.css',
-		'motion'              => 'assets/css/motion.css',
-		'batch-fixes'         => 'assets/css/batch-fixes.css',
-		'ui-round2'           => 'assets/css/ui-round2.css',
-		'site-polish'         => 'assets/css/site-polish.css',
+		'redesign'           => 'assets/css/redesign.css',
+		'layout-refinements' => 'assets/css/layout-refinements.css',
+		'motion'             => 'assets/css/motion.css',
+		'batch-fixes'        => 'assets/css/batch-fixes.css',
+		'ui-round2'          => 'assets/css/ui-round2.css',
+		'site-polish'        => 'assets/css/site-polish.css',
 	);
 
 	$prev = array( 'teznevise-bootstrap-rtl', 'teznevise-fontawesome', 'teznevise-vazirmatn' );
@@ -161,6 +159,9 @@ add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );
 
 /**
  * Helper: enqueue optional CSS if file exists.
+ *
+ * @param string $handle Handle.
+ * @param string $relative_path Path.
  */
 function teznevise_enqueue_optional_css( $handle, $relative_path ) {
 	$resolved = teznevise_resolve_asset( $relative_path );
@@ -175,14 +176,16 @@ function teznevise_enqueue_optional_css( $handle, $relative_path ) {
 }
 
 /**
- * Include modular files.
+ * Include modular files (order matters).
  */
 $teznevise_includes = array(
+	'/inc/defaults.php',
+	'/inc/helpers.php',
+	'/inc/customizer.php',
+	'/inc/page-meta.php',
 	'/inc/setup.php',
 	'/inc/enqueue.php',
-	'/inc/customizer.php',
 	'/inc/seo.php',
-	'/inc/helpers.php',
 );
 
 foreach ( $teznevise_includes as $file ) {
@@ -194,6 +197,9 @@ foreach ( $teznevise_includes as $file ) {
 
 /**
  * Body classes.
+ *
+ * @param array $classes Classes.
+ * @return array
  */
 function teznevise_body_classes( $classes ) {
 	if ( is_front_page() ) {
@@ -205,9 +211,16 @@ function teznevise_body_classes( $classes ) {
 add_filter( 'body_class', 'teznevise_body_classes' );
 
 /**
- * Default contact values (can be overridden via Customizer).
+ * Default contact values (Customizer-backed).
+ *
+ * @param string $key Contact key.
+ * @param string $default Fallback.
+ * @return string
  */
 function teznevise_get_contact( $key, $default = '' ) {
+	if ( function_exists( 'teznevise_mod' ) ) {
+		return teznevise_mod( $key, $default );
+	}
 	$defaults = array(
 		'phone'         => '09302822091',
 		'phone_display' => '۰۹۳۰۲۸۲۲۰۹۱',
@@ -219,12 +232,13 @@ function teznevise_get_contact( $key, $default = '' ) {
 		'address'       => 'تهران، انقلاب، خیابان ۱۲ فروردین',
 		'hours'         => 'شنبه تا پنجشنبه، ۹ تا ۲۱',
 	);
-	$value = get_theme_mod( 'teznevise_' . $key, isset( $defaults[ $key ] ) ? $defaults[ $key ] : $default );
-	return $value;
+	return get_theme_mod( 'teznevise_' . $key, isset( $defaults[ $key ] ) ? $defaults[ $key ] : $default );
 }
 
 /**
  * Logo URL helper with fallback to teznevise_work.
+ *
+ * @return string
  */
 function teznevise_logo_url() {
 	if ( file_exists( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) ) {
