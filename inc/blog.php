@@ -18,32 +18,25 @@ function teznevise_blog_fields() {
 	);
 }
 
-function teznevise_register_blog_meta_box() {
-	add_meta_box( 'teznevise_blog_settings', __( 'Teznevise Blog Settings', 'teznevise' ), 'teznevise_render_blog_meta_box', 'post', 'normal', 'high' );
-}
+function teznevise_register_blog_meta_box() { add_meta_box( 'teznevise_blog_settings', __( 'Teznevise Blog Settings', 'teznevise' ), 'teznevise_render_blog_meta_box', 'post', 'normal', 'high' ); }
 add_action( 'add_meta_boxes_post', 'teznevise_register_blog_meta_box' );
 
 function teznevise_render_blog_meta_box( $post ) {
 	wp_nonce_field( 'teznevise_save_blog_fields', 'teznevise_blog_fields_nonce' );
-	?>
-	<p><?php esc_html_e( 'Optional presentation controls. Standard title, content, excerpt, featured image, category, tags, author, and date remain native WordPress fields.', 'teznevise' ); ?></p>
+	?><p><?php esc_html_e( 'Optional presentation controls. Standard title, content, excerpt, featured image, category, tags, author, and date remain native WordPress fields.', 'teznevise' ); ?></p>
 	<table class="form-table" role="presentation">
 	<?php foreach ( teznevise_blog_fields() as $key => $field ) : ?>
-		<tr>
-			<th><label for="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $field['label'] ); ?></label></th>
-			<td>
-			<?php if ( 'textarea' === $field['type'] ) : ?>
-				<textarea class="large-text" rows="3" id="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $key ); ?>"><?php echo esc_textarea( get_post_meta( $post->ID, $key, true ) ); ?></textarea>
-			<?php elseif ( 'checkbox' === $field['type'] ) : ?>
-				<label><input type="checkbox" id="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $key ); ?>" value="1" <?php checked( get_post_meta( $post->ID, $key, true ), '1' ); ?>> <?php esc_html_e( 'Disable this section for this post', 'teznevise' ); ?></label>
-			<?php else : ?>
-				<input class="regular-text" type="text" id="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( get_post_meta( $post->ID, $key, true ) ); ?>" placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>">
-			<?php endif; ?>
-			</td>
-		</tr>
+		<tr><th><label for="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $field['label'] ); ?></label></th><td>
+		<?php if ( 'textarea' === $field['type'] ) : ?>
+			<textarea class="large-text" rows="3" id="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $key ); ?>"><?php echo esc_textarea( get_post_meta( $post->ID, $key, true ) ); ?></textarea>
+		<?php elseif ( 'checkbox' === $field['type'] ) : ?>
+			<label><input type="checkbox" id="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $key ); ?>" value="1" <?php checked( get_post_meta( $post->ID, $key, true ), '1' ); ?>> <?php esc_html_e( 'Disable this section for this post', 'teznevise' ); ?></label>
+		<?php else : ?>
+			<input class="regular-text" type="text" id="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( get_post_meta( $post->ID, $key, true ) ); ?>" placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>">
+		<?php endif; ?>
+		</td></tr>
 	<?php endforeach; ?>
-	</table>
-	<?php
+	</table><?php
 }
 
 function teznevise_save_blog_fields( $post_id ) {
@@ -67,20 +60,50 @@ function teznevise_read_time( $post_id = 0 ) {
 	$post_id = $post_id ? $post_id : get_the_ID();
 	$custom = teznevise_blog_field( 'read_time', $post_id );
 	if ( $custom ) { return $custom; }
-	$words = str_word_count( wp_strip_all_tags( get_post_field( 'post_content', $post_id ) ) );
+	$text = trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( get_post_field( 'post_content', $post_id ) ) ) );
+	$words = $text ? count( preg_split( '/\s+/u', $text, -1, PREG_SPLIT_NO_EMPTY ) ) : 0;
 	return max( 1, (int) ceil( $words / 200 ) ) . ' ' . __( 'min read', 'teznevise' );
 }
 
 function teznevise_post_heading_id( $text ) { return sanitize_title( wp_strip_all_tags( $text ) ); }
 
+function teznevise_prepare_post_content( $content ) {
+	$used = array();
+	return preg_replace_callback( '/<h([2-3])([^>]*)>(.*?)<\/h\1>/is', function ( $match ) use ( &$used ) {
+		$attrs = $match[2];
+		$title = wp_strip_all_tags( $match[3] );
+		if ( preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $attrs, $id_match ) ) {
+			$id = $id_match[1];
+		} else {
+			$id = teznevise_post_heading_id( $title );
+			$base = $id;
+			$count = 2;
+			while ( isset( $used[ $id ] ) ) { $id = $base . '-' . $count++; }
+			$attrs .= ' id="' . esc_attr( $id ) . '"';
+		}
+		$used[ $id ] = true;
+		return '<h' . $match[1] . $attrs . '>' . $match[3] . '</h' . $match[1] . '>';
+	}, $content );
+}
+
 function teznevise_render_toc( $content ) {
 	if ( ! $content ) { return ''; }
-	preg_match_all( '/<h([2-3])[^>]*>(.*?)<\/h\1>/is', $content, $matches, PREG_SET_ORDER );
+	preg_match_all( '/<h([2-3])([^>]*)>(.*?)<\/h\1>/is', $content, $matches, PREG_SET_ORDER );
 	if ( empty( $matches ) ) { return ''; }
+	$used = array();
 	$items = '<ul class="blog-toc__list">';
 	foreach ( $matches as $match ) {
-		$title = wp_strip_all_tags( $match[2] );
-		$items .= '<li class="blog-toc__item blog-toc__item--level-' . esc_attr( $match[1] ) . '"><a href="#' . esc_attr( teznevise_post_heading_id( $title ) ) . '">' . esc_html( $title ) . '</a></li>';
+		$title = wp_strip_all_tags( $match[3] );
+		if ( preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $match[2], $id_match ) ) {
+			$id = $id_match[1];
+		} else {
+			$id = teznevise_post_heading_id( $title );
+			$base = $id;
+			$count = 2;
+			while ( isset( $used[ $id ] ) ) { $id = $base . '-' . $count++; }
+		}
+		$used[ $id ] = true;
+		$items .= '<li class="blog-toc__item blog-toc__item--level-' . esc_attr( $match[1] ) . '"><a href="#' . esc_attr( $id ) . '">' . esc_html( $title ) . '</a></li>';
 	}
 	return $items . '</ul>';
 }
