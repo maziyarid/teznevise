@@ -2,6 +2,7 @@
 (function () {
   'use strict';
 
+  // Dynamically load additional CSS files if not already loaded
   if (!document.querySelector('link[href*="site-polish.css"]')) {
     var polish = document.createElement('link');
     polish.rel = 'stylesheet';
@@ -15,13 +16,15 @@
     document.head.appendChild(batch);
   }
 
+  // Remove specific elements
   document.querySelectorAll('.footer-bottom-links span, .footer-bottom span').forEach(function (el) {
-    if (el.textContent && el.textContent.indexOf('\u0645\u06cc\u0627\u0646\u0628\u0631') !== -1) {
+    if (el.textContent && el.textContent.indexOf('میانبر') !== -1) {
       el.remove();
     }
   });
 
-  var FA_DIGITS = '\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9';
+  // Persian digit conversion
+  var FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
   function toFa(num) {
     return String(num).replace(/\d/g, function (d) { return FA_DIGITS[d]; });
   }
@@ -32,7 +35,8 @@
     btn.style.display = 'none';
   });
 
-  var header = document.querySelector('.site-header');
+  // Header scroll effect
+  var header = document.querySelector('.site-header, .site-header-new');
   function handleScroll() {
     var scrollY = window.scrollY;
     if (header) {
@@ -47,30 +51,7 @@
   }
   window.addEventListener('scroll', handleScroll, { passive: true });
 
-  var menuToggle = document.querySelector('.menu-toggle');
-  var mobileNav = document.querySelector('.mobile-nav');
-  var mobileNavClose = document.querySelector('.mobile-nav-close');
-  if (menuToggle && mobileNav) {
-    menuToggle.addEventListener('click', function () {
-      mobileNav.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    });
-  }
-  if (mobileNavClose && mobileNav) {
-    mobileNavClose.addEventListener('click', function () {
-      mobileNav.classList.remove('open');
-      document.body.style.overflow = '';
-    });
-  }
-  if (mobileNav) {
-    mobileNav.addEventListener('click', function (e) {
-      if (e.target === mobileNav) {
-        mobileNav.classList.remove('open');
-        document.body.style.overflow = '';
-      }
-    });
-  }
-
+  // Search overlay functionality
   var searchBtn = document.querySelector('[data-search-open]');
   var searchOverlay = document.querySelector('.search-overlay');
   var searchClose = document.querySelector('.search-close');
@@ -97,19 +78,17 @@
     });
   }
 
+  // Close overlays with Escape key
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
       if (searchOverlay && searchOverlay.classList.contains('open')) {
         searchOverlay.classList.remove('open');
         document.body.style.overflow = '';
       }
-      if (mobileNav && mobileNav.classList.contains('open')) {
-        mobileNav.classList.remove('open');
-        document.body.style.overflow = '';
-      }
     }
   });
 
+  // FAQ accordion
   document.querySelectorAll('.faq-question').forEach(function (q) {
     q.addEventListener('click', function () {
       var item = q.closest('.faq-item');
@@ -123,6 +102,7 @@
     });
   });
 
+  // Intersection Observer for fade-in elements
   if ('IntersectionObserver' in window) {
     var fadeElements = document.querySelectorAll('.fade-in');
     var observer = new IntersectionObserver(function (entries) {
@@ -136,6 +116,7 @@
     fadeElements.forEach(function (el) { observer.observe(el); });
   }
 
+  // Back to top button
   var toTopBtn = document.getElementById('toTop');
   if (toTopBtn) {
     toTopBtn.addEventListener('click', function () {
