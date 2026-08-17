@@ -15,7 +15,7 @@ while ( have_posts() ) :
 	$cta_text   = teznevise_page_field( 'cta_text' );
 	$cta_url    = teznevise_page_field( 'cta_url' );
 	$hero_note  = teznevise_page_field( 'hero_note' );
-	$icon       = teznevise_page_field( 'service_icon', 0, '' );
+	$icon       = function_exists( 'teznevise_get_page_icon' ) ? teznevise_get_page_icon() : teznevise_page_field( 'service_icon', 0, '' );
 	$icon_color = teznevise_page_field( 'service_color', 0, 'icon-teal' );
 	$features   = teznevise_page_field( 'features' );
 	$price_note = teznevise_page_field( 'price_note' );

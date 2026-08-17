@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: صفحه خدمت (Service)
- * Description: Service landing with page custom fields + content. Assign to thesis/proposal/statistics/simulation pages.
+ * Description: Service landing with page custom fields + content.
  *
  * @package Teznevise
  */
@@ -16,7 +16,10 @@ while ( have_posts() ) :
 	$cta_text   = teznevise_page_field( 'cta_text', 0, __( 'شروع مشاوره رایگان', 'teznevise' ) );
 	$cta_url    = teznevise_page_field( 'cta_url', 0, '/inquiry/' );
 	$hero_note  = teznevise_page_field( 'hero_note' );
-	$icon       = teznevise_page_field( 'service_icon', 0, 'fa-solid fa-graduation-cap' );
+	$icon       = function_exists( 'teznevise_get_page_icon' ) ? teznevise_get_page_icon() : teznevise_page_field( 'service_icon', 0, 'fa-solid fa-graduation-cap' );
+	if ( ! $icon ) {
+		$icon = 'fa-solid fa-graduation-cap';
+	}
 	$icon_color = teznevise_page_field( 'service_color', 0, 'icon-teal' );
 	$features   = teznevise_page_field( 'features' );
 	$price_note = teznevise_page_field( 'price_note' );
