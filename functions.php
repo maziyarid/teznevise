@@ -8,14 +8,14 @@
  * Teznevise theme functions and definitions.
  *
  * @package Teznevise
- * @version 1.3.1
+ * @version 1.4.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'TEZNEVISE_VERSION', '1.3.1' );
+define( 'TEZNEVISE_VERSION', '1.4.0' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -108,6 +108,7 @@ $teznevise_includes = array(
 	'/inc/helpers.php',
 	'/inc/customizer.php',
 	'/inc/page-meta.php',
+	'/inc/page-meta-extra.php',
 	'/inc/setup-pages.php',
 	'/inc/promote-assets.php',
 	'/inc/seo.php',
