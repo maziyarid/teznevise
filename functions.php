@@ -52,12 +52,35 @@ function teznevise_setup() {
 add_action( 'after_setup_theme', 'teznevise_setup' );
 
 /**
+ * Resolve an asset path: theme assets/ first, then teznevise_work/ fallback.
+ *
+ * @param string $relative_path Path relative to theme root (e.g. assets/css/motion.css).
+ * @return array{url:string,ver:string|int}|null
+ */
+function teznevise_resolve_asset( $relative_path ) {
+	$relative_path = ltrim( $relative_path, '/' );
+	$candidates = array(
+		array( TEZNEVISE_DIR . '/' . $relative_path, TEZNEVISE_URI . '/' . $relative_path ),
+		array( TEZNEVISE_DIR . '/teznevise_work/' . $relative_path, TEZNEVISE_URI . '/teznevise_work/' . $relative_path ),
+	);
+
+	foreach ( $candidates as $pair ) {
+		if ( file_exists( $pair[0] ) ) {
+			return array(
+				'url' => $pair[1],
+				'ver' => filemtime( $pair[0] ) ?: TEZNEVISE_VERSION,
+			);
+		}
+	}
+	return null;
+}
+
+/**
  * Enqueue scripts and styles.
  */
 function teznevise_enqueue_assets() {
 	$ver = TEZNEVISE_VERSION;
 
-	// Fonts (Vazirmatn via CDN for now; can be localized later).
 	wp_enqueue_style(
 		'teznevise-vazirmatn',
 		'https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css',
@@ -65,7 +88,6 @@ function teznevise_enqueue_assets() {
 		'33.003'
 	);
 
-	// Bootstrap RTL (kept for compatibility with existing markup).
 	wp_enqueue_style(
 		'teznevise-bootstrap-rtl',
 		'https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.rtl.min.css',
@@ -73,7 +95,6 @@ function teznevise_enqueue_assets() {
 		'5.3.8'
 	);
 
-	// Font Awesome.
 	wp_enqueue_style(
 		'teznevise-fontawesome',
 		'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css',
@@ -81,7 +102,6 @@ function teznevise_enqueue_assets() {
 		'6.5.2'
 	);
 
-	// Core design system.
 	$css_files = array(
 		'redesign'            => 'assets/css/redesign.css',
 		'layout-refinements'  => 'assets/css/layout-refinements.css',
@@ -93,20 +113,18 @@ function teznevise_enqueue_assets() {
 
 	$prev = array( 'teznevise-bootstrap-rtl', 'teznevise-fontawesome', 'teznevise-vazirmatn' );
 	foreach ( $css_files as $handle => $path ) {
-		$full = TEZNEVISE_DIR . '/' . $path;
-		if ( file_exists( $full ) ) {
-			$dep_ver = filemtime( $full ) ?: $ver;
+		$resolved = teznevise_resolve_asset( $path );
+		if ( $resolved ) {
 			wp_enqueue_style(
 				'teznevise-' . $handle,
-				TEZNEVISE_URI . '/' . $path,
+				$resolved['url'],
 				$prev,
-				$dep_ver
+				$resolved['ver']
 			);
 			$prev = array( 'teznevise-' . $handle );
 		}
 	}
 
-	// Conditional service styles.
 	if ( is_page_template( 'page-service-thesis.php' ) || is_page( 'service-thesis' ) ) {
 		teznevise_enqueue_optional_css( 'service-thesis', 'assets/css/service-thesis.css' );
 	}
@@ -120,19 +138,17 @@ function teznevise_enqueue_assets() {
 		teznevise_enqueue_optional_css( 'service-simulation', 'assets/css/service-simulation.css' );
 	}
 
-	// Theme JS (motion + navigation + FAQ + FAB).
-	$js_path = TEZNEVISE_DIR . '/assets/js/redesign.js';
-	if ( file_exists( $js_path ) ) {
+	$js_resolved = teznevise_resolve_asset( 'assets/js/redesign.js' );
+	if ( $js_resolved ) {
 		wp_enqueue_script(
 			'teznevise-main',
-			TEZNEVISE_URI . '/assets/js/redesign.js',
+			$js_resolved['url'],
 			array(),
-			filemtime( $js_path ) ?: $ver,
+			$js_resolved['ver'],
 			true
 		);
 	}
 
-	// Bootstrap JS (for any residual components).
 	wp_enqueue_script(
 		'teznevise-bootstrap',
 		'https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js',
@@ -147,13 +163,13 @@ add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );
  * Helper: enqueue optional CSS if file exists.
  */
 function teznevise_enqueue_optional_css( $handle, $relative_path ) {
-	$full = TEZNEVISE_DIR . '/' . $relative_path;
-	if ( file_exists( $full ) ) {
+	$resolved = teznevise_resolve_asset( $relative_path );
+	if ( $resolved ) {
 		wp_enqueue_style(
 			'teznevise-' . $handle,
-			TEZNEVISE_URI . '/' . $relative_path,
+			$resolved['url'],
 			array( 'teznevise-ui-round2' ),
-			filemtime( $full ) ?: TEZNEVISE_VERSION
+			$resolved['ver']
 		);
 	}
 }
@@ -193,16 +209,29 @@ add_filter( 'body_class', 'teznevise_body_classes' );
  */
 function teznevise_get_contact( $key, $default = '' ) {
 	$defaults = array(
-		'phone'        => '09302822091',
-		'phone_display'=> '۰۹۳۰۲۸۲۲۰۹۱',
-		'phone_intl'   => '+989302822091',
-		'whatsapp'     => 'https://wa.me/989302822091',
-		'telegram'     => 'https://t.me/Teznevise',
-		'bale'         => 'https://ble.ir/teznevise',
-		'email'        => 'teznevisan@gmail.com',
-		'address'      => 'تهران، انقلاب، خیابان ۱۲ فروردین',
-		'hours'        => 'شنبه تا پنجشنبه، ۹ تا ۲۱',
+		'phone'         => '09302822091',
+		'phone_display' => '۰۹۳۰۲۸۲۲۰۹۱',
+		'phone_intl'    => '+989302822091',
+		'whatsapp'      => 'https://wa.me/989302822091',
+		'telegram'      => 'https://t.me/Teznevise',
+		'bale'          => 'https://ble.ir/teznevise',
+		'email'         => 'teznevisan@gmail.com',
+		'address'       => 'تهران، انقلاب، خیابان ۱۲ فروردین',
+		'hours'         => 'شنبه تا پنجشنبه، ۹ تا ۲۱',
 	);
 	$value = get_theme_mod( 'teznevise_' . $key, isset( $defaults[ $key ] ) ? $defaults[ $key ] : $default );
 	return $value;
+}
+
+/**
+ * Logo URL helper with fallback to teznevise_work.
+ */
+function teznevise_logo_url() {
+	if ( file_exists( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) ) {
+		return TEZNEVISE_URI . '/assets/img/logo.jpg';
+	}
+	if ( file_exists( TEZNEVISE_DIR . '/teznevise_work/assets/img/logo.jpg' ) ) {
+		return TEZNEVISE_URI . '/teznevise_work/assets/img/logo.jpg';
+	}
+	return '';
 }
