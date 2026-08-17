@@ -2,7 +2,8 @@
 /**
  * Project: Teznevise WordPress Theme
  * Author: MAZ//ID (Maziyar)
- * Brand: MΛZ — https://github.com/maziyarid/M-Z
+ * Brand: maziyarid/M-Z — A brand new repository with my complete brand identity, story, and website prototype.
+ * https://github.com/maziyarid/M-Z
  * License: GPL-2.0-or-later
  *
  * Brand constants and footer credit.
@@ -17,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'TEZNEVISE_AUTHOR', 'MAZ//ID (Maziyar)' );
 define( 'TEZNEVISE_BRAND_URL', 'https://github.com/maziyarid/M-Z' );
 define( 'TEZNEVISE_AUTHOR_URL', 'https://maziyarid.com/' );
+define( 'TEZNEVISE_BRAND_TAGLINE', 'A brand new repository with my complete brand identity, story, and website prototype.' );
 
 /**
  * Optional subtle credit in admin footer on theme screens.
@@ -27,7 +29,7 @@ define( 'TEZNEVISE_AUTHOR_URL', 'https://maziyarid.com/' );
 function teznevise_admin_footer_credit( $text ) {
 	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 	if ( $screen && false !== strpos( (string) $screen->id, 'teznevise' ) ) {
-		return 'Teznevise · ' . TEZNEVISE_AUTHOR . ' · <a href="' . esc_url( TEZNEVISE_BRAND_URL ) . '" target="_blank" rel="noopener">MΛZ</a>';
+		return 'Teznevise · ' . TEZNEVISE_AUTHOR . ' · <a href="' . esc_url( TEZNEVISE_BRAND_URL ) . '" target="_blank" rel="noopener">MΛZ / maziyarid/M-Z</a>';
 	}
 	return $text;
 }
