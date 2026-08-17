@@ -3,9 +3,6 @@
  * Theme header.
  *
  * Project: Teznevise WordPress Theme
- * Author: MAZ//ID (Maziyar)
- * Brand: maziyarid/M-Z — A brand new repository with my complete brand identity, story, and website prototype.
- * https://github.com/maziyarid/M-Z
  *
  * @package Teznevise
  */
@@ -23,22 +20,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
+<a class="skip-link screen-reader-text" href="#main-content"><?php esc_html_e( 'Skip to content', 'teznevise' ); ?></a>
 <header class="site-header-new">
 	<div class="announcement">
 		<div class="announcement-inner container announcement-wrap">
 			<div class="announcement-items">
-				<span class="announce-pill">
-					<i class="fa-solid fa-phone" aria-hidden="true"></i>
-					<strong><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></strong>
-				</span>
-				<span class="announce-pill announce-desktop">
-					<i class="fa-regular fa-clock" aria-hidden="true"></i>
-					<?php echo esc_html( teznevise_get_contact( 'hours' ) ); ?>
-				</span>
-				<span class="announce-pill announce-desktop">
-					<i class="fa-solid fa-lock" aria-hidden="true"></i>
-					<?php esc_html_e( 'مشاوره محرمانه و تخصصی', 'teznevise' ); ?>
-				</span>
+				<span class="announce-pill"><i class="fa-solid fa-phone" aria-hidden="true"></i><strong><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></strong></span>
+				<span class="announce-pill announce-desktop"><i class="fa-regular fa-clock" aria-hidden="true"></i><?php echo esc_html( teznevise_get_contact( 'hours' ) ); ?></span>
+				<span class="announce-pill announce-desktop"><i class="fa-solid fa-lock" aria-hidden="true"></i><?php esc_html_e( 'مشاوره محرمانه و تخصصی', 'teznevise' ); ?></span>
 			</div>
 			<div class="utility-links announce-desktop" aria-label="<?php esc_attr_e( 'لینک‌های راهنما', 'teznevise' ); ?>">
 				<a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>"><?php esc_html_e( 'حریم خصوصی', 'teznevise' ); ?></a>
@@ -51,10 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<nav class="main-nav" aria-label="<?php esc_attr_e( 'منوی اصلی', 'teznevise' ); ?>">
 		<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<?php
-			$logo_url = '';
-			if ( function_exists( 'teznevise_logo_url' ) ) {
-				$logo_url = teznevise_logo_url();
-			}
+			$logo_url = function_exists( 'teznevise_logo_url' ) ? teznevise_logo_url() : '';
 			if ( ! $logo_url && has_custom_logo() ) {
 				$custom_logo_id = (int) get_theme_mod( 'custom_logo' );
 				if ( $custom_logo_id ) {
@@ -62,46 +48,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 			}
 			if ( $logo_url ) {
-				printf(
-					'<img src="%s" alt="%s" width="106" height="48" decoding="async" fetchpriority="high">',
-					esc_url( $logo_url ),
-					esc_attr( get_bloginfo( 'name' ) )
-				);
+				printf( '<img src="%s" alt="%s" width="106" height="48" decoding="async" fetchpriority="high">', esc_url( $logo_url ), esc_attr( get_bloginfo( 'name' ) ) );
 			} else {
 				echo '<span class="site-title">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
 			}
 			?>
 		</a>
 
-		<?php
-		wp_nav_menu(
-			array(
-				'theme_location' => 'primary',
-				'container'      => false,
-				'menu_class'     => 'nav-links',
-				'fallback_cb'    => 'teznevise_fallback_primary_menu',
-				'depth'          => 3,
-			)
-		);
-		?>
+		<?php wp_nav_menu( array( 'theme_location' => 'primary', 'container' => false, 'menu_class' => 'nav-links', 'fallback_cb' => 'teznevise_fallback_primary_menu', 'depth' => 3 ) ); ?>
 
 		<div class="nav-actions">
-			<button type="button" class="nav-search-btn" aria-label="<?php esc_attr_e( 'جستجو', 'teznevise' ); ?>" data-search-open>
+			<a class="nav-search-btn" href="<?php echo esc_url( get_search_link() ); ?>" aria-label="<?php esc_attr_e( 'جستجو', 'teznevise' ); ?>">
 				<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-			</button>
+			</a>
 			<div class="nav-quick-actions desktop-cta-group">
-				<a class="nav-cta nav-cta-outline" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">
-					<i class="fa-regular fa-circle-question" aria-hidden="true"></i>
-					<span><?php esc_html_e( 'درباره ما', 'teznevise' ); ?></span>
-				</a>
-				<a class="nav-cta nav-cta-solid" href="<?php echo esc_url( home_url( '/inquiry/' ) ); ?>">
-					<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
-					<span><?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></span>
-				</a>
+				<a class="nav-cta nav-cta-outline" href="<?php echo esc_url( home_url( '/about/' ) ); ?>"><i class="fa-regular fa-circle-question" aria-hidden="true"></i><span><?php esc_html_e( 'درباره ما', 'teznevise' ); ?></span></a>
+				<a class="nav-cta nav-cta-solid" href="<?php echo esc_url( home_url( '/inquiry/' ) ); ?>"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i><span><?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></span></a>
 			</div>
 		</div>
 
-		<button type="button" class="menu-btn" aria-label="<?php esc_attr_e( 'باز کردن منو', 'teznevise' ); ?>" aria-expanded="false" data-menu-toggle>
+		<button type="button" class="menu-btn" aria-label="<?php esc_attr_e( 'باز کردن منو', 'teznevise' ); ?>" aria-expanded="false" aria-controls="mobile-navigation" data-menu-toggle>
 			<i class="fa-solid fa-bars" data-menu-icon aria-hidden="true"></i>
 		</button>
 	</nav>

@@ -6,14 +6,14 @@
  * https://github.com/maziyarid/M-Z
  *
  * @package Teznevise
- * @version 1.4.1
+ * @version 1.5.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'TEZNEVISE_VERSION', '1.4.1' );
+define( 'TEZNEVISE_VERSION', '1.5.0' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -72,6 +72,11 @@ function teznevise_enqueue_assets() {
 		}
 	}
 
+	$blog_css = teznevise_resolve_asset( 'assets/css/blog.css' );
+	if ( $blog_css ) {
+		wp_enqueue_style( 'teznevise-blog', $blog_css['url'], $prev, $blog_css['ver'] );
+	}
+
 	$service_css = array(
 		'service-thesis'     => 'service-thesis',
 		'service-proposal'   => 'service-proposal',
@@ -107,6 +112,7 @@ $teznevise_includes = array(
 	'/inc/customizer.php',
 	'/inc/page-meta.php',
 	'/inc/page-meta-extra.php',
+	'/inc/blog.php',
 	'/inc/setup-pages.php',
 	'/inc/promote-assets.php',
 	'/inc/seo.php',

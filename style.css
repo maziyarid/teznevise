@@ -3,8 +3,8 @@ Theme Name: Teznevise
 Theme URI: https://teznevise.ir/
 Author: MAZ//ID (Maziyar)
 Author URI: https://maziyarid.com/
-Description: RTL-first WordPress theme for Teznevise — thesis, proposal, and statistical analysis consulting. Built under the Maziyar brand system (MΛZ / MAZ//ID). Primary product colour #145D4A.
-Version: 1.4.1
+Description: RTL-first WordPress theme for Teznevise — thesis, proposal, research, and statistical analysis consulting.
+Version: 1.5.0
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -18,7 +18,6 @@ Brand: maziyarid/M-Z — A brand new repository with my complete brand identity,
 https://github.com/maziyarid/M-Z
 */
 
-/* Styles load from assets/css via functions.php (teznevise_work fallback).
- * screenshot.png is auto-ensured on after_setup_theme for Appearance → Themes preview.
- * v1.4.1: header logo size fix + promoted core CSS into assets/css.
+/* Runtime styles are enqueued from assets/css via functions.php.
+ * teznevise_work/assets remains a migration fallback until root asset parity is verified.
  */
