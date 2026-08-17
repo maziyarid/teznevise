@@ -34,13 +34,11 @@ function teznevise_seo_canonical() {
 function teznevise_seo_output_head() {
 	if ( teznevise_seo_plugin_active() ) { return; }
 	$description = teznevise_seo_description();
-	$canonical = teznevise_seo_canonical();
 	if ( $description ) : ?><meta name="description" content="<?php echo esc_attr( $description ); ?>">
 	<?php endif; ?>
-	<?php if ( $canonical && ! is_wp_error( $canonical ) ) : ?><link rel="canonical" href="<?php echo esc_url( $canonical ); ?>">
-	<?php endif; ?>
-	<meta name="robots" content="<?php echo esc_attr( is_search() || is_404() ? 'noindex,follow' : 'index,follow' ); ?>">
 	<?php
+	// WordPress core owns rel=canonical and robots. Keep the theme fallback
+	// limited to description so it cannot emit duplicate core directives.
 }
 add_action( 'wp_head', 'teznevise_seo_output_head', 1 );
 
