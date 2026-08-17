@@ -43,6 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<a href="<?php echo esc_url( home_url( '/team/' ) ); ?>"><?php esc_html_e( 'تیم پژوهشگران', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php esc_html_e( 'تماس با ما', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>"><?php esc_html_e( 'حریم خصوصی', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/sitemap/' ) ); ?>"><?php esc_html_e( 'نقشه سایت', 'teznevise' ); ?></a>
 			</div>
 
 			<div class="footer-col">
@@ -56,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="footer-bottom">
 			<span>© <?php echo esc_html( date_i18n( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?> — <?php esc_html_e( 'تمامی حقوق محفوظ است.', 'teznevise' ); ?></span>
-			<span><?php esc_html_e( 'طراحی RTL واکنش‌گرا — WordPress Theme 1.0.0', 'teznevise' ); ?></span>
+			<span><?php esc_html_e( 'طراحی RTL واکنش‌گرا — WordPress Theme 1.2.0', 'teznevise' ); ?></span>
 		</div>
 	</div>
 </footer>
