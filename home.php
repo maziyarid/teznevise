@@ -1,42 +1,19 @@
 <?php
-/**
- * Blog posts index (when a static front page is set).
- *
- * @package Teznevise
- */
-
 get_header();
 ?>
-
-<section class="section">
-	<div class="container">
-		<div class="section-head" data-reveal>
-			<span class="eyebrow"><?php esc_html_e( 'مرکز دانش', 'teznevise' ); ?></span>
-			<h1><?php esc_html_e( 'بلاگ', 'teznevise' ); ?></h1>
-			<p><?php esc_html_e( 'راهنماهای کاربردی درباره روش تحقیق، نگارش دانشگاهی و تحلیل آماری.', 'teznevise' ); ?></p>
+<main id="primary" class="site-main blog-archive blog-archive--home">
+	<header class="blog-archive__header">
+		<p class="blog-archive__eyebrow"><?php esc_html_e( 'Teznevise journal', 'teznevise' ); ?></p>
+		<h1><?php single_post_title( __( 'Blog', 'teznevise' ) ); ?></h1>
+		<p class="blog-archive__intro"><?php esc_html_e( 'Practical insights, research guidance, and useful tools for better academic and professional work.', 'teznevise' ); ?></p>
+	</header>
+	<?php if ( have_posts() ) : ?>
+		<div class="post-grid">
+		<?php while ( have_posts() ) : the_post(); get_template_part( 'template-parts/post-card' ); endwhile; ?>
 		</div>
-
-		<?php if ( have_posts() ) : ?>
-			<div class="article-grid" data-reveal-stagger>
-				<?php
-				while ( have_posts() ) :
-					the_post();
-					get_template_part( 'template-parts/post-card' );
-				endwhile;
-				?>
-			</div>
-			<?php
-			the_posts_pagination( array(
-				'mid_size'  => 2,
-				'prev_text' => '‹',
-				'next_text' => '›',
-			) );
-			?>
-		<?php else : ?>
-			<p data-reveal><?php esc_html_e( 'هنوز مطلبی منتشر نشده است.', 'teznevise' ); ?></p>
-		<?php endif; ?>
-	</div>
-</section>
-
-<?php
-get_footer();
+		<?php the_posts_pagination( array( 'mid_size' => 1, 'prev_text' => __( 'Previous', 'teznevise' ), 'next_text' => __( 'Next', 'teznevise' ) ) ); ?>
+	<?php else : ?>
+		<p class="blog-archive__empty"><?php esc_html_e( 'No articles have been published yet.', 'teznevise' ); ?></p>
+	<?php endif; ?>
+</main>
+<?php get_footer();

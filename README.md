@@ -1,36 +1,41 @@
-# Teznevise WordPress Theme
+# Teznevise
 
-**Author:** MAZ//ID (Maziyar) · **Brand:** [MΛZ / maziyarid/M-Z](https://github.com/maziyarid/M-Z)
+A custom WordPress theme for the Teznevise website.
 
-> RTL-first theme for [teznevise.ir](https://teznevise.ir/) — thesis, proposal, and statistical consulting.
+## Version
 
-## Quick start
+Current development version: **1.3.0**
 
-1. Activate **Teznevise 1.3.0**
-2. **Appearance → راه‌اندازی تزنویسه** — seed pages + promote assets
-3. **Customize** homepage / NAP
-4. Assign **Primary / Mobile / Bottom** menus
+## Blog conversion
 
-On first load the theme writes `screenshot.png` for the admin Themes screen (MAZ//ID preview art).
+The blog archive, taxonomy archives, and single-post page are powered by native WordPress queries and template hierarchy. Posts use native title, content, excerpt, featured image, categories, tags, author, date, comments, and status fields.
 
-## Signatures (from [M-Z](https://github.com/maziyarid/M-Z))
+The post editor also includes the **Teznevise Blog Settings** panel for optional presentation controls:
 
-| Mark | Where |
-|------|--------|
-| `MAZ//ID` | PHP/JS headers, commits |
-| `M•Z` | Docs bylines |
-| Product green `#145D4A` | Teznevise UI |
-| Studio Z Electric `#0EA5FF` | Maziyar brand system |
+- Kicker / eyebrow.
+- Subtitle / standfirst.
+- Reading time with automatic word-count fallback.
+- Featured label.
+- Author label override.
+- Table-of-contents visibility.
+- Related-post heading.
 
-## Structure
+All metadata is nonce-protected, capability-checked, autosave-safe, revision-safe, and sanitized. Empty optional fields fall back to native WordPress values or theme defaults.
 
-- `front-page.php` — homepage + Customizer
-- `page-service.php`, `page-contact.php`, `page-privacy.php`, `page-sitemap.php`
-- `inc/` — brand, customizer, page meta, setup, SEO, promote assets
-- `assets/` + `teznevise_work/` fallback for CSS/JS
+## Changelog
 
-## License
+### 1.3.0 — 2026-08-17
 
-GPL-2.0-or-later · © Maziyar (MAZ//ID)
+- Completed the native WordPress blog archive and taxonomy archive templates.
+- Completed the single-post presentation template.
+- Added native post-editor fields for blog presentation controls.
+- Added automatic reading-time fallback from post word count.
+- Added generated table of contents from H2/H3 post headings.
+- Added related posts by shared category.
+- Added responsive blog layout and post-card styles.
+- Added pagination and taxonomy descriptions.
 
-— M•Z
+### 1.2.0 — 2026-08-17
+
+- Added the automatic cPanel deployment workflow.
+- Added the footer sitemap link and updated the theme version.

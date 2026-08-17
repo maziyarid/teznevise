@@ -1,32 +1,16 @@
 <?php
-/**
- * Post card for archives.
- *
- * @package Teznevise
- */
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+$post_id = get_the_ID();
+$subtitle = teznevise_blog_field( 'subtitle', $post_id );
+$read_time = teznevise_read_time( $post_id );
 ?>
-<article <?php post_class( 'article-card' ); ?>>
-	<a href="<?php the_permalink(); ?>" class="article-cover"<?php
-	if ( has_post_thumbnail() ) {
-		$thumb = get_the_post_thumbnail_url( get_the_ID(), 'medium_large' );
-		echo ' style="background-image:url(' . esc_url( $thumb ) . ')"';
-	}
-	?>></a>
-	<div class="article-body">
-		<div class="article-meta">
-			<span><?php echo esc_html( get_the_date() ); ?></span>
-			<?php
-			$cats = get_the_category();
-			if ( $cats ) {
-				echo '<span>' . esc_html( $cats[0]->name ) . '</span>';
-			}
-			?>
+<article id="post-<?php the_ID(); ?>" <?php post_class( 'post-card' ); ?>>
+	<a class="post-card__link" href="<?php the_permalink(); ?>">
+		<?php if ( has_post_thumbnail() ) : ?><div class="post-card__media"><?php the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); ?></div><?php endif; ?>
+		<div class="post-card__body">
+			<div class="post-card__meta"><span><?php echo esc_html( get_the_date() ); ?></span><span><?php echo esc_html( $read_time ); ?></span></div>
+			<h2 class="post-card__title"><?php the_title(); ?></h2>
+			<?php if ( $subtitle ) : ?><p class="post-card__subtitle"><?php echo esc_html( $subtitle ); ?></p><?php elseif ( has_excerpt() ) : ?><p class="post-card__subtitle"><?php echo esc_html( get_the_excerpt() ); ?></p><?php endif; ?>
+			<span class="post-card__more"><?php esc_html_e( 'Read article', 'teznevise' ); ?></span>
 		</div>
-		<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-		<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 22 ) ); ?></p>
-		<a class="link-arrow" href="<?php the_permalink(); ?>"><?php esc_html_e( 'مطالعه مقاله', 'teznevise' ); ?></a>
-	</div>
+	</a>
 </article>
