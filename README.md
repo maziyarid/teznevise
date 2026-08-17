@@ -1,62 +1,51 @@
-# Teznevise WordPress Theme 1.1.0
+# Teznevise
 
-RTL-first WordPress theme for [teznevise.ir](https://teznevise.ir/) — specialized thesis, proposal, and statistical analysis consulting.
+A custom WordPress theme for the Teznevise website.
 
-**Primary brand token:** `#145D4A`  
-**Language:** `fa_IR` (RTL)  
-**Requires:** WordPress 6.4+, PHP 8.0+
+## Version
 
-## Installation
+Current development version: **1.2.0**
 
-1. Upload the **repository root** contents into `wp-content/themes/teznevise/`  
-   (or clone this repo directly as the theme folder).
-2. Activate **Teznevise** under Appearance → Themes.
-3. Set a static front page (Settings → Reading) if desired.
-4. Assign menus under Appearance → Menus (Primary, Footer, Mobile, Bottom).
-5. Edit homepage copy: **Appearance → Customize → تزنویسه — محتوای سایت**.
-6. For service/contact pages: create Pages, assign template **صفحه خدمت** or **تماس / درخواست**, fill **فیلدهای تزنویسه** meta box.
+## Features
 
-## Editable backends
+- Responsive WordPress theme structure.
+- Custom homepage, archive, post, page, and 404 templates.
+- Native post-editor controls for blog presentation fields.
+- RTL-ready layout foundation and theme.json configuration.
 
-| Where | What |
-|-------|------|
-| Customizer → تزنویسه | Home hero, services, about, steps, CTA, contact NAP |
-| Page editor → فیلدهای تزنویسه | Eyebrow, subtitle, CTAs, features, icons |
+## Blog post fields
 
-See `docs/EDITABLE-BACKENDS.md`.
+The **Teznevise Blog Settings** panel appears on WordPress posts and provides:
 
-## Page templates
+- Kicker / eyebrow.
+- Subtitle / standfirst.
+- Reading time.
+- Featured label.
+- Table-of-contents visibility.
+- Related-post heading metadata for the next blog-template phase.
 
-| Template | Use for |
-|----------|---------|
-| صفحه خدمت (Service) | service-thesis, proposal, statistics, simulation |
-| تماس / درخواسؠ (Contact) | contact, inquiry |
-| Default `page.php` | about, privacy, tools, generic pages |
+All fields are optional and use safe theme defaults when empty. No custom-field plugin is required.
 
-## Structure
+## Changelog
 
-```
-style.css / functions.php / theme.json
-front-page.php, home.php, page.php, page-service.php, page-contact.php
-single.php, archive.php, search.php, 404.php
-inc/defaults.php, customizer.php, page-meta.php, seo.php, helpers.php
-template-parts/ mobile-nav, fab, bottom-nav, post-card
-teznevise_work/  static reference + CSS/JS/logo (asset fallback)
-docs/
-```
+### 1.2.0 — 2026-08-17
 
-## Styles & motion
+- Added the automatic cPanel deployment workflow.
+- Added the footer sitemap link and updated the theme version.
 
-CSS/JS resolve from `assets/` first, then `teznevise_work/assets/`:
+### Deployment test — 2026-08-17
 
-- redesign, layout-refinements, motion, batch-fixes, ui-round2, site-polish
-- Service CSS when those pages are viewed
-- redesign.js (drawer, FAB, IntersectionObserver reveals)
-- `prefers-reduced-motion` respected
+- Triggered a harmless README-only commit to verify GitHub-to-cPanel automatic synchronization.
 
-## Docs
+### 1.1.0 — 2026-08-17
 
-- `docs/CONVERSION-PLAN-1.0.md`
-- `docs/REQUIREMENTS.md` / `RELEASE_CHECKLIST.md`
-- `docs/EDITABLE-BACKENDS.md`
-- `docs/CANONICAL.md`
+- Added native post-editor custom fields for blog presentation controls.
+- Added sanitised, nonce-protected persistence for post metadata.
+- Added single-post template integration for kicker, subtitle, reading time, featured label, and TOC visibility.
+- Added a reusable `teznevise_post_field()` helper.
+
+### 1.0.0 — 2026-08-17
+
+- Added initial WordPress theme conversion structure.
+- Added responsive header, footer, navigation, homepage, article cards, page, post, and 404 templates.
+- Added asset fallback resolution and deployment configuration.
