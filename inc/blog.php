@@ -22,14 +22,7 @@ function teznevise_blog_fields() {
 }
 
 function teznevise_register_blog_meta_box() {
-	add_meta_box(
-		'teznevise_blog_settings',
-		__( 'Teznevise Blog Settings', 'teznevise' ),
-		'teznevise_render_blog_meta_box',
-		'post',
-		'normal',
-		'high'
-	);
+	add_meta_box( 'teznevise_blog_settings', __( 'Teznevise Blog Settings', 'teznevise' ), 'teznevise_render_blog_meta_box', 'post', 'normal', 'high' );
 }
 add_action( 'add_meta_boxes_post', 'teznevise_register_blog_meta_box' );
 
@@ -40,25 +33,11 @@ function teznevise_render_blog_meta_box( $post ) {
 	foreach ( teznevise_blog_fields() as $key => $field ) {
 		echo '<tr><th scope="row"><label for="' . esc_attr( $key ) . '">' . esc_html( $field['label'] ) . '</label></th><td>';
 		if ( 'textarea' === $field['type'] ) {
-			printf(
-				'<textarea class="large-text" rows="3" id="%1$s" name="%1$s">%2$s</textarea>',
-				esc_attr( $key ),
-				esc_textarea( get_post_meta( $post->ID, $key, true ) )
-			);
+			printf( '<textarea class="large-text" rows="3" id="%1$s" name="%1$s">%2$s</textarea>', esc_attr( $key ), esc_textarea( get_post_meta( $post->ID, $key, true ) ) );
 		} elseif ( 'checkbox' === $field['type'] ) {
-			printf(
-				'<label><input type="checkbox" id="%1$s" name="%1$s" value="1" %2$s> %3$s</label>',
-				esc_attr( $key ),
-				checked( get_post_meta( $post->ID, $key, true ), '1', false ),
-				esc_html__( 'Disable the table of contents for this post.', 'teznevise' )
-			);
+			printf( '<label><input type="checkbox" id="%1$s" name="%1$s" value="1" %2$s> %3$s</label>', esc_attr( $key ), checked( get_post_meta( $post->ID, $key, true ), '1', false ), esc_html__( 'Disable the table of contents for this post.', 'teznevise' ) );
 		} else {
-			printf(
-				'<input class="regular-text" type="text" id="%1$s" name="%1$s" value="%2$s" placeholder="%3$s">',
-				esc_attr( $key ),
-				esc_attr( get_post_meta( $post->ID, $key, true ) ),
-				esc_attr( isset( $field['placeholder'] ) ? $field['placeholder'] : '' )
-			);
+			printf( '<input class="regular-text" type="text" id="%1$s" name="%1$s" value="%2$s" placeholder="%3$s">', esc_attr( $key ), esc_attr( get_post_meta( $post->ID, $key, true ) ), esc_attr( $field['placeholder'] ?? '' ) );
 		}
 		echo '</td></tr>';
 	}
@@ -66,22 +45,9 @@ function teznevise_render_blog_meta_box( $post ) {
 }
 
 function teznevise_save_blog_fields( $post_id ) {
-	if ( ! isset( $_POST['teznevise_blog_fields_nonce'] ) ) {
+	if ( ! isset( $_POST['teznevise_blog_fields_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['teznevise_blog_fields_nonce'] ) ), 'teznevise_save_blog_fields' ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) || 'post' !== get_post_type( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
 	}
-	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['teznevise_blog_fields_nonce'] ) ), 'teznevise_save_blog_fields' ) ) {
-		return;
-	}
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-		return;
-	}
-	if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
-		return;
-	}
-	if ( 'post' !== get_post_type( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {
-		return;
-	}
-
 	foreach ( teznevise_blog_fields() as $key => $field ) {
 		if ( 'checkbox' === $field['type'] ) {
 			update_post_meta( $post_id, $key, isset( $_POST[ $key ] ) ? '1' : '0' );
@@ -89,11 +55,7 @@ function teznevise_save_blog_fields( $post_id ) {
 		}
 		$value = isset( $_POST[ $key ] ) ? wp_unslash( $_POST[ $key ] ) : '';
 		$value = 'textarea' === $field['type'] ? sanitize_textarea_field( $value ) : sanitize_text_field( $value );
-		if ( '' === $value ) {
-			delete_post_meta( $post_id, $key );
-		} else {
-			update_post_meta( $post_id, $key, $value );
-		}
+		'' === $value ? delete_post_meta( $post_id, $key ) : update_post_meta( $post_id, $key, $value );
 	}
 }
 add_action( 'save_post_post', 'teznevise_save_blog_fields' );
@@ -106,9 +68,7 @@ function teznevise_blog_field( $key, $post_id = 0, $fallback = '' ) {
 function teznevise_read_time( $post_id = 0 ) {
 	$post_id = $post_id ? $post_id : get_the_ID();
 	$custom  = teznevise_blog_field( 'read_time', $post_id );
-	if ( $custom ) {
-		return $custom;
-	}
+	if ( $custom ) { return $custom; }
 	$text  = trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( get_post_field( 'post_content', $post_id ) ) ) );
 	$words = $text ? count( preg_split( '/\s+/u', $text, -1, PREG_SPLIT_NO_EMPTY ) ) : 0;
 	return max( 1, (int) ceil( $words / 200 ) ) . ' ' . __( 'min read', 'teznevise' );
@@ -121,69 +81,37 @@ function teznevise_post_heading_id( $text ) {
 
 function teznevise_prepare_post_content( $content ) {
 	$used = array();
-	return preg_replace_callback(
-		'/<h([2-3])([^>]*)>(.*?)<\/h\1>/is',
-		function ( $match ) use ( &$used ) {
-			$attrs = $match[2];
-			$title = wp_strip_all_tags( $match[3] );
-			$id    = '';
-			if ( preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $attrs, $id_match ) ) {
-				$id = sanitize_title( $id_match[1] );
-			}
-			if ( ! $id ) {
-				$id = teznevise_post_heading_id( $title );
-			}
-			$base  = $id;
-			$count = 2;
-			while ( isset( $used[ $id ] ) ) {
-				$id = $base . '-' . $count++;
-			}
-			if ( preg_match( '/\bid\s*=\s*["\']([^"\']*)["\']/i', $attrs ) ) {
-				$attrs = preg_replace( '/\bid\s*=\s*["\'][^"\']*["\']/i', 'id="' . esc_attr( $id ) . '"', $attrs, 1 );
-			} else {
-				$attrs .= ' id="' . esc_attr( $id ) . '"';
-			}
-			$used[ $id ] = true;
-			return '<h' . $match[1] . $attrs . '>' . $match[3] . '</h' . $match[1] . '>';
-		},
-		$content
-	);
+	return preg_replace_callback( '/<h([2-3])([^>]*)>(.*?)<\/h\1>/is', function ( $match ) use ( &$used ) {
+		$attrs = $match[2];
+		$title = wp_strip_all_tags( $match[3] );
+		$id = '';
+		if ( preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $attrs, $id_match ) ) { $id = sanitize_title( $id_match[1] ); }
+		if ( ! $id ) { $id = teznevise_post_heading_id( $title ); }
+		$base = $id;
+		$count = 2;
+		while ( isset( $used[ $id ] ) ) { $id = $base . '-' . $count++; }
+		if ( preg_match( '/\bid\s*=\s*["\']([^"\']*)["\']/i', $attrs ) ) {
+			$attrs = preg_replace( '/\bid\s*=\s*["\'][^"\']*["\']/i', 'id="' . esc_attr( $id ) . '"', $attrs, 1 );
+		} else { $attrs .= ' id="' . esc_attr( $id ) . '"'; }
+		$used[ $id ] = true;
+		return '<h' . $match[1] . $attrs . '>' . $match[3] . '</h' . $match[1] . '>';
+	}, $content );
 }
 
 function teznevise_render_toc( $content ) {
 	preg_match_all( '/<h([2-3])([^>]*)>(.*?)<\/h\1>/is', $content, $matches, PREG_SET_ORDER );
-	if ( empty( $matches ) ) {
-		return '';
-	}
+	if ( empty( $matches ) ) { return ''; }
 	$items = '<ul class="post-toc-grid">';
 	foreach ( $matches as $match ) {
-		if ( ! preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $match[2], $id_match ) ) {
-			continue;
-		}
-		$id    = $id_match[1];
-		$title = wp_strip_all_tags( $match[3] );
-		$items .= '<li><a class="post-toc-item post-toc-item--level-' . esc_attr( $match[1] ) . '" href="#' . esc_attr( $id ) . '">' . esc_html( $title ) . '</a></li>';
+		if ( ! preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $match[2], $id_match ) ) { continue; }
+		$items .= '<li><a class="post-toc-item post-toc-item--level-' . esc_attr( $match[1] ) . '" href="#' . esc_attr( $id_match[1] ) . '">' . esc_html( wp_strip_all_tags( $match[3] ) ) . '</a></li>';
 	}
-	$items .= '</ul>';
-	return $items;
+	return $items . '</ul>';
 }
 
 function teznevise_related_posts( $post_id = 0 ) {
 	$post_id = $post_id ? $post_id : get_the_ID();
-	$terms   = wp_get_post_categories( $post_id, array( 'fields' => 'ids' ) );
-	if ( empty( $terms ) ) {
-		return null;
-	}
-	return new WP_Query(
-		array(
-			'post_type'           => 'post',
-			'posts_per_page'      => 3,
-			'post__not_in'        => array( $post_id ),
-			'category__in'        => $terms,
-			'ignore_sticky_posts' => true,
-			'no_found_rows'       => true,
-			'orderby'             => 'date',
-			'order'               => 'DESC',
-		)
-	);
+	$terms = wp_get_post_categories( $post_id, array( 'fields' => 'ids' ) );
+	if ( empty( $terms ) ) { return null; }
+	return new WP_Query( array( 'post_type' => 'post', 'posts_per_page' => 3, 'post__not_in' => array( $post_id ), 'category__in' => $terms, 'ignore_sticky_posts' => true, 'no_found_rows' => true, 'orderby' => 'date', 'order' => 'DESC' ) );
 }
