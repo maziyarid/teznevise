@@ -1,1 +1,43 @@
-PLACEHOLDER4
+/*
+ * Header logo size constraints — also inlined into site-polish.css.
+ * Author: MAZ//ID (Maziyar)
+ * Brand: maziyarid/M-Z — A brand new repository with my complete brand identity, story, and website prototype.
+ */
+
+.site-header-new .brand img,
+.site-header-new .brand .custom-logo,
+.site-header-new .brand .custom-logo-link img,
+.main-nav .brand img,
+.main-nav .custom-logo-link img,
+a.custom-logo-link img.custom-logo {
+  width: 106px !important;
+  max-width: 106px !important;
+  height: 48px !important;
+  max-height: 48px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+.site-header-new .brand .custom-logo-link,
+.main-nav .brand .custom-logo-link {
+  display: block !important;
+  line-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.site-header-new .brand {
+  max-width: 160px !important;
+  flex-shrink: 0 !important;
+}
+
+@media (max-width: 1050px) {
+  .site-header-new .brand img,
+  .main-nav .brand img,
+  .main-nav .custom-logo-link img {
+    width: auto !important;
+    max-width: 96px !important;
+    height: 36px !important;
+    max-height: 36px !important;
+  }
+}
