@@ -1,51 +1,36 @@
-# Teznevise
+# Teznevise WordPress Theme
 
-A custom WordPress theme for the Teznevise website.
+**Author:** MAZ//ID (Maziyar) · **Brand:** [MΛZ / maziyarid/M-Z](https://github.com/maziyarid/M-Z)
 
-## Version
+> RTL-first theme for [teznevise.ir](https://teznevise.ir/) — thesis, proposal, and statistical consulting.
 
-Current development version: **1.2.0**
+## Quick start
 
-## Features
+1. Activate **Teznevise 1.3.0**
+2. **Appearance → راه‌اندازی تزنویسه** — seed pages + promote assets
+3. **Customize** homepage / NAP
+4. Assign **Primary / Mobile / Bottom** menus
 
-- Responsive WordPress theme structure.
-- Custom homepage, archive, post, page, and 404 templates.
-- Native post-editor controls for blog presentation fields.
-- RTL-ready layout foundation and theme.json configuration.
+On first load the theme writes `screenshot.png` for the admin Themes screen (MAZ//ID preview art).
 
-## Blog post fields
+## Signatures (from [M-Z](https://github.com/maziyarid/M-Z))
 
-The **Teznevise Blog Settings** panel appears on WordPress posts and provides:
+| Mark | Where |
+|------|--------|
+| `MAZ//ID` | PHP/JS headers, commits |
+| `M•Z` | Docs bylines |
+| Product green `#145D4A` | Teznevise UI |
+| Studio Z Electric `#0EA5FF` | Maziyar brand system |
 
-- Kicker / eyebrow.
-- Subtitle / standfirst.
-- Reading time.
-- Featured label.
-- Table-of-contents visibility.
-- Related-post heading metadata for the next blog-template phase.
+## Structure
 
-All fields are optional and use safe theme defaults when empty. No custom-field plugin is required.
+- `front-page.php` — homepage + Customizer
+- `page-service.php`, `page-contact.php`, `page-privacy.php`, `page-sitemap.php`
+- `inc/` — brand, customizer, page meta, setup, SEO, promote assets
+- `assets/` + `teznevise_work/` fallback for CSS/JS
 
-## Changelog
+## License
 
-### 1.2.0 — 2026-08-17
+GPL-2.0-or-later · © Maziyar (MAZ//ID)
 
-- Added the automatic cPanel deployment workflow.
-- Added the footer sitemap link and updated the theme version.
-
-### Deployment test — 2026-08-17
-
-- Triggered a harmless README-only commit to verify GitHub-to-cPanel automatic synchronization.
-
-### 1.1.0 — 2026-08-17
-
-- Added native post-editor custom fields for blog presentation controls.
-- Added sanitised, nonce-protected persistence for post metadata.
-- Added single-post template integration for kicker, subtitle, reading time, featured label, and TOC visibility.
-- Added a reusable `teznevise_post_field()` helper.
-
-### 1.0.0 — 2026-08-17
-
-- Added initial WordPress theme conversion structure.
-- Added responsive header, footer, navigation, homepage, article cards, page, post, and 404 templates.
-- Added asset fallback resolution and deployment configuration.
+— M•Z
