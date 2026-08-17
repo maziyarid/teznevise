@@ -3,14 +3,14 @@
  * Teznevise theme functions and definitions.
  *
  * @package Teznevise
- * @version 1.1.0
+ * @version 1.2.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'TEZNEVISE_VERSION', '1.1.0' );
+define( 'TEZNEVISE_VERSION', '1.2.0' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -123,17 +123,17 @@ function teznevise_enqueue_assets() {
 		}
 	}
 
-	if ( is_page_template( 'page-service-thesis.php' ) || is_page( 'service-thesis' ) ) {
-		teznevise_enqueue_optional_css( 'service-thesis', 'assets/css/service-thesis.css' );
-	}
-	if ( is_page_template( 'page-service-proposal.php' ) || is_page( 'service-proposal' ) ) {
-		teznevise_enqueue_optional_css( 'service-proposal', 'assets/css/service-proposal.css' );
-	}
-	if ( is_page_template( 'page-service-statistics.php' ) || is_page( 'service-statistics' ) ) {
-		teznevise_enqueue_optional_css( 'service-statistics', 'assets/css/service-statistics.css' );
-	}
-	if ( is_page_template( 'page-service-simulation.php' ) || is_page( 'service-simulation' ) ) {
-		teznevise_enqueue_optional_css( 'service-simulation', 'assets/css/service-simulation.css' );
+	// Service-specific CSS by slug (works with shared page-service.php template).
+	$service_css = array(
+		'service-thesis'     => 'service-thesis',
+		'service-proposal'   => 'service-proposal',
+		'service-statistics' => 'service-statistics',
+		'service-simulation' => 'service-simulation',
+	);
+	foreach ( $service_css as $slug => $handle ) {
+		if ( is_page( $slug ) ) {
+			teznevise_enqueue_optional_css( $handle, 'assets/css/' . $handle . '.css' );
+		}
 	}
 
 	$js_resolved = teznevise_resolve_asset( 'assets/js/redesign.js' );
@@ -183,8 +183,7 @@ $teznevise_includes = array(
 	'/inc/helpers.php',
 	'/inc/customizer.php',
 	'/inc/page-meta.php',
-	'/inc/setup.php',
-	'/inc/enqueue.php',
+	'/inc/setup-pages.php',
 	'/inc/seo.php',
 );
 

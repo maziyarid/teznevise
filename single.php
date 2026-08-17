@@ -39,6 +39,11 @@ get_header();
 					<?php the_tags( '<div class="post-tags">', ' ', '</div>' ); ?>
 				</footer>
 			</article>
+			<?php if ( comments_open() || get_comments_number() ) : ?>
+				<div data-reveal>
+					<?php comments_template(); ?>
+				</div>
+			<?php endif; ?>
 		<?php endwhile; ?>
 	</div>
 </section>
