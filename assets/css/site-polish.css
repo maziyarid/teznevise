@@ -1,0 +1,178 @@
+/* Site-wide polish — tools header, blog, footer, CTA, TOC */
+
+/* Hide keyboard shortcut noise in footers */
+.footer-bottom-links span {
+  display: none !important;
+}
+
+/* Footer logo on dark site-footer: remove white box, white logo */
+.site-footer .footer-about img,
+.site-footer img[alt*="تزنویسه"] {
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  filter: brightness(0) invert(1);
+  max-height: 48px;
+  width: auto;
+  opacity: 0.95;
+}
+/* Light redesign footers keep normal logo */
+.footer-new .footer-brand img {
+  filter: none;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Tools / legacy desktop header: menu not centered */
+.site-header .nav-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+}
+.site-header .site-logo {
+  flex: 0 0 auto;
+}
+.site-header .nav-menu {
+  flex: 1 1 auto;
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start !important;
+  gap: 4px;
+  margin-inline: 12px;
+}
+.site-header .nav-actions {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+}
+
+/* Hide theme toggle to avoid dark-mode issues */
+[data-theme-toggle],
+button[aria-label="تغییر تم"],
+button[aria-label="حالت روشن"],
+button[aria-label="حالت تاریک"] {
+  display: none !important;
+}
+
+/* Top bar cleaner on desktop */
+.top-bar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: nowrap;
+}
+.top-bar-contact {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: nowrap;
+}
+.top-bar-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+.top-bar-links a { white-space: nowrap; }
+@media (max-width: 1100px) {
+  .top-bar-contact span:nth-child(n+2) { display: none; }
+  .top-bar-links a:nth-child(n+3) { display: none; }
+}
+@media (max-width: 768px) {
+  .top-bar-links { display: none; }
+}
+
+/* Blog archive search icon */
+.search-field {
+  display: flex !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(20, 93, 74, 0.14);
+  background: #fff;
+}
+.search-field input {
+  flex: 1;
+  border: none !important;
+  outline: none;
+  padding: 12px 14px;
+  font-size: 14px;
+  min-height: 48px;
+  background: transparent;
+}
+.search-field button {
+  width: 52px !important;
+  min-width: 52px !important;
+  min-height: 48px !important;
+  border: none !important;
+  background: #145D4A !important;
+  color: #fff !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 18px !important;
+  cursor: pointer;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+.search-field button i {
+  font-size: 18px !important;
+}
+
+/* Blog archive read-more: corner placement, no arrow */
+.archive-post .post-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 12px;
+}
+.archive-post .post-info .read-more-link {
+  margin-inline-start: auto;
+  font-weight: 800;
+  color: #145D4A;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(20, 93, 74, 0.08);
+  border: 1px solid rgba(20, 93, 74, 0.12);
+  font-size: 13px;
+  transition: 0.25s ease;
+}
+.archive-post .post-info .read-more-link:hover {
+  background: #145D4A;
+  color: #fff;
+  border-color: #145D4A;
+}
+.archive-post .link-arrow span,
+.post-info .link-arrow span {
+  display: none !important;
+}
+
+/* Post sidebar CTA: white button on green */
+.cta-order-btn,
+.widget .btn-light,
+.widget a.btn-light {
+  background: #fff !important;
+  color: #145D4A !important;
+  border: none !important;
+  font-weight: 800 !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+}
+.cta-order-btn:hover,
+.widget .btn-light:hover {
+  background: #f0faf6 !important;
+  color: #0d3f33 !important;
+}
+
+/* Hide duplicate in-article TOC */
+.article-body > .toc,
+.post-content > .toc,
+.entry-content > nav.toc {
+  display: none !important;
+}
