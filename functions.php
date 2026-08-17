@@ -3,14 +3,14 @@
  * Teznevise theme functions and definitions.
  *
  * @package Teznevise
- * @version 1.2.1
+ * @version 1.2.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'TEZNEVISE_VERSION', '1.2.1' );
+define( 'TEZNEVISE_VERSION', '1.2.2' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -52,7 +52,7 @@ function teznevise_setup() {
 add_action( 'after_setup_theme', 'teznevise_setup' );
 
 /**
- * Resolve an asset path: theme assets/ first, then teznevise_work/ fallback.
+ * Resolve an asset path: theme assets/ first (non-empty), then teznevise_work/ fallback.
  *
  * @param string $relative_path Path relative to theme root.
  * @return array{url:string,ver:string|int}|null
@@ -65,7 +65,7 @@ function teznevise_resolve_asset( $relative_path ) {
 	);
 
 	foreach ( $candidates as $pair ) {
-		if ( file_exists( $pair[0] ) ) {
+		if ( file_exists( $pair[0] ) && is_file( $pair[0] ) && filesize( $pair[0] ) > 0 ) {
 			return array(
 				'url' => $pair[1],
 				'ver' => filemtime( $pair[0] ) ?: TEZNEVISE_VERSION,
@@ -240,7 +240,7 @@ function teznevise_get_contact( $key, $default = '' ) {
  * @return string
  */
 function teznevise_logo_url() {
-	if ( file_exists( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) ) {
+	if ( file_exists( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) && filesize( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) > 0 ) {
 		return TEZNEVISE_URI . '/assets/img/logo.jpg';
 	}
 	if ( file_exists( TEZNEVISE_DIR . '/teznevise_work/assets/img/logo.jpg' ) ) {
