@@ -1,4 +1,4 @@
-# Teznevise WordPress Theme 1.0.0
+# Teznevise WordPress Theme 1.1.0
 
 RTL-first WordPress theme for [teznevise.ir](https://teznevise.ir/) — specialized thesis, proposal, and statistical analysis consulting.
 
@@ -13,40 +13,50 @@ RTL-first WordPress theme for [teznevise.ir](https://teznevise.ir/) — speciali
 2. Activate **Teznevise** under Appearance → Themes.
 3. Set a static front page (Settings → Reading) if desired.
 4. Assign menus under Appearance → Menus (Primary, Footer, Mobile, Bottom).
+5. Edit homepage copy: **Appearance → Customize → تزنویسه — محتوای سایت**.
+6. For service/contact pages: create Pages, assign template **صفحه خدمت** or **تماس / درخواست**, fill **فیلدهای تزنویسه** meta box.
+
+## Editable backends
+
+| Where | What |
+|-------|------|
+| Customizer → تزنویسه | Home hero, services, about, steps, CTA, contact NAP |
+| Page editor → فیلدهای تزنویسه | Eyebrow, subtitle, CTAs, features, icons |
+
+See `docs/EDITABLE-BACKENDS.md`.
+
+## Page templates
+
+| Template | Use for |
+|----------|---------|
+| صفحه خدمت (Service) | service-thesis, proposal, statistics, simulation |
+| تماس / درخواسؠ (Contact) | contact, inquiry |
+| Default `page.php` | about, privacy, tools, generic pages |
 
 ## Structure
 
 ```
-style.css          Theme header (v1.0.0)
-functions.php      Setup, enqueue, contact helpers, asset resolver
-theme.json         Design tokens
-header.php / footer.php
-front-page.php     Homepage (richest motion)
-index.php / page.php / single.php / 404.php
-template-parts/    mobile-nav, fab, bottom-nav, post-card
-inc/helpers.php
-docs/              CONVERSION-PLAN, REQUIREMENTS, RELEASE_CHECKLIST, CANONICAL
-teznevise_work/    Static HTML reference + CSS/JS/logo assets (loaded as fallback)
+style.css / functions.php / theme.json
+front-page.php, home.php, page.php, page-service.php, page-contact.php
+single.php, archive.php, search.php, 404.php
+inc/defaults.php, customizer.php, page-meta.php, seo.php, helpers.php
+template-parts/ mobile-nav, fab, bottom-nav, post-card
+teznevise_work/  static reference + CSS/JS/logo (asset fallback)
+docs/
 ```
 
-## Styles & assets
+## Styles & motion
 
-All redesign CSS and motion JS live under `teznevise_work/assets/` and are enqueued automatically via `teznevise_resolve_asset()`:
+CSS/JS resolve from `assets/` first, then `teznevise_work/assets/`:
 
-- `redesign.css`, `layout-refinements.css`, `motion.css`
-- `batch-fixes.css`, `ui-round2.css`, `site-polish.css`
-- Service-specific CSS when those pages are viewed
-- `redesign.js` (mobile nav, FAQ, SEO toggle, FAB, reveal animations)
-- Logo: `teznevise_work/assets/img/logo.jpg`
-
-## Motion
-
-Homepage uses the full motion system:
-
-- Hero cascade, ink-blots, particles, network rings, orbit tags
-- `data-reveal` / `data-reveal-stagger` IntersectionObserver
+- redesign, layout-refinements, motion, batch-fixes, ui-round2, site-polish
+- Service CSS when those pages are viewed
+- redesign.js (drawer, FAB, IntersectionObserver reveals)
 - `prefers-reduced-motion` respected
 
 ## Docs
 
-See `docs/CONVERSION-PLAN-1.0.md`, `docs/REQUIREMENTS.md`, and `docs/RELEASE_CHECKLIST.md` for the Fasdent-style completeness gate.
+- `docs/CONVERSION-PLAN-1.0.md`
+- `docs/REQUIREMENTS.md` / `RELEASE_CHECKLIST.md`
+- `docs/EDITABLE-BACKENDS.md`
+- `docs/CANONICAL.md`
