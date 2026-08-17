@@ -49,9 +49,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if ( has_custom_logo() ) {
 				the_custom_logo();
 			} else {
-				$logo = TEZNEVISE_URI . '/assets/img/logo.jpg';
-				if ( file_exists( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) ) {
-					echo '<img src="' . esc_url( $logo ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '">';
+				$logo_url = function_exists( 'teznevise_logo_url' ) ? teznevise_logo_url() : '';
+				if ( $logo_url ) {
+					echo '<img src="' . esc_url( $logo_url ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '">';
 				} else {
 					echo '<span class="site-title">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
 				}
