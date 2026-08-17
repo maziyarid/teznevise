@@ -51,11 +51,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<nav class="main-nav" aria-label="<?php esc_attr_e( 'منوی اصلی', 'teznevise' ); ?>">
 		<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<?php
-			/**
-			 * Prefer a controlled <img> so we never inherit huge width/height
-			 * attributes from the Media Library (logo source is ~1400px).
-			 * CSS also hard-caps size; this keeps markup identical to the static HTML.
-			 */
 			$logo_url = '';
 			if ( function_exists( 'teznevise_logo_url' ) ) {
 				$logo_url = teznevise_logo_url();
