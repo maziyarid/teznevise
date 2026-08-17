@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="footer-grid">
 			<div class="footer-brand">
 				<?php
-				$logo = TEZNEVISE_URI . '/assets/img/logo.jpg';
-				if ( file_exists( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) ) {
-					echo '<img src="' . esc_url( $logo ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '">';
+				$logo_url = function_exists( 'teznevise_logo_url' ) ? teznevise_logo_url() : '';
+				if ( $logo_url ) {
+					echo '<img src="' . esc_url( $logo_url ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '">';
 				}
 				?>
 				<p><?php esc_html_e( 'تزنویسه همراه پژوهشی دانشجویان و پژوهشگران؛ از انتخاب موضوع و تدوین پروپوزال تا تحلیل آماری، نگارش و آمادگی دفاع.', 'teznevise' ); ?></p>
