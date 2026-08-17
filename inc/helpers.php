@@ -1,144 +1,36 @@
 <?php
 /**
- * Project: Teznevise WordPress Theme
- * Author: MAZ//ID (Maziyar)
- * Brand: maziyarid/M-Z — A brand new repository with my complete brand identity, story, and website prototype.
- * https://github.com/maziyarid/M-Z
- *
- * Theme helpers.
+ * Shared theme helpers.
  *
  * @package Teznevise
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
-/**
- * Fallback primary menu when no menu is assigned.
- */
-function teznevise_fallback_primary_menu() {
-	$items = array(
-		array( 'url' => home_url( '/' ), 'label' => __( 'خانه', 'teznevise' ), 'active' => is_front_page() ),
-		array( 'url' => home_url( '/service-thesis/' ), 'label' => __( 'خدمات', 'teznevise' ), 'active' => is_page( array( 'service-thesis', 'service-proposal', 'service-statistics', 'service-simulation' ) ) ),
-		array( 'url' => home_url( '/tools/' ), 'label' => __( 'ابزارها', 'teznevise' ), 'active' => is_page( 'tools' ) || is_page_template( 'page-tool.php' ) ),
-		array( 'url' => home_url( '/blog/' ), 'label' => __( 'بلاگ', 'teznevise' ), 'active' => is_home() || is_singular( 'post' ) ),
-		array( 'url' => home_url( '/about/' ), 'label' => __( 'درباره ما', 'teznevise' ), 'active' => is_page( 'about' ) ),
+function teznevise_fallback_menu( $args = array() ) {
+	$defaults = array(
+		'theme_location' => '',
+		'container'      => false,
+		'fallback_cb'    => false,
+		'echo'           => false,
+		'menu_class'     => 'nav-links',
 	);
-	echo '<ul class="nav-links">';
-	foreach ( $items as $item ) {
-		$cls = $item['active'] ? ' class="active"' : '';
-		printf(
-			'<li><a%s href="%s">%s</a></li>',
-			$cls,
-			esc_url( $item['url'] ),
-			esc_html( $item['label'] )
-		);
-	}
-	echo '</ul>';
-}
-
-/**
- * Safe theme asset URL helper.
- *
- * @param string $relative_path Relative path.
- * @return string
- */
-function teznevise_asset( $relative_path ) {
-	$resolved = teznevise_resolve_asset( $relative_path );
-	return $resolved ? $resolved['url'] : ( TEZNEVISE_URI . '/' . ltrim( $relative_path, '/' ) );
-}
-
-/**
- * Parse multiline structured lists: title|url|desc|icon
- * Empty lines skipped. Missing parts get empty string.
- *
- * @param string $raw Raw textarea.
- * @param int    $cols Expected columns (default 4).
- * @return array<int,array<int,string>>
- */
-function teznevise_parse_pipe_list( $raw, $cols = 4 ) {
-	$out = array();
-	$raw = (string) $raw;
-	if ( '' === trim( $raw ) ) {
-		return $out;
-	}
-	$lines = preg_split( '/\r\n|\r|\n/', $raw );
-	foreach ( $lines as $line ) {
-		$line = trim( $line );
-		if ( '' === $line || 0 === strpos( $line, '#' ) ) {
-			continue;
-		}
-		$parts = array_map( 'trim', explode( '|', $line ) );
-		while ( count( $parts ) < $cols ) {
-			$parts[] = '';
-		}
-		$out[] = array_slice( $parts, 0, $cols );
-	}
-	return $out;
-}
-
-/**
- * Echo escaped HTML or a safe fallback when empty.
- *
- * @param string $value Value.
- * @param string $fallback Fallback.
- * @param string $tag Optional wrap tag (e.g. p, span). Empty = raw text only.
- */
-function teznevise_echo_or( $value, $fallback = '', $tag = '' ) {
-	$text = ( '' !== trim( (string) $value ) ) ? $value : $fallback;
-	if ( '' === trim( (string) $text ) ) {
-		return;
-	}
-	if ( $tag ) {
-		printf( '<%1$s>%2$s</%1$s>', tag_escape( $tag ), esc_html( $text ) );
-		return;
-	}
-	echo esc_html( $text );
-}
-
-/**
- * Convert legacy .html links in content to WordPress paths when possible.
- *
- * @param string $content Content.
- * @return string
- */
-function teznevise_rewrite_static_links( $content ) {
-	$map = array(
-		'index.html'                      => '/',
-		'about.html'                      => '/about/',
-		'contact.html'                    => '/contact/',
-		'privacy.html'                    => '/privacy/',
-		'team.html'                       => '/team/',
-		'tools.html'                      => '/tools/',
-		'downloads.html'                  => '/downloads/',
-		'inquiry.html'                    => '/inquiry/',
-		'blog.html'                       => '/blog/',
-		'service-thesis.html'             => '/service-thesis/',
-		'service-proposal.html'           => '/service-proposal/',
-		'service-statistics.html'         => '/service-statistics/',
-		'service-simulation.html'         => '/service-simulation/',
-		'tool-descriptive-statistics.html'=> '/tool-descriptive-statistics/',
+	$args = wp_parse_args( $args, $defaults );
+	$locations = array(
+		'primary' => array( 'home', 'blog', 'services', 'about', 'contact' ),
+		'mobile'  => array( 'home', 'services', 'tools', 'blog', 'team', 'about', 'contact' ),
+		'bottom'  => array( 'home', 'services', 'tools', 'blog', 'contact' ),
+		'footer'  => array( 'blog', 'about', 'team', 'contact', 'privacy', 'sitemap' ),
 	);
-	foreach ( $map as $html => $path ) {
-		$content = str_replace( array( 'href="' . $html . '"', "href='" . $html . "'" ), 'href="' . esc_url( home_url( $path ) ) . '"', $content );
-		$content = str_replace( array( 'href="./' . $html . '"', 'href="/' . $html . '"' ), 'href="' . esc_url( home_url( $path ) ) . '"', $content );
+	$items = isset( $locations[ $args['theme_location'] ] ) ? $locations[ $args['theme_location'] ] : $locations['primary'];
+	$labels = array(
+		'home' => __( 'خانه', 'teznevise' ), 'blog' => __( 'بلاگ', 'teznevise' ), 'services' => __( 'خدمات', 'teznevise' ), 'about' => __( 'درباره ما', 'teznevise' ), 'contact' => __( 'تماس با ما', 'teznevise' ), 'tools' => __( 'ابزارهای آنلاین', 'teznevise' ), 'team' => __( 'تیم پژوهشگران', 'teznevise' ), 'privacy' => __( 'حریم خصوصی', 'teznevise' ), 'sitemap' => __( 'نقشه سایت', 'teznevise' ),
+	);
+	$urls = array(
+		'home' => home_url( '/' ), 'blog' => home_url( '/blog/' ), 'services' => home_url( '/service-thesis/' ), 'about' => home_url( '/about/' ), 'contact' => home_url( '/contact/' ), 'tools' => home_url( '/tools/' ), 'team' => home_url( '/team/' ), 'privacy' => home_url( '/privacy/' ), 'sitemap' => home_url( '/sitemap/' ),
+	);
+	$html = '<ul class="' . esc_attr( $args['menu_class'] ) . '">';
+	foreach ( $items as $key ) {
+		$html .= '<li class="menu-item"><a href="' . esc_url( $urls[ $key ] ) . '">' . esc_html( $labels[ $key ] ) . '</a></li>';
 	}
-	return $content;
+	return $html . '</ul>';
 }
-add_filter( 'the_content', 'teznevise_rewrite_static_links', 12 );
-
-/**
- * Discourage public indexing of legacy static HTML under teznevise_work.
- *
- * @param array $robots Robots.
- * @return array
- */
-function teznevise_robots_noindex_work( $robots ) {
-	if ( isset( $_SERVER['REQUEST_URI'] ) && false !== strpos( (string) $_SERVER['REQUEST_URI'], '/teznevise_work/' ) ) {
-		$robots['noindex'] = true;
-		$robots['nofollow'] = true;
-	}
-	return $robots;
-}
-add_filter( 'wp_robots', 'teznevise_robots_noindex_work' );
