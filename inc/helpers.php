@@ -37,5 +37,6 @@ function teznevise_fallback_primary_menu() {
  * Safe theme image URL helper.
  */
 function teznevise_asset( $relative_path ) {
-	return TEZNEVISE_URI . '/' . ltrim( $relative_path, '/' );
+	$resolved = teznevise_resolve_asset( $relative_path );
+	return $resolved ? $resolved['url'] : ( TEZNEVISE_URI . '/' . ltrim( $relative_path, '/' ) );
 }

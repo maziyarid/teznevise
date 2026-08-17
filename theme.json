@@ -1,0 +1,56 @@
+{
+  "$schema": "https://schemas.wp.org/wp/6.7/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "color": {
+      "palette": [
+        { "slug": "brand", "color": "#145D4A", "name": "Brand Primary" },
+        { "slug": "brand-dark", "color": "#0f4a3b", "name": "Brand Dark" },
+        { "slug": "brand-light", "color": "#1b765f", "name": "Brand Light" },
+        { "slug": "accent-teal", "color": "#82d8b9", "name": "Accent Teal" },
+        { "slug": "surface", "color": "#f7fcfa", "name": "Surface" },
+        { "slug": "text", "color": "#2f433c", "name": "Text" },
+        { "slug": "muted", "color": "#5a7268", "name": "Muted" },
+        { "slug": "white", "color": "#ffffff", "name": "White" }
+      ],
+      "defaultPalette": false,
+      "defaultGradients": false
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "fontFamily": "Vazirmatn, Tahoma, sans-serif",
+          "slug": "vazirmatn",
+          "name": "Vazirmatn"
+        }
+      ]
+    },
+    "layout": {
+      "contentSize": "720px",
+      "wideSize": "1200px"
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "var(--wp--preset--color--white)",
+      "text": "var(--wp--preset--color--text)"
+    },
+    "typography": {
+      "fontFamily": "var(--wp--preset--font-family--vazirmatn)",
+      "lineHeight": "1.7"
+    },
+    "elements": {
+      "link": {
+        "color": { "text": "var(--wp--preset--color--brand)" }
+      },
+      "button": {
+        "color": {
+          "background": "var(--wp--preset--color--brand)",
+          "text": "var(--wp--preset--color--white)"
+        },
+        "border": { "radius": "14px" }
+      }
+    }
+  }
+}
