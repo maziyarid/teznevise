@@ -1,42 +1,19 @@
 name: Deploy Teznevise theme
 
+# Deployment is handled by the verified VPS cron job.
+# This workflow is intentionally disabled to prevent failed API runs.
+
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  deploy:
+  deployment-notice:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Update cPanel repository from GitHub
-        env:
-          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
-          CPANEL_USERNAME: ${{ secrets.CPANEL_USERNAME }}
-          CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
-          REPOSITORY_ROOT: ${{ secrets.CPANEL_REPOSITORY_ROOT }}
+      - name: Deployment handled by VPS cron
         run: |
-          set -euo pipefail
-          curl --fail-with-body --silent --show-error \
-            --user "${CPANEL_USERNAME}:${CPANEL_API_TOKEN}" \
-            --get "https://${CPANEL_HOST}/execute/VersionControl/update" \
-            --data-urlencode "repository_root=${REPOSITORY_ROOT}" \
-            --data-urlencode "branch=main"
-
-      - name: Deploy cPanel repository
-        env:
-          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
-          CPANEL_USERNAME: ${{ secrets.CPANEL_USERNAME }}
-          CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
-          REPOSITORY_ROOT: ${{ secrets.CPANEL_REPOSITORY_ROOT }}
-        run: |
-          set -euo pipefail
-          curl --fail-with-body --silent --show-error \
-            --user "${CPANEL_USERNAME}:${CPANEL_API_TOKEN}" \
-            --get "https://${CPANEL_HOST}/execute/VersionControlDeployment/create" \
-            --data-urlencode "repository_root=${REPOSITORY_ROOT}"
+          echo "Deployment is handled by the VPS cron job."
+          echo "The server pulls main and runs cPanel deployment every five minutes."
