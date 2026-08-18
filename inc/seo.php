@@ -24,11 +24,30 @@ function teznevise_seo_description() {
 }
 
 function teznevise_seo_canonical() {
-	if ( is_singular() ) { return get_permalink(); }
-	if ( is_home() && ! is_front_page() ) { return get_permalink( get_option( 'page_for_posts' ) ); }
-	if ( is_category() || is_tag() || is_tax() ) { return get_term_link( get_queried_object() ); }
-	if ( is_post_type_archive() ) { return get_post_type_archive_link( get_query_var( 'post_type' ) ); }
-	return home_url( add_query_arg( array(), $GLOBALS['wp']->request ) );
+	if ( is_search() || is_404() ) {
+		return false;
+	}
+	if ( is_singular() ) {
+		return get_permalink();
+	}
+	if ( is_paged() ) {
+		return get_pagenum_link( max( 1, (int) get_query_var( 'paged' ) ) );
+	}
+	if ( is_front_page() ) {
+		return home_url( '/' );
+	}
+	if ( is_home() ) {
+		$posts_page = (int) get_option( 'page_for_posts' );
+		return $posts_page ? get_permalink( $posts_page ) : home_url( '/' );
+	}
+	if ( is_category() || is_tag() || is_tax() ) {
+		$link = get_term_link( get_queried_object() );
+		return is_wp_error( $link ) ? false : $link;
+	}
+	if ( is_post_type_archive() ) {
+		return get_post_type_archive_link( get_query_var( 'post_type' ) );
+	}
+	return false;
 }
 
 function teznevise_seo_output_head() {
@@ -52,7 +71,10 @@ function teznevise_schema_data() {
 		$graph[] = $article;
 	}
 	if ( is_singular() || is_category() || is_tag() || is_tax() ) {
-		$graph[] = array( '@type' => 'BreadcrumbList', '@id' => home_url( '/#breadcrumbs' ), 'itemListElement' => array( array( '@type' => 'ListItem', 'position' => 1, 'name' => get_bloginfo( 'name' ), 'item' => home_url( '/' ) ), array( '@type' => 'ListItem', 'position' => 2, 'name' => wp_strip_all_tags( wp_get_document_title() ), 'item' => teznevise_seo_canonical() ) ) );
+		$canonical = teznevise_seo_canonical();
+		if ( $canonical ) {
+			$graph[] = array( '@type' => 'BreadcrumbList', '@id' => $canonical . '#breadcrumbs', 'itemListElement' => array( array( '@type' => 'ListItem', 'position' => 1, 'name' => get_bloginfo( 'name' ), 'item' => home_url( '/' ) ), array( '@type' => 'ListItem', 'position' => 2, 'name' => wp_strip_all_tags( wp_get_document_title() ), 'item' => $canonical ) ) );
+		}
 	}
 	return array( '@context' => 'https://schema.org', '@graph' => $graph );
 }
