@@ -64,6 +64,7 @@ function teznevise_enqueue_assets() {
 	wp_enqueue_style( 'teznevise-site-polish', TEZNEVISE_URI . '/assets/css/site-polish.css', array( 'teznevise-ui-round2' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-header-fix', TEZNEVISE_URI . '/assets/css/header-fix.css', array( 'teznevise-site-polish' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-mobile-fixes', TEZNEVISE_URI . '/assets/css/mobile-fixes.css', array( 'teznevise-header-fix' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-service-thesis', TEZNEVISE_URI . '/assets/css/service-thesis.css', array( 'teznevise-mobile-fixes' ), TEZNEVISE_VERSION );
 
 	// JavaScript files - loaded in order, in footer
 	wp_enqueue_script( 'teznevise-redesign', TEZNEVISE_URI . '/assets/js/redesign.js', array(), TEZNEVISE_VERSION, true );
