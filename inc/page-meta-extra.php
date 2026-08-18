@@ -36,8 +36,8 @@ function teznevise_parse_pipe_list( $input, $cols = 2 ) {
 			continue;
 		}
 
-		// Split by pipe and filter out empty values
-		$values = array_filter( array_map( 'trim', explode( '|', $line ) ) );
+		// Split by pipe and trim values - DO NOT filter to preserve positional empty/zero values
+		$values = array_map( 'trim', explode( '|', $line ) );
 
 		// Pad or truncate to the expected number of columns
 		$row = array_pad( $values, $cols, '' );
