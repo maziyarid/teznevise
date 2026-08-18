@@ -29,8 +29,7 @@
 .tz-step:last-child { border-bottom: none !important; }
 .tz-step.is-active { background: rgba(20, 93, 74, 0.06); }
 .tz-step-label { font-size: 11px; font-weight: 800; color: #145D4A; }
-.tz-step-line { margin: 0; font-size: 14px
-; line-height: 1.8; color: #4a5f56; }
+.tz-step-line { margin: 0; font-size: 14px; line-height: 1.8; color: #4a5f56; }
 .tz-step-line strong { font-weight: 850; color: #172d26; }
 .tz-process-visual { position: relative; min-height: 360px; }
 .tz-process-panel {
@@ -57,8 +56,7 @@
 .tz-chat-bubble.tz-out { align-self: flex-end; background: #145D4A; color: #fff; border-bottom-left-radius: 4px; }
 .tz-status-pill { align-self: flex-start; margin-top: 6px; padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 800; background: rgba(20, 93, 74, 0.1); color: #145D4A; }
 .tz-status-pill.tz-progress { background: rgba(245, 158, 11, 0.15); color: #b45309; }
-.tz-status-pill.tz-done { background:
- rgba(16, 185, 129, 0.15); color: #047857; }
+.tz-status-pill.tz-done { background: rgba(16, 185, 129, 0.15); color: #047857; }
 @media (max-width: 900px) {
   .tz-process-showcase { grid-template-columns: 1fr; gap: 24px; }
   .tz-process-steps { order: 1; }
@@ -93,8 +91,7 @@
 }
 .soft-icon-item:hover .soft-icon-name { color: #145D4A; }
 .soft-icon-grid.soft-rows {
-  display: flex !important; flex-wrap: wr
-ap !important; justify-content: center !important;
+  display: flex !important; flex-wrap: wrap !important; justify-content: center !important;
   gap: 18px 16px !important; max-width: 620px; margin-inline: auto;
 }
 .soft-icon-grid.soft-rows .soft-icon-item { flex: 0 0 110px; max-width: 110px; }

@@ -82,8 +82,7 @@ button[aria-label="حالت تاریک"] {
   .top-bar-links a:nth-child(n+3) { display: none; }
 }
 @media (max-width: 768px) {
-  .top-bar
--links { display: none; }
+  .top-bar-links { display: none; }
 }
 
 /* Blog archive search icon */
@@ -168,8 +167,7 @@ button[aria-label="حالت تاریک"] {
 .cta-order-btn:hover,
 .widget .btn-light:hover {
   background: #f0faf6 !important;
-  c
-olor: #0d3f33 !important;
+  color: #0d3f33 !important;
 }
 
 /* Hide duplicate in-article TOC */

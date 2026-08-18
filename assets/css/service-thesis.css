@@ -81,8 +81,7 @@
   gap: 40px;
   align-items: center;
 }
-.tz-process-
-steps h2 {
+.tz-process-steps h2 {
   font-size: clamp(26px, 3.2vw, 36px);
   line-height: 1.45;
   margin: 0 0 12px;
@@ -175,8 +174,7 @@ steps h2 {
 }
 .tz-panel-bar span {
   width: 9px;
- 
- height: 9px;
+  height: 9px;
   border-radius: 50%;
   background: #d5e3dd;
 }
@@ -264,8 +262,7 @@ steps h2 {
     display: none !important;
     min-height: 140px;
   }
-  .tz-
-step.is-active {
+  .tz-step.is-active {
     display: flex !important;
   }
 }

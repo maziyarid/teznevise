@@ -335,6 +335,431 @@ a,button,.btn,.btn-tz,.link-arrow,.nav-link,.nav-links a,.icon-btn,.service-card
 }
 @media (max-width: 720px){
   .hero-visual{min-height:440px}
-  .hero-network{inset:94px
+  .hero-network{inset:94px 0 18px 0}
+  .ring-one{width:226px;height:226px}
+  .ring-two{width:310px;height:310px}
+  .hero-order-button{width:150px;height:150px;font-size:1.2rem}
+  .hero-order-button span{font-size:23px}
+  .orbit-tag{padding:8px 12px;font-size:11.5px}
+  .tag-1{top:10%;right:9%}
+  .tag-2{top:30%;left:0%}
+  .tag-3{bottom:22%;left:4%}
+  .tag-4{bottom:8%;right:9%}
+  .floating-chip.one,.floating-chip.two{font-size:11px}
+  .matrix-card{width:158px;left:auto;right:4px;top:18px;transform:rotate(-2deg)}
+}
+@media (max-width: 460px){
+  .hero-visual{min-height:410px}
+  .ring-one{width:202px;height:202px}
+  .ring-two{width:274px;height:274px}
+  .hero-order-button{width:138px;height:138px}
+  .hero-order-button span{font-size:21px}
+}
 
-... [Content truncated]
+.step::before{display:none!important}
+.step h3{margin-top:18px!important}
+.step-icon{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;margin-bottom:12px;border:1px solid rgba(32,201,151,.18)}
+.article-cover .cover-icon i{font-size:20px}
+/* ===== Round 5: orbit alignment + header order icon + form stripe radius ===== */
+
+/* Header actions */
+.nav-cta-solid{
+  background:linear-gradient(135deg,#145D4A 0%,#176b56 65%,#21816a 100%)!important;
+  border-color:transparent!important;
+  color:#fff!important;
+  box-shadow:0 14px 30px rgba(20,93,74,.22)!important;
+}
+.nav-order-icon{
+  width:46px;height:46px;min-width:46px;min-height:46px;padding:0!important;
+  display:inline-grid;place-items:center;border-radius:15px;
+  color:#fff;background:linear-gradient(145deg,#145D4A,#1c765f);border:1px solid #145D4A;
+  box-shadow:0 11px 24px rgba(20,93,74,.18);
+  transition:transform .34s var(--ui-ease),box-shadow .34s var(--ui-ease),background-color .34s var(--ui-ease)!important;
+}
+.nav-order-icon i{font-size:17px}
+.nav-order-icon:hover{transform:translateY(-2px);background:#0f5142;box-shadow:0 15px 30px rgba(20,93,74,.22)}
+.announcement-link{
+  width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;
+  padding:0!important;border-radius:13px!important;display:grid!important;place-items:center!important;
+}
+.announcement-link i{font-size:16px}
+
+/* Older-header order actions are icon-only too */
+.icon-only-order,.top-order-icon{
+  width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;
+  padding:0!important;display:inline-grid!important;place-items:center!important;border-radius:14px!important;
+}
+.icon-only-order i,.top-order-icon i{font-size:16px}
+.top-bar-links .top-order-icon{
+  background:#145D4A!important;color:#fff!important;border-color:#145D4A!important;
+}
+
+/* Hero: a true centered radial composition. Exactly four orbit labels. */
+.hero-visual{position:relative!important;display:block!important;min-height:560px!important}
+.hero-network{
+  position:absolute!important;
+  width:520px!important;height:520px!important;
+  left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;inset:auto!important;
+  transform:translate(-50%,-50%)!important;
+  display:block!important;
+}
+.network-ring{
+  position:absolute!important;left:50%!important;top:50%!important;
+  transform:translate(-50%,-50%)!important;border-radius:50%!important;
+  pointer-events:none;
+}
+.ring-one{width:300px!important;height:300px!important;border:1.5px dashed rgba(20,93,74,.20)!important}
+.ring-two{width:430px!important;height:430px!important;border:1px solid rgba(20,93,74,.13)!important}
+.ring-three{display:none!important}
+.hero-order-button{
+  position:absolute!important;left:50%!important;top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  width:188px!important;height:188px!important;border-radius:50%!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:0 18px!important;z-index:4!important;
+  background:linear-gradient(145deg,#145D4A 0%,#1b725c 72%,#2a9b7b 100%)!important;
+  color:#fff!important;box-shadow:0 28px 64px rgba(20,93,74,.24),inset 0 0 0 12px rgba(255,255,255,.10)!important;
+  text-align:center!important;
+}
+.hero-order-button span{font-size:27px!important;font-weight:900!important;line-height:1.2!important;white-space:nowrap!important}
+.hero-order-button:hover{transform:translate(-50%,-50%) scale(1.025)!important}
+.orbit-tag{
+  position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  min-height:44px!important;padding:10px 17px!important;border-radius:999px!important;
+  background:rgba(255,255,255,.96)!important;border:1px solid rgba(20,93,74,.11)!important;
+  color:#284a41!important;box-shadow:0 14px 32px rgba(15,23,42,.07)!important;
+  font-size:13px!important;font-weight:850!important;white-space:nowrap!important;z-index:5!important;
+}
+.tag-1{transform:translate(-50%,-50%) translate(160px,-145px)!important}
+.tag-2{transform:translate(-50%,-50%) translate(-175px,-55px)!important}
+.tag-3{transform:translate(-50%,-50%) translate(-145px,142px)!important}
+.tag-4{transform:translate(-50%,-50%) translate(160px,112px)!important}
+
+/* Keep background ink decoration quiet and away from labels */
+.ink-blot{pointer-events:none!important;opacity:.58!important}
+
+/* Order/service forms: top brand stripe must follow the card's rounded corners */
+.lead-card{
+  position:relative!important;overflow:hidden!important;
+  border-radius:30px!important;
+}
+.lead-card::before{
+  content:""!important;position:absolute!important;
+  top:0!important;right:0!important;left:0!important;bottom:auto!important;
+  width:100%!important;height:7px!important;
+  border-radius:30px 30px 8px 8px!important;
+  background:linear-gradient(90deg,#145D4A 0%,#21816a 56%,#82d8b9 100%)!important;
+  pointer-events:none!important;
+}
+
+@media(max-width:1050px){
+  .hero-network{width:500px!important;height:500px!important}
+  .ring-one{width:286px!important;height:286px!important}.ring-two{width:408px!important;height:408px!important}
+  .tag-1{transform:translate(-50%,-50%) translate(150px,-135px)!important}
+  .tag-2{transform:translate(-50%,-50%) translate(-165px,-52px)!important}
+  .tag-3{transform:translate(-50%,-50%) translate(-138px,132px)!important}
+  .tag-4{transform:translate(-50%,-50%) translate(150px,105px)!important}
+}
+@media(max-width:720px){
+  .hero-visual{min-height:430px!important;margin-top:0!important}
+  .hero-network{width:360px!important;height:360px!important}
+  .ring-one{width:218px!important;height:218px!important}.ring-two{width:318px!important;height:318px!important}
+  .hero-order-button{width:146px!important;height:146px!important;box-shadow:0 22px 48px rgba(20,93,74,.22),inset 0 0 0 9px rgba(255,255,255,.10)!important}
+  .hero-order-button span{font-size:22px!important}
+  .orbit-tag{min-height:38px!important;padding:8px 12px!important;font-size:11.5px!important}
+  .tag-1{transform:translate(-50%,-50%) translate(112px,-108px)!important}
+  .tag-2{transform:translate(-50%,-50%) translate(-124px,-43px)!important}
+  .tag-3{transform:translate(-50%,-50%) translate(-105px,105px)!important}
+  .tag-4{transform:translate(-50%,-50%) translate(112px,84px)!important}
+  .lead-card{border-radius:24px!important}
+  .lead-card::before{border-radius:24px 24px 7px 7px!important}
+}
+@media(max-width:420px){
+  .hero-visual{min-height:400px!important}
+  .hero-network{width:326px!important;height:326px!important}
+  .ring-one{width:202px!important;height:202px!important}.ring-two{width:286px!important;height:286px!important}
+  .hero-order-button{width:136px!important;height:136px!important}.hero-order-button span{font-size:20px!important}
+  .orbit-tag{font-size:10.8px!important;padding:7px 10px!important;min-height:36px!important}
+  .tag-1{transform:translate(-50%,-50%) translate(100px,-96px)!important}
+  .tag-2{transform:translate(-50%,-50%) translate(-109px,-39px)!important}
+  .tag-3{transform:translate(-50%,-50%) translate(-95px,94px)!important}
+  .tag-4{transform:translate(-50%,-50%) translate(101px,76px)!important}
+}
+
+/* ========================================================================== 
+   Round 6 — requested surgical refinements
+   Scope: responsive hero orbit, secondary utility bar, glass navigation,
+   research journey strip, remove step arrows, SEO progressive disclosure,
+   slightly smaller typography. Existing icon system intentionally untouched.
+   ========================================================================== */
+
+/* Slightly tighter type scale without compromising readability. */
+body{font-size:15px!important}
+.hero-copy h1{font-size:clamp(36px,4.8vw,62px)!important;line-height:1.28!important}
+.hero-copy>p{font-size:16.5px!important;line-height:1.95!important}
+.section-head h2{font-size:clamp(28px,3.6vw,42px)!important}
+.service-hero h1{font-size:clamp(36px,4.7vw,56px)!important}
+.page-hero-new h1{font-size:clamp(34px,4.6vw,52px)!important}
+.nav-links a,.nav-link{font-size:13.5px!important}
+.section-title{font-size:clamp(1.65rem,3vw,2.15rem)!important}
+.page-hero-title{font-size:clamp(2rem,4.3vw,3.2rem)!important}
+.card-title{font-size:1rem!important}
+
+/* 3) Secondary menu — quiet glass utility rail, info on the right, links on the left. */
+.announcement,.top-bar{
+  background:linear-gradient(135deg,rgba(247,252,250,.96),rgba(232,245,241,.92))!important;
+  color:#38544b!important;
+  border-bottom:1px solid rgba(20,93,74,.09)!important;
+  box-shadow:none!important;
+}
+.announcement .container.announcement-wrap,.top-bar .container{
+  justify-content:space-between!important;
+  align-items:center!important;
+  gap:22px!important;
+}
+.announcement-items,.top-bar-contact{
+  display:flex!important;align-items:center!important;gap:10px!important;flex-wrap:nowrap!important;
+}
+.announce-pill{
+  min-height:32px!important;padding:5px 11px!important;border-radius:999px!important;
+  background:rgba(255,255,255,.72)!important;border:1px solid rgba(20,93,74,.09)!important;
+  color:#426158!important;box-shadow:0 6px 18px rgba(20,93,74,.035)!important;
+}
+.announce-pill strong{color:#163e34!important}
+.top-bar-contact a,.top-bar-contact span{color:#426158!important}
+.top-bar-contact a:hover{color:#145D4A!important}
+.utility-links,.top-bar-links.utility-links{
+  display:flex!important;align-items:center!important;justify-content:flex-end!important;
+  gap:8px!important;flex-wrap:nowrap!important;
+}
+.utility-links a,.top-bar-links.utility-links a{
+  min-height:34px!important;padding:6px 12px!important;border-radius:999px!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  white-space:nowrap!important;font-size:12px!important;font-weight:750!important;
+  color:#466158!important;background:rgba(255,255,255,.78)!important;
+  border:1px solid rgba(20,93,74,.11)!important;
+  box-shadow:0 6px 18px rgba(20,93,74,.03)!important;
+}
+.utility-links a:hover,.top-bar-links.utility-links a:hover{
+  color:#fff!important;background:#145D4A!important;border-color:#145D4A!important;
+  transform:translateY(-1px)!important;
+}
+
+/* Landin-inspired floating glass navigation, using Teznevise brand color. */
+.site-header-new{
+  background:rgba(248,252,250,.72)!important;
+  border-bottom:0!important;
+  backdrop-filter:blur(18px) saturate(150%)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(150%)!important;
+}
+.main-nav,.nav-wrapper{
+  min-height:72px!important;height:76px!important;
+  margin-block:10px!important;padding-inline:18px!important;
+  border:1px solid rgba(20,93,74,.10)!important;border-radius:22px!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.86),rgba(248,252,250,.74))!important;
+  backdrop-filter:blur(20px) saturate(150%)!important;
+  -webkit-backdrop-filter:blur(20px) saturate(150%)!important;
+  box-shadow:0 16px 45px rgba(19,54,44,.08),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.nav-links a,.nav-link{border-radius:12px!important}
+.nav-links a:hover,.nav-links a.active,.nav-link:hover,.nav-link.active{
+  background:rgba(20,93,74,.07)!important;color:#145D4A!important;
+}
+.nav-cta-solid{background:linear-gradient(135deg,#145D4A,#1b765f)!important}
+
+/* 1) Home hero orbit: fully contained, centered and percentage-based for every viewport. */
+.hero-visual{
+  position:relative!important;width:100%!important;max-width:560px!important;
+  min-height:510px!important;margin-inline:auto!important;overflow:clip!important;
+  display:grid!important;place-items:center!important;padding:16px!important;
+}
+.hero-network{
+  position:relative!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;
+  transform:none!important;width:min(100%,480px)!important;height:auto!important;aspect-ratio:1/1!important;
+  display:block!important;margin:auto!important;isolation:isolate!important;
+}
+.network-ring{
+  position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;
+  border-radius:50%!important;pointer-events:none!important;
+}
+.ring-one{width:58%!important;height:58%!important}
+.ring-two{width:88%!important;height:88%!important}
+.hero-order-button{
+  left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+  transform:translate(-50%,-50%)!important;
+  width:clamp(132px,37%,176px)!important;height:auto!important;aspect-ratio:1/1!important;
+  padding:0 14px!important;
+}
+.hero-order-button:hover{transform:translate(-50%,-50%) scale(1.02)!important}
+.hero-order-button span{font-size:clamp(20px,5.4vw,27px)!important}
+.orbit-tag{
+  position:absolute!important;right:auto!important;bottom:auto!important;
+  transform:none!important;min-height:40px!important;max-width:42%!important;
+  padding:8px 14px!important;font-size:12px!important;line-height:1.35!important;
+  overflow:hidden!important;text-overflow:ellipsis!important;
+}
+.tag-1{top:4%!important;left:50%!important;transform:translateX(-50%)!important}
+.tag-2{top:41%!important;left:1.5%!important}
+.tag-3{bottom:5%!important;top:auto!important;left:50%!important;transform:translateX(-50%)!important}
+.tag-4{top:41%!important;right:1.5%!important;left:auto!important}
+.ink-blot{max-width:42%!important;max-height:42%!important}
+
+/* 4) Research journey directly below the hero — readable separation, no bunching. */
+.bridge-strip{margin:0!important;padding:18px 0 4px!important;background:transparent!important}
+.bridge-track{
+  position:relative!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:0!important;padding:9px!important;border-radius:24px!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(246,251,249,.88))!important;
+  border:1px solid rgba(20,93,74,.09)!important;
+  box-shadow:0 14px 42px rgba(20,93,74,.065)!important;
+  backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;
+}
+.bridge-node{
+  min-width:0!important;min-height:58px!important;padding:12px 15px!important;border-radius:15px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;gap:9px!important;
+  text-align:center!important;white-space:normal!important;background:transparent!important;border:0!important;
+  color:#496159!important;font-size:13px!important;font-weight:750!important;line-height:1.55!important;
+  box-shadow:none!important;
+}
+.bridge-node::before{
+  content:""!important;width:7px!important;height:7px!important;min-width:7px!important;border-radius:50%!important;
+  background:#89b9aa!important;box-shadow:0 0 0 4px rgba(20,93,74,.055)!important;
+}
+.bridge-node:not(:last-child){border-inline-end:1px solid rgba(20,93,74,.075)!important}
+.bridge-node:not(:last-child)::after{display:none!important;content:none!important}
+.bridge-node.active{
+  color:#145D4A!important;background:rgba(20,93,74,.065)!important;
+  box-shadow:inset 0 0 0 1px rgba(20,93,74,.07)!important;
+}
+.bridge-node.active::before{background:#145D4A!important}
+
+/* 5) The four home steps keep their cards/icons; remove only the unwanted arrows. */
+.step::after{display:none!important;content:none!important}
+
+/* SEO progressive disclosure — deliberately editorial, like the supplied reference screenshot. */
+.seo-disclosure{
+  max-width:1120px!important;margin-inline:auto!important;padding:30px 34px 24px!important;
+  border-radius:22px!important;background:#fff!important;border:1px solid rgba(20,93,74,.08)!important;
+  box-shadow:0 12px 38px rgba(20,93,74,.045)!important;overflow:hidden!important;
+}
+.seo-disclosure::before{display:none!important;content:none!important}
+.seo-label{
+  display:inline-flex!important;padding:5px 10px!important;border-radius:8px!important;
+  background:rgba(20,93,74,.06)!important;color:#35594f!important;
+  font-size:12px!important;font-weight:800!important;margin-bottom:15px!important;
+}
+.seo-disclosure h2{
+  margin:0 0 14px!important;font-size:clamp(22px,3vw,30px)!important;line-height:1.55!important;
+  color:#172d26!important;
+}
+.seo-reading,.seo-more-content{max-width:none!important}
+.seo-reading p,.seo-more-content p{
+  margin:0 0 12px!important;color:#62736d!important;font-size:13.5px!important;
+  line-height:2.05!important;text-align:right!important;
+}
+.seo-more-content[hidden]{display:none!important}
+.seo-more-btn{
+  appearance:none!important;border:0!important;background:transparent!important;padding:7px 2px!important;
+  display:inline-flex!important;align-items:center!important;gap:9px!important;
+  color:#145D4A!important;font:inherit!important;font-size:13px!important;font-weight:850!important;
+  margin-top:2px!important;cursor:pointer!important;border-radius:8px!important;
+}
+.seo-more-btn:hover{background:rgba(20,93,74,.055)!important;padding-inline:9px!important}
+.seo-more-btn:focus-visible{outline:3px solid rgba(20,93,74,.20)!important;outline-offset:3px!important}
+.seo-more-mark{font-size:22px!important;line-height:1!important;font-weight:400!important}
+
+@media(max-width:1050px){
+  .hero-visual{max-width:540px!important;min-height:500px!important}
+  .hero-network{width:min(100%,460px)!important}
+  .main-nav,.nav-wrapper{height:72px!important;min-height:72px!important}
+}
+
+@media(max-width:768px){
+  /* Keep the secondary menu available on mobile; make it horizontally scrollable instead of hiding it. */
+  .announcement,.top-bar{display:block!important;overflow:hidden!important}
+  .announcement .container.announcement-wrap,.top-bar .container{
+    width:100%!important;max-width:none!important;padding-inline:14px!important;min-height:44px!important;
+    justify-content:flex-start!important;gap:14px!important;overflow-x:auto!important;overscroll-behavior-inline:contain!important;
+    scrollbar-width:none!important;
+  }
+  .announcement .container.announcement-wrap::-webkit-scrollbar,.top-bar .container::-webkit-scrollbar{display:none!important}
+  .announcement-items,.top-bar-contact,.utility-links,.top-bar-links.utility-links{flex:0 0 auto!important}
+  .announce-pill{font-size:11px!important;min-height:30px!important;padding:4px 9px!important}
+  .utility-links a,.top-bar-links.utility-links a{font-size:10.5px!important;min-height:30px!important;padding:5px 9px!important}
+
+  .main-nav,.nav-wrapper{
+    margin-block:8px!important;height:66px!important;min-height:66px!important;border-radius:19px!important;
+    padding-inline:13px!important;
+  }
+  .hero-new{padding-top:45px!important}
+  .hero-visual{min-height:410px!important;max-width:440px!important;padding:8px!important}
+  .hero-network{width:min(100%,380px)!important}
+  .hero-order-button{width:clamp(126px,38%,150px)!important}
+  .orbit-tag{font-size:11px!important;min-height:36px!important;padding:7px 10px!important;max-width:44%!important}
+
+  .bridge-strip{padding-top:14px!important}
+  .bridge-track{
+    display:flex!important;grid-template-columns:none!important;gap:8px!important;padding:9px!important;
+    overflow-x:auto!important;scroll-snap-type:x proximity!important;scrollbar-width:none!important;
+  }
+  .bridge-track::-webkit-scrollbar{display:none!important}
+  .bridge-node{
+    flex:0 0 168px!important;min-height:52px!important;padding:10px 12px!important;
+    scroll-snap-align:start!important;white-space:nowrap!important;font-size:12px!important;
+    border:1px solid rgba(20,93,74,.06)!important;background:rgba(255,255,255,.72)!important;
+  }
+  .bridge-node:not(:last-child){border-inline-end:1px solid rgba(20,93,74,.06)!important}
+  .bridge-node.active{background:rgba(20,93,74,.07)!important}
+
+  .seo-disclosure{padding:24px 20px 20px!important;border-radius:18px!important}
+  .seo-reading p,.seo-more-content p{font-size:13px!important;line-height:2!important}
+  .seo-disclosure h2{font-size:22px!important}
+
+  .hero-copy h1{font-size:clamp(32px,9vw,40px)!important}
+  .hero-copy>p{font-size:15px!important}
+  .section-head h2{font-size:clamp(26px,7vw,34px)!important}
+}
+
+@media(max-width:430px){
+  body{font-size:14.5px!important}
+  .hero-visual{min-height:360px!important;max-width:100%!important;padding-inline:2px!important}
+  .hero-network{width:min(100%,326px)!important}
+  .hero-order-button{width:126px!important}
+  .hero-order-button span{font-size:19px!important}
+  .orbit-tag{font-size:10.5px!important;padding:6px 8px!important;min-height:34px!important}
+  .tag-2{left:0!important}.tag-4{right:0!important}
+  .bridge-node{flex-basis:154px!important;font-size:11.5px!important}
+  .seo-disclosure{padding:20px 16px 17px!important}
+}
+
+/* Respect reduced-motion preferences from the supplied accessibility skill. */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+
+/* Hero sizing safeguard: viewport-based dimension avoids intrinsic Grid sizing collapse. */
+.hero-network{
+  width:min(480px,88vw)!important;
+  height:min(480px,88vw)!important;
+  aspect-ratio:1/1!important;
+}
+@media(max-width:768px){
+  .hero-network{width:min(380px,86vw)!important;height:min(380px,86vw)!important}
+}
+@media(max-width:430px){
+  .hero-network{width:min(326px,84vw)!important;height:min(326px,84vw)!important}
+}
+
+/* Mobile journey: show every stage at once instead of requiring horizontal scrolling. */
+@media(max-width:768px){
+  .bridge-track{
+    display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;overflow:visible!important;scroll-snap-type:none!important;
+  }
+  .bridge-node{
+    flex:none!important;width:auto!important;min-width:0!important;white-space:normal!important;
+    min-height:54px!important;scroll-snap-align:none!important;
+  }
+  .bridge-node:last-child{grid-column:1/-1!important}
+}

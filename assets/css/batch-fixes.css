@@ -71,7 +71,6 @@
     width: 44px;
     height: 44px;
     border: 1px solid rgba(20, 93, 74, 0.14);
-
     background: #fff;
     border-radius: 12px;
     color: #145D4A;
@@ -155,8 +154,7 @@
   color: #145D4A !important;
 }
 .steps .step:nth-child(2) .step-icon {
-  background: rgba(99, 102, 
-241, 0.12) !important;
+  background: rgba(99, 102, 241, 0.12) !important;
   color: #4f46e5 !important;
 }
 .steps .step:nth-child(3) .step-icon {
@@ -221,8 +219,7 @@
   visibility: hidden;
   margin: 0 !important;
   padding: 0 !important;
-  min-height: 0 
-!important;
+  min-height: 0 !important;
 }
 .seo-more-content > * {
   min-height: 0 !important;
@@ -308,8 +305,7 @@
   margin-top: 24px;
   align-self: flex-start;
   background: #fff !important;
-  color: #145D4A !
-important;
+  color: #145D4A !important;
   border: none !important;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12) !important;
   display: inline-flex !important;

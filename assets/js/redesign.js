@@ -6,23 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var menuIcon = document.querySelector('[data-menu-icon]');
   var closeBtn = document.querySelector('[data-menu-close]');
 
-  var menuHideTimer = null;
-
   function setMenuOpen(open) {
     if (!menu) return;
-    if (open) {
-      // The drawer carries a `hidden` attribute in the markup; at some
-      // breakpoints no CSS rule overrides it, so the menu never appeared.
-      if (menuHideTimer) { clearTimeout(menuHideTimer); menuHideTimer = null; }
-      menu.removeAttribute('hidden');
-    }
     menu.classList.toggle('open', open);
-    if (!open) {
-      // Restore `hidden` after the close transition ends.
-      menuHideTimer = setTimeout(function () {
-        if (!menu.classList.contains('open')) menu.setAttribute('hidden', '');
-      }, 450);
-    }
     if (toggle) {
       toggle.setAttribute('aria-expanded', String(open));
       toggle.setAttribute('aria-label', open ? 'بستن منو' : 'باز کردن منو');
@@ -69,8 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var parent = item.parentElement;
       parent.querySelectorAll('.faq-item.open').forEach(function (el) {
         if (el !== item) {
-          el
-.classList.remove('open');
+          el.classList.remove('open');
           var q = el.querySelector('.faq-q');
           if (q) q.setAttribute('aria-expanded', 'false');
         }
@@ -118,8 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
       revealObserver.observe(el);
     });
   } else {
-    document.querySelectorAll('[data-reveal], [data-reveal-stagger]').
-forEach(function (el) {
+    document.querySelectorAll('[data-reveal], [data-reveal-stagger]').forEach(function (el) {
       el.classList.add('is-visible');
     });
   }
@@ -172,8 +156,7 @@ forEach(function (el) {
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && fab.classList.contains('is-open')) {
         fab.classList.remove('is-open');
-        fabTog
-gle.setAttribute('aria-expanded', 'false');
+        fabToggle.setAttribute('aria-expanded', 'false');
         fabMenu.hidden = true;
       }
     });
@@ -197,5 +180,41 @@ gle.setAttribute('aria-expanded', 'false');
       group.classList.toggle('open', !was);
       btn.setAttribute('aria-expanded', String(!was));
     });
+  });
+
+  // Process showcase: switch active step/panel by matching index (click + auto-rotate)
+  document.querySelectorAll('[data-process-showcase]').forEach(function (root) {
+    var steps = root.querySelectorAll('[data-step]');
+    var panels = root.querySelectorAll('[data-panel]');
+    if (!steps.length || !panels.length) return;
+    var i = 0, timer;
+
+    function go(n) {
+      i = ((n % steps.length) + steps.length) % steps.length;
+      steps.forEach(function (el, idx) {
+        el.classList.toggle('is-active', idx === i);
+        el.setAttribute('aria-selected', idx === i ? 'true' : 'false');
+      });
+      panels.forEach(function (el, idx) {
+        el.classList.toggle('is-active', idx === i);
+      });
+    }
+
+    function next() { go(i + 1); }
+    function start() { if (timer) clearInterval(timer); timer = setInterval(next, 3000); }
+    function stop() { if (timer) clearInterval(timer); timer = null; }
+
+    steps.forEach(function (el) {
+      el.addEventListener('click', function () {
+        go(parseInt(el.getAttribute('data-step'), 10) || 0);
+        start();
+      });
+    });
+
+    if (!prefersReduced) {
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+      start();
+    }
   });
 });
