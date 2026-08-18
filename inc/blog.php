@@ -70,6 +70,7 @@ function teznevise_read_time( $post_id = 0 ) {
 	$custom  = teznevise_blog_field( 'read_time', $post_id );
 	if ( $custom ) { return $custom; }
 	$text  = trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( get_post_field( 'post_content', $post_id ) ) ) );
+	// Use Unicode-aware tokenization: split on whitespace and count non-empty tokens
 	$words = $text ? count( preg_split( '/\s+/u', $text, -1, PREG_SPLIT_NO_EMPTY ) ) : 0;
 	return max( 1, (int) ceil( $words / 200 ) ) . ' ' . __( 'min read', 'teznevise' );
 }
@@ -79,32 +80,80 @@ function teznevise_post_heading_id( $text ) {
 	return $id ? $id : 'section';
 }
 
+/**
+ * Global heading ID tracker to ensure uniqueness across the entire content.
+ *
+ * @var array
+ */
+$teznevise_heading_ids = array();
+
 function teznevise_prepare_post_content( $content ) {
-	$used = array();
-	return preg_replace_callback( '/<h([2-3])([^>]*)>(.*?)<\/h\1>/is', function ( $match ) use ( &$used ) {
+	global $teznevise_heading_ids;
+	$teznevise_heading_ids = array();
+	
+	return preg_replace_callback( '/<h([2-3])([^>]*)>(.*?)<\/h\1>/is', function ( $match ) use ( &$teznevise_heading_ids ) {
+		$level = $match[1];
 		$attrs = $match[2];
-		$title = wp_strip_all_tags( $match[3] );
+		$inner = $match[3];
+		$title = wp_strip_all_tags( $inner );
+		
+		// Extract existing ID if present
 		$id = '';
-		if ( preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $attrs, $id_match ) ) { $id = sanitize_title( $id_match[1] ); }
-		if ( ! $id ) { $id = teznevise_post_heading_id( $title ); }
-		$base = $id;
-		$count = 2;
-		while ( isset( $used[ $id ] ) ) { $id = $base . '-' . $count++; }
-		if ( preg_match( '/\bid\s*=\s*["\']([^"\']*)["\']/i', $attrs ) ) {
+		if ( preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $attrs, $id_match ) ) {
+			$id = sanitize_title( $id_match[1] );
+		}
+		
+		// Generate ID if not present
+		if ( ! $id ) {
+			$id = teznevise_post_heading_id( $title );
+		}
+		
+		// Ensure uniqueness - handle both explicit and generated IDs
+		$base_id = $id;
+		$counter = 2;
+		while ( isset( $teznevise_heading_ids[ $id ] ) ) {
+			$id = $base_id . '-' . $counter++;
+		}
+		
+		// Mark this ID as used
+		$teznevise_heading_ids[ $id ] = true;
+		
+		// Update or add the ID attribute
+		if ( preg_match( '/\bid\s*=\s*["\'][^"\']*["\']/i', $attrs ) ) {
 			$attrs = preg_replace( '/\bid\s*=\s*["\'][^"\']*["\']/i', 'id="' . esc_attr( $id ) . '"', $attrs, 1 );
-		} else { $attrs .= ' id="' . esc_attr( $id ) . '"'; }
-		$used[ $id ] = true;
-		return '<h' . $match[1] . $attrs . '>' . $match[3] . '</h' . $match[1] . '>';
+		} else {
+			$attrs .= ' id="' . esc_attr( $id ) . '"';
+		}
+		
+		return '<h' . $level . $attrs . '>' . $inner . '</h' . $level . '>';
 	}, $content );
 }
 
+/**
+ * Render table of contents from prepared content (with IDs already added).
+ *
+ * @param string $content Prepared post content with heading IDs
+ * @return string HTML for TOC
+ */
 function teznevise_render_toc( $content ) {
 	preg_match_all( '/<h([2-3])([^>]*)>(.*?)<\/h\1>/is', $content, $matches, PREG_SET_ORDER );
 	if ( empty( $matches ) ) { return ''; }
+	
 	$items = '<ul class="post-toc-grid">';
 	foreach ( $matches as $match ) {
-		if ( ! preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $match[2], $id_match ) ) { continue; }
-		$items .= '<li><a class="post-toc-item post-toc-item--level-' . esc_attr( $match[1] ) . '" href="#' . esc_attr( $id_match[1] ) . '">' . esc_html( wp_strip_all_tags( $match[3] ) ) . '</a></li>';
+		// Extract ID from the heading attributes
+		if ( ! preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $match[2], $id_match ) ) {
+			continue;
+		}
+		$heading_id = $id_match[1];
+		$heading_text = wp_strip_all_tags( $match[3] );
+		
+		// Skip empty headings
+		if ( empty( $heading_text ) ) {
+			continue;
+		}
+		
+		$items .= '<li><a class="post-toc-item post-toc-item--level-' . esc_attr( $match[1] ) . '" href="#' . esc_attr( $heading_id ) . '">' . esc_html( $heading_text ) . '</a></li>';
 	}
 	return $items . '</ul>';
 }
