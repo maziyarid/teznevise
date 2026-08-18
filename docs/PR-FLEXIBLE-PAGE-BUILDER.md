@@ -51,12 +51,27 @@ This PR introduces a flexible page builder system that allows:
 ## Technical Architecture
 
 ### Data Storage
-All section data stored as JSON in post meta with prefix _teznevise_:
+All section data is stored as a JSON array in the post meta key `_teznevise_builder_sections`:
 
-Example:
-section_title: Software Catalog
-section_subtitle: Description here
-categories: [ { title: Category 1, items: [ { icon_type: fontawesome, icon: fa-solid fa-chart-area, name: Software Name, url: /link/ } ] } ]
+```json
+[
+  {
+    "type": "software_catalog",
+    "enabled": true,
+    "title": "Software Catalog",
+    "text": "Description here",
+    "columns": "3",
+    "items": [
+      {
+        "title": "Software Name",
+        "text": "Short description",
+        "icon": "fa-solid fa-chart-area",
+        "url": "/link/"
+      }
+    ]
+  }
+]
+```
 
 ### Section Types
 - software_catalog: Grid of software/tools with icons
@@ -131,6 +146,15 @@ Test all features and write documentation
 **Total Estimated Time:** 10 days
 
 ---
+
+## Security requirements
+
+- Every write path (meta-box save, REST, any future AJAX save) must verify a nonce,
+  require `current_user_can( 'edit_post', $post_id )` for the target post, skip autosaves,
+  and run `teznevise_builder_sanitize_sections()` before persisting.
+- Uploaded SVGs are output as `<img src>` only; inline SVG markup is never echoed, and the
+  theme does not register the `image/svg+xml` MIME type.
+- All rendered values are escaped at output (`esc_html`, `esc_attr`, `esc_url`).
 
 ## Implementation status
 
