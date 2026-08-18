@@ -5,8 +5,22 @@ This roadmap outlines the systematic conversion of static HTML files from
 `teznevise_work/` into WordPress pages using the Flexible Page Builder system.
 
 ## Primary Goal
-Convert 15 static HTML pages into editable WordPress pages using the builder 
-meta-box, enabling non-technical users to manage content without code edits.
+Convert the 13 singular static HTML pages into editable WordPress pages using the
+builder meta-box, enabling non-technical users to manage content without code
+edits. The archive and 404 layouts require a separate non-singular storage and
+administration flow before they can be builder-managed.
+
+## Non-Singular Templates
+`archive.php` and `404.php` do not have a queried `page` or `post` ID, so they
+cannot use the current `_teznevise_builder_sections` post-meta storage or its
+meta-box. Their conversion is therefore an architecture task, not a direct
+page-template conversion. Choose and document one storage owner (for example,
+singleton owner pages or option-backed layouts), provide a dedicated admin
+screen/editor for those sections, and add template integration that loads the
+saved layout in `archive.php` and `404.php`. Until that architecture is
+implemented, keep these templates on their existing coded layouts and exclude
+them from the builder conversion deliverables.
+
 
 ## Phase 1: Analysis & Planning (COMPLETE)
 - Identified 15 HTML files in `teznevise_work/`
@@ -30,8 +44,12 @@ meta-box, enabling non-technical users to manage content without code edits.
 | 11 | team.html | page-team.php | High |
 | 12 | tools.html | page-tools.php | High |
 | 13 | tool-descriptive-statistics.html | New template | Medium |
-| 14 | blog.html | archive.php | Medium |
-| 15 | 404.html | 404.php | Medium |
+| 14 | blog.html | archive.php (architecture follow-up) | Medium |
+| 15 | 404.html | 404.php (architecture follow-up) | Medium |
+
+The final two entries are tracked as architecture follow-ups, not as editable
+builder templates, until their storage owner, admin screen, and template
+integration are implemented.
 
 ## Phases
 
@@ -64,10 +82,11 @@ meta-box, enabling non-technical users to manage content without code edits.
 | Phase 5 | 5 days | Aug 30 - Sep 3 |
 
 ## Deliverables
-1. 15 WordPress page templates using Flexible Page Builder
-2. Conversion scripts (Node.js)
-3. Test suite
-4. User documentation
+1. 13 WordPress page templates using Flexible Page Builder
+2. A documented storage, admin, and rendering architecture for the archive and 404 layouts (implementation is a follow-up)
+3. Conversion scripts (Node.js)
+4. Test suite
+5. User documentation
 
 ## PR Information
 - Branch: feature/html-to-builder
