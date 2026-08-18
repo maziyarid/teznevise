@@ -34,3 +34,17 @@ function teznevise_fallback_menu( $args = array() ) {
 	}
 	return $html . '</ul>';
 }
+
+/**
+ * Contact / site-info value (phone, WhatsApp, email, …).
+ *
+ * Used by header.php, footer.php, template-parts/fab.php,
+ * template-parts/mobile-nav.php and several page templates.
+ * Values come from the Customizer with Persian defaults as fallback.
+ *
+ * @param string $key Setting key (see teznevise_content_defaults()).
+ * @return string
+ */
+function teznevise_get_contact( $key ) {
+	return teznevise_mod( $key );
+}

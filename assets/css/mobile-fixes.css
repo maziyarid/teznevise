@@ -1,0 +1,63 @@
+/*
+ * Mobile tap/click fixes — Teznevise
+ *
+ * 1) Floating contact widget ("TZ FLOATING CONTACT", injected site-wide
+ *    outside the theme): its hidden panel keeps layout space, so the
+ *    wrapper (#tz-fc-wrap, pointer-events:auto) forms an invisible box
+ *    covering most of the screen and swallowing every tap — the reason
+ *    "elements are not clickable on mobile". The wrapper must never
+ *    receive pointer events; only the FAB button and the OPEN panel may.
+ * 2) Tablet widths (961–1050px): the hamburger is visible but the drawer
+ *    stayed display:none because of its `hidden` attribute.
+ * 3) Decorative hero layers must never intercept taps.
+ * 4) Keep the floating widget clear of the theme's fixed bottom-nav.
+ */
+
+/* ----- 1) Floating contact widget: stop the invisible overlay ----- */
+#tz-fc-wrap {
+	pointer-events: none !important;
+}
+#tz-fc-fab,
+#tz-fc-panel.open,
+#tz-fc-panel.open * {
+	pointer-events: auto !important;
+}
+#tz-fc-tooltip {
+	pointer-events: none !important;
+}
+
+/* ----- 2) Tablet widths: drawer must open like on phones ----- */
+@media (min-width: 961px) and (max-width: 1050px) {
+	.mobile-nav {
+		display: block !important;
+	}
+	.mobile-nav:not(.open) {
+		opacity: 0 !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
+	}
+	.mobile-nav.open {
+		opacity: 1 !important;
+		visibility: visible !important;
+		pointer-events: auto !important;
+	}
+}
+
+/* ----- 3) Decorative hero/visual layers: never block taps ----- */
+.hero-new::before,
+.hero-orb,
+.network-ring,
+.orbit-tag,
+.ink-blot,
+.dashboard-card,
+.floating-chip,
+.service-hero::before {
+	pointer-events: none;
+}
+
+/* ----- 4) Floating widget must not cover the fixed bottom-nav ----- */
+@media (max-width: 960px) {
+	body #tz-fc-portal {
+		bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+	}
+}

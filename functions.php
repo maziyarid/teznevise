@@ -6,32 +6,28 @@
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'TEZNEVISE_VERSION', '1.5.0' );
+define( 'TEZNEVISE_VERSION', '1.5.1' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
-require_once TEZNEVISE_DIR . '/inc/helpers.php';
+/*
+ * Load theme modules.
+ * Order matters: defaults.php provides teznevise_mod() / teznevise_page_field()
+ * which the other modules and the templates rely on.
+ * (inc/menu-assets.php is intentionally NOT loaded — it is a deprecated
+ * duplicate of teznevise_enqueue_assets(), kept only for reference.)
+ */
 require_once TEZNEVISE_DIR . '/inc/defaults.php';
+require_once TEZNEVISE_DIR . '/inc/helpers.php';
+require_once TEZNEVISE_DIR . '/inc/brand.php';
+require_once TEZNEVISE_DIR . '/inc/customizer.php';
+require_once TEZNEVISE_DIR . '/inc/page-meta.php';
+require_once TEZNEVISE_DIR . '/inc/page-meta-extra.php';
 require_once TEZNEVISE_DIR . '/inc/blog.php';
 require_once TEZNEVISE_DIR . '/inc/seo.php';
-
-/**
- * Get contact information from theme mods with defaults fallback.
- *
- * @param string $key Contact key (phone_display, hours, etc.)
- * @return string
- */
-function teznevise_get_contact( $key, $default = '' ) {
-	if ( function_exists( 'teznevise_mod' ) ) {
-		return teznevise_mod( $key, $default );
-	}
-	$defaults = array(
-		'phone'         => '09302822091',
-		'phone_display' => '۰۹۳۰۲۸۲۲۰۹۱',
-		'hours'         => 'شنبه تا پنجشنبه، ۹ تا ۲۱',
-	);
-	return get_theme_mod( 'teznevise_' . $key, isset( $defaults[ $key ] ) ? $defaults[ $key ] : $default );
-}
+require_once TEZNEVISE_DIR . '/inc/setup-pages.php';
+require_once TEZNEVISE_DIR . '/inc/promote-assets.php';
+require_once TEZNEVISE_DIR . '/inc/screenshot-data.php';
 
 function teznevise_setup() {
 	add_theme_support( 'title-tag' );
@@ -47,18 +43,23 @@ function teznevise_setup() {
 add_action( 'after_setup_theme', 'teznevise_setup' );
 
 function teznevise_enqueue_assets() {
-	// Main stylesheet
+	// Main stylesheet (theme header)
 	wp_enqueue_style( 'teznevise-style', get_stylesheet_uri(), array(), TEZNEVISE_VERSION );
-	
-	// Font Awesome 6 (Free) - required for icon classes used in header and footer
-	wp_enqueue_style( 'font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css', array(), '6.5.2' );
-	
-	// CSS files from assets directory - loaded in order
-	wp_enqueue_style( 'teznevise-redesign', TEZNEVISE_URI . '/assets/css/redesign.css', array( 'teznevise-style', 'font-awesome' ), TEZNEVISE_VERSION );
+
+	// Fonts + icons (same CDNs the design prototype uses)
+	wp_enqueue_style( 'teznevise-font-vazirmatn', 'https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css', array(), '33.003' );
+	wp_enqueue_style( 'teznevise-fontawesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css', array(), '6.5.2' );
+
+	// CSS files from assets directory — same cascade order as the design prototype
+	wp_enqueue_style( 'teznevise-redesign', TEZNEVISE_URI . '/assets/css/redesign.css', array( 'teznevise-style' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-layout-refinements', TEZNEVISE_URI . '/assets/css/layout-refinements.css', array( 'teznevise-redesign' ), TEZNEVISE_VERSION );
-	wp_enqueue_style( 'teznevise-site-polish', TEZNEVISE_URI . '/assets/css/site-polish.css', array( 'teznevise-layout-refinements' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-motion', TEZNEVISE_URI . '/assets/css/motion.css', array( 'teznevise-layout-refinements' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-batch-fixes', TEZNEVISE_URI . '/assets/css/batch-fixes.css', array( 'teznevise-motion' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-ui-round2', TEZNEVISE_URI . '/assets/css/ui-round2.css', array( 'teznevise-batch-fixes' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-site-polish', TEZNEVISE_URI . '/assets/css/site-polish.css', array( 'teznevise-ui-round2' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-header-fix', TEZNEVISE_URI . '/assets/css/header-fix.css', array( 'teznevise-site-polish' ), TEZNEVISE_VERSION );
-	
+	wp_enqueue_style( 'teznevise-mobile-fixes', TEZNEVISE_URI . '/assets/css/mobile-fixes.css', array( 'teznevise-header-fix' ), TEZNEVISE_VERSION );
+
 	// JavaScript files - loaded in order, in footer
 	wp_enqueue_script( 'teznevise-redesign', TEZNEVISE_URI . '/assets/js/redesign.js', array(), TEZNEVISE_VERSION, true );
 	wp_enqueue_script( 'teznevise-main', TEZNEVISE_URI . '/assets/js/main.js', array( 'teznevise-redesign' ), TEZNEVISE_VERSION, true );
