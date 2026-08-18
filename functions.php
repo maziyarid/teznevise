@@ -33,6 +33,7 @@ require_once TEZNEVISE_DIR . '/inc/seo.php';
 require_once TEZNEVISE_DIR . '/inc/setup-pages.php';
 require_once TEZNEVISE_DIR . '/inc/promote-assets.php';
 require_once TEZNEVISE_DIR . '/inc/screenshot-data.php';
+require_once TEZNEVISE_DIR . '/inc/consultation.php';
 
 function teznevise_setup() {
 	add_theme_support( 'title-tag' );
@@ -68,5 +69,50 @@ function teznevise_enqueue_assets() {
 	// JavaScript files - loaded in order, in footer
 	wp_enqueue_script( 'teznevise-redesign', TEZNEVISE_URI . '/assets/js/redesign.js', array(), TEZNEVISE_VERSION, true );
 	wp_enqueue_script( 'teznevise-main', TEZNEVISE_URI . '/assets/js/main.js', array( 'teznevise-redesign' ), TEZNEVISE_VERSION, true );
+
+	wp_localize_script(
+		'teznevise-main',
+		'tezneviseConsultation',
+		array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'teznevise_consultation' ),
+		)
+	);
+
+	wp_add_inline_script(
+		'teznevise-main',
+		"document.addEventListener('DOMContentLoaded', function () {\n" .
+		"  var config = window.tezneviseConsultation;\n" .
+		"  if (!config) return;\n" .
+		"  document.querySelectorAll('.lead-card form').forEach(function (form) {\n" .
+		"    var fields = form.querySelectorAll('input, select, textarea');\n" .
+		"    var names = ['name', 'phone', 'degree', 'field', 'message'];\n" .
+		"    fields.forEach(function (field, index) { if (!field.name && names[index]) field.name = names[index]; });\n" .
+		"    var button = form.querySelector('button[type=button], button[type=submit]');\n" .
+		"    if (!button) return;\n" .
+		"    var status = document.createElement('p');\n" .
+		"    status.className = 'inq-msg';\n" .
+		"    status.setAttribute('role', 'status');\n" .
+		"    form.appendChild(status);\n" .
+		"    form.addEventListener('submit', function (event) { event.preventDefault(); });\n" .
+		"    button.addEventListener('click', function (event) {\n" .
+		"      event.preventDefault();\n" .
+		"      status.textContent = '';\n" .
+		"      button.disabled = true;\n" .
+		"      var data = new FormData(form);\n" .
+		"      data.append('action', 'teznevise_consultation');\n" .
+		"      data.append('nonce', config.nonce);\n" .
+		"      fetch(config.ajaxUrl, { method: 'POST', credentials: 'same-origin', body: data })\n" .
+		"        .then(function (response) { return response.json(); })\n" .
+		"        .then(function (result) {\n" .
+		"          status.textContent = result && result.data && result.data.message ? result.data.message : 'ارسال درخواست ناموفق بود.';\n" .
+		"          if (result && result.success) form.reset();\n" .
+		"        })\n" .
+		"        .catch(function () { status.textContent = 'ارسال درخواست ناموفق بود. لطفاً دوباره تلاش کنید.'; })\n" .
+		"        .finally(function () { button.disabled = false; });\n" .
+		"    });\n" .
+		"  });\n" .
+		"});"
+	);
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );
