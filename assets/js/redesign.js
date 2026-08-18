@@ -5,9 +5,17 @@ document.addEventListener('DOMContentLoaded', function () {
   var menu = document.querySelector('[data-mobile-menu]');
   var menuIcon = document.querySelector('[data-menu-icon]');
   var closeBtn = document.querySelector('[data-menu-close]');
+  var menuHideTimer;
 
   function setMenuOpen(open) {
     if (!menu) return;
+    if (menuHideTimer) {
+      clearTimeout(menuHideTimer);
+      menuHideTimer = null;
+    }
+    if (open) {
+      menu.removeAttribute('hidden');
+    }
     menu.classList.toggle('open', open);
     if (toggle) {
       toggle.setAttribute('aria-expanded', String(open));
@@ -17,6 +25,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.style.overflow = open ? 'hidden' : '';
     if (menuIcon) {
       menuIcon.className = open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+    }
+    if (!open) {
+      menuHideTimer = setTimeout(function () {
+        menu.setAttribute('hidden', '');
+        menuHideTimer = null;
+      }, 400);
     }
   }
 
@@ -73,8 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (seoMore) seoMore = seoMore.querySelector('.seo-more-content');
     }
     if (!seoMore) return;
-    seoMore.hidden = false;
-    seoMore.removeAttribute('hidden');
+    seoMore.hidden = true;
     seoMore.classList.remove('is-open');
     seoToggle.setAttribute('aria-expanded', 'false');
     seoToggle.addEventListener('click', function (e) {
@@ -82,6 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var isOpen = seoToggle.getAttribute('aria-expanded') === 'true';
       var next = !isOpen;
       seoToggle.setAttribute('aria-expanded', String(next));
+      seoMore.hidden = !next;
       seoMore.classList.toggle('is-open', next);
       var label = seoToggle.querySelector('.seo-more-text');
       var mark = seoToggle.querySelector('.seo-more-mark');

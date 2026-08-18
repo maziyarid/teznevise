@@ -257,33 +257,33 @@ while ( have_posts() ) :
 					<h3><?php echo esc_html( $d['lead_title'] ); ?></h3>
 					<p><?php echo esc_html( $d['lead_sub'] ); ?></p>
 				</div>
-				<form>
+				<form action="<?php echo esc_url( $inquiry_url ); ?>" method="post">
 					<div class="form-grid">
 						<div class="field">
-							<label><?php esc_html_e( 'نام و نام خانوادگی', 'teznevise' ); ?></label>
-							<input placeholder="<?php esc_attr_e( 'نام شما', 'teznevise' ); ?>" type="text" />
+							<label for="consultation-name"><?php esc_html_e( 'نام و نام خانوادگی', 'teznevise' ); ?></label>
+							<input id="consultation-name" name="name" placeholder="<?php esc_attr_e( 'نام شما', 'teznevise' ); ?>" type="text" />
 						</div>
 						<div class="field">
-							<label><?php esc_html_e( 'شماره تماس', 'teznevise' ); ?></label>
-							<input placeholder="09xxxxxxxxx" type="tel" />
+							<label for="consultation-phone"><?php esc_html_e( 'شماره تماس', 'teznevise' ); ?></label>
+							<input id="consultation-phone" name="phone" placeholder="09xxxxxxxxx" type="tel" />
 						</div>
 						<div class="field">
-							<label><?php esc_html_e( 'مقطع', 'teznevise' ); ?></label>
-							<select>
+							<label for="consultation-level"><?php esc_html_e( 'مقطع', 'teznevise' ); ?></label>
+							<select id="consultation-level" name="level">
 								<option><?php esc_html_e( 'کارشناسی ارشد', 'teznevise' ); ?></option>
 								<option><?php esc_html_e( 'دکتری', 'teznevise' ); ?></option>
 							</select>
 						</div>
 						<div class="field">
-							<label><?php esc_html_e( 'رشته / گرایش', 'teznevise' ); ?></label>
-							<input placeholder="<?php esc_attr_e( 'مثلاً مدیریت بازرگانی', 'teznevise' ); ?>" type="text" />
+							<label for="consultation-field"><?php esc_html_e( 'رشته / گرایش', 'teznevise' ); ?></label>
+							<input id="consultation-field" name="field" placeholder="<?php esc_attr_e( 'مثلاً مدیریت بازرگانی', 'teznevise' ); ?>" type="text" />
 						</div>
 						<div class="field full">
-							<label><?php echo esc_html( $d['lead_label'] ); ?></label>
-							<textarea placeholder="<?php echo esc_attr( $d['lead_ph'] ); ?>"></textarea>
+							<label for="consultation-request"><?php echo esc_html( $d['lead_label'] ); ?></label>
+							<textarea id="consultation-request" name="request" placeholder="<?php echo esc_attr( $d['lead_ph'] ); ?>"></textarea>
 						</div>
 					</div>
-					<button class="btn-tz btn-primary-tz" type="button"><?php esc_html_e( 'ارسال درخواست مشاوره', 'teznevise' ); ?></button>
+					<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ارسال درخواست مشاوره', 'teznevise' ); ?></button>
 					<p class="privacy-note"><?php esc_html_e( 'اطلاعات شما برای بررسی درخواست استفاده می‌شود و محرمانه خواهد ماند.', 'teznevise' ); ?></p>
 				</form>
 			</div>
@@ -398,7 +398,7 @@ while ( have_posts() ) :
 					<p><?php echo esc_html( $para ); ?></p>
 				<?php endforeach; ?>
 			</div>
-			<div class="seo-more-content" id="seoMoreContent">
+			<div class="seo-more-content" id="seoMoreContent" hidden>
 				<?php foreach ( $d['seo_more'] as $para ) : ?>
 					<p><?php echo esc_html( $para ); ?></p>
 				<?php endforeach; ?>
