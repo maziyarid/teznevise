@@ -11,8 +11,27 @@ define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
 require_once TEZNEVISE_DIR . '/inc/helpers.php';
+require_once TEZNEVISE_DIR . '/inc/defaults.php';
 require_once TEZNEVISE_DIR . '/inc/blog.php';
 require_once TEZNEVISE_DIR . '/inc/seo.php';
+
+/**
+ * Get contact information from theme mods with defaults fallback.
+ *
+ * @param string $key Contact key (phone_display, hours, etc.)
+ * @return string
+ */
+function teznevise_get_contact( $key, $default = '' ) {
+	if ( function_exists( 'teznevise_mod' ) ) {
+		return teznevise_mod( $key, $default );
+	}
+	$defaults = array(
+		'phone'         => '09302822091',
+		'phone_display' => '۰۹۳۰۲۸۲۲۰۹۱',
+		'hours'         => 'شنبه تا پنجشنبه، ۹ تا ۲۱',
+	);
+	return get_theme_mod( 'teznevise_' . $key, isset( $defaults[ $key ] ) ? $defaults[ $key ] : $default );
+}
 
 function teznevise_setup() {
 	add_theme_support( 'title-tag' );
