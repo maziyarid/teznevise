@@ -1,0 +1,191 @@
+/**
+ * Teznevise flexible page builder — admin styles.
+ *
+ * Project: Teznevise WordPress Theme
+ * Author: MAZ//ID (Maziyar)
+ * Brand: MΛZ — https://github.com/maziyarid/M-Z
+ *
+ * @package Teznevise
+ */
+
+.tez-builder-intro {
+	margin: 0 0 12px;
+	color: #646970;
+}
+
+.tez-builder-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+	margin-bottom: 14px;
+}
+
+.tez-builder-sections {
+	display: grid;
+	gap: 12px;
+}
+
+.tez-builder-section {
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	background: #fff;
+}
+
+.tez-builder-section-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 12px;
+	background: #f6f7f7;
+	border-bottom: 1px solid #dcdcde;
+	border-radius: 8px 8px 0 0;
+}
+
+.tez-builder-section.is-collapsed .tez-builder-section-body {
+	display: none;
+}
+
+.tez-builder-section.is-collapsed .tez-builder-section-head {
+	border-bottom: 0;
+	border-radius: 8px;
+}
+
+.tez-builder-type-label {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 999px;
+	background: #145d4a;
+	color: #fff;
+	font-size: 11px;
+}
+
+.tez-builder-section-actions,
+.tez-builder-item-actions {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-inline-start: auto;
+}
+
+.tez-builder-enabled {
+	font-size: 12px;
+	color: #50575e;
+}
+
+.tez-builder-danger {
+	color: #b32d2e;
+}
+
+.tez-builder-drag {
+	cursor: grab;
+	color: #8c8f94;
+	user-select: none;
+}
+
+.tez-builder-collapse {
+	text-decoration: none;
+}
+
+.tez-builder-section-body {
+	padding: 12px;
+}
+
+.tez-builder-section-fields,
+.tez-builder-item-body {
+	display: grid;
+	gap: 12px;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	margin-bottom: 12px;
+}
+
+.tez-builder-field label {
+	display: block;
+	font-weight: 600;
+	font-size: 12px;
+	margin-bottom: 4px;
+}
+
+.tez-builder-field input[type="text"],
+.tez-builder-field textarea,
+.tez-builder-field select {
+	width: 100%;
+}
+
+.tez-builder-field .description {
+	margin: 4px 0 0;
+	font-size: 11px;
+}
+
+.tez-builder-items {
+	display: grid;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.tez-builder-item {
+	border: 1px solid #e0e0e0;
+	border-radius: 6px;
+	background: #fbfbfb;
+}
+
+.tez-builder-item-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 10px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.tez-builder-item-body {
+	padding: 10px;
+	margin-bottom: 0;
+}
+
+.tez-builder-icon-control {
+	display: grid;
+	grid-template-columns: 1fr 1fr auto;
+	gap: 6px;
+	align-items: center;
+}
+
+.tez-builder-icon-preview {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	border-radius: 8px;
+	background: #145d4a;
+	color: #fff;
+}
+
+.tez-builder-media-preview img {
+	max-width: 90px;
+	height: auto;
+	display: block;
+	margin-bottom: 6px;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	background: #fff;
+}
+
+.tez-builder-payload {
+	width: 100%;
+	margin-top: 12px;
+	font-family: Menlo, Consolas, monospace;
+	font-size: 11px;
+}
+
+.tez-builder-empty {
+	margin: 0;
+	padding: 10px;
+	background: #f6f7f7;
+	border-radius: 6px;
+}
+
+.ui-sortable-helper {
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}

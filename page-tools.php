@@ -70,6 +70,8 @@ while ( have_posts() ) :
 	</div>
 </section>
 
+<?php teznevise_builder_render_sections(); ?>
+
 <section class="section">
 	<div class="container">
 		<div class="cta-band" data-reveal>
