@@ -6,9 +6,23 @@ document.addEventListener('DOMContentLoaded', function () {
   var menuIcon = document.querySelector('[data-menu-icon]');
   var closeBtn = document.querySelector('[data-menu-close]');
 
+  var menuHideTimer = null;
+
   function setMenuOpen(open) {
     if (!menu) return;
+    if (open) {
+      // The drawer carries a `hidden` attribute in the markup; at some
+      // breakpoints no CSS rule overrides it, so the menu never appeared.
+      if (menuHideTimer) { clearTimeout(menuHideTimer); menuHideTimer = null; }
+      menu.removeAttribute('hidden');
+    }
     menu.classList.toggle('open', open);
+    if (!open) {
+      // Restore `hidden` after the close transition ends.
+      menuHideTimer = setTimeout(function () {
+        if (!menu.classList.contains('open')) menu.setAttribute('hidden', '');
+      }, 450);
+    }
     if (toggle) {
       toggle.setAttribute('aria-expanded', String(open));
       toggle.setAttribute('aria-label', open ? 'بستن منو' : 'باز کردن منو');

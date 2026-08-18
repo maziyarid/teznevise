@@ -2,19 +2,9 @@
 (function () {
   'use strict';
 
-  // Dynamically load additional CSS files if not already loaded
-  if (!document.querySelector('link[href*="site-polish.css"]')) {
-    var polish = document.createElement('link');
-    polish.rel = 'stylesheet';
-    polish.href = 'assets/css/site-polish.css';
-    document.head.appendChild(polish);
-  }
-  if (!document.querySelector('link[href*="batch-fixes.css"]')) {
-    var batch = document.createElement('link');
-    batch.rel = 'stylesheet';
-    batch.href = 'assets/css/batch-fixes.css';
-    document.head.appendChild(batch);
-  }
+  // NOTE: site-polish.css and batch-fixes.css are properly enqueued by
+  // functions.php. The old dynamic injection used relative URLs which
+  // 404'd on every subpage — removed.
 
   // Remove specific elements
   document.querySelectorAll('.footer-bottom-links span, .footer-bottom span').forEach(function (el) {
