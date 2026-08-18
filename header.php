@@ -24,4 +24,5 @@
 	</nav>
 </header>
 <?php get_template_part( 'template-parts/mobile-nav' ); ?>
-<!-- TEST COMMENT -->
+<!-- Open main content landmark for skip link target -->
+<main id="main-content">
