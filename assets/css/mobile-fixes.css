@@ -1,19 +1,11 @@
 /*
- * Mobile tap/click fixes — Teznevise
+ * Mobile tap/click fixes and responsive hardening — Teznevise
  *
- * 1) Floating contact widget ("TZ FLOATING CONTACT", injected site-wide
- *    outside the theme): its hidden panel keeps layout space, so the
- *    wrapper (#tz-fc-wrap, pointer-events:auto) forms an invisible box
- *    covering most of the screen and swallowing every tap — the reason
- *    "elements are not clickable on mobile". The wrapper must never
- *    receive pointer events; only the FAB button and the OPEN panel may.
- * 2) Tablet widths (961–1050px): the hamburger is visible but the drawer
- *    stayed display:none because of its `hidden` attribute.
- * 3) Decorative hero layers must never intercept taps.
- * 4) Keep the floating widget clear of the theme's fixed bottom-nav.
+ * Keep this file defensive: responsive rules should prevent overflow and
+ * preserve touchability without changing desktop layout semantics.
  */
 
-/* ----- 1) Floating contact widget: stop the invisible overlay ----- */
+/* Floating contact widget: prevent an invisible wrapper from swallowing taps. */
 #tz-fc-wrap {
 	pointer-events: none !important;
 }
@@ -26,7 +18,7 @@
 	pointer-events: none !important;
 }
 
-/* ----- 2) Tablet widths: drawer must open like on phones ----- */
+/* Tablet widths: allow the mobile drawer to behave consistently. */
 @media (min-width: 961px) and (max-width: 1050px) {
 	.mobile-nav {
 		display: block !important;
@@ -43,7 +35,7 @@
 	}
 }
 
-/* ----- 3) Decorative hero/visual layers: never block taps ----- */
+/* Decorative layers must never intercept touch/click events. */
 .hero-new::before,
 .hero-orb,
 .network-ring,
@@ -55,9 +47,88 @@
 	pointer-events: none;
 }
 
-/* ----- 4) Floating widget must not cover the fixed bottom-nav ----- */
+/* Keep the floating widget above the fixed mobile navigation. */
 @media (max-width: 960px) {
 	body #tz-fc-portal {
 		bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+	}
+
+	/* Prevent common replaced/media elements from creating viewport overflow. */
+	img,
+	svg,
+	video,
+	canvas,
+	iframe {
+		max-width: 100%;
+	}
+
+	/* Long unbroken strings must not force horizontal scrolling. */
+	body {
+		overflow-x: clip;
+	}
+
+	/* Flexible content blocks should shrink inside grid/flex parents. */
+	main,
+	section,
+	article,
+	.container,
+	.container-fluid,
+	.grid,
+	[class*="grid"],
+	[class*="flex"] {
+		min-width: 0;
+	}
+
+	/* Keep form controls inside the viewport and usable on touch devices. */
+	input,
+	select,
+	textarea,
+	button {
+		max-width: 100%;
+	}
+
+	/* Preserve readable tables by allowing intentional horizontal scrolling. */
+	.table-responsive,
+	.table-wrap,
+	table {
+		max-width: 100%;
+	}
+
+	/* Safe-area padding for devices with a home indicator. */
+	body {
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+}
+
+/* Very narrow phones: avoid forcing horizontal gutters or oversized controls. */
+@media (max-width: 380px) {
+	button,
+	.button,
+	.btn,
+	input,
+	select,
+	textarea {
+		min-width: 0;
+	}
+}
+
+/* Landscape phones have little vertical space; avoid accidental fixed-height
+ * content clipping where components use viewport-relative sizing. */
+@media (max-width: 960px) and (orientation: landscape) {
+	.hero-new,
+	.service-hero {
+		min-height: 0;
+	}
+}
+
+/* Respect users who request reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		scroll-behavior: auto !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
 	}
 }
