@@ -2,6 +2,10 @@
 /**
  * Flexible page builder — admin asset loading.
  *
+ * Project: Teznevise WordPress Theme
+ * Author: MAZ//ID (Maziyar)
+ * Brand: MΛZ — https://github.com/maziyarid/M-Z
+ *
  * @package Teznevise
  */
 

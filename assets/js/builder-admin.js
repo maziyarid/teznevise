@@ -5,6 +5,12 @@
  * `_teznevise_builder_sections` post meta. Structural changes (add, duplicate,
  * remove, move, drag) re-render the list; field edits patch the state in place so
  * the focused input is never rebuilt.
+ *
+ * Project: Teznevise WordPress Theme
+ * Author: MAZ//ID (Maziyar)
+ * Brand: MΛZ — https://github.com/maziyarid/M-Z
+ *
+ * @package Teznevise
  */
 (function ($) {
 	'use strict';
@@ -21,7 +27,15 @@
 	}
 
 	function esc(value) {
-		return $('<div/>').text(value === undefined || value === null ? '' : String(value)).html();
+		if (value === undefined || value === null) {
+			return '';
+		}
+		return String(value)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#39;');
 	}
 
 	function defaultValue(field) {

@@ -9,6 +9,7 @@
  *
  * Project: Teznevise WordPress Theme
  * Author: MAZ//ID (Maziyar)
+ * Brand: MΛZ — https://github.com/maziyarid/M-Z
  *
  * @package Teznevise
  */
@@ -251,8 +252,12 @@ function teznevise_builder_sanitize_field( $value, $field ) {
 			if ( '' === $value ) {
 				return '';
 			}
-			// Relative internal paths stay untouched; templates resolve them.
 			if ( 'url' === $type && ! preg_match( '#^(https?:)?//#i', $value ) ) {
+				// A scheme-like prefix (javascript:, data:, mailto:, …) must pass the allow list.
+				if ( preg_match( '#^[a-z0-9.+-]*:#i', $value ) ) {
+					return esc_url_raw( $value, array( 'http', 'https', 'mailto', 'tel' ) );
+				}
+				// Relative internal paths stay untouched; templates resolve them.
 				return sanitize_text_field( $value );
 			}
 			return esc_url_raw( $value );
@@ -320,13 +325,18 @@ function teznevise_builder_sanitize_sections( $sections ) {
 				continue;
 			}
 			$clean_item = array();
+			$has_content = false;
 			foreach ( $item_fields as $key => $field ) {
 				$clean_item[ $key ] = teznevise_builder_sanitize_field( isset( $item[ $key ] ) ? $item[ $key ] : '', $field );
 				if ( 'image' === $field['type'] ) {
 					$clean_item[ $key . '_id' ] = isset( $item[ $key . '_id' ] ) ? absint( $item[ $key . '_id' ] ) : 0;
 				}
+				// Select/color fields always resolve to a default, so they cannot signal content.
+				if ( ! in_array( $field['type'], array( 'select', 'color' ), true ) && '' !== (string) $clean_item[ $key ] ) {
+					$has_content = true;
+				}
 			}
-			if ( '' === implode( '', array_map( 'strval', $clean_item ) ) ) {
+			if ( ! $has_content ) {
 				continue;
 			}
 			$clean_section['items'][] = $clean_item;

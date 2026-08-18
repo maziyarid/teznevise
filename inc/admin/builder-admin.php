@@ -6,6 +6,10 @@
  * lives in assets/js/builder-admin.js. The hidden field is pre-filled with the
  * stored payload so saving without JavaScript never destroys existing sections.
  *
+ * Project: Teznevise WordPress Theme
+ * Author: MAZ//ID (Maziyar)
+ * Brand: MΛZ — https://github.com/maziyarid/M-Z
+ *
  * @package Teznevise
  */
 
