@@ -1,6 +1,6 @@
 # Teznevise WordPress Theme
 
-**Version:** 1.5.0
+**Version:** 1.6.0
 
 **Author:** MAZ//ID (Maziyar) · **Brand:** [MΛZ / maziyarid/M-Z](https://github.com/maziyarid/M-Z)
 
@@ -49,6 +49,15 @@ Optional presentation fields are available in **Teznevise Blog Settings** on pos
 The theme generates H2/H3 TOC anchors from the prepared rendered content. Existing heading IDs are normalized through one deterministic uniqueness allocator, collisions are suffixed, and Persian headings are supported. Reading time counts Unicode whitespace-separated tokens rather than ASCII-only `str_word_count()`.
 
 The homepage does not emit fabricated/demo blog cards when the site has no posts; it shows a controlled empty state instead.
+
+## Flexible page builder
+
+Pages and posts expose the meta box **صفحه‌ساز تزنویسه — بخش‌های سفارشی**, which composes
+unlimited repeatable sections (hero, software catalog, challenges, service cards, feature
+list, process steps, CTA band) with add / duplicate / reorder / remove controls, Font
+Awesome or media-library icons, and per-section column and background options.
+
+See [`docs/PAGE-BUILDER.md`](docs/PAGE-BUILDER.md).
 
 ## Navigation and accessibility
 

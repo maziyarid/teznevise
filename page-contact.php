@@ -54,6 +54,8 @@ while ( have_posts() ) :
 	</div>
 </section>
 
+<?php teznevise_builder_render_sections(); ?>
+
 	<?php
 endwhile;
 

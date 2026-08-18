@@ -46,5 +46,6 @@ while ( have_posts() ) : the_post();
 			<?php if ( $related && $related->have_posts() ) : ?><section class="blog-post__related" aria-labelledby="related-posts-title"><h2 id="related-posts-title"><?php echo esc_html( $related_heading ); ?></h2><div class="post-grid post-grid--related"><?php while ( $related->have_posts() ) : $related->the_post(); get_template_part( 'template-parts/post-card', null, array( 'heading_level' => 3 ) ); endwhile; ?></div></section><?php endif; wp_reset_postdata(); ?>
 		</div>
 	</section>
+<?php teznevise_builder_render_sections(); ?>
 <?php endwhile;
 get_footer();

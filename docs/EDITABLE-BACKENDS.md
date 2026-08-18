@@ -35,6 +35,12 @@ On any **Page** edit screen, meta box **فیلدهای تزنویسه**:
 
 Fields are registered with `register_post_meta()` (`show_in_rest` => true).
 
+## Pages and posts (flexible page builder)
+
+Meta box **صفحه‌ساز تزنویسه — بخش‌های سفارشی** adds, duplicates, reorders and removes
+unlimited sections and items (`_teznevise_builder_sections`, JSON). See
+[`docs/PAGE-BUILDER.md`](PAGE-BUILDER.md).
+
 ## Template helpers
 
 ```php
@@ -42,4 +48,5 @@ teznevise_mod( 'hero_title_1' );           // Customizer
 teznevise_page_field( 'eyebrow' );         // Page meta
 teznevise_url( '/inquiry/' );              // Relative → absolute
 teznevise_get_contact( 'whatsapp' );       // Contact (Customizer)
+teznevise_builder_render_sections();       // Flexible page builder sections
 ```

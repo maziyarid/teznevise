@@ -132,15 +132,23 @@ Test all features and write documentation
 
 ---
 
-## Next Steps
+## Implementation status
 
-1. Review this PR documentation
-2. Request changes if needed
-3. Approve to begin implementation
-4. I will start with Phase 1 (Core Infrastructure)
+| Phase | Status |
+|-------|--------|
+| Phase 1 — Core infrastructure | Implemented |
+| Phase 2 — Section types | Implemented (hero, software catalog, challenges, service cards, feature list, process steps, CTA band) |
+| Phase 3 — Template updates | Implemented (`page.php`, `page-service.php`, `page-about.php`, `page-contact.php`, `page-downloads.php`, `page-privacy.php`, `page-team.php`, `page-tools.php`, `single.php`) |
+| Phase 4 — Frontend click-to-edit editor | Not implemented — editing happens in the post editor |
+| Phase 5 — Documentation | Implemented (`docs/PAGE-BUILDER.md`) |
 
----
+Deviations from the original plan:
 
-Questions? Please leave comments on this PR.
+- `page-service-thesis.php` and `page-service-statistics.php` do not exist in this theme;
+  the shared `page-service.php` template covers those pages.
+- Sections are stored in a single JSON meta key (`_teznevise_builder_sections`) instead of
+  one meta key per section type, so ordering across section types is preserved.
+- Uploaded SVGs are rendered as `<img>` rather than inlined, and the theme does not enable
+  the `image/svg+xml` MIME type; SVG uploads require that to be allowed site-side.
 
-Ready to implement? Just approve and I will begin!
+Reference documentation: [`docs/PAGE-BUILDER.md`](PAGE-BUILDER.md).

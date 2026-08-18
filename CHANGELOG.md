@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.6.0 — 2026-08-18 — feature/flexible-page-builder
+
+### Changes
+
+- Added the flexible page builder module (`inc/class-teznevise-builder.php`): section type registry, JSON post meta storage, field-level sanitization, and section renderers.
+- Added the builder admin meta box and repeater UI with add, duplicate, remove, drag-and-drop reorder, per-section enable, collapse, Font Awesome icon picker, and media-library icon/image pickers.
+- Added builder frontend styles, enqueued only on singular views that render enabled sections.
+- Registered `_teznevise_builder_sections` with `show_in_rest` and a REST sanitizer shared with the meta-box save path.
+- Wired `teznevise_builder_render_sections()` into the page templates and `single.php`.
+- Documented the builder in `docs/PAGE-BUILDER.md`, `docs/EDITABLE-BACKENDS.md`, and the README.
+- Bumped theme version metadata to 1.6.0.
+
+### Testing
+
+- `php -l` on every changed PHP file and `node --check` on `assets/js/builder-admin.js`.
+- Standalone sanitize/render smoke test: unknown section types and fields dropped, invalid icon colors coerced, attachment IDs cast to integers, disabled sections skipped, markup escaped, JSON meta round-tripped.
+
 ## 1.5.0 — 2026-08-17 — release-readiness branch
 
 ### Changes
