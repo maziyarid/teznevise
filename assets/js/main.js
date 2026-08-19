@@ -14,26 +14,26 @@
   });
 
   // Persian digit conversion
-  var FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
+  const FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
   function toFa(num) {
     return String(num).replace(/\d/g, function (d) { return FA_DIGITS[d]; });
   }
 
-  var htmlEl = document.documentElement;
+  const htmlEl = document.documentElement;
   htmlEl.setAttribute('data-theme', 'light');
   document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
     btn.style.display = 'none';
   });
 
   // Header scroll effect
-  var header = document.querySelector('.site-header, .site-header-new');
+  const header = document.querySelector('.site-header, .site-header-new');
   function handleScroll() {
-    var scrollY = window.scrollY;
+    const scrollY = window.scrollY;
     if (header) {
       if (scrollY > 10) header.classList.add('scrolled');
       else header.classList.remove('scrolled');
     }
-    var toTop = document.getElementById('toTop');
+    const toTop = document.getElementById('toTop');
     if (toTop) {
       if (scrollY > 400) toTop.classList.add('show');
       else toTop.classList.remove('show');
@@ -42,10 +42,10 @@
   window.addEventListener('scroll', handleScroll, { passive: true });
 
   // Search overlay functionality
-  var searchBtn = document.querySelector('[data-search-open]');
-  var searchOverlay = document.querySelector('.search-overlay');
-  var searchClose = document.querySelector('.search-close');
-  var searchInput = document.querySelector('.search-input');
+  const searchBtn = document.querySelector('[data-search-open]');
+  const searchOverlay = document.querySelector('.search-overlay');
+  const searchClose = document.querySelector('.search-close');
+  const searchInput = document.querySelector('.search-input');
   if (searchBtn && searchOverlay) {
     searchBtn.addEventListener('click', function () {
       searchOverlay.classList.add('open');
@@ -81,8 +81,9 @@
   // FAQ accordion
   document.querySelectorAll('.faq-question').forEach(function (q) {
     q.addEventListener('click', function () {
-      var item = q.closest('.faq-item');
-      var group = item.closest('.faq-group');
+      const item = q.closest('.faq-item');
+      if (!item) return;
+      const group = item.closest('.faq-group');
       if (group) {
         group.querySelectorAll('.faq-item.open').forEach(function (openItem) {
           if (openItem !== item) openItem.classList.remove('open');
@@ -94,8 +95,8 @@
 
   // Intersection Observer for fade-in elements
   if ('IntersectionObserver' in window) {
-    var fadeElements = document.querySelectorAll('.fade-in');
-    var observer = new IntersectionObserver(function (entries) {
+    const fadeElements = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
@@ -107,7 +108,7 @@
   }
 
   // Back to top button
-  var toTopBtn = document.getElementById('toTop');
+  const toTopBtn = document.getElementById('toTop');
   if (toTopBtn) {
     toTopBtn.addEventListener('click', function () {
       window.scrollTo({ top: 0, behavior: 'smooth' });
