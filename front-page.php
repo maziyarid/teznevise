@@ -81,5 +81,20 @@ if ( $use_builder ) {
 <section class="section"><div class="container"><div class="cta-band" data-reveal><div><h2><?php echo esc_html( teznevise_mod( 'cta_title' ) ); ?></h2><p><?php echo esc_html( teznevise_mod( 'cta_text' ) ); ?></p></div><a class="btn-tz btn-light-tz btn-lg-tz" href="<?php echo esc_url( teznevise_url( teznevise_mod( 'cta_btn_url' ) ) ); ?>"><?php echo esc_html( teznevise_mod( 'cta_btn' ) ); ?></a></div></div></section>
 <?php endif; ?>
 
+<section class="section section-sm"><div class="container"><div class="seo-panel seo-disclosure" id="seoGuide" data-reveal>
+	<div class="seo-label"><?php esc_html_e( 'راهنمای انتخاب خدمت', 'teznevise' ); ?></div>
+	<h2><?php esc_html_e( 'راهنمای انتخاب خدمات پژوهشی تزنویسه', 'teznevise' ); ?></h2>
+	<div class="seo-reading" id="seoPreview">
+		<p><?php esc_html_e( 'تزنویسه برای دانشجویان و پژوهشگرانی طراحی شده است که می‌خواهند مسیر پایان‌نامه، پروپوزال یا تحلیل آماری خود را با نظم بیشتر و تصمیم‌های علمی روشن‌تر پیش ببرند. کیفیت مراحل بعدی به هماهنگی میان مسئله پژوهش، اهداف، روش تحقیق، ابزار گردآوری داده و شیوه تحلیل وابسته است. به همین دلیل مشاوره اولیه کمک می‌کند قبل از شروع نگارش یا تحلیل، وضعیت واقعی پروژه مشخص شود.', 'teznevise' ); ?></p>
+		<p><?php esc_html_e( 'در بخش انجام پایان‌نامه، نیاز هر پروژه با توجه به رشته، گرایش، مقطع تحصیلی، زمان در دسترس و مرحله فعلی بررسی می‌شود. ساختار خدمات به‌صورت مرحله‌ای است تا هر بخش مستقل باشد اما ارتباط منطقی خود را با مراحل قبل و بعد حفظ کند.', 'teznevise' ); ?></p>
+		<p><?php esc_html_e( 'برای تحلیل آماری انتخاب نرم‌افزار به‌تنهایی تعیین‌کننده نیست. SPSS، Matlab، R، Python یا AMOS زمانی نتیجه قابل دفاع می‌سازند که روش تحلیل متناسب با نوع داده و سوال پژوهش انتخاب شده باشد.', 'teznevise' ); ?></p>
+	</div>
+	<div class="seo-more-content" id="seoMoreContent">
+		<p><?php esc_html_e( 'در بخش پروپوزال، تمرکز روی ارتباط میان عنوان، بیان مسئله، پیشینه، اهداف، سوال‌ها یا فرضیه‌ها و روش اجرا است. اگر این ارتباط از ابتدا شفاف باشد، احتمال بازنویسی‌های سنگین کمتر می‌شود.', 'teznevise' ); ?></p>
+		<p><?php esc_html_e( 'برای شروع همکاری لازم نیست همه فایل‌ها کامل باشند. رشته، مقطع، موضوع یا ایده اولیه، مرحله فعلی و زمان تقریبی، بررسی اولیه را دقیق‌تر می‌کنند. حفظ محرمانگی فایل‌ها در تمام مراحل رعایت می‌شود.', 'teznevise' ); ?></p>
+	</div>
+	<button aria-controls="seoMoreContent" aria-expanded="false" class="seo-more-btn" data-seo-toggle type="button"><span aria-hidden="true" class="seo-more-mark">‹</span><span class="seo-more-text"><?php esc_html_e( 'مشاهده بیشتر', 'teznevise' ); ?></span></button>
+</div></div></section>
+
 <?php get_footer();
 

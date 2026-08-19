@@ -159,6 +159,7 @@
   max-width: 52ch;
 }
 
+/* All software icons centered */
 .soft-icon-grid {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -207,6 +208,7 @@
 }
 .soft-icon-item:hover .soft-icon-name { color: #145D4A; }
 
+/* 3rd category = آمار عمومی و چندمتغیره → exactly 2 rows (5 + 4) */
 .soft-cat:nth-child(3) .soft-icon-grid,
 .soft-icon-grid-two-rows {
   display: grid !important;

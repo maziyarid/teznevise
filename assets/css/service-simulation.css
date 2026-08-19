@@ -93,8 +93,7 @@
 }
 .soft-icon-item:hover .soft-icon-name { color: #145D4A; }
 .soft-icon-grid.soft-rows {
-  display: flex !important; flex-wrap: wr
-ap !important; justify-content: center !important;
+  display: flex !important; flex-wrap: wrap !important; justify-content: center !important;
   gap: 18px 16px !important; max-width: 620px; margin-inline: auto;
 }
 .soft-icon-grid.soft-rows .soft-icon-item { flex: 0 0 110px; max-width: 110px; }

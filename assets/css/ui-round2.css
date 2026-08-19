@@ -84,8 +84,7 @@
   font-weight: 750;
   font-size: 14px;
   color: #31443c;
-  text-decorati
-on: none;
+  text-decoration: none;
   transition: 0.2s ease;
 }
 .nav-links > li > a:hover,
@@ -170,8 +169,7 @@ on: none;
 }
 .nav-dropdown-l3 a {
   display: block;
-  padd
-ing: 10px 14px;
+  padding: 10px 14px;
   border-radius: 10px;
   font-size: 13px;
   font-weight: 650;
@@ -258,8 +256,7 @@ ing: 10px 14px;
   font-size: 14px;
   color: #fff;
 }
-.tz-fab-item .fa-telegram { backgroun
-d: #2AABEE; }
+.tz-fab-item .fa-telegram { background: #2AABEE; }
 .tz-fab-item .fa-whatsapp { background: #25D366; }
 .tz-fab-item .fa-phone { background: #145D4A; }
 .tz-fab-bale {

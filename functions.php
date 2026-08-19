@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.6.2' );
+define( 'TEZNEVISE_VERSION', '1.6.3' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -30,6 +30,7 @@ require_once TEZNEVISE_DIR . '/inc/promote-assets.php';
 require_once TEZNEVISE_DIR . '/inc/screenshot-data.php';
 require_once TEZNEVISE_DIR . '/inc/migration/shortcode-to-builder-migrator.php';
 require_once TEZNEVISE_DIR . '/inc/migration/auto-run.php';
+require_once TEZNEVISE_DIR . '/inc/frontend-compat.php';
 
 // Defensive fallback: this repo's functions.php has repeatedly lost this
 // helper during merges/rewrites (see commits 085c9c44, 75a32ee6). If none of

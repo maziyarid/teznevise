@@ -10,7 +10,7 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	$eyebrow     = teznevise_page_field( 'eyebrow', 0, __( 'صفحه', 'teznevise' ) );
+	$eyebrow     = teznevise_page_field( 'eyebrow', 0, '' );
 	$subtitle   = teznevise_page_field( 'subtitle' );
 	$cta_text   = teznevise_page_field( 'cta_text' );
 	$cta_url    = teznevise_page_field( 'cta_url' );
@@ -22,10 +22,23 @@ while ( have_posts() ) :
 	$sec_text   = teznevise_page_field( 'secondary_cta_text' );
 	$sec_url    = teznevise_page_field( 'secondary_cta_url' );
 	$hide_title = (bool) teznevise_page_field( 'hide_title', 0, false );
-	?>
+	$raw        = (string) get_post_field( 'post_content', get_the_ID() );
+	$is_legacy  = function_exists( 'teznevise_is_legacy_shortcode_content' ) && teznevise_is_legacy_shortcode_content( $raw );
+
+	if ( $is_legacy ) :
+		?>
+<section class="section tz-legacy-embed">
+	<div class="container">
+		<?php the_content(); ?>
+	</div>
+</section>
+		<?php
+	else :
+		?>
 
 <section class="section page-content-section">
 	<div class="container">
+		<?php if ( $eyebrow || ! $hide_title || $subtitle || $cta_text || $sec_text ) : ?>
 		<div class="section-head" data-reveal>
 			<?php if ( $eyebrow ) : ?>
 				<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
@@ -67,6 +80,7 @@ while ( have_posts() ) :
 				</div>
 			<?php endif; ?>
 		</div>
+		<?php endif; ?>
 
 		<?php if ( $features ) : ?>
 			<ul class="reason-list page-features" data-reveal-stagger style="margin:24px 0;list-style:none;padding:0;display:grid;gap:12px;">
@@ -88,9 +102,11 @@ while ( have_posts() ) :
 	</div>
 </section>
 
-<?php teznevise_builder_render_sections(); ?>
+		<?php
+	endif;
 
-	<?php
+	teznevise_builder_render_sections();
+
 endwhile;
 
 get_footer();

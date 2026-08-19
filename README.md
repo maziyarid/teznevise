@@ -1,6 +1,6 @@
 # Teznevise WordPress Theme
 
-**Version:** 1.6.2
+**Version:** 1.6.3
 
 **Author:** MAZ//ID (Maziyar) · **Brand:** [MΛZ / maziyarid/M-Z](https://github.com/maziyarid/M-Z)
 

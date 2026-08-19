@@ -1,0 +1,50 @@
+/**
+ * Alias + header polish. Production previously enqueued this filename
+ * (404 after the HTML→WP move). Keep it as a real stylesheet.
+ * Logo constraints live in header-fix.css (enqueued first).
+ */
+.site-header-new {
+	isolation: isolate;
+}
+.announcement-wrap,
+.announcement-inner {
+	width: min(1180px, calc(100% - 32px));
+	margin-inline: auto;
+	min-height: 36px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+.announcement-items {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+.announce-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	white-space: nowrap;
+}
+.utility-links {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	font-weight: 700;
+}
+.utility-links a {
+	color: inherit;
+	opacity: 0.92;
+}
+.main-nav {
+	overflow: visible;
+}
+
+@media (max-width: 1050px) {
+	.utility-links,
+	.announce-desktop {
+		display: none !important;
+	}
+}

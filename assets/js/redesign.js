@@ -195,4 +195,20 @@ document.addEventListener('DOMContentLoaded', function () {
       btn.setAttribute('aria-expanded', String(!was));
     });
   });
+
+  document.querySelectorAll('[data-filter]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const value = btn.getAttribute('data-filter') || 'all';
+      const root = btn.closest('section, .container, main') || document;
+      root.querySelectorAll('[data-filter]').forEach(function (el) {
+        el.classList.toggle('is-active', el === btn);
+        el.classList.toggle('active', el === btn);
+      });
+      root.querySelectorAll('[data-cat], [data-category]').forEach(function (card) {
+        const cat = card.getAttribute('data-cat') || card.getAttribute('data-category') || '';
+        const show = value === 'all' || cat === value || cat.split(/\s+/).indexOf(value) !== -1;
+        card.hidden = !show;
+      });
+    });
+  });
 });

@@ -11,7 +11,8 @@ get_header();
 ?>
 
 <section class="site-main blog-archive blog-archive--home section">
-	<div class="container">
+	<div class="container blog-layout">
+		<div>
 		<header class="blog-archive__header" data-reveal>
 			<p class="blog-archive__eyebrow"><?php esc_html_e( 'مرکز دانش', 'teznevise' ); ?></p>
 			<h1><?php esc_html_e( 'بلاگ', 'teznevise' ); ?></h1>
@@ -25,6 +26,24 @@ get_header();
 		<?php else : ?>
 			<p class="blog-archive__empty" data-reveal><?php esc_html_e( 'هنوز مطلبی منتشر نشده است.', 'teznevise' ); ?></p>
 		<?php endif; ?>
+		</div>
+		<aside class="blog-sidebar" aria-label="<?php esc_attr_e( 'نوار کناری بلاگ', 'teznevise' ); ?>">
+			<div class="blog-widget side-card">
+				<h2><?php esc_html_e( 'جستجو', 'teznevise' ); ?></h2>
+				<?php get_search_form(); ?>
+			</div>
+			<div class="blog-widget side-card">
+				<h2><?php esc_html_e( 'دسته‌ها', 'teznevise' ); ?></h2>
+				<ul class="cat-list">
+					<?php wp_list_categories( array( 'title_li' => '', 'show_count' => false ) ); ?>
+				</ul>
+			</div>
+			<div class="blog-widget side-card">
+				<h2><?php esc_html_e( 'شروع پروژه', 'teznevise' ); ?></h2>
+				<p><?php esc_html_e( 'موضوع را بفرستید تا مسیر و برآورد اولیه مشخص شود.', 'teznevise' ); ?></p>
+				<a class="btn-tz btn-primary-tz" href="<?php echo esc_url( home_url( '/inquiry/' ) ); ?>"><?php esc_html_e( 'درخواست مشاوره', 'teznevise' ); ?></a>
+			</div>
+		</aside>
 	</div>
 </section>
 

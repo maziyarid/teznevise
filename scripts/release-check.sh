@@ -35,8 +35,13 @@ for file in assets/css/redesign.css assets/css/layout-refinements.css assets/css
 done
 
 # service-proposal styles are covered by shared service template + layout-refinements / redesign cascade
-check "theme version 1.6.0" grep -q '^Version: 1\.6\.0$' style.css
-check "functions version 1.6.0" grep -q "define( 'TEZNEVISE_VERSION', '1.6.0'" functions.php
+check "theme version 1.6.3" grep -q '^Version: 1.6.3$' style.css
+check "functions version 1.6.3" grep -q "define( 'TEZNEVISE_VERSION', '1.6.3'" functions.php
+check "layout-refinements not truncated at 32KB" bash -c 'test "$(wc -c < assets/css/layout-refinements.css)" -gt 40000'
+check "compat layer files" test -f inc/frontend-compat.php -a -s assets/css/wp-compat.css -a -s assets/css/legacy-wpcode.css -a -s inc/legacy-wpcode.php
+check "frontend-compat loaded" grep -q "frontend-compat.php" functions.php
+check "wp-compat stylesheet present" test -s assets/css/wp-compat.css
+check "header-form stylesheet present" test -s assets/css/header-form.css
 check "placeholder corruption absent" bash -c '! grep -R -n -E "^PLACEHOLDER[0-9]*$" --include="*.php" --include="*.css" --include="*.js" .'
 check "no obvious secret assignments" bash -c '! grep -R -n -E "(api[_-]?key|secret|password|private[_-]?key|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY)\\s*[:=]" --exclude-dir=.git --exclude="*.md" .'
 check "GitHub deployment workflow remains non-deploying" bash -c '! grep -n -E "appleboy/ssh-action|scp-action|FTP_|CPANEL.*TOKEN|ssh.*private" .github/workflows/deploy-cpanel.yml'
