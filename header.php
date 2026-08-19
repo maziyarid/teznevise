@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<a class="skip-link screen-reader-text" href="#main-content"><?php esc_html_e( 'Skip to content', 'teznevise' ); ?></a>
 
 <header class="site-header-new">
 	<div class="announcement">
@@ -44,36 +45,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<nav class="main-nav" aria-label="<?php esc_attr_e( 'منوی اصلی', 'teznevise' ); ?>">
-		<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-			<?php
-			if ( has_custom_logo() ) {
-				the_custom_logo();
-			} else {
+		<?php if ( has_custom_logo() ) : ?>
+			<div class="brand"><?php the_custom_logo(); ?></div>
+		<?php else : ?>
+			<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+				<?php
 				$logo_url = function_exists( 'teznevise_logo_url' ) ? teznevise_logo_url() : '';
 				if ( $logo_url ) {
 					echo '<img src="' . esc_url( $logo_url ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '">';
 				} else {
 					echo '<span class="site-title">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
 				}
-			}
-			?>
-		</a>
+				?>
+			</a>
+		<?php endif; ?>
 
 		<?php
 		wp_nav_menu( array(
 			'theme_location' => 'primary',
 			'container'      => false,
 			'menu_class'     => 'nav-links',
-			'fallback_cb'    => 'teznevise_fallback_primary_menu',
+			'fallback_cb'    => 'teznevise_fallback_menu',
 			'depth'          => 3,
 			'walker'         => class_exists( 'Teznevise_Nav_Walker' ) ? new Teznevise_Nav_Walker() : '',
 		) );
 		?>
 
 		<div class="nav-actions">
-			<button type="button" class="nav-search-btn" aria-label="<?php esc_attr_e( 'جستجو', 'teznevise' ); ?>" data-search-open>
+			<a class="nav-search-btn" href="<?php echo esc_url( home_url( '/?s=' ) ); ?>" aria-label="<?php esc_attr_e( 'جستجو', 'teznevise' ); ?>">
 				<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-			</button>
+			</a>
 			<div class="nav-quick-actions desktop-cta-group">
 				<a class="nav-cta nav-cta-outline" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">
 					<i class="fa-regular fa-circle-question" aria-hidden="true"></i>
@@ -86,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</div>
 
-		<button type="button" class="menu-btn" aria-label="<?php esc_attr_e( 'باز کردن منو', 'teznevise' ); ?>" aria-expanded="false" data-menu-toggle>
+		<button type="button" class="menu-btn" aria-label="<?php esc_attr_e( 'باز کردن منو', 'teznevise' ); ?>" aria-controls="mobile-navigation" aria-expanded="false" data-menu-toggle>
 			<i class="fa-solid fa-bars" data-menu-icon aria-hidden="true"></i>
 		</button>
 	</nav>
