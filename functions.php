@@ -28,6 +28,7 @@ if ( is_admin() ) {
 	require_once TEZNEVISE_DIR . '/inc/admin/builder-admin.php';
 	require_once TEZNEVISE_DIR . '/inc/admin/builder-assets.php';
 }
+require_once TEZNEVISE_DIR . '/inc/cpts.php';
 require_once TEZNEVISE_DIR . '/inc/blog.php';
 require_once TEZNEVISE_DIR . '/inc/seo.php';
 require_once TEZNEVISE_DIR . '/inc/setup-pages.php';
@@ -63,8 +64,8 @@ function teznevise_enqueue_assets() {
 	wp_enqueue_style( 'teznevise-batch-fixes', TEZNEVISE_URI . '/assets/css/batch-fixes.css', array( 'teznevise-motion' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-ui-round2', TEZNEVISE_URI . '/assets/css/ui-round2.css', array( 'teznevise-batch-fixes' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-site-polish', TEZNEVISE_URI . '/assets/css/site-polish.css', array( 'teznevise-ui-round2' ), TEZNEVISE_VERSION );
-	wp_enqueue_style( 'teznevise-header-fix', TEZNEVISE_URI . '/assets/css/header-fix.css', array( 'teznevise-site-polish' ), TEZNEVISE_VERSION );
-	wp_enqueue_style( 'teznevise-mobile-fixes', TEZNEVISE_URI . '/assets/css/mobile-fixes.css', array( 'teznevise-header-fix' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-header-form', TEZNEVISE_URI . '/assets/css/header-form.css', array( 'teznevise-site-polish' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-mobile-fixes', TEZNEVISE_URI . '/assets/css/mobile-fixes.css', array( 'teznevise-header-form' ), TEZNEVISE_VERSION );
 
 	// JavaScript files - loaded in order, in footer
 	wp_enqueue_script( 'teznevise-redesign', TEZNEVISE_URI . '/assets/js/redesign.js', array(), TEZNEVISE_VERSION, true );
