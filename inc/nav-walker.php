@@ -67,9 +67,13 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 			$output     .= '<li class="' . esc_attr( $class_names ) . '">';
 
 			$atts                 = array();
+			$atts['title']        = ! empty( $item->attr_title ) ? $item->attr_title : '';
+			$atts['target']       = ! empty( $item->target ) ? $item->target : '';
+			$atts['rel']          = ! empty( $item->xfn ) ? $item->xfn : '';
 			$atts['href']         = ! empty( $item->url ) ? $item->url : '';
 			$atts['class']        = 'nav-link';
 			$atts['aria-current'] = $item->current ? 'page' : '';
+			$atts                 = apply_filters( 'nav_menu_link_attributes', $atts, $item, $args, $depth );
 
 			$attributes = '';
 			foreach ( $atts as $attr => $value ) {
