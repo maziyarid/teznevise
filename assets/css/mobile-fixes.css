@@ -53,7 +53,6 @@
 		bottom: calc(88px + env(safe-area-inset-bottom)) !important;
 	}
 
-	/* Prevent common replaced/media elements from creating viewport overflow. */
 	img,
 	svg,
 	video,
@@ -62,9 +61,11 @@
 		max-width: 100%;
 	}
 
-	/* Long unbroken strings must not force horizontal scrolling. */
+	/* Prevent horizontal scrolling without hiding vertical content behind
+	 * the fixed bottom navigation. */
 	body {
 		overflow-x: clip;
+		padding-bottom: calc(72px + env(safe-area-inset-bottom));
 	}
 
 	/* Flexible content blocks should shrink inside grid/flex parents. */
@@ -79,7 +80,6 @@
 		min-width: 0;
 	}
 
-	/* Keep form controls inside the viewport and usable on touch devices. */
 	input,
 	select,
 	textarea,
@@ -87,16 +87,10 @@
 		max-width: 100%;
 	}
 
-	/* Preserve readable tables by allowing intentional horizontal scrolling. */
 	.table-responsive,
 	.table-wrap,
 	table {
 		max-width: 100%;
-	}
-
-	/* Safe-area padding for devices with a home indicator. */
-	body {
-		padding-bottom: env(safe-area-inset-bottom);
 	}
 }
 
