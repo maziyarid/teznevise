@@ -23,7 +23,7 @@ function teznevise_register_download_cpt() {
 	register_post_type(
 		'download',
 		array(
-			'labels'       => array(
+			'labels'        => array(
 				'name'          => __( 'دانلودها', 'teznevise' ),
 				'singular_name' => __( 'دانلود', 'teznevise' ),
 				'add_new'       => __( 'افزودن دانلود', 'teznevise' ),
@@ -32,16 +32,16 @@ function teznevise_register_download_cpt() {
 				'search_items'  => __( 'جستجوی دانلود', 'teznevise' ),
 				'not_found'     => __( 'دانلودی یافت نشد', 'teznevise' ),
 			),
-			'public'       => true,
-			'has_archive'  => 'download',
-			'rewrite'      => array(
+			'public'        => true,
+			'has_archive'   => 'download',
+			'rewrite'       => array(
 				'slug'       => 'download',
 				'with_front' => false,
 			),
-			'supports'     => array( 'title', 'editor', 'thumbnail', 'excerpt', 'author', 'comments' ),
-			'menu_position'=> 6,
-			'menu_icon'    => 'dashicons-download',
-			'show_in_rest' => true,
+			'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt', 'author', 'comments' ),
+			'menu_position' => 6,
+			'menu_icon'     => 'dashicons-download',
+			'show_in_rest'  => true,
 		)
 	);
 
@@ -50,13 +50,13 @@ function teznevise_register_download_cpt() {
 			'download_category',
 			'download',
 			array(
-				'labels'            => array(
+				'labels'       => array(
 					'name'          => __( 'دسته‌بندی دانلودها', 'teznevise' ),
 					'singular_name' => __( 'دسته دانلود', 'teznevise' ),
 				),
-				'hierarchical'      => true,
-				'show_in_rest'      => true,
-				'rewrite'           => array( 'slug' => 'download-category' ),
+				'hierarchical' => true,
+				'show_in_rest' => true,
+				'rewrite'      => array( 'slug' => 'download-category' ),
 			)
 		);
 	}
@@ -90,19 +90,19 @@ function teznevise_register_service_cpt() {
 	register_post_type(
 		'tz_service',
 		array(
-			'labels'       => array(
+			'labels'        => array(
 				'name'          => __( 'خدمات قیمتی', 'teznevise' ),
 				'singular_name' => __( 'خدمت قیمتی', 'teznevise' ),
 				'add_new_item'  => __( 'افزودن خدمت', 'teznevise' ),
 				'edit_item'     => __( 'ویرایش خدمت', 'teznevise' ),
 			),
-			'public'       => true,
-			'has_archive'  => false,
-			'show_in_rest' => true,
-			'supports'     => array( 'title', 'editor', 'thumbnail' ),
-			'menu_icon'    => 'dashicons-money-alt',
-			'menu_position'=> 7,
-			'rewrite'      => array( 'slug' => 'tz-service' ),
+			'public'        => true,
+			'has_archive'   => false,
+			'show_in_rest'  => true,
+			'supports'      => array( 'title', 'editor', 'thumbnail' ),
+			'menu_icon'     => 'dashicons-money-alt',
+			'menu_position' => 7,
+			'rewrite'       => array( 'slug' => 'tz-service' ),
 		)
 	);
 }
@@ -119,19 +119,19 @@ function teznevise_register_case_study_cpt() {
 	register_post_type(
 		'case_study',
 		array(
-			'labels'       => array(
+			'labels'        => array(
 				'name'          => __( 'مطالعات موردی', 'teznevise' ),
 				'singular_name' => __( 'مطالعه موردی', 'teznevise' ),
 				'add_new_item'  => __( 'افزودن مطالعه موردی', 'teznevise' ),
 				'edit_item'     => __( 'ویرایش مطالعه موردی', 'teznevise' ),
 			),
-			'public'       => true,
-			'has_archive'  => 'case-studies',
-			'show_in_rest' => true,
-			'supports'     => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
-			'menu_icon'    => 'dashicons-portfolio',
-			'menu_position'=> 8,
-			'rewrite'      => array( 'slug' => 'case-study' ),
+			'public'        => true,
+			'has_archive'   => 'case-studies',
+			'show_in_rest'  => true,
+			'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+			'menu_icon'     => 'dashicons-portfolio',
+			'menu_position' => 8,
+			'rewrite'       => array( 'slug' => 'case-study' ),
 		)
 	);
 
@@ -154,13 +154,69 @@ function teznevise_register_case_study_cpt() {
 add_action( 'init', 'teznevise_register_case_study_cpt', 5 );
 
 /**
+ * Flush rewrite rules once after theme switch so CPT permalinks work.
+ */
+function teznevise_cpt_flush_rewrites() {
+	teznevise_register_download_cpt();
+	teznevise_register_service_cpt();
+	teznevise_register_case_study_cpt();
+	flush_rewrite_rules( false );
+}
+add_action( 'after_switch_theme', 'teznevise_cpt_flush_rewrites' );
+
+/**
+ * Query recent downloads as builder card items (for empty software_catalog).
+ *
+ * @param int    $count Max items.
+ * @param string $term_slug Optional download_category slug.
+ * @return array<int,array{title:string,text:string,url:string,icon:string,color:string}>
+ */
+function teznevise_downloads_as_builder_items( $count = 12, $term_slug = '' ) {
+	if ( ! post_type_exists( 'download' ) ) {
+		return array();
+	}
+
+	$args = array(
+		'post_type'      => 'download',
+		'posts_per_page' => absint( $count ),
+		'post_status'    => 'publish',
+		'orderby'        => 'date',
+		'order'          => 'DESC',
+		'no_found_rows'  => true,
+	);
+
+	if ( $term_slug && taxonomy_exists( 'download_category' ) ) {
+		$args['tax_query'] = array(
+			array(
+				'taxonomy' => 'download_category',
+				'field'    => 'slug',
+				'terms'    => sanitize_title( $term_slug ),
+			),
+		);
+	}
+
+	$posts = get_posts( $args );
+	$items = array();
+	foreach ( $posts as $p ) {
+		$items[] = array(
+			'title' => get_the_title( $p ),
+			'text'  => wp_trim_words( $p->post_excerpt ? $p->post_excerpt : $p->post_content, 18 ),
+			'url'   => get_permalink( $p ),
+			'icon'  => 'fa-solid fa-file-arrow-down',
+			'color' => 'icon-teal',
+		);
+	}
+	return $items;
+}
+
+/**
  * Meta field definitions per post type.
  *
- * @return array<string,array<string,array{label:string,type:string}>>
+ * @return array
  */
 function teznevise_cpt_meta_fields() {
 	return array(
-		'download'    => array(
+		'download'   => array(
 			'_teznevise_download_links' => array( 'label' => __( 'لینک‌های دانلود (هر خط: عنوان|URL|حجم)', 'teznevise' ), 'type' => 'textarea' ),
 			'_teznevise_download_count' => array( 'label' => __( 'تعداد دانلود', 'teznevise' ), 'type' => 'number' ),
 			'_teznevise_version'        => array( 'label' => __( 'نسخه', 'teznevise' ), 'type' => 'text' ),
@@ -168,7 +224,7 @@ function teznevise_cpt_meta_fields() {
 			'_teznevise_lang'           => array( 'label' => __( 'زبان', 'teznevise' ), 'type' => 'text' ),
 			'_teznevise_source'         => array( 'label' => __( 'منبع', 'teznevise' ), 'type' => 'text' ),
 		),
-		'tz_service'  => array(
+		'tz_service' => array(
 			'_tz_price_min' => array( 'label' => __( 'حداقل قیمت', 'teznevise' ), 'type' => 'number' ),
 			'_tz_price_max' => array( 'label' => __( 'حداکثر قیمت', 'teznevise' ), 'type' => 'number' ),
 			'_tz_unit'      => array( 'label' => __( 'واحد', 'teznevise' ), 'type' => 'text' ),
@@ -178,7 +234,7 @@ function teznevise_cpt_meta_fields() {
 			'_tz_icon'      => array( 'label' => __( 'آیکون (Font Awesome)', 'teznevise' ), 'type' => 'text' ),
 			'_tz_factors'   => array( 'label' => __( 'عوامل قیمت (هر خط یک مورد)', 'teznevise' ), 'type' => 'textarea' ),
 		),
-		'case_study'  => array(
+		'case_study' => array(
 			'_tz_cs_client'    => array( 'label' => __( 'مشتری', 'teznevise' ), 'type' => 'text' ),
 			'_tz_cs_field'     => array( 'label' => __( 'حوزه', 'teznevise' ), 'type' => 'text' ),
 			'_tz_cs_region'    => array( 'label' => __( 'منطقه', 'teznevise' ), 'type' => 'text' ),
@@ -337,7 +393,6 @@ add_action( 'save_post', 'teznevise_cpt_save_meta' );
 
 /**
  * Minimal shortcodes so pages keep working after WPCode is disabled.
- * Full UI markup can stay in WPCode or be moved later.
  */
 function teznevise_register_fallback_shortcodes() {
 	if ( ! shortcode_exists( 'teznevise_download_category' ) ) {
@@ -352,32 +407,18 @@ function teznevise_register_fallback_shortcodes() {
 					$atts,
 					'teznevise_download_category'
 				);
-				$q = array(
-					'post_type'      => 'download',
-					'posts_per_page' => absint( $atts['count'] ),
-					'post_status'    => 'publish',
-				);
-				if ( $atts['slug'] && taxonomy_exists( 'download_category' ) ) {
-					$q['tax_query'] = array(
-						array(
-							'taxonomy' => 'download_category',
-							'field'    => 'slug',
-							'terms'    => sanitize_title( $atts['slug'] ),
-						),
-					);
-				}
-				$posts = get_posts( $q );
-				if ( ! $posts ) {
+				$items = teznevise_downloads_as_builder_items( absint( $atts['count'] ), $atts['slug'] );
+				if ( ! $items ) {
 					return '<p class="tez-dl-empty">' . esc_html__( 'موردی یافت نشد.', 'teznevise' ) . '</p>';
 				}
 				ob_start();
 				echo '<div class="tez-dl-grid services-grid" style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">';
-				foreach ( $posts as $p ) {
+				foreach ( $items as $item ) {
 					printf(
 						'<a class="service-card" href="%1$s"><h3>%2$s</h3><p>%3$s</p></a>',
-						esc_url( get_permalink( $p ) ),
-						esc_html( get_the_title( $p ) ),
-						esc_html( wp_trim_words( $p->post_excerpt ? $p->post_excerpt : $p->post_content, 18 ) )
+						esc_url( $item['url'] ),
+						esc_html( $item['title'] ),
+						esc_html( $item['text'] )
 					);
 				}
 				echo '</div>';
@@ -390,15 +431,15 @@ function teznevise_register_fallback_shortcodes() {
 		add_shortcode(
 			'tz_price_box',
 			function ( $atts ) {
-				$atts = shortcode_atts( array( 'id' => 0 ), $atts, 'tz_price_box' );
-				$id   = absint( $atts['id'] );
+				$atts  = shortcode_atts( array( 'id' => 0 ), $atts, 'tz_price_box' );
+				$id    = absint( $atts['id'] );
 				if ( ! $id ) {
 					return '';
 				}
-				$min  = get_post_meta( $id, '_tz_price_min', true );
-				$max  = get_post_meta( $id, '_tz_price_max', true );
-				$unit = get_post_meta( $id, '_tz_unit', true );
-				$desc = get_post_meta( $id, '_tz_desc', true );
+				$min   = get_post_meta( $id, '_tz_price_min', true );
+				$max   = get_post_meta( $id, '_tz_price_max', true );
+				$unit  = get_post_meta( $id, '_tz_unit', true );
+				$desc  = get_post_meta( $id, '_tz_desc', true );
 				$title = get_the_title( $id );
 				ob_start();
 				echo '<div class="tez-price-box service-card">';
