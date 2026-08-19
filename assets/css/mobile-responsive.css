@@ -13,6 +13,21 @@
   display: none !important;
 }
 
+/* Keep the skip link out of the visual flow until keyboard users focus it. */
+.skip-link.screen-reader-text {
+  position: fixed;
+  top: -100px;
+  right: 1rem;
+  z-index: 10000;
+}
+.skip-link.screen-reader-text:focus {
+  top: 1rem;
+  padding: .75rem 1rem;
+  color: #fff;
+  background: #111827;
+  outline: 3px solid #f59e0b;
+}
+
 /* Prevent horizontal scroll caused by full-bleed sections/media on small
  * viewports (a common source of "off" mobile layouts vs. desktop). */
 html,

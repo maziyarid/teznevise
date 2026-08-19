@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<a class="skip-link screen-reader-text" href="#main-content"><?php esc_html_e( 'Skip to content', 'teznevise' ); ?></a>
 
 <header class="site-header-new">
 	<div class="announcement">
@@ -47,7 +48,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<?php
 			if ( has_custom_logo() ) {
-				the_custom_logo();
+				$custom_logo_id = get_theme_mod( 'custom_logo' );
+				echo wp_get_attachment_image( $custom_logo_id, 'full', false, array( 'alt' => get_bloginfo( 'name' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WordPress returns escaped image markup.
 			} else {
 				$logo_url = function_exists( 'teznevise_logo_url' ) ? teznevise_logo_url() : '';
 				if ( $logo_url ) {
@@ -64,7 +66,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'theme_location' => 'primary',
 			'container'      => false,
 			'menu_class'     => 'nav-links',
-			'fallback_cb'    => 'teznevise_fallback_primary_menu',
+			'fallback_cb'    => 'teznevise_fallback_menu',
 			'depth'          => 3,
 		) );
 		?>
