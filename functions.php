@@ -12,6 +12,7 @@ define( 'TEZNEVISE_URI', get_template_directory_uri() );
 require_once TEZNEVISE_DIR . '/inc/defaults.php';
 require_once TEZNEVISE_DIR . '/inc/helpers.php';
 require_once TEZNEVISE_DIR . '/inc/brand.php';
+require_once TEZNEVISE_DIR . '/inc/nav-walker.php';
 require_once TEZNEVISE_DIR . '/inc/customizer.php';
 require_once TEZNEVISE_DIR . '/inc/page-meta.php';
 require_once TEZNEVISE_DIR . '/inc/page-meta-extra.php';
@@ -35,8 +36,9 @@ require_once TEZNEVISE_DIR . '/inc/migration/auto-run.php';
 // helper during merges/rewrites (see commits 085c9c44, 75a32ee6). If none of
 // the required inc/ files above defined it, provide a safe default so
 // header.php and footer.php never fatal-error on a missing symbol. Covers
-// every contact type actually referenced in the templates (footer.php uses
-// telegram, whatsapp, phone_intl, phone_display, email, address).
+// every contact type actually referenced in the templates (header.php uses
+// phone_display and hours; footer.php uses telegram, whatsapp, phone_intl,
+// phone_display, email, address).
 if ( ! function_exists( 'teznevise_get_contact' ) ) {
 	/**
 	 * Get a contact channel value for header/footer template display.
@@ -53,6 +55,7 @@ if ( ! function_exists( 'teznevise_get_contact' ) ) {
 			'telegram'      => get_option( 'teznevise_contact_telegram', '' ),
 			'email'         => get_option( 'admin_email' ),
 			'address'       => get_option( 'teznevise_contact_address', '' ),
+			'hours'         => get_option( 'teznevise_contact_hours', 'شنبه تا پنجشنبه: ۹ صبح تا ۲۱' ),
 		);
 		return isset( $contacts[ $type ] ) ? $contacts[ $type ] : '';
 	}
@@ -84,7 +87,9 @@ wp_enqueue_style( 'teznevise-site-polish', TEZNEVISE_URI . '/assets/css/site-pol
 wp_enqueue_style( 'teznevise-header-fix', TEZNEVISE_URI . '/assets/css/header-fix.css', array( 'teznevise-site-polish' ), TEZNEVISE_VERSION );
 wp_enqueue_style( 'teznevise-mobile-fixes', TEZNEVISE_URI . '/assets/css/mobile-fixes.css', array( 'teznevise-header-fix' ), TEZNEVISE_VERSION );
 wp_enqueue_style( 'teznevise-blog', TEZNEVISE_URI . '/assets/css/blog.css', array( 'teznevise-mobile-fixes' ), TEZNEVISE_VERSION );
+wp_enqueue_style( 'teznevise-nav-dropdown', TEZNEVISE_URI . '/assets/css/nav-dropdown.css', array( 'teznevise-blog' ), TEZNEVISE_VERSION );
 wp_enqueue_script( 'teznevise-redesign', TEZNEVISE_URI . '/assets/js/redesign.js', array(), TEZNEVISE_VERSION, true );
 wp_enqueue_script( 'teznevise-main', TEZNEVISE_URI . '/assets/js/main.js', array( 'teznevise-redesign' ), TEZNEVISE_VERSION, true );
+wp_enqueue_script( 'teznevise-nav-dropdown', TEZNEVISE_URI . '/assets/js/nav-dropdown.js', array( 'teznevise-main' ), TEZNEVISE_VERSION, true );
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );
