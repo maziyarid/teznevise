@@ -213,10 +213,15 @@ function teznevise_seed_pages( $replace_builder = false ) {
 		? teznevise_builder_seed_all( (bool) $replace_builder )
 		: array();
 
+	$extracted = function_exists( 'teznevise_apply_extracted_to_pages' )
+		? teznevise_apply_extracted_to_pages( (bool) $replace_builder, false )
+		: array();
+
 	return array(
-		'created' => $created,
-		'skipped' => $skipped,
-		'builder' => $builder,
+		'created'   => $created,
+		'skipped'   => $skipped,
+		'builder'   => $builder,
+		'extracted' => $extracted,
 	);
 }
 
@@ -250,7 +255,7 @@ function teznevise_setup_admin_page() {
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'راه‌اندازی تزنویسه', 'teznevise' ); ?></h1>
-		<p><?php esc_html_e( 'صفحات پیشنهادی با قالب، فیلدهای پیش‌فرض و بخش‌های صفحه‌ساز (از HTML استاتیک) ساخته می‌شوند. نگاشت کامل: docs/HTML-TO-BUILDER-ROADMAP.md', 'teznevise' ); ?></p>
+		<p><?php esc_html_e( 'صفحات پیشنهادی با قالب و فیلدهای پیش‌فرض ساخته می‌شوند. محتوای اصلی برگه‌های موجود (شورت‌کدها) به فیلدهای سفارشی صفحه‌ساز منتقل می‌شود؛ اسلاگ‌ها عوض نمی‌شوند.', 'teznevise' ); ?></p>
 		<?php if ( $result ) : ?>
 			<div class="notice notice-success is-dismissible"><p><?php
 			printf(
@@ -261,11 +266,20 @@ function teznevise_setup_admin_page() {
 			if ( ! empty( $result['builder'] ) ) {
 				echo '<br>';
 				printf(
-					esc_html__( 'صفحه‌ساز — ایجاد: %1$d — به‌روز: %2$d — رد: %3$d — بدون برگه: %4$d', 'teznevise' ),
-					count( $result['builder']['created'] ),
-					count( $result['builder']['updated'] ),
-					count( $result['builder']['skipped'] ),
-					count( $result['builder']['missing'] )
+					esc_html__( 'صفحه‌ساز HTML — ایجاد: %1$d — به‌روز: %2$d — رد: %3$d — بدون برگه: %4$d', 'teznevise' ),
+					count( $result['builder']['created'] ?? array() ),
+					count( $result['builder']['updated'] ?? array() ),
+					count( $result['builder']['skipped'] ?? array() ),
+					count( $result['builder']['missing'] ?? array() )
+				);
+			}
+			if ( ! empty( $result['extracted'] ) ) {
+				echo '<br>';
+				printf(
+					esc_html__( 'محتوای اصلی برگه‌ها — ایجاد: %1$d — به‌روز: %2$d — رد: %3$d', 'teznevise' ),
+					(int) ( $result['extracted']['created'] ?? 0 ),
+					(int) ( $result['extracted']['updated'] ?? 0 ),
+					(int) ( $result['extracted']['skipped'] ?? 0 ) + (int) ( $result['extracted']['empty'] ?? 0 )
 				);
 			}
 			?></p></div>

@@ -15,7 +15,7 @@ while ( have_posts() ) :
 
 	if ( $use_builder ) {
 		teznevise_builder_render_sections();
-		if ( get_the_content() ) :
+		if ( function_exists( 'teznevise_page_should_print_content' ) ? teznevise_page_should_print_content() : get_the_content() ) :
 			?>
 <section class="section">
 	<div class="container">

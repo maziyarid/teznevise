@@ -81,10 +81,16 @@ function teznevise_builder_defaults_entry( $key ) {
  */
 function teznevise_builder_default_sections( $key ) {
 	$entry = teznevise_builder_defaults_entry( $key );
-	if ( empty( $entry['builder'] ) || empty( $entry['sections'] ) || ! is_array( $entry['sections'] ) ) {
-		return array();
+	if ( ! empty( $entry['builder'] ) && ! empty( $entry['sections'] ) && is_array( $entry['sections'] ) ) {
+		return teznevise_builder_sanitize_sections( $entry['sections'] );
 	}
-	return teznevise_builder_sanitize_sections( $entry['sections'] );
+	if ( function_exists( 'teznevise_extracted_entry' ) ) {
+		$extracted = teznevise_extracted_entry( $key );
+		if ( ! empty( $extracted['sections'] ) && is_array( $extracted['sections'] ) ) {
+			return teznevise_builder_sanitize_sections( $extracted['sections'] );
+		}
+	}
+	return array();
 }
 
 /**
@@ -117,8 +123,18 @@ function teznevise_builder_conversion_key( $post_id = 0 ) {
 		return '';
 	}
 
+	if ( 'page' === $post->post_type && function_exists( 'teznevise_page_path' ) ) {
+		$path = teznevise_page_path( $post_id );
+		if ( $path && function_exists( 'teznevise_extracted_entry' ) && teznevise_extracted_entry( $path ) ) {
+			return $path;
+		}
+	}
+
 	$slug = (string) $post->post_name;
 	if ( teznevise_builder_defaults_entry( $slug ) ) {
+		return $slug;
+	}
+	if ( function_exists( 'teznevise_extracted_entry' ) && teznevise_extracted_entry( $slug ) ) {
 		return $slug;
 	}
 

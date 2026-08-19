@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.6.3' );
+define( 'TEZNEVISE_VERSION', '1.6.4' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -17,6 +17,7 @@ require_once TEZNEVISE_DIR . '/inc/page-meta.php';
 require_once TEZNEVISE_DIR . '/inc/page-meta-extra.php';
 require_once TEZNEVISE_DIR . '/inc/class-teznevise-builder.php';
 require_once TEZNEVISE_DIR . '/inc/builder-defaults.php';
+require_once TEZNEVISE_DIR . '/inc/extracted-pages.php';
 require_once TEZNEVISE_DIR . '/inc/builder-seed.php';
 if ( is_admin() ) {
 require_once TEZNEVISE_DIR . '/inc/admin/builder-admin.php';

@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'TEZNEVISE_MIGRATION_OPTION', 'teznevise_shortcode_migration_v1' );
-define( 'TEZNEVISE_MIGRATION_VERSION', '1.1.0' );
+define( 'TEZNEVISE_MIGRATION_VERSION', '1.2.0' );
 
 /**
  * Whether migration has already completed successfully.
@@ -26,7 +26,7 @@ define( 'TEZNEVISE_MIGRATION_VERSION', '1.1.0' );
  */
 function teznevise_migration_is_complete() {
 	$state = get_option( TEZNEVISE_MIGRATION_OPTION, array() );
-	return ! empty( $state['completed'] ) && version_compare( (string) ( $state['version'] ?? '0' ), '1.0.0', '>=' );
+	return ! empty( $state['completed'] ) && version_compare( (string) ( $state['version'] ?? '0' ), '1.2.0', '>=' );
 }
 
 /**
@@ -504,6 +504,18 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 		return $stats;
 	}
 
+	// Extracted original page copy → custom fields. Pages only; never posts;
+	// never changes slug/title/content. Replaces generic 1.1.0 builder JSON.
+	if ( function_exists( 'teznevise_apply_extracted_to_pages' ) ) {
+		$extracted = teznevise_apply_extracted_to_pages( true, (bool) $dry_run );
+		$stats['processed'] += (int) ( $extracted['processed'] ?? 0 );
+		$stats['migrated']  += (int) ( $extracted['created'] ?? 0 ) + (int) ( $extracted['updated'] ?? 0 );
+		$stats['skipped']   += (int) ( $extracted['skipped'] ?? 0 ) + (int) ( $extracted['empty'] ?? 0 );
+		if ( ! empty( $extracted['errors'] ) ) {
+			$stats['errors'] = array_merge( $stats['errors'], $extracted['errors'] );
+		}
+	}
+
 	if ( $seed_tools ) {
 		$stats['tools'] = teznevise_migration_seed_calculator_tools( $dry_run );
 	}
@@ -514,7 +526,18 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 	}
 
 	foreach ( $pages as $page ) {
+		if ( 'page' !== get_post_type( $page->ID ) ) {
+			continue;
+		}
 		$stats['processed']++;
+
+		if ( function_exists( 'teznevise_extracted_entry_for_post' ) ) {
+			$extracted_entry = teznevise_extracted_entry_for_post( (int) $page->ID );
+			if ( $extracted_entry && ( ! isset( $extracted_entry['source'] ) || 'empty' !== $extracted_entry['source'] ) ) {
+				$stats['skipped']++;
+				continue;
+			}
+		}
 
 		$existing = get_post_meta( $page->ID, TEZNEVISE_BUILDER_META, true );
 		if ( is_string( $existing ) && '' !== trim( $existing ) && '[]' !== trim( $existing ) ) {
@@ -541,6 +564,7 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 
 		$stats['migrated']++;
 
+		// Strip is opt-in and still never changes slug/status. Default off.
 		if ( $strip_codes ) {
 			$cleaned = teznevise_migration_strip_structural_shortcodes( $page->post_content );
 			if ( $cleaned !== $page->post_content ) {
@@ -597,11 +621,11 @@ function teznevise_migration_render_setup_section() {
 	?>
 	<hr style="margin:28px 0;">
 	<h2><?php esc_html_e( 'مهاجرت شورت‌کد → صفحه‌ساز', 'teznevise' ); ?></h2>
-	<p><?php esc_html_e( 'صفحات قدیمی شورت‌کد/HTML را به `_teznevise_builder_sections` منتقل می‌کند. فقط صفحاتی بدون متای سازنده تغییر می‌کنند.', 'teznevise' ); ?></p>
+	<p><?php esc_html_e( 'محتوای اصلی برگه‌ها (نه نوشته‌ها) از شورت‌کد/HTML به فیلدهای سفارشی صفحه‌ساز `_teznevise_builder_sections` و `_teznevise_*` منتقل می‌شود. اسلاگ، عنوان، والد و post_content دست نمی‌خورند.', 'teznevise' ); ?></p>
 	<p><a href="https://github.com/maziyarid/teznevise/blob/main/docs/SHORTCODE-TO-BUILDER-MIGRATION.md" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'مستندات مهاجرت', 'teznevise' ); ?></a>
 	· <a href="https://github.com/maziyarid/teznevise/blob/SHortcode-based-content-migration/docs/MIGRATION-DATA-SECURITY.md" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'هشدار امنیتی dumpها', 'teznevise' ); ?></a></p>
 	<?php if ( $done ) : ?>
-		<div class="notice notice-success inline"><p><?php esc_html_e( 'مهاجرت قبلاً با موفقیت انجام شده است (نسخه ≥ 1.0).', 'teznevise' ); ?></p></div>
+		<div class="notice notice-success inline"><p><?php esc_html_e( 'مهاجرت قبلاً با موفقیت انجام شده است (نسخه ≥ 1.2).', 'teznevise' ); ?></p></div>
 	<?php endif; ?>
 	<?php if ( is_array( $result ) ) : ?>
 		<div class="notice notice-info inline"><p>

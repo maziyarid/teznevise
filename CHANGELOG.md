@@ -1,6 +1,22 @@
 # Changelog
 
+## 1.6.4 — 2026-08-19 — Shortcode pages → custom fields
+
+### Changes
+
+- Extracted every published **page** from `docs/sep_posts.csv` and the matching WPCode snippets into `inc/extracted-page-fields.json` (builder sections + `_teznevise_*` meta). **Posts are not touched.**
+- Original slugs, titles, parents, and `post_content` stay as they are (`/thesis/`, `/proposal/`, `/about-us/`, `/contact-us/`, calculator permalinks, nested `thesis/phd` vs `proposal/phd`, …).
+- No invented copy: homepage WPCode placeholders are skipped; that page reuses the site’s own redesign defaults. Empty redesign seed pages (`about`, `service-thesis`, …) stay on `builder-defaults.json`.
+- Migrator v1.2 writes extracted fields onto existing pages (Appearance → Teznevise Setup). Interactive calculators/forms still render from leftover shortcodes.
+- Templates prefer builder custom fields when present so hub shortcodes are not printed twice.
+
+### Testing
+
+- `python3 scripts/extract-shortcode-pages.py --check`
+- PHP lint on changed theme files.
+
 ## 1.6.3 — 2026-08-19 — HTML→WordPress design parity
+
 
 ### Changes
 
