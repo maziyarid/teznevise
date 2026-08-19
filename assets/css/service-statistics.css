@@ -72,8 +72,7 @@
 }
 .tz-step:last-child { border-bottom: none !important; }
 .tz-step.is-active { background: rgba(20, 93, 74, 0.06); }
-.tz-step-
-label { font-size: 11px; font-weight: 800; color: #145D4A; }
+.tz-step-label { font-size: 11px; font-weight: 800; color: #145D4A; }
 .tz-step-line { margin: 0; font-size: 14px; line-height: 1.8; color: #4a5f56; }
 .tz-step-line strong { font-weight: 850; color: #172d26; }
 
@@ -119,8 +118,7 @@ label { font-size: 11px; font-weight: 800; color: #145D4A; }
 .tz-status-pill {
   align-self: flex-start; margin-top: 6px; padding: 5px 11px;
   border-radius: 999px; font-size: 12px; font-weight: 800;
-  background: rgba(20, 93, 74, 0.1); color: #1
-45D4A;
+  background: rgba(20, 93, 74, 0.1); color: #145D4A;
 }
 .tz-status-pill.tz-progress { background: rgba(245, 158, 11, 0.15); color: #b45309; }
 .tz-status-pill.tz-done { background: rgba(16, 185, 129, 0.15); color: #047857; }
@@ -161,7 +159,6 @@ label { font-size: 11px; font-weight: 800; color: #145D4A; }
   max-width: 52ch;
 }
 
-/* All software icons centered */
 .soft-icon-grid {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -202,8 +199,7 @@ label { font-size: 11px; font-weight: 800; color: #145D4A; }
   -webkit-user-select: none;
   pointer-events: none;
 }
-.soft-icon-item:hover .soft-icon-cir
-cle {
+.soft-icon-item:hover .soft-icon-circle {
   color: #145D4A;
   background: rgba(20, 93, 74, 0.12);
   transform: translateY(-3px) scale(1.04);
@@ -211,7 +207,6 @@ cle {
 }
 .soft-icon-item:hover .soft-icon-name { color: #145D4A; }
 
-/* 3rd category = آمار عمومی و چندمتغیره → exactly 2 rows (5 + 4) */
 .soft-cat:nth-child(3) .soft-icon-grid,
 .soft-icon-grid-two-rows {
   display: grid !important;
