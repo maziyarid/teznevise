@@ -49,10 +49,10 @@
 	</a>
 	<ul class="nav-links">
 		<li><a class="<?php echo teznevise_is_current( 'home' ) ? 'active' : ''; ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'خانه', 'teznevise' ); ?></a></li>
-		<li>
+		<li class="menu-item-has-children">
 			<a class="<?php echo teznevise_is_current( array( 'service-thesis', 'service-proposal', 'service-statistics', 'service-simulation', 'thesis', 'proposal' ) ) ? 'active' : ''; ?>" href="<?php echo esc_url( home_url( '/service-thesis/' ) ); ?>"><?php esc_html_e( 'خدمات', 'teznevise' ); ?> <i class="fa-solid fa-chevron-down nav-chevron" aria-hidden="true"></i></a>
-			<ul class="nav-dropdown">
-				<li>
+			<ul class="sub-menu nav-dropdown">
+				<li class="menu-item-has-children">
 					<a href="<?php echo esc_url( home_url( '/service-thesis/' ) ); ?>"><?php esc_html_e( 'پایان‌نامه', 'teznevise' ); ?> <i class="fa-solid fa-chevron-left nav-chevron" aria-hidden="true"></i></a>
 					<ul class="nav-dropdown-l3">
 						<li><a href="<?php echo esc_url( home_url( '/service-thesis/' ) ); ?>"><?php esc_html_e( 'ارشد و دکتری', 'teznevise' ); ?></a></li>
@@ -60,7 +60,7 @@
 						<li><a href="<?php echo esc_url( home_url( '/service-thesis/' ) ); ?>"><?php esc_html_e( 'آمادگی دفاع', 'teznevise' ); ?></a></li>
 					</ul>
 				</li>
-				<li>
+				<li class="menu-item-has-children">
 					<a href="<?php echo esc_url( home_url( '/service-proposal/' ) ); ?>"><?php esc_html_e( 'پروپوزال', 'teznevise' ); ?> <i class="fa-solid fa-chevron-left nav-chevron" aria-hidden="true"></i></a>
 					<ul class="nav-dropdown-l3">
 						<li><a href="<?php echo esc_url( home_url( '/service-proposal/' ) ); ?>"><?php esc_html_e( 'بیان مسئله', 'teznevise' ); ?></a></li>
@@ -68,7 +68,7 @@
 						<li><a href="<?php echo esc_url( home_url( '/service-proposal/' ) ); ?>"><?php esc_html_e( 'مرور ادبیات', 'teznevise' ); ?></a></li>
 					</ul>
 				</li>
-				<li>
+				<li class="menu-item-has-children">
 					<a href="<?php echo esc_url( home_url( '/service-statistics/' ) ); ?>"><?php esc_html_e( 'تحلیل آماری', 'teznevise' ); ?> <i class="fa-solid fa-chevron-left nav-chevron" aria-hidden="true"></i></a>
 					<ul class="nav-dropdown-l3">
 						<li><a href="<?php echo esc_url( home_url( '/service-statistics/' ) ); ?>"><?php esc_html_e( 'SPSS / R / Python', 'teznevise' ); ?></a></li>
@@ -78,17 +78,17 @@
 				</li>
 			</ul>
 		</li>
-		<li>
+		<li class="menu-item-has-children">
 			<a class="<?php echo teznevise_is_current( array( 'tools', 'tool-descriptive-statistics' ) ) ? 'active' : ''; ?>" href="<?php echo esc_url( home_url( '/tools/' ) ); ?>"><?php esc_html_e( 'ابزارها', 'teznevise' ); ?> <i class="fa-solid fa-chevron-down nav-chevron" aria-hidden="true"></i></a>
-			<ul class="nav-dropdown">
+			<ul class="sub-menu nav-dropdown">
 				<li><a href="<?php echo esc_url( home_url( '/tools/' ) ); ?>"><?php esc_html_e( 'آمار توصیفی', 'teznevise' ); ?></a></li>
 				<li><a href="<?php echo esc_url( home_url( '/tools/' ) ); ?>"><?php esc_html_e( 'همبستگی و رگرسیون', 'teznevise' ); ?></a></li>
 				<li><a href="<?php echo esc_url( home_url( '/tools/' ) ); ?>"><?php esc_html_e( 'آزمون‌های فرض', 'teznevise' ); ?></a></li>
 			</ul>
 		</li>
-		<li>
+		<li class="menu-item-has-children">
 			<a class="<?php echo teznevise_is_current( 'blog' ) ? 'active' : ''; ?>" href="<?php echo esc_url( home_url( '/blog/' ) ); ?>"><?php esc_html_e( 'بلاگ', 'teznevise' ); ?> <i class="fa-solid fa-chevron-down nav-chevron" aria-hidden="true"></i></a>
-			<ul class="nav-dropdown">
+			<ul class="sub-menu nav-dropdown">
 				<li><a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>"><?php esc_html_e( 'راهنمای پایان‌نامه', 'teznevise' ); ?></a></li>
 				<li><a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>"><?php esc_html_e( 'روش تحقیق', 'teznevise' ); ?></a></li>
 				<li><a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>"><?php esc_html_e( 'آمار و نرم‌افزار', 'teznevise' ); ?></a></li>
