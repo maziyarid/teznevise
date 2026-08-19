@@ -1,0 +1,77 @@
+name: Guard theme integrity
+
+on:
+  pull_request:
+    paths:
+      - '**/*.php'
+      - 'style.css'
+  push:
+    branches: [ main ]
+    paths:
+      - '**/*.php'
+      - 'style.css'
+
+permissions:
+  contents: read
+
+jobs:
+  lint-php:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Lint every PHP file for syntax errors
+        run: |
+          status=0
+          while IFS= read -r -d '' file; do
+            if ! php -l "$file" > /tmp/lint_out 2>&1; then
+              cat /tmp/lint_out
+              status=1
+            fi
+          done < <(find . -name '*.php' -not -path './node_modules/*' -not -path './vendor/*' -print0)
+          exit $status
+
+  verify-style-header:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify style.css has required WordPress theme header
+        run: |
+          if [ ! -f style.css ]; then
+            echo "::error file=style.css::style.css is missing entirely — WordPress will not recognize this as a valid theme."
+            exit 1
+          fi
+          missing=0
+          for field in "Theme Name" "Version"; do
+            if ! grep -qE "^[[:space:]]*${field}:" style.css; then
+              echo "::error file=style.css::Missing required theme header field: ${field}"
+              missing=1
+            fi
+          done
+          if [ "$missing" -eq 1 ]; then exit 1; fi
+
+  verify-header-php-symbols:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify every teznevise_* function called in header.php is defined somewhere
+        run: |
+          if [ ! -f header.php ]; then
+            echo "::error file=header.php::header.php is missing entirely."
+            exit 1
+          fi
+          missing=0
+          for fn in $(grep -oE 'teznevise_[a-zA-Z_]+\s*\(' header.php | sed -E 's/[[:space:]]*\($//' | sort -u); do
+            if ! grep -rqE "function[[:space:]]+${fn}[[:space:]]*\(" --include='*.php' .; then
+              echo "::error file=header.php::header.php calls ${fn}() but no function definition was found anywhere in the theme. This is the same failure mode that took down production (missing teznevise_get_contact())."
+              missing=1
+            fi
+          done
+          if [ "$missing" -eq 1 ]; then exit 1; fi
