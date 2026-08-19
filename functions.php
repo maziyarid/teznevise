@@ -6,7 +6,7 @@
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'TEZNEVISE_VERSION', '1.6.1' );
+define( 'TEZNEVISE_VERSION', '1.6.2' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -36,6 +36,7 @@ require_once TEZNEVISE_DIR . '/inc/setup-pages.php';
 require_once TEZNEVISE_DIR . '/inc/promote-assets.php';
 require_once TEZNEVISE_DIR . '/inc/screenshot-data.php';
 require_once TEZNEVISE_DIR . '/inc/migration/shortcode-to-builder-migrator.php';
+require_once TEZNEVISE_DIR . '/inc/migration/auto-run.php';
 
 function teznevise_setup() {
 	add_theme_support( 'title-tag' );
@@ -51,14 +52,9 @@ function teznevise_setup() {
 add_action( 'after_setup_theme', 'teznevise_setup' );
 
 function teznevise_enqueue_assets() {
-	// Main stylesheet (theme header)
 	wp_enqueue_style( 'teznevise-style', get_stylesheet_uri(), array(), TEZNEVISE_VERSION );
-
-	// Fonts + icons (same CDNs the design prototype uses)
 	wp_enqueue_style( 'teznevise-font-vazirmatn', 'https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css', array(), '33.003' );
 	wp_enqueue_style( 'teznevise-fontawesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css', array(), '6.5.2' );
-
-	// CSS files from assets directory — same cascade order as the design prototype
 	wp_enqueue_style( 'teznevise-redesign', TEZNEVISE_URI . '/assets/css/redesign.css', array( 'teznevise-style' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-layout-refinements', TEZNEVISE_URI . '/assets/css/layout-refinements.css', array( 'teznevise-redesign' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-motion', TEZNEVISE_URI . '/assets/css/motion.css', array( 'teznevise-layout-refinements' ), TEZNEVISE_VERSION );
@@ -67,8 +63,6 @@ function teznevise_enqueue_assets() {
 	wp_enqueue_style( 'teznevise-site-polish', TEZNEVISE_URI . '/assets/css/site-polish.css', array( 'teznevise-ui-round2' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-header-form', TEZNEVISE_URI . '/assets/css/header-form.css', array( 'teznevise-site-polish' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-mobile-fixes', TEZNEVISE_URI . '/assets/css/mobile-fixes.css', array( 'teznevise-header-form' ), TEZNEVISE_VERSION );
-
-	// JavaScript files - loaded in order, in footer
 	wp_enqueue_script( 'teznevise-redesign', TEZNEVISE_URI . '/assets/js/redesign.js', array(), TEZNEVISE_VERSION, true );
 	wp_enqueue_script( 'teznevise-main', TEZNEVISE_URI . '/assets/js/main.js', array( 'teznevise-redesign' ), TEZNEVISE_VERSION, true );
 }
