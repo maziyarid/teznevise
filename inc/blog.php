@@ -44,6 +44,7 @@ function teznevise_render_blog_meta_box( $post ) {
 	echo '</tbody></table>';
 }
 
+/** Save the custom blog presentation fields after validating the editor request. */
 function teznevise_save_blog_fields( $post_id ) {
 	if ( ! isset( $_POST['teznevise_blog_fields_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['teznevise_blog_fields_nonce'] ) ), 'teznevise_save_blog_fields' ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) || 'post' !== get_post_type( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
@@ -55,7 +56,11 @@ function teznevise_save_blog_fields( $post_id ) {
 		}
 		$value = isset( $_POST[ $key ] ) ? wp_unslash( $_POST[ $key ] ) : '';
 		$value = 'textarea' === $field['type'] ? sanitize_textarea_field( $value ) : sanitize_text_field( $value );
-		'' === $value ? delete_post_meta( $post_id, $key ) : update_post_meta( $post_id, $key, $value );
+		if ( '' === $value ) {
+			delete_post_meta( $post_id, $key );
+		} else {
+			update_post_meta( $post_id, $key, $value );
+		}
 	}
 }
 add_action( 'save_post_post', 'teznevise_save_blog_fields' );
@@ -70,7 +75,6 @@ function teznevise_read_time( $post_id = 0 ) {
 	$custom  = teznevise_blog_field( 'read_time', $post_id );
 	if ( $custom ) { return $custom; }
 	$text  = trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( get_post_field( 'post_content', $post_id ) ) ) );
-	// Use Unicode-aware tokenization: split on whitespace and count non-empty tokens
 	$words = $text ? count( preg_split( '/\s+/u', $text, -1, PREG_SPLIT_NO_EMPTY ) ) : 0;
 	return max( 1, (int) ceil( $words / 200 ) ) . ' ' . __( 'min read', 'teznevise' );
 }
@@ -96,35 +100,24 @@ function teznevise_prepare_post_content( $content ) {
 		$attrs = $match[2];
 		$inner = $match[3];
 		$title = wp_strip_all_tags( $inner );
-		
-		// Extract existing ID if present
 		$id = '';
 		if ( preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $attrs, $id_match ) ) {
 			$id = sanitize_title( $id_match[1] );
 		}
-		
-		// Generate ID if not present
 		if ( ! $id ) {
 			$id = teznevise_post_heading_id( $title );
 		}
-		
-		// Ensure uniqueness - handle both explicit and generated IDs
 		$base_id = $id;
 		$counter = 2;
 		while ( isset( $teznevise_heading_ids[ $id ] ) ) {
 			$id = $base_id . '-' . $counter++;
 		}
-		
-		// Mark this ID as used
 		$teznevise_heading_ids[ $id ] = true;
-		
-		// Update or add the ID attribute
 		if ( preg_match( '/\bid\s*=\s*["\'][^"\']*["\']/i', $attrs ) ) {
 			$attrs = preg_replace( '/\bid\s*=\s*["\'][^"\']*["\']/i', 'id="' . esc_attr( $id ) . '"', $attrs, 1 );
 		} else {
 			$attrs .= ' id="' . esc_attr( $id ) . '"';
 		}
-		
 		return '<h' . $level . $attrs . '>' . $inner . '</h' . $level . '>';
 	}, $content );
 }
@@ -132,27 +125,22 @@ function teznevise_prepare_post_content( $content ) {
 /**
  * Render table of contents from prepared content (with IDs already added).
  *
- * @param string $content Prepared post content with heading IDs
- * @return string HTML for TOC
+ * @param string $content Prepared post content with heading IDs.
+ * @return string HTML for TOC.
  */
 function teznevise_render_toc( $content ) {
 	preg_match_all( '/<h([2-3])([^>]*)>(.*?)<\/h\1>/is', $content, $matches, PREG_SET_ORDER );
 	if ( empty( $matches ) ) { return ''; }
-	
 	$items = '<ul class="post-toc-grid">';
 	foreach ( $matches as $match ) {
-		// Extract ID from the heading attributes
 		if ( ! preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $match[2], $id_match ) ) {
 			continue;
 		}
 		$heading_id = $id_match[1];
 		$heading_text = wp_strip_all_tags( $match[3] );
-		
-		// Skip empty headings
 		if ( empty( $heading_text ) ) {
 			continue;
 		}
-		
 		$items .= '<li><a class="post-toc-item post-toc-item--level-' . esc_attr( $match[1] ) . '" href="#' . esc_attr( $heading_id ) . '">' . esc_html( $heading_text ) . '</a></li>';
 	}
 	return $items . '</ul>';
