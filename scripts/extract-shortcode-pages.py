@@ -726,17 +726,38 @@ def load_dump() -> tuple[list[dict], list[dict]]:
 
 
 def shortcode_map(wpcode: list[dict]) -> dict[str, str]:
+    """Map shortcode names to HTML. Published WPCode wins; trash/draft is fallback only."""
     mapping: dict[str, str] = {}
-    for row in wpcode:
-        html = extract_html_from_php(row.get("post_content") or "")
-        if not html or len(clean_text(html)) < 40:
-            continue
-        names = ADD_SHORTCODE_RE.findall(row.get("post_content") or "")
-        for name in names:
-            # Prefer longer HTML if a shortcode appears twice (publish over trash)
-            prev = mapping.get(name, "")
-            if len(html) > len(prev):
-                mapping[name] = html
+    fallback_names: set[str] = set()
+
+    published = [row for row in wpcode if row.get("post_status") == "publish"]
+    non_published = [row for row in wpcode if row.get("post_status") != "publish"]
+
+    def add_rows(rows: list[dict], allow_existing: bool = True) -> None:
+        for row in rows:
+            html = extract_html_from_php(row.get("post_content") or "")
+            if not html or len(clean_text(html)) < 40:
+                continue
+            names = ADD_SHORTCODE_RE.findall(row.get("post_content") or "")
+            for name in names:
+                if not allow_existing and name in mapping:
+                    continue
+                if len(html) > len(mapping.get(name, "")):
+                    mapping[name] = html
+
+    add_rows(published)
+    before = set(mapping)
+    add_rows(non_published, allow_existing=False)
+    fallback_names.update(set(mapping) - before)
+
+    if fallback_names:
+        print(
+            "Warning: using non-published WPCode definitions for: "
+            + ", ".join(sorted(fallback_names)),
+            file=sys.stderr,
+        )
+
+    shortcode_map.fallback_names = sorted(fallback_names)  # type: ignore[attr-defined]
     return mapping
 
 
@@ -810,6 +831,12 @@ def build_document() -> dict:
                 meta.setdefault("cta_text", cta.get("cta_text") or "")
                 meta.setdefault("cta_url", cta.get("cta_url") or "")
 
+        tpl = template_for(page, path, parent_slug)
+        # Privacy/cookie templates keep the legal body in post_content.
+        # Only hero + CTA belong in the builder so the page is not duplicated.
+        if tpl == "page-privacy.php":
+            sections = [s for s in sections if s.get("type") in ("hero", "cta_band")]
+
         entry = {
             "id": int(page["ID"]),
             "slug": slug,
@@ -822,7 +849,7 @@ def build_document() -> dict:
             "parent_slug": parent_slug,
             "menu_order": int(page.get("menu_order") or 0),
             "guid": page.get("guid") or "",
-            "template": template_for(page, path, parent_slug),
+            "template": tpl,
             "source": source,
             "shortcodes": sorted(set(PAGE_SHORTCODE_RE.findall(page.get("post_content") or ""))),
             "builder": bool(sections),
@@ -840,6 +867,7 @@ def build_document() -> dict:
             "with_meta": sum(1 for p in out_pages.values() if p["meta"]),
             "sources": dict(stats),
             "skipped_post_types": ["post"],
+            "wpcode_fallback_shortcodes": getattr(shortcode_map, "fallback_names", []),
         },
         "pages": out_pages,
     }
@@ -873,6 +901,12 @@ def validate(doc: dict) -> list[str]:
     thesis = pages.get("thesis")
     if thesis and not thesis.get("sections"):
         errors.append("thesis hub has no extracted sections")
+    privacy = pages.get("privacy-policy")
+    if privacy:
+        types = {s.get("type") for s in (privacy.get("sections") or [])}
+        extra = types - {"hero", "cta_band"}
+        if extra:
+            errors.append(f"privacy-policy builder should be hero/cta only, got {sorted(extra)}")
     return errors
 
 

@@ -103,7 +103,15 @@ while ( have_posts() ) :
 						<div class="faq-a"><?php esc_html_e( 'موضوع، مقطع و فایل‌های موجود را بفرستید تا مسیر کار مشخص شود.', 'teznevise' ); ?></div>
 					</div>
 				</div>
-			<?php else : ?>
+			<?php elseif ( function_exists( 'teznevise_page_should_print_content' ) && teznevise_page_should_print_content() ) : ?>
+				<?php
+				if ( function_exists( 'teznevise_the_page_leftover_content' ) ) {
+					teznevise_the_page_leftover_content();
+				} else {
+					the_content();
+				}
+				?>
+			<?php elseif ( ! function_exists( 'teznevise_page_should_print_content' ) ) : ?>
 				<?php the_content(); ?>
 			<?php endif; ?>
 		</div>

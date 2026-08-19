@@ -11,6 +11,10 @@
  * - Never changes slug, title, parent, status, dates, or post_content.
  * - Empty redesign seed pages (about, service-thesis, …) are skipped;
  *   those keep builder-defaults.json.
+ * - Automatic writes never replace administrator-owned builder JSON.
+ *   Replacement is allowed only for empty pages, default-seed data,
+ *   previously extracted data whose hash still matches, or an explicit
+ *   administrator force-replace.
  *
  * @package Teznevise
  */
@@ -18,6 +22,10 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+define( 'TEZNEVISE_EXTRACTED_HASH_META', '_teznevise_extracted_hash' );
+define( 'TEZNEVISE_BUILDER_PROVENANCE_META', '_teznevise_builder_provenance' );
+define( 'TEZNEVISE_EXTRACTED_CURSOR_OPTION', 'teznevise_extracted_cursor' );
 
 /**
  * Absolute path to the extracted pages document.
@@ -130,20 +138,96 @@ function teznevise_extracted_entry_for_post( $post_id ) {
 }
 
 /**
- * Whether leftover post_content is an interactive widget that must still render.
+ * Interactive shortcodes that must keep rendering next to builder sections.
+ *
+ * @return string[]
+ */
+function teznevise_interactive_shortcode_names() {
+	return array(
+		'tz_descriptive',
+		'tz_anova',
+		'tz_ttest',
+		'tz_spearman',
+		'tz_pearson',
+		'tz_cronbach',
+		'tz_cvr',
+		'tz_power',
+		'tz_sample_size',
+		'tz_kr20',
+		'tz_cohens_kappa',
+		'tz_mann_whitney',
+		'tz_wilcoxon',
+		'tz_kruskal_wallis',
+		'tz_regression',
+		'tz_chi_square',
+		'tz_goodness_of_fit',
+		'tz_icc',
+		'tz_price_calculator',
+		'tz_price_box',
+		'tz_price_cta',
+		'tz_careers_terms',
+		'tz_join_form',
+		'tz_join_widget',
+		'gravityform',
+		'gravityforms',
+		'teznevise_downloads',
+		'teznevise_download_category',
+	);
+}
+
+/**
+ * Regex fragment of interactive shortcode names.
+ *
+ * @return string
+ */
+function teznevise_interactive_shortcode_pattern() {
+	$names = array_map( 'preg_quote', teznevise_interactive_shortcode_names() );
+	return implode( '|', $names );
+}
+
+/**
+ * Whether leftover post_content contains an interactive widget that must still render.
+ * Detects the shortcode anywhere, including mixed HTML / multiple tags.
  *
  * @param string $content Raw post_content.
  * @return bool
  */
 function teznevise_is_interactive_shortcode_content( $content ) {
-	$plain = trim( wp_strip_all_tags( (string) $content ) );
+	$plain = (string) $content;
+	if ( function_exists( 'teznevise_normalize_shortcode_quotes' ) ) {
+		$plain = teznevise_normalize_shortcode_quotes( $plain );
+	}
+	$plain = trim( wp_strip_all_tags( $plain ) );
 	if ( '' === $plain ) {
 		return false;
 	}
-	return (bool) preg_match(
-		'/\[(?:tz_descriptive|tz_anova|tz_ttest|tz_spearman|tz_pearson|tz_cronbach|tz_cvr|tz_power|tz_sample_size|tz_kr20|tz_cohens_kappa|tz_mann_whitney|tz_wilcoxon|tz_kruskal_wallis|tz_regression|tz_chi_square|tz_goodness_of_fit|tz_icc|tz_price_calculator|tz_price_box|tz_price_cta|gravityform|teznevise_downloads|teznevise_download_category)\b/i',
-		$plain
-	);
+	$pattern = teznevise_interactive_shortcode_pattern();
+	return (bool) preg_match( '/\[(?:' . $pattern . ')\b/i', $plain );
+}
+
+/**
+ * Interactive shortcode tags extracted from mixed post_content.
+ *
+ * @param string $content Raw post_content.
+ * @return string
+ */
+function teznevise_interactive_shortcodes_markup( $content ) {
+	$content = (string) $content;
+	if ( function_exists( 'teznevise_normalize_shortcode_quotes' ) ) {
+		$content = teznevise_normalize_shortcode_quotes( $content );
+	}
+	$pattern = teznevise_interactive_shortcode_pattern();
+	if ( ! preg_match_all( '/\[(?:' . $pattern . ')\b[^\]]*?\](?:\s*\[\/(?:' . $pattern . ')\])?/i', $content, $matches ) ) {
+		return '';
+	}
+	$unique = array();
+	foreach ( $matches[0] as $tag ) {
+		$tag = trim( $tag );
+		if ( '' !== $tag && ! in_array( $tag, $unique, true ) ) {
+			$unique[] = $tag;
+		}
+	}
+	return implode( "\n", $unique );
 }
 
 /**
@@ -159,12 +243,31 @@ function teznevise_page_should_print_content( $post_id = 0 ) {
 		return false;
 	}
 	if ( function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections() ) {
-		if ( function_exists( 'teznevise_is_legacy_shortcode_content' ) && teznevise_is_legacy_shortcode_content( $raw ) ) {
-			return teznevise_is_interactive_shortcode_content( $raw );
-		}
-		return false;
+		// Independent of the structural legacy-shortcode classifier so mixed
+		// HTML + form/calculator pages (join-us, contact-us) keep working.
+		return teznevise_is_interactive_shortcode_content( $raw );
 	}
 	return true;
+}
+
+/**
+ * Print leftover page content. When builder sections exist, only execute
+ * interactive shortcodes so migrated copy is not duplicated.
+ *
+ * @param int $post_id Optional post ID.
+ */
+function teznevise_the_page_leftover_content( $post_id = 0 ) {
+	$post_id = $post_id ? (int) $post_id : (int) get_the_ID();
+	$raw     = (string) get_post_field( 'post_content', $post_id );
+	if ( function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections() ) {
+		$markup = teznevise_interactive_shortcodes_markup( $raw );
+		if ( '' === $markup ) {
+			return;
+		}
+		echo do_shortcode( $markup ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		return;
+	}
+	the_content();
 }
 
 /**
@@ -184,10 +287,112 @@ function teznevise_extracted_meta_keys() {
 }
 
 /**
+ * Stable hash of sanitized builder sections.
+ *
+ * @param array $sections Sections.
+ * @return string
+ */
+function teznevise_sections_hash( $sections ) {
+	if ( ! is_array( $sections ) ) {
+		$sections = array();
+	}
+	if ( function_exists( 'teznevise_builder_sanitize_sections' ) ) {
+		$sections = teznevise_builder_sanitize_sections( $sections );
+	}
+	$json = wp_json_encode( $sections, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+	return is_string( $json ) ? hash( 'sha256', $json ) : '';
+}
+
+/**
+ * Record who last wrote builder sections.
+ *
+ * @param int    $post_id Page ID.
+ * @param string $kind    extracted|default-seed|manual.
+ */
+function teznevise_set_builder_provenance( $post_id, $kind ) {
+	$post_id = (int) $post_id;
+	$kind    = sanitize_key( $kind );
+	if ( $post_id <= 0 || ! in_array( $kind, array( 'extracted', 'default-seed', 'manual' ), true ) ) {
+		return;
+	}
+	update_post_meta( $post_id, TEZNEVISE_BUILDER_PROVENANCE_META, $kind );
+}
+
+/**
+ * Whether existing builder/meta/template may be replaced by extracted data.
+ *
+ * Automatic runs never overwrite administrator-owned values. Replacement is
+ * allowed when the page is empty, still default-seed, still the previously
+ * written extracted payload, still generic v1.1 parser output, or the
+ * administrator passed an explicit force flag.
+ *
+ * @param int   $post_id Page ID.
+ * @param array $entry   Extracted entry.
+ * @param bool  $force   Administrator force-replace.
+ * @return bool
+ */
+function teznevise_extracted_fields_are_replaceable( $post_id, $entry, $force = false ) {
+	$post_id = (int) $post_id;
+	if ( $force ) {
+		return true;
+	}
+
+	$meta_key = defined( 'TEZNEVISE_BUILDER_META' ) ? TEZNEVISE_BUILDER_META : '_teznevise_builder_sections';
+	$existing = get_post_meta( $post_id, $meta_key, true );
+	$had      = is_string( $existing ) && '' !== trim( $existing ) && '[]' !== trim( $existing );
+	if ( ! $had ) {
+		return true;
+	}
+
+	$provenance  = (string) get_post_meta( $post_id, TEZNEVISE_BUILDER_PROVENANCE_META, true );
+	$stored_hash = (string) get_post_meta( $post_id, TEZNEVISE_EXTRACTED_HASH_META, true );
+	$current     = function_exists( 'teznevise_builder_get_sections' ) ? teznevise_builder_get_sections( $post_id ) : array();
+	$current_h   = teznevise_sections_hash( $current );
+
+	if ( 'manual' === $provenance ) {
+		return false;
+	}
+
+	if ( 'extracted' === $provenance ) {
+		return ( '' === $stored_hash ) || ( $stored_hash === $current_h );
+	}
+
+	if ( 'default-seed' === $provenance ) {
+		return true;
+	}
+
+	$incoming = isset( $entry['sections'] ) && is_array( $entry['sections'] ) ? $entry['sections'] : array();
+	if ( $incoming && $current_h === teznevise_sections_hash( $incoming ) ) {
+		return true;
+	}
+
+	if ( function_exists( 'teznevise_builder_defaults_entry' ) && function_exists( 'teznevise_builder_conversion_key' ) ) {
+		$key   = teznevise_builder_conversion_key( $post_id );
+		$def   = $key ? teznevise_builder_defaults_entry( $key ) : array();
+		$dsecs = ( ! empty( $def['builder'] ) && ! empty( $def['sections'] ) && is_array( $def['sections'] ) ) ? $def['sections'] : array();
+		if ( $dsecs && $current_h === teznevise_sections_hash( $dsecs ) ) {
+			return true;
+		}
+	}
+
+	if ( function_exists( 'teznevise_migration_parse_content' ) ) {
+		$post = get_post( $post_id );
+		if ( $post && 'page' === $post->post_type ) {
+			$parsed = teznevise_migration_parse_content( $post->post_content, $post->post_name );
+			if ( $parsed && $current_h === teznevise_sections_hash( $parsed ) ) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+/**
  * Write extracted custom fields onto an existing page. Never updates the post row.
  *
  * @param int  $post_id         Page ID.
- * @param bool $replace_builder Overwrite builder JSON when already present.
+ * @param bool $replace_builder Administrator force-replace.
  * @param bool $dry_run         Do not write.
  * @return string created|updated|skipped|empty|invalid
  */
@@ -216,20 +421,23 @@ function teznevise_apply_extracted_fields( $post_id, $replace_builder = false, $
 
 	$existing_builder = get_post_meta( $post_id, defined( 'TEZNEVISE_BUILDER_META' ) ? TEZNEVISE_BUILDER_META : '_teznevise_builder_sections', true );
 	$had_builder      = is_string( $existing_builder ) && '' !== trim( $existing_builder ) && '[]' !== trim( $existing_builder );
+	$replaceable      = teznevise_extracted_fields_are_replaceable( $post_id, $entry, (bool) $replace_builder );
 
 	if ( $dry_run ) {
-		if ( $sections && ( $replace_builder || ! $had_builder ) ) {
+		if ( $sections && $replaceable ) {
 			return $had_builder ? 'updated' : 'created';
 		}
-		return $had_builder ? 'skipped' : 'created';
+		return 'skipped';
 	}
 
 	$wrote = false;
 
-	if ( $sections && function_exists( 'teznevise_builder_save_sections' ) && ( $replace_builder || ! $had_builder ) ) {
+	if ( $sections && function_exists( 'teznevise_builder_save_sections' ) && $replaceable ) {
 		if ( teznevise_builder_save_sections( $post_id, $sections ) ) {
 			$wrote = true;
 		}
+		teznevise_set_builder_provenance( $post_id, 'extracted' );
+		update_post_meta( $post_id, TEZNEVISE_EXTRACTED_HASH_META, teznevise_sections_hash( $sections ) );
 	}
 
 	$allowed = teznevise_extracted_meta_keys();
@@ -242,18 +450,23 @@ function teznevise_apply_extracted_fields( $post_id, $replace_builder = false, $
 		}
 		$meta_key = '_teznevise_' . $key;
 		$current  = get_post_meta( $post_id, $meta_key, true );
-		if ( '' !== (string) $current && ! $replace_builder ) {
+		if ( '' !== (string) $current && ! $replaceable ) {
 			continue;
 		}
-		update_post_meta( $post_id, $meta_key, $value );
-		$wrote = true;
+		if ( (string) $current === $value ) {
+			continue;
+		}
+		if ( update_post_meta( $post_id, $meta_key, $value ) ) {
+			$wrote = true;
+		}
 	}
 
 	if ( $template && 'page.php' !== $template ) {
 		$current_tpl = (string) get_post_meta( $post_id, '_wp_page_template', true );
-		if ( $replace_builder || '' === $current_tpl || 'default' === $current_tpl ) {
-			update_post_meta( $post_id, '_wp_page_template', $template );
-			$wrote = true;
+		if ( $replaceable || '' === $current_tpl || 'default' === $current_tpl ) {
+			if ( $current_tpl !== $template && update_post_meta( $post_id, '_wp_page_template', $template ) ) {
+				$wrote = true;
+			}
 		}
 	}
 
@@ -264,13 +477,15 @@ function teznevise_apply_extracted_fields( $post_id, $replace_builder = false, $
 }
 
 /**
- * Apply extracted fields to every published page. Never touches posts.
+ * Apply extracted fields to published pages. Never touches posts.
  *
- * @param bool $replace_builder Overwrite existing builder JSON.
+ * @param bool $replace_builder Overwrite existing builder JSON when allowed.
  * @param bool $dry_run         Dry run.
+ * @param int  $limit           Maximum pages to inspect (0 = all).
+ * @param int  $offset          Query offset.
  * @return array{processed:int,created:int,updated:int,skipped:int,empty:int,errors:string[]}
  */
-function teznevise_apply_extracted_to_pages( $replace_builder = false, $dry_run = false ) {
+function teznevise_apply_extracted_to_pages( $replace_builder = false, $dry_run = false, $limit = 0, $offset = 0 ) {
 	$stats = array(
 		'processed' => 0,
 		'created'   => 0,
@@ -282,11 +497,16 @@ function teznevise_apply_extracted_to_pages( $replace_builder = false, $dry_run 
 
 	$query = new WP_Query(
 		array(
-			'post_type'      => 'page',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'no_found_rows'  => true,
-			'fields'         => 'ids',
+			'post_type'              => 'page',
+			'post_status'            => 'publish',
+			'posts_per_page'         => $limit > 0 ? (int) $limit : -1,
+			'offset'                 => max( 0, (int) $offset ),
+			'orderby'                => 'ID',
+			'order'                  => 'ASC',
+			'no_found_rows'          => true,
+			'fields'                 => 'ids',
+			'update_post_meta_cache' => true,
+			'update_post_term_cache' => false,
 		)
 	);
 

@@ -45,6 +45,10 @@ function teznevise_builder_seed_post( $post_id, $key, $replace = false ) {
 		return 'invalid';
 	}
 
+	if ( function_exists( 'teznevise_set_builder_provenance' ) ) {
+		teznevise_set_builder_provenance( $post_id, 'default-seed' );
+	}
+
 	$entry = teznevise_builder_defaults_entry( $key );
 	if ( ! empty( $entry['excerpt'] ) && ! get_post_field( 'post_excerpt', $post_id ) ) {
 		wp_update_post(

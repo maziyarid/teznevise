@@ -130,6 +130,10 @@ function teznevise_builder_conversion_key( $post_id = 0 ) {
 		}
 	}
 
+	if ( 'page' !== $post->post_type ) {
+		return '';
+	}
+
 	$slug = (string) $post->post_name;
 	if ( teznevise_builder_defaults_entry( $slug ) ) {
 		return $slug;

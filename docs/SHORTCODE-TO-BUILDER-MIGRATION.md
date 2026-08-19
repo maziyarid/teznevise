@@ -16,6 +16,10 @@ This document captures the complete data extraction from the uploaded database e
 - Data: `inc/extracted-page-fields.json` (published pages only)
 - Writer: `inc/extracted-pages.php` → `_teznevise_builder_sections` + `_teznevise_*`
 - Trigger: Appearance → Teznevise Setup, or auto-run migrator v1.2.0
+- Auto-run is provenance-safe: it fills empty pages and replaces default-seed / matching extracted hashes, never administrator-owned builder JSON
+- Force-replace is an explicit Setup checkbox
+- Mixed interactive shortcodes (`tz_careers_terms`, `tz_join_form`, calculators, Gravity Forms) still render beside builder sections
+- Privacy/cookie templates keep legal copy in `post_content`; builder only stores hero/CTA
 - **Never updates `wp_posts` rows** (no slug/title/content/status change)
 - **Never touches `post_type=post`**
 

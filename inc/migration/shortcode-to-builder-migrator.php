@@ -18,6 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'TEZNEVISE_MIGRATION_OPTION', 'teznevise_shortcode_migration_v1' );
 define( 'TEZNEVISE_MIGRATION_VERSION', '1.2.0' );
+if ( ! defined( 'TEZNEVISE_EXTRACTED_CURSOR_OPTION' ) ) {
+	define( 'TEZNEVISE_EXTRACTED_CURSOR_OPTION', 'teznevise_extracted_cursor' );
+}
 
 /**
  * Whether migration has already completed successfully.
@@ -486,9 +489,10 @@ function teznevise_migration_get_candidate_pages() {
  * @param int  $limit          Limit pages.
  * @param bool $strip_codes    Strip structural shortcodes after write.
  * @param bool $seed_tools     Seed calculator tool pages.
+ * @param bool $force_replace  Administrator opt-in to overwrite existing builder JSON.
  * @return array
  */
-function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = false, $seed_tools = false ) {
+function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = false, $seed_tools = false, $force_replace = false ) {
 	$stats = array(
 		'processed'   => 0,
 		'migrated'    => 0,
@@ -505,14 +509,30 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 	}
 
 	// Extracted original page copy → custom fields. Pages only; never posts;
-	// never changes slug/title/content. Replaces generic 1.1.0 builder JSON.
+	// never changes slug/title/content. Auto path is fill/provenance-only —
+	// administrator-owned builder JSON is not replaced unless $force_replace.
 	if ( function_exists( 'teznevise_apply_extracted_to_pages' ) ) {
-		$extracted = teznevise_apply_extracted_to_pages( true, (bool) $dry_run );
+		$limit  = (int) $limit;
+		$offset = 0;
+		if ( $limit > 0 ) {
+			$offset = (int) get_option( TEZNEVISE_EXTRACTED_CURSOR_OPTION, 0 );
+		} else {
+			delete_option( TEZNEVISE_EXTRACTED_CURSOR_OPTION );
+		}
+		$extracted = teznevise_apply_extracted_to_pages( (bool) $force_replace, (bool) $dry_run, $limit, $offset );
 		$stats['processed'] += (int) ( $extracted['processed'] ?? 0 );
 		$stats['migrated']  += (int) ( $extracted['created'] ?? 0 ) + (int) ( $extracted['updated'] ?? 0 );
 		$stats['skipped']   += (int) ( $extracted['skipped'] ?? 0 ) + (int) ( $extracted['empty'] ?? 0 );
 		if ( ! empty( $extracted['errors'] ) ) {
 			$stats['errors'] = array_merge( $stats['errors'], $extracted['errors'] );
+		}
+		if ( ! $dry_run && $limit > 0 ) {
+			$processed = (int) ( $extracted['processed'] ?? 0 );
+			if ( $processed >= $limit ) {
+				update_option( TEZNEVISE_EXTRACTED_CURSOR_OPTION, $offset + $processed, false );
+			} else {
+				delete_option( TEZNEVISE_EXTRACTED_CURSOR_OPTION );
+			}
 		}
 	}
 
@@ -579,7 +599,7 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 		}
 	}
 
-	if ( ! $dry_run && empty( $stats['errors'] ) && ( $stats['migrated'] > 0 || ! empty( $stats['tools']['created'] ) ) ) {
+	if ( ! $dry_run && empty( $stats['errors'] ) && 0 === (int) $limit ) {
 		teznevise_migration_mark_complete( $stats );
 	}
 
@@ -598,7 +618,8 @@ function teznevise_migration_admin_ui() {
 		$dry    = ! empty( $_POST['teznevise_migration_dry_run'] );
 		$strip  = ! empty( $_POST['teznevise_migration_strip'] );
 		$tools  = ! empty( $_POST['teznevise_migration_seed_tools'] );
-		$stats  = teznevise_migration_run( $dry, 0, $strip, $tools );
+		$force  = ! empty( $_POST['teznevise_migration_replace'] );
+		$stats  = teznevise_migration_run( $dry, 0, $strip, $tools, $force );
 		set_transient( 'teznevise_migration_last_result', $stats, 120 );
 	}
 }
@@ -666,6 +687,10 @@ function teznevise_migration_render_setup_section() {
 		<label style="display:block;margin-bottom:8px;">
 			<input type="checkbox" name="teznevise_migration_seed_tools" value="1" />
 			<?php esc_html_e( 'ایجاد / هم‌ترازسازی صفحات ابزارهای محاسباتی (ماشین‌حساب‌ها)', 'teznevise' ); ?>
+		</label>
+		<label style="display:block;margin-bottom:8px;">
+			<input type="checkbox" name="teznevise_migration_replace" value="1" />
+			<?php esc_html_e( 'بازنویسی اجباری بخش‌های صفحه‌ساز موجود (ویرایش‌های دستی پاک می‌شوند)', 'teznevise' ); ?>
 		</label>
 		<label style="display:block;margin-bottom:8px;">
 			<input type="checkbox" name="teznevise_migration_strip" value="1" />

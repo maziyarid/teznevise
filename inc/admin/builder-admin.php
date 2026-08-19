@@ -150,5 +150,8 @@ function teznevise_builder_save_post( $post_id ) {
 	}
 
 	teznevise_builder_save_sections( $post_id, $decoded );
+	if ( function_exists( 'teznevise_set_builder_provenance' ) ) {
+		teznevise_set_builder_provenance( $post_id, 'manual' );
+	}
 }
 add_action( 'save_post', 'teznevise_builder_save_post' );

@@ -213,6 +213,9 @@ function teznevise_seed_pages( $replace_builder = false ) {
 		? teznevise_builder_seed_all( (bool) $replace_builder )
 		: array();
 
+	// Extracted source pages replace default-seed (or empty) sections via
+	// provenance. Administrator-owned builder JSON is left untouched unless
+	// $replace_builder is an explicit force-replace.
 	$extracted = function_exists( 'teznevise_apply_extracted_to_pages' )
 		? teznevise_apply_extracted_to_pages( (bool) $replace_builder, false )
 		: array();

@@ -24,7 +24,13 @@ while ( have_posts() ) :
 <section class="section">
 	<div class="container">
 		<div class="longcopy article-content about-story" data-reveal>
-			<?php the_content(); ?>
+			<?php
+			if ( function_exists( 'teznevise_the_page_leftover_content' ) ) {
+				teznevise_the_page_leftover_content();
+			} else {
+				the_content();
+			}
+			?>
 		</div>
 	</div>
 </section>

@@ -8,6 +8,9 @@
 - Original slugs, titles, parents, and `post_content` stay as they are (`/thesis/`, `/proposal/`, `/about-us/`, `/contact-us/`, calculator permalinks, nested `thesis/phd` vs `proposal/phd`, …).
 - No invented copy: homepage WPCode placeholders are skipped; that page reuses the site’s own redesign defaults. Empty redesign seed pages (`about`, `service-thesis`, …) stay on `builder-defaults.json`.
 - Migrator v1.2 writes extracted fields onto existing pages (Appearance → Teznevise Setup). Interactive calculators/forms still render from leftover shortcodes.
+- Automatic migration is fill/provenance-only: administrator-edited builder JSON, `_teznevise_*` meta, and custom templates are never replaced unless an explicit force-replace checkbox is used. Default-seed and unedited v1.1 parser output remain replaceable.
+- Mixed pages such as `/join-us/` keep `[tz_careers_terms]` and `[tz_join_form]` next to builder sections. Privacy/cookie pages keep the legal body in `post_content` (builder only stores hero/CTA).
+- Extracted writes respect the migration batch limit/cursor and only mark v1.2 complete after a full unlimited pass.
 - Templates prefer builder custom fields when present so hub shortcodes are not printed twice.
 
 ### Testing
