@@ -64,7 +64,9 @@ function teznevise_enqueue_assets() {
 		'batch-fixes'        => 'assets/css/batch-fixes.css',
 		'ui-round2'          => 'assets/css/ui-round2.css',
 		'site-polish'        => 'assets/css/site-polish.css',
+		'mobile-fixes'       => 'assets/css/mobile-fixes.css',
 		'mobile-responsive'  => 'assets/css/mobile-responsive.css',
+		'blog'               => 'assets/css/blog.css',
 	);
 	$prev = array( 'teznevise-bootstrap-rtl', 'teznevise-fontawesome', 'teznevise-vazirmatn' );
 	foreach ( $css_files as $handle => $path ) {
@@ -87,9 +89,13 @@ function teznevise_enqueue_assets() {
 		}
 	}
 
-	$js_resolved = teznevise_resolve_asset( 'assets/js/redesign.js' );
-	if ( $js_resolved ) {
-		wp_enqueue_script( 'teznevise-main', $js_resolved['url'], array(), $js_resolved['ver'], true );
+	$redesign_js = teznevise_resolve_asset( 'assets/js/redesign.js' );
+	if ( $redesign_js ) {
+		wp_enqueue_script( 'teznevise-redesign', $redesign_js['url'], array(), $redesign_js['ver'], true );
+	}
+	$main_js = teznevise_resolve_asset( 'assets/js/main.js' );
+	if ( $main_js ) {
+		wp_enqueue_script( 'teznevise-main', $main_js['url'], $redesign_js ? array( 'teznevise-redesign' ) : array(), $main_js['ver'], true );
 	}
 	wp_enqueue_script( 'teznevise-bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js', array(), '5.3.8', true );
 }
@@ -107,6 +113,12 @@ $teznevise_includes = array(
 	'/inc/screenshot-data.php',
 	'/inc/defaults.php',
 	'/inc/helpers.php',
+	'/inc/cpts.php',
+	'/inc/blog.php',
+	'/inc/class-teznevise-builder.php',
+	'/inc/builder-defaults.php',
+	'/inc/builder-seed.php',
+	'/inc/builder-download-catalog.php',
 	'/inc/customizer.php',
 	'/inc/page-meta.php',
 	'/inc/page-meta-extra.php',
@@ -121,6 +133,11 @@ foreach ( $teznevise_includes as $file ) {
 	}
 }
 
+if ( is_admin() ) {
+	require_once TEZNEVISE_DIR . '/inc/admin/builder-admin.php';
+	require_once TEZNEVISE_DIR . '/inc/admin/builder-assets.php';
+}
+
 function teznevise_body_classes( $classes ) {
 	if ( is_front_page() ) {
 		$classes[] = 'teznevise-home';
@@ -129,24 +146,6 @@ function teznevise_body_classes( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'teznevise_body_classes' );
-
-function teznevise_get_contact( $key, $default = '' ) {
-	if ( function_exists( 'teznevise_mod' ) ) {
-		return teznevise_mod( $key, $default );
-	}
-	$defaults = array(
-		'phone' => '09302822091',
-		'phone_display' => '۰۹۳۰۲۸۲۲۰۹۱',
-		'phone_intl' => '+989302822091',
-		'whatsapp' => 'https://wa.me/989302822091',
-		'telegram' => 'https://t.me/Teznevise',
-		'bale' => 'https://ble.ir/teznevise',
-		'email' => 'teznevisan@gmail.com',
-		'address' => 'تهران، انقلاب، خیابان ۱۲ فروردین',
-		'hours' => 'شنبه تا پنجشنبه، ۹ تا ۲۱',
-	);
-	return get_theme_mod( 'teznevise_' . $key, isset( $defaults[ $key ] ) ? $defaults[ $key ] : $default );
-}
 
 function teznevise_logo_url() {
 	if ( file_exists( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) && filesize( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) > 0 ) {
