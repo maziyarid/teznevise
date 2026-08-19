@@ -46,6 +46,12 @@
   const searchOverlay = document.querySelector('.search-overlay');
   const searchClose = document.querySelector('.search-close');
   const searchInput = document.querySelector('.search-input');
+  function closeSearch() {
+    if (!searchOverlay) return;
+    searchOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    if (searchBtn) searchBtn.focus();
+  }
   if (searchBtn && searchOverlay) {
     searchBtn.addEventListener('click', function () {
       searchOverlay.classList.add('open');
@@ -54,7 +60,8 @@
     });
   }
   if (searchClose && searchOverlay) {
-    searchClose.addEventListener('click', function () {
+    searchClose.addEventListener('click', closeSearch);
+    /*
       searchOverlay.classList.remove('open');
       document.body.style.overflow = '';
     });
@@ -62,8 +69,7 @@
   if (searchOverlay) {
     searchOverlay.addEventListener('click', function (e) {
       if (e.target === searchOverlay) {
-        searchOverlay.classList.remove('open');
-        document.body.style.overflow = '';
+        closeSearch();
       }
     });
   }
@@ -72,11 +78,21 @@
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
       if (searchOverlay && searchOverlay.classList.contains('open')) {
-        searchOverlay.classList.remove('open');
-        document.body.style.overflow = '';
+        closeSearch();
       }
     }
   });
+
+  if (searchOverlay) {
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab' || !searchOverlay.classList.contains('open')) return;
+      const focusable = searchOverlay.querySelectorAll('a[href], button:not([disabled]), input:not([disabled])');
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+  }
 
   // FAQ accordion
   document.querySelectorAll('.faq-question').forEach(function (q) {
