@@ -54,7 +54,11 @@ while ( have_posts() ) :
 <section class="section">
 	<div class="container" style="max-width:820px;margin-inline:auto;">
 		<div class="longcopy article-content privacy-body" data-reveal>
-			<?php the_content(); ?>
+			<?php
+			if ( ! function_exists( 'teznevise_page_should_print_content' ) || teznevise_page_should_print_content() ) {
+				the_content();
+			}
+			?>
 		</div>
 	</div>
 </section>

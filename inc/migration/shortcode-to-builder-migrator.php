@@ -507,7 +507,7 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 	// Extracted original page copy → custom fields. Pages only; never posts;
 	// never changes slug/title/content. Replaces generic 1.1.0 builder JSON.
 	if ( function_exists( 'teznevise_apply_extracted_to_pages' ) ) {
-		$extracted = teznevise_apply_extracted_to_pages( true, (bool) $dry_run );
+		$extracted = teznevise_apply_extracted_to_pages( false, (bool) $dry_run, $limit );
 		$stats['processed'] += (int) ( $extracted['processed'] ?? 0 );
 		$stats['migrated']  += (int) ( $extracted['created'] ?? 0 ) + (int) ( $extracted['updated'] ?? 0 );
 		$stats['skipped']   += (int) ( $extracted['skipped'] ?? 0 ) + (int) ( $extracted['empty'] ?? 0 );

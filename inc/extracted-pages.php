@@ -159,10 +159,9 @@ function teznevise_page_should_print_content( $post_id = 0 ) {
 		return false;
 	}
 	if ( function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections() ) {
-		if ( function_exists( 'teznevise_is_legacy_shortcode_content' ) && teznevise_is_legacy_shortcode_content( $raw ) ) {
-			return teznevise_is_interactive_shortcode_content( $raw );
-		}
-		return false;
+		// Builder sections replace structural content, but widgets embedded in
+		// prose or HTML still need to be executed.
+		return teznevise_is_interactive_shortcode_content( $raw );
 	}
 	return true;
 }
@@ -245,15 +244,17 @@ function teznevise_apply_extracted_fields( $post_id, $replace_builder = false, $
 		if ( '' !== (string) $current && ! $replace_builder ) {
 			continue;
 		}
-		update_post_meta( $post_id, $meta_key, $value );
-		$wrote = true;
+		if ( update_post_meta( $post_id, $meta_key, $value ) ) {
+			$wrote = true;
+		}
 	}
 
 	if ( $template && 'page.php' !== $template ) {
 		$current_tpl = (string) get_post_meta( $post_id, '_wp_page_template', true );
 		if ( $replace_builder || '' === $current_tpl || 'default' === $current_tpl ) {
-			update_post_meta( $post_id, '_wp_page_template', $template );
-			$wrote = true;
+			if ( update_post_meta( $post_id, '_wp_page_template', $template ) ) {
+				$wrote = true;
+			}
 		}
 	}
 
@@ -268,9 +269,10 @@ function teznevise_apply_extracted_fields( $post_id, $replace_builder = false, $
  *
  * @param bool $replace_builder Overwrite existing builder JSON.
  * @param bool $dry_run         Dry run.
+ * @param int  $limit           Maximum pages to inspect.
  * @return array{processed:int,created:int,updated:int,skipped:int,empty:int,errors:string[]}
  */
-function teznevise_apply_extracted_to_pages( $replace_builder = false, $dry_run = false ) {
+function teznevise_apply_extracted_to_pages( $replace_builder = false, $dry_run = false, $limit = 0 ) {
 	$stats = array(
 		'processed' => 0,
 		'created'   => 0,
@@ -284,7 +286,7 @@ function teznevise_apply_extracted_to_pages( $replace_builder = false, $dry_run 
 		array(
 			'post_type'      => 'page',
 			'post_status'    => 'publish',
-			'posts_per_page' => -1,
+			'posts_per_page' => $limit > 0 ? (int) $limit : -1,
 			'no_found_rows'  => true,
 			'fields'         => 'ids',
 		)
