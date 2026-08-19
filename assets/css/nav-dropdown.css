@@ -1,123 +1,98 @@
-/**
- * Self-contained styling for multi-level nav dropdowns rendered by
- * Teznevise_Nav_Walker. Written to be independent of other stylesheets
- * so it cannot collide with existing class names in layout-refinements.css
- * or the System B base (styles.css).
+/* Accessible desktop dropdown styling for .nav-dropdown / .nav-dropdown-l3.
+ * Additive file, loaded after mobile-fixes.css. Does not override existing
+ * .nav-links/.main-nav rules.
+ * @package Teznevise
  */
-.main-nav .nav-links .has-dropdown {
-	position: relative;
+.main-nav .menu-item.has-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
-
-.main-nav .nav-links .has-dropdown > a {
-	display: inline-flex;
-	align-items: center;
-	gap: .35rem;
+.main-nav .nav-dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-inline-start: 2px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 6px;
 }
-
-.main-nav .nav-links .submenu-toggle {
-	background: none;
-	border: none;
-	padding: .25rem;
-	margin-inline-start: .15rem;
-	cursor: pointer;
-	color: inherit;
-	font-size: .7em;
-	line-height: 1;
+.main-nav .nav-dropdown-toggle:hover,
+.main-nav .nav-dropdown-toggle:focus-visible {
+  background: rgba(20, 93, 74, 0.08);
 }
-
-.main-nav .nav-links .submenu-toggle i {
-	transition: transform .2s ease;
+.main-nav .nav-chevron {
+  display: inline-flex;
+  font-size: 10px;
+  transition: transform 0.18s ease;
 }
-
-.main-nav .nav-links .has-dropdown.submenu-open > .submenu-toggle i,
-.main-nav .nav-links .has-dropdown:hover > .submenu-toggle i {
-	transform: rotate(180deg);
+.main-nav .nav-dropdown-toggle[aria-expanded="true"] .nav-chevron {
+  transform: rotate(180deg);
 }
-
-.main-nav .sub-menu.dropdown-panel {
-	position: absolute;
-	inset-inline-start: 0;
-	top: 100%;
-	min-width: 220px;
-	margin: 0;
-	padding: .5rem;
-	list-style: none;
-	background: var(--tz-surface, #ffffff);
-	border: 1px solid var(--tz-border, #e5e7eb);
-	border-radius: var(--tz-radius, 10px);
-	box-shadow: 0 12px 28px -8px rgba(15, 23, 42, .18);
-	opacity: 0;
-	visibility: hidden;
-	transform: translateY(6px);
-	transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
-	z-index: 60;
+.main-nav ul.nav-dropdown {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 100%;
+  min-width: 220px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid rgba(20, 93, 74, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(9, 40, 32, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s;
+  z-index: 40;
 }
-
-.main-nav .sub-menu.dropdown-panel .sub-menu.dropdown-panel {
-	top: 0;
-	inset-inline-start: 100%;
+.main-nav ul.nav-dropdown.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
-
-@media (hover: hover) and (pointer: fine) {
-	.main-nav .has-dropdown:hover > .sub-menu.dropdown-panel,
-	.main-nav .has-dropdown:focus-within > .sub-menu.dropdown-panel {
-		opacity: 1;
-		visibility: visible;
-		transform: translateY(0);
-	}
+.main-nav ul.nav-dropdown .nav-link {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: #172d26;
+  text-decoration: none;
+  font-size: 13.5px;
 }
-
-.main-nav .has-dropdown.submenu-open > .sub-menu.dropdown-panel {
-	opacity: 1;
-	visibility: visible;
-	transform: translateY(0);
+.main-nav ul.nav-dropdown .nav-link:hover,
+.main-nav ul.nav-dropdown .nav-link:focus-visible {
+  background: #f4f9f7;
+  color: #145d4a;
 }
-
-.main-nav .sub-menu.dropdown-panel li {
-	list-style: none;
+.main-nav ul.nav-dropdown-l3 {
+  position: static;
+  margin: 4px 0 4px 12px;
+  padding-inline-start: 10px;
+  border-inline-start: 2px solid rgba(20, 93, 74, 0.15);
+  box-shadow: none;
+  border: 0;
+  background: transparent;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
 }
-
-.main-nav .sub-menu.dropdown-panel a {
-	display: block;
-	padding: .5rem .65rem;
-	border-radius: 8px;
-	white-space: nowrap;
-	color: inherit;
-	text-decoration: none;
-}
-
-.main-nav .sub-menu.dropdown-panel a:hover,
-.main-nav .sub-menu.dropdown-panel a:focus-visible {
-	background: var(--tz-surface-hover, #f3f4f6);
-}
-
-.main-nav .submenu-toggle:focus-visible,
-.main-nav .nav-links a:focus-visible {
-	outline: 2px solid var(--tz-accent, #2563eb);
-	outline-offset: 2px;
-}
-
 @media (max-width: 900px) {
-	.main-nav .sub-menu.dropdown-panel {
-		position: static;
-		opacity: 1;
-		visibility: hidden;
-		max-height: 0;
-		overflow: hidden;
-		box-shadow: none;
-		border: none;
-		transform: none;
-		transition: max-height .2s ease;
-	}
-	.main-nav .has-dropdown.submenu-open > .sub-menu.dropdown-panel {
-		visibility: visible;
-		max-height: 600px;
-	}
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.main-nav .sub-menu.dropdown-panel,
-	.main-nav .submenu-toggle i {
-		transition: none !important;
-	}
+  .main-nav ul.nav-dropdown {
+    position: static;
+    box-shadow: none;
+    border: 0;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    display: none;
+  }
+  .main-nav ul.nav-dropdown.is-open {
+    display: block;
+  }
 }

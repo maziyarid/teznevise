@@ -1,54 +1,80 @@
 /**
- * Toggle behavior for multi-level dropdown submenus rendered by
- * Teznevise_Nav_Walker (see inc/nav-walker.php). Handles tap-to-open on
- * touch/keyboard, closes on outside click, Escape, and blur.
+ * Accessible toggle behaviour for desktop dropdown submenus (.nav-dropdown).
+ *
+ * The submenu is opened/closed exclusively by the dedicated
+ * `.nav-dropdown-toggle` button rendered by Teznevise_Nav_Walker, never by
+ * intercepting the parent link itself, so the link always stays navigable.
+ * On pointer-capable ("hover: hover") devices, hovering the parent item also
+ * opens it, and `aria-expanded` is kept in sync in both cases so the visual
+ * state and the announced state never disagree.
+ *
+ * @package Teznevise
  */
-( function () {
-	'use strict';
+document.addEventListener('DOMContentLoaded', function () {
+  var toggles = document.querySelectorAll('.main-nav .menu-item.has-dropdown > .nav-dropdown-toggle');
+  if (!toggles.length) return;
 
-	function closeAll( except ) {
-		document.querySelectorAll( '.main-nav .has-dropdown.submenu-open' ).forEach( function ( li ) {
-			if ( li === except ) { return; }
-			li.classList.remove( 'submenu-open' );
-			var btn = li.querySelector( '.submenu-toggle' );
-			if ( btn ) { btn.setAttribute( 'aria-expanded', 'false' ); }
-			var link = li.querySelector( '> a' );
-			if ( link ) { link.setAttribute( 'aria-expanded', 'false' ); }
-		} );
-	}
+  var supportsHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;
 
-	document.addEventListener( 'click', function ( event ) {
-		var toggle = event.target.closest( '.submenu-toggle' );
-		if ( toggle ) {
-			event.preventDefault();
-			var li = toggle.closest( '.has-dropdown' );
-			if ( ! li ) { return; }
-			var isOpen = li.classList.contains( 'submenu-open' );
-			closeAll( isOpen ? null : li );
-			li.classList.toggle( 'submenu-open', ! isOpen );
-			toggle.setAttribute( 'aria-expanded', String( ! isOpen ) );
-			var link = li.querySelector( '> a' );
-			if ( link ) { link.setAttribute( 'aria-expanded', String( ! isOpen ) ); }
-			return;
-		}
-		if ( ! event.target.closest( '.main-nav' ) ) {
-			closeAll( null );
-		}
-	}, { passive: false } );
+  function closeAll(except) {
+    toggles.forEach(function (toggle) {
+      if (toggle === except) return;
+      toggle.setAttribute('aria-expanded', 'false');
+      var panel = toggle.parentElement.querySelector('.nav-dropdown');
+      if (panel) panel.classList.remove('is-open');
+    });
+  }
 
-	document.addEventListener( 'keydown', function ( event ) {
-		if ( event.key === 'Escape' ) {
-			closeAll( null );
-		}
-	}, { passive: true } );
+  function openToggle(toggle, panel) {
+    closeAll(toggle);
+    toggle.setAttribute('aria-expanded', 'true');
+    panel.classList.add('is-open');
+  }
 
-	document.querySelectorAll( '.main-nav .has-dropdown' ).forEach( function ( li ) {
-		li.addEventListener( 'focusout', function ( event ) {
-			if ( ! li.contains( event.relatedTarget ) ) {
-				li.classList.remove( 'submenu-open' );
-				var btn = li.querySelector( '.submenu-toggle' );
-				if ( btn ) { btn.setAttribute( 'aria-expanded', 'false' ); }
-			}
-		} );
-	} );
-} )();
+  function closeToggle(toggle, panel) {
+    toggle.setAttribute('aria-expanded', 'false');
+    panel.classList.remove('is-open');
+  }
+
+  toggles.forEach(function (toggle) {
+    var parentItem = toggle.parentElement;
+    var panel = parentItem.querySelector('.nav-dropdown');
+    if (!panel) return;
+
+    toggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      if (isOpen) {
+        closeToggle(toggle, panel);
+      } else {
+        openToggle(toggle, panel);
+      }
+    });
+
+    if (supportsHover) {
+      parentItem.addEventListener('mouseenter', function () {
+        openToggle(toggle, panel);
+      });
+      parentItem.addEventListener('mouseleave', function () {
+        closeToggle(toggle, panel);
+      });
+    }
+
+    parentItem.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeToggle(toggle, panel);
+        toggle.focus();
+      }
+    });
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.main-nav .menu-item.has-dropdown')) {
+      closeAll();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeAll();
+  });
+});
