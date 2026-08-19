@@ -24,8 +24,29 @@ while ( have_posts() ) :
 	$hide_title = (bool) teznevise_page_field( 'hide_title', 0, false );
 	$raw        = (string) get_post_field( 'post_content', get_the_ID() );
 	$is_legacy  = function_exists( 'teznevise_is_legacy_shortcode_content' ) && teznevise_is_legacy_shortcode_content( $raw );
+	$use_builder = function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections();
+	$print_content = function_exists( 'teznevise_page_should_print_content' ) ? teznevise_page_should_print_content() : ( ! $is_legacy || ! $use_builder );
 
-	if ( $is_legacy ) :
+	if ( $use_builder ) :
+		teznevise_builder_render_sections();
+		if ( $print_content ) :
+			?>
+<section class="section">
+	<div class="container">
+		<div class="longcopy article-content" data-reveal>
+			<?php
+			if ( function_exists( 'teznevise_the_page_leftover_content' ) ) {
+				teznevise_the_page_leftover_content();
+			} else {
+				the_content();
+			}
+			?>
+		</div>
+	</div>
+</section>
+			<?php
+		endif;
+	elseif ( $is_legacy ) :
 		?>
 <section class="section tz-legacy-embed">
 	<div class="container">
@@ -104,8 +125,6 @@ while ( have_posts() ) :
 
 		<?php
 	endif;
-
-	teznevise_builder_render_sections();
 
 endwhile;
 

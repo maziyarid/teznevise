@@ -17,7 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'TEZNEVISE_MIGRATION_OPTION', 'teznevise_shortcode_migration_v1' );
-define( 'TEZNEVISE_MIGRATION_VERSION', '1.1.0' );
+define( 'TEZNEVISE_MIGRATION_VERSION', '1.2.0' );
+if ( ! defined( 'TEZNEVISE_EXTRACTED_CURSOR_OPTION' ) ) {
+	define( 'TEZNEVISE_EXTRACTED_CURSOR_OPTION', 'teznevise_extracted_cursor' );
+}
 
 /**
  * Whether migration has already completed successfully.
@@ -26,7 +29,7 @@ define( 'TEZNEVISE_MIGRATION_VERSION', '1.1.0' );
  */
 function teznevise_migration_is_complete() {
 	$state = get_option( TEZNEVISE_MIGRATION_OPTION, array() );
-	return ! empty( $state['completed'] ) && version_compare( (string) ( $state['version'] ?? '0' ), '1.0.0', '>=' );
+	return ! empty( $state['completed'] ) && version_compare( (string) ( $state['version'] ?? '0' ), '1.2.0', '>=' );
 }
 
 /**
@@ -486,9 +489,10 @@ function teznevise_migration_get_candidate_pages() {
  * @param int  $limit          Limit pages.
  * @param bool $strip_codes    Strip structural shortcodes after write.
  * @param bool $seed_tools     Seed calculator tool pages.
+ * @param bool $force_replace  Administrator opt-in to overwrite existing builder JSON.
  * @return array
  */
-function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = false, $seed_tools = false ) {
+function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = false, $seed_tools = false, $force_replace = false ) {
 	$stats = array(
 		'processed'   => 0,
 		'migrated'    => 0,
@@ -504,6 +508,34 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 		return $stats;
 	}
 
+	// Extracted original page copy → custom fields. Pages only; never posts;
+	// never changes slug/title/content. Auto path is fill/provenance-only —
+	// administrator-owned builder JSON is not replaced unless $force_replace.
+	if ( function_exists( 'teznevise_apply_extracted_to_pages' ) ) {
+		$limit  = (int) $limit;
+		$offset = 0;
+		if ( $limit > 0 ) {
+			$offset = (int) get_option( TEZNEVISE_EXTRACTED_CURSOR_OPTION, 0 );
+		} else {
+			delete_option( TEZNEVISE_EXTRACTED_CURSOR_OPTION );
+		}
+		$extracted = teznevise_apply_extracted_to_pages( (bool) $force_replace, (bool) $dry_run, $limit, $offset );
+		$stats['processed'] += (int) ( $extracted['processed'] ?? 0 );
+		$stats['migrated']  += (int) ( $extracted['created'] ?? 0 ) + (int) ( $extracted['updated'] ?? 0 );
+		$stats['skipped']   += (int) ( $extracted['skipped'] ?? 0 ) + (int) ( $extracted['empty'] ?? 0 );
+		if ( ! empty( $extracted['errors'] ) ) {
+			$stats['errors'] = array_merge( $stats['errors'], $extracted['errors'] );
+		}
+		if ( ! $dry_run && $limit > 0 ) {
+			$processed = (int) ( $extracted['processed'] ?? 0 );
+			if ( $processed >= $limit ) {
+				update_option( TEZNEVISE_EXTRACTED_CURSOR_OPTION, $offset + $processed, false );
+			} else {
+				delete_option( TEZNEVISE_EXTRACTED_CURSOR_OPTION );
+			}
+		}
+	}
+
 	if ( $seed_tools ) {
 		$stats['tools'] = teznevise_migration_seed_calculator_tools( $dry_run );
 	}
@@ -514,7 +546,18 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 	}
 
 	foreach ( $pages as $page ) {
+		if ( 'page' !== get_post_type( $page->ID ) ) {
+			continue;
+		}
 		$stats['processed']++;
+
+		if ( function_exists( 'teznevise_extracted_entry_for_post' ) ) {
+			$extracted_entry = teznevise_extracted_entry_for_post( (int) $page->ID );
+			if ( $extracted_entry && ( ! isset( $extracted_entry['source'] ) || 'empty' !== $extracted_entry['source'] ) ) {
+				$stats['skipped']++;
+				continue;
+			}
+		}
 
 		$existing = get_post_meta( $page->ID, TEZNEVISE_BUILDER_META, true );
 		if ( is_string( $existing ) && '' !== trim( $existing ) && '[]' !== trim( $existing ) ) {
@@ -541,6 +584,7 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 
 		$stats['migrated']++;
 
+		// Strip is opt-in and still never changes slug/status. Default off.
 		if ( $strip_codes ) {
 			$cleaned = teznevise_migration_strip_structural_shortcodes( $page->post_content );
 			if ( $cleaned !== $page->post_content ) {
@@ -555,7 +599,7 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 		}
 	}
 
-	if ( ! $dry_run && empty( $stats['errors'] ) && ( $stats['migrated'] > 0 || ! empty( $stats['tools']['created'] ) ) ) {
+	if ( ! $dry_run && empty( $stats['errors'] ) && 0 === (int) $limit ) {
 		teznevise_migration_mark_complete( $stats );
 	}
 
@@ -574,7 +618,8 @@ function teznevise_migration_admin_ui() {
 		$dry    = ! empty( $_POST['teznevise_migration_dry_run'] );
 		$strip  = ! empty( $_POST['teznevise_migration_strip'] );
 		$tools  = ! empty( $_POST['teznevise_migration_seed_tools'] );
-		$stats  = teznevise_migration_run( $dry, 0, $strip, $tools );
+		$force  = ! empty( $_POST['teznevise_migration_replace'] );
+		$stats  = teznevise_migration_run( $dry, 0, $strip, $tools, $force );
 		set_transient( 'teznevise_migration_last_result', $stats, 120 );
 	}
 }
@@ -597,11 +642,11 @@ function teznevise_migration_render_setup_section() {
 	?>
 	<hr style="margin:28px 0;">
 	<h2><?php esc_html_e( 'مهاجرت شورت‌کد → صفحه‌ساز', 'teznevise' ); ?></h2>
-	<p><?php esc_html_e( 'صفحات قدیمی شورت‌کد/HTML را به `_teznevise_builder_sections` منتقل می‌کند. فقط صفحاتی بدون متای سازنده تغییر می‌کنند.', 'teznevise' ); ?></p>
+	<p><?php esc_html_e( 'محتوای اصلی برگه‌ها (نه نوشته‌ها) از شورت‌کد/HTML به فیلدهای سفارشی صفحه‌ساز `_teznevise_builder_sections` و `_teznevise_*` منتقل می‌شود. اسلاگ، عنوان، والد و post_content دست نمی‌خورند.', 'teznevise' ); ?></p>
 	<p><a href="https://github.com/maziyarid/teznevise/blob/main/docs/SHORTCODE-TO-BUILDER-MIGRATION.md" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'مستندات مهاجرت', 'teznevise' ); ?></a>
 	· <a href="https://github.com/maziyarid/teznevise/blob/SHortcode-based-content-migration/docs/MIGRATION-DATA-SECURITY.md" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'هشدار امنیتی dumpها', 'teznevise' ); ?></a></p>
 	<?php if ( $done ) : ?>
-		<div class="notice notice-success inline"><p><?php esc_html_e( 'مهاجرت قبلاً با موفقیت انجام شده است (نسخه ≥ 1.0).', 'teznevise' ); ?></p></div>
+		<div class="notice notice-success inline"><p><?php esc_html_e( 'مهاجرت قبلاً با موفقیت انجام شده است (نسخه ≥ 1.2).', 'teznevise' ); ?></p></div>
 	<?php endif; ?>
 	<?php if ( is_array( $result ) ) : ?>
 		<div class="notice notice-info inline"><p>
@@ -642,6 +687,10 @@ function teznevise_migration_render_setup_section() {
 		<label style="display:block;margin-bottom:8px;">
 			<input type="checkbox" name="teznevise_migration_seed_tools" value="1" />
 			<?php esc_html_e( 'ایجاد / هم‌ترازسازی صفحات ابزارهای محاسباتی (ماشین‌حساب‌ها)', 'teznevise' ); ?>
+		</label>
+		<label style="display:block;margin-bottom:8px;">
+			<input type="checkbox" name="teznevise_migration_replace" value="1" />
+			<?php esc_html_e( 'بازنویسی اجباری بخش‌های صفحه‌ساز موجود (ویرایش‌های دستی پاک می‌شوند)', 'teznevise' ); ?>
 		</label>
 		<label style="display:block;margin-bottom:8px;">
 			<input type="checkbox" name="teznevise_migration_strip" value="1" />

@@ -68,8 +68,10 @@ function teznevise_migration_auto_run() {
 		if ( ! empty( $stats['errors'] ) ) {
 			$aggregate['errors'] = array_merge( $aggregate['errors'], $stats['errors'] );
 		}
-		// No more pages that needed writing in this batch.
-		if ( empty( $stats['migrated'] ) ) {
+		// No more pages that needed writing in this batch — unless the
+		// extracted-page cursor still has unpublished work.
+		$cursor_pending = defined( 'TEZNEVISE_EXTRACTED_CURSOR_OPTION' ) && get_option( TEZNEVISE_EXTRACTED_CURSOR_OPTION );
+		if ( empty( $stats['migrated'] ) && ! $cursor_pending ) {
 			break;
 		}
 	}
