@@ -3,8 +3,7 @@
  * One-shot automatic shortcode → builder migration for theme updates.
  *
  * Manual Setup UI remains available for dry-run, strip, and tool seeding.
- * This file only ensures that an already-active site still migrates without
- * requiring a form submit.
+ * This file ensures an already-active site migrates without a form submit.
  *
  * @package Teznevise
  */
@@ -35,7 +34,7 @@ function teznevise_migration_should_auto_run() {
 }
 
 /**
- * Auto-run migration in small batches until complete.
+ * Auto-run migration in batches until no migratable pages remain.
  */
 function teznevise_migration_auto_run() {
 	if ( ! teznevise_migration_should_auto_run() ) {
@@ -45,12 +44,45 @@ function teznevise_migration_auto_run() {
 		return;
 	}
 
+	if ( function_exists( 'set_time_limit' ) ) {
+		@set_time_limit( 120 );
+	}
+
 	set_transient( 'teznevise_migration_auto_lock', 1, 5 * MINUTE_IN_SECONDS );
 
-	// Live write, no strip, no tool seed, limited batch to avoid timeouts.
-	$stats = teznevise_migration_run( false, 25, false, false );
+	$aggregate = array(
+		'processed' => 0,
+		'migrated'  => 0,
+		'skipped'   => 0,
+		'stripped'  => 0,
+		'errors'    => array(),
+		'dry_run'   => false,
+	);
 
-	set_transient( 'teznevise_migration_auto_last', $stats, HOUR_IN_SECONDS );
+	// Up to 20 batches × 25 pages (handles large sites without one huge request).
+	for ( $i = 0; $i < 20; $i++ ) {
+		$stats = teznevise_migration_run( false, 25, false, false );
+		$aggregate['processed'] += (int) ( $stats['processed'] ?? 0 );
+		$aggregate['migrated']  += (int) ( $stats['migrated'] ?? 0 );
+		$aggregate['skipped']   += (int) ( $stats['skipped'] ?? 0 );
+		if ( ! empty( $stats['errors'] ) ) {
+			$aggregate['errors'] = array_merge( $aggregate['errors'], $stats['errors'] );
+		}
+		// No more pages that needed writing in this batch.
+		if ( empty( $stats['migrated'] ) ) {
+			break;
+		}
+	}
+
+	// Full pass (limit 0) so completion flag is set only when truly done.
+	if ( function_exists( 'teznevise_migration_run' ) ) {
+		$final = teznevise_migration_run( false, 0, false, false );
+		$aggregate['processed'] += (int) ( $final['processed'] ?? 0 );
+		$aggregate['migrated']  += (int) ( $final['migrated'] ?? 0 );
+		$aggregate['skipped']   += (int) ( $final['skipped'] ?? 0 );
+	}
+
+	set_transient( 'teznevise_migration_auto_last', $aggregate, HOUR_IN_SECONDS );
 	delete_transient( 'teznevise_migration_auto_lock' );
 
 	// One-time rewrite flush for CPT permalinks on existing installs.
