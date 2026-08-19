@@ -1,4 +1,4 @@
-# Teznevise 1.5.0 — Release Checklist
+# Teznevise 1.6.0 — Release Checklist
 
 ## Gate semantics
 
@@ -12,7 +12,7 @@ Repository checks cannot substitute for deployed WordPress and live-browser evid
 - [ ] Confirm `main` remains the production branch.
 - [ ] Confirm `teznevise_work/` is reference material, not a page source.
 - [ ] Confirm no secrets, private uploads, backups, or credentials are included.
-- [ ] Confirm `functions.php` version is 1.5.0.
+- [ ] Confirm `functions.php` version is 1.6.0.
 - [ ] Run `bash scripts/release-check.sh`.
 - [ ] Run `php -l` over every PHP file when PHP is available.
 - [ ] Run `node --check` over every JavaScript file when Node is available.
@@ -117,10 +117,9 @@ For every row in `docs/PAGE-MAP.md`:
 
 ## Current release-cycle evidence
 
-- GitHub `main` inspected: `643455415c1143efd862e01a3b644636c5a65a18`.
-- PRs #1, #2, #3 inspected; all remain open/draft and unmerged.
-- Live root checked during this cycle: `PLACEHOLDER3`.
-- Therefore live/deployment gates are currently **FAIL**, regardless of repository correctness.
+- Live root checked 2026-08-19: full WordPress theme HTML (TZ-403 PASS).
+- Release tooling updated to 1.6.0.
+- Remaining blockers are primarily browser/VPS evidence items.
 
 ## Rollback
 
