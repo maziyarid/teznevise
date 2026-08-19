@@ -6,25 +6,8 @@
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'TEZNEVISE_VERSION', '1.6.2' );
-define( 'TEZNEVISE_DIR', get_template_directory() );
-define( 'TEZNEVISE_URI', get_template_directory_uri() );
-
-/*
- * Load theme modules.
- * Order matters: defaults.php provides teznevise_mod() / teznevise_page_field()
- * which the other modules and the templates rely on.
- * (inc/menu-assets.php is intentionally NOT loaded — it is a deprecated
- * duplicate of teznevise_enqueue_assets(), kept only for reference.)
- */
-require_once TEZNEVISE_DIR . '/inc/defaults.php';
-require_once TEZNEVISE_DIR . '/inc/helpers.php';
-require_once TEZNEVISE_DIR . '/inc/brand.php';
-require_once TEZNEVISE_DIR . '/inc/customizer.php';
-require_once TEZNEVISE_DIR . '/inc/page-meta.php';
-require_once TEZNEVISE_DIR . '/inc/page-meta-extra.php';
-require_once TEZNEVISE_DIR . '/inc/class-teznevise-builder.php';
-require_once TEZNEVISE_DIR . '/inc/builder-download-catalog.php';
+require_once TEZNEVISE_DIR . '/inc/builder-defaults.php';
+require_once TEZNEVISE_DIR . '/inc/builder-seed.php';
 if ( is_admin() ) {
 	require_once TEZNEVISE_DIR . '/inc/admin/builder-admin.php';
 	require_once TEZNEVISE_DIR . '/inc/admin/builder-assets.php';

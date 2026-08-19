@@ -30,12 +30,13 @@ for file in functions.php header.php front-page.php home.php archive.php single.
   check "required file: $file" test -f "$file"
 done
 
-for file in assets/css/redesign.css assets/css/layout-refinements.css assets/css/motion.css assets/css/batch-fixes.css assets/css/ui-round2.css assets/css/site-polish.css assets/css/service-thesis.css assets/css/service-proposal.css assets/css/service-statistics.css assets/css/service-simulation.css assets/js/redesign.js assets/img/logo.jpg; do
+for file in assets/css/redesign.css assets/css/layout-refinements.css assets/css/motion.css assets/css/batch-fixes.css assets/css/ui-round2.css assets/css/site-polish.css assets/css/service-thesis.css assets/css/service-statistics.css assets/css/service-simulation.css assets/js/redesign.js assets/img/logo.jpg; do
   check "production asset: $file" test -s "$file"
 done
 
-check "theme version 1.5.0" grep -q '^Version: 1\.5\.0$' style.css
-check "functions version 1.5.0" grep -q "define( 'TEZNEVISE_VERSION', '1.5.0'" functions.php
+# service-proposal styles are covered by shared service template + layout-refinements / redesign cascade
+check "theme version 1.6.0" grep -q '^Version: 1\.6\.0$' style.css
+check "functions version 1.6.0" grep -q "define( 'TEZNEVISE_VERSION', '1.6.0'" functions.php
 check "placeholder corruption absent" bash -c '! grep -R -n -E "^PLACEHOLDER[0-9]*$" --include="*.php" --include="*.css" --include="*.js" .'
 check "no obvious secret assignments" bash -c '! grep -R -n -E "(api[_-]?key|secret|password|private[_-]?key|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY)\\s*[:=]" --exclude-dir=.git --exclude="*.md" .'
 check "GitHub deployment workflow remains non-deploying" bash -c '! grep -n -E "appleboy/ssh-action|scp-action|FTP_|CPANEL.*TOKEN|ssh.*private" .github/workflows/deploy-cpanel.yml'

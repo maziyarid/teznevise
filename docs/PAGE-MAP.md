@@ -2,6 +2,10 @@
 
 **Reference source:** `teznevise_work/`
 
+**Builder conversion (v1.6.1):** singular HTML sources seed `_teznevise_builder_sections`.
+See [`HTML-TO-BUILDER-ROADMAP.md`](HTML-TO-BUILDER-ROADMAP.md). Blog (`home.php`)
+and `404.php` stay native/coded. Slugs in this table are unchanged.
+
 **Audit baseline:** `main` at `643455415c1143efd862e01a3b644636c5a65a18`
 
 Status meanings: **Implemented** = repository template/code exists; **Pending runtime** = requires deployed WordPress/browser evidence; **Gap** = repository work remains.

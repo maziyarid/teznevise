@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: تماس / درخواست (Contact & Inquiry)
- * Description: Contact page with NAP from Customizer + page fields + content/form.
+ * Description: NAP + form stay native; FAQ/CTA/hero come from the Flexible Page Builder when seeded.
  *
  * @package Teznevise
  */
@@ -11,10 +11,14 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	$eyebrow   = teznevise_page_field( 'eyebrow', 0, __( 'ارتباط با ما', 'teznevise' ) );
-	$subtitle = teznevise_page_field( 'subtitle', 0, __( 'مشاوره اولیه رایگان — پاسخ‌گویی سریع', 'teznevise' ) );
-	?>
+	$has_builder_hero = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'hero' );
+	$eyebrow          = teznevise_page_field( 'eyebrow', 0, __( 'ارتباط با ما', 'teznevise' ) );
+	$subtitle        = teznevise_page_field( 'subtitle', 0, __( 'مشاوره اولیه رایگان — پاسخ‌گویی سریع', 'teznevise' ) );
 
+	if ( $has_builder_hero ) {
+		teznevise_builder_render_sections( 0, array( 'only' => array( 'hero' ) ) );
+	} else {
+		?>
 <section class="section">
 	<div class="container">
 		<div class="section-head" data-reveal>
@@ -24,7 +28,14 @@ while ( have_posts() ) :
 				<p><?php echo esc_html( $subtitle ); ?></p>
 			<?php endif; ?>
 		</div>
+	</div>
+</section>
+		<?php
+	}
+	?>
 
+<section class="section">
+	<div class="container">
 		<div class="reason-list contact-cards" data-reveal-stagger style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-bottom:32px;">
 			<div class="reason-item">
 				<div class="icon-box icon-teal"><i class="fa-solid fa-phone" aria-hidden="true"></i></div>
@@ -48,15 +59,17 @@ while ( have_posts() ) :
 			</div>
 		</div>
 
-		<div class="longcopy article-content" data-reveal>
+		<div class="longcopy article-content" id="inquiry-form" data-reveal>
 			<?php the_content(); ?>
 		</div>
 	</div>
 </section>
 
-<?php teznevise_builder_render_sections(); ?>
-
 	<?php
+	if ( function_exists( 'teznevise_builder_render_sections' ) ) {
+		teznevise_builder_render_sections( 0, array( 'except' => array( 'hero' ) ) );
+	}
+
 endwhile;
 
 get_footer();

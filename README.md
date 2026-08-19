@@ -1,6 +1,6 @@
 # Teznevise WordPress Theme
 
-**Version:** 1.6.0
+**Version:** 1.6.1
 
 **Author:** MAZ//ID (Maziyar) · **Brand:** [MΛZ / maziyarid/M-Z](https://github.com/maziyarid/M-Z)
 
@@ -57,7 +57,10 @@ unlimited repeatable sections (hero, software catalog, challenges, service cards
 list, process steps, CTA band) with add / duplicate / reorder / remove controls, Font
 Awesome or media-library icons, and per-section column and background options.
 
-See [`docs/PAGE-BUILDER.md`](docs/PAGE-BUILDER.md).
+See [`docs/PAGE-BUILDER.md`](docs/PAGE-BUILDER.md). HTML prototype conversion
+(inventory, seeding, slug policy) is documented in
+[`docs/HTML-TO-BUILDER-ROADMAP.md`](docs/HTML-TO-BUILDER-ROADMAP.md) and the
+editor-facing [`docs/HTML-TO-BUILDER-GUIDE.md`](docs/HTML-TO-BUILDER-GUIDE.md).
 
 ## Navigation and accessibility
 
