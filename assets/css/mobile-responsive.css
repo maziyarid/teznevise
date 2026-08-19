@@ -1,0 +1,56 @@
+/* Mobile responsiveness and touch-target fixes for the Teznevise header,
+ * mobile off-canvas nav, and bottom nav. Additive file only — layered after
+ * site-polish.css so it can safely patch gaps without editing those files.
+ * @package Teznevise
+ */
+
+/* The mobile off-canvas drawer relies on the [hidden] attribute being
+ * removed/restored by assets/js/redesign.js. Some breakpoints in the base
+ * stylesheets only toggle transform/opacity, which can leave a "hidden"
+ * drawer still occupying layout space or intercepting taps. Force it out of
+ * the accessibility tree and layout whenever [hidden] is present. */
+.mobile-nav[hidden] {
+  display: none !important;
+}
+
+/* Prevent horizontal scroll caused by full-bleed sections/media on small
+ * viewports (a common source of "off" mobile layouts vs. desktop). */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* WCAG 2.5.5 target size: keep primary tap targets at least 44x44px on
+ * touch breakpoints. */
+@media (max-width: 900px) {
+  .menu-btn,
+  .nav-search-btn,
+  .mobile-nav-close,
+  .bottom-nav-item,
+  .tz-fab-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .mobile-nav-panel {
+    width: min(86vw, 360px);
+  }
+}
+
+/* Respect iOS/Android safe areas so the fixed bottom navigation and FAB
+ * never sit under a home-indicator or gesture bar. */
+.bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.tz-fab-wrap {
+  margin-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* When the off-canvas drawer is open, stop the page behind it from
+ * scrolling on iOS Safari (100vh alone does not prevent rubber-banding). */
+body.nav-open {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+}

@@ -1,90 +1,159 @@
 <?php
 /**
- * Teznevise theme bootstrap.
+ * Project: Teznevise WordPress Theme
+ * Author: MAZ//ID (Maziyar)
+ * Brand: maziyarid/M-Z — A brand new repository with my complete brand identity, story, and website prototype.
+ * https://github.com/maziyarid/M-Z
+ *
+ * Teznevise theme functions and definitions.
  *
  * @package Teznevise
+ * @version 1.4.0
  */
-if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.6.2' );
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+define( 'TEZNEVISE_VERSION', '1.4.0' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
-require_once TEZNEVISE_DIR . '/inc/defaults.php';
-require_once TEZNEVISE_DIR . '/inc/helpers.php';
-require_once TEZNEVISE_DIR . '/inc/brand.php';
-require_once TEZNEVISE_DIR . '/inc/customizer.php';
-require_once TEZNEVISE_DIR . '/inc/page-meta.php';
-require_once TEZNEVISE_DIR . '/inc/page-meta-extra.php';
-require_once TEZNEVISE_DIR . '/inc/class-teznevise-builder.php';
-require_once TEZNEVISE_DIR . '/inc/builder-defaults.php';
-require_once TEZNEVISE_DIR . '/inc/builder-seed.php';
-if ( is_admin() ) {
-require_once TEZNEVISE_DIR . '/inc/admin/builder-admin.php';
-require_once TEZNEVISE_DIR . '/inc/admin/builder-assets.php';
-}
-require_once TEZNEVISE_DIR . '/inc/cpts.php';
-require_once TEZNEVISE_DIR . '/inc/blog.php';
-require_once TEZNEVISE_DIR . '/inc/seo.php';
-require_once TEZNEVISE_DIR . '/inc/setup-pages.php';
-require_once TEZNEVISE_DIR . '/inc/promote-assets.php';
-require_once TEZNEVISE_DIR . '/inc/screenshot-data.php';
-require_once TEZNEVISE_DIR . '/inc/migration/shortcode-to-builder-migrator.php';
-require_once TEZNEVISE_DIR . '/inc/migration/auto-run.php';
-
-// Defensive fallback: this repo's functions.php has repeatedly lost this
-// helper during merges/rewrites (see commits 085c9c44, 75a32ee6). If none of
-// the required inc/ files above defined it, provide a safe default so
-// header.php and footer.php never fatal-error on a missing symbol. Covers
-// every contact type actually referenced in the templates (footer.php uses
-// telegram, whatsapp, phone_intl, phone_display, email, address).
-if ( ! function_exists( 'teznevise_get_contact' ) ) {
-	/**
-	 * Get a contact channel value for header/footer template display.
-	 *
-	 * @param string $type Contact channel key.
-	 * @return string
-	 */
-	function teznevise_get_contact( $type = 'phone' ) {
-		$contacts = array(
-			'phone'         => get_option( 'teznevise_contact_phone', '+98 21 0000 0000' ),
-			'phone_intl'    => get_option( 'teznevise_contact_phone_intl', '982100000000' ),
-			'phone_display' => get_option( 'teznevise_contact_phone_display', '+98 21 0000 0000' ),
-			'whatsapp'      => get_option( 'teznevise_contact_whatsapp', '+98 21 0000 0000' ),
-			'telegram'      => get_option( 'teznevise_contact_telegram', '' ),
-			'email'         => get_option( 'admin_email' ),
-			'address'       => get_option( 'teznevise_contact_address', '' ),
-		);
-		return isset( $contacts[ $type ] ) ? $contacts[ $type ] : '';
-	}
-}
-
 function teznevise_setup() {
-add_theme_support( 'title-tag' );
-add_theme_support( 'post-thumbnails' );
-add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' ) );
-register_nav_menus( array(
-'primary' => __( 'Primary Menu', 'teznevise' ),
-'mobile'  => __( 'Mobile Menu', 'teznevise' ),
-'bottom'  => __( 'Bottom Mobile Menu', 'teznevise' ),
-'footer'  => __( 'Footer Menu', 'teznevise' ),
-) );
+	load_theme_textdomain( 'teznevise', TEZNEVISE_DIR . '/languages' );
+	add_theme_support( 'title-tag' );
+	add_theme_support( 'post-thumbnails' );
+	add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' ) );
+	add_theme_support( 'custom-logo', array( 'height' => 80, 'width' => 240, 'flex-height' => true, 'flex-width' => true ) );
+	add_theme_support( 'responsive-embeds' );
+	add_theme_support( 'align-wide' );
+	add_theme_support( 'editor-styles' );
+	add_theme_support( 'wp-block-styles' );
+	register_nav_menus( array(
+		'primary' => __( 'Primary Menu', 'teznevise' ),
+		'footer'  => __( 'Footer Menu', 'teznevise' ),
+		'mobile'  => __( 'Mobile Menu', 'teznevise' ),
+		'bottom'  => __( 'Bottom Nav (Mobile)', 'teznevise' ),
+	) );
 }
 add_action( 'after_setup_theme', 'teznevise_setup' );
 
+function teznevise_resolve_asset( $relative_path ) {
+	$relative_path = ltrim( $relative_path, '/' );
+	$candidates = array(
+		array( TEZNEVISE_DIR . '/' . $relative_path, TEZNEVISE_URI . '/' . $relative_path ),
+		array( TEZNEVISE_DIR . '/teznevise_work/' . $relative_path, TEZNEVISE_URI . '/teznevise_work/' . $relative_path ),
+	);
+	foreach ( $candidates as $pair ) {
+		if ( file_exists( $pair[0] ) && is_file( $pair[0] ) && filesize( $pair[0] ) > 0 ) {
+			return array( 'url' => $pair[1], 'ver' => filemtime( $pair[0] ) ?: TEZNEVISE_VERSION );
+		}
+	}
+	return null;
+}
+
 function teznevise_enqueue_assets() {
-wp_enqueue_style( 'teznevise-style', get_stylesheet_uri(), array(), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-font-vazirmatn', 'https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css', array(), '33.003' );
-wp_enqueue_style( 'teznevise-fontawesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css', array(), '6.5.2' );
-wp_enqueue_style( 'teznevise-redesign', TEZNEVISE_URI . '/assets/css/redesign.css', array( 'teznevise-style' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-layout-refinements', TEZNEVISE_URI . '/assets/css/layout-refinements.css', array( 'teznevise-redesign' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-motion', TEZNEVISE_URI . '/assets/css/motion.css', array( 'teznevise-layout-refinements' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-batch-fixes', TEZNEVISE_URI . '/assets/css/batch-fixes.css', array( 'teznevise-motion' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-ui-round2', TEZNEVISE_URI . '/assets/css/ui-round2.css', array( 'teznevise-batch-fixes' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-site-polish', TEZNEVISE_URI . '/assets/css/site-polish.css', array( 'teznevise-ui-round2' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-header-fix', TEZNEVISE_URI . '/assets/css/header-fix.css', array( 'teznevise-site-polish' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-mobile-fixes', TEZNEVISE_URI . '/assets/css/mobile-fixes.css', array( 'teznevise-header-fix' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-blog', TEZNEVISE_URI . '/assets/css/blog.css', array( 'teznevise-mobile-fixes' ), TEZNEVISE_VERSION );
-wp_enqueue_script( 'teznevise-redesign', TEZNEVISE_URI . '/assets/js/redesign.js', array(), TEZNEVISE_VERSION, true );
-wp_enqueue_script( 'teznevise-main', TEZNEVISE_URI . '/assets/js/main.js', array( 'teznevise-redesign' ), TEZNEVISE_VERSION, true );
+	wp_enqueue_style( 'teznevise-vazirmatn', 'https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css', array(), '33.003' );
+	wp_enqueue_style( 'teznevise-bootstrap-rtl', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.rtl.min.css', array(), '5.3.8' );
+	wp_enqueue_style( 'teznevise-fontawesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css', array(), '6.5.2' );
+
+	$css_files = array(
+		'redesign'           => 'assets/css/redesign.css',
+		'layout-refinements' => 'assets/css/layout-refinements.css',
+		'motion'             => 'assets/css/motion.css',
+		'batch-fixes'        => 'assets/css/batch-fixes.css',
+		'ui-round2'          => 'assets/css/ui-round2.css',
+		'site-polish'        => 'assets/css/site-polish.css',
+		'mobile-responsive'  => 'assets/css/mobile-responsive.css',
+	);
+	$prev = array( 'teznevise-bootstrap-rtl', 'teznevise-fontawesome', 'teznevise-vazirmatn' );
+	foreach ( $css_files as $handle => $path ) {
+		$resolved = teznevise_resolve_asset( $path );
+		if ( $resolved ) {
+			wp_enqueue_style( 'teznevise-' . $handle, $resolved['url'], $prev, $resolved['ver'] );
+			$prev = array( 'teznevise-' . $handle );
+		}
+	}
+
+	$service_css = array(
+		'service-thesis' => 'service-thesis',
+		'service-proposal' => 'service-proposal',
+		'service-statistics' => 'service-statistics',
+		'service-simulation' => 'service-simulation',
+	);
+	foreach ( $service_css as $slug => $handle ) {
+		if ( is_page( $slug ) ) {
+			teznevise_enqueue_optional_css( $handle, 'assets/css/' . $handle . '.css' );
+		}
+	}
+
+	$js_resolved = teznevise_resolve_asset( 'assets/js/redesign.js' );
+	if ( $js_resolved ) {
+		wp_enqueue_script( 'teznevise-main', $js_resolved['url'], array(), $js_resolved['ver'], true );
+	}
+	wp_enqueue_script( 'teznevise-bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js', array(), '5.3.8', true );
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );
+
+function teznevise_enqueue_optional_css( $handle, $relative_path ) {
+	$resolved = teznevise_resolve_asset( $relative_path );
+	if ( $resolved ) {
+		wp_enqueue_style( 'teznevise-' . $handle, $resolved['url'], array( 'teznevise-ui-round2' ), $resolved['ver'] );
+	}
+}
+
+$teznevise_includes = array(
+	'/inc/brand.php',
+	'/inc/screenshot-data.php',
+	'/inc/defaults.php',
+	'/inc/helpers.php',
+	'/inc/customizer.php',
+	'/inc/page-meta.php',
+	'/inc/page-meta-extra.php',
+	'/inc/setup-pages.php',
+	'/inc/promote-assets.php',
+	'/inc/seo.php',
+);
+foreach ( $teznevise_includes as $file ) {
+	$path = TEZNEVISE_DIR . $file;
+	if ( file_exists( $path ) ) {
+		require_once $path;
+	}
+}
+
+function teznevise_body_classes( $classes ) {
+	if ( is_front_page() ) {
+		$classes[] = 'teznevise-home';
+	}
+	$classes[] = 'teznevise-theme';
+	return $classes;
+}
+add_filter( 'body_class', 'teznevise_body_classes' );
+
+function teznevise_get_contact( $key, $default = '' ) {
+	if ( function_exists( 'teznevise_mod' ) ) {
+		return teznevise_mod( $key, $default );
+	}
+	$defaults = array(
+		'phone' => '09302822091',
+		'phone_display' => '۰۹۳۰۲۸۲۲۰۹۱',
+		'phone_intl' => '+989302822091',
+		'whatsapp' => 'https://wa.me/989302822091',
+		'telegram' => 'https://t.me/Teznevise',
+		'bale' => 'https://ble.ir/teznevise',
+		'email' => 'teznevisan@gmail.com',
+		'address' => 'تهران، انقلاب، خیابان ۱۲ فروردین',
+		'hours' => 'شنبه تا پنجشنبه، ۹ تا ۲۱',
+	);
+	return get_theme_mod( 'teznevise_' . $key, isset( $defaults[ $key ] ) ? $defaults[ $key ] : $default );
+}
+
+function teznevise_logo_url() {
+	if ( file_exists( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) && filesize( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) > 0 ) {
+		return TEZNEVISE_URI . '/assets/img/logo.jpg';
+	}
+	if ( file_exists( TEZNEVISE_DIR . '/teznevise_work/assets/img/logo.jpg' ) ) {
+		return TEZNEVISE_URI . '/teznevise_work/assets/img/logo.jpg';
+	}
+	return '';
+}
