@@ -161,9 +161,10 @@ function teznevise_recommended_pages() {
 /**
  * Seed pages.
  *
- * @return array{created:string[],skipped:string[]}
+ * @param bool $replace_builder Overwrite existing builder JSON.
+ * @return array{created:string[],skipped:string[],builder:array}
  */
-function teznevise_seed_pages() {
+function teznevise_seed_pages( $replace_builder = false ) {
 	$created = array();
 	$skipped = array();
 	foreach ( teznevise_recommended_pages() as $slug => $cfg ) {
@@ -207,9 +208,15 @@ function teznevise_seed_pages() {
 		}
 		$created[] = $slug;
 	}
+
+	$builder = function_exists( 'teznevise_builder_seed_all' )
+		? teznevise_builder_seed_all( (bool) $replace_builder )
+		: array();
+
 	return array(
 		'created' => $created,
 		'skipped' => $skipped,
+		'builder' => $builder,
 	);
 }
 
@@ -236,20 +243,31 @@ function teznevise_setup_admin_page() {
 	}
 	$result = null;
 	if ( isset( $_POST['teznevise_seed_pages'] ) && check_admin_referer( 'teznevise_seed_pages' ) ) {
-		$result = teznevise_seed_pages();
+		$replace = ! empty( $_POST['teznevise_replace_builder'] );
+		$result  = teznevise_seed_pages( $replace );
 	}
 	$pages = teznevise_recommended_pages();
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'راه‌اندازی تزنویسه', 'teznevise' ); ?></h1>
-		<p><?php esc_html_e( 'صفحات پیشنهادی با قالب و فیلدهای پیش‌فرض ساخته می‌شوند. نگاشت کامل: docs/PAGE-MAP.md', 'teznevise' ); ?></p>
+		<p><?php esc_html_e( 'صفحات پیشنهادی با قالب، فیلدهای پیش‌فرض و بخش‌های صفحه‌ساز (از HTML استاتیک) ساخته می‌شوند. نگاشت کامل: docs/HTML-TO-BUILDER-ROADMAP.md', 'teznevise' ); ?></p>
 		<?php if ( $result ) : ?>
 			<div class="notice notice-success is-dismissible"><p><?php
 			printf(
-				esc_html__( 'ایجاد: %1$d — رد/به‌روز: %2$d', 'teznevise' ),
+				esc_html__( 'صفحات — ایجاد: %1$d — رد/به‌روز: %2$d', 'teznevise' ),
 				count( $result['created'] ),
 				count( $result['skipped'] )
 			);
+			if ( ! empty( $result['builder'] ) ) {
+				echo '<br>';
+				printf(
+					esc_html__( 'صفحه‌ساز — ایجاد: %1$d — به‌روز: %2$d — رد: %3$d — بدون برگه: %4$d', 'teznevise' ),
+					count( $result['builder']['created'] ),
+					count( $result['builder']['updated'] ),
+					count( $result['builder']['skipped'] ),
+					count( $result['builder']['missing'] )
+				);
+			}
 			?></p></div>
 		<?php endif; ?>
 		<table class="widefat striped" style="max-width:860px;margin:16px 0;">
@@ -276,8 +294,14 @@ function teznevise_setup_admin_page() {
 		</table>
 		<form method="post">
 			<?php wp_nonce_field( 'teznevise_seed_pages' ); ?>
+			<p>
+				<label>
+					<input type="checkbox" name="teznevise_replace_builder" value="1">
+					<?php esc_html_e( 'بازنویسی بخش‌های صفحه‌ساز موجود (تغییرات دستی پاک می‌شود)', 'teznevise' ); ?>
+				</label>
+			</p>
 			<button type="submit" name="teznevise_seed_pages" class="button button-primary button-hero">
-				<?php esc_html_e( 'ایجاد / هم‌ترازسازی صفحات پیشنهادی', 'teznevise' ); ?>
+				<?php esc_html_e( 'ایجاد / هم‌ترازسازی صفحات و بخش‌های صفحه‌ساز', 'teznevise' ); ?>
 			</button>
 		</form>
 		<?php if ( function_exists( 'teznevise_render_promote_assets_section' ) ) {

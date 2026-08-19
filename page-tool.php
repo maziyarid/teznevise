@@ -1,11 +1,7 @@
 <?php
 /**
  * Template Name: ابزار تکی (Single Tool)
- * Description: Individual online tool page — hero + content (calculator HTML in post content).
- *
- * Project: Teznevise WordPress Theme
- * Author: MAZ//ID (Maziyar)
- * Brand: maziyarid/M-Z — A brand new repository with my complete brand identity, story, and website prototype.
+ * Description: Calculator stays in post content; surrounding sections use the Flexible Page Builder.
  *
  * @package Teznevise
  */
@@ -15,18 +11,24 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	$eyebrow   = teznevise_page_field( 'eyebrow', 0, __( 'ابزار آنلاین', 'teznevise' ) );
-	$subtitle = teznevise_page_field( 'subtitle' );
-	$icon     = function_exists( 'teznevise_get_page_icon' ) ? teznevise_get_page_icon() : 'fa-solid fa-calculator';
+	$has_builder_hero   = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'hero' );
+	$has_builder_steps  = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'process_steps' );
+	$has_builder_cta    = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'cta_band' );
+	$eyebrow            = teznevise_page_field( 'eyebrow', 0, __( 'ابزار آنلاین', 'teznevise' ) );
+	$subtitle          = teznevise_page_field( 'subtitle' );
+	$icon              = function_exists( 'teznevise_get_page_icon' ) ? teznevise_get_page_icon() : 'fa-solid fa-calculator';
 	if ( ! $icon ) {
 		$icon = 'fa-solid fa-calculator';
 	}
 	$icon_color = teznevise_page_field( 'service_color', 0, 'icon-amber' );
 	$cta_text   = teznevise_page_field( 'cta_text', 0, __( 'تحلیل آماری تخصصی', 'teznevise' ) );
 	$cta_url    = teznevise_page_field( 'cta_url', 0, '/service-statistics/' );
-	$features   = teznevise_page_field( 'features' ); // how-to steps
-	?>
+	$features   = teznevise_page_field( 'features' );
 
+	if ( $has_builder_hero ) {
+		teznevise_builder_render_sections( 0, array( 'only' => array( 'hero' ) ) );
+	} else {
+		?>
 <section class="service-hero section">
 	<div class="container">
 		<div class="section-head" data-reveal>
@@ -44,8 +46,11 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
+		<?php
+	}
 
-<?php if ( $features ) : ?>
+	if ( ! $has_builder_steps && $features ) :
+		?>
 <section class="section bg-soft">
 	<div class="container">
 		<div class="section-head" data-reveal>
@@ -68,7 +73,11 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
-<?php endif; ?>
+		<?php
+	elseif ( $has_builder_steps ) :
+		teznevise_builder_render_sections( 0, array( 'only' => array( 'process_steps' ) ) );
+	endif;
+	?>
 
 <section class="section">
 	<div class="container">
@@ -78,6 +87,13 @@ while ( have_posts() ) :
 	</div>
 </section>
 
+	<?php
+	if ( function_exists( 'teznevise_builder_render_sections' ) ) {
+		teznevise_builder_render_sections( 0, array( 'except' => array( 'hero', 'process_steps' ) ) );
+	}
+
+	if ( ! $has_builder_cta ) :
+		?>
 <section class="section">
 	<div class="container">
 		<div class="cta-band" data-reveal>
@@ -89,8 +105,9 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
+		<?php
+	endif;
 
-	<?php
 endwhile;
 
 get_footer();

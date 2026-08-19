@@ -535,7 +535,27 @@ function teznevise_builder_cta( $section, $class = 'btn-tz btn-primary-tz btn-lg
  */
 function teznevise_builder_render_hero( $section ) {
 	teznevise_builder_open_section( $section, 'page-hero-new' );
-	teznevise_builder_section_head( $section );
+
+	$eyebrow = isset( $section['eyebrow'] ) ? $section['eyebrow'] : '';
+	$title   = isset( $section['title'] ) ? $section['title'] : '';
+	$text    = isset( $section['text'] ) ? $section['text'] : '';
+
+	if ( '' !== $eyebrow || '' !== $title || '' !== $text ) {
+		echo '<div class="section-head" data-reveal>';
+		if ( $eyebrow ) {
+			echo '<span class="eyebrow">' . esc_html( $eyebrow ) . '</span>';
+		}
+		if ( $title ) {
+			// Pages that skip their hardcoded title use this as the document H1.
+			// Posts already print the_title() as H1 in single.php.
+			$heading = is_singular( 'post' ) ? 'h2' : 'h1';
+			echo '<' . $heading . '>' . esc_html( $title ) . '</' . $heading . '>';
+		}
+		if ( $text ) {
+			echo '<p>' . esc_html( $text ) . '</p>';
+		}
+		echo '</div>';
+	}
 
 	if ( ! empty( $section['cta_text'] ) ) {
 		echo '<div class="hero-actions tez-builder-actions">';
@@ -713,14 +733,28 @@ function teznevise_builder_render_cta_band( $section ) {
 }
 
 /**
- * Render every enabled builder section for a post.
+ * Render enabled builder sections for a post.
  *
- * Templates call this once; editors control the number, order and content of
- * the sections from the post editor.
+ * Templates call this once, or twice with `only` / `except` so native blocks
+ * (forms, calculators, NAP cards) can sit between a hero and the rest.
  *
- * @param int $post_id Post ID.
+ * @param int   $post_id Post ID.
+ * @param array $args {
+ *     Optional. @type string[] $only   Render only these types.
+ *               @type string[] $except Skip these types.
+ * }
  */
-function teznevise_builder_render_sections( $post_id = 0 ) {
+function teznevise_builder_render_sections( $post_id = 0, $args = array() ) {
+	$args = wp_parse_args(
+		$args,
+		array(
+			'only'   => null,
+			'except' => array(),
+		)
+	);
+	$only   = null === $args['only'] ? null : array_map( 'sanitize_key', (array) $args['only'] );
+	$except = array_map( 'sanitize_key', (array) $args['except'] );
+
 	$sections = teznevise_builder_get_sections( $post_id );
 	if ( ! $sections ) {
 		return;
@@ -731,7 +765,14 @@ function teznevise_builder_render_sections( $post_id = 0 ) {
 		if ( empty( $section['enabled'] ) ) {
 			continue;
 		}
-		$definition = isset( $types[ $section['type'] ] ) ? $types[ $section['type'] ] : null;
+		$type = isset( $section['type'] ) ? $section['type'] : '';
+		if ( $only && ! in_array( $type, $only, true ) ) {
+			continue;
+		}
+		if ( $except && in_array( $type, $except, true ) ) {
+			continue;
+		}
+		$definition = isset( $types[ $type ] ) ? $types[ $type ] : null;
 		if ( ! $definition || empty( $definition['render'] ) || ! is_callable( $definition['render'] ) ) {
 			continue;
 		}

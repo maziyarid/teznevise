@@ -1,11 +1,7 @@
 <?php
 /**
  * Template Name: تیم پژوهشگران (Team)
- * Description: Team hub with stats + member grid from page meta / content.
- *
- * Project: Teznevise WordPress Theme
- * Author: MAZ//ID (Maziyar)
- * Brand: maziyarid/M-Z — A brand new repository with my complete brand identity, story, and website prototype.
+ * Description: Team hub via Flexible Page Builder, with page-meta fallback.
  *
  * @package Teznevise
  */
@@ -15,23 +11,37 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	$eyebrow   = teznevise_page_field( 'eyebrow', 0, __( 'تخصص', 'teznevise' ) );
-	$subtitle = teznevise_page_field( 'subtitle', 0, __( 'پژوهشگرانی متخصص از حوزه‌های گوناگون', 'teznevise' ) );
-	$cta_text = teznevise_page_field( 'cta_text', 0, __( 'پیوستن به تیم', 'teznevise' ) );
-	$cta_url  = teznevise_page_field( 'cta_url', 0, '/contact/' );
-	// stats: value|label per line
-	$stats = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( teznevise_page_field( 'team_stats' ), 2 ) : array();
-	if ( ! $stats ) {
-		$stats = array(
-			array( '۲۷+', __( 'پژوهشگر متخصص', 'teznevise' ) ),
-			array( '۴+', __( 'کشور حضور', 'teznevise' ) ),
-			array( '۱۹۷۲+', __( 'پروژه انجام‌شده', 'teznevise' ) ),
-			array( '۹۸٪', __( 'رضایت مراجعان', 'teznevise' ) ),
-		);
-	}
-	// members: name|role|field|bio  (optional; else the_content)
-	$members = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( teznevise_page_field( 'team_members' ), 4 ) : array();
-	?>
+	$use_builder = function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections();
+
+	if ( $use_builder ) {
+		teznevise_builder_render_sections();
+		if ( get_the_content() ) :
+			?>
+<section class="section">
+	<div class="container">
+		<div class="longcopy article-content" data-reveal>
+			<?php the_content(); ?>
+		</div>
+	</div>
+</section>
+			<?php
+		endif;
+	} else {
+		$eyebrow   = teznevise_page_field( 'eyebrow', 0, __( 'تخصص', 'teznevise' ) );
+		$subtitle = teznevise_page_field( 'subtitle', 0, __( 'پژوهشگرانی متخصص از حوزه‌های گوناگون', 'teznevise' ) );
+		$cta_text = teznevise_page_field( 'cta_text', 0, __( 'پیوستن به تیم', 'teznevise' ) );
+		$cta_url  = teznevise_page_field( 'cta_url', 0, '/contact/' );
+		$stats    = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( teznevise_page_field( 'team_stats' ), 2 ) : array();
+		if ( ! $stats ) {
+			$stats = array(
+				array( '۲۷+', __( 'پژوهشگر متخصص', 'teznevise' ) ),
+				array( '۴+', __( 'کشور حضور', 'teznevise' ) ),
+				array( '۱۹۷۲+', __( 'پروژه انجام‌شده', 'teznevise' ) ),
+				array( '۹۸٪', __( 'رضایت مراجعان', 'teznevise' ) ),
+			);
+		}
+		$members = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( teznevise_page_field( 'team_members' ), 4 ) : array();
+		?>
 
 <section class="page-hero-new section">
 	<div class="container">
@@ -58,7 +68,7 @@ while ( have_posts() ) :
 	</div>
 </section>
 
-<?php if ( $members ) : ?>
+		<?php if ( $members ) : ?>
 <section class="section">
 	<div class="container">
 		<div class="section-head" data-reveal>
@@ -84,7 +94,7 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
-<?php endif; ?>
+		<?php endif; ?>
 
 <section class="section">
 	<div class="container">
@@ -93,8 +103,6 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
-
-<?php teznevise_builder_render_sections(); ?>
 
 <section class="section">
 	<div class="container">
@@ -107,8 +115,9 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
+		<?php
+	}
 
-	<?php
 endwhile;
 
 get_footer();

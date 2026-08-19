@@ -1,11 +1,7 @@
 <?php
 /**
  * Template Name: دانلودها (Downloads)
- * Description: Downloadable resources. Each item: title|url|desc
- *
- * Project: Teznevise WordPress Theme
- * Author: MAZ//ID (Maziyar)
- * Brand: maziyarid/M-Z — A brand new repository with my complete brand identity, story, and website prototype.
+ * Description: Downloadable resources via Flexible Page Builder, with page-meta fallback.
  *
  * @package Teznevise
  */
@@ -15,20 +11,36 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	$eyebrow   = teznevise_page_field( 'eyebrow', 0, __( 'منابع', 'teznevise' ) );
-	$subtitle = teznevise_page_field( 'subtitle', 0, __( 'قالب‌ها، چک‌لیست‌ها و راهنماهای آماده', 'teznevise' ) );
-	$items    = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( teznevise_page_field( 'downloads_list' ), 3 ) : array();
-	if ( ! $items ) {
-		$items = array(
-			array( 'قالب پروپوزال ارشد', '#', 'ساختار استاندارد پروپوزال برای مقطع ارشد.' ),
-			array( 'قالب فصل اول پایان‌نامه', '#', 'چارچوب کلی فصل اول و بیان مسئله.' ),
-			array( 'چک‌لیست دفاع پایان‌نامه', '#', 'موارد ضروری قبل از جلسه دفاع.' ),
-			array( 'نمونه بیان مسئله', '#', 'الگوی نگارش بیان مسئله پژوهشی.' ),
-			array( 'راهنمای انتخاب موضوع', '#', 'نکات عملی برای انتخاب موضوع مناسب.' ),
-			array( 'جدول تعیین حجم نمونه', '#', 'مرجع سریع برای تعیین حجم نمونه.' ),
-		);
-	}
-	?>
+	$use_builder = function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections();
+
+	if ( $use_builder ) {
+		teznevise_builder_render_sections();
+		if ( get_the_content() ) :
+			?>
+<section class="section">
+	<div class="container">
+		<div class="longcopy article-content" data-reveal>
+			<?php the_content(); ?>
+		</div>
+	</div>
+</section>
+			<?php
+		endif;
+	} else {
+		$eyebrow   = teznevise_page_field( 'eyebrow', 0, __( 'منابع', 'teznevise' ) );
+		$subtitle = teznevise_page_field( 'subtitle', 0, __( 'قالب‌ها، چک‌لیست‌ها و راهنماهای آماده', 'teznevise' ) );
+		$items    = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( teznevise_page_field( 'downloads_list' ), 3 ) : array();
+		if ( ! $items ) {
+			$items = array(
+				array( 'قالب پروپوزال ارشد', '#', 'ساختار استاندارد پروپوزال برای مقطع ارشد.' ),
+				array( 'قالب فصل اول پایان‌نامه', '#', 'چارچوب کلی فصل اول و بیان مسئله.' ),
+				array( 'چک‌لیست دفاع پایان‌نامه', '#', 'موارد ضروری قبل از جلسه دفاع.' ),
+				array( 'نمونه بیان مسئله', '#', 'الگوی نگارش بیان مسئله پژوهشی.' ),
+				array( 'راهنمای انتخاب موضوع', '#', 'نکات عملی برای انتخاب موضوع مناسب.' ),
+				array( 'جدول تعیین حجم نمونه', '#', 'مرجع سریع برای تعیین حجم نمونه.' ),
+			);
+		}
+		?>
 
 <section class="page-hero-new section">
 	<div class="container">
@@ -76,10 +88,9 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
+		<?php
+	}
 
-<?php teznevise_builder_render_sections(); ?>
-
-	<?php
 endwhile;
 
 get_footer();

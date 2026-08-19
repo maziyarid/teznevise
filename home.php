@@ -2,6 +2,9 @@
 /**
  * Blog posts index (when a static front page is set).
  *
+ * Maps from teznevise_work/blog.html. Native WP_Query loop — not seeded into
+ * the Flexible Page Builder. See docs/HTML-TO-BUILDER-ROADMAP.md.
+ *
  * @package Teznevise
  */
 get_header();
