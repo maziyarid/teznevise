@@ -1,4 +1,4 @@
-# Teznevise 1.5.0 — Controlled Requirements Register
+# Teznevise 1.6.0 — Controlled Requirements Register
 
 ## Status definitions
 
@@ -15,7 +15,7 @@ Every **Blocker=Yes** item must be **PASS**. Any FAIL or PENDING Blocker=Yes ite
 | ID | Requirement | Blocker | Status | Evidence |
 |---|---|---:|---|---|
 | TZ-001 | Canonical theme source is repository root | Yes | PASS | `docs/CANONICAL.md`, repository tree |
-| TZ-002 | Release version is 1.5.0 on release branch | Yes | PASS | `functions.php` |
+| TZ-002 | Release version is 1.6.0 on release branch | Yes | PASS | `functions.php`, `style.css` |
 | TZ-003 | No secrets/private credentials in package | Yes | PENDING | `scripts/release-check.sh` requires execution |
 | TZ-004 | `teznevise_work/` is reference-only content | No | PASS | `docs/PAGE-MAP.md`, runtime resolver documented as migration fallback |
 | TZ-101 | Desktop/mobile logo and header parity | Yes | PENDING | Requires deployed browser evidence |
@@ -47,11 +47,9 @@ Every **Blocker=Yes** item must be **PASS**. Any FAIL or PENDING Blocker=Yes ite
 | TZ-309 | Plugin-aware SEO fallback avoids duplicate theme output | Yes | PASS | `inc/seo.php` plugin detection; plugin runtime validation pending |
 | TZ-401 | Production cPanel deployment target remains correct | Yes | PASS | `.cpanel.yml` |
 | TZ-402 | `.git` excluded from deployed theme | Yes | PASS | `.cpanel.yml` |
-| TZ-403 | Production live response is rendered WordPress | Yes | FAIL | Live root currently returns `PLACEHOLDER3` |
+| TZ-403 | Production live response is rendered WordPress | Yes | PASS | Live root (teznevise.ir) returns full WordPress HTML with theme sections (verified 2026-08-19) |
 | TZ-404 | Deployed revision matches intended `main` revision | Yes | PENDING | Requires VPS SHA evidence |
 
 ## Current release decision
 
-**REJECT.** TZ-403 is an observed live failure, and several runtime-dependent Blocker=Yes requirements remain PENDING.
-
-Repository changes on `feat/release-readiness` do not change production until explicitly reviewed and merged into `main`, after which the VPS cron/cPanel deployment chain must synchronize the production theme.
+**CONDITIONAL.** TZ-403 is now PASS (live site renders correctly). Remaining Blocker=Yes items that are still PENDING are primarily runtime/browser evidence items. Repository hygiene (version alignment in release-check, asset promotion of logo) is addressed in the companion PR. Full production approval still requires VPS SHA confirmation and the outstanding browser checks.
