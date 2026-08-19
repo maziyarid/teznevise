@@ -1,0 +1,7 @@
+# Credential-bearing dumps — never re-commit (see docs/MIGRATION-DATA-SECURITY.md)
+docs/sep_posts.sql
+docs/sep_posts.csv
+docs/wpcode-snippets-export-*.json
+*.sql
+.env
+.env.*

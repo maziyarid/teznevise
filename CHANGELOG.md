@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.6.3 — 2026-08-19 — PR #400 follow-up: remaining mappings + batching
+
+### Changes
+
+- Finish remaining shortcode → builder mappings: `[tz_price_box]`, `[tz_price_cta]`, `[tz_calculation_hub]`, `[tz_careers_terms]`, plus calculator tool pages for Cohen's kappa, ICC, KR-20, and goodness of fit.
+- Populate `software_catalog` items from the download CPT at migrate time; load `inc/builder-download-catalog.php` so empty catalogs still hydrate at render.
+- Candidate query skips pages that already have builder meta or a `_teznevise_migration_skip` marker, so empty parses cannot loop forever.
+- Auto-run stays bounded (25 pages × 3 batches per admin load). Never calls `teznevise_migration_run( …, 0 )` from auto-run. Completion is recorded only after a live scan finds zero remaining candidates (`TEZNEVISE_MIGRATION_VERSION` 1.2.0).
+- Fallback shortcodes for `tz_price_cta`, `tz_calculation_hub`, and `tz_careers_terms` so pages still work before WPCode / builder meta exists.
+- Guard `TEZNEVISE_VERSION` / `TEZNEVISE_DIR` / `TEZNEVISE_URI` with `defined()` so child themes or extra bootstraps cannot fatal.
+- Stop tracking `docs/sep_posts.sql`, `docs/sep_posts.csv`, and `docs/wpcode-snippets-export-2026-08-18.json`; ignore them going forward.
+
+### Testing
+
+- PHP lint on changed files.
+- Mapping table in `docs/SHORTCODE-TO-BUILDER-MIGRATION.md` matches parser cases.
+
 ## 1.6.2 — 2026-08-19 — migration auto-run + version alignment
 
 ### Changes

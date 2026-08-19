@@ -1,9 +1,12 @@
 <?php
 /**
- * One-shot automatic shortcode → builder migration for theme updates.
+ * Incremental automatic shortcode → builder migration for theme updates.
+ *
+ * Runs on admin_init in small batches so an already-active site migrates
+ * without a Setup form submit, without one unbounded request, and with a
+ * persisted remaining-set so a timeout can resume on the next admin load.
  *
  * Manual Setup UI remains available for dry-run, strip, and tool seeding.
- * This file ensures an already-active site migrates without a form submit.
  *
  * @package Teznevise
  */
@@ -11,6 +14,17 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+/** Pages written per batch. Keep this well under typical max_execution_time. */
+define( 'TEZNEVISE_MIGRATION_AUTO_BATCH', 25 );
+
+/**
+ * Max batches per admin request.
+ *
+ * Never invoke teznevise_migration_run() with limit 0 from this file: that
+ * uncapped pass defeats batching and, on timeout, leaves no resume cursor.
+ */
+define( 'TEZNEVISE_MIGRATION_AUTO_MAX_BATCHES', 3 );
 
 /**
  * Whether auto-migration is allowed right now.
@@ -34,7 +48,11 @@ function teznevise_migration_should_auto_run() {
 }
 
 /**
- * Auto-run migration in batches until no migratable pages remain.
+ * Auto-run migration in bounded batches until this request's budget is spent.
+ *
+ * Remaining pages stay in the candidate query (unmigrated, not skipped) so
+ * the next admin load continues instead of restarting from page 1 or
+ * incorrectly marking the job complete.
  */
 function teznevise_migration_auto_run() {
 	if ( ! teznevise_migration_should_auto_run() ) {
@@ -57,35 +75,36 @@ function teznevise_migration_auto_run() {
 		'stripped'  => 0,
 		'errors'    => array(),
 		'dry_run'   => false,
+		'has_more'  => false,
 	);
 
-	// Up to 20 batches × 25 pages (handles large sites without one huge request).
-	for ( $i = 0; $i < 20; $i++ ) {
-		$stats = teznevise_migration_run( false, 25, false, false );
+	$batch_size = (int) TEZNEVISE_MIGRATION_AUTO_BATCH;
+	$max        = (int) TEZNEVISE_MIGRATION_AUTO_MAX_BATCHES;
+
+	for ( $i = 0; $i < $max; $i++ ) {
+		$stats = teznevise_migration_run( false, $batch_size, false, false );
 		$aggregate['processed'] += (int) ( $stats['processed'] ?? 0 );
 		$aggregate['migrated']  += (int) ( $stats['migrated'] ?? 0 );
 		$aggregate['skipped']   += (int) ( $stats['skipped'] ?? 0 );
 		if ( ! empty( $stats['errors'] ) ) {
 			$aggregate['errors'] = array_merge( $aggregate['errors'], $stats['errors'] );
 		}
-		// No more pages that needed writing in this batch.
-		if ( empty( $stats['migrated'] ) ) {
+
+		$has_more              = ! empty( $stats['has_more'] );
+		$aggregate['has_more'] = $has_more;
+
+		if ( empty( $stats['processed'] ) || ! $has_more ) {
 			break;
 		}
 	}
 
-	// Full pass (limit 0) so completion flag is set only when truly done.
-	if ( function_exists( 'teznevise_migration_run' ) ) {
-		$final = teznevise_migration_run( false, 0, false, false );
-		$aggregate['processed'] += (int) ( $final['processed'] ?? 0 );
-		$aggregate['migrated']  += (int) ( $final['migrated'] ?? 0 );
-		$aggregate['skipped']   += (int) ( $final['skipped'] ?? 0 );
+	if ( function_exists( 'teznevise_migration_maybe_mark_complete' ) ) {
+		teznevise_migration_maybe_mark_complete( $aggregate );
 	}
 
 	set_transient( 'teznevise_migration_auto_last', $aggregate, HOUR_IN_SECONDS );
 	delete_transient( 'teznevise_migration_auto_lock' );
 
-	// One-time rewrite flush for CPT permalinks on existing installs.
 	if ( ! get_option( 'teznevise_cpt_rewrites_flushed_v1' ) ) {
 		if ( function_exists( 'teznevise_cpt_flush_rewrites' ) ) {
 			teznevise_cpt_flush_rewrites();
@@ -109,8 +128,10 @@ function teznevise_migration_auto_admin_notice() {
 		return;
 	}
 	delete_transient( 'teznevise_migration_auto_last' );
+	$has_more = ! empty( $stats['has_more'] );
+	$class    = $has_more ? 'notice-info' : 'notice-success';
 	?>
-	<div class="notice notice-success is-dismissible">
+	<div class="notice <?php echo esc_attr( $class ); ?> is-dismissible">
 		<p>
 			<?php
 			printf(
@@ -119,6 +140,10 @@ function teznevise_migration_auto_admin_notice() {
 				(int) ( $stats['migrated'] ?? 0 ),
 				(int) ( $stats['skipped'] ?? 0 )
 			);
+			if ( $has_more ) {
+				echo ' ';
+				esc_html_e( 'صفحات باقی‌مانده در بارگذاری بعدی پیشخوان ادامه می‌یابند.', 'teznevise' );
+			}
 			?>
 			<a href="<?php echo esc_url( admin_url( 'themes.php?page=teznevise-setup' ) ); ?>"><?php esc_html_e( 'جزئیات در راه‌اندازی', 'teznevise' ); ?></a>
 		</p>

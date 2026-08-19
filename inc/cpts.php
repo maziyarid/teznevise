@@ -462,5 +462,68 @@ function teznevise_register_fallback_shortcodes() {
 			}
 		);
 	}
+
+	if ( ! shortcode_exists( 'tz_price_cta' ) ) {
+		add_shortcode(
+			'tz_price_cta',
+			function ( $atts ) {
+				$atts = shortcode_atts(
+					array(
+						'id'   => 0,
+						'text' => '',
+					),
+					$atts,
+					'tz_price_cta'
+				);
+				$id  = absint( $atts['id'] );
+				$url = $id ? get_permalink( $id ) : home_url( '/inquiry/' );
+				if ( ! $url ) {
+					$url = home_url( '/inquiry/' );
+				}
+				$label = $atts['text'] ? $atts['text'] : __( 'ثبت درخواست', 'teznevise' );
+				return sprintf(
+					'<p class="tez-price-cta"><a class="btn btn-primary" href="%1$s">%2$s</a></p>',
+					esc_url( $url ),
+					esc_html( $label )
+				);
+			}
+		);
+	}
+
+	if ( ! shortcode_exists( 'tz_calculation_hub' ) ) {
+		add_shortcode(
+			'tz_calculation_hub',
+			function () {
+				if ( ! function_exists( 'teznevise_migration_calculator_tools' ) ) {
+					return '';
+				}
+				$tools = teznevise_migration_calculator_tools();
+				if ( ! $tools ) {
+					return '';
+				}
+				ob_start();
+				echo '<div class="tez-calc-hub services-grid" style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">';
+				foreach ( $tools as $slug => $cfg ) {
+					printf(
+						'<a class="service-card" href="%1$s"><h3>%2$s</h3><p>%3$s</p></a>',
+						esc_url( home_url( '/' . $slug . '/' ) ),
+						esc_html( $cfg['title'] ),
+						esc_html( $cfg['subtitle'] )
+					);
+				}
+				echo '</div>';
+				return ob_get_clean();
+			}
+		);
+	}
+
+	if ( ! shortcode_exists( 'tz_careers_terms' ) ) {
+		add_shortcode(
+			'tz_careers_terms',
+			function () {
+				return '<div class="tez-careers-terms"><p>' . esc_html__( 'شرایط همکاری با پژوهشگران و متخصصان آماری.', 'teznevise' ) . '</p></div>';
+			}
+		);
+	}
 }
 add_action( 'init', 'teznevise_register_fallback_shortcodes', 30 );

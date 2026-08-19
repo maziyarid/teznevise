@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.6.2
+Stable tag: 1.6.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,12 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 6. Assign menus: Primary, Mobile, Bottom
 
 == Changelog ==
+
+= 1.6.3 =
+* Finish remaining shortcode-to-builder mappings (price box/CTA, calculation hub, careers terms, remaining calculators)
+* Auto-run batches with has_more; never mark complete on a partial batch
+* Load builder-download-catalog hydrator; defensive TEZNEVISE_* constants
+* Stop tracking credential-bearing dump files
 
 = 1.6.2 =
 * Load auto-run shortcode-to-builder migration on admin

@@ -5,9 +5,15 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.6.2' );
-define( 'TEZNEVISE_DIR', get_template_directory() );
-define( 'TEZNEVISE_URI', get_template_directory_uri() );
+if ( ! defined( 'TEZNEVISE_VERSION' ) ) {
+	define( 'TEZNEVISE_VERSION', '1.6.3' );
+}
+if ( ! defined( 'TEZNEVISE_DIR' ) ) {
+	define( 'TEZNEVISE_DIR', get_template_directory() );
+}
+if ( ! defined( 'TEZNEVISE_URI' ) ) {
+	define( 'TEZNEVISE_URI', get_template_directory_uri() );
+}
 
 require_once TEZNEVISE_DIR . '/inc/defaults.php';
 require_once TEZNEVISE_DIR . '/inc/helpers.php';
@@ -23,6 +29,7 @@ require_once TEZNEVISE_DIR . '/inc/admin/builder-admin.php';
 require_once TEZNEVISE_DIR . '/inc/admin/builder-assets.php';
 }
 require_once TEZNEVISE_DIR . '/inc/cpts.php';
+require_once TEZNEVISE_DIR . '/inc/builder-download-catalog.php';
 require_once TEZNEVISE_DIR . '/inc/blog.php';
 require_once TEZNEVISE_DIR . '/inc/seo.php';
 require_once TEZNEVISE_DIR . '/inc/setup-pages.php';

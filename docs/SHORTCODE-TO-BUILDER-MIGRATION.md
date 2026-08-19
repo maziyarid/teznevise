@@ -1,7 +1,7 @@
 # Shortcode to Builder Migration – Complete Data Extraction & Analysis
 
 **Repository:** `maziyarid/teznevise`  
-**Status:** Ready for Review  
+**Status:** Implemented (theme 1.6.3 / migration schema 1.2.0)  
 **Created:** August 19, 2026  
 **Author:** Maziyar ID
 
@@ -136,15 +136,23 @@ Source: Snippet #772
 
 | Builder Type | Maps From | Notes |
 |--------------|-----------|-------|
-| `hero` | `[title]`, `[ux_text]` | First occurrence on page |
-| `software_catalog` | `[teznevise_download_category]` | Uses `download_category` taxonomy |
-| `challenges` | `[row][col][ux_text]` | Multi-item challenge sections |
-| `service_cards` | `[row][col]` | Service / feature cards |
-| `feature_list` | `[ux_text]` with icons | Parse icon classes |
-| `process_steps` | Sequential `[row][col]` | Timelines |
-| `cta_band` | `[gravityform]`, `[ux_text]` | Preserve form shortcode |
+| `hero` | `[title]`, `[ux_text]`, `[tz_home]`, first `<h1>` | First occurrence on page |
+| `software_catalog` | `[teznevise_download_category]` | Items filled from `download` CPT + `download_category` slug |
+| `service_cards` | `[tz_price_box]`, `[tz_calculation_hub]`, `[row][col]` | Price boxes read `tz_service` meta; hub lists calculator tools |
+| `feature_list` | `[tz_careers_terms]`, later `[title]`/`[ux_text]` | Careers/terms and leftover text blocks |
+| `cta_band` | `[tz_price_cta]`, `[gravityform]` | CTA URL from service permalink or `/inquiry/`; Gravity Forms stay in `post_content` |
+| `challenges` | `[row][col][ux_text]` | Multi-item challenge sections (HTML-to-builder defaults) |
+| `process_steps` | Sequential `[row][col]` | Timelines (HTML-to-builder defaults) |
 
 **Storage key:** `_teznevise_builder_sections` (JSON array, `JSON_UNESCAPED_UNICODE`)
+
+**Skip marker:** `_teznevise_migration_skip` — written when a candidate page parses to zero sections so the next batch does not retry it.
+
+**Completion:** option `teznevise_shortcode_migration_v1` with `version >= 1.2.0`. Auto-run never marks complete while `has_more` is true.
+
+**Runtime:** `inc/migration/shortcode-to-builder-migrator.php` + `inc/migration/auto-run.php`. Batches of 25, up to 3 per admin request. Manual Setup UI still supports dry-run, strip, and tool seeding.
+
+**Dumps:** `docs/sep_posts.sql`, `docs/sep_posts.csv`, and the WPCode JSON export are **not** in git. See `docs/MIGRATION-DATA-SECURITY.md`.
 
 ---
 
