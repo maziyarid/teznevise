@@ -7,12 +7,14 @@ document.addEventListener('DOMContentLoaded', function () {
   const closeBtn = document.querySelector('[data-menu-close]');
 
   let menuHideTimer = null;
+  let menuScrollPosition = 0;
 
   /** Keep mobile navigation state, visibility, and accessibility attributes synchronized. */
   function setMenuOpen(open) {
     if (!menu) return;
     if (open) {
       if (menuHideTimer) { clearTimeout(menuHideTimer); menuHideTimer = null; }
+      menuScrollPosition = window.scrollY;
       menu.removeAttribute('hidden');
     }
     menu.classList.toggle('open', open);
@@ -27,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     document.body.classList.toggle('nav-open', open);
     document.body.style.overflow = open ? 'hidden' : '';
+    document.body.style.top = open ? '-' + menuScrollPosition + 'px' : '';
+    if (!open) window.scrollTo(0, menuScrollPosition);
     if (menuIcon) {
       menuIcon.className = open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
     }
