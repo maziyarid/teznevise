@@ -34,19 +34,25 @@ require_once TEZNEVISE_DIR . '/inc/migration/auto-run.php';
 // Defensive fallback: this repo's functions.php has repeatedly lost this
 // helper during merges/rewrites (see commits 085c9c44, 75a32ee6). If none of
 // the required inc/ files above defined it, provide a safe default so
-// header.php and page-service.php never fatal-error on a missing symbol.
+// header.php and footer.php never fatal-error on a missing symbol. Covers
+// every contact type actually referenced in the templates (footer.php uses
+// telegram, whatsapp, phone_intl, phone_display, email, address).
 if ( ! function_exists( 'teznevise_get_contact' ) ) {
 	/**
-	 * Get a contact channel value for header/template display.
+	 * Get a contact channel value for header/footer template display.
 	 *
-	 * @param string $type Contact channel: 'phone', 'whatsapp', or 'email'.
+	 * @param string $type Contact channel key.
 	 * @return string
 	 */
 	function teznevise_get_contact( $type = 'phone' ) {
 		$contacts = array(
-			'phone'    => get_option( 'teznevise_contact_phone', '+98 21 0000 0000' ),
-			'whatsapp' => get_option( 'teznevise_contact_whatsapp', '+98 21 0000 0000' ),
-			'email'    => get_option( 'admin_email' ),
+			'phone'         => get_option( 'teznevise_contact_phone', '+98 21 0000 0000' ),
+			'phone_intl'    => get_option( 'teznevise_contact_phone_intl', '982100000000' ),
+			'phone_display' => get_option( 'teznevise_contact_phone_display', '+98 21 0000 0000' ),
+			'whatsapp'      => get_option( 'teznevise_contact_whatsapp', '+98 21 0000 0000' ),
+			'telegram'      => get_option( 'teznevise_contact_telegram', '' ),
+			'email'         => get_option( 'admin_email' ),
+			'address'       => get_option( 'teznevise_contact_address', '' ),
 		);
 		return isset( $contacts[ $type ] ) ? $contacts[ $type ] : '';
 	}
