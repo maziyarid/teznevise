@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.6.2 — 2026-08-19 — migration auto-run + version alignment
+
+### Changes
+
+- Loaded `inc/migration/auto-run.php` from theme bootstrap so shortcode-to-builder migration can run once on admin load.
+- Footer now prints the version from the `TEZNEVISE_VERSION` constant instead of a hardcoded `1.5.0` string.
+- Completed the incomplete version bump: aligned `style.css` Version header, `readme.txt` Stable tag, and `README.md` to `1.6.2` (matching `functions.php`).
+
+### Testing
+
+- PHP lint on changed files.
+- Visual check that the site footer shows the current theme version.
+
 ## 1.6.1 — 2026-08-19 — feature/html-to-builder
 
 ### Changes

@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,11 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 6. Assign menus: Primary, Mobile, Bottom
 
 == Changelog ==
+
+= 1.6.2 =
+* Load auto-run shortcode-to-builder migration on admin
+* Footer uses dynamic TEZNEVISE_VERSION constant (no more hardcoded version)
+* Aligned style.css / readme.txt / README version metadata with functions.php
 
 = 1.6.1 =
 * Seed Flexible Page Builder sections from teznevise_work HTML
