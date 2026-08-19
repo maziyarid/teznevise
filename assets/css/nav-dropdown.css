@@ -1,0 +1,79 @@
+/* Accessible desktop dropdown styling for .nav-dropdown / .nav-dropdown-l3
+ * Additive file — does not override existing .nav-links/.main-nav rules.
+ * @package Teznevise
+ */
+.main-nav .menu-item.has-dropdown {
+  position: relative;
+}
+.main-nav .nav-chevron {
+  display: inline-flex;
+  margin-inline-start: 4px;
+  font-size: 10px;
+  transition: transform 0.18s ease;
+}
+.main-nav .menu-item.has-dropdown > a[aria-expanded="true"] .nav-chevron {
+  transform: rotate(180deg);
+}
+.main-nav ul.nav-dropdown {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 100%;
+  min-width: 220px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid rgba(20, 93, 74, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(9, 40, 32, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s;
+  z-index: 40;
+}
+.main-nav ul.nav-dropdown.is-open,
+.main-nav .menu-item.has-dropdown:hover > ul.nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.main-nav ul.nav-dropdown .nav-link {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: #172d26;
+  text-decoration: none;
+  font-size: 13.5px;
+}
+.main-nav ul.nav-dropdown .nav-link:hover,
+.main-nav ul.nav-dropdown .nav-link:focus-visible {
+  background: #f4f9f7;
+  color: #145d4a;
+}
+.main-nav ul.nav-dropdown-l3 {
+  position: static;
+  margin: 4px 0 4px 12px;
+  padding-inline-start: 10px;
+  border-inline-start: 2px solid rgba(20, 93, 74, 0.15);
+  box-shadow: none;
+  border: 0;
+  background: transparent;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+@media (max-width: 900px) {
+  .main-nav ul.nav-dropdown {
+    position: static;
+    box-shadow: none;
+    border: 0;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    display: none;
+  }
+  .main-nav ul.nav-dropdown.is-open {
+    display: block;
+  }
+}
