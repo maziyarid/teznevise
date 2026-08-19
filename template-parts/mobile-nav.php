@@ -21,35 +21,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<i class="fa-solid fa-xmark" aria-hidden="true"></i>
 			</button>
 		</div>
-		<div class="mobile-nav-links">
-			<a class="mobile-nav-link<?php echo is_front_page() ? ' active' : ''; ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<i class="fa-solid fa-house" aria-hidden="true"></i> <?php esc_html_e( 'خانه', 'teznevise' ); ?>
-			</a>
-			<a class="mobile-nav-link" href="<?php echo esc_url( home_url( '/service-thesis/' ) ); ?>">
-				<i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> <?php esc_html_e( 'انجام ق نامه', 'teznevise' ); ?>
-			</a>
-			<a class="mobile-nav-link" href="<?php echo esc_url( home_url( '/service-proposal/' ) ); ?>">
-				<i class="fa-solid fa-file-lines" aria-hidden="true"></i> <?php esc_html_e( 'انجام پروپوزال', 'teznevise' ); ?>
-			</a>
-			<a class="mobile-nav-link" href="<?php echo esc_url( home_url( '/service-statistics/' ) ); ?>">
-				<i class="fa-solid fa-chart-line" aria-hidden="true"></i> <?php esc_html_e( 'تحلیل آماری', 'teznevise' ); ?>
-			</a>
-			<a class="mobile-nav-link" href="<?php echo esc_url( home_url( '/tools/' ) ); ?>">
-				<i class="fa-solid fa-calculator" aria-hidden="true"></i> <?php esc_html_e( 'ابزارهای آنلاین', 'teznevise' ); ?>
-			</a>
-			<a class="mobile-nav-link" href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">
-				<i class="fa-solid fa-book-open" aria-hidden="true"></i> <?php esc_html_e( 'بلاگ', 'teznevise' ); ?>
-			</a>
-			<a class="mobile-nav-link" href="<?php echo esc_url( home_url( '/team/' ) ); ?>">
-				<i class="fa-solid fa-user-group" aria-hidden="true"></i> <?php esc_html_e( 'تیم پژوهشگران', 'teznevise' ); ?>
-			</a>
-			<a class="mobile-nav-link" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">
-				<i class="fa-regular fa-circle-question" aria-hidden="true"></i> <?php esc_html_e( 'درباره ما', 'teznevise' ); ?>
-			</a>
-			<a class="mobile-nav-link" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">
-				<i class="fa-solid fa-phone" aria-hidden="true"></i> <?php esc_html_e( 'تماس با ما', 'teznevise' ); ?>
-			</a>
-		</div>
+		<?php
+		wp_nav_menu( array(
+			'theme_location' => 'mobile',
+			'container'      => false,
+			'menu_class'     => 'mobile-nav-links',
+			'fallback_cb'    => 'teznevise_fallback_menu',
+			'depth'          => 3,
+		) );
+		?>
 		<div class="mobile-nav-cta">
 			<a class="btn-tz btn-primary-tz" href="<?php echo esc_url( home_url( '/inquiry/' ) ); ?>">
 				<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> <?php esc_html_e( 'ثبت درخواست مشاوره', 'teznevise' ); ?>
