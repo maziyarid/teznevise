@@ -307,6 +307,14 @@ function teznevise_setup_admin_page() {
 		<?php if ( function_exists( 'teznevise_render_promote_assets_section' ) ) {
 			teznevise_render_promote_assets_section();
 		} ?>
+
+		<?php
+		/**
+		 * Shortcode → builder migration UI (inc/migration/shortcode-to-builder-migrator.php).
+		 */
+		do_action( 'teznevise_setup_after_seed' );
+		?>
+
 		<hr style="margin:28px 0;">
 		<p><strong><?php esc_html_e( 'گام‌های بعدی:', 'teznevise' ); ?></strong>
 			<?php esc_html_e( 'Customize + Menus + محتوای هر صفحه + لینک فایل‌های دانلود.', 'teznevise' ); ?></p>
