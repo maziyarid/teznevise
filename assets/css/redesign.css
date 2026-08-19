@@ -197,12 +197,6 @@ s-grid{gap
   z-index: 1001;
 }
 
-.nav-links > li:hover > .sub-menu,
-.nav-links > li:focus-within > .sub-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
 
 .nav-links .sub-menu a {
   padding: 10px 16px;

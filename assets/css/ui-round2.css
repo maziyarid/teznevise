@@ -120,12 +120,6 @@ on: none;
   list-style: none;
   margin: 0;
 }
-.nav-links > li:hover > .nav-dropdown,
-.nav-links > li:focus-within > .nav-dropdown {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
 .nav-dropdown > li { position: relative; }
 .nav-dropdown > li > a {
   display: flex;
