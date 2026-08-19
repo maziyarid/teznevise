@@ -64,6 +64,7 @@ function teznevise_enqueue_assets() {
 		'batch-fixes'        => 'assets/css/batch-fixes.css',
 		'ui-round2'          => 'assets/css/ui-round2.css',
 		'site-polish'        => 'assets/css/site-polish.css',
+		'blog'               => 'assets/css/blog.css',
 		'nav-dropdown'       => 'assets/css/nav-dropdown.css',
 	);
 	$prev = array( 'teznevise-bootstrap-rtl', 'teznevise-fontawesome', 'teznevise-vazirmatn' );
@@ -112,6 +113,11 @@ $teznevise_includes = array(
 	'/inc/screenshot-data.php',
 	'/inc/defaults.php',
 	'/inc/helpers.php',
+	'/inc/cpts.php',
+	'/inc/blog.php',
+	'/inc/class-teznevise-builder.php',
+	'/inc/builder-defaults.php',
+	'/inc/builder-seed.php',
 	'/inc/nav-walker.php',
 	'/inc/customizer.php',
 	'/inc/page-meta.php',
@@ -135,24 +141,6 @@ function teznevise_body_classes( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'teznevise_body_classes' );
-
-function teznevise_get_contact( $key, $default = '' ) {
-	if ( function_exists( 'teznevise_mod' ) ) {
-		return teznevise_mod( $key, $default );
-	}
-	$defaults = array(
-		'phone' => '09302822091',
-		'phone_display' => '۰۹۳۰۲۸۲۲۰۹۱',
-		'phone_intl' => '+989302822091',
-		'whatsapp' => 'https://wa.me/989302822091',
-		'telegram' => 'https://t.me/Teznevise',
-		'bale' => 'https://ble.ir/teznevise',
-		'email' => 'teznevisan@gmail.com',
-		'address' => 'تهران، انقلاب، خیابان ۱۲ فروردین',
-		'hours' => 'شنبه تا پنجشنبه، ۹ تا ۲۱',
-	);
-	return get_theme_mod( 'teznevise_' . $key, isset( $defaults[ $key ] ) ? $defaults[ $key ] : $default );
-}
 
 function teznevise_logo_url() {
 	if ( file_exists( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) && filesize( TEZNEVISE_DIR . '/assets/img/logo.jpg' ) > 0 ) {
