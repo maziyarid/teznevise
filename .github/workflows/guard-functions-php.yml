@@ -1,0 +1,76 @@
+name: Guard functions.php bootstrap
+
+on:
+  pull_request:
+    paths:
+      - 'functions.php'
+  push:
+    branches: [ main ]
+    paths:
+      - 'functions.php'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Lint functions.php
+        run: php -l functions.php
+
+      - name: Verify required constants are defined
+        run: |
+          missing=0
+          for const in TEZNEVISE_VERSION TEZNEVISE_DIR TEZNEVISE_URI; do
+            if ! grep -qE "define\(\s*'${const}'" functions.php; then
+              echo "::error file=functions.php::Missing define for ${const}"
+              missing=1
+            fi
+          done
+          if [ "$missing" -eq 1 ]; then exit 1; fi
+
+      - name: Verify required inc/ modules are loaded
+        run: |
+          required_files=(
+            "inc/defaults.php"
+            "inc/helpers.php"
+            "inc/brand.php"
+            "inc/customizer.php"
+            "inc/page-meta.php"
+            "inc/page-meta-extra.php"
+            "inc/class-teznevise-builder.php"
+            "inc/builder-defaults.php"
+            "inc/builder-seed.php"
+            "inc/blog.php"
+            "inc/seo.php"
+            "inc/setup-pages.php"
+          )
+          missing=0
+          for f in "${required_files[@]}"; do
+            if ! grep -q "require_once TEZNEVISE_DIR . '/${f}'" functions.php; then
+              echo "::error file=functions.php::Missing require_once for ${f}"
+              missing=1
+            fi
+          done
+          if [ "$missing" -eq 1 ]; then exit 1; fi
+
+      - name: Verify teznevise_get_contact() is available somewhere required
+        run: |
+          if grep -q "function teznevise_get_contact" functions.php; then
+            exit 0
+          fi
+          for f in inc/helpers.php inc/brand.php inc/defaults.php; do
+            if [ -f "$f" ] && grep -q "function teznevise_get_contact" "$f"; then
+              exit 0
+            fi
+          done
+          echo "::error file=functions.php::teznevise_get_contact() is not defined in functions.php or any required inc/ file. This exact symbol has caused a production fatal error 3+ times before (see commits 085c9c44, 75a32ee6, 0746732)."
+          exit 1
