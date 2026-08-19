@@ -52,4 +52,4 @@ Every **Blocker=Yes** item must be **PASS**. Any FAIL or PENDING Blocker=Yes ite
 
 ## Current release decision
 
-**CONDITIONAL.** TZ-403 is now PASS (live site renders correctly). Remaining Blocker=Yes items that are still PENDING are primarily runtime/browser evidence items. Repository hygiene (version alignment in release-check, asset promotion of logo) is addressed in the companion PR. Full production approval still requires VPS SHA confirmation and the outstanding browser checks.
+**NOT APPROVED.** TZ-403 is now PASS (live site renders correctly), but multiple Blocker=Yes items remain PENDING. These include runtime/browser evidence, VPS SHA confirmation, and outstanding browser checks; production approval must wait until every Blocker=Yes item is PASS.
