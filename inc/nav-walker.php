@@ -29,7 +29,7 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 		public function start_lvl( &$output, $depth = 0, $args = null ) {
 			$indent      = str_repeat( "\t", $depth );
 			$level_class = $depth > 0 ? ' nav-dropdown-l3' : ' nav-dropdown';
-			$output     .= "{$indent}<ul class=\"sub-menu{$level_class}\" role=\"menu\">\n";
+			$output     .= "{$indent}<ul class=\"sub-menu{$level_class}\">\n";
 		}
 
 		/**
@@ -69,10 +69,7 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 			$atts['class']         = 'nav-link';
 			$atts['aria-current']  = $item->current ? 'page' : '';
 
-			if ( $has_children && 0 === $depth ) {
-				$atts['aria-haspopup'] = 'true';
-				$atts['aria-expanded'] = 'false';
-			}
+
 
 			$attributes = '';
 			foreach ( $atts as $attr => $value ) {
@@ -89,10 +86,10 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 			$item_output  = isset( $args->before ) ? $args->before : '';
 			$item_output .= '<a' . $attributes . '>';
 			$item_output .= ( isset( $args->link_before ) ? $args->link_before : '' ) . $title . ( isset( $args->link_after ) ? $args->link_after : '' );
-			if ( $has_children && 0 === $depth ) {
-				$item_output .= ' <span class="nav-chevron" aria-hidden="true"><i class="fa-solid fa-chevron-down"></i></span>';
-			}
 			$item_output .= '</a>';
+			if ( $has_children && 0 === $depth ) {
+				$item_output .= ' <button type="button" class="nav-dropdown-toggle" aria-label="' . esc_attr( sprintf( __( 'باز کردن زیرمنوی %s', 'teznevise' ), wp_strip_all_tags( $title ) ) ) . '" aria-haspopup="true" aria-expanded="false"><span class="nav-chevron" aria-hidden="true"><i class="fa-solid fa-chevron-down"></i></span></button>';
+			}
 			$item_output .= isset( $args->after ) ? $args->after : '';
 
 			$output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );

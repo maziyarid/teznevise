@@ -11,7 +11,13 @@
   font-size: 10px;
   transition: transform 0.18s ease;
 }
-.main-nav .menu-item.has-dropdown > a[aria-expanded="true"] .nav-chevron {
+.main-nav .nav-dropdown-toggle {
+  border: 0;
+  background: transparent;
+  padding: 4px;
+  color: inherit;
+}
+.main-nav .nav-dropdown-toggle[aria-expanded="true"] .nav-chevron {
   transform: rotate(180deg);
 }
 .main-nav ul.nav-dropdown {
@@ -32,8 +38,13 @@
   transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s;
   z-index: 40;
 }
-.main-nav ul.nav-dropdown.is-open,
-.main-nav .menu-item.has-dropdown:hover > ul.nav-dropdown {
+/* Visibility is controlled by the disclosure button's synchronized ARIA state. */
+.main-nav .nav-links > li > ul.nav-dropdown {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+}
+.main-nav .nav-links > li > ul.nav-dropdown.is-open {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
