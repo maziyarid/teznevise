@@ -33,6 +33,7 @@ require_once TEZNEVISE_DIR . '/inc/seo.php';
 require_once TEZNEVISE_DIR . '/inc/setup-pages.php';
 require_once TEZNEVISE_DIR . '/inc/promote-assets.php';
 require_once TEZNEVISE_DIR . '/inc/screenshot-data.php';
+require_once TEZNEVISE_DIR . '/inc/migration/shortcode-to-builder-migrator.php';
 
 function teznevise_setup() {
 	add_theme_support( 'title-tag' );
