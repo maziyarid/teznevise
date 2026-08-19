@@ -37,6 +37,18 @@ get_header();
 	</div>
 </section>
 
+<?php
+$use_builder     = function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections();
+$has_builder_cta = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'cta_band' );
+
+if ( $use_builder ) {
+	// Customizer secondary CTA still targets #services after the coded section is skipped.
+	echo '<div id="services">';
+	teznevise_builder_render_sections( 0, array( 'except' => array( 'cta_band' ) ) );
+	echo '</div>';
+} else {
+	?>
+
 <section class="section" id="services">
 	<div class="container">
 		<div class="section-head" data-reveal><div><span class="eyebrow"><?php echo esc_html( teznevise_mod( 'services_eyebrow' ) ); ?></span><h2><?php echo esc_html( teznevise_mod( 'services_title' ) ); ?></h2><p><?php echo esc_html( teznevise_mod( 'services_text' ) ); ?></p></div></div>
@@ -55,10 +67,19 @@ get_header();
 
 <section class="section"><div class="container"><div class="section-head center" data-reveal><span class="eyebrow"><?php echo esc_html( teznevise_mod( 'steps_eyebrow' ) ); ?></span><h2><?php echo esc_html( teznevise_mod( 'steps_title' ) ); ?></h2><p><?php echo esc_html( teznevise_mod( 'steps_text' ) ); ?></p></div><div class="steps" data-reveal-stagger><?php $step_icons = array( 1 => 'fa-regular fa-comments', 2 => 'fa-solid fa-file-circle-check', 3 => 'fa-solid fa-chart-simple', 4 => 'fa-solid fa-person-chalkboard' ); for ( $i = 1; $i <= 4; $i++ ) : ?><div class="step"><div class="step-icon icon-teal"><i class="<?php echo esc_attr( $step_icons[ $i ] ); ?>" aria-hidden="true"></i></div><h3><?php echo esc_html( teznevise_mod( "step{$i}_title" ) ); ?></h3><p><?php echo esc_html( teznevise_mod( "step{$i}_text" ) ); ?></p></div><?php endfor; ?></div></div></section>
 
+	<?php
+}
+?>
+
 <section class="section bg-soft"><div class="container"><div class="section-head" data-reveal><div><span class="eyebrow"><?php echo esc_html( teznevise_mod( 'articles_eyebrow' ) ); ?></span><h2><?php echo esc_html( teznevise_mod( 'articles_title' ) ); ?></h2><p><?php echo esc_html( teznevise_mod( 'articles_text' ) ); ?></p></div><a class="link-arrow" href="<?php echo esc_url( home_url( '/blog/' ) ); ?>"><?php esc_html_e( 'مشاهده همه مقالات', 'teznevise' ); ?></a></div>
 	<div class="article-grid" data-reveal-stagger><?php $recent = new WP_Query( array( 'posts_per_page' => 3, 'post_status' => 'publish', 'ignore_sticky_posts' => true, 'no_found_rows' => true ) ); if ( $recent->have_posts() ) : while ( $recent->have_posts() ) : $recent->the_post(); get_template_part( 'template-parts/post-card' ); endwhile; wp_reset_postdata(); else : ?><p class="blog-archive__empty"><?php esc_html_e( 'هنوز مطلبی منتشر نشده است.', 'teznevise' ); ?></p><?php endif; ?></div>
 </div></section>
 
+<?php if ( $has_builder_cta ) : ?>
+	<?php teznevise_builder_render_sections( 0, array( 'only' => array( 'cta_band' ) ) ); ?>
+<?php else : ?>
 <section class="section"><div class="container"><div class="cta-band" data-reveal><div><h2><?php echo esc_html( teznevise_mod( 'cta_title' ) ); ?></h2><p><?php echo esc_html( teznevise_mod( 'cta_text' ) ); ?></p></div><a class="btn-tz btn-light-tz btn-lg-tz" href="<?php echo esc_url( teznevise_url( teznevise_mod( 'cta_btn_url' ) ) ); ?>"><?php echo esc_html( teznevise_mod( 'cta_btn' ) ); ?></a></div></div></section>
+<?php endif; ?>
 
 <?php get_footer();
+

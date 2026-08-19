@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: درباره ما (About)
- * Description: About page — story, mission, timeline, policy; editable via page meta + content.
+ * Description: About page — story, mission, timeline, policy via Flexible Page Builder.
  *
  * Project: Teznevise WordPress Theme
  * Author: MAZ//ID (Maziyar)
@@ -15,14 +15,30 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	$eyebrow   = teznevise_page_field( 'eyebrow', 0, __( 'تزنویسه', 'teznevise' ) );
-	$subtitle = teznevise_page_field( 'subtitle', 0, __( 'همراه پژوهشی از ایده تا دفاع', 'teznevise' ) );
-	$cta_text = teznevise_page_field( 'cta_text', 0, __( 'شروع مشاوره رایگان', 'teznevise' ) );
-	$cta_url  = teznevise_page_field( 'cta_url', 0, '/inquiry/' );
-	$features = teznevise_page_field( 'features' );
-	$timeline = teznevise_page_field( 'timeline' );
-	$policy   = teznevise_page_field( 'policy_points' );
-	?>
+	$use_builder = function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections();
+
+	if ( $use_builder ) {
+		teznevise_builder_render_sections();
+		if ( get_the_content() ) :
+			?>
+<section class="section">
+	<div class="container">
+		<div class="longcopy article-content about-story" data-reveal>
+			<?php the_content(); ?>
+		</div>
+	</div>
+</section>
+			<?php
+		endif;
+	} else {
+		$eyebrow   = teznevise_page_field( 'eyebrow', 0, __( 'تزنویسه', 'teznevise' ) );
+		$subtitle = teznevise_page_field( 'subtitle', 0, __( 'همراه پژوهشی از ایده تا دفاع', 'teznevise' ) );
+		$cta_text = teznevise_page_field( 'cta_text', 0, __( 'شروع مشاوره رایگان', 'teznevise' ) );
+		$cta_url  = teznevise_page_field( 'cta_url', 0, '/inquiry/' );
+		$features = teznevise_page_field( 'features' );
+		$timeline = teznevise_page_field( 'timeline' );
+		$policy   = teznevise_page_field( 'policy_points' );
+		?>
 
 <section class="page-hero-new section">
 	<div class="container">
@@ -44,7 +60,7 @@ while ( have_posts() ) :
 	</div>
 </section>
 
-<?php if ( $features ) : ?>
+		<?php if ( $features ) : ?>
 <section class="section bg-soft">
 	<div class="container">
 		<div class="section-head" data-reveal>
@@ -61,12 +77,12 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
-<?php endif; ?>
+		<?php endif; ?>
 
-<?php
-$tl = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( $timeline, 3 ) : array();
-if ( $tl ) :
-	?>
+		<?php
+		$tl = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( $timeline, 3 ) : array();
+		if ( $tl ) :
+			?>
 <section class="section">
 	<div class="container">
 		<div class="section-head" data-reveal>
@@ -86,9 +102,9 @@ if ( $tl ) :
 		</div>
 	</div>
 </section>
-<?php endif; ?>
+		<?php endif; ?>
 
-<?php if ( $policy ) : ?>
+		<?php if ( $policy ) : ?>
 <section class="section bg-soft">
 	<div class="container">
 		<div class="section-head" data-reveal>
@@ -105,7 +121,7 @@ if ( $tl ) :
 		</ul>
 	</div>
 </section>
-<?php endif; ?>
+		<?php endif; ?>
 
 <section class="section">
 	<div class="container">
@@ -114,8 +130,6 @@ if ( $tl ) :
 		</div>
 	</div>
 </section>
-
-<?php teznevise_builder_render_sections(); ?>
 
 <section class="section">
 	<div class="container">
@@ -128,8 +142,9 @@ if ( $tl ) :
 		</div>
 	</div>
 </section>
+		<?php
+	}
 
-	<?php
 endwhile;
 
 get_footer();

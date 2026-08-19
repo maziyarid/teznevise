@@ -1,6 +1,25 @@
 # Changelog
 
+## 1.6.1 — 2026-08-19 — feature/html-to-builder
+
+### Changes
+
+- Converted 14 singular HTML sources from `teznevise_work/` into Flexible Page Builder defaults (`inc/builder-defaults.json`).
+- Documented the full 16-file inventory, including `post-sample.html` and the non-singular blog/404 architecture.
+- Added an idempotent seeder (Appearance → Teznevise Setup) that writes builder JSON and excerpts without clobbering editor work.
+- Templates prefer builder sections when present and keep native forms, NAP cards, the calculator, and the posts loop.
+- Hero renderer now outputs `h1` on pages (`h2` on posts) so converted titles stay a single document heading.
+- Added `scripts/html-to-builder.mjs` inventory/schema validator and tests.
+- Slugs are unchanged; no 301 map is required.
+
+### Testing
+
+- `node scripts/html-to-builder.test.mjs`
+- `node scripts/html-to-builder.mjs --check`
+- `node --check` on new scripts; PHP lint when `php` is available.
+
 ## 1.6.0 — 2026-08-18 — feature/flexible-page-builder
+
 
 ### Changes
 

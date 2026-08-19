@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: حریم خصوصی (Privacy Policy)
- * Description: Privacy / legal policy layout.
+ * Description: Legal body stays in post content; hero/CTA can come from the Flexible Page Builder.
  *
  * @package Teznevise
  */
@@ -10,11 +10,17 @@ get_header();
 
 while ( have_posts() ) :
 	the_post();
-	$eyebrow   = teznevise_page_field( 'eyebrow', 0, __( 'حقوق و سیاست‌ها', 'teznevise' ) );
-	$subtitle = teznevise_page_field( 'subtitle', 0, __( 'نحوه جمع‌آوری، استفاده و محافظت از اطلاعات شما', 'teznevise' ) );
-	$updated  = teznevise_page_field( 'hero_note', 0, '' );
-	?>
 
+	$has_builder_hero = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'hero' );
+	$has_builder_cta  = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'cta_band' );
+	$eyebrow          = teznevise_page_field( 'eyebrow', 0, __( 'حقوق و سیاست‌ها', 'teznevise' ) );
+	$subtitle        = teznevise_page_field( 'subtitle', 0, __( 'نحوه جمع‌آوری، استفاده و محافظت از اطلاعات شما', 'teznevise' ) );
+	$updated         = teznevise_page_field( 'hero_note', 0, '' );
+
+	if ( $has_builder_hero ) {
+		teznevise_builder_render_sections( 0, array( 'only' => array( 'hero' ) ) );
+	} else {
+		?>
 <section class="section privacy-policy-section">
 	<div class="container" style="max-width:820px;margin-inline:auto;">
 		<div class="section-head" data-reveal>
@@ -39,12 +45,30 @@ while ( have_posts() ) :
 				</p>
 			<?php endif; ?>
 		</div>
+	</div>
+</section>
+		<?php
+	}
+	?>
 
+<section class="section">
+	<div class="container" style="max-width:820px;margin-inline:auto;">
 		<div class="longcopy article-content privacy-body" data-reveal>
 			<?php the_content(); ?>
 		</div>
+	</div>
+</section>
 
-		<div class="cta-band" data-reveal style="margin-top:40px;">
+	<?php
+	if ( function_exists( 'teznevise_builder_render_sections' ) ) {
+		teznevise_builder_render_sections( 0, array( 'except' => array( 'hero' ) ) );
+	}
+
+	if ( ! $has_builder_cta ) :
+		?>
+<section class="section">
+	<div class="container" style="max-width:820px;margin-inline:auto;">
+		<div class="cta-band" data-reveal>
 			<div>
 				<h2><?php esc_html_e( 'سوالی درباره حریم خصوصی دارید؟', 'teznevise' ); ?></h2>
 				<p><?php esc_html_e( 'از طریق ایمیل یا فرم تماس با ما در ارتباط باشید.', 'teznevise' ); ?></p>
@@ -55,10 +79,9 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
+		<?php
+	endif;
 
-<?php teznevise_builder_render_sections(); ?>
-
-	<?php
 endwhile;
 
 get_footer();

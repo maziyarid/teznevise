@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: صفحه خدمت (Service)
- * Description: Service landing with page custom fields + content.
+ * Description: Shared service landing — Flexible Page Builder first, page-meta fallback.
  *
  * @package Teznevise
  */
@@ -11,21 +11,37 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	$eyebrow     = teznevise_page_field( 'eyebrow', 0, __( 'خدمات پژوهشی', 'teznevise' ) );
-	$subtitle   = teznevise_page_field( 'subtitle' );
-	$cta_text   = teznevise_page_field( 'cta_text', 0, __( 'شروع مشاوره رایگان', 'teznevise' ) );
-	$cta_url    = teznevise_page_field( 'cta_url', 0, '/inquiry/' );
-	$hero_note  = teznevise_page_field( 'hero_note' );
-	$icon       = function_exists( 'teznevise_get_page_icon' ) ? teznevise_get_page_icon() : teznevise_page_field( 'service_icon', 0, 'fa-solid fa-graduation-cap' );
-	if ( ! $icon ) {
-		$icon = 'fa-solid fa-graduation-cap';
-	}
-	$icon_color = teznevise_page_field( 'service_color', 0, 'icon-teal' );
-	$features   = teznevise_page_field( 'features' );
-	$price_note = teznevise_page_field( 'price_note' );
-	$sec_text   = teznevise_page_field( 'secondary_cta_text', 0, __( 'گفتگو در واتساپ', 'teznevise' ) );
-	$sec_url    = teznevise_page_field( 'secondary_cta_url', 0, teznevise_get_contact( 'whatsapp' ) );
-	?>
+	$use_builder = function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections();
+
+	if ( $use_builder ) {
+		teznevise_builder_render_sections();
+		if ( get_the_content() ) :
+			?>
+<section class="section">
+	<div class="container">
+		<div class="longcopy article-content" data-reveal>
+			<?php the_content(); ?>
+		</div>
+	</div>
+</section>
+			<?php
+		endif;
+	} else {
+		$eyebrow     = teznevise_page_field( 'eyebrow', 0, __( 'خدمات پژوهشی', 'teznevise' ) );
+		$subtitle   = teznevise_page_field( 'subtitle' );
+		$cta_text   = teznevise_page_field( 'cta_text', 0, __( 'شروع مشاوره رایگان', 'teznevise' ) );
+		$cta_url    = teznevise_page_field( 'cta_url', 0, '/inquiry/' );
+		$hero_note  = teznevise_page_field( 'hero_note' );
+		$icon       = function_exists( 'teznevise_get_page_icon' ) ? teznevise_get_page_icon() : teznevise_page_field( 'service_icon', 0, 'fa-solid fa-graduation-cap' );
+		if ( ! $icon ) {
+			$icon = 'fa-solid fa-graduation-cap';
+		}
+		$icon_color = teznevise_page_field( 'service_color', 0, 'icon-teal' );
+		$features   = teznevise_page_field( 'features' );
+		$price_note = teznevise_page_field( 'price_note' );
+		$sec_text   = teznevise_page_field( 'secondary_cta_text', 0, __( 'گفتگو در واتساپ', 'teznevise' ) );
+		$sec_url    = teznevise_page_field( 'secondary_cta_url', 0, teznevise_get_contact( 'whatsapp' ) );
+		?>
 
 <section class="service-hero service-hero-aligned section">
 	<div class="container">
@@ -58,7 +74,7 @@ while ( have_posts() ) :
 	</div>
 </section>
 
-<?php if ( $features ) : ?>
+		<?php if ( $features ) : ?>
 <section class="section bg-soft">
 	<div class="container">
 		<div class="section-head" data-reveal>
@@ -78,7 +94,7 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
-<?php endif; ?>
+		<?php endif; ?>
 
 <section class="section">
 	<div class="container">
@@ -87,8 +103,6 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
-
-<?php teznevise_builder_render_sections(); ?>
 
 <section class="section">
 	<div class="container">
@@ -101,8 +115,9 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
+		<?php
+	}
 
-	<?php
 endwhile;
 
 get_footer();
