@@ -1,0 +1,18 @@
+/**
+ * Touch-device support for the dropdown submenus defined in redesign.css.
+ * redesign.css reveals .sub-menu on :hover / :focus-within, which doesn't
+ * fire reliably from a tap on touchscreens. nav-touch.js toggles the
+ * 'submenu-open' class on tap; this file makes that class reveal the
+ * submenu using the exact same visual treatment redesign.css already uses,
+ * without touching any of its existing selectors.
+ */
+.nav-links > li.submenu-open > .sub-menu,
+.nav-links > li.submenu-open > .sub-menu > li.submenu-open > .sub-menu {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.nav-links .sub-menu > li.submenu-open > .sub-menu {
+	transform: translateX(0);
+}
