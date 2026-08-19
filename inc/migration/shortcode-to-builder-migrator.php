@@ -340,12 +340,15 @@ function teznevise_migration_section_base( $type ) {
  * @param int $id Service post ID.
  * @return array{title:string,text:string,url:string,icon:string,color:string}|null
  */
-function teznevise_migration_price_box_item( $id ) {
+function teznevise_migration_price_box_item( $id, $title_override = '' ) {
 	$id = absint( $id );
 	if ( ! $id ) {
 		return null;
 	}
-	$title = get_the_title( $id );
+	$title = trim( (string) $title_override );
+	if ( ! $title ) {
+		$title = get_the_title( $id );
+	}
 	if ( ! $title ) {
 		return null;
 	}
@@ -401,10 +404,10 @@ function teznevise_migration_parse_content( $content, $slug = '' ) {
 
 	if ( preg_match_all( '/\[teznevise_download_category\s+([^\]]*)\]/', $content, $dl_matches ) ) {
 		foreach ( $dl_matches[1] as $atts_raw ) {
-			$slug_attr = '';
-			if ( preg_match( '/slug=["\']([^"\']+)["\']/', $atts_raw, $m ) ) {
-				$slug_attr = sanitize_title( $m[1] );
-			}
+			$parsed_atts = shortcode_parse_atts( $atts_raw );
+			$slug_attr   = ! empty( $parsed_atts['slug'] ) ? sanitize_title( $parsed_atts['slug'] ) : '';
+			$count       = isset( $parsed_atts['count'] ) ? absint( $parsed_atts['count'] ) : 12;
+			$count       = $count > 0 ? $count : 12;
 			$title = __( 'دانلودها', 'teznevise' );
 			if ( $slug_attr && taxonomy_exists( 'download_category' ) ) {
 				$term = get_term_by( 'slug', $slug_attr, 'download_category' );
@@ -414,11 +417,12 @@ function teznevise_migration_parse_content( $content, $slug = '' ) {
 			}
 			$items = array();
 			if ( function_exists( 'teznevise_downloads_as_builder_items' ) ) {
-				$items = teznevise_downloads_as_builder_items( 12, $slug_attr );
+				$items = teznevise_downloads_as_builder_items( $count, $slug_attr );
 			}
 			$section          = teznevise_migration_section_base( 'software_catalog' );
-			$section['title'] = $title;
-			$section['items'] = $items;
+			$section['title']         = $title;
+			$section['category_slug'] = $slug_attr;
+			$section['items']         = $items;
 			$sections[]       = $section;
 		}
 	}
@@ -426,7 +430,8 @@ function teznevise_migration_parse_content( $content, $slug = '' ) {
 	$price_items = array();
 	if ( preg_match_all( '/\[tz_price_box\s+([^\]]*)\]/', $content, $price_matches ) ) {
 		foreach ( $price_matches[1] as $atts_raw ) {
-			$item = teznevise_migration_price_box_item( teznevise_migration_shortcode_id( $atts_raw ) );
+			$price_atts = shortcode_parse_atts( $atts_raw );
+			$item       = teznevise_migration_price_box_item( teznevise_migration_shortcode_id( $atts_raw ), $price_atts['title'] ?? '' );
 			if ( $item ) {
 				$price_items[] = $item;
 			}
@@ -440,10 +445,13 @@ function teznevise_migration_parse_content( $content, $slug = '' ) {
 		$sections[]         = $section;
 	}
 
-	if ( preg_match( '/\[tz_price_cta\s+/', $content ) ) {
-		$cta_url = '/inquiry/';
-		if ( preg_match( '/\[tz_price_cta\s+([^\]]*)\]/', $content, $cta_m ) ) {
-			$sid = teznevise_migration_shortcode_id( $cta_m[1] );
+	if ( preg_match( '/\[tz_price_cta(?:\s[^\]]*)?\]/', $content ) ) {
+		$cta_url   = '/inquiry/';
+		$cta_text  = '';
+		if ( preg_match( '/\[tz_price_cta(?:\s([^\]]*))?\]/', $content, $cta_m ) ) {
+			$cta_atts = shortcode_parse_atts( $cta_m[1] ?? '' );
+			$sid      = teznevise_migration_shortcode_id( $cta_m[1] ?? '' );
+			$cta_text = ! empty( $cta_atts['text'] ) ? $cta_atts['text'] : '';
 			if ( $sid && get_permalink( $sid ) ) {
 				$cta_url = get_permalink( $sid );
 			}
@@ -451,7 +459,7 @@ function teznevise_migration_parse_content( $content, $slug = '' ) {
 		$section            = teznevise_migration_section_base( 'cta_band' );
 		$section['title']   = __( 'درخواست برآورد هزینه', 'teznevise' );
 		$section['text']    = __( 'موضوع را بفرستید؛ مسیر و برآورد اولیه را بررسی می‌کنیم.', 'teznevise' );
-		$section['cta_text'] = __( 'ثبت درخواست', 'teznevise' );
+		$section['cta_text'] = $cta_text ? $cta_text : __( 'ثبت درخواست', 'teznevise' );
 		$section['cta_url'] = $cta_url;
 		$section['background'] = 'soft';
 		$sections[]         = $section;
@@ -667,11 +675,11 @@ function teznevise_migration_get_candidate_pages( $limit = 0 ) {
 			ON sm.post_id = p.ID AND sm.meta_key = %s
 		WHERE p.post_type = 'page' AND p.post_status = 'publish'
 		AND bm.meta_id IS NULL
-		AND sm.meta_id IS NULL
-		AND (" . implode( ' OR ', $conditions ) . ')
+		AND ( sm.meta_id IS NULL OR sm.meta_value <> CONCAT(%s, ':', MD5(p.post_content)) )
+		AND (" . implode( ' OR ', $conditions ) . ')'
 		ORDER BY p.ID ASC';
 
-	array_unshift( $params, $builder_key, $skip_key );
+	array_unshift( $params, $builder_key, $skip_key, TEZNEVISE_MIGRATION_VERSION );
 
 	if ( $limit > 0 ) {
 		$sql     .= ' LIMIT %d';
@@ -731,7 +739,7 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 		$sections = teznevise_migration_parse_content( $page->post_content, $page->post_name );
 		if ( empty( $sections ) ) {
 			if ( ! $dry_run ) {
-				update_post_meta( $page->ID, TEZNEVISE_MIGRATION_SKIP_META, TEZNEVISE_MIGRATION_VERSION );
+				update_post_meta( $page->ID, TEZNEVISE_MIGRATION_SKIP_META, TEZNEVISE_MIGRATION_VERSION . ':' . md5( $page->post_content ) );
 			}
 			$stats['skipped']++;
 			continue;

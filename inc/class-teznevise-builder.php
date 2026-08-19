@@ -141,7 +141,7 @@ function teznevise_builder_section_types() {
 		'software_catalog' => array(
 			'label'       => __( 'کاتالوگ نرم‌افزارها', 'teznevise' ),
 			'description' => __( 'شبکه‌ای از نرم‌افزارها و ابزارها با آیکون', 'teznevise' ),
-			'supports'    => array( 'eyebrow', 'title', 'text', 'columns', 'background' ),
+			'supports'    => array( 'eyebrow', 'title', 'text', 'columns', 'background', 'category_slug' ),
 			'item_label'  => __( 'نرم‌افزار', 'teznevise' ),
 			'item_fields' => $card_fields,
 			'render'      => 'teznevise_builder_render_card_grid',
