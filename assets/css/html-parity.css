@@ -529,11 +529,6 @@ footer.site-footer-new {
 	background: rgba(20, 93, 74, 0.08);
 }
 
-/* Hide builder/service cards with no body copy */
-.services-grid .service-card:has(h3):not(:has(p)) {
-	display: none;
-}
-
 /* WP admin bar shouldn't cover the sticky header */
 .admin-bar .site-header-new {
 	top: 32px;
@@ -551,7 +546,7 @@ footer.site-footer-new {
 .search-overlay {
 	position: fixed;
 	inset: 0;
-	z-index: 200;
+	z-index: 2100;
 	background: rgba(7, 31, 25, 0.55);
 	opacity: 0;
 	visibility: hidden;
