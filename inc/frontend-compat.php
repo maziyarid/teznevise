@@ -71,6 +71,19 @@ function teznevise_enqueue_compat_assets() {
 		array( 'teznevise-nav-touch', 'teznevise-legacy-wpcode' ),
 		TEZNEVISE_VERSION
 	);
+	wp_enqueue_style(
+		'teznevise-html-parity',
+		TEZNEVISE_URI . '/assets/css/html-parity.css',
+		array( 'teznevise-wp-compat' ),
+		TEZNEVISE_VERSION
+	);
+	wp_enqueue_script(
+		'teznevise-nav-overflow',
+		TEZNEVISE_URI . '/assets/js/nav-overflow.js',
+		array(),
+		TEZNEVISE_VERSION,
+		true
+	);
 
 	if ( is_singular() ) {
 		wp_enqueue_style(

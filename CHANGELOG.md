@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.6.5 — 2026-08-19 — Chrome matches static HTML (not WP menus)
+
+### Why
+After the shortcode → builder migration the live theme no longer matched `teznevise_work/*.html`. Appearance → Menus dumped 8 long labels (`انجام پایان نامه`, `ثبت سفارش`, …) into a 72px pill designed for **five short items**, so names wrapped. The footer printed nested thesis pages. Mobile bottom-nav overflowed with the full tree. Hero orbit tags vanished because `motion.css` overwrote their `transform` positions.
+
+### Changes
+- **Desktop nav is the HTML prototype**, not `wp_nav_menu`: خانه، خدمات (dropdown)، ابزارها، بلاگ، درباره ما + search + «درباره ما» outline + «ثبت درخواست».
+- **Mobile drawer** is the HTML link list (logo, 9 items, مشاوره / واتساپ CTAs).
+- **Bottom bar** is the HTML 4-up: خانه / ابزارها / بلاگ / تماس.
+- **Footer** is the 4-column HTML layout (خدمات / دسترسی سریع / ارتباط).
+- **Search overlay** restored (the HTML `data-search-open` control).
+- **Hero orbit tags**: `motion.css` no longer overwrites `transform` positions with `translateY()` — float uses the independent `translate` property.
+- Last-layer `html-parity.css` keeps nowrap labels, 1050px hamburger, stacked hero buttons on small screens, 44px tap targets.
+
+### Testing
+- `node --check` on `assets/js/nav-overflow.js`.
+- Visual QA of `teznevise_work/index.html` at 1920 / 1366 / 390.
+
 ## 1.6.3 — 2026-08-19 — HTML→WordPress design parity
 
 ### Changes
@@ -19,4 +37,3 @@
 - `node --check` on `assets/js/redesign.js`.
 - Extractor `scripts/extract-wpcode.py` regenerates `inc/legacy-wpcode.php` from the WPCode export.
 - Visual QA against teznevise.ir after the 5-minute theme sync.
-

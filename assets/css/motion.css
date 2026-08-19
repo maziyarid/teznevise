@@ -86,13 +86,9 @@
 .hero-order-button:hover,.hero-order-button:focus-visible{animation-play-state:paused;transform:translate(-50%,-50%) scale(1.05)!important;box-shadow:0 34px 76px rgba(20,93,74,.34)
 ,inset 0 0 0 12px rgba(255,255,255,.14)!important}
 @keyframes order-pulse{0%,100%{box-shadow:0 28px 64px rgba(20,93,74,.24),inset 0 0 0 12px rgba(255,255,255,.1)}50%{box-shadow:0 32px 70px rgba(20,93,74,.34),0 0 0 12px rgba(20,93,74,.08),inset 0 0 0 12px rgba(255,255,255,.14)}}
-.orbit-tag{animation:float-tag 5.5s ease-in-out infinite;will-change:transform;z-index:3!important}
+.orbit-tag{animation:float-tag 5.5s ease-in-out infinite;will-change:translate;z-index:3!important}
 .tag-1{animation-delay:0s}.tag-2{animation-delay:.8s}.tag-3{animation-delay:1.6s}.tag-4{animation-delay:2.4s}
-@keyframes float-tag{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.hero-network .tag-1{top:3%!important;left:50%!important;right:auto!important;transform:translateX(-50%)}
-.hero-network .tag-2{top:40%!important;left:0!important;right:auto!important}
-.hero-network .tag-3{bottom:3%!important;top:auto!important;left:50%!important;transform:translateX(-50%)}
-.hero-network .tag-4{top:40%!important;right:0!important;left:auto!important}
+@keyframes float-tag{0%,100%{translate:0 0}50%{translate:0 -8px}}
 .hero-copy .eyebrow,.hero-copy h1,.hero-copy>p,.hero-actions,.hero-points{opacity:0;transform:translateY(18px);animation:hero-in .85s var(--motion-ease-out) forwards}
 .hero-copy .eyebrow{animation-delay:.08s}.hero-copy h1{animation-delay:.18s}.hero-copy>p{animation-delay:.3s}.hero-actions{animation-delay:.42s}.hero-points{animation-delay:.52s}
 @keyframes hero-in{to{opacity:1;transform:translateY(0)}}
