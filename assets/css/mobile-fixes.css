@@ -1,8 +1,8 @@
 /*
  * Mobile tap/click fixes and responsive hardening — Teznevise
  *
- * Keep this file defensive: responsive rules should prevent overflow and
- * preserve touchability without changing desktop layout semantics.
+ * Keep this file defensive: fix known interaction/overflow problems without
+ * introducing broad selectors that can mask component-level layout bugs.
  */
 
 /* Floating contact widget: prevent an invisible wrapper from swallowing taps. */
@@ -53,6 +53,7 @@
 		bottom: calc(88px + env(safe-area-inset-bottom)) !important;
 	}
 
+	/* Replaced elements should never create viewport-wide overflow. */
 	img,
 	svg,
 	video,
@@ -61,53 +62,28 @@
 		max-width: 100%;
 	}
 
-	/* Prevent horizontal scrolling without hiding vertical content behind
-	 * the fixed bottom navigation. */
-	body {
-		overflow-x: clip;
-		padding-bottom: calc(72px + env(safe-area-inset-bottom));
-	}
-
-	/* Flexible content blocks should shrink inside grid/flex parents. */
-	main,
-	section,
-	article,
-	.container,
-	.container-fluid,
-	.grid,
-	[class*="grid"],
-	[class*="flex"] {
-		min-width: 0;
-	}
-
+	/* Keep controls usable on narrow screens without changing their desktop
+	 * sizing or imposing global minimum/maximum widths. */
 	input,
 	select,
 	textarea,
 	button {
-		max-width: 100%;
-	}
-
-	.table-responsive,
-	.table-wrap,
-	table {
-		max-width: 100%;
+		box-sizing: border-box;
 	}
 }
 
-/* Very narrow phones: avoid forcing horizontal gutters or oversized controls. */
+/* Very narrow phones: controls must be allowed to shrink with their parent. */
 @media (max-width: 380px) {
-	button,
-	.button,
-	.btn,
 	input,
 	select,
-	textarea {
+	textarea,
+	button {
 		min-width: 0;
+		max-width: 100%;
 	}
 }
 
-/* Landscape phones have little vertical space; avoid accidental fixed-height
- * content clipping where components use viewport-relative sizing. */
+/* Landscape phones have little vertical space; avoid fixed-height hero crops. */
 @media (max-width: 960px) and (orientation: landscape) {
 	.hero-new,
 	.service-hero {
