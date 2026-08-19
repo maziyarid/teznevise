@@ -1,0 +1,465 @@
+/**
+ * HTML design-parity layer (theme 1.6.6).
+ * Loaded last so it wins over Gutenberg leftovers, WP menu CSS, and
+ * motion.css transform fights. Chrome matches teznevise_work/index.html.
+ */
+
+/* ----- Skip link + overflow ----- */
+.skip-link.screen-reader-text {
+	position: absolute;
+	inset-inline-start: 12px;
+	top: -100px;
+	z-index: 10000;
+	padding: 10px 16px;
+	background: #145D4A;
+	color: #fff;
+	border-radius: 10px;
+	font-weight: 800;
+}
+.skip-link.screen-reader-text:focus {
+	top: 12px;
+}
+html,
+body {
+	overflow-x: hidden;
+	max-width: 100%;
+}
+
+/* ----- Desktop pill: five short labels on one line ----- */
+@media (min-width: 1051px) {
+	.main-nav {
+		display: flex !important;
+		flex-wrap: nowrap !important;
+		align-items: center !important;
+		overflow: visible !important;
+		height: 72px !important;
+		min-height: 72px !important;
+	}
+	.main-nav > .nav-links,
+	.main-nav ul.nav-links {
+		display: flex !important;
+		flex-wrap: nowrap !important;
+		align-items: center !important;
+		flex: 1 1 auto !important;
+		min-width: 0 !important;
+		gap: 0 !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		list-style: none !important;
+		overflow: visible !important;
+	}
+	.nav-links > li {
+		flex: 0 0 auto !important;
+		position: relative;
+		list-style: none !important;
+	}
+	.nav-links > li:nth-child(n + 6) {
+		display: none !important;
+	}
+	.nav-links > li > a {
+		display: inline-flex !important;
+		align-items: center !important;
+		white-space: nowrap !important;
+		font-size: 13.5px !important;
+		font-weight: 750 !important;
+		line-height: 1.2 !important;
+		padding: 8px 11px !important;
+		gap: 6px !important;
+	}
+	.nav-actions {
+		display: flex !important;
+		align-items: center !important;
+		gap: 8px !important;
+		flex: 0 0 auto !important;
+		margin-inline-start: auto;
+	}
+	.desktop-cta-group {
+		display: flex !important;
+		align-items: center !important;
+		gap: 8px !important;
+	}
+	.nav-cta {
+		white-space: nowrap !important;
+		height: 42px !important;
+		padding: 0 14px !important;
+		font-size: 13px !important;
+	}
+	.nav-search-btn,
+	.main-nav .nav-search-btn {
+		width: 42px !important;
+		height: 42px !important;
+		border-radius: 12px !important;
+		border: 1px solid rgba(20, 93, 74, 0.14) !important;
+		background: #fff !important;
+		color: #145D4A !important;
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		flex-shrink: 0 !important;
+		cursor: pointer;
+		padding: 0 !important;
+	}
+	.nav-search-btn:hover {
+		background: #e8f5f1;
+	}
+	.menu-btn {
+		display: none !important;
+	}
+	.brand {
+		flex: 0 0 auto !important;
+	}
+	.brand img {
+		width: 106px !important;
+		height: 48px !important;
+		object-fit: contain !important;
+	}
+}
+
+@media (min-width: 1051px) and (max-width: 1280px) {
+	.nav-links > li > a {
+		padding: 8px 8px !important;
+		font-size: 13px !important;
+	}
+	.nav-cta {
+		padding: 0 12px !important;
+		font-size: 12.5px !important;
+	}
+	.main-nav {
+		gap: 10px !important;
+		padding-inline: 14px !important;
+	}
+}
+
+/* ----- Hamburger at the designed 1050px breakpoint ----- */
+@media (max-width: 1050px) {
+	.main-nav > .nav-links,
+	.main-nav ul.nav-links,
+	header .nav-links,
+	.desktop-cta-group {
+		display: none !important;
+	}
+	.menu-btn {
+		display: inline-flex !important;
+		width: 44px !important;
+		height: 44px !important;
+		min-width: 44px;
+		min-height: 44px;
+	}
+	.nav-actions {
+		margin-inline-start: auto;
+	}
+	.nav-search-btn,
+	.main-nav .nav-search-btn {
+		width: 44px !important;
+		height: 44px !important;
+		min-width: 44px;
+		min-height: 44px;
+		border-radius: 12px;
+		border: 1px solid rgba(20, 93, 74, 0.14);
+		background: #fff;
+		color: #145D4A;
+		display: inline-flex !important;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+	}
+}
+
+/* ----- Footer: WP used .site-footer-new; design uses .footer-new ----- */
+.site-footer-new {
+	background: #071f19;
+	color: #fff;
+	padding: 62px 0 20px;
+}
+.footer-new .footer-logo,
+.footer-new .footer-brand img,
+.site-footer-new .footer-brand img {
+	display: inline-block;
+	width: 120px;
+	height: 58px;
+	object-fit: contain;
+	background: #fff;
+	border-radius: 12px;
+	padding: 6px;
+	margin-bottom: 14px;
+}
+.footer-new .footer-col a,
+.footer-new .footer-col p {
+	display: block;
+}
+
+/* ----- 4-up bottom bar ----- */
+.bottom-nav ul,
+.bottom-nav .bottom-menu-list {
+	display: contents;
+}
+.bottom-nav .menu-item,
+.bottom-nav li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+@media (max-width: 768px) {
+	.bottom-nav {
+		display: grid !important;
+		grid-template-columns: repeat(4, 1fr) !important;
+		height: auto;
+		min-height: 64px;
+		padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+		z-index: 900;
+	}
+	.bottom-nav-item {
+		min-height: 48px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 4px;
+		padding: 6px 4px;
+		border-radius: 14px;
+		font-size: 11px;
+		font-weight: 750;
+		color: #5a7268;
+		text-decoration: none;
+	}
+	.bottom-nav-item i {
+		font-size: 18px;
+	}
+	.bottom-nav-item.active,
+	.bottom-nav-item:hover {
+		color: #145D4A;
+		background: rgba(20, 93, 74, 0.07);
+	}
+	body {
+		padding-bottom: calc(72px + env(safe-area-inset-bottom));
+	}
+}
+@media (min-width: 769px) {
+	.bottom-nav {
+		display: none !important;
+	}
+}
+
+/* ----- Search overlay (styles.css is not enqueued on WP) ----- */
+.search-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 2000;
+	background: rgba(7, 31, 25, 0.55);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.22s ease, visibility 0.22s ease;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	padding-top: 14vh;
+	padding-inline: 16px;
+}
+.search-overlay.open {
+	opacity: 1;
+	visibility: visible;
+}
+.search-box {
+	width: min(600px, 100%);
+	background: #fff;
+	border-radius: 22px;
+	box-shadow: 0 28px 70px rgba(9, 40, 32, 0.22);
+	padding: 22px;
+	transform: translateY(-16px);
+	transition: transform 0.22s ease;
+}
+.search-overlay.open .search-box {
+	transform: translateY(0);
+}
+.search-input-wrap {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+.search-input-wrap > i {
+	position: absolute;
+	inset-inline-start: 16px;
+	color: #5a7268;
+	pointer-events: none;
+}
+.search-input {
+	width: 100%;
+	height: 52px;
+	padding: 12px 48px;
+	border: 2px solid #dfe9e5;
+	border-radius: 14px;
+	background: #f7faf9;
+	color: #10231d;
+	font-size: 16px;
+}
+.search-input:focus {
+	outline: none;
+	border-color: #145D4A;
+	background: #fff;
+}
+.search-close {
+	position: absolute;
+	inset-inline-end: 8px;
+	width: 40px;
+	height: 40px;
+	border: 0;
+	background: transparent;
+	color: #5a7268;
+	border-radius: 10px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+.search-close:hover {
+	background: #e8f5f1;
+	color: #145D4A;
+}
+.search-hints {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 14px;
+}
+.search-hint {
+	display: inline-flex;
+	align-items: center;
+	padding: 8px 12px;
+	min-height: 36px;
+	border-radius: 999px;
+	background: #e8f5f1;
+	color: #145D4A;
+	font-size: 13px;
+	font-weight: 700;
+	text-decoration: none;
+}
+.search-hint:hover {
+	background: #145D4A;
+	color: #fff;
+}
+
+/* ----- Hero orbit tags: keep layout transform while floating ----- */
+.orbit-tag {
+	--orbit-x: 0px;
+	--orbit-y: 0px;
+	position: absolute !important;
+	left: 50% !important;
+	top: 50% !important;
+	right: auto !important;
+	bottom: auto !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	min-height: 44px !important;
+	padding: 10px 17px !important;
+	border-radius: 999px !important;
+	background: rgba(255, 255, 255, 0.96) !important;
+	border: 1px solid rgba(20, 93, 74, 0.11) !important;
+	color: #284a41 !important;
+	box-shadow: 0 14px 32px rgba(15, 23, 42, 0.07) !important;
+	font-size: 13px !important;
+	font-weight: 850 !important;
+	white-space: nowrap !important;
+	z-index: 5 !important;
+	animation: tz-float-tag 5.5s ease-in-out infinite !important;
+	pointer-events: none;
+}
+.tag-1 { --orbit-x: 160px; --orbit-y: -145px; animation-delay: 0s !important; }
+.tag-2 { --orbit-x: -175px; --orbit-y: -55px; animation-delay: 0.8s !important; }
+.tag-3 { --orbit-x: -145px; --orbit-y: 142px; animation-delay: 1.6s !important; }
+.tag-4 { --orbit-x: 160px; --orbit-y: 112px; animation-delay: 2.4s !important; }
+@keyframes tz-float-tag {
+	0%, 100% { transform: translate(-50%, -50%) translate(var(--orbit-x), var(--orbit-y)); }
+	50% { transform: translate(-50%, -50%) translate(var(--orbit-x), calc(var(--orbit-y) - 8px)); }
+}
+@media (max-width: 1050px) {
+	.tag-1 { --orbit-x: 150px; --orbit-y: -135px; }
+	.tag-2 { --orbit-x: -165px; --orbit-y: -52px; }
+	.tag-3 { --orbit-x: -138px; --orbit-y: 132px; }
+	.tag-4 { --orbit-x: 150px; --orbit-y: 105px; }
+}
+@media (max-width: 720px) {
+	.tag-1 { --orbit-x: 110px; --orbit-y: -105px; }
+	.tag-2 { --orbit-x: -120px; --orbit-y: -40px; }
+	.tag-3 { --orbit-x: -100px; --orbit-y: 100px; }
+	.tag-4 { --orbit-x: 112px; --orbit-y: 82px; }
+	.orbit-tag {
+		font-size: 11.5px !important;
+		min-height: 36px !important;
+		padding: 7px 10px !important;
+	}
+}
+
+/* ----- Mobile drawer list (HTML anchors, not WP ul) ----- */
+.mobile-nav-links {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+.mobile-nav-link {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 13px 14px;
+	min-height: 44px;
+	font-size: 15px;
+	font-weight: 700;
+	color: #2f433c;
+	border-radius: 14px;
+	text-decoration: none;
+}
+.mobile-nav-link i {
+	width: 22px;
+	text-align: center;
+	color: #5a7268;
+}
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+	background: rgba(20, 93, 74, 0.08);
+	color: #145D4A;
+}
+.mobile-nav-close {
+	width: 44px;
+	height: 44px;
+	min-width: 44px;
+	min-height: 44px;
+	border: 0;
+	background: #f7faf9;
+	border-radius: 12px;
+	color: #145D4A;
+	cursor: pointer;
+}
+
+/* ----- Tap targets + stacked hero CTAs ----- */
+a, button, .btn-tz, .nav-cta, .nav-search-btn, .menu-btn,
+.bottom-nav-item, .mobile-nav-link, .search-hint, .footer-quick-actions a {
+	touch-action: manipulation;
+}
+@media (max-width: 720px) {
+	.hero-actions {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.hero-actions .btn-tz {
+		width: 100%;
+		justify-content: center;
+		min-height: 48px;
+	}
+	.footer-bottom {
+		flex-direction: column;
+		gap: 8px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.orbit-tag {
+		animation: none !important;
+		transform: translate(-50%, -50%) translate(var(--orbit-x), var(--orbit-y)) !important;
+	}
+	.search-overlay,
+	.search-box,
+	.mobile-nav,
+	.mobile-nav-panel {
+		transition: none !important;
+	}
+}

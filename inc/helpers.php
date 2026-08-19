@@ -48,3 +48,49 @@ function teznevise_fallback_menu( $args = array() ) {
 function teznevise_get_contact( $key ) {
 	return teznevise_mod( $key );
 }
+
+/**
+ * Site logo URL: Customizer logo, then theme / work tree fallbacks.
+ *
+ * @return string
+ */
+function teznevise_logo_url() {
+	if ( function_exists( 'has_custom_logo' ) && has_custom_logo() ) {
+		$url = wp_get_attachment_image_url( (int) get_theme_mod( 'custom_logo' ), 'full' );
+		if ( $url ) {
+			return $url;
+		}
+	}
+	$candidates = array(
+		'/assets/img/logo.jpg',
+		'/teznevise_work/assets/img/logo.jpg',
+	);
+	foreach ( $candidates as $rel ) {
+		if ( is_readable( TEZNEVISE_DIR . $rel ) ) {
+			return TEZNEVISE_URI . $rel;
+		}
+	}
+	return '';
+}
+
+/**
+ * Whether the current request matches a designed chrome slug.
+ *
+ * @param string|string[] $slugs Page slug(s), or 'home' / 'blog'.
+ * @return bool
+ */
+function teznevise_is_current( $slugs ) {
+	$slugs = array_map( 'strval', (array) $slugs );
+	foreach ( $slugs as $slug ) {
+		if ( $slug === 'home' && is_front_page() ) {
+			return true;
+		}
+		if ( $slug === 'blog' && ( is_home() || is_singular( 'post' ) || is_category() || is_tag() ) ) {
+			return true;
+		}
+		if ( is_page( $slug ) ) {
+			return true;
+		}
+	}
+	return false;
+}

@@ -99,6 +99,19 @@ function teznevise_enqueue_compat_assets() {
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_compat_assets', 30 );
 
 /**
+ * Designed-chrome overrides — must win over wp-compat and service CSS.
+ */
+function teznevise_enqueue_html_parity() {
+	wp_enqueue_style(
+		'teznevise-html-parity',
+		TEZNEVISE_URI . '/assets/css/html-parity.css',
+		array( 'teznevise-wp-compat' ),
+		TEZNEVISE_VERSION
+	);
+}
+add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_html_parity', 40 );
+
+/**
  * Map leftover slug pages onto the matching designed templates.
  *
  * @param string $template Current template path.

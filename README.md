@@ -1,6 +1,6 @@
 # Teznevise WordPress Theme
 
-**Version:** 1.6.3
+**Version:** 1.6.6
 
 **Author:** MAZ//ID (Maziyar) · **Brand:** [MΛZ / maziyarid/M-Z](https://github.com/maziyarid/M-Z)
 
@@ -22,7 +22,7 @@ RTL-first WordPress theme for [teznevise.ir](https://teznevise.ir/) — thesis, 
 3. Appearance → راه‌اندازی تزنویسه to seed recommended pages and builder defaults.
 4. Optionally promote assets from `teznevise_work/` into `assets/`.
 5. Appearance → Customize for homepage sections and contact details.
-6. Assign menus: Primary, Mobile, Bottom, Footer.
+6. Header, mobile drawer, bottom bar, and footer chrome match `teznevise_work/` (edit those templates to change labels). Appearance → Menus locations stay registered but do not drive those surfaces.
 
 ## Development notes
 

@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.6.3
+Stable tag: 1.6.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,9 +32,14 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 3. Appearance → راه‌اندازی تزنویسه → create recommended pages
 4. Optionally promote assets from teznevise_work into assets/
 5. Appearance → Customize for homepage and contact details
-6. Assign menus: Primary, Mobile, Bottom
+6. Header / mobile / bottom / footer chrome match teznevise_work HTML (edit those templates). Appearance → Menus does not drive those surfaces.
 
 == Changelog ==
+
+= 1.6.6 =
+* Restore designed HTML chrome: 5-item desktop nav, 4-column footer, 4-up bottom bar, search overlay
+* Load html-parity.css last; fix orbit-tag transform fight
+* Admin notice on Appearance → Menus explaining designed chrome
 
 = 1.6.2 =
 * Load auto-run shortcode-to-builder migration on admin

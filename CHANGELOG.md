@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.6.6 — 2026-08-19 — Designed HTML chrome (header / footer / mobile)
+
+### Changes
+
+- Desktop pill now uses the five short labels from `teznevise_work/index.html` (خانه، خدمات، ابزارها، بلاگ، درباره ما) with designed dropdowns instead of `wp_nav_menu` dumping the full site tree.
+- Search is an overlay (`data-search-open`) rather than a link to `/search/`.
+- Footer class is `.footer-new` with the four designed columns (brand / خدمات / دسترسی سریع / ارتباط).
+- Mobile drawer is the nine-link HTML list; bottom bar is the 4-up خانه / ابزارها / بلاگ / تماس.
+- `html-parity.css` loads last: nowrap labels, 1050px hamburger, 44px taps, search overlay, orbit tags that keep their layout `transform` while floating.
+- `teznevise_logo_url()` and `teznevise_is_current()` live in `inc/helpers.php`.
+- Appearance → Menus shows an admin notice; locations stay registered but no longer render header/footer/bottom chrome.
+
+### Testing
+
+- Static prototype served for visual QA (desktop 1280 and mobile 390).
+- Guard: every `teznevise_*()` called in `header.php` is defined.
+
 ## 1.6.3 — 2026-08-19 — HTML→WordPress design parity
 
 ### Changes
