@@ -60,10 +60,21 @@ teznevise_builder_render_sections();
 
 It is already wired into `page.php`, `page-service.php`, `page-about.php`,
 `page-contact.php`, `page-downloads.php`, `page-privacy.php`, `page-team.php`,
-`page-tools.php` and `single.php`, after the template's built-in content.
+`page-tools.php`, `page-tool.php`, `front-page.php` and `single.php`.
+
+Templates prefer builder sections when they exist and keep native blocks
+(contact NAP, forms, the descriptive-statistics calculator, recent posts)
+in place. See `docs/HTML-TO-BUILDER-ROADMAP.md` for the HTML conversion map.
 
 `assets/css/builder-frontend.css` is enqueued only on singular views that actually have
 enabled sections.
+
+Seed defaults from **Appearance → راه‌اندازی تزنویسه**. JSON source:
+`inc/builder-defaults.json`.
+
+Hero sections render an `h1` on pages (posts keep `h2` because `single.php`
+already prints the article title). Converted page templates skip their
+hardcoded title when a builder hero exists.
 
 ## Not implemented yet
 

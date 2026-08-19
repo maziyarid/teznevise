@@ -64,6 +64,10 @@ button{cursor:pointer}
 .mobile-menu.open{display:block}
 .mobile-menu a{display:block;padding:12px 3px;border-bottom:1px solid #edf2f0;font-weight:700;color:#31443c}
 .mobile-menu .btn-tz{margin-top:14px;width
+.mobile-nav{display:none;padding:0 20px 18px;border-top:1px solid var(--tz-line)}
+.mobile-nav.open{display:block}
+.mobile-nav a{display:block;padding:12px 3px;border-bottom:1px solid #edf2f0;font-weight:700;color:#31443c}
+.mobile-nav .btn-tz{margin-top:14px;width
 :
 100%;color:#fff}
 
@@ -146,3 +150,104 @@ ns:1fr 1fr}.blog-layout{grid-template-columns:1fr}.sidebar{position:static;displ
 @media(max-width:460px){.hero-copy h1{font-size:35px}.hero-visual{min-height:350px}.dash-mini{padding:12px}.dash-cards{gap:8px}.floating-chip{font-size:11px}.service
 s-grid{gap
 :12px}.service-card{padding:22px}.footer-grid{grid-template-columns:1fr}.footer-brand{grid-column:auto}}
+
+
+/* WordPress Desktop Navigation Dropdown Menu */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+
+.nav-links > li {
+  position: relative;
+}
+
+.nav-links > li > a {
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #34453f;
+  font-size: 14px;
+  font-weight: 700;
+  transition: .2s;
+  display: inline-block;
+}
+
+.nav-links > li > a:hover,
+.nav-links > li > a.active {
+  color: var(--tz-primary);
+  background: var(--tz-primary-soft-2);
+}
+
+/* Submenu dropdown - WordPress generates .sub-menu class */
+.nav-links .sub-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border: 1px solid var(--tz-line);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(9, 62, 49, 0.08);
+  min-width: 200px;
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  z-index: 1001;
+}
+
+.nav-links > li:hover > .sub-menu,
+.nav-links > li:focus-within > .sub-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-links .sub-menu a {
+  padding: 10px 16px;
+  white-space: nowrap;
+  display: block;
+}
+
+.nav-links .sub-menu a:hover {
+  background: var(--tz-primary-soft);
+  color: var(--tz-primary);
+}
+
+/* Nested submenus */
+.nav-links .sub-menu .sub-menu {
+  top: 0;
+  left: 100%;
+  margin-left: 10px;
+}
+
+.nav-links > li:hover > .sub-menu > li:hover > .sub-menu,
+.nav-links > li:focus-within > .sub-menu > li:focus-within > .sub-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.nav-links .sub-menu .sub-menu {
+  transform: translateX(-10px);
+}
+
+/* Menu items with children indicator */
+.nav-links .menu-item-has-children > a::after {
+  content: '\f078';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 12px;
+  margin-right: 6px;
+  color: var(--tz-muted);
+}
+
+.nav-links
+ .menu-item-has-children:hover > a::after {
+  color: var(--tz-primary);
+}

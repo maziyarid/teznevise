@@ -2,6 +2,10 @@
 /**
  * 404 template — search, quick links, mini visual sitemap.
  *
+ * Not Flexible Page Builder-managed: a 404 request has no queried page/post
+ * ID, so `_teznevise_builder_sections` cannot attach. See
+ * docs/HTML-TO-BUILDER-ROADMAP.md (non-singular architecture).
+ *
  * @package Teznevise
  */
 

@@ -1,0 +1,19 @@
+reviews:
+  # Review draft PRs as well as ready-for-review PRs.
+  auto_review:
+    enabled: true
+    drafts: true
+
+  # Avoid the noisy "Review skipped. Draft detected." status message.
+  review_status: false
+
+  # Keep reviews useful for implementation PRs while still surfacing
+  # correctness, security, accessibility, and maintainability issues.
+  profile: assertive
+
+chat:
+  auto_reply: true
+
+# Keep path-specific configuration intentionally small; repository code
+# should be reviewed normally unless a future path has a documented need
+# for special treatment.

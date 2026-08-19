@@ -38,8 +38,11 @@ Fields are registered with `register_post_meta()` (`show_in_rest` => true).
 ## Pages and posts (flexible page builder)
 
 Meta box **صفحه‌ساز تزنویسه — بخش‌های سفارشی** adds, duplicates, reorders and removes
-unlimited sections and items (`_teznevise_builder_sections`, JSON). See
-[`docs/PAGE-BUILDER.md`](PAGE-BUILDER.md).
+unlimited sections and items (`_teznevise_builder_sections`, JSON). See [`docs/PAGE-BUILDER.md`](PAGE-BUILDER.md) and the HTML conversion map in
+[`docs/HTML-TO-BUILDER-ROADMAP.md`](HTML-TO-BUILDER-ROADMAP.md). Seed from
+**Appearance → راه‌اندازی تزنویسه**.
+
+The blog index and 404 template are not builder-managed.
 
 ## Template helpers
 

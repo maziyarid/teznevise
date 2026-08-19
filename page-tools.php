@@ -1,11 +1,7 @@
 <?php
 /**
  * Template Name: ابزارهای آنلاین (Tools Hub)
- * Description: Online tools grid. Each tool: title|url|desc|icon
- *
- * Project: Teznevise WordPress Theme
- * Author: MAZ//ID (Maziyar)
- * Brand: maziyarid/M-Z — A brand new repository with my complete brand identity, story, and website prototype.
+ * Description: Online tools grid via Flexible Page Builder, with page-meta fallback.
  *
  * @package Teznevise
  */
@@ -15,23 +11,39 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	$eyebrow   = teznevise_page_field( 'eyebrow', 0, __( 'ابزار رایگان', 'teznevise' ) );
-	$subtitle = teznevise_page_field( 'subtitle', 0, __( 'ماشین‌حساب‌های آماری برای پژوهشگران', 'teznevise' ) );
-	$cta_text = teznevise_page_field( 'cta_text', 0, __( 'درخواست تحلیل تخصصی', 'teznevise' ) );
-	$cta_url  = teznevise_page_field( 'cta_url', 0, '/service-statistics/' );
+	$use_builder = function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections();
 
-	$tools = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( teznevise_page_field( 'tools_list' ), 4 ) : array();
-	if ( ! $tools ) {
-		$tools = array(
-			array( 'آمار توصیفی', '/tool-descriptive-statistics/', 'میانگین، میانه، واریانس و شاخص‌های توصیفی.', 'fa-solid fa-chart-simple' ),
-			array( 'همبستگی پیرسون', '/tools/', 'ضریب همبستگی خطی پیرسون.', 'fa-solid fa-chart-line' ),
-			array( 'همبستگی اسپیرمن', '/tools/', 'همبستگی رتبه‌ای اسپیرمن.', 'fa-solid fa-chart-area' ),
-			array( 'آزمون T-test', '/tools/', 'مقایسه میانگین‌ها.', 'fa-solid fa-not-equal' ),
-			array( 'تحلیل واریانس (ANOVA)', '/tools/', 'مقایسه چند گروه.', 'fa-solid fa-table' ),
-			array( 'آلفای کرونباخ', '/tools/', 'پایایی مقیاس.', 'fa-solid fa-list-check' ),
-		);
-	}
-	?>
+	if ( $use_builder ) {
+		teznevise_builder_render_sections();
+		if ( get_the_content() ) :
+			?>
+<section class="section">
+	<div class="container">
+		<div class="longcopy article-content" data-reveal>
+			<?php the_content(); ?>
+		</div>
+	</div>
+</section>
+			<?php
+		endif;
+	} else {
+		$eyebrow   = teznevise_page_field( 'eyebrow', 0, __( 'ابزار رایگان', 'teznevise' ) );
+		$subtitle = teznevise_page_field( 'subtitle', 0, __( 'ماشین‌حساب‌های آماری برای پژوهشگران', 'teznevise' ) );
+		$cta_text = teznevise_page_field( 'cta_text', 0, __( 'درخواست تحلیل تخصصی', 'teznevise' ) );
+		$cta_url  = teznevise_page_field( 'cta_url', 0, '/service-statistics/' );
+
+		$tools = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( teznevise_page_field( 'tools_list' ), 4 ) : array();
+		if ( ! $tools ) {
+			$tools = array(
+				array( 'آمار توصیفی', '/tool-descriptive-statistics/', 'میانگین، میانه، واریانس و شاخص‌های توصیفی.', 'fa-solid fa-chart-simple' ),
+				array( 'همبستگی پیرسون', '/tools/', 'ضریب همبستگی خطی پیرسون.', 'fa-solid fa-chart-line' ),
+				array( 'همبستگی اسپیرمن', '/tools/', 'همبستگی رتبه‌ای اسپیرمن.', 'fa-solid fa-chart-area' ),
+				array( 'آزمون T-test', '/tools/', 'مقایسه میانگین‌ها.', 'fa-solid fa-not-equal' ),
+				array( 'تحلیل واریانس (ANOVA)', '/tools/', 'مقایسه چند گروه.', 'fa-solid fa-table' ),
+				array( 'آلفای کرونباخ', '/tools/', 'پایایی مقیاس.', 'fa-solid fa-list-check' ),
+			);
+		}
+		?>
 
 <section class="page-hero-new section">
 	<div class="container">
@@ -70,8 +82,6 @@ while ( have_posts() ) :
 	</div>
 </section>
 
-<?php teznevise_builder_render_sections(); ?>
-
 <section class="section">
 	<div class="container">
 		<div class="cta-band" data-reveal>
@@ -83,8 +93,9 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
+		<?php
+	}
 
-	<?php
 endwhile;
 
 get_footer();
