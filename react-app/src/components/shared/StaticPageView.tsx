@@ -1,5 +1,7 @@
 import { STATIC_PAGES } from "@/lib/content";
 import { usePageOverlay } from "@/lib/page-overlay";
+import { stripEmoji } from "@/lib/utils";
+import { faNum } from "@/lib/format";
 import { CtaBand } from "./CtaBand";
 import { PageHero } from "./PageHero";
 
@@ -19,17 +21,20 @@ export function StaticPageView({ slug }: { slug: keyof typeof STATIC_PAGES }) {
       <PageHero eyebrow={eyebrow} title={title} lead={lead} />
       <section className="section">
         <div className="container-tz grid gap-6 md:grid-cols-2">
-          {page.sections.map((s) => (
-            <article key={s.title} className="service-card">
-              <h3>{s.title}</h3>
-              <p>{s.body}</p>
+          {page.sections.map((s, i) => (
+            <article key={s.title} className={`service-card tone-${(i % 9) + 1}`}>
+              <span className="mark faq-num" aria-hidden>
+                {faNum(i + 1)}
+              </span>
+              <h3>{stripEmoji(s.title)}</h3>
+              <p>{stripEmoji(s.body)}</p>
             </article>
           ))}
         </div>
         {extra?.length ? (
           <div className="container-tz prose-fa mt-10 max-w-3xl">
             {extra.map((p) => (
-              <p key={p.slice(0, 24)}>{p}</p>
+              <p key={p.slice(0, 24)}>{stripEmoji(p)}</p>
             ))}
           </div>
         ) : null}

@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, MapPin, Phone, Send, ShieldCheck } from "lucide-react";
 import { FOOTER_NAV, FOOTER_QUICK, FOOTER_SERVICES, SITE } from "@/lib/site";
+import { AppLink } from "@/components/AppLink";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -13,8 +14,8 @@ export function SiteFooter() {
               <img
                 src="/logo.png"
                 alt={`لوگوی ${SITE.name}`}
-                width={116}
-                height={44}
+                width={132}
+                height={50}
                 loading="lazy"
                 decoding="async"
               />
@@ -37,23 +38,14 @@ export function SiteFooter() {
           <div className="footer-col">
             <h4>خدمات</h4>
             {FOOTER_SERVICES.map((l) => (
-              <Link key={l.to} to={l.to}>
+              <AppLink key={l.to} to={l.to}>
                 {l.label}
-              </Link>
+              </AppLink>
             ))}
           </div>
 
           <div className="footer-col">
-            <h4>ناوبری</h4>
-            {FOOTER_NAV.map((l) => (
-              <Link key={l.to} to={l.to}>
-                {l.label}
-              </Link>
-            ))}
-          </div>
-
-          <div className="footer-col">
-            <h4>ارتباط و قوانین</h4>
+            <h4>ارتباط با ما</h4>
             <a href={`tel:${SITE.phoneIntl}`}>
               <Phone className="ml-1 inline size-3.5" /> {SITE.phoneDisplay}
             </a>
@@ -63,17 +55,29 @@ export function SiteFooter() {
             <p>
               <MapPin className="ml-1 inline size-3.5" /> {SITE.address}
             </p>
+          </div>
+        </div>
+
+        <nav className="footer-utility" aria-label="پیوندهای تکمیلی">
+          <div className="footer-menu-list">
+            {FOOTER_NAV.map((l) => (
+              <Link key={l.to} to={l.to}>
+                {l.label}
+              </Link>
+            ))}
+          </div>
+          <div className="footer-legal">
             <Link to="/privacy">حریم خصوصی</Link>
             <Link to="/terms">شرایط استفاده</Link>
             <Link to="/refund">بازگشت وجه</Link>
             <Link to="/cookies">سیاست کوکی</Link>
             <Link to="/rules">آیین‌نامه پژوهشی</Link>
           </div>
-        </div>
+        </nav>
 
         <div className="footer-certs" aria-label="نمادها و گواهی‌ها">
           <a className="trust-badge" href="/privacy" title="نماد اعتماد الکترونیکی">
-            <svg viewBox="0 0 88 88" width="72" height="72" role="img" aria-labelledby="enamad-title">
+            <svg viewBox="0 0 88 88" width={72} height={72} role="img" aria-labelledby="enamad-title">
               <title id="enamad-title">نماد اعتماد الکترونیکی</title>
               <rect x="4" y="4" width="80" height="80" rx="16" fill="#f7fcfa" stroke="#145D4A" />
               <text x="44" y="40" textAnchor="middle" fontSize="11" fontWeight="800" fill="#145D4A" fontFamily="Vazirmatn, Tahoma, sans-serif">
@@ -86,7 +90,7 @@ export function SiteFooter() {
             <span>اینماد</span>
           </a>
           <div className="trust-badge">
-            <svg viewBox="0 0 88 88" width="72" height="72" role="img" aria-labelledby="samandehi-title">
+            <svg viewBox="0 0 88 88" width={72} height={72} role="img" aria-labelledby="samandehi-title">
               <title id="samandehi-title">ساماندهی</title>
               <rect x="4" y="4" width="80" height="80" rx="16" fill="#fbf7ee" stroke="#8a6a22" />
               <text x="44" y="40" textAnchor="middle" fontSize="11" fontWeight="800" fill="#8a6a22" fontFamily="Vazirmatn, Tahoma, sans-serif">

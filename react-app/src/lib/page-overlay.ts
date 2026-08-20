@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { PageBlock } from "@/lib/content";
+import { splitFaqs } from "./page-copy";
 import { getPageField } from "@/lib/server/app";
 
 export type PageFieldRow = {
@@ -30,15 +31,17 @@ export function mergePageBlock(page: PageBlock, overlay: PageFieldRow | null | u
         .map((s) => s.trim())
         .filter(Boolean)
     : page.body;
+  const split = overlay.features ? splitFaqs(features) : { features, faqs: page.faqs ?? [] };
   return {
     ...page,
     eyebrow: overlay.eyebrow?.trim() || page.eyebrow,
     title: overlay.title?.trim() || page.title,
     lead: overlay.lead?.trim() || page.lead,
-    features,
+    features: overlay.features ? split.features : page.features,
+    faqs: overlay.features ? (split.faqs.length ? split.faqs : page.faqs) : page.faqs,
     body,
-    ctaText: overlay.cta_text?.trim() || undefined,
-    ctaUrl: overlay.cta_url?.trim() || undefined,
+    ctaText: overlay.cta_text?.trim() || page.ctaText,
+    ctaUrl: overlay.cta_url?.trim() || page.ctaUrl,
   };
 }
 

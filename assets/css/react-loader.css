@@ -375,3 +375,252 @@ body.tz-react-shell {
     transform: none !important;
   }
 }
+
+/* 1.8.4 — mega isolation, 9-tone cards, numbered FAQ boxes, six centered steps */
+
+@media (min-width: 1051px) {
+  .main-nav ul.nav-dropdown,
+  .main-nav ul.nav-dropdown:not(.is-open) {
+    display: none !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+  .main-nav .menu-item.has-dropdown:hover > ul.nav-dropdown,
+  .main-nav .menu-item.has-dropdown:focus-within > ul.nav-dropdown,
+  .main-nav .menu-item.has-dropdown.is-open > ul.nav-dropdown,
+  .main-nav ul.nav-dropdown.is-open {
+    display: grid !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+.tone-1 { --tone: #145d4a; --tone-soft: #e7f6f1; }
+.tone-2 { --tone: #1a6f8a; --tone-soft: #e5f4f8; }
+.tone-3 { --tone: #8a5a16; --tone-soft: #f8efd8; }
+.tone-4 { --tone: #6b3d7a; --tone-soft: #f4e8f7; }
+.tone-5 { --tone: #9a3b4a; --tone-soft: #f8e8ec; }
+.tone-6 { --tone: #2f6b3a; --tone-soft: #e6f3e8; }
+.tone-7 { --tone: #2c4d8a; --tone-soft: #e6ecf8; }
+.tone-8 { --tone: #7a4a16; --tone-soft: #f6ead9; }
+.tone-9 { --tone: #0f5c62; --tone-soft: #e3f3f4; }
+
+.tone-1, .tone-2, .tone-3, .tone-4, .tone-5,
+.tone-6, .tone-7, .tone-8, .tone-9 {
+  border-color: color-mix(in srgb, var(--tone) 22%, rgba(20, 93, 74, 0.12));
+}
+.tone-1 .icon-box,
+.tone-2 .icon-box,
+.tone-3 .icon-box,
+.tone-4 .icon-box,
+.tone-5 .icon-box,
+.tone-6 .icon-box,
+.tone-7 .icon-box,
+.tone-8 .icon-box,
+.tone-9 .icon-box,
+.tone-1 .faq-num,
+.tone-2 .faq-num,
+.tone-3 .faq-num,
+.tone-4 .faq-num,
+.tone-5 .faq-num,
+.tone-6 .faq-num,
+.tone-7 .faq-num,
+.tone-8 .faq-num,
+.tone-9 .faq-num,
+.tone-1 .tez-builder-step-number,
+.tone-2 .tez-builder-step-number,
+.tone-3 .tez-builder-step-number,
+.tone-4 .tez-builder-step-number,
+.tone-5 .tez-builder-step-number,
+.tone-6 .tez-builder-step-number {
+  background: var(--tone-soft) !important;
+  color: var(--tone) !important;
+  border-color: color-mix(in srgb, var(--tone) 18%, transparent);
+}
+
+.services-grid .service-card:nth-child(1),
+.tez-builder-grid > :nth-child(1),
+.tez-builder-steps > :nth-child(1),
+.reason-list > :nth-child(1) { --tone: #145d4a; --tone-soft: #e7f6f1; }
+.services-grid .service-card:nth-child(2),
+.tez-builder-grid > :nth-child(2),
+.tez-builder-steps > :nth-child(2),
+.reason-list > :nth-child(2) { --tone: #1a6f8a; --tone-soft: #e5f4f8; }
+.services-grid .service-card:nth-child(3),
+.tez-builder-grid > :nth-child(3),
+.tez-builder-steps > :nth-child(3),
+.reason-list > :nth-child(3) { --tone: #8a5a16; --tone-soft: #f8efd8; }
+.services-grid .service-card:nth-child(4),
+.tez-builder-grid > :nth-child(4),
+.tez-builder-steps > :nth-child(4),
+.reason-list > :nth-child(4) { --tone: #6b3d7a; --tone-soft: #f4e8f7; }
+.services-grid .service-card:nth-child(5),
+.tez-builder-grid > :nth-child(5),
+.tez-builder-steps > :nth-child(5),
+.reason-list > :nth-child(5) { --tone: #9a3b4a; --tone-soft: #f8e8ec; }
+.services-grid .service-card:nth-child(6),
+.tez-builder-grid > :nth-child(6),
+.tez-builder-steps > :nth-child(6),
+.reason-list > :nth-child(6) { --tone: #2f6b3a; --tone-soft: #e6f3e8; }
+.services-grid .service-card:nth-child(7),
+.tez-builder-grid > :nth-child(7),
+.reason-list > :nth-child(7) { --tone: #2c4d8a; --tone-soft: #e6ecf8; }
+.services-grid .service-card:nth-child(8),
+.tez-builder-grid > :nth-child(8),
+.reason-list > :nth-child(8) { --tone: #7a4a16; --tone-soft: #f6ead9; }
+.services-grid .service-card:nth-child(9),
+.tez-builder-grid > :nth-child(9),
+.reason-list > :nth-child(9) { --tone: #0f5c62; --tone-soft: #e3f3f4; }
+
+.tez-builder-section-process_steps .section-head,
+.steps.steps-6 {
+  text-align: center;
+}
+.steps.steps-6,
+.tez-builder-steps.steps-6 {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  max-width: 1080px;
+  margin-inline: auto;
+  gap: 16px;
+}
+
+.faq-wrap,
+.faq-group,
+.tzss-faq,
+.tzca-faq,
+.tzt-faq,
+.faq-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 1080px !important;
+  margin-inline: auto;
+  counter-reset: faq;
+}
+.faq-item,
+.faq-card,
+.tzss-faq-item,
+.tzca-faq-item,
+.tzt-faq-item {
+  counter-increment: faq;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 !important;
+  padding: 22px 18px 20px !important;
+  border: 1px solid rgba(20, 93, 74, 0.12);
+  border-radius: 20px !important;
+  background: #fff;
+  min-height: 180px;
+  overflow: visible !important;
+  box-shadow: none;
+}
+.faq-item:nth-child(9n+1), .faq-card:nth-child(9n+1),
+.tzss-faq-item:nth-child(9n+1), .tzca-faq-item:nth-child(9n+1), .tzt-faq-item:nth-child(9n+1) { --tone: #145d4a; --tone-soft: #e7f6f1; }
+.faq-item:nth-child(9n+2), .faq-card:nth-child(9n+2),
+.tzss-faq-item:nth-child(9n+2), .tzca-faq-item:nth-child(9n+2), .tzt-faq-item:nth-child(9n+2) { --tone: #1a6f8a; --tone-soft: #e5f4f8; }
+.faq-item:nth-child(9n+3), .faq-card:nth-child(9n+3),
+.tzss-faq-item:nth-child(9n+3), .tzca-faq-item:nth-child(9n+3), .tzt-faq-item:nth-child(9n+3) { --tone: #8a5a16; --tone-soft: #f8efd8; }
+.faq-item:nth-child(9n+4), .faq-card:nth-child(9n+4),
+.tzss-faq-item:nth-child(9n+4), .tzca-faq-item:nth-child(9n+4), .tzt-faq-item:nth-child(9n+4) { --tone: #6b3d7a; --tone-soft: #f4e8f7; }
+.faq-item:nth-child(9n+5), .faq-card:nth-child(9n+5),
+.tzss-faq-item:nth-child(9n+5), .tzca-faq-item:nth-child(9n+5), .tzt-faq-item:nth-child(9n+5) { --tone: #9a3b4a; --tone-soft: #f8e8ec; }
+.faq-item:nth-child(9n+6), .faq-card:nth-child(9n+6),
+.tzss-faq-item:nth-child(9n+6), .tzca-faq-item:nth-child(9n+6), .tzt-faq-item:nth-child(9n+6) { --tone: #2f6b3a; --tone-soft: #e6f3e8; }
+.faq-item:nth-child(9n+7), .faq-card:nth-child(9n+7),
+.tzss-faq-item:nth-child(9n+7), .tzca-faq-item:nth-child(9n+7), .tzt-faq-item:nth-child(9n+7) { --tone: #2c4d8a; --tone-soft: #e6ecf8; }
+.faq-item:nth-child(9n+8), .faq-card:nth-child(9n+8),
+.tzss-faq-item:nth-child(9n+8), .tzca-faq-item:nth-child(9n+8), .tzt-faq-item:nth-child(9n+8) { --tone: #7a4a16; --tone-soft: #f6ead9; }
+.faq-item:nth-child(9n), .faq-card:nth-child(9n),
+.tzss-faq-item:nth-child(9n), .tzca-faq-item:nth-child(9n), .tzt-faq-item:nth-child(9n) { --tone: #0f5c62; --tone-soft: #e3f3f4; }
+
+.faq-item::before,
+.tzss-faq-item::before,
+.tzca-faq-item::before,
+.tzt-faq-item::before {
+  content: counter(faq);
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 16px;
+  background: var(--tone-soft, #e7f6f1);
+  color: var(--tone, #145d4a);
+}
+.faq-card::before,
+.faq-item:has(.faq-num)::before {
+  display: none !important;
+  content: none !important;
+}
+.faq-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 16px;
+  background: var(--tone-soft, #e7f6f1);
+  color: var(--tone, #145d4a);
+}
+.faq-q,
+.faq-question,
+.tzss-faq-q,
+.tzca-faq-q,
+.tzt-faq-q {
+  width: auto !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  background: transparent !important;
+  font-weight: 800;
+  text-align: start !important;
+  cursor: default;
+  display: block !important;
+}
+.faq-a,
+.faq-answer,
+.tzss-faq-a,
+.tzca-faq-a,
+.tzt-faq-a {
+  display: block !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  color: #5a7268;
+  font-size: 13.5px;
+  line-height: 1.8;
+}
+.faq-a-inner,
+.tzss-faq-a-inner,
+.tzca-faq-a-inner,
+.tzt-faq-a-inner {
+  padding: 0 !important;
+}
+.faq-q span:last-child,
+.faq-icon,
+.faq-item .chevron,
+.tzss-faq-icon,
+.tzca-faq-icon,
+.tzt-faq-icon {
+  display: none !important;
+}
+
+@media (max-width: 1050px) {
+  .faq-wrap, .faq-group, .tzss-faq, .tzca-faq, .tzt-faq, .faq-grid,
+  .steps.steps-6, .tez-builder-steps.steps-6 {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+@media (max-width: 720px) {
+  .faq-wrap, .faq-group, .tzss-faq, .tzca-faq, .tzt-faq, .faq-grid,
+  .steps.steps-6, .tez-builder-steps.steps-6 {
+    grid-template-columns: 1fr !important;
+  }
+}
+

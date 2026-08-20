@@ -368,7 +368,85 @@ function teznevise_builder_get_sections( $post_id = 0 ) {
 		return array();
 	}
 
-	return teznevise_builder_sanitize_sections( $raw );
+	$sections = teznevise_builder_sanitize_sections( $raw );
+
+	$front_id = (int) get_option( 'page_on_front' );
+	if ( $front_id && $post_id === $front_id ) {
+		$sections = teznevise_builder_refresh_homepage_catalog( $sections );
+	}
+
+	return $sections;
+}
+
+/**
+ * Replace stale homepage catalog (6 services / 4 steps) with 9 / 6.
+ *
+ * Saved builder JSON is not overwritten by seed. Live homepage still reads
+ * that meta, so rewrite at render time when the old catalog is detected.
+ *
+ * @param array $sections Sanitized sections.
+ * @return array
+ */
+function teznevise_builder_refresh_homepage_catalog( $sections ) {
+	if ( ! is_array( $sections ) || ! function_exists( 'teznevise_builder_default_sections' ) ) {
+		return $sections;
+	}
+
+	$defaults  = teznevise_builder_default_sections( 'index' );
+	$def_cards = null;
+	$def_steps = null;
+	foreach ( (array) $defaults as $section ) {
+		$type = isset( $section['type'] ) ? $section['type'] : '';
+		if ( 'service_cards' === $type ) {
+			$def_cards = $section;
+		} elseif ( 'process_steps' === $type ) {
+			$def_steps = $section;
+		}
+	}
+
+	foreach ( $sections as $i => $section ) {
+		$type  = isset( $section['type'] ) ? $section['type'] : '';
+		$items = isset( $section['items'] ) && is_array( $section['items'] ) ? $section['items'] : array();
+		$titles = array();
+		foreach ( $items as $item ) {
+			if ( ! empty( $item['title'] ) ) {
+				$titles[] = $item['title'];
+			}
+		}
+
+		if ( 'service_cards' === $type && $def_cards ) {
+			$stale = count( $items ) < 9 || in_array( 'تیم پژوهشگران', $titles, true );
+			if ( $stale && ! empty( $def_cards['items'] ) ) {
+				$sections[ $i ]['items'] = $def_cards['items'];
+			}
+		}
+
+		if ( 'process_steps' === $type && $def_steps ) {
+			$title = isset( $section['title'] ) ? (string) $section['title'] : '';
+			$stale = count( $items ) < 6 || false !== strpos( $title, 'چهار قدم' );
+			if ( $stale ) {
+				if ( ! empty( $def_steps['title'] ) ) {
+					$sections[ $i ]['title'] = $def_steps['title'];
+				}
+				if ( ! empty( $def_steps['items'] ) ) {
+					$sections[ $i ]['items'] = $def_steps['items'];
+				}
+			}
+		}
+	}
+
+	return $sections;
+}
+
+/**
+ * Whether a builder section is an FAQ block (numbered boxes, no accordion).
+ *
+ * @param array $section Section data.
+ * @return bool
+ */
+function teznevise_builder_section_is_faq( $section ) {
+	$hay = ( isset( $section['eyebrow'] ) ? (string) $section['eyebrow'] : '' ) . ' ' . ( isset( $section['title'] ) ? (string) $section['title'] : '' );
+	return ( false !== strpos( $hay, 'پرسش' ) ) || ( false !== strpos( $hay, 'سوال' ) );
 }
 
 /**
@@ -470,7 +548,7 @@ function teznevise_builder_section_head( $section ) {
 		return;
 	}
 	?>
-	<div class="section-head" data-reveal>
+	<div class="section-head<?php echo ( isset( $section['type'] ) && 'process_steps' === $section['type'] ) ? ' center' : ''; ?>" data-reveal>
 		<?php if ( $eyebrow ) : ?>
 			<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
 		<?php endif; ?>
@@ -598,13 +676,16 @@ function teznevise_builder_render_card_grid( $section ) {
 	$columns = isset( $section['columns'] ) ? $section['columns'] : '3';
 	echo '<div class="' . esc_attr( teznevise_builder_grid_class( $columns ) ) . '" data-reveal-stagger>';
 
+	$index = 0;
 	foreach ( $section['items'] as $item ) {
+		$index++;
+		$tone    = ' tone-' . ( ( ( $index - 1 ) % 9 ) + 1 );
 		$url     = isset( $item['url'] ) ? $item['url'] : '';
 		$tag     = $url ? 'a' : 'div';
 		$attrs   = $url ? ' href="' . esc_url( teznevise_url( $url ) ) . '"' : '';
 		$has_svg = ! empty( $item['icon_svg'] );
 
-		echo '<' . $tag . ' class="service-card tez-builder-card' . ( $has_svg ? ' has-svg-icon' : '' ) . '"' . $attrs . '>';
+		echo '<' . $tag . ' class="service-card tez-builder-card' . $tone . ( $has_svg ? ' has-svg-icon' : '' ) . '"' . $attrs . '>';
 		echo teznevise_builder_icon_markup( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.
 
 		if ( ! empty( $item['badge'] ) ) {
@@ -639,15 +720,25 @@ function teznevise_builder_render_feature_list( $section ) {
 	teznevise_builder_open_section( $section );
 	teznevise_builder_section_head( $section );
 
+	$is_faq  = teznevise_builder_section_is_faq( $section );
 	$columns = isset( $section['columns'] ) ? $section['columns'] : '3';
-	echo '<ul class="reason-list ' . esc_attr( teznevise_builder_grid_class( $columns ) ) . '" data-reveal-stagger>';
+	$list_class = $is_faq ? 'faq-grid' : ( 'reason-list ' . teznevise_builder_grid_class( $columns ) );
+	echo '<ul class="' . esc_attr( $list_class ) . '" data-reveal-stagger>';
 
+	$index = 0;
 	foreach ( $section['items'] as $item ) {
 		if ( empty( $item['title'] ) && empty( $item['text'] ) ) {
 			continue;
 		}
-		echo '<li class="reason-item tez-builder-feature">';
-		echo teznevise_builder_icon_markup( $item, 'fa-solid fa-check' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.
+		$index++;
+		$tone = ' tone-' . ( ( ( $index - 1 ) % 9 ) + 1 );
+		$item_class = $is_faq ? ( 'faq-card faq-item' . $tone ) : ( 'reason-item tez-builder-feature' . $tone );
+		echo '<li class="' . esc_attr( $item_class ) . '">';
+		if ( $is_faq ) {
+			echo '<span class="faq-num" aria-hidden="true">' . esc_html( number_format_i18n( $index ) ) . '</span>';
+		} else {
+			echo teznevise_builder_icon_markup( $item, 'fa-solid fa-check' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.
+		}
 		echo '<div>';
 		if ( ! empty( $item['title'] ) ) {
 			echo '<h3>' . esc_html( $item['title'] ) . '</h3>';
@@ -675,11 +766,12 @@ function teznevise_builder_render_process_steps( $section ) {
 	teznevise_builder_open_section( $section );
 	teznevise_builder_section_head( $section );
 
-	echo '<ol class="tez-builder-steps" data-reveal-stagger>';
+	echo '<ol class="tez-builder-steps steps-6" data-reveal-stagger>';
 	$index = 0;
 	foreach ( $section['items'] as $item ) {
 		$index++;
-		echo '<li class="tez-builder-step">';
+		$tone = ' tone-' . ( ( ( $index - 1 ) % 9 ) + 1 );
+		echo '<li class="tez-builder-step' . esc_attr( $tone ) . '">';
 		echo '<div class="tez-builder-step-body">';
 		echo '<span class="tez-builder-step-number" aria-hidden="true">' . esc_html( number_format_i18n( $index ) ) . '</span>';
 		echo teznevise_builder_icon_markup( $item, 'fa-solid fa-arrow-down' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.

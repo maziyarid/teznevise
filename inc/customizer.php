@@ -68,7 +68,7 @@ function teznevise_customize_register( $wp_customize ) {
 		$type = ( $key === 'services_text' ) ? 'textarea' : 'text';
 		teznevise_add_text_setting( $wp_customize, $key, $label, 'teznevise_services', $defaults, $type );
 	}
-	for ( $i = 1; $i <= 6; $i++ ) {
+	for ( $i = 1; $i <= 9; $i++ ) {
 		teznevise_add_text_setting( $wp_customize, "svc{$i}_title", sprintf( __( 'کارت %d — عنوان', 'teznevise' ), $i ), 'teznevise_services', $defaults );
 		teznevise_add_text_setting( $wp_customize, "svc{$i}_text", sprintf( __( 'کارت %d — توضیح', 'teznevise' ), $i ), 'teznevise_services', $defaults, 'textarea' );
 		teznevise_add_text_setting( $wp_customize, "svc{$i}_url", sprintf( __( 'کارت %d — لینک', 'teznevise' ), $i ), 'teznevise_services', $defaults, 'url' );
@@ -95,7 +95,7 @@ function teznevise_customize_register( $wp_customize ) {
 		teznevise_add_text_setting( $wp_customize, $key, $cfg[0], 'teznevise_about', $defaults, $cfg[1] );
 	}
 
-	$wp_customize->add_section( 'teznevise_steps', array( 'title' => __( 'صفحه اصلی — چهار قدم', 'teznevise' ), 'panel' => 'teznevise_panel', 'priority' => 50 ) );
+	$wp_customize->add_section( 'teznevise_steps', array( 'title' => __( 'صفحه اصلی — شش قدم', 'teznevise' ), 'panel' => 'teznevise_panel', 'priority' => 50 ) );
 	foreach ( array(
 		'steps_eyebrow' => array( __( 'ابرو قدم‌ها', 'teznevise' ), 'text' ),
 		'steps_title' => array( __( 'عنوان قدم‌ها', 'teznevise' ), 'text' ),
@@ -108,6 +108,10 @@ function teznevise_customize_register( $wp_customize ) {
 		'step3_text' => array( __( 'قدم 3 — متن', 'teznevise' ), 'textarea' ),
 		'step4_title' => array( __( 'قدم 4 — عنوان', 'teznevise' ), 'text' ),
 		'step4_text' => array( __( 'قدم 4 — متن', 'teznevise' ), 'textarea' ),
+		'step5_title' => array( __( 'قدم 5 — عنوان', 'teznevise' ), 'text' ),
+		'step5_text' => array( __( 'قدم 5 — متن', 'teznevise' ), 'textarea' ),
+		'step6_title' => array( __( 'قدم 6 — عنوان', 'teznevise' ), 'text' ),
+		'step6_text' => array( __( 'قدم 6 — متن', 'teznevise' ), 'textarea' ),
 	) as $key => $cfg ) {
 		teznevise_add_text_setting( $wp_customize, $key, $cfg[0], 'teznevise_steps', $defaults, $cfg[1] );
 	}

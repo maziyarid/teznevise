@@ -1,34 +1,28 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import {
-  Bolt,
-  Calculator,
-  Compass,
-  FileCheck2,
-  GraduationCap,
-  Lightbulb,
-  LineChart,
-  PenTool,
-  Shield,
-  Users,
-} from "lucide-react";
+import { AppLink } from "@/components/AppLink";
 import { ARTICLES, REASONS, SERVICES, STEPS } from "@/lib/content";
 import { TESTIMONIALS } from "@/lib/site-extra";
 import { CtaBand } from "@/components/shared/CtaBand";
 import { Universities } from "@/components/shared/Universities";
+import { FaIcon } from "@/components/ui/FaIcon";
+import { faNum } from "@/lib/format";
 
-const ICONS = {
-  grad: GraduationCap,
-  file: FileCheck2,
-  chart: LineChart,
-  calc: Calculator,
-  idea: Lightbulb,
-  team: Users,
-  shield: Shield,
-  compass: Compass,
-  bolt: Bolt,
-  pen: PenTool,
-} as const;
+const FA: Record<string, string> = {
+  grad: "fa-graduation-cap",
+  file: "fa-file-lines",
+  chart: "fa-chart-line",
+  calc: "fa-calculator",
+  idea: "fa-lightbulb",
+  sim: "fa-microchip",
+  qual: "fa-comments",
+  proj: "fa-folder-open",
+  paper: "fa-newspaper",
+  shield: "fa-shield-halved",
+  compass: "fa-compass",
+  bolt: "fa-bolt",
+  pen: "fa-pen-nib",
+};
 
 export function HomePage() {
   const [seoOpen, setSeoOpen] = useState(false);
@@ -61,8 +55,8 @@ export function HomePage() {
                 {["مشاوره اولیه رایگان", "متخصص هر رشته", "پشتیبانی تا تحویل"].map(
                   (t) => (
                     <span key={t} className="inline-flex items-center gap-2">
-                      <i className="grid size-5 place-items-center rounded-full bg-brand/10 text-xs font-black text-brand not-italic">
-                        ✓
+                      <i className="grid size-5 place-items-center rounded-full bg-brand/10 text-brand not-italic">
+                        <FaIcon icon="fa-check" className="text-[10px]" />
                       </i>
                       {t}
                     </span>
@@ -109,32 +103,27 @@ export function HomePage() {
 
       <section className="section" id="services">
         <div className="container-tz">
-          <div className="section-head">
-            <div>
-              <span className="eyebrow">خدمات پژوهشی تزنویسه</span>
-              <h2>هر مرحله از پروژه را با یک پل تخصصی جلو ببرید</h2>
-              <p>
-                ساختار صفحه طوری طراحی شده که از یک خدمت به خدمت بعدی، روان و هدفمند
-                حرکت کنید.
-              </p>
-            </div>
+          <div className="section-head center">
+            <span className="eyebrow">خدمات پژوهشی تزنویسه</span>
+            <h2>هر مرحله از پروژه را با یک پل تخصصی جلو ببرید</h2>
+            <p>
+              نه خدمت اصلی، از پایان‌نامه تا مقاله؛ ساختار صفحه طوری است که از یک خدمت به
+              خدمت بعدی روان حرکت کنید.
+            </p>
           </div>
           <div className="services-grid">
-            {SERVICES.map((s) => {
-              const Icon = ICONS[s.icon];
-              return (
-                <article key={s.to} className="service-card">
-                  <div className="icon-box">
-                    <Icon className="size-6" />
-                  </div>
-                  <h3>{s.title}</h3>
-                  <p>{s.text}</p>
-                  <Link className="link-arrow" to={s.to}>
-                    جزئیات خدمت ←
-                  </Link>
-                </article>
-              );
-            })}
+            {SERVICES.map((s, i) => (
+              <article key={s.to} className={`service-card tone-${(i % 9) + 1}`}>
+                <div className="icon-box">
+                  <FaIcon icon={FA[s.icon] || "fa-circle-dot"} />
+                </div>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+                <AppLink className="link-arrow" to={s.to}>
+                  جزئیات خدمت
+                </AppLink>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -165,18 +154,15 @@ export function HomePage() {
               </Link>
             </div>
             <div className="reason-list">
-              {REASONS.map((r) => {
-                const Icon = ICONS[r.icon];
-                return (
-                  <div key={r.title} className="reason-item">
-                    <div className="icon-box">
-                      <Icon className="size-5" />
-                    </div>
-                    <b>{r.title}</b>
-                    <p>{r.text}</p>
+              {REASONS.map((r, i) => (
+                <div key={r.title} className={`reason-item tone-${(i % 6) + 1}`}>
+                  <div className="icon-box">
+                    <FaIcon icon={FA[r.icon] || "fa-circle-dot"} />
                   </div>
-                );
-              })}
+                  <b>{r.title}</b>
+                  <p>{r.text}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -186,13 +172,13 @@ export function HomePage() {
         <div className="container-tz">
           <div className="section-head center">
             <span className="eyebrow">از کجا شروع کنم؟</span>
-            <h2>چهار قدم تا یک مسیر پژوهشی روشن</h2>
+            <h2>شش قدم تا یک مسیر پژوهشی روشن</h2>
             <p>هر مرحله خروجی مشخص دارد؛ بنابراین همیشه می‌دانید قدم بعدی چیست.</p>
           </div>
-          <div className="steps">
+          <div className="steps steps-6">
             {STEPS.map((s, i) => (
-              <div key={s.title} className="step">
-                <div className="n">۰{i + 1}</div>
+              <div key={s.title} className={`step tone-${(i % 6) + 1}`}>
+                <div className="n">{faNum(i + 1)}</div>
                 <h3>{s.title}</h3>
                 <p>{s.text}</p>
               </div>
@@ -214,8 +200,8 @@ export function HomePage() {
             </Link>
           </div>
           <div className="article-grid">
-            {ARTICLES.slice(0, 3).map((a) => (
-              <article key={a.slug} className="article-card">
+            {ARTICLES.slice(0, 3).map((a, i) => (
+              <article key={a.slug} className={`article-card tone-${(i % 3) + 1}`}>
                 <div className={`article-cover ${a.cover}`} />
                 <div className="article-body">
                   <div className="article-meta">
@@ -247,8 +233,8 @@ export function HomePage() {
             </Link>
           </div>
           <div className="quote-grid">
-            {TESTIMONIALS.slice(0, 3).map((t) => (
-              <blockquote key={t.name} className="quote-card">
+            {TESTIMONIALS.slice(0, 3).map((t, i) => (
+              <blockquote key={t.name} className={`quote-card tone-${(i % 3) + 1}`}>
                 <p>«{t.quote}»</p>
                 <footer>
                   <b>{t.name}</b>
@@ -297,7 +283,7 @@ export function HomePage() {
               aria-expanded={seoOpen}
               onClick={() => setSeoOpen((v) => !v)}
             >
-              {seoOpen ? "نمایش کمتر" : "‹ مشاهده بیشتر"}
+              {seoOpen ? "نمایش کمتر" : "مشاهده بیشتر"}
             </button>
           </div>
         </div>

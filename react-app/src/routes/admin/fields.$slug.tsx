@@ -3,7 +3,8 @@ import { useEffect, useMemo, useState, type ChangeEvent } from "react";
 import { AppPage } from "@/components/layout/AppFrame";
 import { FIELD_CATALOG } from "@/lib/field-catalog";
 import { getPageField, savePageField } from "@/lib/server/app";
-import { PROPOSAL_PAGES, SERVICE_PAGES, STATIC_PAGES, THESIS_PAGES } from "@/lib/content";
+import { PROPOSAL_PAGES, SERVICE_PAGES, STATIC_PAGES, THESIS_PAGES, TOOLS } from "@/lib/content";
+import { CASE_STUDIES, DOWNLOADS, GAMS_PAGE, IMPORTED_LEGAL } from "@/lib/imported-pages";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/fields/$slug")({ component: FieldEditor });
@@ -70,6 +71,73 @@ function defaultsFor(slug: string): FormState {
       cta_text: "",
       cta_url: "",
     };
+  }
+  if (slug === "gams") {
+    return {
+      eyebrow: GAMS_PAGE.eyebrow,
+      title: GAMS_PAGE.title,
+      lead: GAMS_PAGE.lead,
+      features: GAMS_PAGE.features.join("\n"),
+      body: (GAMS_PAGE.body ?? []).join("\n\n"),
+      cta_text: "شروع مشاوره رایگان",
+      cta_url: "/inquiry",
+    };
+  }
+  if (slug.startsWith("tool-")) {
+    const t = TOOLS.find((x) => x.slug === slug.slice(5));
+    if (t) {
+      return {
+        eyebrow: t.group,
+        title: t.title,
+        lead: t.text,
+        features: "",
+        body: "",
+        cta_text: "تحلیل آماری تخصصی",
+        cta_url: "/statistics",
+      };
+    }
+  }
+  if (slug.startsWith("legal-")) {
+    const p = IMPORTED_LEGAL[slug.slice(6)];
+    if (p) {
+      return {
+        eyebrow: "قوانین",
+        title: p.title,
+        lead: p.lead,
+        features: "",
+        body: p.sections.map((s) => `${s.title}\n${s.body}`).join("\n\n"),
+        cta_text: "",
+        cta_url: "",
+      };
+    }
+  }
+  if (slug.startsWith("download-")) {
+    const d = DOWNLOADS.find((x) => x.slug === slug.slice(9));
+    if (d) {
+      return {
+        eyebrow: d.source,
+        title: d.title,
+        lead: d.excerpt,
+        features: d.files.map((f) => f.text).join("\n"),
+        body: d.sections.map((s) => `${s.title}\n${s.body}`).join("\n\n"),
+        cta_text: "",
+        cta_url: "",
+      };
+    }
+  }
+  if (slug.startsWith("case-")) {
+    const c = CASE_STUDIES.find((x) => x.slug === slug.slice(5));
+    if (c) {
+      return {
+        eyebrow: c.field,
+        title: c.title,
+        lead: c.excerpt,
+        features: [c.client, c.degree, c.service, c.duration].join("\n"),
+        body: `چالش\n${c.challenge}\n\nراه‌حل\n${c.solution}\n\nنتیجه\n${c.result}`,
+        cta_text: "پروژه مشابه",
+        cta_url: "/inquiry",
+      };
+    }
   }
   return { eyebrow: "", title: "", lead: "", features: "", body: "", cta_text: "", cta_url: "" };
 }

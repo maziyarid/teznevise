@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CASES } from "@/lib/site-extra";
+import { CASE_STUDIES } from "@/lib/imported-pages";
 import { STATIC_PAGES } from "@/lib/content";
 import { usePageOverlay } from "@/lib/page-overlay";
 import { CtaBand } from "@/components/shared/CtaBand";
@@ -19,6 +20,19 @@ function CasesPage() {
       />
       <section className="section">
         <div className="container-tz grid gap-6">
+          {CASE_STUDIES.map((c) => (
+            <article key={c.slug} className="case-card" id={c.slug}>
+              <span className="case-index">{c.icon}</span>
+              <div>
+                <p className="eyebrow">{c.field}</p>
+                <h2>{c.title}</h2>
+                <p>{c.excerpt}</p>
+                <Link to="/case-study/$slug" params={{ slug: c.slug }} className="link-arrow mt-3 inline-flex">
+                  خواندن مطالعه کامل
+                </Link>
+              </div>
+            </article>
+          ))}
           {CASES.map((c, i) => (
             <article key={c.slug} className="case-card" id={c.slug}>
               <span className="case-index">۰{i + 1}</span>

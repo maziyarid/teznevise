@@ -427,11 +427,13 @@
     display: block !important;
   }
   .main-nav .menu-item.has-dropdown:hover > ul.nav-dropdown,
-  .main-nav .menu-item.has-dropdown:focus-within > ul.nav-dropdown {
+  .main-nav .menu-item.has-dropdown:focus-within > ul.nav-dropdown,
+  .main-nav .menu-item.has-dropdown.is-open > ul.nav-dropdown {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
     transform: translateY(0) !important;
+    display: grid !important;
   }
   .main-nav .nav-links > li:has(> a[href*="/inquiry"]),
   .main-nav .nav-links > li:has(> a[href*="/about-us"]),
@@ -491,10 +493,9 @@
     width: auto !important;
     min-width: 0 !important;
     max-width: none !important;
-    max-height: min(70vh, 520px) !important;
+    max-height: min(62vh, 520px) !important;
     overflow-x: hidden !important;
     overflow-y: auto !important;
-    display: grid !important;
     grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important;
     gap: 6px 10px !important;
     padding: 16px !important;
@@ -507,6 +508,7 @@
   }
   .main-nav ul.nav-dropdown,
   .main-nav ul.nav-dropdown:not(.is-open) {
+    display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
@@ -516,6 +518,7 @@
   .main-nav .menu-item.has-dropdown:focus-within > ul.nav-dropdown,
   .main-nav .menu-item.has-dropdown.is-open > ul.nav-dropdown,
   .main-nav ul.nav-dropdown.is-open {
+    display: grid !important;
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
