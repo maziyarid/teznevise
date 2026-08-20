@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.7 — 2026-08-20 — Empty-builder fill vs field overwrite
+
+- Empty, non-manual builder JSON can be filled without overwriting existing `_teznevise_*` fields or a non-default template.
+- `default-seed` pages still refresh fields/template even when builder JSON is empty.
+- Dry-run reports field/template writes, not just builder JSON.
+
 ## 1.7.6 — 2026-08-20 — Remaining shortcode mappings + dump removal
 
 - Map `[tz_price_box]`, `[tz_price_cta]` (including bare `[tz_price_cta]` and `text=`), `[tz_calculation_hub]` (with optional attributes), and `[tz_careers_terms]`.

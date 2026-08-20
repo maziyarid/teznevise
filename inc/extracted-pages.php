@@ -12,9 +12,10 @@
  * - Empty redesign seed pages (about, service-thesis, …) are skipped;
  *   those keep builder-defaults.json.
  * - Automatic writes never replace administrator-owned builder JSON.
- *   Replacement is allowed only for empty pages, default-seed data,
- *   previously extracted data whose hash still matches, or an explicit
- *   administrator force-replace.
+ *   Empty builder JSON may be filled without overwriting existing
+ *   `_teznevise_*` fields or a non-default template. Field/template
+ *   replacement is allowed only for default-seed data, unedited extracted
+ *   payloads, generic v1.1 parser output, or an explicit force-replace.
  * - Manual provenance is honored even when builder JSON is empty ([]):
  *   administrator-owned _teznevise_* meta and non-default templates stay.
  *
@@ -487,16 +488,29 @@ function teznevise_stamp_manual_from_rest( $post, $request, $_creating ) { // ph
 add_action( 'rest_after_insert_page', 'teznevise_stamp_manual_from_rest', 10, 3 );
 
 /**
+ * Whether the page currently has a non-empty builder payload.
+ *
+ * `[]` and missing meta are empty.
+ *
+ * @param int $post_id Page ID.
+ * @return bool
+ */
+function teznevise_extracted_page_has_builder_payload( $post_id ) {
+	$meta_key = defined( 'TEZNEVISE_BUILDER_META' ) ? TEZNEVISE_BUILDER_META : '_teznevise_builder_sections';
+	$existing = get_post_meta( (int) $post_id, $meta_key, true );
+	return is_string( $existing ) && '' !== trim( $existing ) && '[]' !== trim( $existing );
+}
+
+/**
  * Whether existing builder/meta/template may be replaced by extracted data.
  *
- * Automatic runs never overwrite administrator-owned values. Replacement is
- * allowed when the page is empty, still default-seed, still the previously
- * written extracted payload, still generic v1.1 parser output, or the
- * administrator passed an explicit force flag.
- *
- * Manual provenance is checked before the empty-builder fast path so a page
- * with [] builder JSON, manual provenance, and administrator-owned
- * `_teznevise_*` meta / non-default template is never treated as replaceable.
+ * Automatic runs never overwrite administrator-owned values. Empty builder
+ * JSON is not treated as ownership of `_teznevise_*` fields or a
+ * non-default `_wp_page_template`. Manual provenance is checked first.
+ * Default-seed pages stay theme-owned even when builder JSON is empty, so
+ * their fields/template can refresh. Extracted provenance keeps existing
+ * custom fields; builder JSON can still refresh via
+ * teznevise_extracted_builder_may_write() when the stored hash matches.
  *
  * @param int   $post_id Page ID.
  * @param array $entry   Extracted entry.
@@ -515,24 +529,27 @@ function teznevise_extracted_fields_are_replaceable( $post_id, $entry, $force = 
 		return false;
 	}
 
-	$meta_key = defined( 'TEZNEVISE_BUILDER_META' ) ? TEZNEVISE_BUILDER_META : '_teznevise_builder_sections';
-	$existing = get_post_meta( $post_id, $meta_key, true );
-	$had      = is_string( $existing ) && '' !== trim( $existing ) && '[]' !== trim( $existing );
-	if ( ! $had ) {
+	// Default-seed remains theme-owned, including empty builder JSON.
+	if ( 'default-seed' === $provenance ) {
 		return true;
+	}
+
+	// Empty builder may be filled separately. It must not authorize
+	// replacement of existing custom fields or a non-default template.
+	if ( ! teznevise_extracted_page_has_builder_payload( $post_id ) ) {
+		return false;
 	}
 
 	$stored_hash = (string) get_post_meta( $post_id, TEZNEVISE_EXTRACTED_HASH_META, true );
 	$current     = function_exists( 'teznevise_builder_get_sections' ) ? teznevise_builder_get_sections( $post_id ) : array();
 	$current_h   = teznevise_sections_hash( $current );
 
+	// Previously extracted pages keep their existing custom fields unless
+	// the administrator force-replaces.
 	if ( 'extracted' === $provenance ) {
-		return ( '' === $stored_hash ) || ( $stored_hash === $current_h );
+		return false;
 	}
 
-	if ( 'default-seed' === $provenance ) {
-		return true;
-	}
 
 	$incoming = isset( $entry['sections'] ) && is_array( $entry['sections'] ) ? $entry['sections'] : array();
 	if ( $incoming && $current_h === teznevise_sections_hash( $incoming ) ) {
@@ -558,6 +575,42 @@ function teznevise_extracted_fields_are_replaceable( $post_id, $entry, $force = 
 		}
 	}
 
+	return false;
+}
+
+/**
+ * Whether extracted builder JSON may be written onto the page.
+ *
+ * Empty, non-manual builder payloads are fillable. Manual provenance is
+ * never filled or replaced without $force. Unedited extracted builder JSON
+ * may refresh from the dataset even when existing custom fields are kept.
+ *
+ * @param int   $post_id Page ID.
+ * @param array $entry   Extracted entry.
+ * @param bool  $force   Administrator force-replace.
+ * @return bool
+ */
+function teznevise_extracted_builder_may_write( $post_id, $entry, $force = false ) {
+	$post_id = (int) $post_id;
+	if ( $force ) {
+		return true;
+	}
+	$provenance = (string) get_post_meta( $post_id, TEZNEVISE_BUILDER_PROVENANCE_META, true );
+	if ( 'manual' === $provenance ) {
+		return false;
+	}
+	if ( ! teznevise_extracted_page_has_builder_payload( $post_id ) ) {
+		return true;
+	}
+	if ( teznevise_extracted_fields_are_replaceable( $post_id, $entry, false ) ) {
+		return true;
+	}
+	if ( 'extracted' === $provenance ) {
+		$stored_hash = (string) get_post_meta( $post_id, TEZNEVISE_EXTRACTED_HASH_META, true );
+		$current     = function_exists( 'teznevise_builder_get_sections' ) ? teznevise_builder_get_sections( $post_id ) : array();
+		$current_h   = teznevise_sections_hash( $current );
+		return ( '' === $stored_hash ) || ( $stored_hash === $current_h );
+	}
 	return false;
 }
 
@@ -592,20 +645,36 @@ function teznevise_apply_extracted_fields( $post_id, $replace_builder = false, $
 		return 'empty';
 	}
 
-	$existing_builder = get_post_meta( $post_id, defined( 'TEZNEVISE_BUILDER_META' ) ? TEZNEVISE_BUILDER_META : '_teznevise_builder_sections', true );
-	$had_builder      = is_string( $existing_builder ) && '' !== trim( $existing_builder ) && '[]' !== trim( $existing_builder );
-	$replaceable      = teznevise_extracted_fields_are_replaceable( $post_id, $entry, (bool) $replace_builder );
+	$had_builder   = teznevise_extracted_page_has_builder_payload( $post_id );
+	$overwrite     = teznevise_extracted_fields_are_replaceable( $post_id, $entry, (bool) $replace_builder );
+	$write_builder = teznevise_extracted_builder_may_write( $post_id, $entry, (bool) $replace_builder );
 
 	if ( $dry_run ) {
-		if ( $sections && $replaceable ) {
+		if ( $sections && $write_builder ) {
 			return $had_builder ? 'updated' : 'created';
+		}
+		$allowed = teznevise_extracted_meta_keys();
+		foreach ( $meta as $key => $value ) {
+			if ( ! in_array( $key, $allowed, true ) || ! is_string( $value ) || '' === $value ) {
+				continue;
+			}
+			$current = get_post_meta( $post_id, '_teznevise_' . $key, true );
+			if ( ( '' === (string) $current || $overwrite ) && (string) $current !== $value ) {
+				return $had_builder ? 'updated' : 'created';
+			}
+		}
+		if ( $template && 'page.php' !== $template ) {
+			$current_tpl = (string) get_post_meta( $post_id, '_wp_page_template', true );
+			if ( ( $overwrite || '' === $current_tpl || 'default' === $current_tpl ) && $current_tpl !== $template ) {
+				return $had_builder ? 'updated' : 'created';
+			}
 		}
 		return 'skipped';
 	}
 
 	$wrote = false;
 
-	if ( $sections && function_exists( 'teznevise_builder_save_sections' ) && $replaceable ) {
+	if ( $sections && function_exists( 'teznevise_builder_save_sections' ) && $write_builder ) {
 		if ( teznevise_builder_save_sections( $post_id, $sections ) ) {
 			$wrote = true;
 		}
@@ -623,7 +692,7 @@ function teznevise_apply_extracted_fields( $post_id, $replace_builder = false, $
 		}
 		$meta_key = '_teznevise_' . $key;
 		$current  = get_post_meta( $post_id, $meta_key, true );
-		if ( '' !== (string) $current && ! $replaceable ) {
+		if ( '' !== (string) $current && ! $overwrite ) {
 			continue;
 		}
 		if ( (string) $current === $value ) {
@@ -636,7 +705,7 @@ function teznevise_apply_extracted_fields( $post_id, $replace_builder = false, $
 
 	if ( $template && 'page.php' !== $template ) {
 		$current_tpl = (string) get_post_meta( $post_id, '_wp_page_template', true );
-		if ( $replaceable || '' === $current_tpl || 'default' === $current_tpl ) {
+		if ( $overwrite || '' === $current_tpl || 'default' === $current_tpl ) {
 			if ( $current_tpl !== $template && update_post_meta( $post_id, '_wp_page_template', $template ) ) {
 				$wrote = true;
 			}
