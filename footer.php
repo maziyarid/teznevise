@@ -37,23 +37,22 @@
 				<a href="<?php echo esc_url( home_url( '/tools/' ) ); ?>"><?php esc_html_e( 'ابزارهای آنلاین', 'teznevise' ); ?></a>
 			</div>
 			<div class="footer-col">
-				<h4><?php esc_html_e( 'ناوبری', 'teznevise' ); ?></h4>
-				<?php echo wp_nav_menu( array( 'theme_location' => 'footer', 'container' => false, 'menu_class' => 'footer-menu-list', 'fallback_cb' => 'teznevise_fallback_menu', 'echo' => false, 'depth' => 2 ) ); ?>
-				<nav class="footer-legal" aria-label="<?php esc_attr_e( 'صفحات حقوقی', 'teznevise' ); ?>">
-					<a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>"><?php esc_html_e( 'حریم خصوصی', 'teznevise' ); ?></a>
-					<a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>"><?php esc_html_e( 'قوانین استفاده', 'teznevise' ); ?></a>
-					<a href="<?php echo esc_url( home_url( '/cookies/' ) ); ?>"><?php esc_html_e( 'کوکی‌ها', 'teznevise' ); ?></a>
-					<a href="<?php echo esc_url( home_url( '/refund/' ) ); ?>"><?php esc_html_e( 'بازپرداخت', 'teznevise' ); ?></a>
-					<a href="<?php echo esc_url( home_url( '/research-rules/' ) ); ?>"><?php esc_html_e( 'ضوابط پژوهش', 'teznevise' ); ?></a>
-				</nav>
-			</div>
-			<div class="footer-col">
 				<h4><?php esc_html_e( 'ارتباط با ما', 'teznevise' ); ?></h4>
 				<a href="tel:<?php echo esc_attr( teznevise_get_contact( 'phone_intl' ) ); ?>"><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></a>
 				<a href="mailto:<?php echo esc_attr( teznevise_get_contact( 'email' ) ); ?>"><?php echo esc_html( teznevise_get_contact( 'email' ) ); ?></a>
 				<p><?php echo esc_html( teznevise_get_contact( 'address' ) ); ?></p>
 			</div>
 		</div>
+		<nav class="footer-utility" aria-label="<?php esc_attr_e( 'پیوندهای تکمیلی', 'teznevise' ); ?>">
+			<?php echo wp_nav_menu( array( 'theme_location' => 'footer', 'container' => false, 'menu_class' => 'footer-menu-list', 'fallback_cb' => 'teznevise_fallback_menu', 'echo' => false, 'depth' => 1 ) ); ?>
+			<div class="footer-legal" aria-label="<?php esc_attr_e( 'صفحات حقوقی', 'teznevise' ); ?>">
+				<a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>"><?php esc_html_e( 'حریم خصوصی', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>"><?php esc_html_e( 'قوانین استفاده', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/cookies/' ) ); ?>"><?php esc_html_e( 'کوکی‌ها', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/refund/' ) ); ?>"><?php esc_html_e( 'بازپرداخت', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/research-rules/' ) ); ?>"><?php esc_html_e( 'ضوابط پژوهش', 'teznevise' ); ?></a>
+			</div>
+		</nav>
 		<div class="footer-certs" aria-label="<?php esc_attr_e( 'نمادهای اعتماد', 'teznevise' ); ?>">
 			<?php
 			$enamad    = function_exists( 'teznevise_tezcoin_get' ) ? teznevise_tezcoin_get( 'enamad_url' ) : '';
@@ -76,7 +75,6 @@
 		</div>
 		<div class="footer-bottom">
 			<span>© <?php echo esc_html( date_i18n( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?> — <?php esc_html_e( 'تمامی حقوق محفوظ است.', 'teznevise' ); ?></span>
-			<span><?php printf( esc_html__( 'طراحی RTL واکنش‌گرا — WordPress Theme %s', 'teznevise' ), esc_html( defined( 'TEZNEVISE_VERSION' ) ? TEZNEVISE_VERSION : '' ) ); ?></span>
 		</div>
 	</div>
 </footer>

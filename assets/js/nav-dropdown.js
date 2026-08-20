@@ -3,12 +3,10 @@
  * by the desktop primary menu (.main-nav) and the mobile drawer menu
  * (.mobile-nav-links) -- both are rendered by the same Teznevise_Nav_Walker.
  *
- * The submenu is opened/closed exclusively by the dedicated
- * `.nav-dropdown-toggle` button, never by intercepting the parent link
- * itself, so the link always stays navigable. On pointer-capable
- * ("hover: hover") devices, hovering the parent item also opens it, and
- * `aria-expanded` is kept in sync in both cases so the visual state and the
- * announced state never disagree.
+ * Desktop hover only follows the parent item (the in-flow link row) plus
+ * the mega panel that is a child of that item. A short close delay covers
+ * the gap between the bar and the panel so the menu cannot stay open just
+ * because the pointer is over the page below.
  *
  * @package Teznevise
  */
@@ -17,34 +15,55 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!toggles.length) return;
 
   var supportsHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;
+  var closeDelay = 160;
+  var closeTimer = null;
 
   function closeAll(except) {
     toggles.forEach(function (toggle) {
       if (toggle === except) return;
       toggle.setAttribute('aria-expanded', 'false');
-      var panel = toggle.parentElement.querySelector('.nav-dropdown');
+      var panel = toggle.parentElement.querySelector(':scope > .nav-dropdown, :scope > ul.nav-dropdown');
+      if (!panel) panel = toggle.parentElement.querySelector('.nav-dropdown');
       if (panel) panel.classList.remove('is-open');
+      toggle.parentElement.classList.remove('is-open');
     });
   }
 
   function openToggle(toggle, panel) {
+    if (closeTimer) {
+      clearTimeout(closeTimer);
+      closeTimer = null;
+    }
     closeAll(toggle);
     toggle.setAttribute('aria-expanded', 'true');
     panel.classList.add('is-open');
+    toggle.parentElement.classList.add('is-open');
   }
 
   function closeToggle(toggle, panel) {
     toggle.setAttribute('aria-expanded', 'false');
     panel.classList.remove('is-open');
+    toggle.parentElement.classList.remove('is-open');
+  }
+
+  function scheduleClose(toggle, panel) {
+    if (closeTimer) clearTimeout(closeTimer);
+    closeTimer = setTimeout(function () {
+      closeToggle(toggle, panel);
+      closeTimer = null;
+    }, closeDelay);
   }
 
   toggles.forEach(function (toggle) {
     var parentItem = toggle.parentElement;
-    var panel = parentItem.querySelector('.nav-dropdown');
+    var panel = parentItem.querySelector(':scope > .nav-dropdown, :scope > ul.nav-dropdown');
+    if (!panel) panel = parentItem.querySelector('.nav-dropdown');
     if (!panel) return;
     var inMobileDrawer = !!toggle.closest('.mobile-nav-links');
 
-    toggle.addEventListener('click', function () {
+    toggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
       var isOpen = toggle.getAttribute('aria-expanded') === 'true';
       if (isOpen) {
         closeToggle(toggle, panel);
@@ -53,14 +72,18 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // Hover-to-open only makes sense for the desktop floating panel; the
-    // mobile drawer's inline accordion is click/tap-only.
     if (supportsHover && !inMobileDrawer) {
       parentItem.addEventListener('mouseenter', function () {
         openToggle(toggle, panel);
       });
       parentItem.addEventListener('mouseleave', function () {
-        closeToggle(toggle, panel);
+        scheduleClose(toggle, panel);
+      });
+      panel.addEventListener('mouseenter', function () {
+        openToggle(toggle, panel);
+      });
+      panel.addEventListener('mouseleave', function () {
+        scheduleClose(toggle, panel);
       });
     }
 

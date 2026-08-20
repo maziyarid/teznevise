@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.8.0 — 2026-08-20 — Mega menu, footer, search overlay
+
+- Desktop submenus are full-width mega panels (grid + scroll) so long tool/thesis lists stay on screen, with Font Awesome icons on every item.
+- Closed panels keep `pointer-events: none` so hovering the page no longer opens a menu.
+- Search overlay sits above the header, centered in the viewport (no upward clip under the bar).
+- Footer is three columns (brand / services / contact). Company and legal links sit in a horizontal strip above the copyright.
+- Footer logo is the mark only, inverted to white, with no plate behind it.
+- Page heroes, builder cards, blog archive, and forms get denser rhythm and readable contrast.
+
+
 ## 1.7.9 — 2026-08-20 — Desktop header + skip-link
 
 - Remove the English "Skip to content" link from `header.php`. It was painted on every page because the theme never shipped `.screen-reader-text`.

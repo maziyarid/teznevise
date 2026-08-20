@@ -111,6 +111,10 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 
 			$item_output  = isset( $args->before ) ? $args->before : '';
 			$item_output .= '<a' . $attributes . '>';
+			$icon         = function_exists( 'teznevise_nav_icon' ) ? teznevise_nav_icon( isset( $atts['href'] ) ? $atts['href'] : '', $title ) : '';
+			if ( $icon ) {
+				$item_output .= '<i class="' . esc_attr( $icon ) . ' nav-item-icon" aria-hidden="true"></i>';
+			}
 			$item_output .= ( isset( $args->link_before ) ? $args->link_before : '' ) . $title . ( isset( $args->link_after ) ? $args->link_after : '' );
 			$item_output .= '</a>';
 			$item_output .= isset( $args->after ) ? $args->after : '';
