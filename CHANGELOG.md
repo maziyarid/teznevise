@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.9 — 2026-08-20 — Desktop header + skip-link
+
+- Remove the English "Skip to content" link from `header.php`. It was painted on every page because the theme never shipped `.screen-reader-text`.
+- Compact the desktop bar: hide walker chevrons (hover/focus-within still opens dropdowns), drop Inquiry/About items that already exist as CTAs, and override the 88px / 34px gap from layout-refinements.
+
+
 ## 1.7.8 — 2026-08-20 — Hotfix: migrator parse error (issue #425)
 
 - Close the duplicated `[gravityform]` `if` in `teznevise_migration_parse_content()` that left an unclosed `{` from line 370 to EOF and fatally broke every request that loaded the theme.

@@ -388,3 +388,69 @@
 @media (prefers-reduced-motion: reduce) {
   .tz-fab-toggle { animation: none !important; }
 }
+
+/* 1.7.9 — skip-link + compact desktop header.
+ * layout-refinements.css sets .main-nav to height 88px / gap 34px and
+ * nav-dropdown.css parks a 28px chevron beside every parent. Together with
+ * WP menu items that duplicate the CTA buttons, the 1200px bar overflows. */
+.skip-link,
+.skip-link.screen-reader-text {
+  display: none !important;
+}
+
+@media (min-width: 1051px) {
+  .main-nav {
+    height: 72px !important;
+    min-height: 72px !important;
+    gap: 8px !important;
+    padding-inline: 12px !important;
+  }
+  .main-nav .nav-links {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 0 !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    justify-content: center !important;
+  }
+  .main-nav .nav-links > li > a,
+  .main-nav .nav-links > li > .nav-link {
+    padding: 8px 8px !important;
+    font-size: 13px !important;
+    white-space: nowrap !important;
+  }
+  .main-nav .nav-dropdown-toggle {
+    display: none !important;
+  }
+  .main-nav .menu-item.has-dropdown {
+    display: block !important;
+  }
+  .main-nav .menu-item.has-dropdown:hover > ul.nav-dropdown,
+  .main-nav .menu-item.has-dropdown:focus-within > ul.nav-dropdown {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateY(0) !important;
+  }
+  .main-nav .nav-links > li:has(> a[href*="/inquiry"]),
+  .main-nav .nav-links > li:has(> a[href*="/about-us"]),
+  .main-nav .nav-links > li:has(> a[href*="/about/"]) {
+    display: none !important;
+  }
+  .main-nav .nav-actions {
+    gap: 6px !important;
+    flex: 0 0 auto !important;
+  }
+  .main-nav .nav-cta {
+    height: 40px !important;
+    padding-inline: 12px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media (min-width: 1051px) and (max-width: 1180px) {
+  .main-nav .desktop-cta-group .nav-cta-outline {
+    display: none !important;
+  }
+}
