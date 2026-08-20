@@ -38,7 +38,7 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 
 = 1.6.6 =
 * Shortcode migration skips manual-provenance empty builders unless force-replace
-* Page-meta and REST `_teznevise_*` writes stamp manual ownership
+* Page-meta and REST `_teznevise_*` writes stamp manual ownership only when values change
 
 = 1.6.5 =
 * Empty builder JSON no longer bypasses manual provenance or existing custom fields/templates

@@ -18,7 +18,7 @@ This document captures the complete data extraction from the uploaded database e
 - Trigger: Appearance → Teznevise Setup, or auto-run migrator v1.2.0
 - Auto-run is provenance-safe: it fills empty pages and replaces default-seed / matching extracted hashes, never administrator-owned builder JSON
 - Manual provenance is honored on both the extracted-fields path and the later shortcode-to-builder candidate loop, even when builder JSON is `[]`
-- Non-builder `_teznevise_*` metabox/REST writes stamp `manual` provenance
+- Non-builder `_teznevise_*` metabox/REST writes stamp `manual` provenance only when a stored value actually changes
 - Force-replace is an explicit Setup checkbox
 - Mixed interactive shortcodes (`tz_careers_terms`, `tz_join_form`, calculators, Gravity Forms) still render beside builder sections
 - Privacy/cookie templates keep legal copy in `post_content`; builder only stores hero/CTA
