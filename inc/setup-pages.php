@@ -79,6 +79,22 @@ function teznevise_recommended_pages() {
 				'service_color' => 'icon-amber',
 			),
 		),
+		'blog'               => array(
+			'title'    => 'بلاگ',
+			'template' => '',
+			'meta'     => array(
+				'eyebrow'  => 'مرکز دانش',
+				'subtitle' => 'راهنما و مقالات پژوهشی',
+			),
+		),
+		'testimonials'       => array(
+			'title'    => 'نظرات مشتریان',
+			'template' => 'page-team.php',
+			'meta'     => array(
+				'eyebrow'  => 'اعتماد',
+				'subtitle' => 'بازخورد دانشجویان و پژوهشگران',
+			),
+		),
 		'tool-descriptive-statistics' => array(
 			'title'    => 'آمار توصیفی',
 			'template' => 'page-tool.php',
@@ -239,6 +255,11 @@ function teznevise_seed_pages( $replace_builder = false ) {
 			}
 		}
 		$created[] = $slug;
+	}
+
+	$blog = get_page_by_path( 'blog' );
+	if ( $blog instanceof WP_Post && ! (int) get_option( 'page_for_posts' ) ) {
+		update_option( 'page_for_posts', (int) $blog->ID );
 	}
 
 	$builder = function_exists( 'teznevise_builder_seed_all' )

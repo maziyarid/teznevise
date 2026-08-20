@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.4 — 2026-08-20 — Chrome URL and search a11y
+
+- Blog chrome links resolve from `page_for_posts` (then a seeded `blog` page, then home) instead of a hard-coded `/blog/` path.
+- Setup seeds `blog` as the posts page when unset, and seeds `testimonials`.
+- Header “بازخورد مشتریان” now points at `/testimonials/` instead of `/contact/`.
+- Search overlay traps Tab, restores focus to the trigger, and keeps `hidden` / `aria-hidden` / `aria-expanded` in sync.
+
 ## 1.7.3 — 2026-08-20 — Footer and FAB polish
 
 - FAB stays 18px from the physical right (no RTL inset reset).

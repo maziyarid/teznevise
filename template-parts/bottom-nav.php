@@ -36,7 +36,7 @@ if ( ! $items ) {
 	$items = array(
 		array( 'label' => __( 'خانه', 'teznevise' ), 'url' => home_url( '/' ) ),
 		array( 'label' => __( 'ابزارها', 'teznevise' ), 'url' => home_url( '/tools/' ) ),
-		array( 'label' => __( 'بلاگ', 'teznevise' ), 'url' => home_url( '/blog/' ) ),
+		array( 'label' => __( 'بلاگ', 'teznevise' ), 'url' => teznevise_posts_url() ),
 		array( 'label' => __( 'تماس', 'teznevise' ), 'url' => 'tel:' . teznevise_get_contact( 'phone_intl' ) ),
 	);
 }
