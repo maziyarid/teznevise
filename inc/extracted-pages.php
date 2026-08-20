@@ -356,32 +356,48 @@ function teznevise_stamp_manual_page_ownership( $post_id ) {
  * @param WP_REST_Request $request  Request.
  * @param bool            $creating Creating vs updating.
  */
-function teznevise_stamp_manual_from_rest( $post, $request, $_creating ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
-	if ( ! $post instanceof WP_Post || 'page' !== $post->post_type ) {
-		return;
+function teznevise_capture_rest_page_meta( $prepared, $request ) {
+	if ( ! $prepared instanceof WP_Post || 'page' !== $prepared->post_type || ! $prepared->ID ) {
+		return $prepared;
 	}
-	if ( ! current_user_can( 'edit_page', (int) $post->ID ) ) {
+	$meta = $request instanceof WP_REST_Request ? $request->get_param( 'meta' ) : null;
+	if ( ! is_array( $meta ) ) {
+		return $prepared;
+	}
+	global $teznevise_rest_page_meta_before;
+	$teznevise_rest_page_meta_before[ (int) $prepared->ID ] = array();
+	foreach ( array_keys( $meta ) as $key ) {
+		$key = (string) $key;
+		if ( 0 === strpos( $key, '_teznevise_' ) ) {
+			$teznevise_rest_page_meta_before[ (int) $prepared->ID ][ $key ] = get_post_meta( $prepared->ID, $key, true );
+		}
+	}
+	return $prepared;
+}
+add_filter( 'rest_pre_insert_page', 'teznevise_capture_rest_page_meta', 10, 2 );
+
+function teznevise_stamp_manual_from_rest( $post, $request, $_creating ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	if ( ! $post instanceof WP_Post || 'page' !== $post->post_type || ! current_user_can( 'edit_page', (int) $post->ID ) ) {
 		return;
 	}
 	$meta = $request instanceof WP_REST_Request ? $request->get_param( 'meta' ) : null;
 	if ( ! is_array( $meta ) ) {
 		return;
 	}
-	$skip = array(
-		'_teznevise_builder_sections',
-		'_teznevise_builder_provenance',
-		'_teznevise_extracted_hash',
-	);
+	$skip = array( '_teznevise_builder_sections', '_teznevise_builder_provenance', '_teznevise_extracted_hash' );
+	global $teznevise_rest_page_meta_before;
+	$before = isset( $teznevise_rest_page_meta_before[ (int) $post->ID ] ) ? $teznevise_rest_page_meta_before[ (int) $post->ID ] : array();
 	foreach ( array_keys( $meta ) as $key ) {
 		$key = (string) $key;
-		if ( 0 !== strpos( $key, '_teznevise_' ) ) {
+		if ( 0 !== strpos( $key, '_teznevise_' ) || in_array( $key, $skip, true ) ) {
 			continue;
 		}
-		if ( in_array( $key, $skip, true ) ) {
-			continue;
+		$old = array_key_exists( $key, $before ) ? $before[ $key ] : null;
+		$new = get_post_meta( $post->ID, $key, true );
+		if ( maybe_serialize( $old ) !== maybe_serialize( $new ) ) {
+			teznevise_stamp_manual_page_ownership( (int) $post->ID );
+			return;
 		}
-		teznevise_stamp_manual_page_ownership( (int) $post->ID );
-		return;
 	}
 }
 add_action( 'rest_after_insert_page', 'teznevise_stamp_manual_from_rest', 10, 3 );
