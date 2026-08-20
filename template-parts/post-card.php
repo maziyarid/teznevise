@@ -19,6 +19,6 @@ $category = $categories ? $categories[0] : null;
 		<div class="post-card__meta"><time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( get_the_date( 'j F Y' ) ); ?></time><?php if ( $category ) : ?><a href="<?php echo esc_url( get_category_link( $category->term_id ) ); ?>"><?php echo esc_html( $category->name ); ?></a><?php endif; ?></div>
 		<<?php echo esc_attr( $heading_tag ); ?>><a href="<?php echo esc_url( get_permalink() ); ?>"><?php the_title(); ?></a></<?php echo esc_attr( $heading_tag ); ?>>
 		<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 24 ) ); ?></p>
-		<a class="link-arrow" href="<?php echo esc_url( get_permalink() ); ?>"><?php esc_html_e( 'مطالعه مقاله', 'teznevise' ); ?></a>
+		<a class="btn-readmore" href="<?php echo esc_url( get_permalink() ); ?>"><?php esc_html_e( 'ادامه مطلب', 'teznevise' ); ?></a>
 	</div>
 </article>

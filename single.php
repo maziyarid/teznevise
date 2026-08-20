@@ -32,13 +32,21 @@ while ( have_posts() ) : the_post();
 						<span><?php echo esc_html( $author_label ); ?></span><span><?php echo esc_html( teznevise_read_time( $post_id ) ); ?></span>
 					</div>
 				</header>
-				<?php if ( has_post_thumbnail() ) : ?><figure class="blog-post__featured-image article-cover" data-reveal><?php the_post_thumbnail( 'large', array( 'alt' => esc_attr( get_the_title() ) ) ); ?></figure><?php endif; ?>
+				<?php if ( has_post_thumbnail() ) : ?><figure class="blog-post__featured-image article-cover" data-reveal><?php the_post_thumbnail( 'large', array( 'alt' => esc_attr( get_the_title() ), 'loading' => 'eager', 'decoding' => 'async', 'fetchpriority' => 'high' ) ); ?></figure><?php endif; ?>
 				<?php if ( $toc ) : ?><details class="blog-post__toc-mobile" data-reveal><summary><span><?php esc_html_e( 'فهرست مطالب', 'teznevise' ); ?></span><span aria-hidden="true">⌄</span></summary><?php echo wp_kses_post( $toc ); ?></details><?php endif; ?>
 				<div class="blog-post__layout">
 					<?php if ( $toc ) : ?><aside class="blog-post__toc entry-toc" aria-label="<?php esc_attr_e( 'Table of contents', 'teznevise' ); ?>"><p class="entry-toc__label"><?php esc_html_e( 'On this page', 'teznevise' ); ?></p><?php echo wp_kses_post( $toc ); ?></aside><?php endif; ?>
 					<div class="blog-post__content entry-content article-content longcopy" data-reveal><?php echo $content; ?></div>
 				</div>
-				<footer class="article-footer" data-reveal><?php the_tags( '<div class="post-tags">', ' ', '</div>' ); ?></footer>
+				<footer class="article-footer" data-reveal>
+					<?php the_tags( '<div class="post-tags">', ' ', '</div>' ); ?>
+					<div class="share-bar" aria-label="<?php esc_attr_e( 'اشتراک', 'teznevise' ); ?>">
+						<button type="button" data-share="telegram" data-url="<?php echo esc_url( get_permalink() ); ?>" data-title="<?php echo esc_attr( get_the_title() ); ?>" data-slug="<?php echo esc_attr( get_post_field( 'post_name' ) ); ?>"><i class="fa-brands fa-telegram" aria-hidden="true"></i> تلگرام</button>
+						<button type="button" data-share="whatsapp" data-url="<?php echo esc_url( get_permalink() ); ?>" data-title="<?php echo esc_attr( get_the_title() ); ?>" data-slug="<?php echo esc_attr( get_post_field( 'post_name' ) ); ?>"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> واتساپ</button>
+						<button type="button" data-share="x" data-url="<?php echo esc_url( get_permalink() ); ?>" data-title="<?php echo esc_attr( get_the_title() ); ?>" data-slug="<?php echo esc_attr( get_post_field( 'post_name' ) ); ?>">X</button>
+						<button type="button" data-share="linkedin" data-url="<?php echo esc_url( get_permalink() ); ?>" data-title="<?php echo esc_attr( get_the_title() ); ?>" data-slug="<?php echo esc_attr( get_post_field( 'post_name' ) ); ?>">LinkedIn</button>
+					</div>
+				</footer>
 			</article>
 			<?php if ( $previous || $next ) : ?><nav class="blog-post__prev-next" aria-label="<?php esc_attr_e( 'Post navigation', 'teznevise' ); ?>"><div><?php if ( $previous ) : ?><a href="<?php echo esc_url( get_permalink( $previous ) ); ?>"><small><?php esc_html_e( 'Previous article', 'teznevise' ); ?></small><span><?php echo esc_html( get_the_title( $previous ) ); ?></span></a><?php endif; ?></div><div><?php if ( $next ) : ?><a href="<?php echo esc_url( get_permalink( $next ) ); ?>"><small><?php esc_html_e( 'Next article', 'teznevise' ); ?></small><span><?php echo esc_html( get_the_title( $next ) ); ?></span></a><?php endif; ?></div></nav><?php endif; ?>
 			<?php if ( comments_open() || get_comments_number() ) : ?><div data-reveal><?php comments_template(); ?></div><?php endif; ?>

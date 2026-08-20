@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.6.6' );
+define( 'TEZNEVISE_VERSION', '1.7.0' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -32,6 +32,7 @@ require_once TEZNEVISE_DIR . '/inc/screenshot-data.php';
 require_once TEZNEVISE_DIR . '/inc/migration/shortcode-to-builder-migrator.php';
 require_once TEZNEVISE_DIR . '/inc/migration/auto-run.php';
 require_once TEZNEVISE_DIR . '/inc/frontend-compat.php';
+require_once TEZNEVISE_DIR . '/inc/tezcoin.php';
 
 // Defensive fallback: this repo's functions.php has repeatedly lost this
 // helper during merges/rewrites (see commits 085c9c44, 75a32ee6). If none of
@@ -89,8 +90,13 @@ wp_enqueue_style( 'teznevise-header-fix', TEZNEVISE_URI . '/assets/css/header-fi
 wp_enqueue_style( 'teznevise-mobile-fixes', TEZNEVISE_URI . '/assets/css/mobile-fixes.css', array( 'teznevise-header-fix' ), TEZNEVISE_VERSION );
 wp_enqueue_style( 'teznevise-blog', TEZNEVISE_URI . '/assets/css/blog.css', array( 'teznevise-mobile-fixes' ), TEZNEVISE_VERSION );
 wp_enqueue_style( 'teznevise-nav-touch', TEZNEVISE_URI . '/assets/css/nav-touch.css', array( 'teznevise-blog' ), TEZNEVISE_VERSION );
+wp_enqueue_style( 'teznevise-product', TEZNEVISE_URI . '/assets/css/product-1.7.css', array( 'teznevise-nav-touch' ), TEZNEVISE_VERSION );
 wp_enqueue_script( 'teznevise-redesign', TEZNEVISE_URI . '/assets/js/redesign.js', array(), TEZNEVISE_VERSION, true );
 wp_enqueue_script( 'teznevise-main', TEZNEVISE_URI . '/assets/js/main.js', array( 'teznevise-redesign' ), TEZNEVISE_VERSION, true );
 wp_enqueue_script( 'teznevise-nav-touch', TEZNEVISE_URI . '/assets/js/nav-touch.js', array( 'teznevise-main' ), TEZNEVISE_VERSION, true );
+wp_enqueue_script( 'teznevise-product', TEZNEVISE_URI . '/assets/js/product-1.7.js', array( 'teznevise-nav-touch' ), TEZNEVISE_VERSION, true );
+if ( function_exists( 'teznevise_localize_front_script' ) ) {
+	teznevise_localize_front_script();
+}
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );

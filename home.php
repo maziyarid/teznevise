@@ -18,6 +18,18 @@ get_header();
 			<h1><?php esc_html_e( 'بلاگ', 'teznevise' ); ?></h1>
 			<p class="blog-archive__intro"><?php esc_html_e( 'راهنماهای کاربردی درباره روش تحقیق، نگارش دانشگاهی و تحلیل آماری.', 'teznevise' ); ?></p>
 		</header>
+		<nav class="blog-cats" aria-label="<?php esc_attr_e( 'دسته‌ها', 'teznevise' ); ?>">
+			<?php
+			$cats = get_categories( array( 'orderby' => 'count', 'order' => 'DESC', 'number' => 8 ) );
+			foreach ( $cats as $cat ) {
+				printf(
+					'<a class="cat-chip" href="%s">%s</a>',
+					esc_url( get_category_link( $cat->term_id ) ),
+					esc_html( $cat->name )
+				);
+			}
+			?>
+		</nav>
 		<?php if ( have_posts() ) : ?>
 			<div class="post-grid" data-reveal-stagger>
 				<?php while ( have_posts() ) : the_post(); get_template_part( 'template-parts/post-card' ); endwhile; ?>

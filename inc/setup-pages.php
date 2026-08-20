@@ -139,6 +139,38 @@ function teznevise_recommended_pages() {
 				'subtitle' => 'حریم خصوصی',
 			),
 		),
+		'terms'              => array(
+			'title'    => 'قوانین استفاده',
+			'template' => 'page-privacy.php',
+			'meta'     => array(
+				'eyebrow'  => 'حقوق',
+				'subtitle' => 'شرایط استفاده از خدمات تزنویسه',
+			),
+		),
+		'cookies'            => array(
+			'title'    => 'سیاست کوکی',
+			'template' => 'page-privacy.php',
+			'meta'     => array(
+				'eyebrow'  => 'حقوق',
+				'subtitle' => 'کوکی‌ها و ذخیره‌سازی محلی',
+			),
+		),
+		'refund'             => array(
+			'title'    => 'بازپرداخت',
+			'template' => 'page-privacy.php',
+			'meta'     => array(
+				'eyebrow'  => 'حقوق',
+				'subtitle' => 'شرایط لغو و بازپرداخت',
+			),
+		),
+		'research-rules'     => array(
+			'title'    => 'ضوابط پژوهش',
+			'template' => 'page-privacy.php',
+			'meta'     => array(
+				'eyebrow'  => 'اخلاق پژوهش',
+				'subtitle' => 'اصالت علمی و محرمانگی',
+			),
+		),
 		'sitemap'            => array(
 			'title'    => 'نقشه سایت',
 			'template' => 'page-sitemap.php',

@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.7.0 — 2026-08-20 — Header, Tezcoin, footer, blog
+
+### Changes
+
+- Mobile header: hamburger on the right, centered logo, search / Tezcoin / profile icons on the left.
+- Search icon opens an overlay with popular queries (not a dead link).
+- Header Tezcoin chip + tooltip (1000 coins after signup and completed profile).
+- WordPress admin: Appearance → تزکوین for coin price, packs, Zarinpal / AqayePardakht, Enamad.
+- Footer trust seals (اینماد / ساماندهی / SSL), services column, legal links.
+- University coworker strip on home and service pages.
+- Chaty FAB visible on mobile, items open toward the left, staggered animation.
+- Blog: category chips, «ادامه مطلب» buttons, social share with Tezcoin reward.
+- Comments require login; approved comments award Tezcoin.
+- Classic-editor leftover shortcodes are stripped on the front (interactive tool shortcodes kept).
+- Bottom nav remains the customizable `bottom` menu location.
+
+### Testing
+
+- Hard-refresh home: header credits, search overlay, university strip, footer seals.
+- Mobile 390px: logo centered, hamburger right, icons left, FAB above bottom nav.
+- Appearance → تزکوین saves; profile fields grant 1000 coins once complete.
+
 ## 1.6.6 — 2026-08-20 — Shortcode + meta provenance
 
 ### Changes

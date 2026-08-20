@@ -1,0 +1,291 @@
+<?php
+/**
+ * Tezcoin wallet, rewards, and admin cost settings.
+ *
+ * @package Teznevise
+ */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+function teznevise_tezcoin_defaults() {
+	return array(
+		'irr'             => 1000,
+		'profile_bonus'   => 1000,
+		'comment_reward'  => 20,
+		'share_reward'    => 50,
+		'referral_bonus'  => 200,
+		'zarinpal'        => '',
+		'aqaye_pin'       => '',
+		'pack_1_coins'    => 500,
+		'pack_1_irr'      => 450000,
+		'pack_2_coins'    => 1200,
+		'pack_2_irr'      => 1000000,
+		'pack_3_coins'    => 3000,
+		'pack_3_irr'      => 2200000,
+		'enamad_url'      => '',
+		'samandehi_url'   => '',
+	);
+}
+
+function teznevise_tezcoin_get( $key ) {
+	$defaults = teznevise_tezcoin_defaults();
+	$opt      = get_option( 'teznevise_tezcoin', array() );
+	if ( ! is_array( $opt ) ) {
+		$opt = array();
+	}
+	return isset( $opt[ $key ] ) ? $opt[ $key ] : ( isset( $defaults[ $key ] ) ? $defaults[ $key ] : '' );
+}
+
+function teznevise_tezcoin_balance( $user_id = 0 ) {
+	$user_id = $user_id ? (int) $user_id : get_current_user_id();
+	if ( ! $user_id ) {
+		return 0;
+	}
+	return (int) get_user_meta( $user_id, 'teznevise_tezcoin_balance', true );
+}
+
+function teznevise_tezcoin_credit( $user_id, $amount, $reason, $ref = '' ) {
+	$user_id = (int) $user_id;
+	$amount  = (int) $amount;
+	if ( $user_id <= 0 || 0 === $amount ) {
+		return false;
+	}
+	$balance = teznevise_tezcoin_balance( $user_id ) + $amount;
+	update_user_meta( $user_id, 'teznevise_tezcoin_balance', $balance );
+	$log   = get_user_meta( $user_id, 'teznevise_tezcoin_ledger', true );
+	$log   = is_array( $log ) ? $log : array();
+	$log[] = array(
+		'amount' => $amount,
+		'reason' => sanitize_text_field( $reason ),
+		'ref'    => sanitize_text_field( $ref ),
+		'time'   => time(),
+	);
+	if ( count( $log ) > 80 ) {
+		$log = array_slice( $log, -80 );
+	}
+	update_user_meta( $user_id, 'teznevise_tezcoin_ledger', $log );
+	return $balance;
+}
+
+function teznevise_profile_is_complete( $user_id ) {
+	$user = get_userdata( $user_id );
+	if ( ! $user ) {
+		return false;
+	}
+	$name       = trim( $user->first_name . ' ' . $user->display_name );
+	$phone      = get_user_meta( $user_id, 'teznevise_phone', true );
+	$university = get_user_meta( $user_id, 'teznevise_university', true );
+	$field      = get_user_meta( $user_id, 'teznevise_field', true );
+	return ( strlen( $name ) >= 2 && $phone && $university && $field );
+}
+
+function teznevise_maybe_profile_bonus( $user_id ) {
+	if ( get_user_meta( $user_id, 'teznevise_tezcoin_bonus_granted', true ) ) {
+		return;
+	}
+	if ( ! teznevise_profile_is_complete( $user_id ) ) {
+		return;
+	}
+	$bonus = (int) teznevise_tezcoin_get( 'profile_bonus' );
+	if ( $bonus <= 0 ) {
+		$bonus = 1000;
+	}
+	teznevise_tezcoin_credit( $user_id, $bonus, 'هدیه تکمیل پروفایل', 'profile' );
+	update_user_meta( $user_id, 'teznevise_tezcoin_bonus_granted', 1 );
+}
+
+function teznevise_tezcoin_admin_menu() {
+	add_theme_page(
+		__( 'تزکوین', 'teznevise' ),
+		__( 'تزکوین', 'teznevise' ),
+		'manage_options',
+		'teznevise-tezcoin',
+		'teznevise_tezcoin_admin_page'
+	);
+}
+add_action( 'admin_menu', 'teznevise_tezcoin_admin_menu' );
+
+function teznevise_tezcoin_admin_page() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	if ( isset( $_POST['teznevise_tezcoin_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['teznevise_tezcoin_nonce'] ) ), 'teznevise_tezcoin_save' ) ) {
+		$save = array();
+		foreach ( array_keys( teznevise_tezcoin_defaults() ) as $key ) {
+			$save[ $key ] = isset( $_POST[ $key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) : '';
+		}
+		update_option( 'teznevise_tezcoin', $save, false );
+		echo '<div class="updated"><p>' . esc_html__( 'تنظیمات تزکوین ذخیره شد.', 'teznevise' ) . '</p></div>';
+	}
+	$d = wp_parse_args( get_option( 'teznevise_tezcoin', array() ), teznevise_tezcoin_defaults() );
+	?>
+	<div class="wrap">
+		<h1><?php esc_html_e( 'تزکوین و درگاه‌ها', 'teznevise' ); ?></h1>
+		<p><?php esc_html_e( 'قیمت هر تزکوین، پاداش‌ها و کلید زرین‌پال / آقای پرداخت. با تکمیل پروفایل ۱۰۰۰ تزکوین هدیه داده می‌شود.', 'teznevise' ); ?></p>
+		<form method="post">
+			<?php wp_nonce_field( 'teznevise_tezcoin_save', 'teznevise_tezcoin_nonce' ); ?>
+			<table class="form-table" role="presentation">
+				<tr><th><label for="irr"><?php esc_html_e( 'قیمت هر تزکوین (ریال)', 'teznevise' ); ?></label></th>
+					<td><input name="irr" id="irr" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['irr'] ); ?>"></td></tr>
+				<tr><th><label for="profile_bonus"><?php esc_html_e( 'هدیه تکمیل پروفایل', 'teznevise' ); ?></label></th>
+					<td><input name="profile_bonus" id="profile_bonus" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['profile_bonus'] ); ?>"></td></tr>
+				<tr><th><label for="comment_reward"><?php esc_html_e( 'پاداش نظر', 'teznevise' ); ?></label></th>
+					<td><input name="comment_reward" id="comment_reward" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['comment_reward'] ); ?>"></td></tr>
+				<tr><th><label for="share_reward"><?php esc_html_e( 'پاداش اشتراک', 'teznevise' ); ?></label></th>
+					<td><input name="share_reward" id="share_reward" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['share_reward'] ); ?>"></td></tr>
+				<tr><th><label for="referral_bonus"><?php esc_html_e( 'پاداش معرفی', 'teznevise' ); ?></label></th>
+					<td><input name="referral_bonus" id="referral_bonus" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['referral_bonus'] ); ?>"></td></tr>
+				<tr><th><label for="zarinpal"><?php esc_html_e( 'مرچنت زرین‌پال', 'teznevise' ); ?></label></th>
+					<td><input name="zarinpal" id="zarinpal" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['zarinpal'] ); ?>"></td></tr>
+				<tr><th><label for="aqaye_pin"><?php esc_html_e( 'پین آقای پرداخت', 'teznevise' ); ?></label></th>
+					<td><input name="aqaye_pin" id="aqaye_pin" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['aqaye_pin'] ); ?>"></td></tr>
+				<tr><th><?php esc_html_e( 'بسته ۱', 'teznevise' ); ?></th>
+					<td>سکه <input name="pack_1_coins" dir="ltr" value="<?php echo esc_attr( $d['pack_1_coins'] ); ?>"> ریال <input name="pack_1_irr" dir="ltr" value="<?php echo esc_attr( $d['pack_1_irr'] ); ?>"></td></tr>
+				<tr><th><?php esc_html_e( 'بسته ۲', 'teznevise' ); ?></th>
+					<td>سکه <input name="pack_2_coins" dir="ltr" value="<?php echo esc_attr( $d['pack_2_coins'] ); ?>"> ریال <input name="pack_2_irr" dir="ltr" value="<?php echo esc_attr( $d['pack_2_irr'] ); ?>"></td></tr>
+				<tr><th><?php esc_html_e( 'بسته ۳', 'teznevise' ); ?></th>
+					<td>سکه <input name="pack_3_coins" dir="ltr" value="<?php echo esc_attr( $d['pack_3_coins'] ); ?>"> ریال <input name="pack_3_irr" dir="ltr" value="<?php echo esc_attr( $d['pack_3_irr'] ); ?>"></td></tr>
+				<tr><th><label for="enamad_url"><?php esc_html_e( 'لینک اینماد', 'teznevise' ); ?></label></th>
+					<td><input name="enamad_url" id="enamad_url" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['enamad_url'] ); ?>"></td></tr>
+				<tr><th><label for="samandehi_url"><?php esc_html_e( 'لینک ساماندهی', 'teznevise' ); ?></label></th>
+					<td><input name="samandehi_url" id="samandehi_url" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['samandehi_url'] ); ?>"></td></tr>
+			</table>
+			<?php submit_button( __( 'ذخیره تزکوین', 'teznevise' ) ); ?>
+		</form>
+	</div>
+	<?php
+}
+
+function teznevise_extra_profile_fields( $user ) {
+	?>
+	<h2><?php esc_html_e( 'پروفایل تزنویسه', 'teznevise' ); ?></h2>
+	<table class="form-table">
+		<tr><th><label for="teznevise_phone"><?php esc_html_e( 'موبایل', 'teznevise' ); ?></label></th>
+			<td><input type="text" name="teznevise_phone" id="teznevise_phone" value="<?php echo esc_attr( get_user_meta( $user->ID, 'teznevise_phone', true ) ); ?>" class="regular-text" dir="ltr"></td></tr>
+		<tr><th><label for="teznevise_university"><?php esc_html_e( 'دانشگاه', 'teznevise' ); ?></label></th>
+			<td><input type="text" name="teznevise_university" id="teznevise_university" value="<?php echo esc_attr( get_user_meta( $user->ID, 'teznevise_university', true ) ); ?>" class="regular-text"></td></tr>
+		<tr><th><label for="teznevise_field"><?php esc_html_e( 'رشته', 'teznevise' ); ?></label></th>
+			<td><input type="text" name="teznevise_field" id="teznevise_field" value="<?php echo esc_attr( get_user_meta( $user->ID, 'teznevise_field', true ) ); ?>" class="regular-text"></td></tr>
+		<tr><th><?php esc_html_e( 'تزکوین', 'teznevise' ); ?></th>
+			<td><strong><?php echo esc_html( number_format_i18n( teznevise_tezcoin_balance( $user->ID ) ) ); ?></strong></td></tr>
+	</table>
+	<?php
+}
+add_action( 'show_user_profile', 'teznevise_extra_profile_fields' );
+add_action( 'edit_user_profile', 'teznevise_extra_profile_fields' );
+
+function teznevise_save_extra_profile_fields( $user_id ) {
+	if ( ! current_user_can( 'edit_user', $user_id ) ) {
+		return;
+	}
+	foreach ( array( 'teznevise_phone', 'teznevise_university', 'teznevise_field' ) as $key ) {
+		if ( isset( $_POST[ $key ] ) ) {
+			update_user_meta( $user_id, $key, sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) );
+		}
+	}
+	teznevise_maybe_profile_bonus( $user_id );
+}
+add_action( 'personal_options_update', 'teznevise_save_extra_profile_fields' );
+add_action( 'edit_user_profile_update', 'teznevise_save_extra_profile_fields' );
+
+function teznevise_award_comment_coins( $comment_id, $approved ) {
+	if ( 1 !== (int) $approved && '1' !== (string) $approved ) {
+		return;
+	}
+	$comment = get_comment( $comment_id );
+	if ( ! $comment || ! $comment->user_id ) {
+		return;
+	}
+	$key = 'teznevise_comment_paid_' . (int) $comment->comment_post_ID;
+	if ( get_user_meta( $comment->user_id, $key, true ) ) {
+		return;
+	}
+	$reward = (int) teznevise_tezcoin_get( 'comment_reward' );
+	if ( $reward <= 0 ) {
+		return;
+	}
+	teznevise_tezcoin_credit( (int) $comment->user_id, $reward, 'نظر در بلاگ', (string) $comment->comment_post_ID );
+	update_user_meta( $comment->user_id, $key, 1 );
+}
+add_action( 'comment_post', 'teznevise_award_comment_coins', 10, 2 );
+
+function teznevise_ajax_share_reward() {
+	check_ajax_referer( 'teznevise_share', 'nonce' );
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error();
+	}
+	$slug = isset( $_POST['slug'] ) ? sanitize_key( wp_unslash( $_POST['slug'] ) ) : '';
+	$net  = isset( $_POST['network'] ) ? sanitize_key( wp_unslash( $_POST['network'] ) ) : '';
+	if ( ! $slug || ! $net ) {
+		wp_send_json_error();
+	}
+	$user_id = get_current_user_id();
+	$key     = 'teznevise_share_' . $slug . '_' . $net;
+	if ( get_user_meta( $user_id, $key, true ) ) {
+		wp_send_json_success( array( 'already' => true, 'balance' => teznevise_tezcoin_balance( $user_id ) ) );
+	}
+	$reward = (int) teznevise_tezcoin_get( 'share_reward' );
+	teznevise_tezcoin_credit( $user_id, $reward, 'اشتراک مطلب', $slug . ':' . $net );
+	update_user_meta( $user_id, $key, 1 );
+	wp_send_json_success( array( 'balance' => teznevise_tezcoin_balance( $user_id ) ) );
+}
+add_action( 'wp_ajax_teznevise_share_reward', 'teznevise_ajax_share_reward' );
+
+function teznevise_log_search_query() {
+	if ( ! is_search() ) {
+		return;
+	}
+	$q = trim( (string) get_search_query() );
+	if ( strlen( $q ) < 2 ) {
+		return;
+	}
+	$log = get_option( 'teznevise_search_log', array() );
+	if ( ! is_array( $log ) ) {
+		$log = array();
+	}
+	$log[ $q ] = isset( $log[ $q ] ) ? (int) $log[ $q ] + 1 : 1;
+	if ( count( $log ) > 80 ) {
+		arsort( $log );
+		$log = array_slice( $log, 0, 80, true );
+	}
+	update_option( 'teznevise_search_log', $log, false );
+}
+add_action( 'wp', 'teznevise_log_search_query' );
+
+function teznevise_popular_searches() {
+	$log = get_option( 'teznevise_search_log', array() );
+	if ( is_array( $log ) && $log ) {
+		arsort( $log );
+		return array_slice( array_keys( $log ), 0, 6 );
+	}
+	return array( 'پایان‌نامه', 'پروپوزال', 'SPSS', 'حجم نمونه', 'آلفای کرونباخ', 'فصل چهارم' );
+}
+
+function teznevise_localize_front_script() {
+	wp_localize_script(
+		'teznevise-product',
+		'tezneviseProduct',
+		array(
+			'ajax'    => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'teznevise_share' ),
+			'logged'  => is_user_logged_in() ? 1 : 0,
+		)
+	);
+}
+
+function teznevise_strip_dead_shortcodes( $content ) {
+	if ( is_admin() || ! is_string( $content ) ) {
+		return $content;
+	}
+	$keep = function_exists( 'teznevise_interactive_shortcode_names' ) ? teznevise_interactive_shortcode_names() : array();
+	return preg_replace_callback(
+		'/\[[\/]?([a-zA-Z0-9_-]+)[^\]]*\]/',
+		function ( $m ) use ( $keep ) {
+			$name = strtolower( $m[1] );
+			return in_array( $name, $keep, true ) ? $m[0] : '';
+		},
+		$content
+	);
+}
+add_filter( 'the_content', 'teznevise_strip_dead_shortcodes', 8 );

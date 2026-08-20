@@ -126,4 +126,5 @@ while ( have_posts() ) :
 
 endwhile;
 
+get_template_part( 'template-parts/universities' );
 get_footer();
