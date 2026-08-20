@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.7.4' );
+define( 'TEZNEVISE_VERSION', '1.7.5' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -69,6 +69,14 @@ if ( ! function_exists( 'teznevise_get_contact' ) ) {
 function teznevise_setup() {
 add_theme_support( 'title-tag' );
 add_theme_support( 'post-thumbnails' );
+add_theme_support( 'automatic-feed-links' );
+add_theme_support( 'responsive-embeds' );
+add_theme_support( 'custom-logo', array(
+	'height'      => 96,
+	'width'       => 212,
+	'flex-height' => true,
+	'flex-width'  => true,
+) );
 add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' ) );
 register_nav_menus( array(
 'primary' => __( 'Primary Menu', 'teznevise' ),
@@ -111,6 +119,19 @@ function teznevise_enqueue_parity_css() {
 		TEZNEVISE_URI . '/assets/css/react-parity.css',
 		array(),
 		TEZNEVISE_VERSION
+	);
+	wp_enqueue_style(
+		'teznevise-signature',
+		TEZNEVISE_URI . '/assets/css/signature.css',
+		array( 'teznevise-parity' ),
+		TEZNEVISE_VERSION
+	);
+	wp_enqueue_script(
+		'teznevise-ui',
+		TEZNEVISE_URI . '/assets/js/teznevise-ui.js',
+		array( 'teznevise-product' ),
+		TEZNEVISE_VERSION,
+		true
 	);
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_parity_css', 999 );

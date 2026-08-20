@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.5 — 2026-08-20 — Signature folio UI + WP 7.1 / PHP 8.5
+
+- Last-loaded `signature.css` + `teznevise-ui.js`: cotton-paper ground, forest-ink chrome, folio cards, pill CTAs, ink pointer, magnetic buttons, Persian counters.
+- Nav labels stay nowrap on desktop so WP menus cannot wrap the pill.
+- `custom-logo`, `responsive-embeds`, `automatic-feed-links`. Tested up to WordPress 7.1. PHP 8.0–8.5.
+- Classic PHP templates stay the theme. The React companion in `react-app/` is unchanged. Vue is not added — two SPA frameworks would fight WordPress.
+
 ## 1.7.4 — 2026-08-20 — Chrome URL and search a11y
 
 - Blog chrome links resolve from `page_for_posts` (then a seeded `blog` page, then home) instead of a hard-coded `/blog/` path.

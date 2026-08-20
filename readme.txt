@@ -2,9 +2,9 @@
 Contributors: maziyarid
 Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education, blog, translation-ready
 Requires at least: 6.4
-Tested up to: 6.8
+Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.7.4
+Stable tag: 1.7.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,12 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 6. Assign menus: Primary, Mobile, Bottom
 
 == Changelog ==
+
+= 1.7.5 =
+* Signature research-folio UI (paper, forest ink, folio cards, ink cursor, magnetic CTAs)
+* Compatible with WordPress 7.1 and PHP 8.5
+* custom-logo, responsive-embeds, automatic-feed-links
+* Vanilla JS UI kit — PHP templates remain the WordPress source of truth (React companion stays in react-app/)
 
 = 1.6.6 =
 * Shortcode migration skips manual-provenance empty builders unless force-replace

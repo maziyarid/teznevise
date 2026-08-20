@@ -1,0 +1,451 @@
+/**
+ * Teznevise signature layer — 1.6.9
+ * Unique “research folio” system. Loaded last so it wins.
+ * Not a generic SaaS kit: warm cotton paper, forest ink, folio cards.
+ */
+:root {
+	--sig-paper: #f3eee4;
+	--sig-paper-2: #faf7f0;
+	--sig-ink: #10231d;
+	--sig-ink-soft: #3a4d46;
+	--sig-forest: #0e3b31;
+	--sig-forest-2: #145d4a;
+	--sig-line: rgba(16, 35, 29, 0.12);
+	--sig-line-strong: rgba(16, 35, 29, 0.22);
+	--sig-radius-outer: 28px;
+	--sig-radius-inner: 18px;
+	--sig-ease: cubic-bezier(0.22, 1, 0.36, 1);
+	--sig-quick: 150ms;
+	--sig-fast: 250ms;
+}
+
+html {
+	background: var(--sig-paper);
+}
+body {
+	background-color: var(--sig-paper) !important;
+	background-image:
+		radial-gradient(ellipse 80% 50% at 100% -10%, rgba(14, 59, 49, 0.06), transparent 50%),
+		radial-gradient(ellipse 60% 40% at 0% 100%, rgba(20, 93, 74, 0.05), transparent 46%),
+		repeating-linear-gradient(
+			0deg,
+			rgba(16, 35, 29, 0.018) 0 1px,
+			transparent 1px 32px
+		);
+	color: var(--sig-ink);
+}
+::selection {
+	background: #145d4a;
+	color: #faf7f0;
+}
+
+/* Custom ink scrollbar — desktop only */
+@media (pointer: fine) {
+	html {
+		scrollbar-width: thin;
+		scrollbar-color: #145d4a transparent;
+	}
+	::-webkit-scrollbar { width: 10px; }
+	::-webkit-scrollbar-thumb {
+		background: #145d4a;
+		border-radius: 99px;
+		border: 2px solid var(--sig-paper);
+	}
+}
+
+/* Header: paper glass, not generic white blur */
+.site-header-new {
+	background: color-mix(in srgb, var(--sig-paper-2) 86%, transparent) !important;
+	border-bottom: 1px solid var(--sig-line) !important;
+	backdrop-filter: blur(22px) saturate(1.1);
+}
+.site-header-new.scrolled .main-nav {
+	box-shadow: 0 10px 28px rgba(16, 35, 29, 0.08) !important;
+}
+.announcement {
+	background: var(--sig-forest) !important;
+	letter-spacing: 0.01em;
+}
+.nav-links > li > a {
+	border-radius: 999px !important;
+}
+.nav-links > li > a.active {
+	background: var(--sig-forest) !important;
+	color: #faf7f0 !important;
+}
+.nav-cta-solid,
+.btn-primary-tz {
+	background: var(--sig-forest) !important;
+	background-image: none !important;
+	color: #faf7f0 !important;
+	border-radius: 999px !important;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset, 0 10px 24px rgba(14, 59, 49, 0.22) !important;
+	letter-spacing: 0.01em;
+}
+.nav-cta-outline,
+.btn-light-tz,
+.btn-outline-tz {
+	border-radius: 999px !important;
+	background: var(--sig-paper-2) !important;
+	border: 1px solid var(--sig-line-strong) !important;
+}
+.btn-tz:hover,
+.nav-cta:hover {
+	transform: translateY(-1px);
+}
+.btn-tz:active,
+.nav-cta:active,
+.menu-btn:active {
+	transform: scale(0.96);
+}
+
+/* Folio cards — inner hairline, concentric radius, ink stamp */
+.service-card,
+.article-card,
+.post-card,
+.related-card,
+.lead-card,
+.card,
+.side-card,
+.reason-item,
+.team-card,
+.archive-post {
+	position: relative;
+	background: var(--sig-paper-2) !important;
+	border: 1px solid var(--sig-line) !important;
+	border-radius: var(--sig-radius-outer) !important;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 18px 40px rgba(16, 35, 29, 0.06) !important;
+}
+.service-card::before,
+.article-card::before,
+.card::before {
+	content: "";
+	position: absolute;
+	inset: 8px;
+	border: 1px solid rgba(16, 35, 29, 0.08);
+	border-radius: var(--sig-radius-inner);
+	pointer-events: none;
+}
+.service-card::after {
+	content: "";
+	position: absolute;
+	top: auto;
+	bottom: 18px;
+	inset-inline-start: auto;
+	inset-inline-end: 18px;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	border: 1.5px solid rgba(20, 93, 74, 0.35);
+	box-shadow: 0 0 0 3px rgba(20, 93, 74, 0.08);
+	pointer-events: none;
+}
+
+/* Headings: manuscript rule under the last line */
+.section-head h2,
+.page-hero h1,
+.page-hero-title,
+.hero-copy h1 {
+	color: var(--sig-ink);
+	text-wrap: balance;
+}
+.section-head h2 {
+	position: relative;
+	display: inline-block;
+}
+.section-head h2::after {
+	content: "";
+	display: block;
+	width: min(7.5rem, 40%);
+	height: 3px;
+	margin-top: 10px;
+	margin-inline-start: auto;
+	background: linear-gradient(90deg, transparent, #145d4a 20%, #0e3b31 80%, transparent);
+	border-radius: 99px;
+	opacity: 0.85;
+}
+.section-head.center h2::after {
+	margin-inline: auto;
+}
+
+.eyebrow {
+	background: var(--sig-paper-2) !important;
+	border-color: var(--sig-line) !important;
+	letter-spacing: 0.04em;
+}
+
+.hero-new,
+.page-hero,
+.page-hero-new,
+.post-hero {
+	background-color: transparent !important;
+	background-image:
+		radial-gradient(circle at 12% 10%, rgba(20, 93, 74, 0.1), transparent 34%),
+		linear-gradient(180deg, rgba(250, 247, 240, 0.4), transparent 70%) !important;
+}
+
+/* Forms — ink underline focus, 44px taps */
+.form-input,
+.form-select,
+.form-textarea,
+.tz-form input,
+.tz-form select,
+.tz-form textarea,
+.lead-card input,
+.lead-card select,
+.lead-card textarea,
+.field input,
+.field select,
+.field textarea,
+.search-input,
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="search"],
+select,
+textarea {
+	background: #fff !important;
+	border: 1px solid var(--sig-line) !important;
+	border-radius: 14px !important;
+	color: var(--sig-ink) !important;
+	transition: border-color var(--sig-quick) var(--sig-ease), box-shadow var(--sig-quick) var(--sig-ease);
+}
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus,
+.tz-form input:focus,
+.lead-card input:focus,
+.field input:focus,
+.search-input:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: none !important;
+	border-color: #145d4a !important;
+	box-shadow: 0 0 0 3px rgba(20, 93, 74, 0.16) !important;
+}
+
+/* Footer folio */
+.footer-new {
+	background: var(--sig-forest) !important;
+	color: #e7f0ec;
+	border-top: 0;
+}
+.footer-new a { color: #d5e6df; }
+.footer-new a:hover { color: #fff; }
+.footer-col h4 {
+	color: #fff !important;
+	font-size: 13px !important;
+	letter-spacing: 0.08em;
+}
+
+/* Bottom nav — paper, hairline, safe area */
+.bottom-nav {
+	background: color-mix(in srgb, var(--sig-paper-2) 92%, transparent) !important;
+	border-top: 1px solid var(--sig-line) !important;
+	backdrop-filter: blur(16px);
+	padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.bottom-nav-item.active {
+	color: var(--sig-forest) !important;
+}
+
+/* FAQ folio */
+.faq-item,
+.faq-wrap .faq-item {
+	background: var(--sig-paper-2);
+	border: 1px solid var(--sig-line);
+	border-radius: 18px;
+	overflow: hidden;
+}
+.faq-question,
+.faq-q {
+	width: 100%;
+	text-align: right;
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	min-height: 56px;
+	padding: 16px 20px;
+	font-weight: 750;
+	color: var(--sig-ink);
+}
+.faq-answer,
+.faq-a {
+	display: none;
+	padding: 0 20px 18px;
+	color: var(--sig-ink-soft);
+	line-height: 1.9;
+}
+.faq-item.open .faq-answer,
+.faq-item.open .faq-a {
+	display: block;
+}
+
+/* CTA band */
+.cta-band,
+.cta-section {
+	background: var(--sig-forest) !important;
+	color: #faf7f0 !important;
+	border-radius: 32px !important;
+	box-shadow: 0 24px 50px rgba(14, 59, 49, 0.22);
+}
+.cta-band h2,
+.cta-title { color: #fff !important; }
+.cta-band p,
+.cta-desc { color: rgba(250, 247, 240, 0.82) !important; }
+.cta-band .btn-light-tz,
+.cta-section .btn-outline {
+	background: #faf7f0 !important;
+	color: var(--sig-forest) !important;
+}
+
+/* Search overlay */
+.search-overlay {
+	background: rgba(16, 35, 29, 0.55);
+	backdrop-filter: blur(10px);
+}
+.search-box {
+	background: var(--sig-paper-2);
+	border-radius: 24px;
+	border: 1px solid var(--sig-line);
+}
+
+/* Ink cursor (created by JS) */
+.tz-ink-cursor {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 12px;
+	height: 12px;
+	margin: -6px 0 0 -6px;
+	border-radius: 50%;
+	background: #145d4a;
+	pointer-events: none;
+	z-index: 10050;
+	opacity: 0;
+	transform: translate3d(-100px, -100px, 0) scale(0.4);
+	transition: opacity 180ms var(--sig-ease), transform 80ms linear, width 160ms var(--sig-ease), height 160ms var(--sig-ease);
+	mix-blend-mode: multiply;
+}
+.tz-ink-cursor.is-on { opacity: 0.85; }
+.tz-ink-cursor.is-press {
+	width: 22px;
+	height: 22px;
+	margin: -11px 0 0 -11px;
+}
+@media (pointer: coarse), (max-width: 900px) {
+	.tz-ink-cursor { display: none !important; }
+}
+
+/* Magnetic / tilt helpers */
+.tz-magnet { will-change: transform; }
+.service-card.tz-tilt,
+.article-card.tz-tilt {
+	transform-style: preserve-3d;
+}
+
+/* Stats */
+.stat-value,
+[data-counter] {
+	font-variant-numeric: tabular-nums;
+	font-weight: 850;
+	color: var(--sig-forest);
+}
+
+/* Article body */
+.article-body,
+.article-content,
+.privacy-body,
+.longcopy {
+	color: var(--sig-ink);
+}
+.article-body a,
+.article-content a,
+.privacy-body a {
+	color: var(--sig-forest-2);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+/* 404 numeral */
+.error-404-num {
+	font-family: Vazirmatn, sans-serif;
+	font-feature-settings: "ss01";
+}
+
+/* Mobile drawer */
+.mobile-nav-panel {
+	background: var(--sig-paper-2) !important;
+}
+.mobile-nav-link.active {
+	background: rgba(20, 93, 74, 0.1) !important;
+	color: var(--sig-forest) !important;
+}
+
+/* Focus visible — keyboard only */
+:focus-visible {
+	outline: 2px solid #145d4a;
+	outline-offset: 3px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* Grok overlay must stay visible */
+.grok-app-builder-banner,
+[data-grok-remix],
+iframe[src*="grok.com"] { visibility: visible !important; }
+
+@media (max-width: 720px) {
+	.service-card::before,
+	.article-card::before,
+	.card::before { inset: 6px; }
+	.cta-band,
+	.cta-section { border-radius: 24px !important; }
+	body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.tz-ink-cursor,
+	.tz-magnet,
+	.tz-tilt,
+	.btn-tz,
+	.nav-cta,
+	.service-card {
+		transition: none !important;
+		transform: none !important;
+		animation: none !important;
+	}
+}
+
+/* ----- 1.7.5: keep WP menu on one line ----- */
+@media (min-width: 1051px) {
+	.main-nav {
+		flex-wrap: nowrap !important;
+		align-items: center !important;
+		overflow: visible !important;
+	}
+	.main-nav > .nav-links,
+	.main-nav ul.nav-links {
+		display: flex !important;
+		flex-wrap: nowrap !important;
+		align-items: center !important;
+		min-width: 0 !important;
+		overflow: visible !important;
+	}
+	.nav-links > li {
+		flex: 0 0 auto !important;
+		list-style: none !important;
+	}
+	.nav-links > li:nth-child(n + 6) {
+		display: none !important;
+	}
+	.nav-links > li > a {
+		white-space: nowrap !important;
+		font-size: 13.5px !important;
+	}
+	.menu-btn { display: none !important; }
+}
+@media (max-width: 1050px) {
+	.nav-links { display: none !important; }
+	.menu-btn { display: grid !important; place-items: center; }
+}
