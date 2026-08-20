@@ -15,15 +15,19 @@
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 }
 
 .tez-builder-cols-2 {
-	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.tez-builder-cols-3 {
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
 
 .tez-builder-cols-4 {
-	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
 .tez-builder-card {
@@ -72,6 +76,7 @@
 
 .tez-builder-feature {
 	display: flex;
+	flex-direction: column;
 	gap: 12px;
 	align-items: flex-start;
 }
@@ -87,28 +92,37 @@
 
 .tez-builder-steps {
 	display: grid;
-	gap: 18px;
+	gap: 16px;
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	counter-reset: tez-builder-step;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
 .tez-builder-step {
-	display: grid;
-	gap: 16px;
-	align-items: center;
-	grid-template-columns: 1fr;
-	padding: 18px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 10px;
+	padding: 22px 20px;
 	border: 1px solid rgba(20, 93, 74, 0.12);
-	border-radius: 16px;
+	border-radius: 20px;
 	background: #fff;
+	min-height: 180px;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-@media (min-width: 782px) {
-	.tez-builder-step:has(.tez-builder-step-visual) {
-		grid-template-columns: 1fr minmax(200px, 40%);
-	}
+.tez-builder-step:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 14px 32px rgba(9, 62, 49, 0.1);
+}
+
+.tez-builder-step-body {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+	width: 100%;
 }
 
 .tez-builder-step-number {
@@ -117,23 +131,26 @@
 	justify-content: center;
 	width: 34px;
 	height: 34px;
-	margin-bottom: 8px;
 	border-radius: 50%;
 	background: rgba(20, 93, 74, 0.1);
 	color: #145d4a;
-	font-weight: 700;
+	font-weight: 800;
 }
 
 .tez-builder-step-body h3 {
-	margin: 8px 0 6px;
+	margin: 4px 0 0;
 }
 
 .tez-builder-step-body p {
 	margin: 0;
+	color: #5a7268;
+	font-size: 14px;
+	line-height: 1.75;
 }
 
 .tez-builder-step-visual {
 	margin: 0;
+	width: 100%;
 }
 
 .tez-builder-step-visual img {

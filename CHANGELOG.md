@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.8.3 — 2026-08-20 — Mega width, stacked heroes, card steps, motion
+
+- Desktop mega menu stretches the full nav bar (3-column grid). `left/right: auto` after `inset-inline` had shrink-wrapped it into a scrolling strip.
+- Builder `.section-head` stacks eyebrow / title / lead so heroes and FAQs are no longer a two-column split.
+- Process steps are compact cards in a wrapping grid, not full-width empty rows.
+- CTA buttons on dark bands stay a pill (`flex: none`, nowrap) instead of a wrapped white square.
+- Feature/FAQ cards use `auto-fill` so the last row keeps the same card width; icon stacks above the title.
+- Hover lift and press-scale on cards and buttons; mega panel fades in. `prefers-reduced-motion` still wins.
+
+
 ## 1.8.2 — 2026-08-20 — SiteShell chrome: compact nav, centered search, page rhythm
 
 - Primary-nav labels match the React header (پایان‌نامه / پروپوزال / ابزار / تماس). Inquiry and About stay in the CTA cluster, not the link row.
