@@ -302,7 +302,7 @@ function teznevise_blog_shortcode_fallback() {
 		}
 		wp_reset_postdata();
 	} else {
-		echo '<p class="blog-archive__empty"><a class="btn-tz btn-primary-tz" href="' . esc_url( home_url( '/blog/' ) ) . '">' . esc_html__( 'مشاهده مطالب مرکز دانش', 'teznevise' ) . '</a></p>';
+		echo '<p class="blog-archive__empty"><a class="btn-tz btn-primary-tz" href="' . esc_url( function_exists( 'teznevise_posts_url' ) ? teznevise_posts_url() : home_url( '/' ) ) . '">' . esc_html__( 'مشاهده مطالب مرکز دانش', 'teznevise' ) . '</a></p>';
 	}
 	echo '</div>';
 	return ob_get_clean();

@@ -6,20 +6,38 @@
   var searchOverlay = document.querySelector('.search-overlay');
   var searchClose = document.querySelector('.search-close');
   var searchInput = document.querySelector('.search-input');
+  var lastTrigger = null;
+
+  function searchFocusables() {
+    if (!searchOverlay) return [];
+    return Array.prototype.slice.call(
+      searchOverlay.querySelectorAll('a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])')
+    ).filter(function (el) {
+      return !el.hasAttribute('disabled') && el.offsetParent !== null;
+    });
+  }
 
   function openSearch(e) {
     if (e) e.preventDefault();
     if (!searchOverlay) return;
+    lastTrigger = (e && e.currentTarget) ? e.currentTarget : searchBtn;
     searchOverlay.hidden = false;
     searchOverlay.classList.add('open');
+    searchOverlay.setAttribute('aria-hidden', 'false');
+    if (searchBtn) searchBtn.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
     if (searchInput) setTimeout(function () { searchInput.focus(); }, 80);
   }
   function closeSearch() {
-    if (!searchOverlay) return;
+    if (!searchOverlay || searchOverlay.hidden) return;
     searchOverlay.classList.remove('open');
     searchOverlay.hidden = true;
+    searchOverlay.setAttribute('aria-hidden', 'true');
+    if (searchBtn) searchBtn.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
+    if (lastTrigger && typeof lastTrigger.focus === 'function') {
+      lastTrigger.focus();
+    }
   }
   if (searchBtn) searchBtn.addEventListener('click', openSearch);
   if (searchClose) searchClose.addEventListener('click', closeSearch);
@@ -29,7 +47,23 @@
     });
   }
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeSearch();
+    if (!searchOverlay || searchOverlay.hidden) return;
+    if (e.key === 'Escape') {
+      closeSearch();
+      return;
+    }
+    if (e.key !== 'Tab') return;
+    var list = searchFocusables();
+    if (!list.length) return;
+    var first = list[0];
+    var last = list[list.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
   });
 
   document.querySelectorAll('[data-share]').forEach(function (btn) {

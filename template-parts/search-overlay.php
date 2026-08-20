@@ -9,8 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $popular = function_exists( 'teznevise_popular_searches' ) ? teznevise_popular_searches() : array();
 ?>
-<div class="search-overlay" hidden>
-	<div class="search-overlay-panel" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'جستجو', 'teznevise' ); ?>">
+<div id="teznevise-search-overlay" class="search-overlay" hidden aria-hidden="true">
+	<div class="search-overlay-panel" role="dialog" aria-modal="true" aria-labelledby="tz-overlay-q">
 		<form class="search-overlay-form" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<label class="screen-reader-text" for="tz-overlay-q"><?php esc_html_e( 'جستجو', 'teznevise' ); ?></label>
 			<input class="search-input" id="tz-overlay-q" type="search" name="s" placeholder="<?php esc_attr_e( 'جستجو در خدمات، ابزارها و مقالات…', 'teznevise' ); ?>" value="<?php echo esc_attr( get_search_query() ); ?>">

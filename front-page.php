@@ -73,7 +73,7 @@ if ( $use_builder ) {
 
 <?php get_template_part( 'template-parts/universities' ); ?>
 
-<section class="section bg-soft"><div class="container"><div class="section-head" data-reveal><div><span class="eyebrow"><?php echo esc_html( teznevise_mod( 'articles_eyebrow' ) ); ?></span><h2><?php echo esc_html( teznevise_mod( 'articles_title' ) ); ?></h2><p><?php echo esc_html( teznevise_mod( 'articles_text' ) ); ?></p></div><a class="link-arrow" href="<?php echo esc_url( home_url( '/blog/' ) ); ?>"><?php esc_html_e( 'مشاهده همه مقالات', 'teznevise' ); ?></a></div>
+<section class="section bg-soft"><div class="container"><div class="section-head" data-reveal><div><span class="eyebrow"><?php echo esc_html( teznevise_mod( 'articles_eyebrow' ) ); ?></span><h2><?php echo esc_html( teznevise_mod( 'articles_title' ) ); ?></h2><p><?php echo esc_html( teznevise_mod( 'articles_text' ) ); ?></p></div><a class="link-arrow" href="<?php echo esc_url( function_exists( 'teznevise_posts_url' ) ? teznevise_posts_url() : home_url( '/' ) ); ?>"><?php esc_html_e( 'مشاهده همه مقالات', 'teznevise' ); ?></a></div>
 	<div class="article-grid" data-reveal-stagger><?php $recent = new WP_Query( array( 'posts_per_page' => 3, 'post_status' => 'publish', 'ignore_sticky_posts' => true, 'no_found_rows' => true ) ); if ( $recent->have_posts() ) : while ( $recent->have_posts() ) : $recent->the_post(); get_template_part( 'template-parts/post-card' ); endwhile; wp_reset_postdata(); else : ?><p class="blog-archive__empty"><?php esc_html_e( 'هنوز مطلبی منتشر نشده است.', 'teznevise' ); ?></p><?php endif; ?></div>
 </div></section>
 
