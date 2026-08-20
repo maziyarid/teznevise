@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.7.6 — 2026-08-20 — Remaining shortcode mappings + dump removal
+
+- Map `[tz_price_box]`, `[tz_price_cta]` (including bare `[tz_price_cta]` and `text=`), `[tz_calculation_hub]` (with optional attributes), and `[tz_careers_terms]`.
+- Seed Cohen's kappa, ICC, KR-20, and goodness-of-fit calculator pages.
+- Catalog migration keeps `category_slug` / `count` and hydrates items; render-time hydrator honors the stored category.
+- Empty parses write a content-hashed skip marker so later edits or schema bumps can retry.
+- Fallback shortcodes for price CTA, calculation hub, and careers terms.
+- Remove credential-bearing `docs/sep_posts.*` and WPCode dump from the tree.
+
 ## 1.7.5 — 2026-08-20 — Accessible nav disclosure
 
 - `Teznevise_Nav_Walker` renders a separate `.nav-dropdown-toggle` beside parent items so the parent link always navigates.

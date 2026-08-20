@@ -1,12 +1,8 @@
 # Migration data security
 
-## Files in this PR
+## Files removed from the tree
 
-| Path | Risk |
-|------|------|
-| `docs/sep_posts.sql` | High — full `wp_posts` dump; may embed WPCode/snippet bodies with mail config, keys, or PII |
-| `docs/sep_posts.csv` | High — same content as CSV |
-| `docs/wpcode-snippets-export-2026-08-18.json` | Medium — snippet source; review for secrets before sharing |
+`docs/sep_posts.sql`, `docs/sep_posts.csv`, and `docs/wpcode-snippets-export-*.json` are gitignored and must not be re-committed. They were credential-bearing dumps (full `wp_posts` / WPCode snippet source).
 
 ## Required actions before merge / public exposure
 
