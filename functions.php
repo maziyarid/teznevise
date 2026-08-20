@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.6.4' );
+define( 'TEZNEVISE_VERSION', '1.6.5' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
