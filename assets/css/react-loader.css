@@ -1,0 +1,48 @@
+/**
+ * React SiteShell loader for the WordPress front-end.
+ * Mirrors src/components/layout/SiteShell.tsx from the companion app.
+ *
+ * @package Teznevise
+ */
+html {
+  overflow-x: clip;
+}
+body.tz-react-shell {
+  margin: 0;
+  background: #ffffff;
+  color: #10231d;
+  font-family: Vazirmatn, Tahoma, ui-sans-serif, system-ui, sans-serif;
+}
+.tz-react-shell-inner {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background: #ffffff;
+  color: #10231d;
+}
+.tz-react-shell-inner #main-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.site-header.site-header-new {
+  position: sticky;
+  top: 0;
+  z-index: 3000;
+  isolation: isolate;
+  background: #fff;
+}
+.announce.announcement,
+.announcement.announce {
+  background: linear-gradient(135deg, rgba(247, 252, 250, 0.96), rgba(232, 245, 241, 0.92));
+  border-bottom: 1px solid rgba(20, 93, 74, 0.09);
+}
+.footer-logo.footer-logo-wrap,
+.footer-logo-wrap {
+  background: transparent !important;
+  padding: 0 !important;
+}
+.footer-logo.footer-logo-wrap img,
+.footer-logo-wrap img {
+  filter: brightness(0) invert(1);
+  background: transparent;
+}

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.8.1 — 2026-08-20 — Front-end never loads the migrator
+
+- `shortcode-to-builder-migrator.php` is required only in wp-admin / WP-CLI. A parse error in that file can no longer white-screen the public site (issue #425).
+- WordPress chrome boots through the same SiteShell wrapper as the React app (`tz-react-shell`): flex column, sticky header, React class aliases, white footer logo.
+- Bump migration file stamp so VPS rsync replaces any leftover 1.7.6 copy.
+
+
 ## 1.8.0 — 2026-08-20 — Mega menu, footer, search overlay
 
 - Desktop submenus are full-width mega panels (grid + scroll) so long tool/thesis lists stay on screen, with Font Awesome icons on every item.

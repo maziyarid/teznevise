@@ -9,6 +9,9 @@
  * Also seeds calculator tool pages and optionally strips structural
  * shortcodes from post_content after a successful migration.
  *
+ * Loaded from functions.php only in is_admin() / WP-CLI as of 1.8.1 so a
+ * parse error here cannot take down the public front-end.
+ *
  * @package Teznevise
  */
 
@@ -17,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'TEZNEVISE_MIGRATION_OPTION', 'teznevise_shortcode_migration_v1' );
-define( 'TEZNEVISE_MIGRATION_VERSION', '1.2.0' );
+define( 'TEZNEVISE_MIGRATION_VERSION', '1.2.1' );
 if ( ! defined( 'TEZNEVISE_MIGRATION_SKIP_META' ) ) {
 	define( 'TEZNEVISE_MIGRATION_SKIP_META', '_teznevise_migration_skip' );
 }

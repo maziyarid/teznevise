@@ -5,11 +5,11 @@
  * @package Teznevise
  */
 ?></main>
-<footer class="site-footer-new footer-new">
+<footer class="site-footer site-footer-new footer-new">
 	<div class="container">
 		<div class="footer-grid">
 			<div class="footer-brand">
-				<a class="footer-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+				<a class="footer-logo footer-logo-wrap" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 					<?php
 					$logo_url = function_exists( 'teznevise_logo_url' ) ? teznevise_logo_url() : '';
 					if ( ! $logo_url && has_custom_logo() ) {
@@ -80,6 +80,7 @@
 </footer>
 <?php get_template_part( 'template-parts/fab' ); ?>
 <?php get_template_part( 'template-parts/bottom-nav' ); ?>
+</div>
 <?php wp_footer(); ?>
 </body>
 </html>

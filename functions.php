@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.8.0' );
+define( 'TEZNEVISE_VERSION', '1.8.1' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -31,8 +31,18 @@ require_once TEZNEVISE_DIR . '/inc/seo.php';
 require_once TEZNEVISE_DIR . '/inc/setup-pages.php';
 require_once TEZNEVISE_DIR . '/inc/promote-assets.php';
 require_once TEZNEVISE_DIR . '/inc/screenshot-data.php';
-require_once TEZNEVISE_DIR . '/inc/migration/shortcode-to-builder-migrator.php';
-require_once TEZNEVISE_DIR . '/inc/migration/auto-run.php';
+/*
+ * Never load the shortcode migrator on the public front-end.
+ * A parse error in that file (Unclosed '{' on line 370 / issue #425)
+ * fatals every request that includes functions.php. Admin + WP-CLI only.
+ */
+if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+	$tez_migrator = TEZNEVISE_DIR . '/inc/migration/shortcode-to-builder-migrator.php';
+	if ( is_readable( $tez_migrator ) ) {
+		require_once $tez_migrator;
+	}
+	require_once TEZNEVISE_DIR . '/inc/migration/auto-run.php';
+}
 require_once TEZNEVISE_DIR . '/inc/frontend-compat.php';
 require_once TEZNEVISE_DIR . '/inc/tezcoin.php';
 require_once TEZNEVISE_DIR . '/inc/legal-pages.php';
@@ -115,6 +125,19 @@ function teznevise_enqueue_parity_css() {
 		TEZNEVISE_URI . '/assets/css/react-parity.css',
 		array(),
 		TEZNEVISE_VERSION
+	);
+	wp_enqueue_style(
+		'teznevise-react-loader',
+		TEZNEVISE_URI . '/assets/css/react-loader.css',
+		array( 'teznevise-parity' ),
+		TEZNEVISE_VERSION
+	);
+	wp_enqueue_script(
+		'teznevise-react-loader',
+		TEZNEVISE_URI . '/assets/js/react-loader.js',
+		array( 'teznevise-nav-dropdown' ),
+		TEZNEVISE_VERSION,
+		true
 	);
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_parity_css', 999 );
