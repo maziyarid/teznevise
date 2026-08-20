@@ -476,6 +476,9 @@ function teznevise_apply_extracted_fields( $post_id, $replace_builder = false, $
 	if ( isset( $entry['source'] ) && 'empty' === $entry['source'] ) {
 		return 'empty';
 	}
+	if ( ! $replace_builder && 'manual' === teznevise_extracted_builder_provenance( $post_id ) ) {
+		return 'skipped';
+	}
 
 	$sections = isset( $entry['sections'] ) && is_array( $entry['sections'] ) ? $entry['sections'] : array();
 	$meta     = isset( $entry['meta'] ) && is_array( $entry['meta'] ) ? $entry['meta'] : array();
