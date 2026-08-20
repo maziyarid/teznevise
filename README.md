@@ -41,3 +41,7 @@ The deployed SHA must match the intended `main` release SHA. Review cPanel Versi
 2. Mirror the same value in `style.css` (Version header), `readme.txt` (Stable tag), and `README.md`.
 3. Add a CHANGELOG entry.
 4. Allow the VPS cron to pull the corrected `main` revision through cPanel VersionControl.
+
+## React app
+
+The TanStack/React companion app (wallet, dashboard, tools) lives in [`react-app/`](./react-app/).
