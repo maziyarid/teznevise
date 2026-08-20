@@ -10,14 +10,16 @@
 get_header();
 ?>
 
-<section class="site-main blog-archive blog-archive--home section">
-	<div class="container blog-layout">
+<section class="site-main blog-archive blog-archive--home">
+	<header class="blog-archive__header page-hero" data-reveal>
+		<div class="container page-hero-inner">
+			<p class="blog-archive__eyebrow eyebrow"><?php esc_html_e( 'مرکز دانش', 'teznevise' ); ?></p>
+			<h1><?php esc_html_e( 'راهنماها و آموزش‌های پژوهشی', 'teznevise' ); ?></h1>
+			<p class="blog-archive__intro"><?php esc_html_e( 'نگارش فصل‌ها، روش تحقیق و تحلیل آماری به زبان کاربردی.', 'teznevise' ); ?></p>
+		</div>
+	</header>
+	<div class="container blog-layout section">
 		<div>
-		<header class="blog-archive__header" data-reveal>
-			<p class="blog-archive__eyebrow"><?php esc_html_e( 'مرکز دانش', 'teznevise' ); ?></p>
-			<h1><?php esc_html_e( 'بلاگ', 'teznevise' ); ?></h1>
-			<p class="blog-archive__intro"><?php esc_html_e( 'راهنماهای کاربردی درباره روش تحقیق، نگارش دانشگاهی و تحلیل آماری.', 'teznevise' ); ?></p>
-		</header>
 		<nav class="blog-cats" aria-label="<?php esc_attr_e( 'دسته‌ها', 'teznevise' ); ?>">
 			<?php
 			$cats = get_categories( array( 'orderby' => 'count', 'order' => 'DESC', 'number' => 8 ) );

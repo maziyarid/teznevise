@@ -40,7 +40,7 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 		 */
 		public function start_lvl( &$output, $depth = 0, $args = null ) {
 			$indent      = str_repeat( "\t", $depth );
-			$level_class = $depth > 0 ? ' nav-dropdown-l3' : ' nav-dropdown';
+			$level_class = $depth > 0 ? ' nav-dropdown-l3' : ' nav-dropdown nav-panel mega';
 			$output     .= "{$indent}<ul class=\"sub-menu{$level_class}\">\n";
 		}
 
@@ -80,6 +80,9 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 			if ( $has_children && 0 === $depth ) {
 				$classes[] = 'has-dropdown';
 			}
+			if ( 0 === $depth && function_exists( 'teznevise_nav_is_cta_duplicate' ) && teznevise_nav_is_cta_duplicate( isset( $item->url ) ? $item->url : '' ) ) {
+				$classes[] = 'nav-hide-desktop';
+			}
 
 			$classes = apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args, $depth );
 			$classes = array_map( 'sanitize_html_class', (array) $classes );
@@ -109,14 +112,27 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 			$title = apply_filters( 'the_title', $item->title, $item->ID );
 			$title = apply_filters( 'nav_menu_item_title', $title, $item, $args, $depth );
 
-			$item_output  = isset( $args->before ) ? $args->before : '';
-			$item_output .= '<a' . $attributes . '>';
-			$icon         = function_exists( 'teznevise_nav_icon' ) ? teznevise_nav_icon( isset( $atts['href'] ) ? $atts['href'] : '', $title ) : '';
-			if ( $icon ) {
-				$item_output .= '<i class="' . esc_attr( $icon ) . ' nav-item-icon" aria-hidden="true"></i>';
+			$href             = isset( $atts['href'] ) ? (string) $atts['href'] : '';
+			$path             = (string) wp_parse_url( $href, PHP_URL_PATH );
+			$is_group_heading = ( 1 === (int) $depth && $has_children && ( '' === $href || '#' === $href || '' === $path ) );
+
+			$item_output = isset( $args->before ) ? $args->before : '';
+			$icon        = function_exists( 'teznevise_nav_icon' ) ? teznevise_nav_icon( $href, $title ) : '';
+			if ( $is_group_heading ) {
+				$item_output .= '<h4 class="mega-heading">';
+				if ( $icon ) {
+					$item_output .= '<i class="' . esc_attr( $icon ) . ' nav-item-icon" aria-hidden="true"></i>';
+				}
+				$item_output .= ( isset( $args->link_before ) ? $args->link_before : '' ) . $title . ( isset( $args->link_after ) ? $args->link_after : '' );
+				$item_output .= '</h4>';
+			} else {
+				$item_output .= '<a' . $attributes . '>';
+				if ( $icon ) {
+					$item_output .= '<i class="' . esc_attr( $icon ) . ' nav-item-icon" aria-hidden="true"></i>';
+				}
+				$item_output .= ( isset( $args->link_before ) ? $args->link_before : '' ) . $title . ( isset( $args->link_after ) ? $args->link_after : '' );
+				$item_output .= '</a>';
 			}
-			$item_output .= ( isset( $args->link_before ) ? $args->link_before : '' ) . $title . ( isset( $args->link_after ) ? $args->link_after : '' );
-			$item_output .= '</a>';
 			$item_output .= isset( $args->after ) ? $args->after : '';
 
 			// A separate button beside the link, not the link itself, toggles the

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.8.2 — 2026-08-20 — SiteShell chrome: compact nav, centered search, page rhythm
+
+- Primary-nav labels match the React header (پایان‌نامه / پروپوزال / ابزار / تماس). Inquiry and About stay in the CTA cluster, not the link row.
+- Mega panels use `.nav-panel.mega` markup; `#` group items render as headings, not dead links.
+- Search overlay is forced to `position:fixed; inset:0; z-index:5000` so it never opens under the sticky bar. Tab trap uses `getClientRects()`.
+- `react-loader.css` is the last-wins SiteShell layer (flex column, sticky header, white footer logo, blog/form cards).
+- Blog archive header and lead forms pick up the same hero/card rhythm as the React pages.
+
+
 ## 1.8.1 — 2026-08-20 — Front-end never loads the migrator
 
 - `shortcode-to-builder-migrator.php` is required only in wp-admin / WP-CLI. A parse error in that file can no longer white-screen the public site (issue #425).

@@ -219,6 +219,64 @@ function teznevise_nav_icon( $url, $title = '' ) {
 }
 
 /**
+ * True when a top-level primary item duplicates a header CTA (About / Inquiry).
+ *
+ * @param string $url Menu item URL.
+ * @return bool
+ */
+function teznevise_nav_is_cta_duplicate( $url ) {
+	$path = untrailingslashit( (string) wp_parse_url( (string) $url, PHP_URL_PATH ) );
+	return in_array( $path, array( '/inquiry', '/about-us', '/about' ), true );
+}
+
+/**
+ * Compact primary-nav labels to match the React SiteHeader.
+ *
+ * @param string   $title Item title.
+ * @param WP_Post  $item  Menu item.
+ * @param stdClass $args  Walker args.
+ * @param int      $depth Depth.
+ * @return string
+ */
+function teznevise_nav_item_title_short( $title, $item, $args = null, $depth = 0 ) {
+	unset( $item, $depth );
+	if ( ! is_object( $args ) || empty( $args->theme_location ) || 'primary' !== $args->theme_location ) {
+		return $title;
+	}
+	$map = array(
+		'انجام پایان نامه'              => 'پایان‌نامه',
+		'انجام پایان‌نامه'              => 'پایان‌نامه',
+		'انجام پروپوزال'                 => 'پروپوزال',
+		'ابزارهای آنلاین'                => 'ابزار',
+		'تماس با ما'                     => 'تماس',
+		'انجام فصل به فصل'               => 'فصل به فصل',
+		'نگارش فصل اول پایان نامه'     => 'نگارش فصل اول',
+		'نگارش فصل دوم پایان نامه'     => 'نگارش فصل دوم',
+		'نگارش فصل سوم پایان نامه'     => 'نگارش فصل سوم',
+		'نگارش فصل چهارم پایان نامه'   => 'نگارش فصل چهارم',
+		'نگارش فصل پنجم پایان نامه'    => 'نگارش فصل پنجم',
+		'انجام پایان نامه علوم انسانی' => 'علوم انسانی',
+		'انجام پایان نامه مهندسی'      => 'فنی و مهندسی',
+		'انجام پایان نامه علوم پایه'   => 'علوم پایه',
+		'انجام پایان نامه علوم پزشکی'  => 'علوم پزشکی',
+		'انجام پایان نامه هنر/معماری'  => 'هنر و معماری',
+		'علوم بین‌رشته‌ای و کاربردی'     => 'علوم بین‌رشته‌ای',
+		'انجام رساله دکتری'              => 'رساله دکتری',
+		'نگارش پایان نامه بین المللی'  => 'پایان‌نامه بین‌المللی',
+		'انجام پروپوزال دکتری'           => 'پروپوزال دکتری',
+		'انجام پروپوزال کلاسی'           => 'پروپوزال کلاسی',
+		'انجام پروپوزال انگلیسی'         => 'پروپوزال انگلیسی',
+		'نگارش پروپوزال کیفی'            => 'پژوهش کیفی',
+		'نگارش پروپوزال کمی'             => 'پژوهش کمی',
+		'نگارش پروپوزال کاربردی'         => 'تحقیق کاربردی',
+		'نگارش پروپوزال پزشکی'           => 'پروپوزال پزشکی',
+		'سایر موارد'                     => 'سایر',
+	);
+	return isset( $map[ $title ] ) ? $map[ $title ] : $title;
+}
+add_filter( 'nav_menu_item_title', 'teznevise_nav_item_title_short', 20, 4 );
+
+/**
  * Posts-index URL: configured page_for_posts, then a `blog` page, then home.
  *
  * @return string

@@ -1,6 +1,6 @@
 /**
  * React SiteShell loader for the WordPress front-end.
- * Mirrors src/components/layout/SiteShell.tsx from the companion app.
+ * Last-enqueued chrome layer. Mirrors src/components/layout/SiteShell.tsx.
  *
  * @package Teznevise
  */
@@ -24,6 +24,7 @@ body.tz-react-shell {
   flex: 1 1 auto;
   min-width: 0;
 }
+.site-header,
 .site-header.site-header-new {
   position: sticky;
   top: 0;
@@ -36,13 +37,139 @@ body.tz-react-shell {
   background: linear-gradient(135deg, rgba(247, 252, 250, 0.96), rgba(232, 245, 241, 0.92));
   border-bottom: 1px solid rgba(20, 93, 74, 0.09);
 }
+.footer-logo,
 .footer-logo.footer-logo-wrap,
 .footer-logo-wrap {
   background: transparent !important;
   padding: 0 !important;
+  box-shadow: none !important;
 }
+.footer-logo img,
 .footer-logo.footer-logo-wrap img,
 .footer-logo-wrap img {
-  filter: brightness(0) invert(1);
-  background: transparent;
+  filter: brightness(0) invert(1) !important;
+  background: transparent !important;
+}
+
+/* Search — fill the viewport, sit above the sticky header, flex-center the panel. */
+.search-overlay,
+#teznevise-search-overlay,
+#teznevise-search-overlay.search-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  z-index: 5000 !important;
+  margin: 0 !important;
+  padding: 24px !important;
+  overflow: auto !important;
+  background: rgba(8, 28, 22, 0.55) !important;
+  transform: none !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.search-overlay[hidden]:not(.open) {
+  display: none !important;
+}
+.search-overlay.open,
+.search-overlay.open[hidden],
+#teznevise-search-overlay.open {
+  display: flex !important;
+}
+.search-overlay-panel,
+.search-overlay .search-box,
+.search-overlay-form {
+  position: relative !important;
+  top: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+}
+.search-overlay-panel {
+  width: min(640px, 100%) !important;
+  margin: 0 auto !important;
+  background: #fff !important;
+  border-radius: 22px !important;
+  padding: 18px !important;
+  box-shadow: 0 24px 60px rgba(9, 40, 32, 0.2) !important;
+}
+.search-overlay-form {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  border: 1px solid #dfe9e5 !important;
+  border-radius: 16px !important;
+  padding: 8px 10px !important;
+  background: #f7fcfa !important;
+}
+.search-overlay-form .search-input {
+  flex: 1 1 auto !important;
+  border: 0 !important;
+  background: transparent !important;
+  min-height: 44px !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+@media (min-width: 1051px) {
+  .main-nav .nav-links > li.nav-hide-desktop {
+    display: none !important;
+  }
+  .main-nav ul.nav-dropdown > .menu-item-has-children > .mega-heading,
+  .main-nav .mega-heading {
+    margin: 0 0 6px !important;
+    padding: 4px 10px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    color: #145d4a !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+}
+
+.blog-archive {
+  padding-top: 0 !important;
+}
+.blog-archive__header,
+.blog-archive__header.page-hero {
+  padding: 48px 0 36px !important;
+  margin: 0 !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(130, 216, 185, 0.22), transparent 34%),
+    linear-gradient(180deg, #f9fdfb, #f3faf7) !important;
+  border-bottom: 1px solid rgba(20, 93, 74, 0.08);
+}
+.blog-archive__header h1 {
+  font-size: clamp(28px, 4vw, 44px) !important;
+  line-height: 1.4 !important;
+  color: #10231d !important;
+  max-width: 18em;
+  margin: 0;
+}
+.blog-archive__intro {
+  max-width: 42em;
+  color: #5a7268 !important;
+  margin-top: 10px;
+}
+.page-hero-inner {
+  max-width: 760px;
+}
+.post-card,
+.article-card,
+.lead-card,
+.tz-form.lead-card {
+  border-radius: 20px !important;
+  background: #fff !important;
+  border: 1px solid rgba(20, 93, 74, 0.1) !important;
+}
+.tz-form.lead-card {
+  padding: 24px !important;
+}
+.tz-form .field label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+  color: #17342c;
 }
