@@ -215,8 +215,8 @@ function teznevise_register_page_meta() {
 				'single'            => true,
 				'default'           => $default,
 				'show_in_rest'      => true,
-				'auth_callback'     => function () {
-					return current_user_can( 'edit_pages' );
+				'auth_callback'     => function ( $allowed, $meta_key, $object_id ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+					return current_user_can( 'edit_page', (int) $object_id );
 				},
 				'sanitize_callback' => function ( $value ) use ( $type ) {
 					if ( 'boolean' === $type ) {
@@ -413,12 +413,18 @@ function teznevise_save_page_meta( $post_id ) {
 	if ( get_post_type( $post_id ) !== 'page' ) {
 		return;
 	}
-	$schema = teznevise_page_meta_schema();
+	$schema  = teznevise_page_meta_schema();
+	$changed = false;
 	foreach ( $schema as $key => $args ) {
 		$meta_key = '_teznevise_' . $key;
 		$type     = $args['type'];
 		if ( 'boolean' === $type ) {
-			update_post_meta( $post_id, $meta_key, isset( $_POST[ $meta_key ] ) ? 1 : 0 );
+			$val     = isset( $_POST[ $meta_key ] ) ? 1 : 0;
+			$current = get_post_meta( $post_id, $meta_key, true );
+			if ( (string) (int) $current !== (string) $val ) {
+				update_post_meta( $post_id, $meta_key, $val );
+				$changed = true;
+			}
 			continue;
 		}
 		if ( ! isset( $_POST[ $meta_key ] ) ) {
@@ -430,7 +436,15 @@ function teznevise_save_page_meta( $post_id ) {
 		} else {
 			$val = sanitize_text_field( $raw );
 		}
+		$current = get_post_meta( $post_id, $meta_key, true );
+		if ( (string) $current === (string) $val ) {
+			continue;
+		}
 		update_post_meta( $post_id, $meta_key, $val );
+		$changed = true;
+	}
+	if ( $changed && function_exists( 'teznevise_stamp_manual_page_ownership' ) ) {
+		teznevise_stamp_manual_page_ownership( $post_id );
 	}
 }
 add_action( 'save_post_page', 'teznevise_save_page_meta' );

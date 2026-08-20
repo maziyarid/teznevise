@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.6.6 — 2026-08-20 — Shortcode + meta provenance
+
+### Changes
+
+- The shortcode-to-builder candidate loop now skips pages with `_teznevise_builder_provenance = manual` unless the Setup force-replace checkbox is used, even when builder JSON is empty `[]`.
+- Administrator writes of `_teznevise_*` page fields (metabox save or REST meta) stamp `manual` provenance, so empty-builder automatic migration cannot overwrite those edits.
+- REST `auth_callback` for page `_teznevise_*` meta is scoped to `edit_page` on the target page.
+
+### Testing
+
+- Manual provenance + `[]` builder + leftover shortcode content + no extracted entry → non-forced `teznevise_migration_run` skips.
+- Same page with force-replace → parsed sections written.
+- Changing a `_teznevise_*` metabox or REST field stamps `manual`; subsequent auto-run leaves the page alone.
+
 ## 1.6.5 — 2026-08-20 — Empty-builder ownership
 
 ### Changes

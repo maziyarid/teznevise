@@ -321,6 +321,72 @@ function teznevise_set_builder_provenance( $post_id, $kind ) {
 }
 
 /**
+ * Whether a page is marked as administrator-owned.
+ *
+ * @param int $post_id Page ID.
+ * @return bool
+ */
+function teznevise_page_has_manual_builder_provenance( $post_id ) {
+	return 'manual' === (string) get_post_meta( (int) $post_id, TEZNEVISE_BUILDER_PROVENANCE_META, true );
+}
+
+/**
+ * Stamp manual provenance after an administrator writes protected page fields.
+ *
+ * Used by metabox saves and REST meta updates. Extracted/seed writers call
+ * teznevise_set_builder_provenance() with extracted|default-seed instead.
+ *
+ * @param int $post_id Page ID.
+ */
+function teznevise_stamp_manual_page_ownership( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 || 'page' !== get_post_type( $post_id ) ) {
+		return;
+	}
+	teznevise_set_builder_provenance( $post_id, 'manual' );
+}
+
+/**
+ * Stamp manual provenance when REST writes protected `_teznevise_*` page fields.
+ *
+ * Builder internals (`_teznevise_builder_sections`, provenance, extracted hash)
+ * are owned by the builder/extracted writers and are ignored here.
+ *
+ * @param WP_Post         $post     Inserted page.
+ * @param WP_REST_Request $request  Request.
+ * @param bool            $creating Creating vs updating.
+ */
+function teznevise_stamp_manual_from_rest( $post, $request, $_creating ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	if ( ! $post instanceof WP_Post || 'page' !== $post->post_type ) {
+		return;
+	}
+	if ( ! current_user_can( 'edit_page', (int) $post->ID ) ) {
+		return;
+	}
+	$meta = $request instanceof WP_REST_Request ? $request->get_param( 'meta' ) : null;
+	if ( ! is_array( $meta ) ) {
+		return;
+	}
+	$skip = array(
+		'_teznevise_builder_sections',
+		'_teznevise_builder_provenance',
+		'_teznevise_extracted_hash',
+	);
+	foreach ( array_keys( $meta ) as $key ) {
+		$key = (string) $key;
+		if ( 0 !== strpos( $key, '_teznevise_' ) ) {
+			continue;
+		}
+		if ( in_array( $key, $skip, true ) ) {
+			continue;
+		}
+		teznevise_stamp_manual_page_ownership( (int) $post->ID );
+		return;
+	}
+}
+add_action( 'rest_after_insert_page', 'teznevise_stamp_manual_from_rest', 10, 3 );
+
+/**
  * Whether existing builder/meta/template may be replaced by extracted data.
  *
  * Automatic runs never overwrite administrator-owned values. Replacement is

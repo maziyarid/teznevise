@@ -1,7 +1,7 @@
 # Shortcode to Builder Migration – Complete Data Extraction & Analysis
 
 **Repository:** `maziyarid/teznevise`  
-**Status:** Implemented in theme 1.6.4  
+**Status:** Implemented in theme 1.6.6  
 **Created:** August 19, 2026  
 **Author:** Maziyar ID
 
@@ -11,12 +11,14 @@
 
 This document captures the complete data extraction from the uploaded database export (`sep_posts.sql`) and WPCode snippets (`wpcode-snippets-export-2026-08-18.json`). It identifies **29 custom fields**, **30+ shortcode patterns**, **3 custom post types**, and **3 custom taxonomies** that need to be mapped to the Flexible Page Builder.
 
-**v1.6.4 implementation**
+**v1.6.6 implementation**
 - Generator: `scripts/extract-shortcode-pages.py`
 - Data: `inc/extracted-page-fields.json` (published pages only)
 - Writer: `inc/extracted-pages.php` → `_teznevise_builder_sections` + `_teznevise_*`
 - Trigger: Appearance → Teznevise Setup, or auto-run migrator v1.2.0
 - Auto-run is provenance-safe: it fills empty pages and replaces default-seed / matching extracted hashes, never administrator-owned builder JSON
+- Manual provenance is honored on both the extracted-fields path and the later shortcode-to-builder candidate loop, even when builder JSON is `[]`
+- Non-builder `_teznevise_*` metabox/REST writes stamp `manual` provenance
 - Force-replace is an explicit Setup checkbox
 - Mixed interactive shortcodes (`tz_careers_terms`, `tz_join_form`, calculators, Gravity Forms) still render beside builder sections
 - Privacy/cookie templates keep legal copy in `post_content`; builder only stores hero/CTA
