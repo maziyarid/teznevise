@@ -225,7 +225,6 @@ function teznevise_interactive_shortcodes_markup( $content ) {
 	}
 	$unique = array();
 	foreach ( $matches[0] as $tag ) {
-		$tag = trim( $tag );
 		if ( '' !== $tag && ! in_array( $tag, $unique, true ) ) {
 			$unique[] = $tag;
 		}
@@ -490,7 +489,7 @@ function teznevise_apply_extracted_fields( $post_id, $replace_builder = false, $
 	$write_builder = teznevise_extracted_builder_may_write( $post_id, $entry, (bool) $replace_builder );
 
 	if ( $dry_run ) {
-		if ( $sections && $write_builder ) {
+		if ( ( $sections && $write_builder ) || $overwrite ) {
 			return $had_builder ? 'updated' : 'created';
 		}
 		return 'skipped';
