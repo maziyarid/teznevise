@@ -13,7 +13,7 @@
     return Array.prototype.slice.call(
       searchOverlay.querySelectorAll('a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])')
     ).filter(function (el) {
-      return !el.hasAttribute('disabled') && el.offsetParent !== null;
+      return !el.hasAttribute('disabled') && el.getClientRects().length > 0;
     });
   }
 
