@@ -1,4 +1,4 @@
-/* Teznevise 1.7 — header, FAB, footer, blog, mobile alignment */
+/* Teznevise 1.7 — header, FAB, footer, blog, mobile, account */
 
 .nav-search-btn {
   appearance: none;
@@ -15,6 +15,8 @@
   cursor: pointer;
   padding: 0;
 }
+
+.nav-credits {
   min-width: 40px;
   height: 40px;
   padding: 0 10px;
@@ -49,8 +51,6 @@
   display: none;
   padding: 72px 16px 24px;
 }
-.search-overlay.open,
-.search-overlay:not([hidden]).open { display: block; }
 .search-overlay.open { display: block; }
 .search-overlay-panel {
   width: min(640px, 100%);
@@ -225,7 +225,6 @@
   text-decoration: none;
 }
 
-/* FAB: show on mobile too, open to the visual left */
 .tz-fab-wrap {
   display: block !important;
   inset-inline-end: 16px !important;
@@ -249,6 +248,45 @@
 .tz-fab-wrap.is-open .tz-fab-item:nth-child(2) { transition-delay: 70ms; }
 .tz-fab-wrap.is-open .tz-fab-item:nth-child(3) { transition-delay: 110ms; }
 .tz-fab-wrap.is-open .tz-fab-item:nth-child(4) { transition-delay: 150ms; }
+
+.account-shell { padding-top: 36px; }
+.account-head h1 { margin: 8px 0; }
+.account-balance { font-weight: 800; color: #145d4a; }
+.account-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 22px; }
+.account-tabs a {
+  padding: 8px 14px; border-radius: 12px; border: 1px solid #dfe9e5;
+  text-decoration: none; font-weight: 800; color: #31443c;
+}
+.account-tabs a.is-on { background: #145d4a; color: #fff; border-color: #145d4a; }
+.account-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.surface-card {
+  background: #fff; border: 1px solid #dfe9e5; border-radius: 20px;
+  padding: 18px; box-shadow: 0 10px 30px rgba(9, 62, 49, 0.06); margin-bottom: 16px;
+}
+.account-form { display: grid; gap: 12px; }
+.account-form label { display: grid; gap: 6px; font-weight: 700; }
+.account-form input, .account-form textarea, .account-form select, .ltr-field {
+  border: 1px solid #dfe9e5; border-radius: 12px; padding: 10px 12px; font: inherit;
+}
+.pack-row { display: flex; gap: 10px; align-items: center; margin: 8px 0; }
+.ledger { list-style: none; margin: 0; padding: 0; }
+.ledger li { display: grid; grid-template-columns: 90px 1fr auto; gap: 10px; padding: 8px 0; border-bottom: 1px solid #eef4f1; }
+.account-flash { background: #e8f5f1; border-radius: 12px; padding: 10px 14px; font-weight: 700; }
+.account-flash.is-warn { background: #fbf7ee; }
+.prog { height: 8px; background: #eef4f1; border-radius: 99px; overflow: hidden; }
+.prog span { display: block; height: 100%; background: linear-gradient(90deg, #145d4a, #82d8b9); }
+.tools-ai-card { max-width: 720px; }
+.ai-out { white-space: pre-wrap; margin-top: 12px; line-height: 1.9; }
+.ai-cost { color: #5a7268; font-weight: 700; }
+.agent-picks { border: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.agent-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid #dfe9e5; border-radius: 999px; padding: 6px 12px;
+  font-weight: 700; cursor: pointer;
+}
+.agent-chip:has(input:checked) { background: #145d4a; color: #fff; border-color: #145d4a; }
+.ticket-replies { margin: 10px 0 0; padding: 0; list-style: none; font-size: 13px; color: #31443c; }
+.ticket-replies li { padding: 6px 0; border-top: 1px solid #eef4f1; }
 
 @media (max-width: 1050px) {
   .main-nav {
@@ -291,13 +329,15 @@
   .page-hero-new,
   .section-head,
   .service-hero .section-head,
-  .blog-archive__header {
+  .blog-archive__header,
+  .account-head {
     text-align: center !important;
   }
   .hero-actions,
   .hero-points,
   .service-hero .hero-actions,
-  .cta-band {
+  .cta-band,
+  .account-tabs {
     justify-content: center !important;
   }
   .hero-copy p,

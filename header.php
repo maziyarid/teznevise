@@ -38,7 +38,7 @@ if ( $logo_url ) {
 	$tip     = $logged
 		? sprintf( __( 'موجودی: %s تزکوین', 'teznevise' ), number_format_i18n( (int) $balance ) )
 		: __( 'با ثبت‌نام و تکمیل پروفایل ۱۰۰۰ تزکوین هدیه بگیرید', 'teznevise' );
-	$account = $logged ? admin_url( 'profile.php' ) : wp_login_url( home_url( '/' ) );
+	$account = $logged ? home_url( '/account/' ) : wp_login_url( home_url( '/account/' ) );
 	?>
 	<a class="nav-credits" href="<?php echo esc_url( $account ); ?>" title="<?php echo esc_attr( $tip ); ?>" aria-label="<?php echo esc_attr( $tip ); ?>">
 		<i class="fa-solid fa-coins" aria-hidden="true"></i>

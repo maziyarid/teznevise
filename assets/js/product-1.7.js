@@ -53,4 +53,31 @@
       }
     });
   });
+  var ask = document.getElementById('tzAskAi');
+  if (ask && window.tezneviseProduct) {
+    ask.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var out = document.getElementById('tzAskOut');
+      var q = ask.querySelector('textarea');
+      var agent = ask.querySelector('input[name="agent"]:checked');
+      if (!q || !out) return;
+      out.hidden = false;
+      out.textContent = '…';
+      var body = new FormData();
+      body.append('action', 'teznevise_ask_ai');
+      body.append('nonce', tezneviseProduct.nonce);
+      body.append('q', q.value);
+      if (agent) body.append('agent', agent.value);
+      fetch(tezneviseProduct.ajax, { method: 'POST', body: body, credentials: 'same-origin' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (d && d.success && d.data && d.data.text) out.textContent = d.data.text;
+          else if (d && d.data && d.data.message === 'no-key') out.textContent = 'کلید OpenRouter در تنظیمات تزکوین وارد نشده است.';
+          else if (d && d.data && d.data.message === 'login') out.textContent = 'وارد شوید.';
+          else if (d && d.data && d.data.message === 'no-coins') out.textContent = 'موجودی تزکوین کافی نیست.';
+          else out.textContent = 'پاسخ آماده نشد.';
+        })
+        .catch(function () { out.textContent = 'ارتباط برقرار نشد.'; });
+    });
+  }
 })();

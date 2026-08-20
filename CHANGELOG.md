@@ -1,6 +1,19 @@
 # Changelog
 
+## 1.7.1 — 2026-08-20 — Account, tickets, payments, AI agents
+
+### Changes
+
+- Front-end `/account/` dashboard: wallet, buy Tezcoin (Zarinpal / AqayePardakht), ledger, referrals, profile bonus, tickets with isolated vault uploads, project tracking.
+- 1000 Tezcoin after a complete profile (name, phone, university, field, degree). Referral bonus pays both sides once.
+- Legal pages auto-seeded: terms, cookies, refund, research-rules.
+- Tools Ask-AI: pick an admin-defined agent, optional Tavily context, OpenRouter key + Tezcoin cost in Appearance → تزکوین.
+- Admin: AI agents CPT with Markdown skill upload, project status metabox, Tezcoin accounting, GA / Clarity IDs.
+- Logged-in comments auto-approved; image alt filled from title when empty.
+- Header credits/profile now open `/account/`.
+
 ## 1.7.0 — 2026-08-20 — Header, Tezcoin, footer, blog
+
 
 ### Changes
 

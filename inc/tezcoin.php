@@ -25,6 +25,12 @@ function teznevise_tezcoin_defaults() {
 		'pack_3_irr'      => 2200000,
 		'enamad_url'      => '',
 		'samandehi_url'   => '',
+		'openrouter_key'  => '',
+		'youcom_key'      => '',
+		'tavily_key'      => '',
+		'ai_cost'         => 5,
+		'ga_id'           => '',
+		'clarity_id'      => '',
 	);
 }
 
@@ -73,11 +79,15 @@ function teznevise_profile_is_complete( $user_id ) {
 	if ( ! $user ) {
 		return false;
 	}
-	$name       = trim( $user->first_name . ' ' . $user->display_name );
+	$name       = trim( $user->first_name );
+	if ( strlen( $name ) < 2 ) {
+		$name = trim( $user->display_name );
+	}
 	$phone      = get_user_meta( $user_id, 'teznevise_phone', true );
 	$university = get_user_meta( $user_id, 'teznevise_university', true );
 	$field      = get_user_meta( $user_id, 'teznevise_field', true );
-	return ( strlen( $name ) >= 2 && $phone && $university && $field );
+	$degree     = get_user_meta( $user_id, 'teznevise_degree', true );
+	return ( strlen( $name ) >= 2 && $phone && $university && $field && $degree );
 }
 
 function teznevise_maybe_profile_bonus( $user_id ) {
@@ -93,6 +103,15 @@ function teznevise_maybe_profile_bonus( $user_id ) {
 	}
 	teznevise_tezcoin_credit( $user_id, $bonus, 'هدیه تکمیل پروفایل', 'profile' );
 	update_user_meta( $user_id, 'teznevise_tezcoin_bonus_granted', 1 );
+	$ref = (int) get_user_meta( $user_id, 'teznevise_referred_by', true );
+	if ( $ref && ! get_user_meta( $user_id, 'teznevise_referral_paid', true ) && $ref !== (int) $user_id ) {
+		$gift = (int) teznevise_tezcoin_get( 'referral_bonus' );
+		if ( $gift > 0 ) {
+			teznevise_tezcoin_credit( $ref, $gift, 'پاداش معرفی دوست', (string) $user_id );
+			teznevise_tezcoin_credit( $user_id, $gift, 'هدیه کد معرف', (string) $ref );
+			update_user_meta( $user_id, 'teznevise_referral_paid', 1 );
+		}
+	}
 }
 
 function teznevise_tezcoin_admin_menu() {
@@ -150,6 +169,18 @@ function teznevise_tezcoin_admin_page() {
 					<td><input name="enamad_url" id="enamad_url" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['enamad_url'] ); ?>"></td></tr>
 				<tr><th><label for="samandehi_url"><?php esc_html_e( 'لینک ساماندهی', 'teznevise' ); ?></label></th>
 					<td><input name="samandehi_url" id="samandehi_url" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['samandehi_url'] ); ?>"></td></tr>
+				<tr><th><label for="openrouter_key"><?php esc_html_e( 'کلید OpenRouter', 'teznevise' ); ?></label></th>
+					<td><input name="openrouter_key" id="openrouter_key" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['openrouter_key'] ); ?>"></td></tr>
+				<tr><th><label for="youcom_key"><?php esc_html_e( 'کلید you.com', 'teznevise' ); ?></label></th>
+					<td><input name="youcom_key" id="youcom_key" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['youcom_key'] ); ?>"></td></tr>
+				<tr><th><label for="tavily_key"><?php esc_html_e( 'کلید Tavily', 'teznevise' ); ?></label></th>
+					<td><input name="tavily_key" id="tavily_key" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['tavily_key'] ); ?>"></td></tr>
+				<tr><th><label for="ai_cost"><?php esc_html_e( 'هزینه هر پرسش هوش مصنوعی (تزکوین)', 'teznevise' ); ?></label></th>
+					<td><input name="ai_cost" id="ai_cost" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['ai_cost'] ); ?>"></td></tr>
+				<tr><th><label for="ga_id"><?php esc_html_e( 'شناسه Google Analytics (G-…)', 'teznevise' ); ?></label></th>
+					<td><input name="ga_id" id="ga_id" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['ga_id'] ); ?>"></td></tr>
+				<tr><th><label for="clarity_id"><?php esc_html_e( 'شناسه Microsoft Clarity', 'teznevise' ); ?></label></th>
+					<td><input name="clarity_id" id="clarity_id" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['clarity_id'] ); ?>"></td></tr>
 			</table>
 			<?php submit_button( __( 'ذخیره تزکوین', 'teznevise' ) ); ?>
 		</form>
@@ -158,15 +189,22 @@ function teznevise_tezcoin_admin_page() {
 }
 
 function teznevise_extra_profile_fields( $user ) {
+	$keys = array(
+		'teznevise_phone'      => 'موبایل',
+		'teznevise_university' => 'دانشگاه',
+		'teznevise_field'      => 'رشته',
+		'teznevise_degree'     => 'مقطع',
+		'teznevise_city'       => 'شهر',
+		'teznevise_orcid'      => 'ORCID',
+		'teznevise_telegram'   => 'تلگرام',
+	);
 	?>
 	<h2><?php esc_html_e( 'پروفایل تزنویسه', 'teznevise' ); ?></h2>
 	<table class="form-table">
-		<tr><th><label for="teznevise_phone"><?php esc_html_e( 'موبایل', 'teznevise' ); ?></label></th>
-			<td><input type="text" name="teznevise_phone" id="teznevise_phone" value="<?php echo esc_attr( get_user_meta( $user->ID, 'teznevise_phone', true ) ); ?>" class="regular-text" dir="ltr"></td></tr>
-		<tr><th><label for="teznevise_university"><?php esc_html_e( 'دانشگاه', 'teznevise' ); ?></label></th>
-			<td><input type="text" name="teznevise_university" id="teznevise_university" value="<?php echo esc_attr( get_user_meta( $user->ID, 'teznevise_university', true ) ); ?>" class="regular-text"></td></tr>
-		<tr><th><label for="teznevise_field"><?php esc_html_e( 'رشته', 'teznevise' ); ?></label></th>
-			<td><input type="text" name="teznevise_field" id="teznevise_field" value="<?php echo esc_attr( get_user_meta( $user->ID, 'teznevise_field', true ) ); ?>" class="regular-text"></td></tr>
+		<?php foreach ( $keys as $key => $label ) : ?>
+		<tr><th><label for="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label></th>
+			<td><input type="text" name="<?php echo esc_attr( $key ); ?>" id="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( get_user_meta( $user->ID, $key, true ) ); ?>" class="regular-text"></td></tr>
+		<?php endforeach; ?>
 		<tr><th><?php esc_html_e( 'تزکوین', 'teznevise' ); ?></th>
 			<td><strong><?php echo esc_html( number_format_i18n( teznevise_tezcoin_balance( $user->ID ) ) ); ?></strong></td></tr>
 	</table>
@@ -179,7 +217,7 @@ function teznevise_save_extra_profile_fields( $user_id ) {
 	if ( ! current_user_can( 'edit_user', $user_id ) ) {
 		return;
 	}
-	foreach ( array( 'teznevise_phone', 'teznevise_university', 'teznevise_field' ) as $key ) {
+	foreach ( array( 'teznevise_phone', 'teznevise_university', 'teznevise_field', 'teznevise_degree', 'teznevise_city', 'teznevise_orcid', 'teznevise_telegram' ) as $key ) {
 		if ( isset( $_POST[ $key ] ) ) {
 			update_user_meta( $user_id, $key, sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) );
 		}
@@ -231,6 +269,76 @@ function teznevise_ajax_share_reward() {
 	wp_send_json_success( array( 'balance' => teznevise_tezcoin_balance( $user_id ) ) );
 }
 add_action( 'wp_ajax_teznevise_share_reward', 'teznevise_ajax_share_reward' );
+
+function teznevise_auto_approve_member_comments( $approved, $commentdata ) {
+	if ( ! empty( $commentdata['user_ID'] ) || ! empty( $commentdata['user_id'] ) ) {
+		return 1;
+	}
+	return $approved;
+}
+add_filter( 'pre_comment_approved', 'teznevise_auto_approve_member_comments', 10, 2 );
+
+function teznevise_default_image_alt( $attachment_id ) {
+	if ( ! wp_attachment_is_image( $attachment_id ) ) {
+		return;
+	}
+	if ( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) {
+		return;
+	}
+	$post = get_post( $attachment_id );
+	if ( $post && $post->post_title ) {
+		update_post_meta( $attachment_id, '_wp_attachment_image_alt', $post->post_title );
+	}
+}
+add_action( 'add_attachment', 'teznevise_default_image_alt' );
+
+function teznevise_tracking_head() {
+	$ga      = (string) teznevise_tezcoin_get( 'ga_id' );
+	$clarity = (string) teznevise_tezcoin_get( 'clarity_id' );
+	if ( $ga && preg_match( '/^G-[A-Z0-9]+$/i', $ga ) ) {
+		echo '<script async src="https://www.googletagmanager.com/gtag/js?id=' . esc_attr( $ga ) . '"></script>';
+		echo '<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","' . esc_js( $ga ) . '");</script>' . "\n";
+	}
+	if ( $clarity && preg_match( '/^[A-Za-z0-9]+$/', $clarity ) ) {
+		echo '<script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","' . esc_js( $clarity ) . '");</script>' . "\n";
+	}
+}
+add_action( 'wp_head', 'teznevise_tracking_head', 20 );
+
+function teznevise_tezcoin_accounting_menu() {
+	add_theme_page(
+		__( 'حسابداری تزکوین', 'teznevise' ),
+		__( 'حسابداری تزکوین', 'teznevise' ),
+		'manage_options',
+		'teznevise-ledger',
+		'teznevise_tezcoin_accounting_page'
+	);
+}
+add_action( 'admin_menu', 'teznevise_tezcoin_accounting_menu' );
+
+function teznevise_tezcoin_accounting_page() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	$users = get_users(
+		array(
+			'meta_key'     => 'teznevise_tezcoin_balance',
+			'meta_compare' => '>',
+			'meta_value'   => 0,
+			'number'       => 50,
+			'orderby'      => 'meta_value_num',
+			'order'        => 'DESC',
+		)
+	);
+	echo '<div class="wrap"><h1>' . esc_html__( 'دفتر حساب تزکوین', 'teznevise' ) . '</h1>';
+	echo '<table class="widefat striped"><thead><tr><th>کاربر</th><th>مانده</th><th>آخرین تراکنش</th></tr></thead><tbody>';
+	foreach ( $users as $u ) {
+		$ledger = get_user_meta( $u->ID, 'teznevise_tezcoin_ledger', true );
+		$last   = is_array( $ledger ) && $ledger ? end( $ledger ) : array();
+		echo '<tr><td>' . esc_html( $u->display_name ) . '</td><td>' . esc_html( number_format_i18n( teznevise_tezcoin_balance( $u->ID ) ) ) . '</td><td>' . esc_html( isset( $last['reason'] ) ? $last['reason'] : '—' ) . '</td></tr>';
+	}
+	echo '</tbody></table></div>';
+}
 
 function teznevise_log_search_query() {
 	if ( ! is_search() ) {
@@ -289,3 +397,48 @@ function teznevise_strip_dead_shortcodes( $content ) {
 	);
 }
 add_filter( 'the_content', 'teznevise_strip_dead_shortcodes', 8 );
+
+function teznevise_ajax_ask_ai() {
+	check_ajax_referer( 'teznevise_share', 'nonce' );
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error( array( 'message' => 'login' ) );
+	}
+	$q = isset( $_POST['q'] ) ? sanitize_textarea_field( wp_unslash( $_POST['q'] ) ) : '';
+	if ( strlen( $q ) < 4 ) {
+		wp_send_json_error( array( 'message' => 'short' ) );
+	}
+	$key = (string) teznevise_tezcoin_get( 'openrouter_key' );
+	if ( ! $key ) {
+		wp_send_json_error( array( 'message' => 'no-key' ) );
+	}
+	$res = wp_remote_post(
+		'https://openrouter.ai/api/v1/chat/completions',
+		array(
+			'timeout' => 40,
+			'headers' => array(
+				'Authorization' => 'Bearer ' . $key,
+				'Content-Type'  => 'application/json',
+			),
+			'body'    => wp_json_encode(
+				array(
+					'model'      => 'openai/gpt-4o-mini',
+					'max_tokens' => 700,
+					'messages'   => array(
+						array( 'role' => 'system', 'content' => 'You are a Persian research-methods tutor for Teznevise. Answer in Persian. Be concise.' ),
+						array( 'role' => 'user', 'content' => $q ),
+					),
+				)
+			),
+		)
+	);
+	if ( is_wp_error( $res ) ) {
+		wp_send_json_error( array( 'message' => $res->get_error_message() ) );
+	}
+	$body = json_decode( wp_remote_retrieve_body( $res ), true );
+	$text = isset( $body['choices'][0]['message']['content'] ) ? $body['choices'][0]['message']['content'] : '';
+	if ( ! $text ) {
+		wp_send_json_error( array( 'message' => 'empty' ) );
+	}
+	wp_send_json_success( array( 'text' => $text ) );
+}
+// Replaced by teznevise_ajax_ask_ai_v2 in inc/ai-agents.php (priority 1).
