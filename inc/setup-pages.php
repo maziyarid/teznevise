@@ -318,6 +318,50 @@ function teznevise_seed_pages( $replace_builder = false ) {
 }
 
 /**
+ * Create the 1.8.4 service pages if they are missing (qualitative / project / article).
+ */
+function teznevise_ensure_184_service_pages() {
+	if ( get_option( 'teznevise_184_service_pages' ) ) {
+		return;
+	}
+	if ( ! function_exists( 'teznevise_recommended_pages' ) ) {
+		return;
+	}
+	$wanted = array( 'service-qualitative', 'service-project', 'service-article' );
+	$pages  = teznevise_recommended_pages();
+	foreach ( $wanted as $slug ) {
+		if ( get_page_by_path( $slug ) || empty( $pages[ $slug ] ) ) {
+			continue;
+		}
+		$cfg     = $pages[ $slug ];
+		$page_id = wp_insert_post(
+			array(
+				'post_title'   => $cfg['title'],
+				'post_name'    => $slug,
+				'post_status'  => 'publish',
+				'post_type'    => 'page',
+				'post_content' => '',
+				'post_author'  => 1,
+			),
+			true
+		);
+		if ( is_wp_error( $page_id ) ) {
+			continue;
+		}
+		if ( ! empty( $cfg['template'] ) ) {
+			update_post_meta( $page_id, '_wp_page_template', $cfg['template'] );
+		}
+		if ( ! empty( $cfg['meta'] ) ) {
+			foreach ( $cfg['meta'] as $key => $val ) {
+				update_post_meta( $page_id, '_teznevise_' . $key, $val );
+			}
+		}
+	}
+	update_option( 'teznevise_184_service_pages', '1.8.4', true );
+}
+add_action( 'init', 'teznevise_ensure_184_service_pages', 41 );
+
+/**
  * Admin menu.
  */
 function teznevise_setup_admin_menu() {
