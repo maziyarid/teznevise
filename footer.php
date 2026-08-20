@@ -5,44 +5,28 @@
  * @package Teznevise
  */
 ?></main>
-<footer class="site-footer-new">
+<footer class="site-footer-new footer-new">
 	<div class="container">
 		<div class="footer-grid">
 			<div class="footer-brand">
 				<a class="footer-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 					<?php
 					$logo_url = function_exists( 'teznevise_logo_url' ) ? teznevise_logo_url() : '';
+					if ( ! $logo_url && has_custom_logo() ) {
+						$logo_url = wp_get_attachment_image_url( (int) get_theme_mod( 'custom_logo' ), 'full' );
+					}
 					if ( $logo_url ) {
-						printf( '<img src="%s" alt="%s" width="106" height="48" loading="lazy">', esc_url( $logo_url ), esc_attr( get_bloginfo( 'name' ) ) );
+						printf( '<img src="%s" alt="%s" width="116" height="44" loading="lazy" decoding="async">', esc_url( $logo_url ), esc_attr( get_bloginfo( 'name' ) ) );
 					} else {
 						echo esc_html( get_bloginfo( 'name' ) );
 					}
 					?>
 				</a>
+				<p><?php esc_html_e( 'تزنویسه همراه پژوهشی دانشجویان و پژوهشگران؛ از انتخاب موضوع و تدوین پروپوزال تا تحلیل آماری، نگارش و آمادگی دفاع.', 'teznevise' ); ?></p>
 				<p><?php esc_html_e( 'پژوهش بهتر، آینده روشن‌تر.', 'teznevise' ); ?></p>
 				<div class="footer-social">
 					<a href="<?php echo esc_url( teznevise_get_contact( 'telegram' ) ); ?>" aria-label="<?php esc_attr_e( 'تلگرام', 'teznevise' ); ?>"><i class="fa-brands fa-telegram"></i></a>
 					<a href="<?php echo esc_url( teznevise_get_contact( 'whatsapp' ) ); ?>" aria-label="<?php esc_attr_e( 'واتساپ', 'teznevise' ); ?>"><i class="fa-brands fa-whatsapp"></i></a>
-				</div>
-				<div class="footer-certs" aria-label="<?php esc_attr_e( 'نمادهای اعتماد', 'teznevise' ); ?>">
-					<?php
-					$enamad    = function_exists( 'teznevise_tezcoin_get' ) ? teznevise_tezcoin_get( 'enamad_url' ) : '';
-					$samandehi = function_exists( 'teznevise_tezcoin_get' ) ? teznevise_tezcoin_get( 'samandehi_url' ) : '';
-					$enamad    = $enamad ? $enamad : home_url( '/privacy/' );
-					$samandehi = $samandehi ? $samandehi : home_url( '/privacy/' );
-					?>
-					<a class="trust-seal" href="<?php echo esc_url( $enamad ); ?>" rel="noopener" title="<?php esc_attr_e( 'اینماد', 'teznevise' ); ?>">
-						<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="#145D4A"/><path d="M16 25.2l5 5 11-13" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-						<span><?php esc_html_e( 'اینماد', 'teznevise' ); ?></span>
-					</a>
-					<a class="trust-seal" href="<?php echo esc_url( $samandehi ); ?>" rel="noopener" title="<?php esc_attr_e( 'ساماندهی', 'teznevise' ); ?>">
-						<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="10" width="32" height="28" rx="6" fill="#1b765f"/><path d="M16 24h16M24 16v16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
-						<span><?php esc_html_e( 'ساماندهی', 'teznevise' ); ?></span>
-					</a>
-					<span class="trust-seal" title="<?php esc_attr_e( 'SSL', 'teznevise' ); ?>">
-						<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="20" width="24" height="16" rx="4" fill="#0f4a3b"/><path d="M18 20v-4a6 6 0 0112 0v4" fill="none" stroke="#82d8b9" stroke-width="3"/></svg>
-						<span>SSL</span>
-					</span>
 				</div>
 			</div>
 			<div class="footer-col">
@@ -69,6 +53,26 @@
 				<a href="mailto:<?php echo esc_attr( teznevise_get_contact( 'email' ) ); ?>"><?php echo esc_html( teznevise_get_contact( 'email' ) ); ?></a>
 				<p><?php echo esc_html( teznevise_get_contact( 'address' ) ); ?></p>
 			</div>
+		</div>
+		<div class="footer-certs" aria-label="<?php esc_attr_e( 'نمادهای اعتماد', 'teznevise' ); ?>">
+			<?php
+			$enamad    = function_exists( 'teznevise_tezcoin_get' ) ? teznevise_tezcoin_get( 'enamad_url' ) : '';
+			$samandehi = function_exists( 'teznevise_tezcoin_get' ) ? teznevise_tezcoin_get( 'samandehi_url' ) : '';
+			$enamad    = $enamad ? $enamad : home_url( '/privacy/' );
+			$samandehi = $samandehi ? $samandehi : home_url( '/privacy/' );
+			?>
+			<a class="trust-seal" href="<?php echo esc_url( $enamad ); ?>" rel="noopener" title="<?php esc_attr_e( 'اینماد', 'teznevise' ); ?>">
+				<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="#145D4A"/><path d="M16 25.2l5 5 11-13" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+				<span><?php esc_html_e( 'اینماد', 'teznevise' ); ?></span>
+			</a>
+			<a class="trust-seal" href="<?php echo esc_url( $samandehi ); ?>" rel="noopener" title="<?php esc_attr_e( 'ساماندهی', 'teznevise' ); ?>">
+				<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="10" width="32" height="28" rx="6" fill="#1b765f"/><path d="M16 24h16M24 16v16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+				<span><?php esc_html_e( 'ساماندهی', 'teznevise' ); ?></span>
+			</a>
+			<span class="trust-seal" title="<?php esc_attr_e( 'SSL', 'teznevise' ); ?>">
+				<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="20" width="24" height="16" rx="4" fill="#0f4a3b"/><path d="M18 20v-4a6 6 0 0112 0v4" fill="none" stroke="#82d8b9" stroke-width="3"/></svg>
+				<span>SSL</span>
+			</span>
 		</div>
 		<div class="footer-bottom">
 			<span>© <?php echo esc_html( date_i18n( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?> — <?php esc_html_e( 'تمامی حقوق محفوظ است.', 'teznevise' ); ?></span>

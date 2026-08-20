@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.7.2 — 2026-08-20 — React visual parity
+
+### Changes
+
+- Opaque sticky header so the hero «ثبت سفارش» orb no longer paints through the nav.
+- Desktop: hamburger hidden; search / Tezcoin / profile stay visible.
+- Mobile: hamburger on the physical right, logo centered and sized down, icons on the left — no overlap.
+- FAB pinned to the physical right; chat items open upward toward the left.
+- Bottom nav uses icon + short label (خانه / ابزارها / بلاگ / تماس).
+- Footer logo, spaced legal links, trust seals as a row, dark background matching the React replica.
+- Builder `[data-reveal]` no longer leaves sections invisible if JS is late.
+
 ## 1.7.1 — 2026-08-20 — Account, tickets, payments, AI agents
 
 ### Changes

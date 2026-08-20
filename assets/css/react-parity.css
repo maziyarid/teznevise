@@ -1,0 +1,372 @@
+/* Teznevise 1.7.2 — last-loaded React parity. Wins the CSS pile. */
+
+/* ----- Header is opaque so the hero cannot paint through it ----- */
+.site-header-new {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 3000 !important;
+  isolation: isolate !important;
+  background: #fff !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+.hero-new,
+.hero-visual,
+.hero-network,
+.hero-order-button,
+.orbit-tag,
+.ink-blot,
+.hero-particles {
+  z-index: 1 !important;
+}
+.hero-new { isolation: isolate; }
+
+/* ----- Desktop nav: no hamburger, search stays visible ----- */
+@media (min-width: 1051px) {
+  .main-nav > .menu-btn,
+  .main-nav .menu-btn {
+    display: none !important;
+  }
+  .main-nav {
+    display: flex !important;
+    align-items: center !important;
+    position: relative !important;
+  }
+  [dir="rtl"] .main-nav > .brand { order: 1 !important; }
+  [dir="rtl"] .main-nav > .nav-links { order: 2 !important; flex: 1 !important; }
+  [dir="rtl"] .main-nav > .nav-actions { order: 3 !important; }
+  .main-nav .nav-search-btn,
+  .nav-search-btn {
+    display: inline-flex !important;
+  }
+}
+
+/* ----- Mobile / tablet: hamburger RIGHT, logo CENTER, icons LEFT ----- */
+@media (max-width: 1050px) {
+  .main-nav {
+    display: grid !important;
+    grid-template-columns: 44px minmax(0, 1fr) auto !important;
+    grid-template-rows: 64px !important;
+    align-items: center !important;
+    direction: rtl !important;
+    position: relative !important;
+    height: 64px !important;
+    min-height: 64px !important;
+    gap: 6px !important;
+    padding-inline: 10px !important;
+    overflow: visible !important;
+  }
+  .main-nav > .nav-links,
+  .main-nav .nav-links {
+    display: none !important;
+  }
+  .main-nav > .menu-btn,
+  .main-nav .menu-btn {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    order: 0 !important;
+    justify-self: start !important;
+    align-self: center !important;
+    display: inline-flex !important;
+    z-index: 4 !important;
+    margin: 0 !important;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+  }
+  .main-nav > .brand {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+    order: 0 !important;
+    justify-self: center !important;
+    align-self: center !important;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    z-index: 1 !important;
+    max-width: 92px !important;
+    min-width: 0 !important;
+    pointer-events: auto !important;
+  }
+  .main-nav > .brand img {
+    width: 84px !important;
+    max-width: 84px !important;
+    height: 32px !important;
+    max-height: 32px !important;
+    mix-blend-mode: normal !important;
+  }
+  .main-nav > .nav-actions,
+  .main-nav .nav-actions {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    order: 0 !important;
+    justify-self: end !important;
+    align-self: center !important;
+    display: flex !important;
+    gap: 6px !important;
+    z-index: 4 !important;
+    margin: 0 !important;
+    position: relative !important;
+  }
+  .desktop-cta-group,
+  .nav-quick-actions.desktop-cta-group {
+    display: none !important;
+  }
+  .nav-search-btn,
+  .nav-credits,
+  .nav-account {
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+  }
+  .nav-credits span { display: none; }
+}
+
+.main-nav > .brand img {
+  mix-blend-mode: normal !important;
+  object-fit: contain !important;
+}
+
+/* ----- Hero stays below the header, one column on small screens ----- */
+@media (max-width: 1050px) {
+  .hero-grid,
+  .service-hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .hero-copy { order: 1 !important; }
+  .hero-visual {
+    order: 2 !important;
+    min-height: 300px !important;
+    max-width: 100% !important;
+    margin-top: 8px !important;
+  }
+  .hero-new { padding-top: 28px !important; }
+}
+
+/* Reveal animation must not hide content if JS is late */
+[data-reveal],
+[data-reveal-stagger] > * {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ----- FAB: physical RIGHT, items open toward the left ----- */
+.tz-fab-wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  position: fixed !important;
+  right: 18px !important;
+  left: auto !important;
+  inset-inline-start: auto !important;
+  inset-inline-end: auto !important;
+  bottom: 22px !important;
+  z-index: 1200 !important;
+  gap: 10px !important;
+}
+.tz-fab-menu {
+  position: static !important;
+  display: none !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 8px !important;
+  inset: auto !important;
+}
+.tz-fab-menu[hidden] { display: none !important; }
+.tz-fab-wrap.is-open .tz-fab-menu {
+  display: flex !important;
+}
+.tz-fab-item {
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+  flex-direction: row !important;
+  min-width: 148px;
+  justify-content: flex-start !important;
+}
+@media (max-width: 768px) {
+  .tz-fab-wrap {
+    right: 14px !important;
+    bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* ----- Bottom nav: icon + label, 4–5 equal columns ----- */
+.bottom-nav {
+  display: none;
+}
+@media (max-width: 768px) {
+  .bottom-nav {
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: space-around !important;
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 1100 !important;
+    background: rgba(255, 255, 255, 0.97) !important;
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(20, 93, 74, 0.1) !important;
+    padding: 6px 4px calc(8px + env(safe-area-inset-bottom)) !important;
+    box-shadow: 0 -8px 28px rgba(9, 40, 32, 0.06);
+  }
+  body { padding-bottom: 78px !important; }
+  .bottom-nav ul,
+  .bottom-nav .bottom-menu-list {
+    display: flex !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    justify-content: space-around !important;
+    gap: 0 !important;
+  }
+  .bottom-nav li { flex: 1 1 0; list-style: none !important; margin: 0 !important; }
+  .bottom-nav a,
+  .bottom-nav-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    min-height: 52px;
+    padding: 6px 4px !important;
+    border-radius: 14px !important;
+    font-size: 11px !important;
+    font-weight: 750 !important;
+    color: #5a7268 !important;
+    text-decoration: none !important;
+    line-height: 1.2 !important;
+  }
+  .bottom-nav a i,
+  .bottom-nav-item i {
+    font-size: 18px !important;
+    color: #145d4a;
+  }
+  .bottom-nav a span,
+  .bottom-nav-item span {
+    max-width: 76px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .bottom-nav a:hover,
+  .bottom-nav a.current,
+  .bottom-nav .current-menu-item > a {
+    color: #145d4a !important;
+    background: rgba(20, 93, 74, 0.07) !important;
+  }
+}
+
+/* ----- Footer: dark, spaced legal links, logo plate ----- */
+.site-footer-new,
+.footer-new {
+  background: #071f19 !important;
+  color: #fff !important;
+  padding: 64px 0 28px !important;
+}
+.footer-logo {
+  display: inline-flex !important;
+  background: #fff !important;
+  border-radius: 12px !important;
+  padding: 6px 10px !important;
+  margin-bottom: 12px !important;
+}
+.footer-logo img {
+  width: 116px !important;
+  height: 44px !important;
+  object-fit: contain !important;
+  filter: none !important;
+  background: transparent !important;
+  mix-blend-mode: normal !important;
+}
+.footer-brand p { color: #9fb2ab !important; }
+.footer-col h4 { color: #fff !important; }
+.footer-col a,
+.footer-col p,
+.footer-menu-list a {
+  color: #9fb2ab !important;
+  display: block !important;
+  margin: 0 0 9px !important;
+}
+.footer-col a:hover { color: #fff !important; }
+.footer-legal {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px 14px !important;
+  margin-top: 16px !important;
+}
+.footer-legal a {
+  display: inline-block !important;
+  color: #c5d7d0 !important;
+  margin: 0 !important;
+  padding: 4px 0 !important;
+  white-space: nowrap !important;
+}
+.footer-certs {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  margin-top: 18px !important;
+}
+.trust-seal {
+  background: #fff !important;
+  color: #145d4a !important;
+}
+.footer-bottom {
+  color: #789088 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+@media (max-width: 720px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr !important;
+    text-align: right !important;
+    gap: 28px !important;
+  }
+  .footer-brand { grid-column: 1 / -1 !important; }
+  .footer-bottom { display: block !important; text-align: center !important; }
+  .footer-certs,
+  .footer-legal,
+  .footer-social { justify-content: flex-start !important; }
+  .hero-copy,
+  .hero-copy h1,
+  .page-hero-new,
+  .section-head,
+  .account-head { text-align: center !important; }
+  .hero-actions,
+  .hero-points { justify-content: center !important; }
+}
+
+/* Tools / account surfaces */
+.tez-builder-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.tez-builder-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 900px) {
+  .tez-builder-cols-3 { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 560px) {
+  .tez-builder-cols-3 { grid-template-columns: 1fr !important; }
+}
+.tools-ai { padding-top: 12px; }
+.tools-ai-card {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(130, 216, 185, 0.28), transparent 40%),
+    #fff;
+  border: 1px solid rgba(20, 93, 74, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tz-fab-toggle { animation: none !important; }
+}

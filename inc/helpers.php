@@ -48,3 +48,50 @@ function teznevise_fallback_menu( $args = array() ) {
 function teznevise_get_contact( $key ) {
 	return teznevise_mod( $key );
 }
+
+/**
+ * Site logo URL for header and footer.
+ *
+ * @return string
+ */
+function teznevise_logo_url() {
+	if ( has_custom_logo() ) {
+		$url = wp_get_attachment_image_url( (int) get_theme_mod( 'custom_logo' ), 'full' );
+		if ( $url ) {
+			return $url;
+		}
+	}
+	return '';
+}
+
+/**
+ * Icon class for a bottom-nav destination.
+ *
+ * @param string $url   Item URL.
+ * @param string $label Item label.
+ * @return string
+ */
+function teznevise_bottom_icon( $url, $label ) {
+	$u = strtolower( (string) $url );
+	$l = (string) $label;
+	if ( 0 === strpos( $u, 'tel:' ) || false !== strpos( $l, 'تماس' ) ) {
+		return 'fa-solid fa-phone';
+	}
+	if ( false !== strpos( $u, '/tools' ) || false !== strpos( $l, 'ابزار' ) ) {
+		return 'fa-solid fa-calculator';
+	}
+	if ( false !== strpos( $u, '/blog' ) || false !== strpos( $l, 'بلاگ' ) ) {
+		return 'fa-solid fa-book-open';
+	}
+	if ( false !== strpos( $u, '/account' ) || false !== strpos( $l, 'حساب' ) || false !== strpos( $l, 'ورود' ) ) {
+		return 'fa-solid fa-user';
+	}
+	if ( false !== strpos( $u, '/wallet' ) || false !== strpos( $l, 'کیف' ) ) {
+		return 'fa-solid fa-wallet';
+	}
+	if ( trailingslashit( $u ) === trailingslashit( home_url( '/' ) ) || 'خانه' === $l ) {
+		return 'fa-solid fa-house';
+	}
+	return 'fa-solid fa-layer-group';
+}
+

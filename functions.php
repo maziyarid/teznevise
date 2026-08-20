@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.7.1' );
+define( 'TEZNEVISE_VERSION', '1.7.2' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -94,6 +94,7 @@ wp_enqueue_style( 'teznevise-mobile-fixes', TEZNEVISE_URI . '/assets/css/mobile-
 wp_enqueue_style( 'teznevise-blog', TEZNEVISE_URI . '/assets/css/blog.css', array( 'teznevise-mobile-fixes' ), TEZNEVISE_VERSION );
 wp_enqueue_style( 'teznevise-nav-touch', TEZNEVISE_URI . '/assets/css/nav-touch.css', array( 'teznevise-blog' ), TEZNEVISE_VERSION );
 wp_enqueue_style( 'teznevise-product', TEZNEVISE_URI . '/assets/css/product-1.7.css', array( 'teznevise-nav-touch' ), TEZNEVISE_VERSION );
+
 wp_enqueue_script( 'teznevise-redesign', TEZNEVISE_URI . '/assets/js/redesign.js', array(), TEZNEVISE_VERSION, true );
 wp_enqueue_script( 'teznevise-main', TEZNEVISE_URI . '/assets/js/main.js', array( 'teznevise-redesign' ), TEZNEVISE_VERSION, true );
 wp_enqueue_script( 'teznevise-nav-touch', TEZNEVISE_URI . '/assets/js/nav-touch.js', array( 'teznevise-main' ), TEZNEVISE_VERSION, true );
@@ -103,3 +104,13 @@ if ( function_exists( 'teznevise_localize_front_script' ) ) {
 }
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );
+
+function teznevise_enqueue_parity_css() {
+	wp_enqueue_style(
+		'teznevise-parity',
+		TEZNEVISE_URI . '/assets/css/react-parity.css',
+		array(),
+		TEZNEVISE_VERSION
+	);
+}
+add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_parity_css', 999 );
