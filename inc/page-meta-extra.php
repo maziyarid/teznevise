@@ -87,8 +87,8 @@ function teznevise_register_page_meta_extra() {
 				'single'            => true,
 				'default'           => $default,
 				'show_in_rest'      => true,
-				'auth_callback'     => function () {
-					return current_user_can( 'edit_pages' );
+				'auth_callback'     => function ( $allowed, $meta_key, $object_id ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+					return current_user_can( 'edit_page', (int) $object_id );
 				},
 				'sanitize_callback' => function ( $value ) {
 					return is_string( $value ) ? sanitize_textarea_field( $value ) : '';
@@ -192,13 +192,22 @@ function teznevise_save_page_meta_extra( $post_id ) {
 	if ( get_post_type( $post_id ) !== 'page' ) {
 		return;
 	}
+	$changed = false;
 	foreach ( array_keys( teznevise_page_meta_schema_extra() ) as $key ) {
 		$meta_key = '_teznevise_' . $key;
 		if ( ! isset( $_POST[ $meta_key ] ) ) {
 			continue;
 		}
-		$val = sanitize_textarea_field( wp_unslash( $_POST[ $meta_key ] ) );
+		$val     = sanitize_textarea_field( wp_unslash( $_POST[ $meta_key ] ) );
+		$current = get_post_meta( $post_id, $meta_key, true );
+		if ( (string) $current === (string) $val ) {
+			continue;
+		}
 		update_post_meta( $post_id, $meta_key, $val );
+		$changed = true;
+	}
+	if ( $changed && function_exists( 'teznevise_stamp_manual_page_ownership' ) ) {
+		teznevise_stamp_manual_page_ownership( $post_id );
 	}
 }
 add_action( 'save_post_page', 'teznevise_save_page_meta_extra' );

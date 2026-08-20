@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.6.5
+Stable tag: 1.6.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,10 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 6. Assign menus: Primary, Mobile, Bottom
 
 == Changelog ==
+
+= 1.6.6 =
+* Shortcode migration skips manual-provenance empty builders unless force-replace
+* Page-meta and REST `_teznevise_*` writes stamp manual ownership only when values change
 
 = 1.6.5 =
 * Empty builder JSON no longer bypasses manual provenance or existing custom fields/templates

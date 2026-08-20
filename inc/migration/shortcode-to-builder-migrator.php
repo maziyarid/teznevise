@@ -559,6 +559,13 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 			}
 		}
 
+		// Manual provenance wins even when builder JSON is empty [].
+		// Force-replace remains the only override (mirrors #418 extracted path).
+		if ( ! $force_replace && function_exists( 'teznevise_page_has_manual_builder_provenance' ) && teznevise_page_has_manual_builder_provenance( (int) $page->ID ) ) {
+			$stats['skipped']++;
+			continue;
+		}
+
 		$existing = get_post_meta( $page->ID, TEZNEVISE_BUILDER_META, true );
 		if ( is_string( $existing ) && '' !== trim( $existing ) && '[]' !== trim( $existing ) ) {
 			$stats['skipped']++;

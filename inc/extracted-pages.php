@@ -321,6 +321,172 @@ function teznevise_set_builder_provenance( $post_id, $kind ) {
 }
 
 /**
+ * Whether a page is marked as administrator-owned.
+ *
+ * @param int $post_id Page ID.
+ * @return bool
+ */
+function teznevise_page_has_manual_builder_provenance( $post_id ) {
+	return 'manual' === (string) get_post_meta( (int) $post_id, TEZNEVISE_BUILDER_PROVENANCE_META, true );
+}
+
+/**
+ * Stamp manual provenance after an administrator writes protected page fields.
+ *
+ * Used by metabox saves and REST meta updates. Extracted/seed writers call
+ * teznevise_set_builder_provenance() with extracted|default-seed instead.
+ *
+ * @param int $post_id Page ID.
+ */
+function teznevise_stamp_manual_page_ownership( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 || 'page' !== get_post_type( $post_id ) ) {
+		return;
+	}
+	teznevise_set_builder_provenance( $post_id, 'manual' );
+}
+
+/**
+ * Builder-owned meta keys that must not trigger manual provenance.
+ *
+ * @return string[]
+ */
+function teznevise_builder_internal_meta_keys() {
+	return array(
+		'_teznevise_builder_sections',
+		'_teznevise_builder_provenance',
+		'_teznevise_extracted_hash',
+	);
+}
+
+/**
+ * Whether two stored page-meta values should be treated as unchanged.
+ *
+ * REST and metaboxes store booleans as '', '0', or '1', so a no-op false
+ * rewrite must not look like a change.
+ *
+ * @param mixed $left  Prior value.
+ * @param mixed $right Current value.
+ * @return bool
+ */
+function teznevise_page_meta_values_equivalent( $left, $right ) {
+	if ( $left === $right || (string) $left === (string) $right ) {
+		return true;
+	}
+	$emptyish = static function ( $value ) {
+		return false === $value || null === $value || '' === $value || 0 === $value || '0' === $value;
+	};
+	return $emptyish( $left ) && $emptyish( $right );
+}
+
+/**
+ * Protected `_teznevise_*` keys present on a REST page request.
+ *
+ * Builder internals are excluded so extracted/seed/builder writers keep ownership.
+ *
+ * @param WP_REST_Request|mixed $request Request.
+ * @return string[]
+ */
+function teznevise_protected_meta_keys_from_rest_request( $request ) {
+	$meta = $request instanceof WP_REST_Request ? $request->get_param( 'meta' ) : null;
+	if ( ! is_array( $meta ) ) {
+		return array();
+	}
+	$skip = teznevise_builder_internal_meta_keys();
+	$keys = array();
+	foreach ( array_keys( $meta ) as $key ) {
+		$key = (string) $key;
+		if ( 0 !== strpos( $key, '_teznevise_' ) ) {
+			continue;
+		}
+		if ( in_array( $key, $skip, true ) ) {
+			continue;
+		}
+		$keys[] = $key;
+	}
+	return $keys;
+}
+
+/**
+ * Prior protected meta values for the in-flight REST page update.
+ *
+ * rest_insert_page runs before REST writes meta; rest_after_insert_page
+ * consumes the snapshot. Passing $set stores; omitting $set takes and clears.
+ *
+ * @param int        $post_id Page ID.
+ * @param array|null $set     Snapshot to store.
+ * @return array<string,mixed>
+ */
+function teznevise_rest_protected_meta_snapshot( $post_id, $set = null ) {
+	static $store = array();
+	$post_id      = (int) $post_id;
+	if ( $post_id <= 0 ) {
+		return array();
+	}
+	if ( null !== $set ) {
+		$store[ $post_id ] = is_array( $set ) ? $set : array();
+		return $store[ $post_id ];
+	}
+	$prior = isset( $store[ $post_id ] ) && is_array( $store[ $post_id ] ) ? $store[ $post_id ] : array();
+	unset( $store[ $post_id ] );
+	return $prior;
+}
+
+/**
+ * Snapshot protected `_teznevise_*` values before REST writes page meta.
+ *
+ * @param WP_Post         $post     Inserted page.
+ * @param WP_REST_Request $request  Request.
+ * @param bool            $creating Creating vs updating.
+ */
+function teznevise_snapshot_rest_protected_meta( $post, $request, $_creating ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	if ( ! $post instanceof WP_Post || 'page' !== $post->post_type ) {
+		return;
+	}
+	$keys = teznevise_protected_meta_keys_from_rest_request( $request );
+	if ( empty( $keys ) ) {
+		return;
+	}
+	$snap = array();
+	foreach ( $keys as $key ) {
+		$snap[ $key ] = get_post_meta( (int) $post->ID, $key, true );
+	}
+	teznevise_rest_protected_meta_snapshot( (int) $post->ID, $snap );
+}
+add_action( 'rest_insert_page', 'teznevise_snapshot_rest_protected_meta', 10, 3 );
+
+/**
+ * Stamp manual provenance when REST actually changed protected `_teznevise_*` fields.
+ *
+ * Compares stored values after the write against the rest_insert_page snapshot
+ * so no-op payloads (clients resending existing meta) do not take ownership.
+ *
+ * @param WP_Post         $post     Inserted page.
+ * @param WP_REST_Request $request  Request.
+ * @param bool            $creating Creating vs updating.
+ */
+function teznevise_stamp_manual_from_rest( $post, $request, $_creating ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	if ( ! $post instanceof WP_Post || 'page' !== $post->post_type ) {
+		return;
+	}
+	if ( ! current_user_can( 'edit_page', (int) $post->ID ) ) {
+		return;
+	}
+	$prior = teznevise_rest_protected_meta_snapshot( (int) $post->ID );
+	if ( empty( $prior ) ) {
+		return;
+	}
+	foreach ( $prior as $key => $old ) {
+		$now = get_post_meta( (int) $post->ID, (string) $key, true );
+		if ( ! teznevise_page_meta_values_equivalent( $old, $now ) ) {
+			teznevise_stamp_manual_page_ownership( (int) $post->ID );
+			return;
+		}
+	}
+}
+add_action( 'rest_after_insert_page', 'teznevise_stamp_manual_from_rest', 10, 3 );
+
+/**
  * Whether existing builder/meta/template may be replaced by extracted data.
  *
  * Automatic runs never overwrite administrator-owned values. Replacement is
