@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.8.4 — 2026-08-20 — Nine services, six steps, FAQ boxes, mega isolation
+
+- Homepage services are 9 cards: تیم پژوهشگران → شبیه‌سازی, plus تحلیل کیفی, انجام پروژه دانشجویی, انجام مقاله. Render-time rewrite updates stale builder JSON so cPanel rsync shows them without an admin re-seed.
+- Process steps are 6 centered cards (`شش قدم تا یک مسیر پژوهشی روشن`) instead of 4.
+- Inner-page cards pick up the same 9-tone palette as the homepage.
+- FAQ blocks are numbered colorful boxes with answers always visible — no accordion arrows.
+- Mega menu only opens on the nav item (or keyboard `.is-open`). Closed panels are `display:none` so mid-page hover cannot reveal them.
+- Font Awesome 7.1.0. React `react-app/src` absorbs the WordPress page conversion (tools/thesis/legal single-page layout).
+
+
 ## 1.8.3 — 2026-08-20 — Mega width, stacked heroes, card steps, motion
 
 - Desktop mega menu stretches the full nav bar (3-column grid). `left/right: auto` after `inset-inline` had shrink-wrapped it into a scrolling strip.

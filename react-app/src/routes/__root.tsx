@@ -40,6 +40,10 @@ export const Route = createRootRoute({
         crossOrigin: "anonymous",
       },
       { rel: "stylesheet", href: appCss },
+      {
+        rel: "stylesheet",
+        href: "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css",
+      },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
     ],

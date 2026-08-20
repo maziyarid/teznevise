@@ -3,10 +3,9 @@
  * by the desktop primary menu (.main-nav) and the mobile drawer menu
  * (.mobile-nav-links) -- both are rendered by the same Teznevise_Nav_Walker.
  *
- * Desktop hover only follows the parent item (the in-flow link row) plus
- * the mega panel that is a child of that item. A short close delay covers
- * the gap between the bar and the panel so the menu cannot stay open just
- * because the pointer is over the page below.
+ * Desktop hover only follows the in-flow nav link plus the mega panel
+ * after it is open. The closed panel is `display:none`, so hovering the
+ * page below the bar cannot keep or open a menu.
  *
  * @package Teznevise
  */
@@ -73,17 +72,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     if (supportsHover && !inMobileDrawer) {
-      parentItem.addEventListener('mouseenter', function () {
-        openToggle(toggle, panel);
-      });
-      parentItem.addEventListener('mouseleave', function () {
-        scheduleClose(toggle, panel);
-      });
-      panel.addEventListener('mouseenter', function () {
-        openToggle(toggle, panel);
-      });
-      panel.addEventListener('mouseleave', function () {
-        scheduleClose(toggle, panel);
+      var link = parentItem.querySelector(':scope > a.nav-link, :scope > a, :scope > .nav-link');
+      var hoverTargets = [panel];
+      if (link) hoverTargets.push(link);
+      hoverTargets.forEach(function (el) {
+        el.addEventListener('mouseenter', function () {
+          openToggle(toggle, panel);
+        });
+        el.addEventListener('mouseleave', function () {
+          scheduleClose(toggle, panel);
+        });
       });
     }
 

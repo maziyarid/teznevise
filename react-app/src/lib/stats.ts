@@ -50,6 +50,30 @@ export function skewness(xs: number[]) {
   return (n / ((n - 1) * (n - 2))) * xs.reduce((a, x) => a + ((x - m) / s) ** 3, 0);
 }
 
+export function kurtosis(xs: number[]) {
+  const n = xs.length;
+  if (n < 4) return NaN;
+  const m = mean(xs);
+  const s = stdev(xs);
+  if (!s) return NaN;
+  const m4 = xs.reduce((a, x) => a + ((x - m) / s) ** 4, 0) / n;
+  return m4 - 3;
+}
+
+export function mode(xs: number[]) {
+  const freq = new Map<number, number>();
+  for (const x of xs) freq.set(x, (freq.get(x) || 0) + 1);
+  let best = xs[0];
+  let n = 0;
+  for (const [v, c] of freq) {
+    if (c > n) {
+      best = v;
+      n = c;
+    }
+  }
+  return { value: best, count: n };
+}
+
 export function pearson(x: number[], y: number[]) {
   const n = Math.min(x.length, y.length);
   const xs = x.slice(0, n);
@@ -82,6 +106,13 @@ export function cronbach(items: number[][]) {
 
 export function sampleSizeMean(z: number, sd: number, e: number) {
   return Math.ceil(((z * sd) / e) ** 2);
+}
+
+export function cochranN(z: number, p: number, e: number, N?: number) {
+  const q = 1 - p;
+  const n0 = (z * z * p * q) / (e * e);
+  if (!N || N <= 0) return Math.ceil(n0);
+  return Math.ceil(n0 / (1 + (n0 - 1) / N));
 }
 
 export function tStat(xs: number[], mu0: number) {
@@ -187,4 +218,161 @@ export function pearsonInterpret(r: number) {
   if (a < 0.5) return "رابطه متوسط";
   if (a < 0.7) return "رابطه قوی";
   return "رابطه خیلی قوی";
+}
+
+/** Average ranks, 1-based; ties share the mean rank. */
+export function ranksOf(xs: number[]): number[] {
+  const idx = xs.map((v, i) => ({ v, i })).sort((a, b) => a.v - b.v);
+  const out = Array(xs.length).fill(0);
+  let i = 0;
+  while (i < idx.length) {
+    let j = i;
+    while (j + 1 < idx.length && idx[j + 1].v === idx[i].v) j++;
+    const avg = (i + 1 + j + 1) / 2;
+    for (let k = i; k <= j; k++) out[idx[k].i] = avg;
+    i = j + 1;
+  }
+  return out;
+}
+
+export function spearman(x: number[], y: number[]) {
+  const n = Math.min(x.length, y.length);
+  if (n < 2) return NaN;
+  return pearson(ranksOf(x.slice(0, n)), ranksOf(y.slice(0, n)));
+}
+
+export function mannWhitney(a: number[], b: number[]) {
+  if (a.length < 1 || b.length < 1) return null;
+  const labels = [...a.map((v) => ({ v, g: 1 })), ...b.map((v) => ({ v, g: 2 }))];
+  const r = ranksOf(labels.map((x) => x.v));
+  const r1 = r.reduce((s, ri, i) => s + (labels[i].g === 1 ? ri : 0), 0);
+  const n1 = a.length;
+  const n2 = b.length;
+  const u1 = n1 * n2 + (n1 * (n1 + 1)) / 2 - r1;
+  const u2 = n1 * n2 - u1;
+  const u = Math.min(u1, u2);
+  const mu = (n1 * n2) / 2;
+  const sigma = Math.sqrt((n1 * n2 * (n1 + n2 + 1)) / 12);
+  const z = sigma ? (u - mu) / sigma : NaN;
+  return { n1, n2, r1, u1, u2, u, z };
+}
+
+export function wilcoxon(before: number[], after: number[]) {
+  const n = Math.min(before.length, after.length);
+  const diffs: number[] = [];
+  for (let i = 0; i < n; i++) {
+    const d = after[i] - before[i];
+    if (d !== 0) diffs.push(d);
+  }
+  if (diffs.length < 1) return null;
+  const abs = diffs.map((d) => Math.abs(d));
+  const r = ranksOf(abs);
+  let tPos = 0;
+  let tNeg = 0;
+  diffs.forEach((d, i) => {
+    if (d > 0) tPos += r[i];
+    else tNeg += r[i];
+  });
+  const t = Math.min(tPos, tNeg);
+  return { n: diffs.length, tPos, tNeg, t };
+}
+
+export function kruskalWallis(groups: number[][]) {
+  const cleaned = groups.filter((g) => g.length >= 1);
+  if (cleaned.length < 2) return null;
+  const labels = cleaned.flatMap((g, gi) => g.map((v) => ({ v, g: gi })));
+  const r = ranksOf(labels.map((x) => x.v));
+  const n = labels.length;
+  const k = cleaned.length;
+  let sum = 0;
+  for (let gi = 0; gi < k; gi++) {
+    const idx = labels.map((x, i) => (x.g === gi ? i : -1)).filter((i) => i >= 0);
+    const ri = idx.reduce((s, i) => s + r[i], 0);
+    sum += (ri * ri) / idx.length;
+  }
+  const h = (12 / (n * (n + 1))) * sum - 3 * (n + 1);
+  return { k, n, h, df: k - 1 };
+}
+
+export function cohensKappa(a: number, b: number, c: number, d: number) {
+  const n = a + b + c + d;
+  if (n <= 0) return null;
+  const po = (a + d) / n;
+  const pe = (((a + b) * (a + c)) / n + ((c + d) * (b + d)) / n) / n;
+  const k = 1 - pe === 0 ? NaN : (po - pe) / (1 - pe);
+  return { n, po, pe, k };
+}
+
+export function kr20(items: number[][]) {
+  const k = items.length;
+  if (k < 2) return NaN;
+  const n = Math.min(...items.map((r) => r.length));
+  const cols = items.map((r) => r.slice(0, n));
+  const pq = cols.map((col) => {
+    const p = mean(col);
+    return p * (1 - p);
+  });
+  const totals = Array.from({ length: n }, (_, i) => cols.reduce((s, c) => s + c[i], 0));
+  const vt = variance(totals);
+  if (!vt) return NaN;
+  return (k / (k - 1)) * (1 - pq.reduce((s, x) => s + x, 0) / vt);
+}
+
+export function kr21(k: number, m: number, vt: number) {
+  if (k < 2 || vt <= 0) return NaN;
+  return (k / (k - 1)) * (1 - (m * (1 - m / k)) / vt);
+}
+
+export function cvr(ne: number, n: number) {
+  if (n <= 0) return NaN;
+  return (ne - n / 2) / (n / 2);
+}
+
+export function itemCvi(nAgree: number, n: number) {
+  if (n <= 0) return NaN;
+  return nAgree / n;
+}
+
+export function goodnessOfFit(obs: number[], exp: number[]) {
+  const n = Math.min(obs.length, exp.length);
+  if (n < 2) return null;
+  let x2 = 0;
+  for (let i = 0; i < n; i++) {
+    if (exp[i] <= 0) return null;
+    x2 += (obs[i] - exp[i]) ** 2 / exp[i];
+  }
+  return { x2, df: n - 1 };
+}
+
+/** ICC(1,1) one-way random; each row is a subject, columns are raters. */
+export function icc11(rows: number[][]) {
+  const k = rows[0]?.length || 0;
+  const n = rows.filter((r) => r.length === k).length;
+  if (n < 2 || k < 2) return null;
+  const data = rows.slice(0, n);
+  const gm = mean(data.flat());
+  const ssb = data.reduce((s, r) => s + k * (mean(r) - gm) ** 2, 0);
+  const ssw = data.reduce((s, r) => s + r.reduce((b, x) => b + (x - mean(r)) ** 2, 0), 0);
+  const msb = ssb / (n - 1);
+  const msw = ssw / (n * (k - 1));
+  const icc = (msb - msw) / (msb + (k - 1) * msw);
+  return { n, k, msb, msw, icc };
+}
+
+export function independentT(a: number[], b: number[]) {
+  if (a.length < 2 || b.length < 2) return null;
+  const ma = mean(a);
+  const mb = mean(b);
+  const sa = variance(a);
+  const sb = variance(b);
+  const df = a.length + b.length - 2;
+  const t = (ma - mb) / Math.sqrt(sa / a.length + sb / b.length);
+  return { ma, mb, t, df, d: (ma - mb) / Math.sqrt(((a.length - 1) * sa + (b.length - 1) * sb) / df) };
+}
+
+export function pairedT(a: number[], b: number[]) {
+  const n = Math.min(a.length, b.length);
+  if (n < 2) return null;
+  const d = Array.from({ length: n }, (_, i) => b[i] - a[i]);
+  return { ...tStat(d, 0), n, meanDiff: mean(d) };
 }

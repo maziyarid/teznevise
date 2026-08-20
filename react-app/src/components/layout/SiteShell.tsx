@@ -17,9 +17,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-surface text-ink">
       <Tracker />
-      <a className="skip-link" href="#main-content">
-        رفتن به محتوا
-      </a>
       <SiteHeader />
       <main id="main-content" className="flex-1">
         {children}

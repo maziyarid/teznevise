@@ -8,6 +8,9 @@ export const Route = createFileRoute("/proposal/$slug")({
     if (!page) throw notFound();
     return page;
   },
+  head: ({ loaderData }) => ({
+    meta: [{ title: loaderData ? `${loaderData.title} | تزنویسه` : "پروپوزال" }],
+  }),
   component: Page,
 });
 

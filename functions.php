@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.8.3' );
+define( 'TEZNEVISE_VERSION', '1.8.4' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -94,7 +94,7 @@ add_action( 'after_setup_theme', 'teznevise_setup' );
 function teznevise_enqueue_assets() {
 wp_enqueue_style( 'teznevise-style', get_stylesheet_uri(), array(), TEZNEVISE_VERSION );
 wp_enqueue_style( 'teznevise-font-vazirmatn', 'https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css', array(), '33.003' );
-wp_enqueue_style( 'teznevise-fontawesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css', array(), '6.5.2' );
+wp_enqueue_style( 'teznevise-fontawesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css', array(), '7.1.0' );
 wp_enqueue_style( 'teznevise-redesign', TEZNEVISE_URI . '/assets/css/redesign.css', array( 'teznevise-style' ), TEZNEVISE_VERSION );
 wp_enqueue_style( 'teznevise-layout-refinements', TEZNEVISE_URI . '/assets/css/layout-refinements.css', array( 'teznevise-redesign' ), TEZNEVISE_VERSION );
 wp_enqueue_style( 'teznevise-motion', TEZNEVISE_URI . '/assets/css/motion.css', array( 'teznevise-layout-refinements' ), TEZNEVISE_VERSION );

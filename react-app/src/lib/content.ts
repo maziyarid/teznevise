@@ -1,3 +1,8 @@
+import { IMPORTED_PROPOSAL, IMPORTED_THESIS, IMPORTED_TOOLS } from "./imported-pages";
+import { absorbImported, importedToPage, splitFaqs, type FaqItem, type PageCopy } from "./page-copy";
+
+export type { FaqItem };
+
 export type ArticleSection = { heading: string; paragraphs: string[] };
 export type Article = {
   slug: string;
@@ -12,14 +17,7 @@ export type Article = {
   sections: ArticleSection[];
 };
 
-export type PageBlock = {
-  slug: string;
-  eyebrow: string;
-  title: string;
-  lead: string;
-  features: string[];
-  body?: string[];
-};
+export type PageBlock = PageCopy;
 
 export function articleMinutes(article: Article) {
 	const words = article.sections.flatMap((s) => [s.heading, ...s.paragraphs]).join(" ").split(/\s+/).filter(Boolean).length;
@@ -195,10 +193,28 @@ export const SERVICES = [
 		icon: "idea"
 	},
 	{
-		to: "/team",
-		title: "تیم پژوهشگران",
-		text: "همکاری با پژوهشگر متخصص متناسب با رشته و موضوع پروژه، از علوم انسانی تا مهندسی.",
-		icon: "team"
+		to: "/simulation",
+		title: "شبیه‌سازی",
+		text: "مدل‌سازی عددی، شبیه‌سازی سیستم‌ها و تحلیل‌های مهندسی با MATLAB و Python.",
+		icon: "sim"
+	},
+	{
+		to: "/proposal/qualitative",
+		title: "تحلیل کیفی",
+		text: "تحلیل مضمون، گراندد تئوری و پدیدارشناسی با کدگذاری منظم و قابل دفاع.",
+		icon: "qual"
+	},
+	{
+		to: "/project",
+		title: "انجام پروژه دانشجویی",
+		text: "پروژه‌های درسی، کارورزی و گزارش‌های دانشگاهی با ساختار علمی و تحویل مرحله‌ای.",
+		icon: "proj"
+	},
+	{
+		to: "/article",
+		title: "انجام مقاله",
+		text: "نگارش، استخراج و آماده‌سازی مقاله علمی از پایان‌نامه برای مجلات داخلی و ISI.",
+		icon: "paper"
 	}
 ] as const;
 export const REASONS = [
@@ -233,12 +249,20 @@ export const STEPS = [
 		text: "ساختار پژوهش، پرسش‌ها، فرضیه‌ها و روش اجرا منسجم می‌شود."
 	},
 	{
+		title: "گردآوری داده",
+		text: "ابزار، نمونه و پروتکل اجرا مشخص می‌شود تا داده قابل‌اتکا باشد."
+	},
+	{
 		title: "اجرا و تحلیل",
 		text: "داده‌ها با روش مناسب تحلیل و نتایج به‌صورت علمی تفسیر می‌شوند."
 	},
 	{
-		title: "نگارش و دفاع",
-		text: "فصل‌ها تکمیل، اصلاحات اعمال و برای ارائه نهایی آماده می‌شوید."
+		title: "نگارش فصل‌ها",
+		text: "فصل‌ها تکمیل، انسجام منطقی حفظ و اصلاحات استاد اعمال می‌شود."
+	},
+	{
+		title: "دفاع و تحویل",
+		text: "آمادگی جلسه دفاع، فایل نهایی و پشتیبانی تا تأیید دانشگاه."
 	}
 ];
 export const SERVICE_PAGES: Record<string, PageBlock> = {
@@ -292,6 +316,32 @@ export const SERVICE_PAGES: Record<string, PageBlock> = {
 			"MATLAB، Python و ابزارهای تخصصی",
 			"گزارش روش و تفسیر نتایج"
 		]
+	},
+	project: {
+		slug: "project",
+		eyebrow: "خدمات دانشگاهی",
+		title: "انجام پروژه دانشجویی",
+		lead: "پروژه‌های درسی، کارورزی و گزارش‌های عملی را با ساختار علمی، زمان‌بندی شفاف و پژوهشگر هم‌رشته پیش می‌بریم.",
+		features: [
+			"تعریف مسئله و خروجی مورد انتظار استاد",
+			"ساختار گزارش مطابق قالب دانشگاه",
+			"تحلیل داده یا شبیه‌سازی در صورت نیاز",
+			"تحویل مرحله‌ای و پشتیبانی اصلاحات"
+		],
+		body: ["پروژه دانشجویی وقتی قابل دفاع است که مسئله، روش و خروجی با هم بخوانند. مسیر تزنویسه همین انسجام را از موضوع تا فایل نهایی حفظ می‌کند."]
+	},
+	article: {
+		slug: "article",
+		eyebrow: "نگارش علمی",
+		title: "انجام و استخراج مقاله",
+		lead: "از استخراج مقاله از پایان‌نامه تا نگارش مستقل برای مجلات داخلی و بین‌المللی، با ساختار استاندارد و منابع به‌روز.",
+		features: [
+			"استخراج مقاله از پایان‌نامه یا رساله",
+			"ساختار IMRaD و قالب مجله هدف",
+			"ویرایش علمی فارسی و انگلیسی",
+			"آماده‌سازی ارسال و پاسخ به داور"
+		],
+		body: ["مقاله قوی تکرار پایان‌نامه نیست؛ یک پرسش مشخص، یافته متمرکز و بحث قابل استناد است. ما همان منطق را برای مجله هدف شما می‌سازیم."]
 	}
 };
 export const THESIS_PAGES: Record<string, PageBlock> = {
@@ -639,15 +689,91 @@ export type ToolDef = {
 
 export const TOOLS: ToolDef[] = [
   { slug: "descriptive-statistics", title: "آمار توصیفی", text: "میانگین، میانه، انحراف معیار، چارک‌ها، چولگی و نمودار توزیع.", tier: "free", kind: "calc", group: "آمار پایه" },
-  { slug: "sample-size", title: "حجم نمونه", text: "برآورد n برای میانگین با سطح اطمینان و خطای قابل قبول.", tier: "free", kind: "calc", group: "آمار پایه" },
+  { slug: "sample-size", title: "حجم نمونه", text: "برآورد n با فرمول کوکران و مفروضات سطح اطمینان.", tier: "free", kind: "calc", group: "آمار پایه" },
   { slug: "cronbachs-alpha", title: "آلفای کرونباخ", text: "پایایی پرسشنامه از روی واریانس گویه‌ها.", tier: "free", kind: "calc", group: "آمار پایه" },
   { slug: "pearson-correlation", title: "همبستگی پیرسون", text: "ضریب r و تفسیر شدت رابطه دو متغیر کمی.", tier: "free", kind: "calc", group: "آمار پایه" },
-  { slug: "t-test", title: "آزمون t تک‌نمونه‌ای", text: "مقایسه میانگین نمونه با یک مقدار مرجع و اندازه اثر.", tier: "free", kind: "calc", group: "آمار پایه" },
-  { slug: "regression", title: "رگرسیون ساده", text: "شیب، عرض از مبدأ و R² برای یک پیش‌بین.", tier: "free", kind: "calc", group: "آمار پایه" },
-  { slug: "anova", title: "تحلیل واریانس یک‌راهه", text: "مقایسه میانگین چند گروه و آماره F.", tier: "pro", kind: "calc", group: "آمار پیشرفته" },
-  { slug: "chi-square", title: "خی‌دو استقلال", text: "جدول توافقی و آزمون خی‌دو.", tier: "pro", kind: "calc", group: "آمار پیشرفته" },
-  { slug: "power-analysis", title: "تحلیل توان آزمون", text: "برآورد حجم نمونه برای اختلاف دو میانگین با d کوهن.", tier: "pro", kind: "calc", group: "آمار پیشرفته" },
+  { slug: "spearman", title: "همبستگی اسپیرمن", text: "همبستگی رتبه‌ای برای داده‌های غیرنرمال یا ترتیبی.", tier: "free", kind: "calc", group: "آمار پایه" },
+  { slug: "t-test", title: "آزمون t", text: "t تک‌نمونه‌ای، مستقل و زوجی با تفسیر معناداری.", tier: "free", kind: "calc", group: "آمار پایه" },
+  { slug: "regression", title: "رگرسیون", text: "شیب، عرض از مبدأ و R² برای پیش‌بین کمی.", tier: "free", kind: "calc", group: "آمار پایه" },
+  { slug: "anova", title: "تحلیل واریانس", text: "مقایسه میانگین چند گروه و آماره F.", tier: "free", kind: "calc", group: "آمار پیشرفته" },
+  { slug: "chi-square", title: "خی‌دو", text: "آزمون استقلال در جدول توافقی.", tier: "free", kind: "calc", group: "آمار پیشرفته" },
+  { slug: "power-analysis", title: "توان آزمون", text: "برآورد حجم نمونه برای اختلاف دو میانگین.", tier: "free", kind: "calc", group: "آمار پیشرفته" },
+  { slug: "content-validity", title: "روایی محتوا", text: "محاسبه CVR و CVI بر اساس نظر متخصصان.", tier: "free", kind: "calc", group: "روایی و پایایی" },
+  { slug: "kr20", title: "KR-20 / KR-21", text: "پایایی آزمون‌های دوحالتی صحیح/غلط.", tier: "free", kind: "calc", group: "روایی و پایایی" },
+  { slug: "cohens-kappa", title: "کاپای کوهن", text: "توافق بین دو ارزیاب برای داده‌های رده‌ای.", tier: "free", kind: "calc", group: "روایی و پایایی" },
+  { slug: "icc", title: "ICC", text: "همبستگی درون‌کلاسی برای اندازه‌گیری‌های تکراری.", tier: "free", kind: "calc", group: "روایی و پایایی" },
+  { slug: "mann-whitney", title: "من-ویتنی", text: "آزمون ناپارامتری دو گروه مستقل.", tier: "free", kind: "calc", group: "ناپارامتری" },
+  { slug: "wilcoxon", title: "ویلکاکسون", text: "آزمون ناپارامتری زوجی پیش‌آزمون و پس‌آزمون.", tier: "free", kind: "calc", group: "ناپارامتری" },
+  { slug: "kruskal-wallis", title: "کروسکال-والیس", text: "جایگزین ناپارامتری ANOVA برای چند گروه.", tier: "free", kind: "calc", group: "ناپارامتری" },
+  { slug: "goodness-of-fit", title: "نیکویی برازش", text: "آزمون تطابق توزیع مشاهده‌شده با توزیع مورد انتظار.", tier: "free", kind: "calc", group: "آمار پیشرفته" },
+  { slug: "price", title: "برآورد هزینه", text: "برآورد اولیه هزینه خدمت بر اساس مقطع و نوع پروژه.", tier: "free", kind: "calc", group: "دستیار پژوهشی" },
   { slug: "method-advisor", title: "مشاور روش تحقیق", text: "با هوش مصنوعی روش کمی، کیفی یا ترکیبی پیشنهاد بگیرید.", tier: "pro", kind: "ai", group: "دستیار پژوهشی" },
   { slug: "apa-citation", title: "ساخت ارجاع APA", text: "مشخصات منبع را بدهید؛ قالب APA ساخته می‌شود.", tier: "pro", kind: "ai", group: "دستیار پژوهشی" },
   { slug: "theme-extractor", title: "استخراج مضمون کیفی", text: "متن مصاحبه را بگذارید تا مضامین اولیه پیشنهاد شود.", tier: "pro", kind: "ai", group: "دستیار پژوهشی" },
 ];
+
+export const TOOL_GROUPS = ["آمار پایه", "روایی و پایایی", "آمار پیشرفته", "ناپارامتری", "دستیار پژوهشی"] as const;
+
+export const TOOL_ALIASES: Record<string, string> = {
+  "descriptive-statistics-calculator": "descriptive-statistics",
+  "sample-size-calculator": "sample-size",
+  "cronbachs-alpha-calculator": "cronbachs-alpha",
+  "pearson-correlation-calculator": "pearson-correlation",
+  "spearman-correlation-calculator": "spearman",
+  "spearman-correlation": "spearman",
+  "t-test-calculator": "t-test",
+  "regression-calculator": "regression",
+  "anova-calculator": "anova",
+  "chi-square-calculator": "chi-square",
+  "power-analysis-calculator": "power-analysis",
+  "content-validity-calculator": "content-validity",
+  "kr20-kr21-calculator": "kr20",
+  "kr20-kr21": "kr20",
+  "cohens-kappa-calculator": "cohens-kappa",
+  "icc-calculator": "icc",
+  "mann-whitney-calculator": "mann-whitney",
+  "wilcoxon-calculator": "wilcoxon",
+  "kruskal-wallis-calculator": "kruskal-wallis",
+  "goodness-of-fit-calculator": "goodness-of-fit",
+  "price-calculator": "price",
+};
+
+export function resolveTool(slug: string) {
+  const canon = TOOL_ALIASES[slug] || slug.replace(/-calculator$/, "");
+  return TOOLS.find((t) => t.slug === canon || t.slug === slug) ?? null;
+}
+
+export function importedToolCopy(slug: string) {
+  const keys = [
+    slug,
+    `${slug}-calculator`,
+    ...Object.entries(TOOL_ALIASES)
+      .filter(([, v]) => v === slug)
+      .map(([k]) => k),
+  ];
+  for (const k of keys) {
+    if (IMPORTED_TOOLS[k]) return IMPORTED_TOOLS[k];
+  }
+  return null;
+}
+
+absorbImported(THESIS_PAGES, IMPORTED_THESIS);
+absorbImported(PROPOSAL_PAGES, IMPORTED_PROPOSAL, ["hub"]);
+
+if (IMPORTED_PROPOSAL.hub) {
+  const hub = importedToPage({ ...IMPORTED_PROPOSAL.hub, slug: "proposal" });
+  SERVICE_PAGES.proposal = {
+    ...SERVICE_PAGES.proposal,
+    ...hub,
+    slug: "proposal",
+    features: hub.features.length ? hub.features : SERVICE_PAGES.proposal.features,
+    faqs: hub.faqs?.length ? hub.faqs : SERVICE_PAGES.proposal.faqs,
+  };
+}
+
+if (!SERVICE_PAGES.thesis.faqs?.length && IMPORTED_THESIS.humanities) {
+  SERVICE_PAGES.thesis.faqs = importedToPage(IMPORTED_THESIS.humanities).faqs;
+}
+if (!SERVICE_PAGES.statistics.faqs?.length && IMPORTED_TOOLS["online-calculation-tools"]) {
+  SERVICE_PAGES.statistics.faqs = splitFaqs(IMPORTED_TOOLS["online-calculation-tools"].features).faqs;
+}

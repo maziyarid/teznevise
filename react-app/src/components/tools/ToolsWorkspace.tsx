@@ -1,44 +1,55 @@
 import { Link } from "@tanstack/react-router";
-import { Lock, Sparkles } from "lucide-react";
-import { TOOLS, type ToolDef } from "@/lib/content";
+import { Lock } from "lucide-react";
+import { importedToolCopy, TOOL_GROUPS, TOOLS, type ToolDef } from "@/lib/content";
+import { usePageOverlay } from "@/lib/page-overlay";
 import { CALC_MAP } from "./Calculators";
 import { AskAiPanel } from "./AskAiPanel";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { CheckGrid } from "@/components/shared/CheckGrid";
 import { cn } from "@/lib/utils";
-
-const GROUPS = ["آمار پایه", "آمار پیشرفته", "دستیار پژوهشی"] as const;
 
 export function ToolsWorkspace({ tool }: { tool: ToolDef }) {
   const { user } = useCurrentUserState();
   const Calc = CALC_MAP[tool.slug as keyof typeof CALC_MAP];
   const locked = tool.tier === "pro" && !user;
-  const context = `ابزار فعال: ${tool.title}. ${tool.text}`;
+  const overlay = usePageOverlay(`tool-${tool.slug}`);
+  const imported = importedToolCopy(tool.slug);
+  const title = overlay?.title?.trim() || tool.title;
+  const text = overlay?.lead?.trim() || tool.text;
+  const features = overlay?.features
+    ? overlay.features.split(/\n+/).map((s) => s.trim()).filter(Boolean)
+    : imported?.features || [];
+  const context = `ابزار فعال: ${title}. ${text}`;
 
   return (
     <div className="tools-shell">
       <aside className="tools-rail" aria-label="فهرست ابزارها">
-        {GROUPS.map((g) => (
-          <div key={g} className="tools-group">
-            <p className="tools-group-title">{g}</p>
-            {TOOLS.filter((t) => t.group === g).map((t) => (
-              <Link
-                key={t.slug}
-                to="/tools/$slug"
-                params={{ slug: t.slug }}
-                className={cn("tool-item", t.slug === tool.slug && "is-active")}
-              >
-                <span>{t.title}</span>
-                <em className={t.tier === "pro" ? "badge-pro" : "badge-free"}>{t.tier === "pro" ? "ویژه" : "رایگان"}</em>
-              </Link>
-            ))}
-          </div>
-        ))}
+        {TOOL_GROUPS.map((g) => {
+          const items = TOOLS.filter((t) => t.group === g);
+          if (!items.length) return null;
+          return (
+            <div key={g} className="tools-group">
+              <p className="tools-group-title">{g}</p>
+              {items.map((t) => (
+                <Link
+                  key={t.slug}
+                  to="/tools/$slug"
+                  params={{ slug: t.slug }}
+                  className={cn("tool-item", t.slug === tool.slug && "is-active")}
+                >
+                  <span>{t.title}</span>
+                  <em className={t.tier === "pro" ? "badge-pro" : "badge-free"}>{t.tier === "pro" ? "ویژه" : "رایگان"}</em>
+                </Link>
+              ))}
+            </div>
+          );
+        })}
       </aside>
       <div className="tools-main">
         <header className="tools-head">
           <span className={tool.tier === "pro" ? "badge-pro" : "badge-free"}>{tool.tier === "pro" ? "ابزار ویژه" : "ابزار رایگان"}</span>
-          <h1>{tool.title}</h1>
-          <p>{tool.text}</p>
+          <h1>{title}</h1>
+          <p>{text}</p>
         </header>
         {locked ? (
           <div className="tool-lock">
@@ -53,13 +64,14 @@ export function ToolsWorkspace({ tool }: { tool: ToolDef }) {
           <>
             {Calc ? <Calc /> : (
               <div className="tool-card">
-                <p className="mb-0 flex items-center gap-2 text-muted">
-                  <Sparkles className="size-4 text-brand" /> این ابزار کاملاً با هوش مصنوعی کار می‌کند. سؤال را پایین بنویسید.
+                <p className="mb-0 text-muted">
+                  این ابزار کاملاً با هوش مصنوعی کار می‌کند. سؤال را پایین بنویسید.
                 </p>
               </div>
             )}
+            {features.length ? <CheckGrid items={features} /> : null}
             <AskAiPanel
-              tool={tool.title}
+              tool={title}
               context={context}
               placeholder={
                 tool.kind === "ai"

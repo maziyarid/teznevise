@@ -23,7 +23,7 @@ export type NavItem = {
 export const PRIMARY_NAV: NavItem[] = [
   { label: "خانه", to: "/" },
   {
-    label: "انجام پایان‌نامه",
+    label: "پایان‌نامه",
     to: "/thesis",
     children: [
       {
@@ -40,15 +40,22 @@ export const PRIMARY_NAV: NavItem[] = [
         heading: "بر اساس رشته",
         items: [
           { label: "علوم انسانی", to: "/thesis/humanities" },
+          { label: "روانشناسی", to: "/thesis/humanities/psychology" },
+          { label: "حقوق", to: "/thesis/humanities/law" },
+          { label: "مدیریت", to: "/thesis/humanities/management" },
+          { label: "علوم اجتماعی", to: "/thesis/humanities/social-sciences" },
+          { label: "فلسفه", to: "/thesis/humanities/philosophy" },
+          { label: "تاریخ", to: "/thesis/humanities/history" },
           { label: "فنی و مهندسی", to: "/thesis/engineering" },
           { label: "علوم پایه", to: "/thesis/pure-science" },
           { label: "علوم پزشکی", to: "/thesis/medical-health" },
           { label: "هنر و معماری", to: "/thesis/art-architecture-media" },
           { label: "کشاورزی و منابع طبیعی", to: "/thesis/agriculture-natural-resources" },
+          { label: "علوم دامی و دامپزشکی", to: "/thesis/animal-science-veterinary" },
         ],
       },
       {
-        heading: "سایر",
+        heading: "سایر خدمات",
         items: [
           { label: "رساله دکتری", to: "/thesis/phd" },
           { label: "پایان‌نامه بین‌المللی", to: "/thesis/international" },
@@ -58,42 +65,62 @@ export const PRIMARY_NAV: NavItem[] = [
     ],
   },
   {
-    label: "انجام پروپوزال",
+    label: "پروپوزال",
     to: "/proposal",
     children: [
       {
+        heading: "انواع پروپوزال",
         items: [
           { label: "پروپوزال دکتری", to: "/proposal/phd" },
           { label: "پروپوزال کلاسی", to: "/proposal/project" },
           { label: "پروپوزال انگلیسی", to: "/proposal/english" },
+          { label: "پروپوزال پزشکی", to: "/proposal/medical" },
+        ],
+      },
+      {
+        heading: "روش پژوهش",
+        items: [
           { label: "پژوهش کیفی", to: "/proposal/qualitative" },
           { label: "پژوهش کمی", to: "/proposal/quantitative" },
           { label: "تحقیق کاربردی", to: "/proposal/applied-research" },
-          { label: "پروپوزال پزشکی", to: "/proposal/medical" },
         ],
       },
     ],
   },
   { label: "بلاگ", to: "/blog" },
   {
-    label: "ابزارهای آنلاین",
+    label: "ابزار",
     to: "/tools",
     children: [
       {
+        heading: "آمار پایه",
         items: [
           { label: "آمار توصیفی", to: "/tools/descriptive-statistics" },
           { label: "حجم نمونه", to: "/tools/sample-size" },
-          { label: "آلفای کرونباخ", to: "/tools/cronbachs-alpha" },
-          { label: "همبستگی پیرسون", to: "/tools/pearson-correlation" },
           { label: "آزمون t", to: "/tools/t-test" },
           { label: "رگرسیون", to: "/tools/regression" },
-          { label: "ANOVA و خی‌دو", to: "/tools/anova" },
+        ],
+      },
+      {
+        heading: "روایی و پایایی",
+        items: [
+          { label: "آلفای کرونباخ", to: "/tools/cronbachs-alpha" },
+          { label: "همبستگی پیرسون", to: "/tools/pearson-correlation" },
+          { label: "همبستگی اسپیرمن", to: "/tools/spearman" },
+        ],
+      },
+      {
+        heading: "پیشرفته",
+        items: [
+          { label: "ANOVA", to: "/tools/anova" },
+          { label: "خی‌دو", to: "/tools/chi-square" },
+          { label: "برآورد هزینه", to: "/tools/price" },
           { label: "دستیار هوش مصنوعی", to: "/tools/method-advisor" },
         ],
       },
     ],
   },
-  { label: "تماس با ما", to: "/contact" },
+  { label: "تماس", to: "/contact" },
 ];
 
 export const UTILITY_LINKS = [
@@ -106,8 +133,11 @@ export const FOOTER_SERVICES = [
   { label: "انجام پایان‌نامه", to: "/thesis" },
   { label: "انجام پروپوزال", to: "/proposal" },
   { label: "تحلیل آماری", to: "/statistics" },
-  { label: "ابزارهای آنلاین", to: "/tools" },
   { label: "شبیه‌سازی", to: "/simulation" },
+  { label: "تحلیل کیفی", to: "/proposal/qualitative" },
+  { label: "پروژه دانشجویی", to: "/project" },
+  { label: "انجام مقاله", to: "/article" },
+  { label: "ابزارهای آنلاین", to: "/tools" },
 ] as const;
 
 export const FOOTER_NAV = [
@@ -118,6 +148,7 @@ export const FOOTER_NAV = [
   { label: "افتخارات و سوابق", to: "/achievements" },
   { label: "نظرات متقاضیان", to: "/testimonials" },
   { label: "مطالعات موردی", to: "/case-studies" },
+  { label: "دانلودها", to: "/downloads" },
 ] as const;
 
 export const FOOTER_QUICK = [

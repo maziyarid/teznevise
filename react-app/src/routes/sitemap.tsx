@@ -17,8 +17,14 @@ function Sitemap() {
         { label: "سیاست کوکی", to: "/cookies" },
         { label: "بازگشت وجه", to: "/refund" },
         { label: "آیین‌نامه پژوهشی", to: "/rules" },
+        { label: "استفاده منصفانه", to: "/fair-use-policy" },
+        { label: "تضمین اصالت", to: "/originality-guarantee" },
+        { label: "سیاست بازنگری", to: "/revision-policy" },
+        { label: "تعهدات موسسه", to: "/service-commitments" },
+        { label: "مسئولیت اجتماعی", to: "/corporate-social-responsibility" },
       ],
     },
+    { title: "دانلودها", items: [{ label: "همه دانلودها", to: "/downloads" }] },
   ];
   return (
     <>

@@ -6,5 +6,5 @@ const page = legalBySlug("privacy")!;
 
 export const Route = createFileRoute("/privacy")({
   head: () => ({ meta: [{ title: `${page.title} | تزنویسه` }, { name: "description", content: page.lead }] }),
-  component: () => <LegalView page={page} />,
+  component: () => <LegalView page={page} fieldSlug="legal-privacy-policy" />,
 });

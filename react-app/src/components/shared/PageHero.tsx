@@ -1,3 +1,5 @@
+import { stripEmoji } from "@/lib/utils";
+
 export function PageHero({
   eyebrow,
   title,
@@ -9,10 +11,10 @@ export function PageHero({
 }) {
   return (
     <section className="page-hero">
-      <div className="container-tz">
-        <span className="eyebrow">{eyebrow}</span>
-        <h1>{title}</h1>
-        <p>{lead}</p>
+      <div className="container-tz page-hero-inner">
+        {eyebrow ? <span className="eyebrow">{stripEmoji(eyebrow)}</span> : null}
+        <h1>{stripEmoji(title)}</h1>
+        {lead ? <p>{stripEmoji(lead)}</p> : null}
       </div>
     </section>
   );

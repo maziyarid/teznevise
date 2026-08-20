@@ -10,19 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as ArticleRouteImport } from './routes/article'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
+import { Route as DownloadsRouteImport } from './routes/downloads'
+import { Route as GamsRouteImport } from './routes/gams'
 import { Route as InquiryRouteImport } from './routes/inquiry'
 import { Route as JoinUsRouteImport } from './routes/join-us'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as OurStoryRouteImport } from './routes/our-story'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ProjectRouteImport } from './routes/project'
 import { Route as RefundRouteImport } from './routes/refund'
 import { Route as RulesRouteImport } from './routes/rules'
 import { Route as SearchRouteImport } from './routes/search'
@@ -44,11 +49,15 @@ import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminTezcoinRouteImport } from './routes/admin/tezcoin'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as CaseStudySlugRouteImport } from './routes/case-study/$slug'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardOrdersRouteImport } from './routes/dashboard/orders'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
 import { Route as DashboardReferralsRouteImport } from './routes/dashboard/referrals'
 import { Route as DashboardWalletRouteImport } from './routes/dashboard/wallet'
+import { Route as DownloadSlugRouteImport } from './routes/download/$slug'
+import { Route as OnlineCalculationToolsIndexRouteImport } from './routes/online-calculation-tools/index'
+import { Route as OnlineCalculationToolsSlugRouteImport } from './routes/online-calculation-tools/$slug'
 import { Route as PayCallbackRouteImport } from './routes/pay/callback'
 import { Route as ProposalIndexRouteImport } from './routes/proposal/index'
 import { Route as ProposalSlugRouteImport } from './routes/proposal/$slug'
@@ -64,10 +73,16 @@ import { Route as DashboardProjectsIndexRouteImport } from './routes/dashboard/p
 import { Route as DashboardProjectsIdRouteImport } from './routes/dashboard/projects/$id'
 import { Route as DashboardTicketsIndexRouteImport } from './routes/dashboard/tickets/index'
 import { Route as DashboardTicketsIdRouteImport } from './routes/dashboard/tickets/$id'
+import { Route as ThesisHumanitiesSlugRouteImport } from './routes/thesis/humanities/$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SlugRoute = SlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -83,6 +98,11 @@ const AchievementsRoute = AchievementsRouteImport.update({
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticleRoute = ArticleRouteImport.update({
+  id: '/article',
+  path: '/article',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CareersRoute = CareersRouteImport.update({
@@ -110,6 +130,16 @@ const DashboardRouteRoute = DashboardRouteRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DownloadsRoute = DownloadsRouteImport.update({
+  id: '/downloads',
+  path: '/downloads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GamsRoute = GamsRouteImport.update({
+  id: '/gams',
+  path: '/gams',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InquiryRoute = InquiryRouteImport.update({
   id: '/inquiry',
   path: '/inquiry',
@@ -133,6 +163,11 @@ const OurStoryRoute = OurStoryRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectRoute = ProjectRouteImport.update({
+  id: '/project',
+  path: '/project',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RefundRoute = RefundRouteImport.update({
@@ -240,6 +275,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CaseStudySlugRoute = CaseStudySlugRouteImport.update({
+  id: '/case-study/$slug',
+  path: '/case-study/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -265,6 +305,23 @@ const DashboardWalletRoute = DashboardWalletRouteImport.update({
   path: '/wallet',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DownloadSlugRoute = DownloadSlugRouteImport.update({
+  id: '/download/$slug',
+  path: '/download/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnlineCalculationToolsIndexRoute =
+  OnlineCalculationToolsIndexRouteImport.update({
+    id: '/online-calculation-tools/',
+    path: '/online-calculation-tools/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const OnlineCalculationToolsSlugRoute =
+  OnlineCalculationToolsSlugRouteImport.update({
+    id: '/online-calculation-tools/$slug',
+    path: '/online-calculation-tools/$slug',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const PayCallbackRoute = PayCallbackRouteImport.update({
   id: '/pay/callback',
   path: '/pay/callback',
@@ -340,22 +397,32 @@ const DashboardTicketsIdRoute = DashboardTicketsIdRouteImport.update({
   path: '/tickets/$id',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const ThesisHumanitiesSlugRoute = ThesisHumanitiesSlugRouteImport.update({
+  id: '/thesis/humanities/$slug',
+  path: '/thesis/humanities/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/$slug': typeof SlugRoute
   '/about': typeof AboutRoute
   '/achievements': typeof AchievementsRoute
+  '/article': typeof ArticleRoute
   '/careers': typeof CareersRoute
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/downloads': typeof DownloadsRoute
+  '/gams': typeof GamsRoute
   '/inquiry': typeof InquiryRoute
   '/join-us': typeof JoinUsRoute
   '/login': typeof LoginRoute
   '/our-story': typeof OurStoryRoute
   '/privacy': typeof PrivacyRoute
+  '/project': typeof ProjectRoute
   '/refund': typeof RefundRoute
   '/rules': typeof RulesRoute
   '/search': typeof SearchRoute
@@ -375,10 +442,13 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tezcoin': typeof AdminTezcoinRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/case-study/$slug': typeof CaseStudySlugRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/referrals': typeof DashboardReferralsRoute
   '/dashboard/wallet': typeof DashboardWalletRoute
+  '/download/$slug': typeof DownloadSlugRoute
+  '/online-calculation-tools/$slug': typeof OnlineCalculationToolsSlugRoute
   '/pay/callback': typeof PayCallbackRoute
   '/proposal/$slug': typeof ProposalSlugRoute
   '/thesis/$slug': typeof ThesisSlugRoute
@@ -386,6 +456,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/online-calculation-tools/': typeof OnlineCalculationToolsIndexRoute
   '/proposal/': typeof ProposalIndexRoute
   '/thesis/': typeof ThesisIndexRoute
   '/tools/': typeof ToolsIndexRoute
@@ -394,23 +465,29 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/projects/$id': typeof DashboardProjectsIdRoute
   '/dashboard/tickets/$id': typeof DashboardTicketsIdRoute
+  '/thesis/humanities/$slug': typeof ThesisHumanitiesSlugRoute
   '/admin/tickets/': typeof AdminTicketsIndexRoute
   '/dashboard/projects/': typeof DashboardProjectsIndexRoute
   '/dashboard/tickets/': typeof DashboardTicketsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$slug': typeof SlugRoute
   '/about': typeof AboutRoute
   '/achievements': typeof AchievementsRoute
+  '/article': typeof ArticleRoute
   '/careers': typeof CareersRoute
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/downloads': typeof DownloadsRoute
+  '/gams': typeof GamsRoute
   '/inquiry': typeof InquiryRoute
   '/join-us': typeof JoinUsRoute
   '/login': typeof LoginRoute
   '/our-story': typeof OurStoryRoute
   '/privacy': typeof PrivacyRoute
+  '/project': typeof ProjectRoute
   '/refund': typeof RefundRoute
   '/rules': typeof RulesRoute
   '/search': typeof SearchRoute
@@ -430,10 +507,13 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tezcoin': typeof AdminTezcoinRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/case-study/$slug': typeof CaseStudySlugRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/referrals': typeof DashboardReferralsRoute
   '/dashboard/wallet': typeof DashboardWalletRoute
+  '/download/$slug': typeof DownloadSlugRoute
+  '/online-calculation-tools/$slug': typeof OnlineCalculationToolsSlugRoute
   '/pay/callback': typeof PayCallbackRoute
   '/proposal/$slug': typeof ProposalSlugRoute
   '/thesis/$slug': typeof ThesisSlugRoute
@@ -441,6 +521,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/online-calculation-tools': typeof OnlineCalculationToolsIndexRoute
   '/proposal': typeof ProposalIndexRoute
   '/thesis': typeof ThesisIndexRoute
   '/tools': typeof ToolsIndexRoute
@@ -449,6 +530,7 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/projects/$id': typeof DashboardProjectsIdRoute
   '/dashboard/tickets/$id': typeof DashboardTicketsIdRoute
+  '/thesis/humanities/$slug': typeof ThesisHumanitiesSlugRoute
   '/admin/tickets': typeof AdminTicketsIndexRoute
   '/dashboard/projects': typeof DashboardProjectsIndexRoute
   '/dashboard/tickets': typeof DashboardTicketsIndexRoute
@@ -458,17 +540,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/$slug': typeof SlugRoute
   '/about': typeof AboutRoute
   '/achievements': typeof AchievementsRoute
+  '/article': typeof ArticleRoute
   '/careers': typeof CareersRoute
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/downloads': typeof DownloadsRoute
+  '/gams': typeof GamsRoute
   '/inquiry': typeof InquiryRoute
   '/join-us': typeof JoinUsRoute
   '/login': typeof LoginRoute
   '/our-story': typeof OurStoryRoute
   '/privacy': typeof PrivacyRoute
+  '/project': typeof ProjectRoute
   '/refund': typeof RefundRoute
   '/rules': typeof RulesRoute
   '/search': typeof SearchRoute
@@ -488,10 +575,13 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tezcoin': typeof AdminTezcoinRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/case-study/$slug': typeof CaseStudySlugRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/referrals': typeof DashboardReferralsRoute
   '/dashboard/wallet': typeof DashboardWalletRoute
+  '/download/$slug': typeof DownloadSlugRoute
+  '/online-calculation-tools/$slug': typeof OnlineCalculationToolsSlugRoute
   '/pay/callback': typeof PayCallbackRoute
   '/proposal/$slug': typeof ProposalSlugRoute
   '/thesis/$slug': typeof ThesisSlugRoute
@@ -499,6 +589,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/online-calculation-tools/': typeof OnlineCalculationToolsIndexRoute
   '/proposal/': typeof ProposalIndexRoute
   '/thesis/': typeof ThesisIndexRoute
   '/tools/': typeof ToolsIndexRoute
@@ -507,6 +598,7 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/projects/$id': typeof DashboardProjectsIdRoute
   '/dashboard/tickets/$id': typeof DashboardTicketsIdRoute
+  '/thesis/humanities/$slug': typeof ThesisHumanitiesSlugRoute
   '/admin/tickets/': typeof AdminTicketsIndexRoute
   '/dashboard/projects/': typeof DashboardProjectsIndexRoute
   '/dashboard/tickets/': typeof DashboardTicketsIndexRoute
@@ -517,17 +609,22 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/dashboard'
+    | '/$slug'
     | '/about'
     | '/achievements'
+    | '/article'
     | '/careers'
     | '/case-studies'
     | '/contact'
     | '/cookies'
+    | '/downloads'
+    | '/gams'
     | '/inquiry'
     | '/join-us'
     | '/login'
     | '/our-story'
     | '/privacy'
+    | '/project'
     | '/refund'
     | '/rules'
     | '/search'
@@ -547,10 +644,13 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/tezcoin'
     | '/blog/$slug'
+    | '/case-study/$slug'
     | '/dashboard/orders'
     | '/dashboard/profile'
     | '/dashboard/referrals'
     | '/dashboard/wallet'
+    | '/download/$slug'
+    | '/online-calculation-tools/$slug'
     | '/pay/callback'
     | '/proposal/$slug'
     | '/thesis/$slug'
@@ -558,6 +658,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/dashboard/'
+    | '/online-calculation-tools/'
     | '/proposal/'
     | '/thesis/'
     | '/tools/'
@@ -566,23 +667,29 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/dashboard/projects/$id'
     | '/dashboard/tickets/$id'
+    | '/thesis/humanities/$slug'
     | '/admin/tickets/'
     | '/dashboard/projects/'
     | '/dashboard/tickets/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$slug'
     | '/about'
     | '/achievements'
+    | '/article'
     | '/careers'
     | '/case-studies'
     | '/contact'
     | '/cookies'
+    | '/downloads'
+    | '/gams'
     | '/inquiry'
     | '/join-us'
     | '/login'
     | '/our-story'
     | '/privacy'
+    | '/project'
     | '/refund'
     | '/rules'
     | '/search'
@@ -602,10 +709,13 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/tezcoin'
     | '/blog/$slug'
+    | '/case-study/$slug'
     | '/dashboard/orders'
     | '/dashboard/profile'
     | '/dashboard/referrals'
     | '/dashboard/wallet'
+    | '/download/$slug'
+    | '/online-calculation-tools/$slug'
     | '/pay/callback'
     | '/proposal/$slug'
     | '/thesis/$slug'
@@ -613,6 +723,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/dashboard'
+    | '/online-calculation-tools'
     | '/proposal'
     | '/thesis'
     | '/tools'
@@ -621,6 +732,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/dashboard/projects/$id'
     | '/dashboard/tickets/$id'
+    | '/thesis/humanities/$slug'
     | '/admin/tickets'
     | '/dashboard/projects'
     | '/dashboard/tickets'
@@ -629,17 +741,22 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/dashboard'
+    | '/$slug'
     | '/about'
     | '/achievements'
+    | '/article'
     | '/careers'
     | '/case-studies'
     | '/contact'
     | '/cookies'
+    | '/downloads'
+    | '/gams'
     | '/inquiry'
     | '/join-us'
     | '/login'
     | '/our-story'
     | '/privacy'
+    | '/project'
     | '/refund'
     | '/rules'
     | '/search'
@@ -659,10 +776,13 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/tezcoin'
     | '/blog/$slug'
+    | '/case-study/$slug'
     | '/dashboard/orders'
     | '/dashboard/profile'
     | '/dashboard/referrals'
     | '/dashboard/wallet'
+    | '/download/$slug'
+    | '/online-calculation-tools/$slug'
     | '/pay/callback'
     | '/proposal/$slug'
     | '/thesis/$slug'
@@ -670,6 +790,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/dashboard/'
+    | '/online-calculation-tools/'
     | '/proposal/'
     | '/thesis/'
     | '/tools/'
@@ -678,6 +799,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/dashboard/projects/$id'
     | '/dashboard/tickets/$id'
+    | '/thesis/humanities/$slug'
     | '/admin/tickets/'
     | '/dashboard/projects/'
     | '/dashboard/tickets/'
@@ -687,17 +809,22 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  SlugRoute: typeof SlugRoute
   AboutRoute: typeof AboutRoute
   AchievementsRoute: typeof AchievementsRoute
+  ArticleRoute: typeof ArticleRoute
   CareersRoute: typeof CareersRoute
   CaseStudiesRoute: typeof CaseStudiesRoute
   ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
+  DownloadsRoute: typeof DownloadsRoute
+  GamsRoute: typeof GamsRoute
   InquiryRoute: typeof InquiryRoute
   JoinUsRoute: typeof JoinUsRoute
   LoginRoute: typeof LoginRoute
   OurStoryRoute: typeof OurStoryRoute
   PrivacyRoute: typeof PrivacyRoute
+  ProjectRoute: typeof ProjectRoute
   RefundRoute: typeof RefundRoute
   RulesRoute: typeof RulesRoute
   SearchRoute: typeof SearchRoute
@@ -709,15 +836,20 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TestimonialsRoute: typeof TestimonialsRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  CaseStudySlugRoute: typeof CaseStudySlugRoute
+  DownloadSlugRoute: typeof DownloadSlugRoute
+  OnlineCalculationToolsSlugRoute: typeof OnlineCalculationToolsSlugRoute
   PayCallbackRoute: typeof PayCallbackRoute
   ProposalSlugRoute: typeof ProposalSlugRoute
   ThesisSlugRoute: typeof ThesisSlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  OnlineCalculationToolsIndexRoute: typeof OnlineCalculationToolsIndexRoute
   ProposalIndexRoute: typeof ProposalIndexRoute
   ThesisIndexRoute: typeof ThesisIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ThesisHumanitiesSlugRoute: typeof ThesisHumanitiesSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -727,6 +859,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$slug': {
+      id: '/$slug'
+      path: '/$slug'
+      fullPath: '/$slug'
+      preLoaderRoute: typeof SlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -748,6 +887,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/article': {
+      id: '/article'
+      path: '/article'
+      fullPath: '/article'
+      preLoaderRoute: typeof ArticleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/careers': {
@@ -785,6 +931,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/downloads': {
+      id: '/downloads'
+      path: '/downloads'
+      fullPath: '/downloads'
+      preLoaderRoute: typeof DownloadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gams': {
+      id: '/gams'
+      path: '/gams'
+      fullPath: '/gams'
+      preLoaderRoute: typeof GamsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/inquiry': {
       id: '/inquiry'
       path: '/inquiry'
@@ -818,6 +978,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/project': {
+      id: '/project'
+      path: '/project'
+      fullPath: '/project'
+      preLoaderRoute: typeof ProjectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/refund': {
@@ -967,6 +1134,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/case-study/$slug': {
+      id: '/case-study/$slug'
+      path: '/case-study/$slug'
+      fullPath: '/case-study/$slug'
+      preLoaderRoute: typeof CaseStudySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
@@ -1001,6 +1175,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/wallet'
       preLoaderRoute: typeof DashboardWalletRouteImport
       parentRoute: typeof DashboardRouteRoute
+    }
+    '/download/$slug': {
+      id: '/download/$slug'
+      path: '/download/$slug'
+      fullPath: '/download/$slug'
+      preLoaderRoute: typeof DownloadSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/online-calculation-tools/': {
+      id: '/online-calculation-tools/'
+      path: '/online-calculation-tools'
+      fullPath: '/online-calculation-tools/'
+      preLoaderRoute: typeof OnlineCalculationToolsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/online-calculation-tools/$slug': {
+      id: '/online-calculation-tools/$slug'
+      path: '/online-calculation-tools/$slug'
+      fullPath: '/online-calculation-tools/$slug'
+      preLoaderRoute: typeof OnlineCalculationToolsSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/pay/callback': {
       id: '/pay/callback'
@@ -1107,6 +1302,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTicketsIdRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/thesis/humanities/$slug': {
+      id: '/thesis/humanities/$slug'
+      path: '/thesis/humanities/$slug'
+      fullPath: '/thesis/humanities/$slug'
+      preLoaderRoute: typeof ThesisHumanitiesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1186,17 +1388,22 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  SlugRoute: SlugRoute,
   AboutRoute: AboutRoute,
   AchievementsRoute: AchievementsRoute,
+  ArticleRoute: ArticleRoute,
   CareersRoute: CareersRoute,
   CaseStudiesRoute: CaseStudiesRoute,
   ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
+  DownloadsRoute: DownloadsRoute,
+  GamsRoute: GamsRoute,
   InquiryRoute: InquiryRoute,
   JoinUsRoute: JoinUsRoute,
   LoginRoute: LoginRoute,
   OurStoryRoute: OurStoryRoute,
   PrivacyRoute: PrivacyRoute,
+  ProjectRoute: ProjectRoute,
   RefundRoute: RefundRoute,
   RulesRoute: RulesRoute,
   SearchRoute: SearchRoute,
@@ -1208,15 +1415,20 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TestimonialsRoute: TestimonialsRoute,
   BlogSlugRoute: BlogSlugRoute,
+  CaseStudySlugRoute: CaseStudySlugRoute,
+  DownloadSlugRoute: DownloadSlugRoute,
+  OnlineCalculationToolsSlugRoute: OnlineCalculationToolsSlugRoute,
   PayCallbackRoute: PayCallbackRoute,
   ProposalSlugRoute: ProposalSlugRoute,
   ThesisSlugRoute: ThesisSlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
+  OnlineCalculationToolsIndexRoute: OnlineCalculationToolsIndexRoute,
   ProposalIndexRoute: ProposalIndexRoute,
   ThesisIndexRoute: ThesisIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ThesisHumanitiesSlugRoute: ThesisHumanitiesSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

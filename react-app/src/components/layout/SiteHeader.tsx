@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   ChevronDown,
@@ -14,6 +14,8 @@ import {
   X,
 } from "lucide-react";
 import { PRIMARY_NAV, SITE, UTILITY_LINKS } from "@/lib/site";
+import { navIconFor } from "@/lib/nav-icons";
+import { FaIcon } from "@/components/ui/FaIcon";
 import { signOut } from "@/lib/auth/client";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { getMyProfile } from "@/lib/server/app";
@@ -29,6 +31,16 @@ export function SiteHeader() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [acc, setAcc] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
+  const leaveTimer = useRef<number | null>(null);
+
+  function openMega(key: string) {
+    if (leaveTimer.current) window.clearTimeout(leaveTimer.current);
+    setOpenMenu(key);
+  }
+  function closeMega() {
+    if (leaveTimer.current) window.clearTimeout(leaveTimer.current);
+    leaveTimer.current = window.setTimeout(() => setOpenMenu(null), 160);
+  }
 
   useEffect(() => {
     setOpen(false);
@@ -38,11 +50,11 @@ export function SiteHeader() {
   }, [pathname]);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    document.body.style.overflow = open || searchOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [open]);
+  }, [open, searchOpen]);
 
   return (
     <>
@@ -96,9 +108,9 @@ export function SiteHeader() {
               return (
                 <li
                   key={item.to}
-                  className={cn(openMenu === item.to && "is-open")}
-                  onMouseEnter={() => hasKids && setOpenMenu(item.to)}
-                  onMouseLeave={() => setOpenMenu(null)}
+                  className={cn(hasKids && "has-dropdown", openMenu === item.to && "is-open")}
+                  onMouseEnter={hasKids ? () => openMega(item.to) : undefined}
+                  onMouseLeave={hasKids ? closeMega : undefined}
                 >
                   {hasKids ? (
                     <button
@@ -107,26 +119,31 @@ export function SiteHeader() {
                       aria-expanded={openMenu === item.to}
                       onClick={() => setOpenMenu((cur) => (cur === item.to ? null : item.to))}
                     >
+                      <FaIcon icon={navIconFor(item.to, item.label)} className="nav-item-icon" />
                       {item.label}
                       <ChevronDown className="nav-chevron" aria-hidden />
                     </button>
                   ) : (
                     <Link to={item.to} className={cn(active && "is-active")}>
+                      <FaIcon icon={navIconFor(item.to, item.label)} className="nav-item-icon" />
                       {item.label}
                     </Link>
                   )}
                   {hasKids ? (
-                    <div className={cn("nav-panel", (item.children?.length ?? 0) > 1 && "wide")}>
-                      {item.children!.map((col, i) => (
-                        <div key={i}>
-                          {col.heading ? <h4>{col.heading}</h4> : null}
-                          {col.items.map((c) => (
-                            <Link key={c.to} to={c.to}>
-                              {c.label}
-                            </Link>
-                          ))}
-                        </div>
-                      ))}
+                    <div className="nav-panel mega">
+                      <div className="mega-inner">
+                        {item.children!.map((col, i) => (
+                          <div key={i} className="mega-col">
+                            {col.heading ? <h4>{col.heading}</h4> : null}
+                            {col.items.map((c) => (
+                              <Link key={c.to} to={c.to}>
+                                <FaIcon icon={navIconFor(c.to, c.label)} className="nav-item-icon" />
+                                <span>{c.label}</span>
+                              </Link>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ) : null}
                 </li>
@@ -139,6 +156,8 @@ export function SiteHeader() {
               type="button"
               className="icon-btn header-search"
               aria-label="جستجو"
+              aria-expanded={searchOpen}
+              aria-controls="teznevise-search-overlay"
               onClick={() => setSearchOpen(true)}
             >
               <Search className="size-4" />
@@ -182,11 +201,17 @@ export function SiteHeader() {
                     aria-expanded={acc === item.to}
                     onClick={() => setAcc((c) => (c === item.to ? null : item.to))}
                   >
+                    {(() => {
+                      return <FaIcon icon={navIconFor(item.to, item.label)} className="size-4" />;
+                    })()}
                     {item.label}
                     <ChevronDown className={cn("size-4 transition-transform", acc === item.to && "rotate-180")} />
                   </button>
                 ) : (
                   <Link to={item.to} className="mobile-link">
+                    {(() => {
+                      return <FaIcon icon={navIconFor(item.to, item.label)} className="size-4" />;
+                    })()}
                     {item.label}
                   </Link>
                 )}

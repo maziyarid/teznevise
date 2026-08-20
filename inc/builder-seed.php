@@ -171,3 +171,31 @@ function teznevise_builder_seed_all( $replace = false ) {
 
 	return $result;
 }
+
+/**
+ * Persist the 1.8.4 homepage catalog (9 services / 6 steps) once.
+ *
+ * Render-time rewrite covers the public site immediately; this writes the
+ * same items into builder meta so wp-admin matches what visitors see.
+ */
+function teznevise_builder_upgrade_homepage_184() {
+	if ( get_option( 'teznevise_homepage_catalog_184' ) ) {
+		return;
+	}
+	if ( ! defined( 'TEZNEVISE_BUILDER_META' ) || ! function_exists( 'teznevise_builder_get_sections' ) ) {
+		return;
+	}
+	$front_id = (int) get_option( 'page_on_front' );
+	if ( $front_id <= 0 ) {
+		return;
+	}
+	$sections = teznevise_builder_get_sections( $front_id );
+	if ( ! $sections ) {
+		return;
+	}
+	if ( teznevise_builder_save_sections( $front_id, $sections ) ) {
+		update_option( 'teznevise_homepage_catalog_184', '1.8.4', true );
+	}
+}
+add_action( 'init', 'teznevise_builder_upgrade_homepage_184', 40 );
+
