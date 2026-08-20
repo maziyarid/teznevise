@@ -15,6 +15,8 @@
  *   Replacement is allowed only for empty pages, default-seed data,
  *   previously extracted data whose hash still matches, or an explicit
  *   administrator force-replace.
+ * - Manual provenance is honored even when builder JSON is empty ([]):
+ *   administrator-owned _teznevise_* meta and non-default templates stay.
  *
  * @package Teznevise
  */
@@ -326,6 +328,10 @@ function teznevise_set_builder_provenance( $post_id, $kind ) {
  * written extracted payload, still generic v1.1 parser output, or the
  * administrator passed an explicit force flag.
  *
+ * Manual provenance is checked before the empty-builder fast path so a page
+ * with [] builder JSON, manual provenance, and administrator-owned
+ * `_teznevise_*` meta / non-default template is never treated as replaceable.
+ *
  * @param int   $post_id Page ID.
  * @param array $entry   Extracted entry.
  * @param bool  $force   Administrator force-replace.
@@ -337,6 +343,12 @@ function teznevise_extracted_fields_are_replaceable( $post_id, $entry, $force = 
 		return true;
 	}
 
+	// Manual ownership always wins — even when builder JSON is empty [].
+	$provenance = (string) get_post_meta( $post_id, TEZNEVISE_BUILDER_PROVENANCE_META, true );
+	if ( 'manual' === $provenance ) {
+		return false;
+	}
+
 	$meta_key = defined( 'TEZNEVISE_BUILDER_META' ) ? TEZNEVISE_BUILDER_META : '_teznevise_builder_sections';
 	$existing = get_post_meta( $post_id, $meta_key, true );
 	$had      = is_string( $existing ) && '' !== trim( $existing ) && '[]' !== trim( $existing );
@@ -344,14 +356,9 @@ function teznevise_extracted_fields_are_replaceable( $post_id, $entry, $force = 
 		return true;
 	}
 
-	$provenance  = (string) get_post_meta( $post_id, TEZNEVISE_BUILDER_PROVENANCE_META, true );
 	$stored_hash = (string) get_post_meta( $post_id, TEZNEVISE_EXTRACTED_HASH_META, true );
 	$current     = function_exists( 'teznevise_builder_get_sections' ) ? teznevise_builder_get_sections( $post_id ) : array();
 	$current_h   = teznevise_sections_hash( $current );
-
-	if ( 'manual' === $provenance ) {
-		return false;
-	}
 
 	if ( 'extracted' === $provenance ) {
 		return ( '' === $stored_hash ) || ( $stored_hash === $current_h );

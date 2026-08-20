@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.6.5 — 2026-08-20 — Empty-builder ownership
+
+### Changes
+
+- Automatic extracted migration no longer treats empty builder JSON (`[]` / missing) as permission to replace administrator-owned `_teznevise_*` fields or a non-default page template.
+- Manual provenance is checked before the empty-builder path, so a page saved in the builder with an empty payload is skipped unless the Setup force-replace checkbox is used.
+- Empty, non-manual builder JSON can still be filled. Existing custom fields and templates stay in place; default-seed and unedited v1.1 parser output remain replaceable.
+
+### Testing
+
+- Ownership matrix: manual + empty builder, empty builder + custom fields, default-seed, unedited extracted hash, force-replace.
+
 ## 1.6.4 — 2026-08-19 — Shortcode pages → custom fields
 
 ### Changes
@@ -38,4 +50,3 @@
 - `node --check` on `assets/js/redesign.js`.
 - Extractor `scripts/extract-wpcode.py` regenerates `inc/legacy-wpcode.php` from the WPCode export.
 - Visual QA against teznevise.ir after the 5-minute theme sync.
-
