@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.3 — 2026-08-20 — Footer and FAB polish
+
+- FAB stays 18px from the physical right (no RTL inset reset).
+- Footer social icons no longer sit on the logo; extra bottom padding clears the mobile tab bar.
+
 ## 1.7.2 — 2026-08-20 — React visual parity
 
 ### Changes

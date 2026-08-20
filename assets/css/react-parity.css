@@ -161,8 +161,6 @@
   position: fixed !important;
   right: 18px !important;
   left: auto !important;
-  inset-inline-start: auto !important;
-  inset-inline-end: auto !important;
   bottom: 22px !important;
   z-index: 1200 !important;
   gap: 10px !important;
@@ -307,6 +305,22 @@
   padding: 4px 0 !important;
   white-space: nowrap !important;
 }
+.footer-social {
+  display: flex !important;
+  gap: 8px !important;
+  margin-top: 14px !important;
+  position: static !important;
+}
+.footer-social a {
+  width: 36px !important;
+  height: 36px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 10px !important;
+  color: #fff !important;
+  margin: 0 !important;
+}
 .footer-certs {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -325,6 +339,10 @@
   gap: 12px !important;
 }
 @media (max-width: 720px) {
+  .site-footer-new,
+  .footer-new {
+    padding-bottom: 110px !important;
+  }
   .footer-grid {
     grid-template-columns: 1fr 1fr !important;
     text-align: right !important;
