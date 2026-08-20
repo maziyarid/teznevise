@@ -31,7 +31,10 @@ add_filter( 'teznevise_builder_section_types', 'teznevise_builder_download_catal
  */
 function teznevise_builder_render_software_catalog( $section ) {
 	if ( empty( $section['items'] ) && function_exists( 'teznevise_downloads_as_builder_items' ) ) {
-		$section['items'] = teznevise_downloads_as_builder_items( 12 );
+		$count = isset( $section['count'] ) ? absint( $section['count'] ) : 12;
+		$count = $count > 0 ? $count : 12;
+		$slug  = ! empty( $section['category_slug'] ) ? sanitize_title( $section['category_slug'] ) : '';
+		$section['items'] = teznevise_downloads_as_builder_items( $count, $slug );
 	}
 
 	if ( empty( $section['items'] ) ) {
