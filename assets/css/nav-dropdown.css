@@ -1,0 +1,182 @@
+/* Accessible dropdown styling for .nav-dropdown / .nav-dropdown-l3.
+ * Shared by the desktop primary menu (.main-nav, floating panel) and the
+ * mobile drawer menu (.mobile-nav-links, inline accordion) -- both render
+ * through the same Teznevise_Nav_Walker. Additive file, loaded after
+ * blog.css. Does not override existing .nav-links/.main-nav rules.
+ * @package Teznevise
+ */
+
+/* Shared toggle-button appearance (both desktop and mobile). */
+.menu-item.has-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.nav-dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-inline-start: 2px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.nav-dropdown-toggle:hover,
+.nav-dropdown-toggle:focus-visible {
+  background: rgba(20, 93, 74, 0.08);
+}
+.nav-chevron {
+  display: inline-flex;
+  font-size: 10px;
+  transition: transform 0.18s ease;
+}
+.nav-dropdown-toggle[aria-expanded="true"] .nav-chevron {
+  transform: rotate(180deg);
+}
+
+/* Desktop: floating panel under the primary nav. */
+.main-nav ul.nav-dropdown {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 100%;
+  min-width: 220px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid rgba(20, 93, 74, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(9, 40, 32, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s;
+  z-index: 40;
+}
+/* Authoritative closed state for the desktop panel: this theme also ships
+ * older, more generic `:hover`/`:focus-within` selectors elsewhere
+ * (redesign.css, ui-round2.css) that can independently reveal a
+ * `.sub-menu`. `!important` here guarantees a dropdown this component
+ * controls stays hidden unless JS has explicitly added `.is-open`, so the
+ * visible state can never disagree with the `aria-expanded` value JS also
+ * sets. */
+.main-nav ul.nav-dropdown:not(.is-open) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(6px) !important;
+}
+.main-nav ul.nav-dropdown.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.main-nav ul.nav-dropdown .nav-link {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: #172d26;
+  text-decoration: none;
+  font-size: 13.5px;
+}
+.main-nav ul.nav-dropdown .nav-link:hover,
+.main-nav ul.nav-dropdown .nav-link:focus-visible {
+  background: #f4f9f7;
+  color: #145d4a;
+}
+
+/* Mobile drawer: inline accordion, not a floating panel -- it already
+ * lives inside a full-height off-canvas drawer, so a nested position:fixed
+ * panel would either clip or float over unrelated content. */
+.mobile-nav-links ul.nav-dropdown {
+  position: static;
+  margin: 4px 0 4px 0;
+  padding: 0;
+  list-style: none;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 1;
+  visibility: visible;
+  transition: max-height 0.2s ease;
+}
+.mobile-nav-links ul.nav-dropdown.is-open {
+  max-height: 1000px;
+}
+.mobile-nav-links ul.nav-dropdown .nav-link {
+  display: block;
+  padding: 10px 12px 10px 24px;
+  color: inherit;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* Third level: an always-visible nested list inside whichever panel (desktop
+ * floating or mobile accordion) is already open -- see inc/nav-walker.php
+ * for the accessibility rationale. */
+.nav-dropdown-l3 {
+  position: static !important;
+  margin: 4px 0 4px 12px;
+  padding-inline-start: 10px;
+  border-inline-start: 2px solid rgba(20, 93, 74, 0.15);
+  box-shadow: none !important;
+  border-width: 0 0 0 2px;
+  background: transparent !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+@media (max-width: 900px) {
+  .main-nav ul.nav-dropdown {
+    position: static;
+    box-shadow: none;
+    border: 0;
+    transform: none !important;
+    display: none;
+  }
+  .main-nav ul.nav-dropdown.is-open {
+    display: block;
+  }
+}
+
+/* Legacy override fix: assets/css/ui-round2.css forces
+ * `display: none !important` on `.nav-dropdown` at widths <= 1050px,
+ * which silently defeats the `.is-open` class this component sets when a
+ * mobile disclosure is activated -- the toggle then announces
+ * aria-expanded="true" while its links render with no box and are
+ * unreachable. This file loads after ui-round2.css in the enqueue chain,
+ * so an equal-specificity `!important` rule here wins the cascade and
+ * restores the submenu whenever it's actually open. */
+@media (max-width: 1050px) {
+  .mobile-nav-links ul.nav-dropdown.is-open {
+    display: block !important;
+  }
+  .main-nav ul.nav-dropdown.is-open {
+    display: block !important;
+  }
+}
+
+/* Same legacy-override problem, one level deeper: ui-round2.css also
+ * applies `display: none !important` directly to `.nav-dropdown-l3`
+ * (not just `.nav-dropdown`) at widths <= 1050px. The previous override
+ * only restored the second-level panel, so third-level links stayed
+ * unrendered even after their parent opened. `.nav-dropdown-l3` only ever
+ * renders when its ancestor `.nav-dropdown.is-open` panel is itself
+ * visible, so it is safe to unconditionally restore its display here. */
+@media (max-width: 1050px) {
+  .nav-dropdown-l3 {
+    display: block !important;
+  }
+}
