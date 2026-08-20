@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.8 — 2026-08-20 — Hotfix: migrator parse error (issue #425)
+
+- Close the duplicated `[gravityform]` `if` in `teznevise_migration_parse_content()` that left an unclosed `{` from line 370 to EOF and fatally broke every request that loaded the theme.
+- Coerce shortcode `title` / `text` attributes to strings before sanitization.
+
+
 ## 1.7.7 — 2026-08-20 — Empty-builder fill vs field overwrite
 
 - Empty, non-manual builder JSON can be filled without overwriting existing `_teznevise_*` fields or a non-default template.

@@ -412,7 +412,8 @@ function teznevise_migration_parse_content( $content, $slug = '' ) {
 		foreach ( $price_matches[1] as $atts_raw ) {
 			$price_atts = shortcode_parse_atts( $atts_raw );
 			$price_atts = is_array( $price_atts ) ? $price_atts : array();
-			$item       = teznevise_migration_price_box_item( teznevise_migration_shortcode_id( $atts_raw ), $price_atts['title'] ?? '' );
+			$title_attr = isset( $price_atts['title'] ) && is_string( $price_atts['title'] ) ? $price_atts['title'] : '';
+			$item       = teznevise_migration_price_box_item( teznevise_migration_shortcode_id( $atts_raw ), $title_attr );
 			if ( $item ) {
 				$price_items[] = $item;
 			}
@@ -433,7 +434,7 @@ function teznevise_migration_parse_content( $content, $slug = '' ) {
 			$cta_atts = shortcode_parse_atts( $cta_m[1] ?? '' );
 			$cta_atts = is_array( $cta_atts ) ? $cta_atts : array();
 			$sid      = teznevise_migration_shortcode_id( $cta_m[1] ?? '' );
-			$cta_text = ! empty( $cta_atts['text'] ) ? $cta_atts['text'] : '';
+			$cta_text = ( isset( $cta_atts['text'] ) && is_string( $cta_atts['text'] ) ) ? $cta_atts['text'] : '';
 			if ( $sid && get_permalink( $sid ) ) {
 				$cta_url = get_permalink( $sid );
 			}
@@ -481,7 +482,6 @@ function teznevise_migration_parse_content( $content, $slug = '' ) {
 		$sections[]         = $section;
 	}
 
-	if ( preg_match( '/\[gravityform\s+/', $content ) ) {
 	if ( preg_match( '/\[gravityform\s+/', $content ) ) {
 		$sections[] = array(
 			'type'       => 'cta_band',
