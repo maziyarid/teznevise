@@ -24,6 +24,9 @@
 		var link = event.target.closest( '.nav-links .menu-item-has-children > a' );
 		if ( link ) {
 			var li = link.parentElement;
+			if ( li.querySelector( ':scope > .nav-dropdown-toggle' ) ) {
+				return;
+			}
 			if ( ! li.classList.contains( 'submenu-open' ) ) {
 				event.preventDefault();
 				var parentOpen = link.closest( '.sub-menu' ) ? li.parentElement.closest( 'li.submenu-open' ) : null;

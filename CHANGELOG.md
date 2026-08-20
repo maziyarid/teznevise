@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.5 — 2026-08-20 — Accessible nav disclosure
+
+- `Teznevise_Nav_Walker` renders a separate `.nav-dropdown-toggle` beside parent items so the parent link always navigates.
+- Desktop and mobile menus share the walker; hover-to-open is desktop-only.
+- `nav-touch.js` no longer intercepts the first tap on walker-rendered parent links.
+- Menu `target` / `rel` / `title` attributes and `nav_menu_*` filters are preserved.
+
 ## 1.7.4 — 2026-08-20 — Chrome URL and search a11y
 
 - Blog chrome links resolve from `page_for_posts` (then a seeded `blog` page, then home) instead of a hard-coded `/blog/` path.

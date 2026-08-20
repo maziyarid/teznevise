@@ -29,7 +29,7 @@ if ( $logo_url ) {
 	echo '<span class="site-title">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
 }
 ?></a>
-<?php wp_nav_menu( array( 'theme_location' => 'primary', 'container' => false, 'menu_class' => 'nav-links', 'fallback_cb' => 'teznevise_fallback_menu', 'depth' => 3 ) ); ?>
+<?php wp_nav_menu( array( 'theme_location' => 'primary', 'container' => false, 'menu_class' => 'nav-links', 'fallback_cb' => 'teznevise_fallback_menu', 'depth' => 3, 'walker' => class_exists( 'Teznevise_Nav_Walker' ) ? new Teznevise_Nav_Walker() : '' ) ); ?>
 <div class="nav-actions">
 	<button type="button" class="nav-search-btn" data-search-open aria-label="<?php esc_attr_e( 'جستجو', 'teznevise' ); ?>" aria-expanded="false" aria-controls="teznevise-search-overlay"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
 	<?php
