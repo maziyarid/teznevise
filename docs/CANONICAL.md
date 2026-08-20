@@ -23,5 +23,6 @@ Do **not** upload `teznevise_work/` or any historical folders into the productio
 - `docs/CONVERSION-PLAN-1.0.md` — full conversion plan
 - `docs/REQUIREMENTS.md` — gate requirements (Blocker=Yes must PASS)
 - `docs/RELEASE_CHECKLIST.md` — executable release checklist
+- `docs/PREMIUM-STACK-PLAN.md` — CSS collapse + one-frontend roadmap (1.8.4). Do not stack Next.js on TanStack.
 
 This document is the equivalent of Fasdent’s `CANONICAL_SOURCE.md`.
