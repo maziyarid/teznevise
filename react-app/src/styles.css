@@ -1,3 +1,4 @@
+/* Design: Editorial Signal — warm paper surfaces, signal teal, asymmetric editorial rhythm, and restrained motion. */
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -32,17 +33,17 @@
 
 @theme {
   --font-sans: "Vazirmatn", Tahoma, ui-sans-serif, system-ui, sans-serif;
-  --color-brand: #145d4a;
-  --color-brand-dark: #0f4a3b;
-  --color-brand-deep: #071f19;
-  --color-brand-light: #1b765f;
-  --color-accent: #82d8b9;
-  --color-ink: #10231d;
-  --color-muted: #5a7268;
-  --color-line: #dfe9e5;
-  --color-surface: #ffffff;
-  --color-soft: #f7fcfa;
-  --color-cream: #fbf7ee;
+  --color-brand: #0b6b67;
+  --color-brand-dark: #075653;
+  --color-brand-deep: #082b29;
+  --color-brand-light: #17817b;
+  --color-accent: #8bdbcc;
+  --color-ink: #102725;
+  --color-muted: #59716b;
+  --color-line: #d7e5e1;
+  --color-surface: #fffdf8;
+  --color-soft: #f4f9f7;
+  --color-cream: #f7f1e5;
   --radius-pill: 999px;
   --radius-card: 1.25rem;
   --shadow-nav: 0 16px 45px rgba(19, 54, 44, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.82);
@@ -70,6 +71,10 @@
   a {
     color: inherit;
     text-decoration: none;
+  }
+  :focus-visible {
+    outline: 3px solid rgba(11, 107, 103, 0.38);
+    outline-offset: 3px;
   }
   img {
     max-width: 100%;
@@ -2298,6 +2303,47 @@ i.fa-brands {
 .services-grid > *:nth-child(8) { animation-delay: 0.39s; }
 .services-grid > *:nth-child(9) { animation-delay: 0.44s; }
 
+/* Editorial Signal motion: content opts in through .tz-reveal instead of animating every card on page load. */
+.services-grid > *,
+.steps > *,
+.reason-list > *,
+.article-grid > *,
+.check-grid > *,
+.faq-grid > *,
+.quote-grid > *,
+.service-card,
+.article-card,
+.quote-card,
+.people-card,
+.step {
+  animation: none;
+}
+.tz-reveal {
+  animation: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tz-reveal {
+    animation: tz-rise 260ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+  .services-grid > .tz-reveal:nth-child(2),
+  .article-grid > .tz-reveal:nth-child(2),
+  .reason-list > .tz-reveal:nth-child(2),
+  .steps > .tz-reveal:nth-child(2),
+  .quote-grid > .tz-reveal:nth-child(2) { animation-delay: 45ms; }
+  .services-grid > .tz-reveal:nth-child(3),
+  .article-grid > .tz-reveal:nth-child(3),
+  .reason-list > .tz-reveal:nth-child(3),
+  .steps > .tz-reveal:nth-child(3),
+  .quote-grid > .tz-reveal:nth-child(3) { animation-delay: 90ms; }
+  .services-grid > .tz-reveal:nth-child(4),
+  .reason-list > .tz-reveal:nth-child(4),
+  .steps > .tz-reveal:nth-child(4) { animation-delay: 135ms; }
+  .services-grid > .tz-reveal:nth-child(5),
+  .steps > .tz-reveal:nth-child(5) { animation-delay: 180ms; }
+  .services-grid > .tz-reveal:nth-child(n + 6),
+  .steps > .tz-reveal:nth-child(n + 6) { animation-delay: 225ms; }
+}
+
 @media (max-width: 1050px) {
   .faq-grid,
   .mega-inner {
@@ -2310,5 +2356,4 @@ i.fa-brands {
     grid-template-columns: 1fr;
   }
 }
-
 

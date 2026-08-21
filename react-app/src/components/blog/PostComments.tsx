@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { listApprovedComments, submitComment } from "@/lib/comments";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
@@ -10,10 +10,12 @@ export function PostComments({ slug }: { slug: string }) {
   const [body, setBody] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const load = () => void listApprovedComments({ data: { slug } }).then(setRows).catch(() => setRows([]));
+  const load = useCallback(() => {
+    void listApprovedComments({ data: { slug } }).then(setRows).catch(() => setRows([]));
+  }, [slug]);
   useEffect(() => {
     load();
-  }, [slug]);
+  }, [load]);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();

@@ -19,14 +19,14 @@ export function LegalView({ page, fieldSlug }: { page: LegalPage; fieldSlug?: st
       <section className="section">
         <div className="container-tz faq-grid" style={{ gridTemplateColumns: "repeat(2, minmax(0,1fr))" }}>
           {page.sections.map((s, i) => (
-            <article key={s.title} className={`faq-card tone-${(i % 9) + 1}`}>
+            <article key={s.title} className={`faq-card tone-${(i % 9) + 1} tz-reveal`}>
               <span className="faq-num">{faNum(i + 1)}</span>
               <h3>{stripEmoji(s.title)}</h3>
               <p>{stripEmoji(s.body)}</p>
             </article>
           ))}
           {extra?.length
-            ? extra.map((p, i) => (
+            ? extra.map((p) => (
                 <p key={p.slice(0, 24)} className="text-muted">
                   {stripEmoji(p)}
                 </p>

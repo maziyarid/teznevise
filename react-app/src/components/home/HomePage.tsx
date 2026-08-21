@@ -8,6 +8,8 @@ import { Universities } from "@/components/shared/Universities";
 import { FaIcon } from "@/components/ui/FaIcon";
 import { faNum } from "@/lib/format";
 
+/** Design: Editorial Signal — the homepage uses signal teal, precise editorial rhythm, and opt-in reveal motion. */
+
 const FA: Record<string, string> = {
   grad: "fa-graduation-cap",
   file: "fa-file-lines",
@@ -32,7 +34,7 @@ export function HomePage() {
       <section className="hero-new">
         <div className="container-tz">
           <div className="hero-grid">
-            <div className="hero-copy">
+            <div className="hero-copy tz-reveal">
               <span className="eyebrow">همراهی علمی از ایده تا دفاع</span>
               <h1>
                 از موضوع تا تحویل نهایی،{" "}
@@ -64,7 +66,7 @@ export function HomePage() {
                 )}
               </div>
             </div>
-            <div className="hero-visual" aria-label="نمایی از خدمات تزنویسه">
+            <div className="hero-visual tz-reveal" aria-label="نمایی از خدمات تزنویسه">
               <div className="hero-orb" />
               <div className="hero-card">
                 <div className="mb-4 flex items-center justify-between border-b border-line pb-3">
@@ -113,7 +115,7 @@ export function HomePage() {
           </div>
           <div className="services-grid">
             {SERVICES.map((s, i) => (
-              <article key={s.to} className={`service-card tone-${(i % 9) + 1}`}>
+              <article key={s.to} className={`service-card tone-${(i % 9) + 1} tz-reveal`}>
                 <div className="icon-box">
                   <FaIcon icon={FA[s.icon] || "fa-circle-dot"} />
                 </div>
@@ -133,7 +135,7 @@ export function HomePage() {
       <section className="section bg-soft">
         <div className="container-tz">
           <div className="reason-wrap">
-            <div className="reason-panel">
+            <div className="reason-panel tz-reveal">
               <span
                 className="eyebrow"
                 style={{
@@ -155,7 +157,7 @@ export function HomePage() {
             </div>
             <div className="reason-list">
               {REASONS.map((r, i) => (
-                <div key={r.title} className={`reason-item tone-${(i % 6) + 1}`}>
+                <div key={r.title} className={`reason-item tone-${(i % 6) + 1} tz-reveal`}>
                   <div className="icon-box">
                     <FaIcon icon={FA[r.icon] || "fa-circle-dot"} />
                   </div>
@@ -177,7 +179,7 @@ export function HomePage() {
           </div>
           <div className="steps steps-6">
             {STEPS.map((s, i) => (
-              <div key={s.title} className={`step tone-${(i % 6) + 1}`}>
+              <div key={s.title} className={`step tone-${(i % 6) + 1} tz-reveal`}>
                 <div className="n">{faNum(i + 1)}</div>
                 <h3>{s.title}</h3>
                 <p>{s.text}</p>
@@ -201,7 +203,7 @@ export function HomePage() {
           </div>
           <div className="article-grid">
             {ARTICLES.slice(0, 3).map((a, i) => (
-              <article key={a.slug} className={`article-card tone-${(i % 3) + 1}`}>
+              <article key={a.slug} className={`article-card tone-${(i % 3) + 1} tz-reveal`}>
                 <div className={`article-cover ${a.cover}`} />
                 <div className="article-body">
                   <div className="article-meta">
@@ -234,7 +236,7 @@ export function HomePage() {
           </div>
           <div className="quote-grid">
             {TESTIMONIALS.slice(0, 3).map((t, i) => (
-              <blockquote key={t.name} className={`quote-card tone-${(i % 3) + 1}`}>
+              <blockquote key={t.name} className={`quote-card tone-${(i % 3) + 1} tz-reveal`}>
                 <p>«{t.quote}»</p>
                 <footer>
                   <b>{t.name}</b>
@@ -250,7 +252,7 @@ export function HomePage() {
 
       <section className="section section-sm">
         <div className="container-tz">
-          <div className="seo-panel">
+          <div className="seo-panel tz-reveal">
             <div className="text-xs font-extrabold text-brand">راهنمای انتخاب خدمت</div>
             <h2>راهنمای انتخاب خدمات پژوهشی تزنویسه</h2>
             <p>

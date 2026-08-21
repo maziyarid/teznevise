@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.0 — 2026-08-21 — Editorial Signal modernization and compatibility hardening
+
+- Add `assets/css/modernization.css` as a namespaced, final WordPress theme layer. It maps Bootstrap semantic colors to Teznevise Signal Teal, provides high-contrast focus states, and rationalizes responsive container, form, and motion behavior without re-enqueuing legacy stylesheets.
+- Make card animation opt-in through `data-tz-reveal` / `.tz-reveal` rather than auto-animating every card at once. Reduced-motion, forced-colors, keyboard focus, touch-target, and safe-area behavior are explicitly covered.
+- Align WordPress metadata with 6.9 and PHP 8.3+ while reviewing the code path for PHP 8.5 compatibility.
+- Repair the React dependency lockfile, Vite preview host allowlist, Unicode emoji sanitization, hook dependency warnings, and PWA metadata test isolation.
+
 ## 1.8.7 — 2026-08-21 — Single-post layout, Persian chrome, local icons
 
 - Article body is the wide main column; table of contents is the 300px sticky sidebar. Named grid areas so RTL no longer swaps them.

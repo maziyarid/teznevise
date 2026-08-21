@@ -131,6 +131,8 @@ export default defineConfig(({ command, isPreview }) => ({
     host: "0.0.0.0",
     port: 8080,
     strictPort: true,
+    // Permit the managed preview proxy without disabling Vite host protection.
+    allowedHosts: [".manus.computer"],
   },
   preview: {
     host: "127.0.0.1",

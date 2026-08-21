@@ -1,0 +1,121 @@
+/**
+ * Teznevise final presentation layer.
+ * Design: Editorial Signal — warm reading surfaces, signal teal, precise focus, and purposeful motion.
+ * This file is loaded after the four public bundles and intentionally scopes all fixes to the theme shell.
+ */
+
+:root {
+  --tz-signal: #0b6b67;
+  --tz-signal-dark: #075653;
+  --tz-signal-soft: #e4f4f1;
+  --tz-paper: #fffdf8;
+  --tz-ink-strong: #102725;
+  --tz-vermilion: #b84332;
+  --tz-focus-ring: rgba(11, 107, 103, 0.38);
+  --tz-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --tz-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.tz-react-shell {
+  --bs-blue: var(--tz-signal);
+  --bs-indigo: #315f91;
+  --bs-purple: #5d4e83;
+  --bs-pink: #9a4a69;
+  --bs-red: var(--tz-vermilion);
+  --bs-orange: #b56a2c;
+  --bs-yellow: #9a6d19;
+  --bs-green: #37733e;
+  --bs-teal: var(--tz-signal);
+  --bs-cyan: #1b7182;
+  --bs-primary: var(--tz-signal);
+  --bs-primary-rgb: 11, 107, 103;
+  --bs-secondary: #59716b;
+  --bs-secondary-rgb: 89, 113, 107;
+  --bs-success: #37733e;
+  --bs-success-rgb: 55, 115, 62;
+  --bs-info: #1b7182;
+  --bs-info-rgb: 27, 113, 130;
+  --bs-warning: #9a6d19;
+  --bs-warning-rgb: 154, 109, 25;
+  --bs-danger: var(--tz-vermilion);
+  --bs-danger-rgb: 184, 67, 50;
+  --bs-light: #f4f9f7;
+  --bs-light-rgb: 244, 249, 247;
+  --bs-dark: var(--tz-ink-strong);
+  --bs-dark-rgb: 16, 39, 37;
+  --bs-body-bg: var(--tz-paper);
+  --bs-body-color: var(--tz-ink-strong);
+  --bs-border-color: #d7e5e1;
+}
+
+.tz-react-shell :is(a, button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--tz-focus-ring);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+.tz-react-shell .btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--tz-signal);
+  --bs-btn-border-color: var(--tz-signal);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--tz-signal-dark);
+  --bs-btn-hover-border-color: var(--tz-signal-dark);
+  --bs-btn-active-bg: var(--tz-signal-dark);
+  --bs-btn-active-border-color: var(--tz-signal-dark);
+}
+
+.tz-react-shell .text-primary { color: var(--tz-signal) !important; }
+.tz-react-shell .bg-primary { background-color: var(--tz-signal) !important; }
+.tz-react-shell .border-primary { border-color: var(--tz-signal) !important; }
+.tz-react-shell .alert-primary {
+  --bs-alert-color: #064744;
+  --bs-alert-bg: var(--tz-signal-soft);
+  --bs-alert-border-color: #a8d9cf;
+}
+
+.tz-react-shell :is(.container, .container-tz) {
+  width: min(var(--tz-content, 1180px), calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.tz-react-shell :is(.service-card, .article-card, .quote-card, .step, .reason-item, .check-card, .faq-card) {
+  animation: none;
+  transition-timing-function: var(--tz-ease-out);
+}
+
+.tz-react-shell .tz-reveal { animation: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .tz-react-shell .tz-reveal { animation: tz-editorial-rise 260ms var(--tz-ease-out) both; }
+  .tz-react-shell :is(.services-grid, .article-grid, .reason-list, .steps, .quote-grid) > .tz-reveal:nth-child(2) { animation-delay: 45ms; }
+  .tz-react-shell :is(.services-grid, .article-grid, .reason-list, .steps, .quote-grid) > .tz-reveal:nth-child(3) { animation-delay: 90ms; }
+  .tz-react-shell :is(.services-grid, .article-grid, .reason-list, .steps, .quote-grid) > .tz-reveal:nth-child(4) { animation-delay: 135ms; }
+  .tz-react-shell :is(.services-grid, .article-grid, .reason-list, .steps, .quote-grid) > .tz-reveal:nth-child(5) { animation-delay: 180ms; }
+  .tz-react-shell :is(.services-grid, .article-grid, .reason-list, .steps, .quote-grid) > .tz-reveal:nth-child(n + 6) { animation-delay: 225ms; }
+  .tz-react-shell :is(.btn-tz, .nav-cta, .icon-btn, .menu-btn, .bottom-nav-item):active { transform: scale(0.97); }
+}
+
+@keyframes tz-editorial-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .tz-react-shell :is(.container, .container-tz) { width: min(var(--tz-content, 1180px), calc(100% - 1.5rem)); }
+  .tz-react-shell :is(.btn-tz, .nav-cta, .menu-btn, .icon-btn) { min-height: 44px; }
+  .tz-react-shell .bottom-nav { padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (forced-colors: active) {
+  .tz-react-shell :is(.btn-tz, .nav-cta, .icon-btn, .service-card, .article-card, .surface-card) { border: 1px solid CanvasText; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tz-react-shell *, .tz-react-shell *::before, .tz-react-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

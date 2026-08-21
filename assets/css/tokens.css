@@ -2,8 +2,9 @@
  * Design tokens + local fonts. First public stylesheet after style.css.
  * Project: Teznevise WordPress Theme
  * Author: MAZ//ID (Maziyar)
- * Brand: MΛZ — https://github.com/maziyarid/M-Z
+ * Brand: MΛZ — https://maziyarid/M-Z
  * @package Teznevise
+ * Design: Editorial Signal — warm reading surfaces, signal teal, sharp hierarchy, and restrained motion.
  */
 
 @layer tez-tokens, tez-base, tez-components, tez-pages, tez-chrome, tez-fixes;
@@ -38,26 +39,26 @@
 }
 
 :root {
-    --tz-brand: #145D4A;
-    --tz-brand-dark: #0f4a3b;
-    --tz-brand-deep: #071f19;
-    --tz-brand-light: #1b765f;
-    --tz-primary: #145D4A;
-    --tz-primary-700: #0d4c3d;
-    --tz-primary-800: #083d31;
-    --tz-primary-900: #062e26;
-    --tz-primary-soft: #e8f5f1;
-    --tz-primary-soft-2: #f2faf7;
-    --tz-accent: #82d8b9;
-    --tz-accent-2: #bcebd9;
-    --tz-ink: #10231d;
-    --tz-text: #2f433c;
-    --tz-muted: #5a7268;
-    --tz-line: #dfe9e5;
-    --tz-surface: #ffffff;
-    --tz-surface-2: #f7fcfa;
-    --tz-soft: #f7fcfa;
-    --tz-warm: #fbf7ee;
+    --tz-brand: #0b6b67;
+    --tz-brand-dark: #075653;
+    --tz-brand-deep: #082b29;
+    --tz-brand-light: #17817b;
+    --tz-primary: #0b6b67;
+    --tz-primary-700: #075653;
+    --tz-primary-800: #064744;
+    --tz-primary-900: #082b29;
+    --tz-primary-soft: #e4f4f1;
+    --tz-primary-soft-2: #f1f9f7;
+    --tz-accent: #8bdbcc;
+    --tz-accent-2: #c4eee6;
+    --tz-ink: #102725;
+    --tz-text: #304843;
+    --tz-muted: #59716b;
+    --tz-line: #d7e5e1;
+    --tz-surface: #fffdf8;
+    --tz-surface-2: #f6faf8;
+    --tz-soft: #f4f9f7;
+    --tz-warm: #f7f1e5;
     --tz-content: 1180px;
     --tz-font: "Vazirmatn", Tahoma, sans-serif;
     --tz-radius: 24px;

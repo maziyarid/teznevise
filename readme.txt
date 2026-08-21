@@ -2,9 +2,9 @@
 Contributors: maziyarid
 Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education, blog, translation-ready
 Requires at least: 6.4
-Tested up to: 6.8
-Requires PHP: 8.0
-Stable tag: 1.8.7
+Tested up to: 6.9
+Requires PHP: 8.3
+Stable tag: 1.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,10 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 6. Assign menus: Primary, Mobile, Bottom
 
 == Changelog ==
+
+= 1.9.0 =
+* Add a final Editorial Signal compatibility layer with unified semantic Bootstrap colors, visible focus states, RTL-aware sizing, and motion-safe controls.
+* Align release metadata with WordPress 6.9 and PHP 8.5 readiness; rebuild the React lockfile and resolve lint/test regressions.
 
 = 1.8.7 =
 * Single posts: article is the wide column, TOC is the sidebar; Persian UI copy
