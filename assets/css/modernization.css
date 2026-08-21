@@ -85,6 +85,19 @@
 
 .tz-react-shell .tz-reveal { animation: none; }
 
+.tz-react-shell .tz-classic-disclosure {
+	max-width: min(var(--tz-content, 1180px), 100%);
+	margin-inline: auto;
+}
+
+.tz-react-shell .tz-classic-disclosure .seo-more-content {
+	max-width: 76ch;
+}
+
+.tz-react-shell .tz-interactive-page-content + .tz-classic-disclosure {
+	margin-top: var(--tz-space-6, 1.5rem);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .tz-react-shell .tz-reveal { animation: tz-editorial-rise 260ms var(--tz-ease-out) both; }
   .tz-react-shell :is(.services-grid, .article-grid, .reason-list, .steps, .quote-grid) > .tz-reveal:nth-child(2) { animation-delay: 45ms; }

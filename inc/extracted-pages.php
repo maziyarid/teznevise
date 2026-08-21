@@ -209,6 +209,116 @@ function teznevise_is_interactive_shortcode_content( $content ) {
 }
 
 /**
+ * Return classic-editor prose after shortcodes are removed.
+ *
+ * Builder sections already represent the structured page. This keeps any
+ * administrator-authored long-form copy available without duplicating forms,
+ * calculators, or a legacy shortcode layout.
+ *
+ * @param string $content Raw post content.
+ * @return string
+ */
+function teznevise_page_classic_copy( $content ) {
+	$content = (string) $content;
+	if ( function_exists( 'teznevise_normalize_shortcode_quotes' ) ) {
+		$content = teznevise_normalize_shortcode_quotes( $content );
+	}
+	return trim( wp_strip_all_tags( strip_shortcodes( $content ) ) );
+}
+
+/**
+ * Remove only the interactive shortcode tags that already render above the
+ * disclosure, leaving administrator-authored classic prose untouched.
+ *
+ * @param string $content Raw post content.
+ * @return string
+ */
+function teznevise_page_without_interactive_shortcodes( $content ) {
+	$content = (string) $content;
+	if ( function_exists( 'teznevise_normalize_shortcode_quotes' ) ) {
+		$content = teznevise_normalize_shortcode_quotes( $content );
+	}
+	$pattern = teznevise_interactive_shortcode_pattern();
+	return (string) preg_replace( '/\[(?:' . $pattern . ')\b[^\]]*?\](?:\s*\[\/(?:' . $pattern . ')\])?/i', '', $content );
+}
+
+/**
+ * Render classic editor copy through normal WordPress formatting filters while
+ * bypassing this disclosure filter for the nested rendering pass.
+ *
+ * @param string $content Raw classic content.
+ * @return string
+ */
+function teznevise_render_classic_page_content( $content ) {
+	global $teznevise_rendering_classic_page_content;
+	$previous = ! empty( $teznevise_rendering_classic_page_content );
+	$teznevise_rendering_classic_page_content = true;
+	$rendered = apply_filters( 'the_content', $content );
+	$teznevise_rendering_classic_page_content = $previous;
+	return $rendered;
+}
+
+/**
+ * Wrap classic-editor content in the shared accessible "show more" pattern.
+ *
+ * @param string $content Rendered page content.
+ * @param int    $post_id Page ID.
+ * @return string
+ */
+function teznevise_page_content_disclosure_markup( $content, $post_id = 0 ) {
+	$post_id = $post_id ? (int) $post_id : (int) get_the_ID();
+	if ( '' === teznevise_page_classic_copy( $content ) ) {
+		return '';
+	}
+	$target_id = 'tz-classic-content-' . $post_id;
+	ob_start();
+	?>
+	<div class="seo-panel seo-disclosure tz-classic-disclosure" data-reveal>
+		<div class="seo-label"><?php esc_html_e( 'محتوای تکمیلی', 'teznevise' ); ?></div>
+		<h2><?php esc_html_e( 'جزئیات و توضیحات بیشتر', 'teznevise' ); ?></h2>
+		<div class="seo-more-content article-content longcopy" id="<?php echo esc_attr( $target_id ); ?>">
+			<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rendered through the_content. ?>
+		</div>
+		<button aria-controls="<?php echo esc_attr( $target_id ); ?>" aria-expanded="false" class="seo-more-btn" data-seo-toggle type="button"><span aria-hidden="true" class="seo-more-mark">‹</span><span class="seo-more-text"><?php esc_html_e( 'مشاهده بیشتر', 'teznevise' ); ?></span></button>
+	</div>
+	<?php
+	return (string) ob_get_clean();
+}
+
+/**
+ * Apply the shared disclosure to normal classic-editor pages.
+ *
+ * Legacy shortcode layouts are retained untouched; builder templates use
+ * teznevise_the_page_leftover_content() for their widget-plus-copy handling.
+ *
+ * @param string $content Rendered post content.
+ * @return string
+ */
+function teznevise_filter_page_content_disclosure( $content ) {
+	global $teznevise_rendering_classic_page_content;
+	if ( ! empty( $teznevise_rendering_classic_page_content ) || is_admin() || ! is_singular( 'page' ) || ! in_the_loop() || ! is_main_query() ) {
+		return $content;
+	}
+	$raw = (string) get_post_field( 'post_content', get_the_ID() );
+	if ( function_exists( 'teznevise_is_legacy_shortcode_content' ) && teznevise_is_legacy_shortcode_content( $raw ) ) {
+		return $content;
+	}
+	if ( teznevise_is_interactive_shortcode_content( $raw ) ) {
+		$interactive = teznevise_interactive_shortcodes_markup( $raw );
+		$classic     = teznevise_render_classic_page_content( teznevise_page_without_interactive_shortcodes( $raw ) );
+		$markup      = teznevise_page_content_disclosure_markup( $classic );
+		$output      = '';
+		if ( '' !== $interactive ) {
+			$output .= '<div class="tz-interactive-page-content">' . do_shortcode( $interactive ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+		return $output . $markup;
+	}
+	$markup = teznevise_page_content_disclosure_markup( $content );
+	return $markup ? $markup : $content;
+}
+add_filter( 'the_content', 'teznevise_filter_page_content_disclosure', 50 );
+
+/**
  * Interactive shortcode tags extracted from mixed post_content.
  *
  * @param string $content Raw post_content.
@@ -246,9 +356,9 @@ function teznevise_page_should_print_content( $post_id = 0 ) {
 		return false;
 	}
 	if ( function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections() ) {
-		// Independent of the structural legacy-shortcode classifier so mixed
-		// HTML + form/calculator pages (join-us, contact-us) keep working.
-		return teznevise_is_interactive_shortcode_content( $raw );
+		// Keep forms/calculators in place and expose remaining classic-editor copy
+		// through the shared disclosure instead of silently dropping it.
+		return teznevise_is_interactive_shortcode_content( $raw ) || '' !== teznevise_page_classic_copy( $raw );
 	}
 	return true;
 }
@@ -264,10 +374,14 @@ function teznevise_the_page_leftover_content( $post_id = 0 ) {
 	$raw     = (string) get_post_field( 'post_content', $post_id );
 	if ( function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections() ) {
 		$markup = teznevise_interactive_shortcodes_markup( $raw );
-		if ( '' === $markup ) {
-			return;
+		if ( '' !== $markup ) {
+			echo '<div class="tz-interactive-page-content">' . do_shortcode( $markup ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
-		echo do_shortcode( $markup ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		$classic = teznevise_render_classic_page_content( teznevise_page_without_interactive_shortcodes( $raw ) );
+		$classic = teznevise_page_content_disclosure_markup( $classic, $post_id );
+		if ( '' !== $classic ) {
+			echo $classic; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
 		return;
 	}
 	the_content();

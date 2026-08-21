@@ -6,6 +6,19 @@
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+function teznevise_page_url_from_candidates( $candidates, $fallback_path = '/' ) {
+	foreach ( (array) $candidates as $candidate ) {
+		$page = get_page_by_path( sanitize_title( (string) $candidate ), OBJECT, 'page' );
+		if ( $page instanceof WP_Post ) {
+			$url = get_permalink( $page );
+			if ( $url ) {
+				return $url;
+			}
+		}
+	}
+	return home_url( $fallback_path );
+}
+
 function teznevise_fallback_menu( $args = array() ) {
 	$defaults = array(
 		'theme_location' => '',
@@ -28,13 +41,13 @@ function teznevise_fallback_menu( $args = array() ) {
 	$urls = array(
 		'home'     => home_url( '/' ),
 		'blog'     => teznevise_posts_url(),
-		'services' => home_url( '/service-thesis/' ),
-		'about'    => home_url( '/about/' ),
-		'contact'  => home_url( '/contact/' ),
-		'tools'    => home_url( '/tools/' ),
-		'team'     => home_url( '/team/' ),
-		'privacy'  => home_url( '/privacy/' ),
-		'sitemap'  => home_url( '/sitemap/' ),
+		'services' => teznevise_page_url_from_candidates( array( 'thesis', 'service-thesis', 'proposal', 'service-proposal' ), '/service-thesis/' ),
+		'about'    => teznevise_page_url_from_candidates( array( 'about-us', 'about', 'our-story' ), '/about/' ),
+		'contact'  => teznevise_page_url_from_candidates( array( 'contact-us', 'contact', 'inquiry' ), '/contact/' ),
+		'tools'    => teznevise_page_url_from_candidates( array( 'online-calculation-tools', 'tools' ), '/tools/' ),
+		'team'     => teznevise_page_url_from_candidates( array( 'our-team', 'team' ), '/team/' ),
+		'privacy'  => teznevise_page_url_from_candidates( array( 'privacy-policy', 'privacy' ), '/privacy/' ),
+		'sitemap'  => teznevise_page_url_from_candidates( array( 'sitemap' ), '/sitemap/' ),
 	);
 	$html = '<ul class="' . esc_attr( $args['menu_class'] ) . '">';
 	foreach ( $items as $key ) {
@@ -314,4 +327,3 @@ function teznevise_page_url( $slug, $fallback_path = '' ) {
 	$path = $fallback_path ? $fallback_path : '/' . trim( (string) $slug, '/' ) . '/';
 	return home_url( $path );
 }
-
