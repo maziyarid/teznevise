@@ -131,8 +131,10 @@ export default defineConfig(({ command, isPreview }) => ({
     host: "0.0.0.0",
     port: 8080,
     strictPort: true,
-    // Permit the managed preview proxy without disabling Vite host protection.
-    allowedHosts: [".manus.computer"],
+    // Permit the managed preview proxies without disabling Vite host protection.
+    // The OAuth preview client uses grok-sandbox.com; Manus project previews use
+    // manus.computer. This setting is development-only and does not affect cPanel.
+    allowedHosts: [".grok-sandbox.com", ".manus.computer"],
   },
   preview: {
     host: "127.0.0.1",

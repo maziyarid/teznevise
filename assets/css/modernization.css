@@ -74,13 +74,12 @@
   --bs-alert-border-color: #a8d9cf;
 }
 
-.tz-react-shell :is(.container, .container-tz) {
+.tz-react-shell .container-tz {
   width: min(var(--tz-content, 1180px), calc(100% - 2rem));
   margin-inline: auto;
 }
 
 .tz-react-shell :is(.service-card, .article-card, .quote-card, .step, .reason-item, .check-card, .faq-card) {
-  animation: none;
   transition-timing-function: var(--tz-ease-out);
 }
 
@@ -102,7 +101,7 @@
 }
 
 @media (max-width: 768px) {
-  .tz-react-shell :is(.container, .container-tz) { width: min(var(--tz-content, 1180px), calc(100% - 1.5rem)); }
+  .tz-react-shell .container-tz { width: min(var(--tz-content, 1180px), calc(100% - 1.5rem)); }
   .tz-react-shell :is(.btn-tz, .nav-cta, .menu-btn, .icon-btn) { min-height: 44px; }
   .tz-react-shell .bottom-nav { padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
 }

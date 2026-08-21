@@ -2303,21 +2303,8 @@ i.fa-brands {
 .services-grid > *:nth-child(8) { animation-delay: 0.39s; }
 .services-grid > *:nth-child(9) { animation-delay: 0.44s; }
 
-/* Editorial Signal motion: content opts in through .tz-reveal instead of animating every card on page load. */
-.services-grid > *,
-.steps > *,
-.reason-list > *,
-.article-grid > *,
-.check-grid > *,
-.faq-grid > *,
-.quote-grid > *,
-.service-card,
-.article-card,
-.quote-card,
-.people-card,
-.step {
-  animation: none;
-}
+/* Editorial Signal motion: .tz-reveal refines selected elements without
+   disabling the established motion on shared page templates. */
 .tz-reveal {
   animation: none;
 }
@@ -2356,4 +2343,3 @@ i.fa-brands {
     grid-template-columns: 1fr;
   }
 }
-

@@ -33,6 +33,15 @@ export type CurrentUserState = {
   isPending: boolean;
 };
 
+function useDisabledSession() {
+  return { data: null, isPending: false };
+}
+
+// Choose the implementation once at module initialization, then call it on every
+// render. This preserves the disabled-auth fallback without conditionally calling
+// a hook inside `useCurrentUserState()`.
+const useConfiguredSession = authEnabled ? authClient.useSession : useDisabledSession;
+
 /**
  * Current user + loading state. Same behavior in live preview and when deployed:
  *   - Auth enabled (default) -> the real signed-in user; `user` is `null` while
@@ -51,12 +60,12 @@ export type CurrentUserState = {
  *   if (isPending) return null;              // still resolving — don't redirect yet
  *   if (!user) return <RedirectToSignIn />;  // definitely signed out
  *
- * `authEnabled` is a module-level constant fixed at load, so the guarded hook
- * call keeps a stable hook order across every render of a given component.
+ * `authEnabled` is a module-level constant fixed at load, so the selected session
+ * hook keeps a stable hook order across every render of a given component.
  */
 export function useCurrentUserState(): CurrentUserState {
+  const { data, isPending } = useConfiguredSession();
   if (!authEnabled) return { user: DEV_USER, isPending: false };
-  const { data, isPending } = authClient.useSession();
   const user = data?.user;
   return {
     user: user
