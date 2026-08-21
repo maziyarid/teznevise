@@ -30,7 +30,7 @@ function teznevise_page_url_from_candidates( $candidates, $fallback_path = '/' )
 	}
 	foreach ( $candidates as $candidate ) {
 		$page = get_page_by_path( sanitize_title( $candidate ), OBJECT, 'page' );
-		if ( $page instanceof WP_Post ) {
+		if ( $page instanceof WP_Post && 'publish' === $page->post_status ) {
 			$url = get_permalink( $page );
 			if ( $url ) {
 				$cache[ $key ] = $url;

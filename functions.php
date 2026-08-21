@@ -6,6 +6,10 @@
  * 
  * @package TezNevise
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
+define( 'TEZNEVISE_VERSION', '1.9.2' );
+define( 'TEZNEVISE_DIR', get_template_directory() );
+define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
 if ( ! defined( '_S_VERSION' ) ) {
 	// Replace the version number of the theme on each release.

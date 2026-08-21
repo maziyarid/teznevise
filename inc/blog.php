@@ -130,8 +130,10 @@ function teznevise_prepare_post_content( $content ) {
 }
 
 function teznevise_localize_on_this_page( $translation, $text, $domain = '' ) {
-	unset( $domain );
-	if ( 'On this page' === $text || 'On this page' === $translation ) {
+	if ( is_admin() || 'teznevise' !== $domain || 'On this page' !== $text ) {
+		return $translation;
+	}
+	if ( 'On this page' === $text ) {
 		return 'در این مقاله';
 	}
 	return $translation;

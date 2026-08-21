@@ -191,15 +191,29 @@ function teznevise_migration_seed_calculator_tools( $dry_run = true ) {
 	foreach ( teznevise_migration_calculator_tools() as $slug => $cfg ) {
 		$existing = get_page_by_path( $slug );
 		if ( $existing ) {
-			// Ensure template + shortcode content if empty.
-			$needs = false;
-			if ( 'page-tool.php' !== get_post_meta( $existing->ID, '_wp_page_template', true ) ) {
-				$needs = true;
+			// Never replace existing calculator markup, but make every existing
+			// tool page self-describing when its template or presentation fields
+			// are incomplete. This matters for legacy calculator pages that already
+			// contain a functional shortcode yet were created before `_teznevise_*`
+			// metadata was introduced.
+			$needs_template = 'page-tool.php' !== get_post_meta( $existing->ID, '_wp_page_template', true );
+			$needs_content  = '' === trim( (string) $existing->post_content );
+			$tool_meta      = array(
+				'_teznevise_eyebrow'       => __( 'ابزار آنلاین', 'teznevise' ),
+				'_teznevise_subtitle'      => $cfg['subtitle'],
+				'_teznevise_service_icon'  => $cfg['icon'],
+				'_teznevise_service_color' => 'icon-amber',
+				'_teznevise_cta_text'      => __( 'تحلیل آماری تخصصی', 'teznevise' ),
+				'_teznevise_cta_url'       => '/service-statistics/',
+			);
+			$needs_meta = false;
+			foreach ( $tool_meta as $meta_key => $value ) {
+				if ( '' === (string) get_post_meta( $existing->ID, $meta_key, true ) && '' !== (string) $value ) {
+					$needs_meta = true;
+					break;
+				}
 			}
-			if ( '' === trim( (string) $existing->post_content ) ) {
-				$needs = true;
-			}
-			if ( ! $needs ) {
+			if ( ! $needs_template && ! $needs_content && ! $needs_meta ) {
 				$stats['skipped']++;
 				continue;
 			}
@@ -207,8 +221,10 @@ function teznevise_migration_seed_calculator_tools( $dry_run = true ) {
 				$stats['updated']++;
 				continue;
 			}
-			update_post_meta( $existing->ID, '_wp_page_template', 'page-tool.php' );
-			if ( '' === trim( (string) $existing->post_content ) ) {
+			if ( $needs_template ) {
+				update_post_meta( $existing->ID, '_wp_page_template', 'page-tool.php' );
+			}
+			if ( $needs_content ) {
 				wp_update_post(
 					array(
 						'ID'           => $existing->ID,
@@ -216,10 +232,11 @@ function teznevise_migration_seed_calculator_tools( $dry_run = true ) {
 					)
 				);
 			}
-			update_post_meta( $existing->ID, '_teznevise_eyebrow', __( 'ابزار آنلاین', 'teznevise' ) );
-			update_post_meta( $existing->ID, '_teznevise_subtitle', $cfg['subtitle'] );
-			update_post_meta( $existing->ID, '_teznevise_service_icon', $cfg['icon'] );
-			update_post_meta( $existing->ID, '_teznevise_service_color', 'icon-amber' );
+			foreach ( $tool_meta as $meta_key => $value ) {
+				if ( '' === (string) get_post_meta( $existing->ID, $meta_key, true ) && '' !== (string) $value ) {
+					update_post_meta( $existing->ID, $meta_key, $value );
+				}
+			}
 			$stats['updated']++;
 			continue;
 		}
