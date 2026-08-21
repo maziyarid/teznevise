@@ -27,6 +27,22 @@ The current remote `main` includes release **1.9.3** (`0fafae0`, “restore 1.9.
 
 This sequence is structurally sound in the checked source. Repository-wide PHP linting and the builder conversion test passed before this analysis branch was created. The branch therefore does not claim that the newly merged source alone caused the live error.
 
+## Baseline comparison (stable 1.9.2 `e905f6d` → current 1.9.3 `0fafae0`)
+
+The common builder execution path was compared against the last stable 1.9.2 revision (`e905f6d`, “load calculator CSS/JS on live”). Only these builder-path files changed:
+
+| File | Diff | Behavioral implication for builder 500s |
+| --- | --- | --- |
+| `functions.php` | `TEZNEVISE_VERSION` `1.9.2` → `1.9.3` | Cache-busting only. Module load order and required helpers are unchanged. |
+| `inc/extracted-pages.php` | Added `tz_service_cta` and `tz_calculation_hub` to the interactive shortcode list; escaped `/` in the closing-shortcode regex | Those two tags can now stay visible in leftover markup. In PHP single-quoted strings `\/` is identical to `/`, so the regex itself does not change. |
+| `page-tool.php` | After the calculator, render `teznevise_ai_shortcode()` or `template-parts/tools-ai` | Affects single-tool templates only. Cannot explain 500s on `/about-us/`, `/terms/`, or `/service-thesis/`. |
+| `inc/class-teznevise-builder.php` | unchanged | No renderer or sanitizer delta. |
+| `inc/builder-defaults.php` | unchanged | |
+| `inc/builder-seed.php` | unchanged | |
+| `page.php`, `page-service.php` | unchanged | Shared leftover/disclosure path is identical. |
+
+**Finding:** the 1.9.2→1.9.3 builder-path delta does not contain a source-level explanation for the builder-route 500 family. A host PHP/WordPress error log with file, line, and exception remains required before any rollback or migration.
+
 ## Builder execution trace
 
 The affected template family shares the following request path:
