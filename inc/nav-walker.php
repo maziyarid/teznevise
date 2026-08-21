@@ -80,6 +80,9 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 			if ( $has_children && 0 === $depth ) {
 				$classes[] = 'has-dropdown';
 			}
+			if ( 1 === (int) $depth ) {
+				$classes[] = 'mega-col';
+			}
 			if ( 0 === $depth && function_exists( 'teznevise_nav_is_cta_duplicate' ) && teznevise_nav_is_cta_duplicate( isset( $item->url ) ? $item->url : '' ) ) {
 				$classes[] = 'nav-hide-desktop';
 			}

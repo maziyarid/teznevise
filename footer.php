@@ -38,7 +38,7 @@
 			</div>
 			<div class="footer-col">
 				<h4><?php esc_html_e( 'ارتباط با ما', 'teznevise' ); ?></h4>
-				<a href="tel:<?php echo esc_attr( teznevise_get_contact( 'phone_intl' ) ); ?>"><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></a>
+				<a href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( teznevise_get_contact( 'phone_intl' ) ) : 'tel:+989302822091' ); ?>"><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></a>
 				<a href="mailto:<?php echo esc_attr( teznevise_get_contact( 'email' ) ); ?>"><?php echo esc_html( teznevise_get_contact( 'email' ) ); ?></a>
 				<p><?php echo esc_html( teznevise_get_contact( 'address' ) ); ?></p>
 			</div>

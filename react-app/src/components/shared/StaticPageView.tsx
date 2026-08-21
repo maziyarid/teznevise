@@ -3,6 +3,7 @@ import { usePageOverlay } from "@/lib/page-overlay";
 import { stripEmoji } from "@/lib/utils";
 import { faNum } from "@/lib/format";
 import { CtaBand } from "./CtaBand";
+import { MoreContent } from "./MoreContent";
 import { PageHero } from "./PageHero";
 
 export function StaticPageView({ slug }: { slug: keyof typeof STATIC_PAGES }) {
@@ -31,13 +32,7 @@ export function StaticPageView({ slug }: { slug: keyof typeof STATIC_PAGES }) {
             </article>
           ))}
         </div>
-        {extra?.length ? (
-          <div className="container-tz prose-fa mt-10 max-w-3xl">
-            {extra.map((p) => (
-              <p key={p.slice(0, 24)}>{stripEmoji(p)}</p>
-            ))}
-          </div>
-        ) : null}
+        {extra?.length ? <MoreContent paragraphs={extra} /> : null}
       </section>
       <CtaBand />
     </>

@@ -1,23 +1,7 @@
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import {
-  BarChart3,
-  Coins,
-  FileText,
-  FolderKanban,
-  Gift,
-  Inbox,
-  LayoutDashboard,
-  LogOut,
-  MessageCircle,
-  MessageSquare,
-  Settings2,
-  Sparkles,
-  Ticket,
-  UserRound,
-  Wallet,
-} from "lucide-react";
+import { FaIcon } from "@/components/ui/FaIcon";
 import { signOut } from "@/lib/auth/client";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { RedirectToSignIn } from "@/lib/auth/gates";
@@ -26,26 +10,26 @@ import { Logo } from "./Logo";
 import { cn } from "@/lib/utils";
 
 const USER_NAV = [
-  { to: "/dashboard", label: "خلاصه", icon: LayoutDashboard, exact: true },
-  { to: "/dashboard/projects", label: "پروژه‌ها", icon: FolderKanban, exact: false },
-  { to: "/dashboard/tickets", label: "تیکت‌ها", icon: Ticket, exact: false },
-  { to: "/dashboard/orders", label: "درخواست‌ها", icon: FileText, exact: false },
-  { to: "/dashboard/wallet", label: "کیف پول", icon: Wallet, exact: false },
-  { to: "/dashboard/referrals", label: "معرفی دوستان", icon: Gift, exact: false },
-  { to: "/dashboard/profile", label: "پروفایل", icon: UserRound, exact: false },
+  { to: "/dashboard", label: "خلاصه", icon: "fa-table-columns", exact: true },
+  { to: "/dashboard/projects", label: "پروژه‌ها", icon: "fa-folder-open", exact: false },
+  { to: "/dashboard/tickets", label: "تیکت‌ها", icon: "fa-ticket", exact: false },
+  { to: "/dashboard/orders", label: "درخواست‌ها", icon: "fa-file-lines", exact: false },
+  { to: "/dashboard/wallet", label: "کیف پول", icon: "fa-wallet", exact: false },
+  { to: "/dashboard/referrals", label: "معرفی دوستان", icon: "fa-gift", exact: false },
+  { to: "/dashboard/profile", label: "پروفایل", icon: "fa-user", exact: false },
 ] as const;
 
 const ADMIN_NAV = [
-  { to: "/admin", label: "نمای کلی", icon: LayoutDashboard, exact: true },
-  { to: "/admin/tickets", label: "تیکت‌ها", icon: Inbox, exact: false },
-  { to: "/admin/projects", label: "پروژه‌ها", icon: FolderKanban, exact: false },
-  { to: "/admin/inquiries", label: "سفارش‌ها", icon: FileText, exact: false },
-  { to: "/admin/tezcoin", label: "تزکوین", icon: Coins, exact: false },
-  { to: "/admin/agents", label: "عامل‌های هوش مصنوعی", icon: Sparkles, exact: false },
-  { to: "/admin/analytics", label: "بازدید و کلیک", icon: BarChart3, exact: false },
-  { to: "/admin/comments", label: "نظرها", icon: MessageCircle, exact: false },
-  { to: "/admin/fields", label: "فیلدهای صفحات", icon: MessageSquare, exact: false },
-  { to: "/admin/settings", label: "تنظیمات", icon: Settings2, exact: false },
+  { to: "/admin", label: "نمای کلی", icon: "fa-table-columns", exact: true },
+  { to: "/admin/tickets", label: "تیکت‌ها", icon: "fa-inbox", exact: false },
+  { to: "/admin/projects", label: "پروژه‌ها", icon: "fa-folder-open", exact: false },
+  { to: "/admin/inquiries", label: "سفارش‌ها", icon: "fa-file-lines", exact: false },
+  { to: "/admin/tezcoin", label: "تزکوین", icon: "fa-coins", exact: false },
+  { to: "/admin/agents", label: "عامل‌های هوش مصنوعی", icon: "fa-robot", exact: false },
+  { to: "/admin/analytics", label: "بازدید و کلیک", icon: "fa-chart-column", exact: false },
+  { to: "/admin/comments", label: "نظرها", icon: "fa-comments", exact: false },
+  { to: "/admin/fields", label: "فیلدهای صفحات", icon: "fa-pen-to-square", exact: false },
+  { to: "/admin/settings", label: "تنظیمات", icon: "fa-gear", exact: false },
 ] as const;
 
 export function AppFrame({ kind }: { kind: "user" | "admin" }) {
@@ -76,10 +60,9 @@ export function AppFrame({ kind }: { kind: "user" | "admin" }) {
         <nav className="app-side-nav">
           {nav.map((item) => {
             const active = item.exact ? pathname === item.to : pathname === item.to || pathname.startsWith(item.to + "/");
-            const Icon = item.icon;
             return (
               <Link key={item.to} to={item.to} className={cn("app-nav-link", active && "is-active")}>
-                <Icon className="size-4" />
+                <FaIcon icon={item.icon} />
                 {item.label}
               </Link>
             );
@@ -89,19 +72,22 @@ export function AppFrame({ kind }: { kind: "user" | "admin" }) {
           <p className="mb-2 truncate px-3 text-xs text-muted">{user.displayName || user.primaryEmail}</p>
           {kind === "user" && role === "admin" ? (
             <Link to="/admin" className="app-nav-link">
+              <FaIcon icon="fa-shield-halved" />
               پنل مدیریت
             </Link>
           ) : null}
           {kind === "admin" ? (
             <Link to="/dashboard" className="app-nav-link">
+              <FaIcon icon="fa-user" />
               پنل کاربری
             </Link>
           ) : null}
           <Link to="/" className="app-nav-link">
+            <FaIcon icon="fa-house" />
             بازگشت به سایت
           </Link>
           <button type="button" className="app-nav-link w-full" onClick={() => void signOut("/")}>
-            <LogOut className="size-4" />
+            <FaIcon icon="fa-right-from-bracket" />
             خروج
           </button>
         </div>

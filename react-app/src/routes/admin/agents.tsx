@@ -14,6 +14,8 @@ function AgentsAdmin() {
   const [provider, setProvider] = useState<"xai" | "openrouter" | "tavily" | "you">("xai");
   const [model, setModel] = useState("");
   const [prompt, setPrompt] = useState("");
+  const [apiBase, setApiBase] = useState("");
+  const [keySetting, setKeySetting] = useState("");
   const [slug, setSlug] = useState(TOOLS[0]?.slug ?? "descriptive-statistics");
   const [stitle, setStitle] = useState("");
   const [body, setBody] = useState("");
@@ -29,7 +31,7 @@ function AgentsAdmin() {
   async function onAgent(e: FormEvent) {
     e.preventDefault();
     try {
-      await saveAgent({ data: { name, provider, model, system_prompt: prompt } });
+      await saveAgent({ data: { name, provider, model, system_prompt: prompt, api_base: apiBase, api_key_setting: keySetting } });
       toast.success("عامل ذخیره شد");
       setName("");
       setPrompt("");
@@ -73,6 +75,14 @@ function AgentsAdmin() {
           <div className="field">
             <label htmlFor="am">مدل (اختیاری)</label>
             <input id="am" dir="ltr" value={model} onChange={(e) => setModel(e.target.value)} />
+          </div>
+          <div className="field">
+            <label htmlFor="ab">آدرس API (اختیاری)</label>
+            <input id="ab" dir="ltr" value={apiBase} onChange={(e) => setApiBase(e.target.value)} placeholder="https://api.x.ai/v1" />
+          </div>
+          <div className="field">
+            <label htmlFor="ak">کلید تنظیمات (نام فیلد تنظیمات)</label>
+            <input id="ak" dir="ltr" value={keySetting} onChange={(e) => setKeySetting(e.target.value)} placeholder="openrouter_key" />
           </div>
           <div className="field">
             <label htmlFor="as">پرامپت سیستم</label>

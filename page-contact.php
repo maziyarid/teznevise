@@ -40,7 +40,7 @@ while ( have_posts() ) :
 			<div class="reason-item">
 				<div class="icon-box icon-teal"><i class="fa-solid fa-phone" aria-hidden="true"></i></div>
 				<b><?php esc_html_e( 'تلفن', 'teznevise' ); ?></b>
-				<p><a href="tel:<?php echo esc_attr( teznevise_get_contact( 'phone_intl' ) ); ?>"><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></a></p>
+				<p><a href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( teznevise_get_contact( 'phone_intl' ) ) : 'tel:+989302822091' ); ?>"><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></a></p>
 			</div>
 			<div class="reason-item">
 				<div class="icon-box icon-indigo"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
@@ -83,7 +83,7 @@ while ( have_posts() ) :
 					<div class="inquiry-messengers" style="margin-top:16px;">
 						<a class="inq-msg" href="<?php echo esc_url( 'https://wa.me/' . $phone ); ?>"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> واتساپ</a>
 						<a class="inq-msg" href="<?php echo esc_url( teznevise_get_contact( 'telegram' ) ); ?>"><i class="fa-brands fa-telegram" aria-hidden="true"></i> تلگرام</a>
-						<a class="inq-msg" href="tel:<?php echo esc_attr( teznevise_get_contact( 'phone_intl' ) ); ?>"><i class="fa-solid fa-phone" aria-hidden="true"></i> تماس</a>
+						<a class="inq-msg" href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( teznevise_get_contact( 'phone_intl' ) ) : 'tel:+989302822091' ); ?>"><i class="fa-solid fa-phone" aria-hidden="true"></i> تماس</a>
 					</div>
 				</div>
 			</div>

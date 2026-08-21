@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<a class="tz-fab-item" href="<?php echo esc_url( teznevise_get_contact( 'bale' ) ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'بله', 'teznevise' ); ?>">
 			<span class="tz-fab-bale"><?php esc_html_e( 'بله', 'teznevise' ); ?></span><span><?php esc_html_e( 'بله', 'teznevise' ); ?></span>
 		</a>
-		<a class="tz-fab-item" href="tel:<?php echo esc_attr( teznevise_get_contact( 'phone_intl' ) ); ?>" aria-label="<?php esc_attr_e( 'تماس تلفنی', 'teznevise' ); ?>">
+		<a class="tz-fab-item" href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( teznevise_get_contact( 'phone_intl' ) ) : 'tel:+989302822091' ); ?>" aria-label="<?php esc_attr_e( 'تماس تلفنی', 'teznevise' ); ?>">
 			<i class="fa-solid fa-phone" aria-hidden="true"></i><span><?php esc_html_e( 'تماس', 'teznevise' ); ?></span>
 		</a>
 	</div>

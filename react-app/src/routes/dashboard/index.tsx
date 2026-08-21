@@ -7,6 +7,7 @@ import { getMyWallet } from "@/lib/server/wallet";
 import { useCurrentUser } from "@/lib/auth/use-current-user";
 import { statusFa } from "@/lib/ticket-status";
 import { faNum } from "@/lib/format";
+import { FaIcon } from "@/components/ui/FaIcon";
 
 export const Route = createFileRoute("/dashboard/")({ component: DashHome });
 
@@ -25,30 +26,61 @@ function DashHome() {
   }, []);
 
   const openTickets = tickets.filter((t) => t.status !== "closed").length;
+  const greeting = user?.displayName || user?.primaryEmail || "";
 
   return (
-    <AppPage title="پنل کاربری" hint={`خوش آمدید ${user?.displayName || user?.primaryEmail || ""}`}>
-      <div className="mb-6 grid gap-4 sm:grid-cols-4">
-        <div className="surface-card">
-          <p className="text-sm text-muted">تزکوین</p>
-          <p className="mt-1 text-3xl font-black text-brand">{faNum(coins)}</p>
+    <AppPage title="پنل کاربری" hint={`خوش آمدید ${greeting}`}>
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <article className="dash-stat tone-1">
+          <p className="k">
+            <FaIcon icon="fa-coins" /> تزکوین
+          </p>
+          <p className="v">{faNum(coins)}</p>
           <Link to="/dashboard/wallet" className="text-xs font-bold text-brand">
-            خرید اعتبار
+            خرید اعتبار و تاریخچه
           </Link>
-        </div>
-        <div className="surface-card">
-          <p className="text-sm text-muted">پروژه‌ها</p>
-          <p className="mt-1 text-3xl font-black text-brand">{projects.length}</p>
-        </div>
-        <div className="surface-card">
-          <p className="text-sm text-muted">تیکت‌های باز</p>
-          <p className="mt-1 text-3xl font-black text-brand">{openTickets}</p>
-        </div>
-        <div className="surface-card">
-          <p className="text-sm text-muted">درخواست‌ها</p>
-          <p className="mt-1 text-3xl font-black text-brand">{orders.length}</p>
-        </div>
+        </article>
+        <article className="dash-stat tone-2">
+          <p className="k">
+            <FaIcon icon="fa-folder-open" /> پروژه‌ها
+          </p>
+          <p className="v">{faNum(projects.length)}</p>
+          <Link to="/dashboard/projects" className="text-xs font-bold text-brand">
+            مدیریت پروژه‌ها
+          </Link>
+        </article>
+        <article className="dash-stat tone-5">
+          <p className="k">
+            <FaIcon icon="fa-ticket" /> تیکت‌های باز
+          </p>
+          <p className="v">{faNum(openTickets)}</p>
+          <Link to="/dashboard/tickets" className="text-xs font-bold text-brand">
+            پیگیری پشتیبانی
+          </Link>
+        </article>
+        <article className="dash-stat tone-3">
+          <p className="k">
+            <FaIcon icon="fa-file-lines" /> درخواست‌ها
+          </p>
+          <p className="v">{faNum(orders.length)}</p>
+          <Link to="/dashboard/orders" className="text-xs font-bold text-brand">
+            همه سفارش‌ها
+          </Link>
+        </article>
       </div>
+
+      <div className="mb-6 grid gap-3 sm:grid-cols-3">
+        <Link to="/inquiry" className="btn-tz btn-primary-tz">
+          <FaIcon icon="fa-pen-to-square" /> ثبت سفارش جدید
+        </Link>
+        <Link to="/tools" className="btn-tz btn-light-tz">
+          <FaIcon icon="fa-calculator" /> ابزارهای آنلاین
+        </Link>
+        <Link to="/dashboard/tickets" className="btn-tz btn-light-tz">
+          <FaIcon icon="fa-headset" /> تیکت جدید
+        </Link>
+      </div>
+
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="surface-card">
           <div className="mb-3 flex items-center justify-between">
@@ -58,7 +90,7 @@ function DashHome() {
             </Link>
           </div>
           {projects.length === 0 ? (
-            <p className="text-sm text-muted">پروژه‌ای ثبت نشده.</p>
+            <p className="text-sm text-muted">پروژه‌ای ثبت نشده. از ثبت درخواست شروع کنید.</p>
           ) : (
             <ul className="space-y-3">
               {projects.slice(0, 4).map((p) => (
@@ -85,19 +117,56 @@ function DashHome() {
             </Link>
           </div>
           {tickets.length === 0 ? (
-            <p className="text-sm text-muted">هنوز تیکتی ندارید.</p>
+            <p className="text-sm text-muted">تیکتی ندارید.</p>
           ) : (
-            <ul className="space-y-2">
-              {tickets.slice(0, 5).map((t) => (
+            <ul className="space-y-3">
+              {tickets.slice(0, 4).map((t) => (
                 <li key={t.id}>
-                  <Link to="/dashboard/tickets/$id" params={{ id: t.id }} className="block rounded-xl px-2 py-2 hover:bg-soft">
+                  <Link to="/dashboard/tickets/$id" params={{ id: t.id }} className="flex justify-between text-sm">
                     <b>{t.subject}</b>
-                    <span className="mr-2 text-xs text-muted">{statusFa(t.status)}</span>
+                    <span>{statusFa(t.status)}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           )}
+        </section>
+        <section className="surface-card">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="font-extrabold">درخواست‌های اخیر</h2>
+            <Link to="/dashboard/orders" className="text-sm font-bold text-brand">
+              همه
+            </Link>
+          </div>
+          {orders.length === 0 ? (
+            <p className="text-sm text-muted">درخواستی ثبت نشده.</p>
+          ) : (
+            <ul className="space-y-3">
+              {orders.slice(0, 4).map((o) => (
+                <li key={o.id} className="flex justify-between text-sm">
+                  <b>{o.service || o.name}</b>
+                  <span className="text-muted">{o.created_at.slice(0, 10)}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+        <section className="surface-card tone-6">
+          <h2 className="font-extrabold">دستیار و اعتبار</h2>
+          <p className="text-sm text-muted">
+            هر پیام دستیار از سهمیه روزانه و تزکوین شما کم می‌شود. تاریخچه گفتگو برای حساب واردشده ذخیره می‌شود.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Link to="/dashboard/wallet" className="btn-tz btn-primary-tz">
+              شارژ کیف پول
+            </Link>
+            <Link to="/dashboard/referrals" className="btn-tz btn-light-tz">
+              معرفی دوستان
+            </Link>
+            <Link to="/dashboard/profile" className="btn-tz btn-light-tz">
+              تکمیل پروفایل
+            </Link>
+          </div>
         </section>
       </div>
     </AppPage>

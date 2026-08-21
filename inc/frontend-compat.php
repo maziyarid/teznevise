@@ -220,9 +220,8 @@ function teznevise_gravityform_fallback( $atts = array() ) {
  * Register fallbacks only when the original plugin shortcode is missing.
  */
 function teznevise_register_missing_shortcodes() {
-	if ( ! shortcode_exists( 'gravityform' ) ) {
-		add_shortcode( 'gravityform', 'teznevise_gravityform_fallback' );
-	}
+	remove_shortcode( 'gravityform' );
+	add_shortcode( 'gravityform', 'teznevise_gravityform_fallback' );
 	if ( ! shortcode_exists( 'teznevise_blog' ) ) {
 		add_shortcode( 'teznevise_blog', 'teznevise_blog_shortcode_fallback' );
 	}

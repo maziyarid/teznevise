@@ -2406,3 +2406,116 @@ body.tz-react-shell .site-header-new {
     grid-template-areas: "content" "aside" !important;
   }
 }
+
+/* 1.9.4 — RTL mega menu, leftover disclosure, FA icons, no LTR leftover */
+@media (min-width: 1051px) {
+  .main-nav {
+    position: relative !important;
+    overflow: visible !important;
+  }
+  .main-nav .menu-item.has-dropdown,
+  .main-nav .nav-links > li.has-dropdown {
+    position: static !important;
+  }
+  .main-nav ul.nav-dropdown,
+  .main-nav ul.nav-dropdown.nav-panel,
+  .main-nav ul.nav-dropdown.mega {
+    direction: rtl !important;
+    text-align: right !important;
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    left: 12px !important;
+    right: 12px !important;
+    inset-inline: auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    display: none !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: minmax(210px, 1fr) !important;
+    grid-template-columns: none !important;
+    gap: 12px !important;
+    padding: 16px !important;
+    background: #fff !important;
+    border: 1px solid rgba(20, 93, 74, 0.12) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 22px 48px rgba(9, 40, 32, 0.16) !important;
+    z-index: 90 !important;
+    max-height: min(72vh, 640px) !important;
+    overflow: auto !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+  .main-nav .menu-item.has-dropdown:hover > ul.nav-dropdown,
+  .main-nav .menu-item.has-dropdown.is-open > ul.nav-dropdown,
+  .main-nav .nav-links > li.has-dropdown:hover > ul.nav-dropdown,
+  .main-nav .nav-links > li.is-open > ul.nav-dropdown {
+    display: grid !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+  .main-nav ul.nav-dropdown > li,
+  .main-nav ul.nav-dropdown > .mega-col,
+  .main-nav ul.nav-dropdown > .menu-item-has-children {
+    background: #f7fcfa !important;
+    border: 1px solid rgba(20, 93, 74, 0.08) !important;
+    border-radius: 14px !important;
+    padding: 10px !important;
+    min-width: 0 !important;
+    direction: rtl !important;
+    text-align: right !important;
+  }
+  .main-nav ul.nav-dropdown a,
+  .main-nav ul.nav-dropdown .nav-link,
+  .main-nav ul.nav-dropdown .mega-heading,
+  .main-nav ul.nav-dropdown h4 {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    direction: rtl !important;
+    text-align: right !important;
+    white-space: normal !important;
+    width: 100% !important;
+  }
+  .main-nav ul.nav-dropdown .nav-item-icon,
+  .main-nav ul.nav-dropdown i {
+    flex: 0 0 1.15em !important;
+    width: 1.15em !important;
+    text-align: center !important;
+    font-family: "Font Awesome 7 Free", "Font Awesome 6 Free", "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+  }
+  .main-nav ul.nav-dropdown-l3,
+  .main-nav ul.nav-dropdown ul {
+    position: static !important;
+    display: flex !important;
+    flex-direction: column !important;
+    left: auto !important;
+    right: auto !important;
+    inset: auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+    overflow: visible !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    grid-template-columns: none !important;
+  }
+}
+
+.tz-classic-disclosure.seo-panel {
+  margin-top: 24px;
+}
