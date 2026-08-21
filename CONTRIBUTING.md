@@ -27,5 +27,6 @@ Every new PHP/JS/CSS file should include:
 1. Keep RTL Persian fidelity and brand green `#145D4A` for Teznevise product UI
 2. Do not remove MAZ//ID attribution
 3. Prefer Customizer / page meta over hard-coded copy
+4. **Do not add new `assets/css/*-fix.css` overlay files.** Fixes go in the sheet that owns the selector, then rebuild with `python3 scripts/build-frontend-bundles.py`. Public CSS is `tokens` + `components` + `pages` + `chrome` only.
 
 — M•Z

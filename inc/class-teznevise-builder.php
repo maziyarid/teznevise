@@ -893,14 +893,7 @@ function teznevise_builder_has_sections() {
  * Frontend styles, loaded only where sections exist.
  */
 function teznevise_builder_enqueue_frontend() {
-	if ( ! teznevise_builder_has_sections() ) {
-		return;
-	}
-	wp_enqueue_style(
-		'teznevise-builder-frontend',
-		TEZNEVISE_URI . '/assets/css/builder-frontend.css',
-		array( 'teznevise-redesign' ),
-		TEZNEVISE_VERSION
-	);
+	/* 1.8.5: builder-frontend.css is folded into components.css. */
+	return;
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_builder_enqueue_frontend', 20 );

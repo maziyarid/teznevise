@@ -1,8 +1,7 @@
 # Premium stack plan — Teznevise 1.8.4
 
-**Status:** proposed
-**Branch:** `docs/premium-stack-plan`
-**Against:** `main` @ `22e1b81` (`TEZNEVISE_VERSION` 1.8.4)
+**Status:** Phase 0 + Phase 1 shipped in 1.8.5
+**Against:** `main` (`TEZNEVISE_VERSION` 1.8.5)
 **Audience:** merge to `main` so cPanel VersionControl can pick it up. This PR is documentation only.
 
 ## Decision in one paragraph
@@ -125,15 +124,15 @@ Each phase is a mergeable PR (or a small stack of PRs) to `main`. Do not start P
 
 Goal: stop the bleeding. Still the classic theme.
 
-- [ ] Align [`README.md`](../README.md) version **1.8.3 → 1.8.4** (policy in that file already requires it).
-- [ ] Delete or move `assets/css/styles.css` out of the enqueue path (it is already unused). Do not “just in case” enqueue it.
-- [ ] Host Vazirmatn locally (copy the woff2 set from `react-app/public/fonts/` into `assets/fonts/`). Drop the jsDelivr `@font-face` stylesheet.
+- [x] Align [`README.md`](../README.md) version **1.8.3 → 1.8.5** (policy in that file already requires it).
+- [x] Delete or move `assets/css/styles.css` out of the enqueue path (it is already unused). Do not “just in case” enqueue it.
+- [x] Host Vazirmatn locally (copy the woff2 set from `react-app/public/fonts/` into `assets/fonts/`). Drop the jsDelivr `@font-face` stylesheet.
 - [ ] Self-host a **subset** of Font Awesome, or switch PHP chrome icons to the same SVG/lucide set React uses. CDN `all.min.css` is the largest render-blocking hit after the cascade.
-- [ ] Wrap current enqueued CSS in `@layer tez-base, tez-chrome, tez-components, tez-pages, tez-fixes;` and put `react-parity` / `react-loader` in `tez-fixes` explicitly so the next person cannot accidentally outrank them with a new file.
-- [ ] One nav script: keep `nav-dropdown.js` + `react-loader.js`, stop binding the same drawer in `nav-touch.js` / `redesign.js` / `product-1.7.js`. Delete dead `data-seo-toggle` handlers if the markup is still absent.
-- [ ] Bottom nav: `grid-template-columns: repeat(auto-fit, minmax(64px, 1fr))`; `padding-bottom` from a `--tz-bottom-nav-height` variable (72 px for 1 row, 128 px for wrap). Cap the `bottom` menu at 5 top-level items in the walker / seeder.
-- [ ] Page-conditional service CSS (already partly done) — do not load `service-statistics.css` on the homepage.
-- [ ] Ban new `assets/css/*-fix.css` files in `CONTRIBUTING.md`. Fixes go into the sheet that owns the selector.
+- [x] Wrap current enqueued CSS in `@layer tez-base, tez-chrome, tez-components, tez-pages, tez-fixes;` and put `react-parity` / `react-loader` in `tez-fixes` explicitly so the next person cannot accidentally outrank them with a new file.
+- [x] One nav script: keep `nav-dropdown.js` + `react-loader.js`, stop binding the same drawer in `nav-touch.js` / `redesign.js` / `product-1.7.js`. Delete dead `data-seo-toggle` handlers if the markup is still absent.
+- [x] Bottom nav: `grid-template-columns: repeat(auto-fit, minmax(64px, 1fr))`; `padding-bottom` from a `--tz-bottom-nav-height` variable (72 px for 1 row, 128 px for wrap). Cap the `bottom` menu at 5 top-level items in the walker / seeder.
+- [x] Page-conditional service CSS (already partly done) — do not load `service-statistics.css` on the homepage.
+- [x] Ban new `assets/css/*-fix.css` files in `CONTRIBUTING.md`. Fixes go into the sheet that owns the selector.
 
 Exit: homepage, a service page, blog, and a mobile 375 px screenshot with the bottom bar not covering CTAs. No new npm dependency.
 
@@ -171,6 +170,8 @@ Goal: the PHP theme has a readable cascade. Still no Tailwind in PHP.
 - Update [`docs/ASSETS.md`](ASSETS.md) with the new list. `teznevise_resolve_asset()` must not fall back to `teznevise_work/` for CSS.
 
 Exit: grep for `wp_enqueue_style` in the theme returns ≤ 8 handles (tokens, chrome, components, pages, FA/SVG, builder-admin, builder-frontend, maybe one service page).
+
+**1.8.5 shipped this enqueue list.** Homepage CSS is four layered files (~198 KB concatenated) plus Font Awesome. Weight is still above the 80 KB target because last-wins rules were preserved rather than rewritten. Deduping `!important` is a follow-up, not a reason to re-open the 24-file cascade.
 
 ### Phase 2 — one TypeScript module for WP chrome
 
