@@ -6,40 +6,32 @@
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-/**
- * Resolve a published page URL from slug candidates (first match wins).
- *
- * Candidates are tried in array order so preferred slug variants come first
- * (for example `thesis` before `service-thesis`). The `$fallback_path` is
- * used only when none of the candidates exist; callers may pass different
- * fallbacks because header CTAs and the compact bottom bar have different
- * conversion paths (`/inquiry/` vs `/contact/`).
- *
- * Results are memoized for the rest of the request.
- *
- * @param string[] $candidates    Preferred slug variants, most specific first.
- * @param string   $fallback_path Path used when no candidate exists.
- * @return string
- */
 function teznevise_page_url_from_candidates( $candidates, $fallback_path = '/' ) {
 	static $cache = array();
-	$candidates   = array_values( array_filter( array_map( 'strval', (array) $candidates ) ) );
-	$key          = implode( '|', $candidates ) . '>' . (string) $fallback_path;
-	if ( isset( $cache[ $key ] ) ) {
-		return $cache[ $key ];
+
+	$normalized_candidates = array_map(
+		static function ( $candidate ) {
+			return sanitize_title( (string) $candidate );
+		},
+		(array) $candidates
+	);
+	$cache_key = md5( wp_json_encode( array( $normalized_candidates, (string) $fallback_path ) ) );
+	if ( array_key_exists( $cache_key, $cache ) ) {
+		return $cache[ $cache_key ];
 	}
-	foreach ( $candidates as $candidate ) {
-		$page = get_page_by_path( sanitize_title( $candidate ), OBJECT, 'page' );
+
+	foreach ( $normalized_candidates as $candidate ) {
+		$page = get_page_by_path( $candidate, OBJECT, 'page' );
 		if ( $page instanceof WP_Post ) {
 			$url = get_permalink( $page );
 			if ( $url ) {
-				$cache[ $key ] = $url;
+				$cache[ $cache_key ] = $url;
 				return $url;
 			}
 		}
 	}
-	$cache[ $key ] = home_url( $fallback_path );
-	return $cache[ $key ];
+	$cache[ $cache_key ] = home_url( $fallback_path );
+	return $cache[ $cache_key ];
 }
 
 function teznevise_fallback_menu( $args = array() ) {
