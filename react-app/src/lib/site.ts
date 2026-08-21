@@ -40,18 +40,24 @@ export const PRIMARY_NAV: NavItem[] = [
         heading: "بر اساس رشته",
         items: [
           { label: "علوم انسانی", to: "/thesis/humanities" },
-          { label: "روانشناسی", to: "/thesis/humanities/psychology" },
-          { label: "حقوق", to: "/thesis/humanities/law" },
-          { label: "مدیریت", to: "/thesis/humanities/management" },
-          { label: "علوم اجتماعی", to: "/thesis/humanities/social-sciences" },
-          { label: "فلسفه", to: "/thesis/humanities/philosophy" },
-          { label: "تاریخ", to: "/thesis/humanities/history" },
           { label: "فنی و مهندسی", to: "/thesis/engineering" },
           { label: "علوم پایه", to: "/thesis/pure-science" },
           { label: "علوم پزشکی", to: "/thesis/medical-health" },
           { label: "هنر و معماری", to: "/thesis/art-architecture-media" },
           { label: "کشاورزی و منابع طبیعی", to: "/thesis/agriculture-natural-resources" },
           { label: "علوم دامی و دامپزشکی", to: "/thesis/animal-science-veterinary" },
+          { label: "علوم بین‌رشته‌ای", to: "/thesis/interdisciplinary" },
+        ],
+      },
+      {
+        heading: "علوم انسانی",
+        items: [
+          { label: "روانشناسی", to: "/thesis/humanities/psychology" },
+          { label: "حقوق", to: "/thesis/humanities/law" },
+          { label: "مدیریت", to: "/thesis/humanities/management" },
+          { label: "علوم اجتماعی", to: "/thesis/humanities/social-sciences" },
+          { label: "فلسفه", to: "/thesis/humanities/philosophy" },
+          { label: "تاریخ", to: "/thesis/humanities/history" },
         ],
       },
       {
@@ -59,7 +65,6 @@ export const PRIMARY_NAV: NavItem[] = [
         items: [
           { label: "رساله دکتری", to: "/thesis/phd" },
           { label: "پایان‌نامه بین‌المللی", to: "/thesis/international" },
-          { label: "علوم بین‌رشته‌ای", to: "/thesis/interdisciplinary" },
         ],
       },
     ],

@@ -1,11 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
-import { importedToolCopy, TOOL_GROUPS, TOOLS, type ToolDef } from "@/lib/content";
+import { toolPageCopy, TOOL_GROUPS, TOOLS, type ToolDef } from "@/lib/content";
 import { usePageOverlay } from "@/lib/page-overlay";
 import { CALC_MAP } from "./Calculators";
 import { AskAiPanel } from "./AskAiPanel";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { CheckGrid } from "@/components/shared/CheckGrid";
+import { FaqGrid } from "@/components/shared/FaqGrid";
+import { stripEmoji } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 export function ToolsWorkspace({ tool }: { tool: ToolDef }) {
@@ -13,12 +15,13 @@ export function ToolsWorkspace({ tool }: { tool: ToolDef }) {
   const Calc = CALC_MAP[tool.slug as keyof typeof CALC_MAP];
   const locked = tool.tier === "pro" && !user;
   const overlay = usePageOverlay(`tool-${tool.slug}`);
-  const imported = importedToolCopy(tool.slug);
-  const title = overlay?.title?.trim() || tool.title;
-  const text = overlay?.lead?.trim() || tool.text;
+  const copy = toolPageCopy(tool.slug);
+  const title = overlay?.title?.trim() || copy.heroTitle || tool.title;
+  const text = overlay?.lead?.trim() || copy.lead || tool.text;
   const features = overlay?.features
     ? overlay.features.split(/\n+/).map((s) => s.trim()).filter(Boolean)
-    : imported?.features || [];
+    : copy.features;
+  const faqs = copy.faqs;
   const context = `ابزار فعال: ${title}. ${text}`;
 
   return (
@@ -37,8 +40,10 @@ export function ToolsWorkspace({ tool }: { tool: ToolDef }) {
                   params={{ slug: t.slug }}
                   className={cn("tool-item", t.slug === tool.slug && "is-active")}
                 >
-                  <span>{t.title}</span>
-                  <em className={t.tier === "pro" ? "badge-pro" : "badge-free"}>{t.tier === "pro" ? "ویژه" : "رایگان"}</em>
+                  <span>{shortToolLabel(t.slug, t.title)}</span>
+                  <em className={t.tier === "pro" ? "badge-pro" : "badge-free"}>
+                    {t.tier === "pro" ? "ویژه" : "رایگان"}
+                  </em>
                 </Link>
               ))}
             </div>
@@ -47,9 +52,11 @@ export function ToolsWorkspace({ tool }: { tool: ToolDef }) {
       </aside>
       <div className="tools-main">
         <header className="tools-head">
-          <span className={tool.tier === "pro" ? "badge-pro" : "badge-free"}>{tool.tier === "pro" ? "ابزار ویژه" : "ابزار رایگان"}</span>
-          <h1>{title}</h1>
-          <p>{text}</p>
+          <span className={tool.tier === "pro" ? "badge-pro" : "badge-free"}>
+            {tool.tier === "pro" ? "ابزار ویژه" : "ابزار رایگان"}
+          </span>
+          <h1>{stripEmoji(title)}</h1>
+          <p>{stripEmoji(text)}</p>
         </header>
         {locked ? (
           <div className="tool-lock">
@@ -69,7 +76,36 @@ export function ToolsWorkspace({ tool }: { tool: ToolDef }) {
                 </p>
               </div>
             )}
-            {features.length ? <CheckGrid items={features} /> : null}
+            {features.length ? (
+              <div className="tool-guide-block">
+                <div className="section-head">
+                  <span className="eyebrow">چطور از این ابزار استفاده کنیم؟</span>
+                  <h2>راهنمای استفاده</h2>
+                </div>
+                <CheckGrid items={features} />
+              </div>
+            ) : null}
+            {copy.sections.map((s, i) => (
+              <article key={s.heading} className={`service-card tone-${(i % 9) + 1} tool-guide-card`}>
+                <h3>{s.heading}</h3>
+                {s.paragraphs.map((p) => (
+                  <p key={p.slice(0, 32)}>{p}</p>
+                ))}
+              </article>
+            ))}
+            <FaqGrid items={faqs} embedded />
+            <div className="cta-band cta-band-inline">
+              <div>
+                <h2>{copy.ctaTitle || "برای تفسیر نتایج کمک می‌خواهید؟"}</h2>
+                <p>
+                  {copy.ctaText ||
+                    "تیم تحلیل آماری تزنویسه نتایج را به‌صورت علمی برای پژوهش شما تفسیر می‌کند."}
+                </p>
+              </div>
+              <Link to="/inquiry" className="btn-tz btn-light-tz btn-lg-tz">
+                سفارش تحلیل آماری
+              </Link>
+            </div>
             <AskAiPanel
               tool={title}
               context={context}
@@ -84,4 +120,32 @@ export function ToolsWorkspace({ tool }: { tool: ToolDef }) {
       </div>
     </div>
   );
+}
+
+function shortToolLabel(slug: string, title: string) {
+  const map: Record<string, string> = {
+    "descriptive-statistics": "آمار توصیفی",
+    "sample-size": "حجم نمونه",
+    "cronbachs-alpha": "آلفای کرونباخ",
+    "pearson-correlation": "همبستگی پیرسون",
+    spearman: "همبستگی اسپیرمن",
+    "t-test": "آزمون t",
+    regression: "رگرسیون",
+    anova: "تحلیل واریانس",
+    "chi-square": "خی‌دو",
+    "power-analysis": "توان آزمون",
+    "content-validity": "روایی محتوا",
+    kr20: "KR-20 / KR-21",
+    "cohens-kappa": "کاپای کوهن",
+    icc: "ICC",
+    "mann-whitney": "من-ویتنی",
+    wilcoxon: "ویلکاکسون",
+    "kruskal-wallis": "کروسکال-والیس",
+    "goodness-of-fit": "نیکویی برازش",
+    price: "برآورد هزینه",
+    "method-advisor": "مشاور روش",
+    "apa-citation": "ارجاع APA",
+    "theme-extractor": "استخراج مضمون",
+  };
+  return map[slug] || title;
 }

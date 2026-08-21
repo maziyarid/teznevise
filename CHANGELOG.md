@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.2 — 2026-08-21 — Calculator runtime and complete page content coverage
+
+- Always enqueue `legacy-wpcode.css` so dumped calculator HTML (`.tzss-*`, `.tzpc-*`, …) is no longer unstyled on live.
+- Add `assets/js/calculators.js` to hydrate sample-size (Cochran + Morgan), confidence pills, tabs, FA icons, and FAQ toggles — the JS never made it into saved post_content.
+- Widen the leftover-shortcode CSS matcher so `page-tool.php` and `*calculator*` slugs pick up styles even when the page stores expanded HTML instead of `[tz_sample_size]`.
+- Keep interactive calculator, hub, and service-CTA shortcodes visible next to the shared classic-editor disclosure.
+- Complete missing template and presentation metadata for existing calculator pages without overwriting populated editor content; document the production catalogue audit for all 105 live pages.
 ## 1.9.1 — 2026-08-21 — Export templates, comments, RTL article, footer
 
 - Consume enclosing interactive shortcodes (`[tz_descriptive]…[/tz_descriptive]`) so leftover classic copy never shows the closing tag.

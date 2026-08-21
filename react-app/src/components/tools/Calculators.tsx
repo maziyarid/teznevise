@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
 import {
   anova,
   chiSquare,
@@ -23,20 +24,22 @@ import {
   mean,
   median,
   mode,
+  morganN,
   pairedT,
   parseSeries,
   parseTable,
   pearson,
   pearsonInterpret,
+  powerFromN,
   powerNTwoMean,
   quantile,
-  sampleSizeMean,
   skewness,
   spearman,
   stdev,
   tStat,
   variance,
   wilcoxon,
+  zForAlpha,
 } from "@/lib/stats";
 
 function Field({
@@ -136,66 +139,132 @@ export function DescriptiveCalc() {
 }
 
 export function SampleSizeCalc() {
-  const [kind, setKind] = useState<"mean" | "cochran">("cochran");
-  const [sd, setSd] = useState("10");
-  const [e, setE] = useState("0.05");
-  const [cl, setCl] = useState("1.96");
-  const [p, setP] = useState("0.5");
-  const [N, setN] = useState("");
-  const nMean = sampleSizeMean(Number(cl), Number(sd), Number(e));
-  const nCochran = cochranN(Number(cl), Number(p), Number(e), N ? Number(N) : undefined);
+  const [tab, setTab] = useState<"cochran" | "morgan">("cochran");
+  const [pop, setPop] = useState("10000");
+  const [conf, setConf] = useState<90 | 95 | 99>(95);
+  const [margin, setMargin] = useState("5");
+  const [prop, setProp] = useState("50");
+  const [morganPop, setMorganPop] = useState("500");
+  const z = conf === 90 ? 1.64485 : conf === 99 ? 2.57583 : 1.95996;
+  const N = pop.trim() ? Number(pop) : undefined;
+  const nCochran = cochranN(z, Number(prop) / 100, Number(margin) / 100, N);
+  const nMorgan = morganN(Number(morganPop));
+  const morganRows: [string, string][] = [
+    ["۵۰", "۴۴"],
+    ["۱۰۰", "۸۰"],
+    ["۲۰۰", "۱۳۲"],
+    ["۳۰۰", "۱۶۹"],
+    ["۵۰۰", "۲۱۷"],
+    ["۱٬۰۰۰", "۲۷۸"],
+    ["۱٬۵۰۰", "۳۰۶"],
+    ["۳٬۰۰۰", "۳۴۱"],
+    ["۵٬۰۰۰", "۳۵۷"],
+    ["۱۰٬۰۰۰", "۳۷۰"],
+    ["۱۰۰٬۰۰۰ و بیشتر", "۳۸۴"],
+  ];
   return (
-    <div className="tool-card grid gap-3">
-      <div className="flex flex-wrap gap-2">
-        <button type="button" className={`btn-tz ${kind === "cochran" ? "btn-primary-tz" : "btn-light-tz"}`} onClick={() => setKind("cochran")}>
-          کوکران
+    <div className="tzss-calc-card tool-card">
+      <div className="tzss-tabs flex">
+        <button
+          type="button"
+          className={`tzss-tab ${tab === "cochran" ? "tzss-tab-active btn-primary-tz" : "btn-light-tz"} btn-tz`}
+          onClick={() => setTab("cochran")}
+        >
+          <i className="fa-solid fa-square-root-variable" aria-hidden="true" /> فرمول کوکران
         </button>
-        <button type="button" className={`btn-tz ${kind === "mean" ? "btn-primary-tz" : "btn-light-tz"}`} onClick={() => setKind("mean")}>
-          میانگین جامعه
+        <button
+          type="button"
+          className={`tzss-tab ${tab === "morgan" ? "tzss-tab-active btn-primary-tz" : "btn-light-tz"} btn-tz`}
+          onClick={() => setTab("morgan")}
+        >
+          <i className="fa-solid fa-table" aria-hidden="true" /> جدول مورگان
         </button>
       </div>
-      {kind === "cochran" ? (
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div className="field">
-            <label>Z (۱.۹۶ ≈ ۹۵٪)</label>
-            <input value={cl} onChange={(e) => setCl(e.target.value)} dir="ltr" />
+      {tab === "cochran" ? (
+        <div className="tzss-grid mt-4 grid gap-6 lg:grid-cols-[1fr_280px]">
+          <div className="tzss-fields grid gap-3">
+            <div className="field">
+              <label>
+                حجم جامعه آماری <span className="text-xs text-muted">(برای جامعه نامحدود خالی بگذارید)</span>
+              </label>
+              <input dir="ltr" value={pop} onChange={(e) => setPop(e.target.value)} placeholder="مثلاً: ۱۰۰۰۰" />
+            </div>
+            <div className="field">
+              <label>سطح اطمینان</label>
+              <div className="flex flex-wrap gap-2">
+                {([90, 95, 99] as const).map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    className={`btn-tz ${conf === c ? "btn-primary-tz" : "btn-light-tz"}`}
+                    onClick={() => setConf(c)}
+                  >
+                    {c}٪
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="field">
+              <label>
+                حاشیه خطا (٪) <span className="text-xs text-muted">(معمولاً ۵٪)</span>
+              </label>
+              <input dir="ltr" value={margin} onChange={(e) => setMargin(e.target.value)} />
+            </div>
+            <div className="field">
+              <label>
+                نسبت موفقیت / واریانس (٪) <span className="text-xs text-muted">(اگر نامشخص است، ۵۰ بگذارید)</span>
+              </label>
+              <input dir="ltr" value={prop} onChange={(e) => setProp(e.target.value)} />
+            </div>
+            <p className="tzss-method-note text-sm text-muted mb-0">
+              <strong>راهنما:</strong> فرمول کوکران (Cochran) رایج‌ترین روش برای محاسبه حجم نمونه در پژوهش‌های پیمایشی است. اگر نسبت موفقیت را نمی‌دانید، مقدار ۵۰٪ بیشترین حجم نمونه (محافظه‌کارانه‌ترین حالت) را می‌دهد.
+            </p>
           </div>
-          <div className="field">
-            <label>نسبت p (معمولاً ۰.۵)</label>
-            <input value={p} onChange={(e) => setP(e.target.value)} dir="ltr" />
-          </div>
-          <div className="field">
-            <label>حاشیه خطا e</label>
-            <input value={e} onChange={(e) => setE(e.target.value)} dir="ltr" />
-          </div>
-          <div className="field">
-            <label>حجم جامعه N (اختیاری)</label>
-            <input value={N} onChange={(e) => setN(e.target.value)} dir="ltr" placeholder="نامحدود" />
-          </div>
-          <div className="sm:col-span-2">
-            <StatTable rows={[["حجم نمونه", Number.isFinite(nCochran) ? fmt(nCochran, 0) : "—"]]} />
+          <div className="tzss-result">
+            <div className="tzss-result-label">حجم نمونه پیشنهادی</div>
+            <div className="tzss-result-number" dir="ltr">{Number.isFinite(nCochran) ? fmt(nCochran, 0) : "—"}</div>
+            <div className="tzss-result-unit">نفر</div>
+            <div className="tzss-result-divider" />
+            <div className="tzss-result-detail"><span>سطح اطمینان:</span><span>{conf}٪</span></div>
+            <div className="tzss-result-detail"><span>حاشیه خطا:</span><span>{margin}٪</span></div>
+            <div className="tzss-result-detail"><span>حجم جامعه:</span><span>{pop.trim() ? pop : "نامحدود"}</span></div>
+            <div className="tzss-result-formula">n = (z²·p·q/e²) / [1+(z²·p·q/e²-1)/N]</div>
+            <Link to="/inquiry" className="tzss-result-cta btn-tz btn-primary-tz mt-3">سفارش تحلیل آماری</Link>
           </div>
         </div>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid gap-4 mt-4">
           <div className="field">
-            <label>انحراف معیار (σ)</label>
-            <input value={sd} onChange={(e) => setSd(e.target.value)} dir="ltr" />
+            <label>حجم جامعه آماری خود را وارد کنید</label>
+            <input dir="ltr" value={morganPop} onChange={(e) => setMorganPop(e.target.value)} placeholder="مثلاً: ۵۰۰" />
           </div>
-          <div className="field">
-            <label>خطای قابل قبول (E)</label>
-            <input value={e} onChange={(e) => setE(e.target.value)} dir="ltr" />
+          <div className="tzss-morgan-result">
+            <div className="tzss-morgan-result-num" dir="ltr">{Number.isFinite(nMorgan) && nMorgan > 0 ? fmt(nMorgan, 0) : "—"}</div>
+            <div className="tzss-morgan-result-label">حجم نمونه بر اساس جدول کرجسی و مورگان</div>
           </div>
-          <div className="field">
-            <label>Z (۱.۹۶ ≈ ۹۵٪)</label>
-            <input value={cl} onChange={(e) => setCl(e.target.value)} dir="ltr" />
+          <div className="overflow-x-auto">
+            <table className="tzss-morgan-table w-full text-sm">
+              <thead>
+                <tr>
+                  <th>حجم جامعه (N)</th>
+                  <th>حجم نمونه (n)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {morganRows.map(([a, b]) => (
+                  <tr key={a}>
+                    <td>{a}</td>
+                    <td>{b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div className="sm:col-span-3">
-            <StatTable rows={[["حجم نمونه پیشنهادی", Number.isFinite(nMean) ? fmt(nMean, 0) : "—"]]} />
-          </div>
+          <p className="text-sm text-muted mb-0">
+            <strong>جدول مورگان:</strong> جدول کرجسی و مورگان (Krejcie & Morgan, 1970) یکی از پرکاربردترین روش‌های تعیین حجم نمونه در علوم انسانی و اجتماعی است که با سطح اطمینان ۹۵٪ و حاشیه خطای ۵٪ تنظیم شده است.
+          </p>
         </div>
       )}
-      <p className="text-xs text-muted">ریزش نمونه را جداگانه اضافه کنید. این برآورد جایگزین نظر کمیته روش نیست.</p>
     </div>
   );
 }
@@ -372,15 +441,99 @@ export function ChiSquareCalc() {
 }
 
 export function PowerCalc() {
+  const [mode, setMode] = useState<"n" | "power">("n");
+  const [tails, setTails] = useState<"two" | "one">("two");
   const [d, setD] = useState("0.5");
-  const n = powerNTwoMean(Number(d));
+  const [alpha, setAlpha] = useState("0.05");
+  const [power, setPower] = useState("0.80");
+  const [n, setN] = useState("64");
+  const [out, setOut] = useState<{ n: number; power: number } | null>(null);
+
+  function run() {
+    const dv = Number(d);
+    const a = Number(alpha);
+    const zA = zForAlpha(a, tails);
+    if (mode === "n") {
+      const target = Number(power);
+      const zB = zForAlpha(1 - target, "one");
+      const nn = powerNTwoMean(dv, zA, zB);
+      setOut({ n: nn, power: target });
+    } else {
+      const nn = Number(n);
+      const pwr = powerFromN(dv, nn, zA);
+      setOut({ n: nn, power: pwr });
+    }
+  }
+
   return (
-    <div className="tool-card grid gap-3">
+    <div className="tool-card grid gap-4">
+      <p className="text-sm text-muted mb-0">
+        این ابزار برای آزمون t مستقل (مقایسه میانگین دو گروه) طراحی شده است. اندازه اثر (Cohen's d): کوچک=۰.۲، متوسط=۰.۵، بزرگ=۰.۸
+      </p>
+      <div className="seg-row" role="tablist" aria-label="نوع محاسبه">
+        <button type="button" className={cn("seg-btn", mode === "n" && "is-on")} onClick={() => setMode("n")}>
+          حجم نمونه لازم
+        </button>
+        <button type="button" className={cn("seg-btn", mode === "power" && "is-on")} onClick={() => setMode("power")}>
+          توان آزمون
+        </button>
+      </div>
+      <div className="seg-row" role="tablist" aria-label="دامنه آزمون">
+        <button type="button" className={cn("seg-btn", tails === "two" && "is-on")} onClick={() => setTails("two")}>
+          دودامنه
+        </button>
+        <button type="button" className={cn("seg-btn", tails === "one" && "is-on")} onClick={() => setTails("one")}>
+          یک‌دامنه
+        </button>
+      </div>
       <div className="field">
         <label>اندازه اثر d (کوهن)</label>
         <input value={d} onChange={(e) => setD(e.target.value)} dir="ltr" />
+        <div className="chip-row">
+          {[
+            ["0.2", "کوچک"],
+            ["0.5", "متوسط"],
+            ["0.8", "بزرگ"],
+          ].map(([v, lab]) => (
+            <button
+              key={v}
+              type="button"
+              className={cn("chip-btn", d === v && "is-on")}
+              onClick={() => setD(v)}
+            >
+              {lab} ({v})
+            </button>
+          ))}
+        </div>
       </div>
-      <StatTable rows={[["n در هر گروه (α≈۰.۰۵، توان≈۰.۸۰)", Number.isFinite(n) ? fmt(n, 0) : "—"]]} />
+      <div className="field">
+        <label>سطح معناداری α</label>
+        <input value={alpha} onChange={(e) => setAlpha(e.target.value)} dir="ltr" />
+      </div>
+      {mode === "n" ? (
+        <div className="field">
+          <label>توان هدف</label>
+          <input value={power} onChange={(e) => setPower(e.target.value)} dir="ltr" />
+        </div>
+      ) : (
+        <div className="field">
+          <label>حجم نمونه در هر گروه</label>
+          <input value={n} onChange={(e) => setN(e.target.value)} dir="ltr" />
+        </div>
+      )}
+      <button type="button" className="btn-tz btn-primary-tz" onClick={run}>
+        محاسبه
+      </button>
+      {out ? (
+        <StatTable
+          rows={[
+            ["حجم نمونه لازم (هر گروه)", Number.isFinite(out.n) ? fmt(out.n, 0) : "—"],
+            ["توان آزمون", Number.isFinite(out.power) ? fmt(out.power, 3) : "—"],
+          ]}
+        />
+      ) : (
+        <p className="text-sm text-muted mb-0">مفروضات را وارد کنید و محاسبه را بزنید.</p>
+      )}
     </div>
   );
 }

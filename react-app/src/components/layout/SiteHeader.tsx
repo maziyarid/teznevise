@@ -39,7 +39,7 @@ export function SiteHeader() {
   }
   function closeMega() {
     if (leaveTimer.current) window.clearTimeout(leaveTimer.current);
-    leaveTimer.current = window.setTimeout(() => setOpenMenu(null), 160);
+    leaveTimer.current = window.setTimeout(() => setOpenMenu(null), 220);
   }
 
   useEffect(() => {
@@ -48,6 +48,18 @@ export function SiteHeader() {
     setAcc(null);
     setSearchOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpenMenu(null);
+        setOpen(false);
+        setSearchOpen(false);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open || searchOpen ? "hidden" : "";
@@ -109,14 +121,14 @@ export function SiteHeader() {
                 <li
                   key={item.to}
                   className={cn(hasKids && "has-dropdown", openMenu === item.to && "is-open")}
-                  onMouseEnter={hasKids ? () => openMega(item.to) : undefined}
-                  onMouseLeave={hasKids ? closeMega : undefined}
                 >
                   {hasKids ? (
                     <button
                       type="button"
                       className={cn("nav-top", active && "is-active")}
                       aria-expanded={openMenu === item.to}
+                      onMouseEnter={() => openMega(item.to)}
+                      onMouseLeave={closeMega}
                       onClick={() => setOpenMenu((cur) => (cur === item.to ? null : item.to))}
                     >
                       <FaIcon icon={navIconFor(item.to, item.label)} className="nav-item-icon" />
@@ -130,11 +142,21 @@ export function SiteHeader() {
                     </Link>
                   )}
                   {hasKids ? (
-                    <div className="nav-panel mega">
-                      <div className="mega-inner">
+                    <div className="nav-panel mega" aria-hidden={openMenu !== item.to}>
+                      <div
+                        className="mega-inner"
+                        style={{ ["--mega-cols" as string]: String(item.children!.length) }}
+                        onMouseEnter={() => openMega(item.to)}
+                        onMouseLeave={closeMega}
+                      >
                         {item.children!.map((col, i) => (
                           <div key={i} className="mega-col">
-                            {col.heading ? <h4>{col.heading}</h4> : null}
+                            {col.heading ? (
+                              <h4>
+                                <FaIcon icon={navIconFor("#", col.heading)} className="nav-item-icon" />
+                                {col.heading}
+                              </h4>
+                            ) : null}
                             {col.items.map((c) => (
                               <Link key={c.to} to={c.to}>
                                 <FaIcon icon={navIconFor(c.to, c.label)} className="nav-item-icon" />

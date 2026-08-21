@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Paperclip, Download, Shield } from "lucide-react";
 import { downloadVaultFile, listVaultFiles, uploadVaultFile } from "@/lib/server/vault";
 import { toast } from "sonner";
@@ -6,25 +6,11 @@ import { toast } from "sonner";
 export function TicketFiles({ ticketId }: { ticketId: string }) {
   const [rows, setRows] = useState<Awaited<ReturnType<typeof listVaultFiles>>>([]);
   const [busy, setBusy] = useState(false);
-  const loadVersion = useRef(0);
 
-  const load = useCallback(() => {
-    const version = ++loadVersion.current;
-    void listVaultFiles({ data: { ticketId } })
-      .then((nextRows) => {
-        if (loadVersion.current === version) setRows(nextRows);
-      })
-      .catch(() => {
-        if (loadVersion.current === version) setRows([]);
-      });
-  }, [ticketId]);
+  const load = () => void listVaultFiles({ data: { ticketId } }).then(setRows).catch(() => setRows([]));
   useEffect(() => {
-    setRows([]);
     load();
-    return () => {
-      loadVersion.current += 1;
-    };
-  }, [load]);
+  }, [ticketId]);
 
   async function onFile(file: File) {
     setBusy(true);
