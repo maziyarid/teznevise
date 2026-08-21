@@ -1,6 +1,7 @@
 # Live Page Coverage Audit
 
-**Audit date:** 2026-08-21  
+**Audit date:** 2026-08-21
+
 **Scope:** Public WordPress pages at `teznevise.ir`, compared against `inc/extracted-page-fields.json`.
 
 ## Result
