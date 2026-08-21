@@ -198,7 +198,7 @@ function teznevise_interactive_shortcode_pattern() {
  */
 function teznevise_interactive_shortcode_match_regex() {
 	$pattern = teznevise_interactive_shortcode_pattern();
-	return '\[(' . $pattern . ')\b[^\]]*\](?:(.*?)\s*\[/\1\])?';
+	return '\[(' . $pattern . ')\b[^\]]*\](?:(.*?)\s*\[\/\1\])?';
 }
 
 /**
