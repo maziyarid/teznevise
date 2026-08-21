@@ -259,12 +259,6 @@ export function ogCardPublicPath(cwd = process.cwd()) {
   return "";
 }
 
-function detectCustomOgCard(cwd = process.cwd(), site = {}) {
-  if (ogCardPublicPath(cwd)) return true;
-  // Vercel runtime has no public/: trust a bake that already saw the file.
-  return siteHasCustomCard(site) || Boolean(String(site.image ?? "").trim());
-}
-
 /** Snapshot for Vite/Nitro to bake into the server bundle (Vercel has no workspace FS). */
 export function snapshotOgIdentity(cwd = process.cwd()) {
   const site = { ...readOgSite(cwd) };
@@ -318,12 +312,14 @@ export function siteHasCustomCard(site = {}) {
 }
 
 /**
- * Preview: public/og.jpg|png on disk.
- * Vercel: the bake (`card=custom` / `image`) because the function cannot stat public/.
- * Otherwise empty — caller emits the og.grok.me placeholder.
+ * The caller supplies a normalized identity: automatic snapshots already stamp
+ * an on-disk preview card, while explicit route/test identities remain stable.
+ * Vercel uses the baked `card=custom` / `image` values because the runtime
+ * cannot inspect the workspace filesystem.
  */
-export function resolveOgCardAsset(site = {}, cwd = process.cwd()) {
-  return ogCardPublicPath(cwd) || (detectCustomOgCard(cwd, site) ? String(site.image ?? "").trim() || "/og.jpg" : "");
+export function resolveOgCardAsset(site = {}) {
+  const image = String(site.image ?? "").trim();
+  return siteHasCustomCard(site) || image ? image || "/og.jpg" : "";
 }
 
 /** Stamp `card=custom` when public/og.jpg or public/og.png is on disk. */
@@ -354,7 +350,7 @@ export function grokOgHeadTags({
     tags.push(`<meta property="og:type" content="x:game">`);
   }
   if (publicHost) {
-    const asset = resolveOgCardAsset(site, cwd);
+    const asset = resolveOgCardAsset(site);
     const custom = Boolean(asset);
     let image = custom
       ? `https://${publicHost}${asset.startsWith("/") ? asset : `/${asset}`}`
@@ -402,14 +398,15 @@ function insertBeforeHeadClose(html, snippet) {
 
 export function normalizeHeadContext(ctx = {}) {
   const cwd = ctx.cwd ?? process.cwd();
-  // Middleware passes a baked `site`. Still consult the workspace so a
-  // public/og.jpg generated after that snapshot (or missed by a wrong cwd)
-  // wins over the og.grok.me placeholder. Vercel has no public/ to read, so
-  // a correct bake is unchanged.
-  const site = applyCustomCardFromFs(
-    ctx.site !== undefined ? ctx.site : snapshotOgIdentity(cwd).site,
-    cwd,
-  );
+  // Explicit caller data must be deterministic: preview tests, route-level
+  // metadata, and baked server identities must not be changed because the
+  // process happens to run inside another application's public/ directory.
+  // Automatic runtime snapshots still inspect public/og.jpg so a real local
+  // card is picked up during development and baked for deployment.
+  const site =
+    ctx.site !== undefined
+      ? ctx.site
+      : applyCustomCardFromFs(snapshotOgIdentity(cwd).site, cwd);
   const appName = resolveOgTitle(site, ctx.appName ?? DEFAULT_APP_NAME, ctx.host ?? "");
   return {
     appName,
