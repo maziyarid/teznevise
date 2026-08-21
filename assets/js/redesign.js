@@ -78,11 +78,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  document.querySelectorAll('[data-seo-toggle]').forEach(function (seoToggle) {
+  document.querySelectorAll('[data-seo-toggle], [data-content-toggle]').forEach(function (seoToggle) {
     const targetId = seoToggle.getAttribute('aria-controls');
     let seoMore = targetId ? document.getElementById(targetId) : null;
     if (!seoMore) {
-      seoMore = seoToggle.closest('.seo-disclosure, .seo-panel');
+      seoMore = seoToggle.closest('.seo-disclosure, .seo-panel, .tz-classic-disclosure');
       if (seoMore) seoMore = seoMore.querySelector('.seo-more-content');
     }
     if (!seoMore) return;

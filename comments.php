@@ -49,6 +49,8 @@ if ( post_password_required() ) {
 		comment_form( array(
 			'class_form'           => 'comment-form tez-comment-form',
 			'class_submit'         => 'submit btn-tz btn-primary-tz',
+			'submit_button'        => '<button name="%1$s" type="submit" id="%2$s" class="%3$s">%4$s</button>',
+			'submit_field'         => '<p class="form-submit">%1$s %2$s</p>',
 			'title_reply'          => __( 'نظر خود را بنویسید', 'teznevise' ),
 			'title_reply_before'   => '<h2 id="reply-title" class="comment-reply-title">',
 			'title_reply_after'    => '</h2>',

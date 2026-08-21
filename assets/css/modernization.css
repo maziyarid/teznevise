@@ -85,6 +85,19 @@
 
 .tz-react-shell .tz-reveal { animation: none; }
 
+.tz-react-shell .tz-classic-disclosure {
+	max-width: min(var(--tz-content, 1180px), 100%);
+	margin-inline: auto;
+}
+
+.tz-react-shell .tz-classic-disclosure .seo-more-content {
+	max-width: 76ch !important;
+}
+
+.tz-react-shell .tz-interactive-page-content + .tz-classic-disclosure {
+	margin-top: var(--tz-space-6, 1.5rem);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .tz-react-shell .tz-reveal { animation: tz-editorial-rise 260ms var(--tz-ease-out) both; }
   .tz-react-shell :is(.services-grid, .article-grid, .reason-list, .steps, .quote-grid) > .tz-reveal:nth-child(2) { animation-delay: 45ms; }
@@ -117,4 +130,131 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ===== 1.9.1 screenshot last-wins: article, comments, footer ===== */
+
+.tz-react-shell .blog-post__layout {
+  display: grid !important;
+  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr) !important;
+  grid-template-areas: "aside content" !important;
+  gap: clamp(28px, 3vw, 44px) !important;
+  align-items: start !important;
+}
+.tz-react-shell .blog-post__content {
+  grid-area: content !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+.tz-react-shell .blog-post__aside {
+  grid-area: aside !important;
+}
+.tz-react-shell .article-content,
+.tz-react-shell .blog-post__content .article-content {
+  max-width: 72ch;
+}
+.tz-react-shell .entry-toc__label,
+.tz-react-shell .blog-post__toc .entry-toc__label {
+  font-size: 0 !important;
+}
+.tz-react-shell .entry-toc__label::after,
+.tz-react-shell .blog-post__toc .entry-toc__label::after {
+  content: "در این مقاله";
+  font-size: 14px;
+  font-weight: 850;
+  color: #10231d;
+}
+
+@media (max-width: 900px) {
+  .tz-react-shell .blog-post__layout {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: "content" "aside" !important;
+  }
+}
+
+.tz-react-shell .comments-area #respond,
+.tz-react-shell .tez-comment-form,
+.tz-react-shell .comment-form {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px;
+  max-width: 720px;
+}
+.tz-react-shell .comment-form-comment {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px;
+}
+.tz-react-shell .comment-form-comment label {
+  order: -1 !important;
+  display: block !important;
+  color: #17342c;
+  font-size: 14px;
+  font-weight: 800;
+}
+.tz-react-shell .comment-form textarea,
+.tz-react-shell .tez-comment-form textarea {
+  min-height: 180px !important;
+  width: 100% !important;
+  padding: 12px 14px !important;
+  border: 1px solid #cbdcd5 !important;
+  border-radius: 16px !important;
+  background: #fff !important;
+  color: #10231d !important;
+  font: inherit !important;
+  box-sizing: border-box;
+}
+.tz-react-shell .comment-form .submit,
+.tz-react-shell .comment-form input[type="submit"],
+.tz-react-shell .comment-form button.submit,
+.tz-react-shell .tez-comment-form .submit {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  min-height: 48px !important;
+  padding: 10px 22px !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  background: #145d4a !important;
+  color: #fff !important;
+  font: inherit !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+}
+
+.tz-react-shell .site-footer-new .footer-utility {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: space-between;
+  align-items: flex-start !important;
+  gap: 16px 24px;
+  width: 100%;
+}
+.tz-react-shell .site-footer-new .footer-certs {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+  flex-basis: 100% !important;
+  margin-top: 20px !important;
+  justify-content: flex-start !important;
+  gap: 10px;
+}
+.tz-react-shell .site-footer-new .trust-seal {
+  width: 88px;
+  min-width: 88px;
+  min-height: 96px;
+  background: #fff;
+  color: #145d4a;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 800;
 }

@@ -49,8 +49,8 @@ if ( $logo_url ) {
 		<i class="<?php echo $logged ? 'fa-solid fa-user' : 'fa-regular fa-user'; ?>" aria-hidden="true"></i>
 	</a>
 	<div class="nav-quick-actions desktop-cta-group">
-		<a class="nav-cta nav-cta-outline" href="<?php echo esc_url( home_url( '/about/' ) ); ?>"><i class="fa-regular fa-circle-question" aria-hidden="true"></i><span><?php esc_html_e( 'درباره ما', 'teznevise' ); ?></span></a>
-		<a class="nav-cta nav-cta-solid" href="<?php echo esc_url( home_url( '/inquiry/' ) ); ?>"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i><span><?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></span></a>
+		<a class="nav-cta nav-cta-outline" href="<?php echo esc_url( teznevise_page_url_from_candidates( array( 'about-us', 'about', 'our-story' ), '/about/' ) ); ?>"><i class="fa-regular fa-circle-question" aria-hidden="true"></i><span><?php esc_html_e( 'درباره ما', 'teznevise' ); ?></span></a>
+		<a class="nav-cta nav-cta-solid" href="<?php echo esc_url( teznevise_page_url_from_candidates( array( 'inquiry', 'contact-us', 'contact' ), '/inquiry/' ) ); ?>"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i><span><?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></span></a>
 	</div>
 </div>
 </nav>
