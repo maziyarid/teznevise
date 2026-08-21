@@ -72,7 +72,7 @@ function teznevise_read_time( $post_id = 0 ) {
 	$text  = trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( get_post_field( 'post_content', $post_id ) ) ) );
 	// Use Unicode-aware tokenization: split on whitespace and count non-empty tokens
 	$words = $text ? count( preg_split( '/\s+/u', $text, -1, PREG_SPLIT_NO_EMPTY ) ) : 0;
-	return max( 1, (int) ceil( $words / 200 ) ) . ' ' . __( 'min read', 'teznevise' );
+	return max( 1, (int) ceil( $words / 200 ) ) . ' ' . __( 'دقیقه مطالعه', 'teznevise' );
 }
 
 function teznevise_post_heading_id( $text ) {

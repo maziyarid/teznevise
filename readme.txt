@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.8.6
+Stable tag: 1.8.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,10 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 6. Assign menus: Primary, Mobile, Bottom
 
 == Changelog ==
+
+= 1.8.7 =
+* Single posts: article is the wide column, TOC is the sidebar; Persian UI copy
+* Desktop header: hide empty/broken top-level menu icon boxes; self-host Font Awesome
 
 = 1.8.6 =
 * Unlayered CSS last-wins restore white header, compact nav, and hero orbit
