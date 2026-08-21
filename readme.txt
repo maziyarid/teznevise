@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.9
 Requires PHP: 8.3
-Stable tag: 1.9.0
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,11 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 6. Assign menus: Primary, Mobile, Bottom
 
 == Changelog ==
+
+= 1.9.1 =
+* Enclosing interactive shortcodes no longer leak closing tags into classic copy
+* Classic-only pages stay visible; disclosure is for supplementary copy only
+* Comment form, RTL article/TOC, and footer trust seals restyled
 
 = 1.9.0 =
 * Editorial Signal compatibility layer: semantic Bootstrap colors, visible focus states, RTL-aware sizing, and motion-safe controls.
