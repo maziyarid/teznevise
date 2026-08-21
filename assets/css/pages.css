@@ -40,15 +40,15 @@
 }
 .blog-post__layout {
   display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px) !important;
-  grid-template-areas: "content aside" !important;
+  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr) !important;
+  grid-template-areas: "aside content" !important;
   gap: clamp(28px, 3vw, 44px) !important;
   align-items: start !important;
 }
 .blog-post__content {
   grid-area: content;
   min-width: 0;
-  max-width: 72ch;
+  max-width: none;
 }
 .blog-post__aside {
   grid-area: aside;
@@ -281,19 +281,23 @@ body.tz-reading-focus .blog-post__content { max-width: none; }
   line-height: 1.9;
 }
 .tez-comment-form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 16px;
+  max-width: 720px;
 }
 .tez-comment-form > p { margin: 0; }
-.tez-comment-form .logged-in-as,
-.tez-comment-form .comment-notes,
-.tez-comment-form .comment-form-comment,
-.tez-comment-form .form-submit,
-.tez-comment-form .comment-form-cookies-consent { grid-column: 1 / -1; }
+.tez-comment-form .comment-form-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tez-comment-form .comment-form-comment label {
+  order: -1;
+}
 .tez-comment-form label {
   display: block;
-  margin-bottom: 7px;
+  margin-bottom: 0;
   color: #17342c;
   font-size: 14px;
   font-weight: 800;
@@ -320,7 +324,11 @@ body.tz-reading-focus .blog-post__content { max-width: none; }
   outline: 3px solid rgba(20, 93, 74, 0.14);
   outline-offset: 2px;
 }
-.tez-comment-form .submit {
+.tez-comment-form .submit,
+.tez-comment-form button.submit,
+.tez-comment-form input[type="submit"] {
+  appearance: none;
+  -webkit-appearance: none;
   min-height: 48px;
   padding: 10px 22px;
   border: 0;
@@ -329,6 +337,10 @@ body.tz-reading-focus .blog-post__content { max-width: none; }
   color: #fff;
   font: inherit;
   font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .no-comments {
   display: flex;
@@ -340,9 +352,9 @@ body.tz-reading-focus .blog-post__content { max-width: none; }
 }
 @media (max-width: 640px) {
   .comments-area { border-radius: 18px; }
-  .tez-comment-form { grid-template-columns: 1fr; }
-  .tez-comment-form > p { grid-column: 1; }
-  .tez-comment-form .submit { width: 100%; }
+  .tez-comment-form .submit,
+  .tez-comment-form button.submit,
+  .tez-comment-form input[type="submit"] { width: 100%; }
 }
 
 /* === page-extras.css === */

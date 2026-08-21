@@ -189,6 +189,17 @@ function teznevise_interactive_shortcode_pattern() {
 }
 
 /**
+ * Regex that matches an interactive shortcode in either self-closing or
+ * enclosing form, including the inner body and the matching close tag.
+ *
+ * @return string Pattern without delimiters.
+ */
+function teznevise_interactive_shortcode_match_regex() {
+	$pattern = teznevise_interactive_shortcode_pattern();
+	return '\[(' . $pattern . ')\b[^\]]*\](?:(.*?)\s*\[/\1\])?';
+}
+
+/**
  * Whether leftover post_content contains an interactive widget that must still render.
  * Detects the shortcode anywhere, including mixed HTML / multiple tags.
  *
@@ -238,8 +249,8 @@ function teznevise_page_without_interactive_shortcodes( $content ) {
 	if ( function_exists( 'teznevise_normalize_shortcode_quotes' ) ) {
 		$content = teznevise_normalize_shortcode_quotes( $content );
 	}
-	$pattern = teznevise_interactive_shortcode_pattern();
-	return (string) preg_replace( '/\[(?:' . $pattern . ')\b[^\]]*?\](?:\s*\[\/(?:' . $pattern . ')\])?/i', '', $content );
+	$pattern = teznevise_interactive_shortcode_match_regex();
+	return (string) preg_replace( '/' . $pattern . '/is', '', $content );
 }
 
 /**
@@ -303,6 +314,10 @@ function teznevise_filter_page_content_disclosure( $content ) {
 	if ( function_exists( 'teznevise_is_legacy_shortcode_content' ) && teznevise_is_legacy_shortcode_content( $raw ) ) {
 		return $content;
 	}
+	// Builder leftover is printed by teznevise_the_page_leftover_content().
+	if ( function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections() ) {
+		return $content;
+	}
 	if ( teznevise_is_interactive_shortcode_content( $raw ) ) {
 		$interactive = teznevise_interactive_shortcodes_markup( $raw );
 		$classic     = teznevise_render_classic_page_content( teznevise_page_without_interactive_shortcodes( $raw ) );
@@ -313,8 +328,8 @@ function teznevise_filter_page_content_disclosure( $content ) {
 		}
 		return $output . $markup;
 	}
-	$markup = teznevise_page_content_disclosure_markup( $content );
-	return $markup ? $markup : $content;
+	// Classic-only pages keep their body visible. Do not hide it behind "مشاهده بیشتر".
+	return $content;
 }
 add_filter( 'the_content', 'teznevise_filter_page_content_disclosure', 50 );
 
@@ -329,8 +344,8 @@ function teznevise_interactive_shortcodes_markup( $content ) {
 	if ( function_exists( 'teznevise_normalize_shortcode_quotes' ) ) {
 		$content = teznevise_normalize_shortcode_quotes( $content );
 	}
-	$pattern = teznevise_interactive_shortcode_pattern();
-	if ( ! preg_match_all( '/\[(?:' . $pattern . ')\b[^\]]*?\](?:\s*\[\/(?:' . $pattern . ')\])?/i', $content, $matches ) ) {
+	$pattern = teznevise_interactive_shortcode_match_regex();
+	if ( ! preg_match_all( '/' . $pattern . '/is', $content, $matches ) ) {
 		return '';
 	}
 	$unique = array();

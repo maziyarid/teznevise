@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.1 — 2026-08-21 — Export templates, comments, RTL article, footer
+
+- Consume enclosing interactive shortcodes (`[tz_descriptive]…[/tz_descriptive]`) so leftover classic copy never shows the closing tag.
+- Classic-only pages stay fully visible; the `مشاهده بیشتر` disclosure is only used next to builder/interactive widgets.
+- Memoize page-URL candidate lookups and keep footer trust seals on their own row.
+- Comment form: label above the textarea, branded submit button, flex layout.
+- RTL article grid: wide reading column on the right, TOC on the left, Persian “در این مقاله” label.
+
+
 ## 1.9.0 — 2026-08-21 — Editorial Signal modernization and compatibility hardening
 
 - Add `assets/css/modernization.css` as a final, namespaced compatibility layer for Bootstrap semantics, focus visibility, responsive sizing, safe-area behavior, and reduced motion.

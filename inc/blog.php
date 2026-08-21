@@ -129,6 +129,15 @@ function teznevise_prepare_post_content( $content ) {
 	}, $content );
 }
 
+function teznevise_localize_on_this_page( $translation, $text, $domain = '' ) {
+	unset( $domain );
+	if ( 'On this page' === $text || 'On this page' === $translation ) {
+		return 'در این مقاله';
+	}
+	return $translation;
+}
+add_filter( 'gettext', 'teznevise_localize_on_this_page', 10, 3 );
+
 /**
  * Render table of contents from prepared content (with IDs already added).
  *
