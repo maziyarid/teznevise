@@ -1132,10 +1132,7 @@ a.custom-logo-link img.custom-logo {
  * layout-refinements.css sets .main-nav to height 88px / gap 34px and
  * nav-dropdown.css parks a 28px chevron beside every parent. Together with
  * WP menu items that duplicate the CTA buttons, the 1200px bar overflows. */
-.skip-link,
-.skip-link.screen-reader-text {
-  display: none !important;
-}
+
 
 @media (min-width: 1051px) {
   .main-nav {
