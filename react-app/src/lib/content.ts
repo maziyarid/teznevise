@@ -1,5 +1,6 @@
 import { IMPORTED_PROPOSAL, IMPORTED_THESIS, IMPORTED_TOOLS } from "./imported-pages";
 import { absorbImported, importedToPage, splitFaqs, type FaqItem, type PageCopy } from "./page-copy";
+import { TOOL_GUIDES } from "./tool-guides";
 
 export type { FaqItem };
 
@@ -755,6 +756,31 @@ export function importedToolCopy(slug: string) {
     if (IMPORTED_TOOLS[k]) return IMPORTED_TOOLS[k];
   }
   return null;
+}
+
+export function toolPageCopy(slug: string) {
+  const canon = TOOL_ALIASES[slug] || slug.replace(/-calculator$/, "");
+  const imp = importedToolCopy(canon) || importedToolCopy(slug);
+  const guide = TOOL_GUIDES[canon] || TOOL_GUIDES[slug];
+  const rawFeatures = (guide?.features?.length ? guide.features : imp?.features) ?? [];
+  const split = splitFaqs(rawFeatures);
+  return {
+    heroTitle: guide?.heroTitle || imp?.heroTitle || imp?.title || "",
+    title: guide?.heroTitle || imp?.title || "",
+    lead: guide?.lead || imp?.lead || "",
+    features: split.features,
+    faqs: guide?.faqs?.length ? guide.faqs : split.faqs,
+    body: guide?.body ?? [],
+    sections: guide?.sections ?? [],
+    ctaTitle: guide?.ctaTitle,
+    ctaText: guide?.ctaText,
+  };
+}
+
+for (const t of TOOLS) {
+  const copy = toolPageCopy(t.slug);
+  if (copy.heroTitle) t.title = copy.heroTitle;
+  if (copy.lead) t.text = copy.lead;
 }
 
 absorbImported(THESIS_PAGES, IMPORTED_THESIS);

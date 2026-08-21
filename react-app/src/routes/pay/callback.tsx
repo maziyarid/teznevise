@@ -8,9 +8,9 @@ export const Route = createFileRoute("/pay/callback")({ component: PayCallback }
 function PayCallback() {
   const search = useRouterState({ select: (s) => s.location.searchStr });
   const [msg, setMsg] = useState("در حال تأیید پرداخت…");
+  const params = new URLSearchParams(search.startsWith("?") ? search.slice(1) : search);
 
   useEffect(() => {
-    const params = new URLSearchParams(search.startsWith("?") ? search.slice(1) : search);
     const authority = params.get("Authority") || params.get("authority") || undefined;
     const transid = params.get("transid") || params.get("transId") || undefined;
     const status = params.get("Status") || params.get("status") || undefined;

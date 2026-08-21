@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AppPage } from "@/components/layout/AppFrame";
 import { TicketFiles } from "@/components/tickets/TicketFiles";
 import { getTicket, replyTicket, setTicketStatus } from "@/lib/server/app";
@@ -12,25 +12,11 @@ function AdminTicket() {
   const { id } = Route.useParams();
   const [data, setData] = useState<Awaited<ReturnType<typeof getTicket>> | null>(null);
   const [body, setBody] = useState("");
-  const loadVersion = useRef(0);
 
-  const load = useCallback(() => {
-    const version = ++loadVersion.current;
-    void getTicket({ data: { id } })
-      .then((nextData) => {
-        if (loadVersion.current === version) setData(nextData);
-      })
-      .catch(() => {
-        if (loadVersion.current === version) setData(null);
-      });
-  }, [id]);
+  const load = () => void getTicket({ data: { id } }).then(setData).catch(() => setData(null));
   useEffect(() => {
-    setData(null);
     load();
-    return () => {
-      loadVersion.current += 1;
-    };
-  }, [load]);
+  }, [id]);
 
   if (!data) return <AppPage title="تیکت">بارگذاری…</AppPage>;
 

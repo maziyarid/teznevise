@@ -1,5 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { resolveTool } from "@/lib/content";
+import { resolveTool, toolPageCopy } from "@/lib/content";
 import { ToolsWorkspace } from "@/components/tools/ToolsWorkspace";
 
 export const Route = createFileRoute("/tools/$slug")({
@@ -8,9 +8,11 @@ export const Route = createFileRoute("/tools/$slug")({
     if (!tool) throw notFound();
     return tool;
   },
-  head: ({ loaderData }) => ({
-    meta: [{ title: loaderData ? `${loaderData.title} | ابزار تزنویسه` : "ابزار" }],
-  }),
+  head: ({ loaderData }) => {
+    const copy = loaderData ? toolPageCopy(loaderData.slug) : null;
+    const title = copy?.heroTitle || loaderData?.title;
+    return { meta: [{ title: title ? `${title} | تزنویسه` : "ابزار" }] };
+  },
   component: ToolPage,
 });
 

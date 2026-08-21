@@ -1,4 +1,10 @@
 const RULES: [string, string][] = [
+  ["humanities/psychology", "fa-brain"],
+  ["humanities/law", "fa-scale-balanced"],
+  ["humanities/management", "fa-briefcase"],
+  ["humanities/social-sciences", "fa-users"],
+  ["humanities/philosophy", "fa-scroll"],
+  ["humanities/history", "fa-landmark"],
   ["chapter-one", "fa-file-lines"],
   ["chapter-two", "fa-book-open"],
   ["chapter-three", "fa-flask"],
@@ -21,12 +27,6 @@ const RULES: [string, string][] = [
   ["/proposal/quantitative", "fa-chart-pie"],
   ["/proposal/applied", "fa-wrench"],
   ["/proposal/medical", "fa-stethoscope"],
-  ["psychology", "fa-brain"],
-  ["law", "fa-scale-balanced"],
-  ["management", "fa-briefcase"],
-  ["philosophy", "fa-scroll"],
-  ["history", "fa-landmark"],
-  ["social-sciences", "fa-users"],
   ["descriptive-statistics", "fa-chart-simple"],
   ["sample-size", "fa-users"],
   ["cronbach", "fa-percent"],
@@ -56,13 +56,25 @@ export function navIconFor(to: string, label = ""): string {
   if (to === "#" || to === "") {
     if (label.includes("فصل")) return "fa-list-ol";
     if (label.includes("رشته")) return "fa-tags";
+    if (label.includes("انسانی")) return "fa-landmark";
     if (label.includes("سایر")) return "fa-ellipsis";
+    if (label.includes("پروپوزال")) return "fa-file-lines";
+    if (label.includes("روش")) return "fa-flask";
+    if (label.includes("آمار")) return "fa-chart-simple";
+    if (label.includes("روایی") || label.includes("پایایی")) return "fa-clipboard-check";
+    if (label.includes("پیشرفته")) return "fa-layer-group";
     return "fa-circle-dot";
   }
   const path = to.toLowerCase();
+  let bestIcon = "";
+  let bestLen = -1;
   for (const [needle, icon] of RULES) {
-    if (path.includes(needle)) return icon;
+    if (path.includes(needle) && needle.length > bestLen) {
+      bestIcon = icon;
+      bestLen = needle.length;
+    }
   }
+  if (bestIcon) return bestIcon;
   if (label.includes("پایان")) return "fa-graduation-cap";
   if (label.includes("پروپوزال")) return "fa-file-lines";
   if (label.includes("ابزار")) return "fa-calculator";

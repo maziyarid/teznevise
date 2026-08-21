@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { listApprovedComments, submitComment } from "@/lib/comments";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
@@ -9,25 +9,11 @@ export function PostComments({ slug }: { slug: string }) {
   const [rows, setRows] = useState<Awaited<ReturnType<typeof listApprovedComments>>>([]);
   const [body, setBody] = useState("");
   const [busy, setBusy] = useState(false);
-  const loadVersion = useRef(0);
 
-  const load = useCallback(() => {
-    const version = ++loadVersion.current;
-    void listApprovedComments({ data: { slug } })
-      .then((nextRows) => {
-        if (loadVersion.current === version) setRows(nextRows);
-      })
-      .catch(() => {
-        if (loadVersion.current === version) setRows([]);
-      });
-  }, [slug]);
+  const load = () => void listApprovedComments({ data: { slug } }).then(setRows).catch(() => setRows([]));
   useEffect(() => {
-    setRows([]);
     load();
-    return () => {
-      loadVersion.current += 1;
-    };
-  }, [load]);
+  }, [slug]);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();

@@ -253,6 +253,28 @@
 .tzss-hero h1 { color:#fff !important; font-size:34px; font-weight:800; margin:0 0 14px; line-height:1.4; }
 .tzss-hero p { color:rgba(255,255,255,0.92) !important; font-size:16px; margin:0; line-height:1.9; }
 
+.tzss-tab i { margin-left: 8px; color: inherit; }
+
+/* Force dumped calculator widgets to keep their card layout even if
+ * a later rule resets article inputs. */
+.tzss-calc-card,
+.tzss-calc-card * { box-sizing: border-box; }
+.article-content .tzss-field input,
+.tool-body .tzss-field input,
+.tzss-field input {
+  display: block !important;
+  width: 100% !important;
+  min-height: 46px;
+  padding: 12px 14px !important;
+  border: 1.5px solid #d1d5db !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+}
+.tzss-grid { display: grid !important; grid-template-columns: 1fr 340px !important; gap: 30px !important; }
+@media (max-width: 900px) {
+  .tzss-grid { grid-template-columns: 1fr !important; }
+}
+
 /* Calculator Card */
 .tzss-calc-card {
   background:#fff; border:1px solid #e5e7eb; border-radius:18px;
