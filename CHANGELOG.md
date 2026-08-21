@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.8.8 — 2026-08-21 — Live-theme audit and RTL remediation
+
+- Correct the physical RTL article grid: the reading column is now the wide right-hand column and the bounded TOC is the left-hand sidebar.
+- Style native WordPress comment, reply, nested-comment, logged-in, and logged-out states with accessible labels and focus treatment.
+- Stabilize desktop/tablet header density, responsive footer grids, long contact values, trust marks, and legal-link wrapping.
+- Restore a Persian keyboard skip link and add consistent visible focus indicators across interactive controls.
+- Document the production audit matrix, resolved defects, and CMS/server-owned follow-ups in `docs/LIVE-THEME-AUDIT-2026-08-21.md`.
+- Establish Teznevise Design System v2 with shared runtime/editor/React tokens, component contracts, editorial patterns, and a phased Premium v2 architecture roadmap.
+- Add progressively enhanced instant search, focus mode, bounded reading-size controls, responsive image presets, deferred public JavaScript, and local font preloading.
+
 ## 1.8.7 — 2026-08-21 — Single-post layout, Persian chrome, local icons
 
 - Article body is the wide main column; table of contents is the 300px sticky sidebar. Named grid areas so RTL no longer swaps them.

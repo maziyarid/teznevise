@@ -13,6 +13,7 @@
 </head>
 <body <?php body_class( 'tz-react-shell' ); ?>>
 <?php wp_body_open(); ?>
+<a class="skip-link screen-reader-text" href="#main-content"><?php esc_html_e( 'رفتن به محتوای اصلی', 'teznevise' ); ?></a>
 <div class="tz-react-shell-inner">
 <header class="site-header site-header-new">
 <div class="announcement announce"><div class="announcement-inner announce-inner container announcement-wrap"><div class="announcement-items"><span class="announce-pill pill"><i class="fa-solid fa-phone" aria-hidden="true"></i><strong><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></strong></span><span class="announce-pill pill announce-desktop"><i class="fa-regular fa-clock" aria-hidden="true"></i><?php echo esc_html( teznevise_get_contact( 'hours' ) ); ?></span><span class="announce-pill pill announce-desktop"><i class="fa-solid fa-lock" aria-hidden="true"></i><?php esc_html_e( 'مشاوره محرمانه و تخصصی', 'teznevise' ); ?></span></div><div class="utility-links announce-utils announce-desktop" aria-label="<?php esc_attr_e( 'لینک‌های راهنما', 'teznevise' ); ?>"><a href="<?php echo esc_url( teznevise_page_url( 'privacy', '/privacy/' ) ); ?>"><?php esc_html_e( 'حریم خصوصی', 'teznevise' ); ?></a><a href="<?php echo esc_url( teznevise_page_url( 'testimonials', '/testimonials/' ) ); ?>"><?php esc_html_e( 'بازخورد مشتریان', 'teznevise' ); ?></a><a href="<?php echo esc_url( teznevise_page_url( 'inquiry', '/inquiry/' ) ); ?>"><?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></a></div></div></div>

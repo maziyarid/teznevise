@@ -31,22 +31,26 @@
 }
 
 @theme {
+  /* Mirrors Teznevise Design System v2 in assets/css/tokens.css. */
   --font-sans: "Vazirmatn", Tahoma, ui-sans-serif, system-ui, sans-serif;
   --color-brand: #145d4a;
-  --color-brand-dark: #0f4a3b;
-  --color-brand-deep: #071f19;
-  --color-brand-light: #1b765f;
-  --color-accent: #82d8b9;
   --color-ink: #10231d;
-  --color-muted: #5a7268;
-  --color-line: #dfe9e5;
+  --color-accent: #82d8b9;
   --color-surface: #ffffff;
-  --color-soft: #f7fcfa;
-  --color-cream: #fbf7ee;
-  --radius-pill: 999px;
+  --color-soft: #f3f7f5;
+  --color-brand-dark: color-mix(in srgb, var(--color-brand) 76%, var(--color-ink));
+  --color-brand-deep: var(--color-ink);
+  --color-brand-light: color-mix(in srgb, var(--color-brand) 82%, var(--color-accent));
+  --color-muted: color-mix(in srgb, var(--color-ink) 62%, var(--color-surface));
+  --color-line: color-mix(in srgb, var(--color-brand) 16%, var(--color-surface));
+  --color-cream: var(--color-soft);
+  --radius-control: 0.75rem;
   --radius-card: 1.25rem;
-  --shadow-nav: 0 16px 45px rgba(19, 54, 44, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.82);
-  --shadow-card: 0 10px 30px rgba(9, 62, 49, 0.08);
+  --radius-panel: 1.75rem;
+  --radius-pill: 999px;
+  --shadow-nav: 0 18px 55px color-mix(in srgb, var(--color-ink) 10%, transparent);
+  --shadow-card: 0 10px 30px color-mix(in srgb, var(--color-ink) 8%, transparent);
+  --ease-standard: cubic-bezier(.2, .8, .2, 1);
   --tz-bottom-nav-height: 72px;
 }
 

@@ -4,52 +4,76 @@
   "settings": {
     "appearanceTools": true,
     "color": {
-      "palette": [
-        { "slug": "brand", "color": "#145D4A", "name": "Brand Primary" },
-        { "slug": "brand-dark", "color": "#0f4a3b", "name": "Brand Dark" },
-        { "slug": "brand-light", "color": "#1b765f", "name": "Brand Light" },
-        { "slug": "accent-teal", "color": "#82d8b9", "name": "Accent Teal" },
-        { "slug": "surface", "color": "#f7fcfa", "name": "Surface" },
-        { "slug": "text", "color": "#2f433c", "name": "Text" },
-        { "slug": "muted", "color": "#5a7268", "name": "Muted" },
-        { "slug": "white", "color": "#ffffff", "name": "White" }
-      ],
       "defaultPalette": false,
-      "defaultGradients": false
+      "defaultGradients": false,
+      "palette": [
+        { "slug": "evergreen", "color": "#145D4A", "name": "Evergreen" },
+        { "slug": "ink", "color": "#10231D", "name": "Ink" },
+        { "slug": "mint", "color": "#82D8B9", "name": "Mint" },
+        { "slug": "paper", "color": "#FFFFFF", "name": "Paper" },
+        { "slug": "mist", "color": "#F3F7F5", "name": "Mist" }
+      ]
+    },
+    "layout": {
+      "contentSize": "72ch",
+      "wideSize": "1180px"
+    },
+    "spacing": {
+      "spacingScale": {
+        "operator": "*",
+        "increment": 1.5,
+        "steps": 7,
+        "mediumStep": "1rem",
+        "unit": "rem"
+      },
+      "units": ["px", "rem", "em", "%", "vw", "vh"]
     },
     "typography": {
+      "fluid": true,
       "fontFamilies": [
         {
           "fontFamily": "Vazirmatn, Tahoma, sans-serif",
           "slug": "vazirmatn",
           "name": "Vazirmatn"
         }
+      ],
+      "fontSizes": [
+        { "slug": "small", "size": "0.875rem", "name": "Small" },
+        { "slug": "medium", "size": "1rem", "name": "Body" },
+        { "slug": "large", "size": "1.25rem", "name": "Lead" },
+        { "slug": "x-large", "size": "clamp(1.75rem, 3vw, 2.5rem)", "name": "Heading" },
+        { "slug": "display", "size": "clamp(2.25rem, 5vw, 4.75rem)", "name": "Display" }
       ]
-    },
-    "layout": {
-      "contentSize": "1180px",
-      "wideSize": "1180px"
     }
   },
   "styles": {
     "color": {
-      "background": "var(--wp--preset--color--white)",
-      "text": "var(--wp--preset--color--text)"
+      "background": "var(--wp--preset--color--paper)",
+      "text": "var(--wp--preset--color--ink)"
+    },
+    "spacing": {
+      "blockGap": "1.5rem"
     },
     "typography": {
       "fontFamily": "var(--wp--preset--font-family--vazirmatn)",
-      "lineHeight": "1.7"
+      "fontSize": "var(--wp--preset--font-size--medium)",
+      "lineHeight": "1.9"
     },
     "elements": {
-      "link": {
-        "color": { "text": "var(--wp--preset--color--brand)" }
-      },
       "button": {
+        "border": { "radius": "12px" },
         "color": {
-          "background": "var(--wp--preset--color--brand)",
-          "text": "var(--wp--preset--color--white)"
+          "background": "var(--wp--preset--color--evergreen)",
+          "text": "var(--wp--preset--color--paper)"
         },
-        "border": { "radius": "14px" }
+        "typography": { "fontWeight": "700" }
+      },
+      "heading": {
+        "color": { "text": "var(--wp--preset--color--ink)" },
+        "typography": { "fontWeight": "800", "lineHeight": "1.45" }
+      },
+      "link": {
+        "color": { "text": "var(--wp--preset--color--evergreen)" }
       }
     }
   }

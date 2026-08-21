@@ -38,6 +38,11 @@ while ( have_posts() ) :
 						<a href="<?php echo esc_url( get_category_link( $primary_cat ) ); ?>"><?php echo esc_html( $primary_cat->name ); ?></a>
 					<?php endif; ?>
 				</nav>
+				<div class="article-tools" role="group" aria-label="<?php esc_attr_e( 'ابزارهای مطالعه', 'teznevise' ); ?>">
+					<button class="article-tools__button" type="button" data-reading-focus aria-pressed="false"><?php esc_html_e( 'مطالعه متمرکز', 'teznevise' ); ?></button>
+					<button class="article-tools__button" type="button" data-reading-size="increase" aria-label="<?php esc_attr_e( 'بزرگ‌تر کردن متن مقاله', 'teznevise' ); ?>">الف+</button>
+					<button class="article-tools__button" type="button" data-reading-size="reset" aria-label="<?php esc_attr_e( 'بازنشانی اندازه متن مقاله', 'teznevise' ); ?>">الف</button>
+				</div>
 				<header class="blog-post__header article-header" data-reveal>
 					<?php if ( $kicker ) : ?><p class="blog-post__kicker"><?php echo esc_html( $kicker ); ?></p><?php endif; ?>
 					<?php if ( $featured_label ) : ?><p class="blog-post__featured"><?php echo esc_html( $featured_label ); ?></p><?php endif; ?>
@@ -70,7 +75,7 @@ while ( have_posts() ) :
 					<aside class="blog-post__aside">
 						<?php if ( $toc ) : ?>
 							<nav class="blog-post__toc entry-toc" aria-label="<?php esc_attr_e( 'فهرست مطالب', 'teznevise' ); ?>">
-								<p class="entry-toc__label"><?php esc_html_e( 'در این صفحه', 'teznevise' ); ?></p>
+								<p class="entry-toc__label"><?php esc_html_e( 'در این مقاله', 'teznevise' ); ?></p>
 								<?php echo wp_kses_post( $toc ); ?>
 							</nav>
 						<?php endif; ?>

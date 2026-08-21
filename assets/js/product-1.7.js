@@ -66,6 +66,73 @@
     }
   });
 
+  /* Teznevise Design System v2 — progressively enhanced instant search. */
+  var instantForm = document.querySelector('[data-instant-search]');
+  var instantResults = document.querySelector('[data-search-results]');
+  var instantStatus = document.querySelector('[data-search-status]');
+  var instantList = document.querySelector('[data-search-list]');
+  var searchTimer = 0;
+  var searchRequest = null;
+
+  function setSearchStatus(message) {
+    if (instantStatus) instantStatus.textContent = message;
+  }
+  function clearInstantResults() {
+    if (instantList) instantList.textContent = '';
+    if (instantResults) instantResults.hidden = true;
+    setSearchStatus('');
+  }
+  function renderInstantResults(items) {
+    if (!instantList || !instantResults) return;
+    instantList.textContent = '';
+    items.forEach(function (item) {
+      var row = document.createElement('li');
+      var link = document.createElement('a');
+      link.href = item.url;
+      link.textContent = item.title;
+      row.appendChild(link);
+      instantList.appendChild(row);
+    });
+    instantResults.hidden = false;
+    setSearchStatus(items.length ? items.length + ' نتیجه پیدا شد.' : 'نتیجه‌ای پیدا نشد.');
+  }
+  function requestInstantSearch(query) {
+    if (!instantForm) return;
+    var endpoint = instantForm.getAttribute('data-search-endpoint');
+    if (!endpoint) return;
+    if (searchRequest) searchRequest.abort();
+    searchRequest = new AbortController();
+    if (instantResults) instantResults.hidden = false;
+    setSearchStatus('در حال جستجو…');
+    fetch(endpoint + '?search=' + encodeURIComponent(query) + '&per_page=6&_fields=id,title,url,subtype', {
+      credentials: 'same-origin',
+      signal: searchRequest.signal
+    })
+      .then(function (response) {
+        if (!response.ok) throw new Error('search');
+        return response.json();
+      })
+      .then(renderInstantResults)
+      .catch(function (error) {
+        if (error.name === 'AbortError') return;
+        if (instantResults) instantResults.hidden = false;
+        setSearchStatus('جستجوی سریع در دسترس نیست؛ برای جستجوی کامل Enter را بزنید.');
+      });
+  }
+  if (instantForm && searchInput) {
+    searchInput.setAttribute('autocomplete', 'off');
+    searchInput.addEventListener('input', function () {
+      window.clearTimeout(searchTimer);
+      var query = searchInput.value.trim();
+      if (query.length < 2) {
+        if (searchRequest) searchRequest.abort();
+        clearInstantResults();
+        return;
+      }
+      searchTimer = window.setTimeout(function () { requestInstantSearch(query); }, 220);
+    });
+  }
+
   document.querySelectorAll('[data-share]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var net = btn.getAttribute('data-share');
@@ -114,6 +181,22 @@
         .catch(function () { out.textContent = 'ارتباط برقرار نشد.'; });
     });
   }
+
+  /* Teznevise Design System v2 — focus mode and bounded type controls. */
+  var focusButton = document.querySelector('[data-reading-focus]');
+  var readingSize = 1;
+  if (focusButton) {
+    focusButton.addEventListener('click', function () {
+      var active = document.body.classList.toggle('tz-reading-focus');
+      focusButton.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+  document.querySelectorAll('[data-reading-size]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      readingSize = button.getAttribute('data-reading-size') === 'increase' ? Math.min(1.25, readingSize + 0.1) : 1;
+      document.documentElement.style.setProperty('--tz-reading-size', readingSize + 'rem');
+    });
+  });
 
   /* 1.8.7 — reading progress + TOC spy on single posts */
   var progressFill = document.querySelector('.reading-progress span');
