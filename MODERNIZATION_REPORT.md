@@ -28,7 +28,7 @@ The React application is now reproducibly installable, lint-clean, type-safe, te
 
 A final, namespaced `assets/css/modernization.css` layer now loads after the core WordPress bundles. It maps Bootstrap semantic variables—primary, success, information, warning, danger, light, dark, foreground, and borders—to the Teznevise design system rather than allowing legacy purple/default Bootstrap color ownership. The layer also normalizes `.btn-primary`, `.text-primary`, `.bg-primary`, `.border-primary`, and `.alert-primary` within the theme shell.
 
-The shared WordPress token layer and React Tailwind theme now use the same color philosophy: **Signal Teal** (`#0B6B67`) for meaningful action and navigation, warm paper for reading areas, ink-black text for long-form clarity, and restrained vermilion for destructive/urgent meaning. This removes the cross-platform color drift between the former WordPress and React styling systems.
+The shared WordPress token layer and React Tailwind theme now follow the same **Design System v2** color philosophy: evergreen brand teal for meaningful action and navigation, paper for reading areas, ink text for long-form clarity, and restrained vermilion for destructive or urgent meaning. This removes the cross-platform color drift between the former WordPress and React styling systems.
 
 ### Responsive, RTL, and Accessibility Improvements
 

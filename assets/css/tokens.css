@@ -4,7 +4,7 @@
  * Author: MAZ//ID (Maziyar)
  * Brand: MΛZ — https://github.com/maziyarid/M-Z
  * @package Teznevise
- * Design: Editorial Signal — warm reading surfaces, signal teal, sharp hierarchy, and restrained motion.
+ * Design: Editorial Signal compatibility additions follow the Design System v2 contract below.
  */
 
 @layer tez-tokens, tez-base, tez-components, tez-pages, tez-chrome, tez-fixes;
@@ -39,36 +39,86 @@
 }
 
 :root {
-    --tz-brand: #0b6b67;
-    --tz-brand-dark: #075653;
-    --tz-brand-deep: #082b29;
-    --tz-brand-light: #17817b;
-    --tz-primary: #0b6b67;
-    --tz-primary-700: #075653;
-    --tz-primary-800: #064744;
-    --tz-primary-900: #082b29;
-    --tz-primary-soft: #e4f4f1;
-    --tz-primary-soft-2: #f1f9f7;
-    --tz-accent: #8bdbcc;
-    --tz-accent-2: #c4eee6;
-    --tz-ink: #102725;
-    --tz-text: #304843;
-    --tz-muted: #59716b;
-    --tz-line: #d7e5e1;
-    --tz-surface: #fffdf8;
-    --tz-surface-2: #f6faf8;
-    --tz-soft: #f4f9f7;
-    --tz-warm: #f7f1e5;
-    --tz-content: 1180px;
-    --tz-font: "Vazirmatn", Tahoma, sans-serif;
-    --tz-radius: 24px;
-    --tz-radius-sm: 16px;
-    --tz-radius-card: 1.25rem;
-    --tz-radius-pill: 999px;
-    --tz-shadow: 0 18px 55px rgba(9, 62, 49, 0.10);
-    --tz-shadow-sm: 0 10px 30px rgba(9, 62, 49, 0.08);
-    --tz-bottom-nav-height: 72px;
-  }
+  /* Teznevise Design System v2: five foundational colors. */
+  --tz-color-brand: #145d4a;
+  --tz-color-ink: #10231d;
+  --tz-color-accent: #82d8b9;
+  --tz-color-paper: #ffffff;
+  --tz-color-mist: #f3f7f5;
+
+  /* Semantic color roles derived from the foundation. */
+  --tz-color-brand-strong: color-mix(in srgb, var(--tz-color-brand) 76%, var(--tz-color-ink));
+  --tz-color-brand-soft: color-mix(in srgb, var(--tz-color-brand) 9%, var(--tz-color-paper));
+  --tz-color-text: color-mix(in srgb, var(--tz-color-ink) 86%, var(--tz-color-paper));
+  --tz-color-muted: color-mix(in srgb, var(--tz-color-ink) 62%, var(--tz-color-paper));
+  --tz-color-border: color-mix(in srgb, var(--tz-color-brand) 16%, var(--tz-color-paper));
+  --tz-color-focus: color-mix(in srgb, var(--tz-color-brand) 28%, transparent);
+
+  --tz-font-sans: "Vazirmatn", Tahoma, sans-serif;
+  --tz-text-xs: 0.75rem;
+  --tz-text-sm: 0.875rem;
+  --tz-text-md: 1rem;
+  --tz-text-lg: 1.125rem;
+  --tz-text-xl: clamp(1.5rem, 2vw, 2rem);
+  --tz-text-display: clamp(2.25rem, 5vw, 4.75rem);
+  --tz-leading-tight: 1.45;
+  --tz-leading-body: 1.9;
+
+  --tz-space-1: 0.25rem;
+  --tz-space-2: 0.5rem;
+  --tz-space-3: 0.75rem;
+  --tz-space-4: 1rem;
+  --tz-space-6: 1.5rem;
+  --tz-space-8: 2rem;
+  --tz-space-10: 2.5rem;
+  --tz-space-12: 3rem;
+  --tz-space-16: 4rem;
+  --tz-space-20: 5rem;
+  --tz-space-24: 6rem;
+
+  --tz-radius-control: 0.75rem;
+  --tz-radius-card: 1.25rem;
+  --tz-radius-panel: 1.75rem;
+  --tz-radius-pill: 999px;
+  --tz-shadow-card: 0 10px 30px color-mix(in srgb, var(--tz-color-ink) 8%, transparent);
+  --tz-shadow-float: 0 18px 55px color-mix(in srgb, var(--tz-color-ink) 10%, transparent);
+  --tz-duration-fast: 120ms;
+  --tz-duration-control: 200ms;
+  --tz-duration-layout: 320ms;
+  --tz-ease-standard: cubic-bezier(.2, .8, .2, 1);
+  --tz-content-wide: 1180px;
+  --tz-content-reading: 72ch;
+  --tz-content-focus: 66ch;
+  --tz-bottom-nav-height: 72px;
+
+  /* Compatibility aliases; migrate existing components incrementally. */
+  --tz-brand: var(--tz-color-brand);
+  --tz-brand-dark: var(--tz-color-brand-strong);
+  --tz-brand-deep: var(--tz-color-ink);
+  --tz-brand-light: color-mix(in srgb, var(--tz-color-brand) 82%, var(--tz-color-accent));
+  --tz-primary: var(--tz-color-brand);
+  --tz-primary-700: var(--tz-color-brand-strong);
+  --tz-primary-800: var(--tz-color-brand-strong);
+  --tz-primary-900: var(--tz-color-ink);
+  --tz-primary-soft: var(--tz-color-brand-soft);
+  --tz-primary-soft-2: var(--tz-color-mist);
+  --tz-accent: var(--tz-color-accent);
+  --tz-accent-2: color-mix(in srgb, var(--tz-color-accent) 52%, var(--tz-color-paper));
+  --tz-ink: var(--tz-color-ink);
+  --tz-text: var(--tz-color-text);
+  --tz-muted: var(--tz-color-muted);
+  --tz-line: var(--tz-color-border);
+  --tz-surface: var(--tz-color-paper);
+  --tz-surface-2: var(--tz-color-mist);
+  --tz-soft: var(--tz-color-mist);
+  --tz-warm: var(--tz-color-mist);
+  --tz-content: var(--tz-content-wide);
+  --tz-font: var(--tz-font-sans);
+  --tz-radius: var(--tz-radius-panel);
+  --tz-radius-sm: var(--tz-radius-control);
+  --tz-shadow: var(--tz-shadow-float);
+  --tz-shadow-sm: var(--tz-shadow-card);
+}
 
 html {
   scroll-behavior: smooth;

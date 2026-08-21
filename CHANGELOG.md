@@ -2,10 +2,20 @@
 
 ## 1.9.0 — 2026-08-21 — Editorial Signal modernization and compatibility hardening
 
-- Add `assets/css/modernization.css` as a namespaced, final WordPress theme layer. It maps Bootstrap semantic colors to Teznevise Signal Teal, provides high-contrast focus states, and rationalizes responsive container, form, and motion behavior without re-enqueuing legacy stylesheets.
-- Make card animation opt-in through `data-tz-reveal` / `.tz-reveal` rather than auto-animating every card at once. Reduced-motion, forced-colors, keyboard focus, touch-target, and safe-area behavior are explicitly covered.
-- Align WordPress metadata with 6.9 and PHP 8.3+ while reviewing the code path for PHP 8.5 compatibility.
-- Repair the React dependency lockfile, Vite preview host allowlist, Unicode emoji sanitization, hook dependency warnings, and PWA metadata test isolation.
+- Add `assets/css/modernization.css` as a final, namespaced compatibility layer for Bootstrap semantics, focus visibility, responsive sizing, safe-area behavior, and reduced motion.
+- Make selected React entrances opt in through `.tz-reveal` without disabling the established shared-template motion system.
+- Strengthen async ticket/comment loaders against stale responses, make the disabled-auth fallback hook-safe, and test Unicode sanitization for skin-tone modifiers and meaningful symbols.
+- Align metadata with WordPress 6.9 and PHP 8.3+, retaining the PHP 8.5 readiness review and source-only release validation.
+
+## 1.8.8 — 2026-08-21 — Live-theme audit and RTL remediation
+
+- Correct the physical RTL article grid: the reading column is now the wide right-hand column and the bounded TOC is the left-hand sidebar.
+- Style native WordPress comment, reply, nested-comment, logged-in, and logged-out states with accessible labels and focus treatment.
+- Stabilize desktop/tablet header density, responsive footer grids, long contact values, trust marks, and legal-link wrapping.
+- Restore a Persian keyboard skip link and add consistent visible focus indicators across interactive controls.
+- Document the production audit matrix, resolved defects, and CMS/server-owned follow-ups in `docs/LIVE-THEME-AUDIT-2026-08-21.md`.
+- Establish Teznevise Design System v2 with shared runtime/editor/React tokens, component contracts, editorial patterns, and a phased Premium v2 architecture roadmap.
+- Add progressively enhanced instant search, focus mode, bounded reading-size controls, responsive image presets, deferred public JavaScript, and local font preloading.
 
 ## 1.8.7 — 2026-08-21 — Single-post layout, Persian chrome, local icons
 

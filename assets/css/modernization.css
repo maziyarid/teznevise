@@ -5,11 +5,11 @@
  */
 
 :root {
-  --tz-signal: #0b6b67;
-  --tz-signal-dark: #075653;
-  --tz-signal-soft: #e4f4f1;
-  --tz-paper: #fffdf8;
-  --tz-ink-strong: #102725;
+  --tz-signal: var(--tz-brand);
+  --tz-signal-dark: var(--tz-brand-dark);
+  --tz-signal-soft: var(--tz-primary-soft);
+  --tz-paper: var(--tz-surface);
+  --tz-ink-strong: var(--tz-ink);
   --tz-vermilion: #b84332;
   --tz-focus-ring: rgba(11, 107, 103, 0.38);
   --tz-ease-out: cubic-bezier(0.23, 1, 0.32, 1);

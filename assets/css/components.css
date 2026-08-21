@@ -2636,3 +2636,77 @@ body {
 	}
 }
 
+/* ----- Teznevise Design System v2 component contracts ----- */
+:where(.tz-button, .btn-tz) {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--tz-space-2);
+	min-height: 44px;
+	padding: var(--tz-space-3) var(--tz-space-6);
+	border: 1px solid transparent;
+	border-radius: var(--tz-radius-control);
+	font: inherit;
+	font-weight: 800;
+	line-height: 1.4;
+	text-decoration: none;
+	transition: background-color var(--tz-duration-control) var(--tz-ease-standard), border-color var(--tz-duration-control) var(--tz-ease-standard), color var(--tz-duration-control) var(--tz-ease-standard), transform var(--tz-duration-fast) var(--tz-ease-standard);
+}
+:where(.tz-button--primary, .btn-primary-tz) {
+	background: var(--tz-color-brand);
+	color: var(--tz-color-paper);
+}
+:where(.tz-button--secondary, .btn-outline-tz, .btn-light-tz) {
+	border-color: var(--tz-color-border);
+	background: var(--tz-color-paper);
+	color: var(--tz-color-brand);
+}
+:where(.tz-button, .btn-tz):active { transform: translateY(1px); }
+:where(.tz-button, .btn-tz)[disabled],
+:where(.tz-button, .btn-tz)[aria-disabled="true"] { cursor: not-allowed; opacity: .55; }
+
+:where(.tz-card, .post-card, .article-card, .author-card, .lead-card) {
+	border: 1px solid var(--tz-color-border);
+	border-radius: var(--tz-radius-card);
+	background: var(--tz-color-paper);
+	color: var(--tz-color-text);
+}
+:where(a.tz-card, a.post-card, a.article-card) {
+	transition: border-color var(--tz-duration-control) var(--tz-ease-standard), box-shadow var(--tz-duration-control) var(--tz-ease-standard), transform var(--tz-duration-control) var(--tz-ease-standard);
+}
+:where(a.tz-card, a.post-card, a.article-card):hover {
+	border-color: var(--tz-color-brand);
+	box-shadow: var(--tz-shadow-card);
+	transform: translateY(-2px);
+}
+:where(.tz-badge, .eyebrow, .blog-post__kicker) {
+	display: inline-flex;
+	align-items: center;
+	min-height: 28px;
+	padding-inline: var(--tz-space-3);
+	border-radius: var(--tz-radius-pill);
+	background: var(--tz-color-brand-soft);
+	color: var(--tz-color-brand);
+	font-size: var(--tz-text-xs);
+	font-weight: 800;
+}
+:where(.tz-field, .field) > label {
+	display: block;
+	margin-bottom: var(--tz-space-2);
+	color: var(--tz-color-text);
+	font-size: var(--tz-text-sm);
+	font-weight: 800;
+}
+:where(.tz-field, .field) :is(input, select, textarea) {
+	width: 100%;
+	border: 1px solid var(--tz-color-border);
+	border-radius: var(--tz-radius-control);
+	background: var(--tz-color-paper);
+	color: var(--tz-color-text);
+}
+:where(.tz-field, .field) :is(input, select, textarea):focus-visible {
+	border-color: var(--tz-color-brand);
+	outline: 3px solid var(--tz-color-focus);
+	outline-offset: 2px;
+}
+

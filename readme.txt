@@ -37,8 +37,11 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 == Changelog ==
 
 = 1.9.0 =
-* Add a final Editorial Signal compatibility layer with unified semantic Bootstrap colors, visible focus states, RTL-aware sizing, and motion-safe controls.
-* Align release metadata with WordPress 6.9 and PHP 8.5 readiness; rebuild the React lockfile and resolve lint/test regressions.
+* Editorial Signal compatibility layer: semantic Bootstrap colors, visible focus states, RTL-aware sizing, and motion-safe controls.
+* Preserve Design System v2, resolve review findings, and validate PHP-ready WordPress plus React behavior.
+
+= 1.8.8 =
+* Full live-theme audit: correct RTL article/TOC columns, native comment forms, responsive chrome, keyboard focus, and footer wrapping
 
 = 1.8.7 =
 * Single posts: article is the wide column, TOC is the sidebar; Persian UI copy

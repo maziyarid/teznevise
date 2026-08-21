@@ -6,6 +6,18 @@
 
 RTL-first WordPress theme for [teznevise.ir](https://teznevise.ir/) — thesis, proposal, research, and statistical consulting.
 
+## Teznevise Design System v2
+
+The proprietary design-system contract lives in [`design-system/`](./design-system/). It defines the Persian-first editorial language, five-color semantic palette, local Vazirmatn typography, spacing and motion scales, `tz-*` component contracts, and the signature research-margin pattern.
+
+- Runtime CSS tokens: [`assets/css/tokens.css`](./assets/css/tokens.css)
+- WordPress editor presets: [`theme.json`](./theme.json)
+- Companion frontend mapping: [`react-app/src/styles.css`](./react-app/src/styles.css)
+- Classic PHP components use authored `tz-*` classes; Tailwind remains isolated to `react-app/`.
+- Extend the owning component stylesheet. Do not add another global `*-fix.css` file.
+
+The [Premium v2 roadmap](./docs/PREMIUM-V2-ROADMAP.md) is incremental. WordPress remains server-rendered for speed, SEO, and compatibility; React/TypeScript is selective, and a future headless frontend replaces rather than duplicates the current TanStack runtime.
+
 ## Production source and deployment
 
 - Production branch: `main`.

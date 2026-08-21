@@ -1,4 +1,3 @@
-/* Design: Editorial Signal — warm paper surfaces, signal teal, asymmetric editorial rhythm, and restrained motion. */
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -32,22 +31,26 @@
 }
 
 @theme {
+  /* Mirrors Teznevise Design System v2 in assets/css/tokens.css. */
   --font-sans: "Vazirmatn", Tahoma, ui-sans-serif, system-ui, sans-serif;
-  --color-brand: #0b6b67;
-  --color-brand-dark: #075653;
-  --color-brand-deep: #082b29;
-  --color-brand-light: #17817b;
-  --color-accent: #8bdbcc;
-  --color-ink: #102725;
-  --color-muted: #59716b;
-  --color-line: #d7e5e1;
-  --color-surface: #fffdf8;
-  --color-soft: #f4f9f7;
-  --color-cream: #f7f1e5;
-  --radius-pill: 999px;
+  --color-brand: #145d4a;
+  --color-ink: #10231d;
+  --color-accent: #82d8b9;
+  --color-surface: #ffffff;
+  --color-soft: #f3f7f5;
+  --color-brand-dark: color-mix(in srgb, var(--color-brand) 76%, var(--color-ink));
+  --color-brand-deep: var(--color-ink);
+  --color-brand-light: color-mix(in srgb, var(--color-brand) 82%, var(--color-accent));
+  --color-muted: color-mix(in srgb, var(--color-ink) 62%, var(--color-surface));
+  --color-line: color-mix(in srgb, var(--color-brand) 16%, var(--color-surface));
+  --color-cream: var(--color-soft);
+  --radius-control: 0.75rem;
   --radius-card: 1.25rem;
-  --shadow-nav: 0 16px 45px rgba(19, 54, 44, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.82);
-  --shadow-card: 0 10px 30px rgba(9, 62, 49, 0.08);
+  --radius-panel: 1.75rem;
+  --radius-pill: 999px;
+  --shadow-nav: 0 18px 55px color-mix(in srgb, var(--color-ink) 10%, transparent);
+  --shadow-card: 0 10px 30px color-mix(in srgb, var(--color-ink) 8%, transparent);
+  --ease-standard: cubic-bezier(.2, .8, .2, 1);
   --tz-bottom-nav-height: 72px;
 }
 
@@ -71,10 +74,6 @@
   a {
     color: inherit;
     text-decoration: none;
-  }
-  :focus-visible {
-    outline: 3px solid rgba(11, 107, 103, 0.38);
-    outline-offset: 3px;
   }
   img {
     max-width: 100%;
@@ -2303,8 +2302,25 @@ i.fa-brands {
 .services-grid > *:nth-child(8) { animation-delay: 0.39s; }
 .services-grid > *:nth-child(9) { animation-delay: 0.44s; }
 
-/* Editorial Signal motion: .tz-reveal refines selected elements without
-   disabling the established motion on shared page templates. */
+@media (max-width: 1050px) {
+  .faq-grid,
+  .mega-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 720px) {
+  .faq-grid,
+  .mega-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Editorial Signal refinements: selectively enhance entrances without replacing
+   the established Design System v2 animation contract for shared templates. */
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-brand) 38%, transparent);
+  outline-offset: 3px;
+}
 .tz-reveal {
   animation: none;
 }
@@ -2329,17 +2345,4 @@ i.fa-brands {
   .steps > .tz-reveal:nth-child(5) { animation-delay: 180ms; }
   .services-grid > .tz-reveal:nth-child(n + 6),
   .steps > .tz-reveal:nth-child(n + 6) { animation-delay: 225ms; }
-}
-
-@media (max-width: 1050px) {
-  .faq-grid,
-  .mega-inner {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-@media (max-width: 720px) {
-  .faq-grid,
-  .mega-inner {
-    grid-template-columns: 1fr;
-  }
 }
