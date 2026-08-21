@@ -198,7 +198,7 @@ function teznevise_interactive_shortcode_pattern() {
  */
 function teznevise_interactive_shortcode_match_regex() {
 	$pattern = teznevise_interactive_shortcode_pattern();
-	return '\[(' . $pattern . ')\b[^\]]*\](?:(.*?)\s*\[/\1\])?';
+	return '\[(' . $pattern . ')\b[^\]]*\](?:(.*?)\s*\[\/\1\])?';
 }
 
 /**
@@ -237,6 +237,26 @@ function teznevise_page_classic_copy( $content ) {
 		$content = teznevise_normalize_shortcode_quotes( $content );
 	}
 	return trim( wp_strip_all_tags( strip_shortcodes( $content ) ) );
+}
+
+/**
+ * Whether classic-editor markup carries displayable content after interactive
+ * widgets have been separated. Text alone is not sufficient: image, media,
+ * and core embedding shortcodes are valid editor content and must stay visible
+ * next to builder sections.
+ *
+ * @param string $content Raw or rendered classic content.
+ * @return bool
+ */
+function teznevise_page_has_classic_content( $content ) {
+	$content = teznevise_page_without_interactive_shortcodes( (string) $content );
+	if ( '' !== teznevise_page_classic_copy( $content ) ) {
+		return true;
+	}
+	if ( preg_match( '/<(?:img|picture|figure|iframe|video|audio|object|embed|svg)\b/i', $content ) ) {
+		return true;
+	}
+	return (bool) preg_match( '/\[(?:gallery|caption|embed|audio|video|playlist)\b/i', $content );
 }
 
 /**
@@ -280,7 +300,7 @@ function teznevise_render_classic_page_content( $content ) {
  */
 function teznevise_page_content_disclosure_markup( $content, $post_id = 0 ) {
 	$post_id = $post_id ? (int) $post_id : (int) get_the_ID();
-	if ( '' === teznevise_page_classic_copy( $content ) ) {
+	if ( ! teznevise_page_has_classic_content( $content ) ) {
 		return '';
 	}
 	$target_id = 'tz-classic-content-' . $post_id;
@@ -375,7 +395,7 @@ function teznevise_page_should_print_content( $post_id = 0 ) {
 	if ( function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections() ) {
 		// Keep forms/calculators in place and expose remaining classic-editor copy
 		// through the shared disclosure instead of silently dropping it.
-		return teznevise_is_interactive_shortcode_content( $raw ) || '' !== teznevise_page_classic_copy( $raw );
+		return teznevise_is_interactive_shortcode_content( $raw ) || teznevise_page_has_classic_content( $raw );
 	}
 	return true;
 }
