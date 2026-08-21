@@ -94,6 +94,34 @@ function teznevise_get_contact( $key ) {
 }
 
 /**
+ * Absolute tel: href that esc_url() will not turn into /tel:...
+ *
+ * @param string $raw Phone number or existing tel: value.
+ * @return string
+ */
+function teznevise_tel_href( $raw ) {
+	$raw = trim( (string) $raw );
+	if ( 0 === strpos( $raw, 'tel:' ) ) {
+		$raw = substr( $raw, 4 );
+	}
+	$digits = preg_replace( '/[^\d+]/', '', $raw );
+	if ( 0 === strpos( $digits, '00' ) ) {
+		$digits = '+' . substr( $digits, 2 );
+	}
+	if ( 0 === strpos( $digits, '09' ) ) {
+		$digits = '+98' . substr( $digits, 1 );
+	} elseif ( 0 === strpos( $digits, '9' ) && 10 === strlen( $digits ) ) {
+		$digits = '+98' . $digits;
+	} elseif ( 0 === strpos( $digits, '98' ) && '+' !== substr( $digits, 0, 1 ) ) {
+		$digits = '+' . $digits;
+	}
+	if ( '' === $digits ) {
+		return '';
+	}
+	return 'tel:' . $digits;
+}
+
+/**
  * Site logo URL for header and footer.
  *
  * @return string

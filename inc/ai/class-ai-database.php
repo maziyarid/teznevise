@@ -166,7 +166,10 @@ class TezNevise_AI_Database {
             ['agent_id' => 'stats', 'name' => 'Statistics Helper', 'description' => 'Expert in statistical analysis and interpretation', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4', 'color' => '#8b5cf6', 'icon' => 'brain', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 2],
         ];
         foreach ($default_agents as $agent) {
-            $wpdb->replace($agents_table, $agent);
+            $exists = $wpdb->get_var($wpdb->prepare("SELECT agent_id FROM $agents_table WHERE agent_id = %s", $agent['agent_id']));
+            if (!$exists) {
+                $wpdb->insert($agents_table, $agent);
+            }
         }
         $skills_table = $wpdb->prefix . $prefix . 'skills';
         $default_skills = [
@@ -204,7 +207,7 @@ class TezNevise_AI_Database {
     public static function get_all_agents() {
         global $wpdb;
         $table = $wpdb->prefix . self::PREFIX . 'agents';
-        return $wpdb->get_results("SELECT * FROM $table WHERE is_active = 1 ORDER BY sort_order ASC");
+        return $wpdb->get_results("SELECT * FROM $table WHERE is_active = 1 ORDER BY sort_order ASC", ARRAY_A);
     }
     
     public static function get_skills($agent_id) {

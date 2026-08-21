@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.9.3 — 2026-08-21 — Restore bootstrap, mega nav, tool AI, dashboard
+
+- Restore the 1.9.2 WordPress bootstrap. `functions.php` no longer requires missing Underscores files (`inc/template-functions.php` and friends), which fatally took the live site down.
+- Enqueue the real public bundles (`tokens`, `components`, `pages`, `chrome`, `modernization`) and self-hosted Font Awesome so header icons match the compact chrome.
+- Mega-menu panel is a 3-column card with wrapping labels (no truncated «علوم پا»).
+- Tool pages render a vanilla JS assistant under the calculator. First message: «اگه نتونستی با ابزار کار کنی میتونی از من کمک بگیری». Agent name under every bubble. Per-agent API endpoint/model, visible thinking, collaboration modes, logged-in history, guest/signed-in caps and Tezcoin cost from Settings → TezNevise AI.
+- Account dashboard adds an AI history tab and restyled tabs.
+- `tel:` CTAs no longer become `/tel:…`. Trust seals only link when a real Enamad/Samandehi URL is configured.
+
+See `docs/CHANGELOG-1.9.3.md` for the attached audit matrix.
+
+
 ## 1.9.2 — 2026-08-21 — Calculator runtime and complete page content coverage
 
 - Always enqueue `legacy-wpcode.css` so dumped calculator HTML (`.tzss-*`, `.tzpc-*`, …) is no longer unstyled on live.

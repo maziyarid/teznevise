@@ -58,21 +58,36 @@ function teznevise_ai_shortcode($atts) {
         'thinking_enabled' => '',
     ], $atts);
     
-    $tool_id = $atts['tool'];
-    if (empty($tool_id)) return '';
-    
-    $tool = TezNevise_AI_Core::get_tool($tool_id);
+    $tool_id = $atts['tool'] ? $atts['tool'] : 'general';
+    $tool = class_exists('TezNevise_AI_Core') ? TezNevise_AI_Core::get_tool($tool_id) : null;
+    if (!$tool) {
+        $tool = class_exists('TezNevise_AI_Core') ? TezNevise_AI_Core::get_tool('general') : null;
+    }
     if (!$tool) return '';
     
     return TezNevise_AI_Chat::render_chat([
         'tool_id' => $tool_id,
-        'agent_id' => $atts['agent_id'] ?: $tool['default_agent'],
+        'agent_id' => $atts['agent_id'] ?: ($tool['default_agent'] ?? 'general'),
         'collaboration_mode' => $atts['collaboration_mode'] ?: ($tool['collaboration_mode'] ?? 'single'),
         'thinking_enabled' => $atts['thinking_enabled'] !== 'false' && ($tool['thinking_enabled'] ?? true),
         'tool_config' => $tool,
     ]);
 }
 add_shortcode('teznevise_ai', 'teznevise_ai_shortcode');
+function teznevise_list_ai_agents() {
+	if ( ! class_exists( 'TezNevise_AI_Database' ) ) {
+		return array();
+	}
+	$rows = array();
+	foreach ( (array) TezNevise_AI_Database::get_all_agents() as $agent ) {
+		$agent = (array) $agent;
+		$rows[] = (object) array(
+			'ID'         => $agent['agent_id'] ?? '',
+			'post_title' => $agent['name'] ?? '',
+		);
+	}
+	return $rows;
+}
 
 function teznevise_ai_mann_whitney_shortcode($atts) {
     return teznevise_ai_shortcode(['tool' => 'mann-whitney'] + $atts);

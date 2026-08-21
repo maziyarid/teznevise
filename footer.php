@@ -57,17 +57,19 @@
 			<?php
 			$enamad    = function_exists( 'teznevise_tezcoin_get' ) ? teznevise_tezcoin_get( 'enamad_url' ) : '';
 			$samandehi = function_exists( 'teznevise_tezcoin_get' ) ? teznevise_tezcoin_get( 'samandehi_url' ) : '';
-			$enamad    = $enamad ? $enamad : home_url( '/privacy/' );
-			$samandehi = $samandehi ? $samandehi : home_url( '/privacy/' );
 			?>
-			<a class="trust-seal" href="<?php echo esc_url( $enamad ); ?>" rel="noopener" title="<?php esc_attr_e( 'اینماد', 'teznevise' ); ?>">
+			<?php if ( $enamad && false === strpos( $enamad, '/privacy' ) ) : ?>
+			<a class="trust-seal" href="<?php echo esc_url( $enamad ); ?>" rel="noopener noreferrer" target="_blank" title="<?php esc_attr_e( 'اینماد', 'teznevise' ); ?>">
 				<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="#145D4A"/><path d="M16 25.2l5 5 11-13" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 				<span><?php esc_html_e( 'اینماد', 'teznevise' ); ?></span>
 			</a>
-			<a class="trust-seal" href="<?php echo esc_url( $samandehi ); ?>" rel="noopener" title="<?php esc_attr_e( 'ساماندهی', 'teznevise' ); ?>">
+			<?php endif; ?>
+			<?php if ( $samandehi && false === strpos( $samandehi, '/privacy' ) ) : ?>
+			<a class="trust-seal" href="<?php echo esc_url( $samandehi ); ?>" rel="noopener noreferrer" target="_blank" title="<?php esc_attr_e( 'ساماندهی', 'teznevise' ); ?>">
 				<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="10" width="32" height="28" rx="6" fill="#1b765f"/><path d="M16 24h16M24 16v16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
 				<span><?php esc_html_e( 'ساماندهی', 'teznevise' ); ?></span>
 			</a>
+			<?php endif; ?>
 			<span class="trust-seal" title="<?php esc_attr_e( 'SSL', 'teznevise' ); ?>">
 				<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="20" width="24" height="16" rx="4" fill="#0f4a3b"/><path d="M18 20v-4a6 6 0 0112 0v4" fill="none" stroke="#82d8b9" stroke-width="3"/></svg>
 				<span>SSL</span>

@@ -1,263 +1,148 @@
 <?php
 /**
- * TezNevise functions and definitions
- * 
- * @link https://developer.wordpress.org/themes/basics/theme-functions/
- * 
- * @package TezNevise
+ * Teznevise theme bootstrap.
+ *
+ * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.9.2' );
+define( 'TEZNEVISE_VERSION', '1.9.3' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
-if ( ! defined( '_S_VERSION' ) ) {
-	// Replace the version number of the theme on each release.
-	define( '_S_VERSION', '1.0.0' );
+require_once TEZNEVISE_DIR . '/inc/defaults.php';
+require_once TEZNEVISE_DIR . '/inc/helpers.php';
+require_once TEZNEVISE_DIR . '/inc/nav-walker.php';
+require_once TEZNEVISE_DIR . '/inc/brand.php';
+require_once TEZNEVISE_DIR . '/inc/customizer.php';
+require_once TEZNEVISE_DIR . '/inc/page-meta.php';
+require_once TEZNEVISE_DIR . '/inc/page-meta-extra.php';
+require_once TEZNEVISE_DIR . '/inc/class-teznevise-builder.php';
+require_once TEZNEVISE_DIR . '/inc/builder-defaults.php';
+require_once TEZNEVISE_DIR . '/inc/extracted-pages.php';
+require_once TEZNEVISE_DIR . '/inc/builder-seed.php';
+if ( is_admin() ) {
+require_once TEZNEVISE_DIR . '/inc/admin/builder-admin.php';
+require_once TEZNEVISE_DIR . '/inc/admin/builder-assets.php';
+}
+require_once TEZNEVISE_DIR . '/inc/cpts.php';
+require_once TEZNEVISE_DIR . '/inc/builder-download-catalog.php';
+require_once TEZNEVISE_DIR . '/inc/blog.php';
+require_once TEZNEVISE_DIR . '/inc/seo.php';
+require_once TEZNEVISE_DIR . '/inc/setup-pages.php';
+require_once TEZNEVISE_DIR . '/inc/promote-assets.php';
+require_once TEZNEVISE_DIR . '/inc/screenshot-data.php';
+/*
+ * Never load the shortcode migrator on the public front-end.
+ * A parse error in that file (Unclosed '{' on line 370 / issue #425)
+ * fatals every request that includes functions.php. Admin + WP-CLI only.
+ */
+if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+	$tez_migrator = TEZNEVISE_DIR . '/inc/migration/shortcode-to-builder-migrator.php';
+	if ( is_readable( $tez_migrator ) ) {
+		require_once $tez_migrator;
+	}
+	require_once TEZNEVISE_DIR . '/inc/migration/auto-run.php';
+}
+require_once TEZNEVISE_DIR . '/inc/frontend-compat.php';
+require_once TEZNEVISE_DIR . '/inc/tezcoin.php';
+require_once TEZNEVISE_DIR . '/inc/legal-pages.php';
+require_once TEZNEVISE_DIR . '/inc/dashboard.php';
+require_once TEZNEVISE_DIR . '/inc/ai-agents.php';
+
+// Defensive fallback: this repo's functions.php has repeatedly lost this
+// helper during merges/rewrites (see commits 085c9c44, 75a32ee6). If none of
+// the required inc/ files above defined it, provide a safe default so
+// header.php and footer.php never fatal-error on a missing symbol. Covers
+// every contact type actually referenced in the templates (header.php uses
+// phone_display and hours; footer.php uses telegram, whatsapp, phone_intl,
+// phone_display, email, address).
+if ( ! function_exists( 'teznevise_get_contact' ) ) {
+	/**
+	 * Get a contact channel value for header/footer template display.
+	 *
+	 * @param string $type Contact channel key.
+	 * @return string
+	 */
+	function teznevise_get_contact( $type = 'phone' ) {
+		$contacts = array(
+			'phone'         => get_option( 'teznevise_contact_phone', '+98 21 0000 0000' ),
+			'phone_intl'    => get_option( 'teznevise_contact_phone_intl', '982100000000' ),
+			'phone_display' => get_option( 'teznevise_contact_phone_display', '+98 21 0000 0000' ),
+			'whatsapp'      => get_option( 'teznevise_contact_whatsapp', '+98 21 0000 0000' ),
+			'telegram'      => get_option( 'teznevise_contact_telegram', '' ),
+			'email'         => get_option( 'admin_email' ),
+			'address'       => get_option( 'teznevise_contact_address', '' ),
+			'hours'         => get_option( 'teznevise_contact_hours', 'شنبه تا پنجشنبه: ۹ صبح تا ۲۱' ),
+		);
+		return isset( $contacts[ $type ] ) ? $contacts[ $type ] : '';
+	}
 }
 
-/**
- * Sets up theme defaults and registers support for various WordPress features.
- */
 function teznevise_setup() {
-	// Add default posts and comments RSS feed links to head.
-	add_theme_support( 'automatic-feed-links' );
-	
-	// Add theme support for document Title tag and logo
-	add_theme_support( 'title-tag' );
-	
-	// Add theme support for Post Thumbnails
-	add_theme_support( 'post-thumbnails' );
-	
-	// Add theme support for Custom Logo
-	add_theme_support( 'custom-logo', array(
-		'width'       => 200,
-		'height'      => 200,
-		'flex-width'  => true,
-		'flex-height' => true,
-	) );
-	
-	// Add theme support for Custom Background
-	add_theme_support( 'custom-background', apply_filters( 'teznevise_custom_background_args', array(
-		'default-color' => 'ffffff',
-		'default-image' => '',
-	) ) );
-	
-	// Add theme support for Custom Header
-	add_theme_support( 'custom-header', apply_filters( 'teznevise_custom_header_args', array(
-		'default-image'          => '',
-		'default-text-color'    => '000000',
-		'width'                 => 1200,
-		'height'                => 200,
-		'flex-height'           => true,
-		'wp-head-callback'     => 'teznevise_header_style',
-	) ) );
-	
-	// Add theme support for HTML5
-	add_theme_support( 'html5', array(
-		'search-form',
-		'comment-form',
-		'comment-list',
-		'gallery',
-		'caption',
-		'style',
-		'script',
-	) );
-	
-	// Add theme support for Post Formats
-	add_theme_support( 'post-formats', array(
-		'aside',
-		'image',
-		'video',
-		'quote',
-		'link',
-		'gallery',
-		'status',
-		'audio',
-		'chat',
-	) );
-	
-	// Add theme support for WooCommerce
-	add_theme_support( 'woocommerce' );
-	
-	// Add theme support for Gutenberg
-	add_theme_support( 'wp-block-styles' );
-	add_theme_support( 'align-wide' );
-	
-	// Register image sizes
-	add_image_size( 'teznevise-thumbnail', 300, 200, true );
-	add_image_size( 'teznevise-medium', 600, 400, true );
-	add_image_size( 'teznevise-large', 1200, 600, true );
-	
-	// Register navigation menus
-	register_nav_menus( array(
-		'primary' => esc_html__( 'Primary Menu', 'teznevise' ),
-		'secondary' => esc_html__( 'Secondary Menu', 'teznevise' ),
-		'footer' => esc_html__( 'Footer Menu', 'teznevise' ),
-	) );
-	
-	// Load theme textdomain
-	load_theme_textdomain( 'teznevise', get_template_directory() . '/languages' );
-	
-	// Add editor styles
-	add_editor_style( 'style-editor.css' );
+add_theme_support( 'title-tag' );
+add_theme_support( 'post-thumbnails' );
+add_theme_support( 'responsive-embeds' );
+add_theme_support( 'align-wide' );
+add_theme_support( 'editor-styles' );
+add_editor_style( 'assets/css/tokens.css' );
+add_image_size( 'teznevise-card', 720, 450, true );
+add_image_size( 'teznevise-hero', 1440, 810, true );
+add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' ) );
+register_nav_menus( array(
+'primary' => __( 'Primary Menu', 'teznevise' ),
+'mobile'  => __( 'Mobile Menu', 'teznevise' ),
+'bottom'  => __( 'Bottom Mobile Menu', 'teznevise' ),
+'footer'  => __( 'Footer Menu', 'teznevise' ),
+) );
 }
 add_action( 'after_setup_theme', 'teznevise_setup' );
 
-/**
- * Set the content width in pixels, based on the theme's design and stylesheet.
- */
-function teznevise_content_width() {
-	// This variable is intended to be overruled from themes.
-	// Open WPCS issue: {@link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1043}
-	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
-	$GLOBALS['content_width'] = apply_filters( 'teznevise_content_width', 1200 );
-}
-add_action( 'after_setup_theme', 'teznevise_content_width', 0 );
+function teznevise_enqueue_assets() {
+	wp_enqueue_style( 'teznevise-style', get_stylesheet_uri(), array(), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-tokens', TEZNEVISE_URI . '/assets/css/tokens.css', array( 'teznevise-style' ), TEZNEVISE_VERSION );
+	$fa_rel = '/assets/vendor/fontawesome/css/all.min.css';
+	if ( is_readable( TEZNEVISE_DIR . $fa_rel ) ) {
+		wp_enqueue_style( 'teznevise-fontawesome', TEZNEVISE_URI . $fa_rel, array(), TEZNEVISE_VERSION );
+	} else {
+		wp_enqueue_style( 'teznevise-fontawesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css', array(), '7.1.0' );
+	}
+	wp_enqueue_style( 'teznevise-components', TEZNEVISE_URI . '/assets/css/components.css', array( 'teznevise-tokens' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-pages', TEZNEVISE_URI . '/assets/css/pages.css', array( 'teznevise-components' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-chrome', TEZNEVISE_URI . '/assets/css/chrome.css', array( 'teznevise-pages' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-modernization', TEZNEVISE_URI . '/assets/css/modernization.css', array( 'teznevise-chrome' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-legacy-wpcode', TEZNEVISE_URI . '/assets/css/legacy-wpcode.css', array( 'teznevise-modernization' ), TEZNEVISE_VERSION );
+	wp_enqueue_script( 'teznevise-calculators', TEZNEVISE_URI . '/assets/js/calculators.js', array(), TEZNEVISE_VERSION, true );
+	wp_script_add_data( 'teznevise-calculators', 'strategy', 'defer' );
 
-/**
- * Register widget area.
- */
-function teznevise_widgets_init() {
-	register_sidebar( array(
-		'name'          => esc_html__( 'Sidebar', 'teznevise' ),
-		'id'            => 'sidebar-1',
-		'description'   => esc_html__( 'Add widgets here.', 'teznevise' ),
-		'before_widget' => '<section id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</section>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
-	) );
-	
-	register_sidebar( array(
-		'name'          => esc_html__( 'Footer Widget Area', 'teznevise' ),
-		'id'            => 'footer-widget-area',
-		'description'   => esc_html__( 'Add widgets here to appear in your footer.', 'teznevise' ),
-		'before_widget' => '<section id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</section>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
-	) );
-}
-add_action( 'widgets_init', 'teznevise_widgets_init' );
-
-/**
- * Enqueue scripts and styles.
- */
-function teznevise_scripts() {
-	// Load CSS
-	wp_enqueue_style( 'teznevise-style', get_stylesheet_uri(), array(), _S_VERSION );
-	
-	// Load JS
-	wp_enqueue_script( 'teznevise-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
-	wp_enqueue_script( 'teznevise-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), _S_VERSION, true );
-	
-	// Load Font Awesome
-	wp_enqueue_style( 'font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css', array(), '6.0.0' );
-	
-	// Load custom JS
-	wp_enqueue_script( 'teznevise-custom', get_template_directory_uri() . '/js/custom.js', array('jquery'), _S_VERSION, true );
-	
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-		wp_enqueue_script( 'comment-reply' );
+	wp_enqueue_script( 'teznevise-chrome', TEZNEVISE_URI . '/assets/js/chrome.js', array(), TEZNEVISE_VERSION, true );
+	wp_script_add_data( 'teznevise-chrome', 'strategy', 'defer' );
+	if ( function_exists( 'teznevise_localize_front_script' ) ) {
+		teznevise_localize_front_script();
 	}
 }
-add_action( 'wp_enqueue_scripts', 'teznevise_scripts' );
+add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );
 
 /**
- * Enqueue admin scripts and styles.
+ * Preload only the regular local font used above the fold.
+ *
+ * @param array $preload_resources Existing preload resources.
+ * @return array
  */
-function teznevise_admin_scripts() {
-	// Load admin CSS
-	wp_enqueue_style( 'teznevise-admin-style', get_template_directory_uri() . '/css/admin.css', array(), _S_VERSION );
-	
-	// Load admin JS
-	wp_enqueue_script( 'teznevise-admin-script', get_template_directory_uri() . '/js/admin.js', array('jquery'), _S_VERSION, true );
+function teznevise_preload_resources( $preload_resources ) {
+	$preload_resources[] = array(
+		'href'        => TEZNEVISE_URI . '/assets/fonts/Vazirmatn-Regular.woff2',
+		'as'          => 'font',
+		'type'        => 'font/woff2',
+		'crossorigin' => 'anonymous',
+	);
+	return $preload_resources;
 }
-add_action( 'admin_enqueue_scripts', 'teznevise_admin_scripts' );
+add_filter( 'wp_preload_resources', 'teznevise_preload_resources' );
 
 /**
- * Implement the Custom Header feature.
+ * 1.8.5: parity CSS/JS now lives in chrome.css / chrome.js.
+ * Keep this hook as a no-op so old callers do not fatal.
  */
-require get_template_directory() . '/inc/custom-header.php';
-
-/**
- * Custom template tags for this theme.
- */
-require get_template_directory() . '/inc/template-tags.php';
-
-/**
- * Functions which enhance the theme by hooking into WordPress.
- */
-require get_template_directory() . '/inc/template-functions.php';
-
-/**
- * Customizer additions.
- */
-require get_template_directory() . '/inc/customizer.php';
-
-/**
- * Load Jetpack compatibility file.
- */
-if ( defined( 'JETPACK__VERSION' ) ) {
-	require get_template_directory() . '/inc/jetpack.php';
+function teznevise_enqueue_parity_css() {
+	return;
 }
-
-/**
- * Load WooCommerce compatibility file.
- */
-if ( class_exists( 'WooCommerce' ) ) {
-	require get_template_directory() . '/inc/woocommerce.php';
-}
-
-/**
- * Load Elementor compatibility file.
- */
-if ( defined( 'ELEMENTOR_VERSION' ) ) {
-	require get_template_directory() . '/inc/elementor.php';
-}
-
-/**
- * Load TezNevise Builder.
- */
-require get_template_directory() . '/inc/class-teznevise-builder.php';
-
-/**
- * Load theme helpers.
- */
-require get_template_directory() . '/inc/helpers.php';
-
-/**
- * Load theme defaults.
- */
-require get_template_directory() . '/inc/defaults.php';
-
-/**
- * Load theme CPTs.
- */
-require get_template_directory() . '/inc/cpts.php';
-
-/**
- * Load theme SEO.
- */
-require get_template_directory() . '/inc/seo.php';
-
-/**
- * Load theme blog functions.
- */
-require get_template_directory() . '/inc/blog.php';
-
-/**
- * Load theme dashboard.
- */
-require get_template_directory() . '/inc/dashboard.php';
-
-/**
- * Load theme TezCoin.
- */
-require get_template_directory() . '/inc/tezcoin.php';
-
-/**
- * Load TezNevise AI Chat System.
- */
-require get_template_directory() . '/inc/ai-agents.php';

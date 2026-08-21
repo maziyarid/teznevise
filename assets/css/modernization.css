@@ -258,3 +258,114 @@
   font-size: 12px;
   font-weight: 800;
 }
+
+.tz-react-shell .nav-item-icon,
+.tz-react-shell .nav-item-icon::before {
+  font-family: "Font Awesome 7 Free", "Font Awesome 6 Free", "Font Awesome 5 Free" !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+  display: inline-block !important;
+  width: 1.1em;
+  text-align: center;
+}
+.tz-react-shell .nav-credits,
+.tz-react-shell .nav-account,
+.tz-react-shell .nav-search-btn {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 1051px) {
+  .tz-react-shell .main-nav {
+    overflow: visible !important;
+  }
+  .tz-react-shell .main-nav ul.nav-dropdown,
+  .tz-react-shell .main-nav ul.nav-dropdown.mega {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(220px, 1fr)) !important;
+    width: min(920px, calc(100vw - 48px)) !important;
+    max-width: 920px !important;
+    inset-inline-end: 0 !important;
+    inset-inline-start: auto !important;
+    left: auto !important;
+    right: 0 !important;
+    padding: 18px 20px !important;
+    gap: 8px 18px !important;
+    background: #fff !important;
+    border-radius: 22px !important;
+    box-shadow: 0 18px 48px rgba(9, 40, 32, 0.12) !important;
+  }
+  .tz-react-shell .main-nav ul.nav-dropdown > li > a,
+  .tz-react-shell .main-nav ul.nav-dropdown-l3 > li > a {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    line-height: 1.55 !important;
+    align-items: flex-start !important;
+  }
+}
+
+.tz-ai-chat {
+  max-width: 760px;
+  margin: 24px auto 48px;
+  padding: 22px;
+  border: 1px solid rgba(20, 93, 74, 0.12);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(9, 40, 32, 0.05);
+}
+.tz-ai-chat__head h2 { margin: 4px 0 8px; }
+.tz-ai-chat__meta { color: #5a7268; font-size: 13px; }
+.tz-ai-chat__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+}
+.tz-ai-chat__toolbar select, .tz-ai-chat textarea {
+  width: 100%;
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid #cbdcd5;
+  padding: 8px 12px;
+  font: inherit;
+}
+.tz-ai-chat__log {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 420px;
+  overflow: auto;
+  padding: 8px 0 16px;
+}
+.tz-ai-msg__bubble {
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #f3faf7;
+  line-height: 1.8;
+}
+.tz-ai-msg.is-user .tz-ai-msg__bubble { background: #145d4a; color: #fff; }
+.tz-ai-msg__name { margin-top: 4px; font-size: 12px; color: #5a7268; font-weight: 700; }
+.tz-ai-think { margin-bottom: 8px; font-size: 13px; color: #3d534a; }
+.tz-ai-think pre { white-space: pre-wrap; background: #f8fbf9; padding: 10px; border-radius: 10px; }
+.tz-ai-chat__form { display: grid; gap: 10px; }
+.account-shell .account-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 22px;
+}
+.account-shell .account-tabs a {
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(20, 93, 74, 0.14);
+  text-decoration: none;
+  font-weight: 800;
+  color: #145d4a;
+}
+.account-shell .account-tabs a.is-on { background: #145d4a; color: #fff; }
+.account-ai-log { display: grid; gap: 10px; padding: 0; list-style: none; }

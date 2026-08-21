@@ -16,6 +16,7 @@ $tabs    = array(
 	'profile'  => 'پروفایل',
 	'tickets'  => 'تیکت‌ها',
 	'projects' => 'پروژه‌ها',
+	'ai'       => 'گفتگوهای هوش مصنوعی',
 );
 $balance = function_exists( 'teznevise_tezcoin_balance' ) ? teznevise_tezcoin_balance( $uid ) : 0;
 $ledger  = get_user_meta( $uid, 'teznevise_tezcoin_ledger', true );
@@ -203,6 +204,35 @@ $pay     = isset( $_GET['pay'] ) ? sanitize_key( wp_unslash( $_GET['pay'] ) ) : 
 					</article>
 				<?php endforeach; ?>
 			</div>
+		<?php endif; ?>
+
+		<?php if ( 'ai' === $tab ) : ?>
+			<section class="surface-card account-ai">
+				<h2><?php esc_html_e( 'تاریخچه گفتگو', 'teznevise' ); ?></h2>
+				<p><?php esc_html_e( 'پیام‌های ابزارهای آنلاین برای حساب شما ذخیره می‌شود.', 'teznevise' ); ?></p>
+				<?php
+				$history = array();
+				if ( class_exists( 'TezNevise_AI_API' ) && is_user_logged_in() ) {
+					$req = new WP_REST_Request( 'GET', '/teznevise-ai/v1/chat/history' );
+					$res = TezNevise_AI_API::get_history( $req );
+					if ( ! is_wp_error( $res ) && ! empty( $res['messages'] ) ) {
+						$history = $res['messages'];
+					}
+				}
+				if ( ! $history ) :
+					?>
+					<p><?php esc_html_e( 'هنوز گفتگویی ثبت نشده است.', 'teznevise' ); ?></p>
+				<?php else : ?>
+					<ol class="account-ai-log">
+						<?php foreach ( $history as $row ) : ?>
+							<li class="tz-ai-msg is-<?php echo esc_attr( $row['role'] ); ?>">
+								<div class="tz-ai-msg__bubble"><?php echo esc_html( wp_trim_words( wp_strip_all_tags( $row['content'] ), 80 ) ); ?></div>
+								<footer class="tz-ai-msg__name"><?php echo esc_html( $row['agent_name'] ? $row['agent_name'] : $row['role'] ); ?> · <?php echo esc_html( $row['tool_id'] ); ?></footer>
+							</li>
+						<?php endforeach; ?>
+					</ol>
+				<?php endif; ?>
+			</section>
 		<?php endif; ?>
 	</div>
 </section>

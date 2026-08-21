@@ -13,46 +13,57 @@ class TezNevise_AI_Chat {
     }
     
     public static function enqueue_assets() {
-        wp_enqueue_script('wp-element');
-        wp_enqueue_script('wp-i18n');
-        wp_enqueue_script('wp-url');
-        
-        wp_enqueue_script(
-            'teznevise-ai',
-            get_template_directory_uri() . '/js/teznevise-ai.js',
-            ['wp-element', 'wp-i18n', 'wp-url', 'wp-api-fetch'],
-            filemtime(get_template_directory() . '/js/teznevise-ai.js'),
-            true
-        );
-        
-        wp_enqueue_script(
+        $js = get_template_directory() . '/js/ai/chat.js';
+        $css = get_template_directory() . '/css/teznevise-ai.css';
+        if ( is_readable( $js ) ) {
+            wp_enqueue_script(
+                'teznevise-ai-chat',
+                get_template_directory_uri() . '/js/ai/chat.js',
+                array(),
+                (string) filemtime( $js ),
+                true
+            );
+        }
+        if ( is_readable( $css ) ) {
+            wp_enqueue_style(
+                'teznevise-ai',
+                get_template_directory_uri() . '/css/teznevise-ai.css',
+                array(),
+                (string) filemtime( $css )
+            );
+        }
+        $agents = array();
+        if ( class_exists( 'TezNevise_AI_Database' ) ) {
+            foreach ( (array) TezNevise_AI_Database::get_all_agents() as $agent ) {
+                $row = (array) $agent;
+                $agents[] = array(
+                    'id'                => $row['agent_id'] ?? '',
+                    'name'              => $row['name'] ?? '',
+                    'description'       => $row['description'] ?? '',
+                    'model'             => $row['model'] ?? '',
+                    'color'             => $row['color'] ?? '#145d4a',
+                    'icon'              => $row['icon'] ?? 'brain',
+                    'thinking_enabled'  => ! empty( $row['thinking_enabled'] ),
+                );
+            }
+        }
+        wp_localize_script(
             'teznevise-ai-chat',
-            get_template_directory_uri() . '/js/ai/chat.js',
-            ['teznevise-ai'],
-            filemtime(get_template_directory() . '/js/ai/chat.js'),
-            true
+            'tezneviseAiConfig',
+            array(
+                'rest_url'    => rest_url( 'teznevise-ai/v1/' ),
+                'nonce'       => wp_create_nonce( 'wp_rest' ),
+                'isLoggedIn'  => is_user_logged_in(),
+                'loginUrl'    => wp_login_url( get_permalink() ),
+                'settings'    => array(
+                    'persian_initial_message' => 'اگه نتونستی با ابزار کار کنی میتونی از من کمک بگیری',
+                    'free_tier_limit'         => (int) get_option( 'teznevise_ai_free_tier_limit', 10 ),
+                    'signed_in_limit'         => (int) get_option( 'teznevise_ai_signed_in_limit', 100 ),
+                    'cost_per_message'        => (float) get_option( 'teznevise_ai_cost_per_message', 0 ),
+                ),
+                'agents'      => $agents,
+            )
         );
-        
-        wp_enqueue_style(
-            'teznevise-ai',
-            get_template_directory_uri() . '/css/teznevise-ai.css',
-            [],
-            filemtime(get_template_directory() . '/css/teznevise-ai.css')
-        );
-        
-        wp_localize_script('teznevise-ai', 'tezneviseAiConfig', [
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'rest_url' => rest_url(),
-            'nonce' => wp_create_nonce('wp_rest'),
-            'isLoggedIn' => is_user_logged_in(),
-            'currentUserId' => get_current_user_id(),
-            'settings' => [
-                'persian_initial_message' => 'اگه نتونستی با ابزار کار کنی میتونی از من کمک بگیری',
-                'free_tier_limit' => 10,
-                'signed_in_limit' => 100,
-            ],
-            'agents' => self::get_agent_configs(),
-        ]);
     }
     
     private static function get_agent_configs() {
@@ -89,54 +100,57 @@ class TezNevise_AI_Chat {
         }
         
         self::enqueue_assets();
-        
-        $instance_id = 'teznevise-ai-chat-' . $tool_id . '-' . wp_generate_password(4, false);
-        
-        $tool_config_json = wp_json_encode([
-            'id' => $tool_id,
-            'name' => $tool_config['name'] ?? '',
-            'description' => $tool_config['description'] ?? '',
-            'default_agent' => $tool_config['default_agent'] ?? 'general',
-            'default_agent_name' => $tool_config['default_agent_name'] ?? 'Assistants',
-            'initial_message' => $tool_config['initial_message'] ?? 'اگه نتونستی با ابزار کار کنی میتونی از من کمک بگیری',
-            'free_tier_limit' => $tool_config['free_tier_limit'] ?? 10,
-            'signed_in_limit' => $tool_config['signed_in_limit'] ?? 100,
-            'cost_per_message' => $tool_config['cost_per_message'] ?? 0.01,
-            'recommended_agents' => $tool_config['recommended_agents'] ?? ['general'],
-            'collaboration_mode' => $atts['collaboration_mode'],
-            'thinking_enabled' => $atts['thinking_enabled'],
-        ]);
-        
+        $instance_id = 'teznevise-ai-chat-' . sanitize_html_class( $tool_id ) . '-' . wp_generate_password( 4, false );
+        $initial     = $tool_config['initial_message'] ?? 'اگه نتونستی با ابزار کار کنی میتونی از من کمک بگیری';
+        $agent_name  = $tool_config['default_agent_name'] ?? 'Assistants';
+        $free        = (int) ( $tool_config['free_tier_limit'] ?? get_option( 'teznevise_ai_free_tier_limit', 10 ) );
+        $signed      = (int) ( $tool_config['signed_in_limit'] ?? get_option( 'teznevise_ai_signed_in_limit', 100 ) );
+        $cost        = (float) ( $tool_config['cost_per_message'] ?? get_option( 'teznevise_ai_cost_per_message', 0 ) );
+        $collab      = $atts['collaboration_mode'];
+        $thinking    = ! empty( $atts['thinking_enabled'] );
+        $agents      = class_exists( 'TezNevise_AI_Database' ) ? (array) TezNevise_AI_Database::get_all_agents() : array();
         ob_start();
         ?>
-        <div id="<?php echo esc_attr($instance_id); ?>" 
-             class="teznevise-ai-chat-wrapper"
-             data-tool-id="<?php echo esc_attr($tool_id); ?>"
-             data-agent-id="<?php echo esc_attr($atts['agent_id']); ?>"
-             data-collaboration-mode="<?php echo esc_attr($atts['collaboration_mode']); ?>"
-             data-thinking-enabled="<?php echo esc_attr($atts['thinking_enabled'] ? 'true' : 'false'); ?>"
-             data-tool-config="<?php echo esc_attr($tool_config_json); ?>">
-        </div>
-        
-        <script type="text/javascript">
-        (function() {
-            var container = document.getElementById('<?php echo esc_js($instance_id); ?>');
-            if (container) {
-                var toolConfig = <?php echo $tool_config_json; ?>;
-                ReactDOM.createRoot(container).render(
-                    React.createElement(TezNeviseAIChat, {
-                        toolId: '<?php echo esc_js($tool_id); ?>',
-                        agentId: '<?php echo esc_js($atts["agent_id"]); ?>',
-                        collaborationMode: '<?php echo esc_js($atts["collaboration_mode"]); ?>',
-                        thinkingEnabled: <?php echo $atts['thinking_enabled'] ? 'true' : 'false'; ?>,
-                        toolConfig: toolConfig
-                    })
-                );
-            }
-        })();
-        </script>
+        <section class="tz-ai-chat" id="<?php echo esc_attr( $instance_id ); ?>" data-tool-id="<?php echo esc_attr( $tool_id ); ?>" data-agent-id="<?php echo esc_attr( $atts['agent_id'] ); ?>" data-collaboration-mode="<?php echo esc_attr( $collab ); ?>" data-thinking="<?php echo $thinking ? '1' : '0'; ?>">
+            <header class="tz-ai-chat__head">
+                <div>
+                    <span class="eyebrow"><?php esc_html_e( 'دستیار پژوهشی', 'teznevise' ); ?></span>
+                    <h2><?php echo esc_html( $tool_config['name'] ?? __( 'گفتگو با هوش مصنوعی', 'teznevise' ) ); ?></h2>
+                </div>
+                <p class="tz-ai-chat__meta"><?php echo esc_html( sprintf( __( 'مهمان: %1$d پیام رایگان — عضو: %2$d — هزینه هر پیام: %3$s تزکوین', 'teznevise' ), $free, $signed, number_format_i18n( $cost ) ) ); ?></p>
+            </header>
+            <div class="tz-ai-chat__toolbar">
+                <label><?php esc_html_e( 'عامل', 'teznevise' ); ?>
+                    <select data-ai-agent>
+                        <?php foreach ( $agents as $ag ) : $ag = (array) $ag; ?>
+                            <option value="<?php echo esc_attr( $ag['agent_id'] ?? '' ); ?>" <?php selected( $atts['agent_id'], $ag['agent_id'] ?? '' ); ?>><?php echo esc_html( $ag['name'] ?? '' ); ?> — <?php echo esc_html( $ag['model'] ?? '' ); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <label><?php esc_html_e( 'همکاری', 'teznevise' ); ?>
+                    <select data-ai-collab>
+                        <option value="single" <?php selected( $collab, 'single' ); ?>><?php esc_html_e( 'جداگانه', 'teznevise' ); ?></option>
+                        <option value="collaborative" <?php selected( $collab, 'collaborative' ); ?>><?php esc_html_e( 'همکاری زنجیره‌ای', 'teznevise' ); ?></option>
+                        <option value="separate" <?php selected( $collab, 'separate' ); ?>><?php esc_html_e( 'جدا + بازتاب پایانی', 'teznevise' ); ?></option>
+                    </select>
+                </label>
+                <label class="tz-ai-chat__check"><input type="checkbox" data-ai-thinking <?php checked( $thinking ); ?>> <?php esc_html_e( 'نمایش فرآیند فکر', 'teznevise' ); ?></label>
+            </div>
+            <div class="tz-ai-chat__log" data-ai-log>
+                <article class="tz-ai-msg is-assistant">
+                    <div class="tz-ai-msg__bubble"><?php echo esc_html( $initial ); ?></div>
+                    <footer class="tz-ai-msg__name"><?php echo esc_html( $agent_name ); ?></footer>
+                </article>
+            </div>
+            <form class="tz-ai-chat__form" data-ai-form>
+                <label class="screen-reader-text" for="<?php echo esc_attr( $instance_id ); ?>-q"><?php esc_html_e( 'پیام', 'teznevise' ); ?></label>
+                <textarea id="<?php echo esc_attr( $instance_id ); ?>-q" data-ai-input rows="3" required minlength="4" placeholder="<?php esc_attr_e( 'سؤال خود را بنویسید…', 'teznevise' ); ?>"></textarea>
+                <button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ارسال', 'teznevise' ); ?></button>
+            </form>
+            <p class="tz-ai-chat__status" data-ai-status hidden></p>
+        </section>
         <?php
-        return ob_get_clean();
+        return (string) ob_get_clean();
     }
     
     public static function render_generic_chat($atts) {

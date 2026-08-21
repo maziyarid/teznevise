@@ -457,7 +457,7 @@ function teznevise_render_service_fallback( $title, $tag = '' ) {
 					<p class="service-lead"><?php echo esc_html( $copy['lead'] ); ?></p>
 					<div class="hero-actions">
 						<a class="btn-tz btn-primary-tz btn-lg-tz" href="<?php echo esc_url( home_url( '/inquiry/' ) ); ?>"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> <?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></a>
-						<a class="btn-tz btn-light-tz btn-lg-tz" href="<?php echo esc_url( 'tel:' . preg_replace( '/\s+/', '', (string) $tel ) ); ?>"><i class="fa-solid fa-phone" aria-hidden="true"></i> <?php echo esc_html( $phone ); ?></a>
+						<a class="btn-tz btn-light-tz btn-lg-tz" href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( $tel ? $tel : $phone ) : 'tel:+989302822091' ); ?>"><i class="fa-solid fa-phone" aria-hidden="true"></i> <?php echo esc_html( $phone ); ?></a>
 					</div>
 					<div class="service-bullets">
 						<?php foreach ( $copy['bullets'] as $bullet ) : ?>
