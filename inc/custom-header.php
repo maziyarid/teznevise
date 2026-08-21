@@ -1,42 +1,53 @@
 <?php
 /**
- * Custom header functionality for TezNevise theme
+ * Custom header setup for TezNevise theme
  * 
- * This file handles custom header features and is required by functions.php
+ * @package TezNevise
  */
 
 if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly
+    exit;
 }
 
-// Custom header setup
-function teznevise_custom_header_setup() {
-    // Add custom header support
-    add_theme_support('custom-header', apply_filters('teznevise_custom_header_args', array(
-        'default-image'          => '',
-        'default-text-color'     => '000000',
-        'width'                 => 1200,
-        'height'                => 90,
-        'flex-height'           => true,
-        'flex-width'            => true,
-        'wp-head-callback'      => 'teznevise_header_style',
-    )));
-}
-add_action('after_setup_theme', 'teznevise_custom_header_setup');
-
-// Custom header style
-function teznevise_header_style() {
-    $header_image = get_header_image();
-    if (!empty($header_image)) {
-        echo '<style type="text/css">.site-header { background: url(' . esc_url($header_image) . ') no-repeat center top; background-size: cover; }</style>';
+if (!function_exists('teznevise_custom_header_setup')) {
+    function teznevise_custom_header_setup() {
+        add_theme_support('custom-header', array(
+            'default-image' => '',
+            'default-text-color' => '000000',
+            'width' => 1200,
+            'height' => 90,
+            'flex-height' => true,
+            'flex-width' => true,
+            'wp-head-callback' => 'teznevise_header_style',
+            'admin-head-callback' => 'teznevise_admin_header_style',
+            'admin-preview-callback' => 'teznevise_admin_header_image',
+        ));
     }
-}
+    add_action('after_setup_theme', 'teznevise_custom_header_setup');
 
-// Custom header image markup
-function teznevise_custom_header_markup() {
-    if (get_header_image()) {
-        echo '<div class="custom-header-image">';
-        the_header_image_tag();
+    function teznevise_header_style() {
+        $header_text_color = get_header_textcolor();
+        echo '<style type="text/css">';
+        if (!display_header_text()) {
+            echo '.site-title, .site-description { position: absolute; clip: rect(1px, 1px, 1px, 1px); padding: 0; margin: 0; overflow: hidden; }';
+        } else {
+            echo '.site-title a, .site-description { color: #' . esc_attr($header_text_color) . '; }';
+        }
+        echo '</style>';
+    }
+
+    function teznevise_admin_header_style() {
+        echo '<style type="text/css">.appearance_page_custom-header #headimg { border: none; }</style>';
+    }
+
+    function teznevise_admin_header_image() {
+        $style = ' style="color:#' . get_header_textcolor() . ';"';
+        echo '<div id="headimg">';
+        if (get_header_image()) {
+            echo '<img src="' . esc_url(header_image()) . '" alt="' . esc_attr__('Header Image', 'teznevise') . '" />';
+        }
+        echo '<h1 class="displaying-header' . $style . '">' . get_bloginfo('name') . '</h1>';
+        echo '<p class="displaying-header' . $style . '">' . get_bloginfo('description') . '</p>';
         echo '</div>';
     }
 }
