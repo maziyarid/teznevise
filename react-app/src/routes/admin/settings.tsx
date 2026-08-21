@@ -60,6 +60,15 @@ function SettingsPage() {
           <Field id="openrouter_key" label="OpenRouter API key" value={map.openrouter_key ?? ""} onChange={set} />
           <Field id="youcom_key" label="You.com API key" value={map.youcom_key ?? ""} onChange={set} />
           <Field id="tavily_key" label="Tavily API key" value={map.tavily_key ?? ""} onChange={set} />
+          <Field id="xai_api_key" label="xAI API key (جایگزین env)" value={map.xai_api_key ?? ""} onChange={set} />
+          <Field id="openai_api_key" label="OpenAI-compatible API key" value={map.openai_api_key ?? ""} onChange={set} />
+          <Field id="openai_api_base" label="OpenAI-compatible base URL" value={map.openai_api_base ?? ""} onChange={set} />
+        </section>
+        <section className="surface-card grid gap-3">
+          <h2 className="m-0 text-lg font-extrabold">سهمیه و هزینه پیام</h2>
+          <Field id="ai_guest_limit" label="سقف رایگان مهمان در روز" value={map.ai_guest_limit ?? "3"} onChange={set} />
+          <Field id="ai_signed_in_limit" label="سقف روزانه کاربر واردشده" value={map.ai_signed_in_limit ?? "20"} onChange={set} />
+          <Field id="ai_cost_per_message" label="هزینه هر پیام (تزکوین)" value={map.ai_cost_per_message ?? "5"} onChange={set} />
         </section>
         <section className="surface-card grid gap-3">
           <h2 className="m-0 text-lg font-extrabold">نوار پایین (ویجت)</h2>

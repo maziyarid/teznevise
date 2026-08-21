@@ -7,6 +7,7 @@ import { AskAiPanel } from "./AskAiPanel";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { CheckGrid } from "@/components/shared/CheckGrid";
 import { FaqGrid } from "@/components/shared/FaqGrid";
+import { MoreContent } from "@/components/shared/MoreContent";
 import { stripEmoji } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
@@ -94,6 +95,9 @@ export function ToolsWorkspace({ tool }: { tool: ToolDef }) {
               </article>
             ))}
             <FaqGrid items={faqs} embedded />
+            {copy.body?.length ? (
+              <MoreContent paragraphs={copy.body} title="توضیحات و محتوای صفحه" />
+            ) : null}
             <div className="cta-band cta-band-inline">
               <div>
                 <h2>{copy.ctaTitle || "برای تفسیر نتایج کمک می‌خواهید؟"}</h2>

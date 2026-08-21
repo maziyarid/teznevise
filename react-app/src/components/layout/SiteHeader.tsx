@@ -1,18 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  ChevronDown,
-  CircleHelp,
-  Clock,
-  Coins,
-  Lock,
-  Menu,
-  PenSquare,
-  Phone,
-  Search,
-  UserRound,
-  X,
-} from "lucide-react";
 import { PRIMARY_NAV, SITE, UTILITY_LINKS } from "@/lib/site";
 import { navIconFor } from "@/lib/nav-icons";
 import { FaIcon } from "@/components/ui/FaIcon";
@@ -39,7 +26,7 @@ export function SiteHeader() {
   }
   function closeMega() {
     if (leaveTimer.current) window.clearTimeout(leaveTimer.current);
-    leaveTimer.current = window.setTimeout(() => setOpenMenu(null), 220);
+    leaveTimer.current = window.setTimeout(() => setOpenMenu(null), 160);
   }
 
   useEffect(() => {
@@ -57,8 +44,16 @@ export function SiteHeader() {
         setSearchOpen(false);
       }
     }
+    function onClick(e: MouseEvent) {
+      const t = e.target as HTMLElement | null;
+      if (t && !t.closest(".has-dropdown")) setOpenMenu(null);
+    }
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("mousedown", onClick);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("mousedown", onClick);
+    };
   }, []);
 
   useEffect(() => {
@@ -75,15 +70,15 @@ export function SiteHeader() {
           <div className="announce-inner">
             <div className="announce-items">
               <a className="pill" href={`tel:${SITE.phoneIntl}`}>
-                <Phone className="size-3.5" aria-hidden />
+                <FaIcon icon="fa-phone" className="nav-item-icon" />
                 <strong>{SITE.phoneDisplay}</strong>
               </a>
               <span className="pill announce-desktop">
-                <Clock className="size-3.5" aria-hidden />
+                <FaIcon icon="fa-clock" className="nav-item-icon" />
                 {SITE.hours}
               </span>
               <span className="pill announce-desktop">
-                <Lock className="size-3.5" aria-hidden />
+                <FaIcon icon="fa-lock" className="nav-item-icon" />
                 مشاوره محرمانه و تخصصی
               </span>
             </div>
@@ -105,7 +100,7 @@ export function SiteHeader() {
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+            <FaIcon icon={open ? "fa-xmark" : "fa-bars"} />
           </button>
 
           <Logo />
@@ -133,7 +128,7 @@ export function SiteHeader() {
                     >
                       <FaIcon icon={navIconFor(item.to, item.label)} className="nav-item-icon" />
                       {item.label}
-                      <ChevronDown className="nav-chevron" aria-hidden />
+                      <FaIcon icon="fa-chevron-down" className="nav-chevron" />
                     </button>
                   ) : (
                     <Link to={item.to} className={cn(active && "is-active")}>
@@ -142,10 +137,10 @@ export function SiteHeader() {
                     </Link>
                   )}
                   {hasKids ? (
-                    <div className="nav-panel mega" aria-hidden={openMenu !== item.to}>
+                    <div className="nav-panel mega" dir="rtl" aria-hidden={openMenu !== item.to}>
                       <div
                         className="mega-inner"
-                        style={{ ["--mega-cols" as string]: String(item.children!.length) }}
+                        dir="rtl"
                         onMouseEnter={() => openMega(item.to)}
                         onMouseLeave={closeMega}
                       >
@@ -182,7 +177,7 @@ export function SiteHeader() {
               aria-controls="teznevise-search-overlay"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="size-4" />
+              <FaIcon icon="fa-magnifying-glass" />
             </button>
             <CreditsSlot />
             <div className="header-auth">
@@ -190,11 +185,11 @@ export function SiteHeader() {
             </div>
             <div className="desktop-cta flex items-center gap-2">
               <Link to="/about" className="nav-cta nav-cta-outline">
-                <CircleHelp className="size-4" />
+                <FaIcon icon="fa-circle-question" />
                 <span>درباره ما</span>
               </Link>
               <Link to="/inquiry" className="nav-cta nav-cta-solid">
-                <PenSquare className="size-4" />
+                <FaIcon icon="fa-pen-to-square" />
                 <span>ثبت درخواست</span>
               </Link>
             </div>
@@ -209,7 +204,7 @@ export function SiteHeader() {
           <div className="mobile-nav-header">
             <Logo />
             <button type="button" className="icon-btn" aria-label="بستن منو" onClick={() => setOpen(false)}>
-              <X className="size-5" />
+              <FaIcon icon="fa-xmark" />
             </button>
           </div>
           {PRIMARY_NAV.map((item) => {
@@ -223,17 +218,13 @@ export function SiteHeader() {
                     aria-expanded={acc === item.to}
                     onClick={() => setAcc((c) => (c === item.to ? null : item.to))}
                   >
-                    {(() => {
-                      return <FaIcon icon={navIconFor(item.to, item.label)} className="size-4" />;
-                    })()}
+                    <FaIcon icon={navIconFor(item.to, item.label)} className="size-4" />
                     {item.label}
-                    <ChevronDown className={cn("size-4 transition-transform", acc === item.to && "rotate-180")} />
+                    <FaIcon icon="fa-chevron-down" className={cn("size-4", acc === item.to && "rotate-180")} />
                   </button>
                 ) : (
                   <Link to={item.to} className="mobile-link">
-                    {(() => {
-                      return <FaIcon icon={navIconFor(item.to, item.label)} className="size-4" />;
-                    })()}
+                    <FaIcon icon={navIconFor(item.to, item.label)} className="size-4" />
                     {item.label}
                   </Link>
                 )}
@@ -242,6 +233,7 @@ export function SiteHeader() {
                     <Link to={item.to}>همه {item.label}</Link>
                     {item.children!.flatMap((c) => c.items).map((s) => (
                       <Link key={s.to} to={s.to}>
+                        <FaIcon icon={navIconFor(s.to, s.label)} className="nav-item-icon" />
                         {s.label}
                       </Link>
                     ))}
@@ -251,17 +243,19 @@ export function SiteHeader() {
             );
           })}
           <Link to="/about" className="mobile-link">
+            <FaIcon icon="fa-circle-info" className="size-4" />
             درباره ما
           </Link>
           <Link to="/privacy" className="mobile-link">
+            <FaIcon icon="fa-shield-halved" className="size-4" />
             حریم خصوصی
           </Link>
           <div className="mt-5 flex flex-col gap-2.5">
             <Link to="/inquiry" className="btn-tz btn-primary-tz">
-              <PenSquare className="size-4" /> ثبت درخواست مشاوره
+              <FaIcon icon="fa-pen-to-square" /> ثبت درخواست مشاوره
             </Link>
             <a className="btn-tz btn-light-tz" href={`tel:${SITE.phoneIntl}`}>
-              تماس {SITE.phoneDisplay}
+              <FaIcon icon="fa-phone" /> تماس {SITE.phoneDisplay}
             </a>
           </div>
         </div>
@@ -297,7 +291,7 @@ function CreditsSlot() {
       aria-label="تزکوین"
       title={tip}
     >
-      <Coins className="size-4" aria-hidden />
+      <FaIcon icon="fa-coins" />
       <span>{balance == null ? "—" : faNum(balance)}</span>
     </Link>
   );
@@ -329,7 +323,7 @@ function AuthSlot() {
           </Link>
         ) : null}
         <Link to="/dashboard" className="icon-btn" aria-label="پنل کاربری" title="پنل کاربری">
-          <UserRound className="size-4" />
+          <FaIcon icon="fa-user" />
         </Link>
         <button type="button" className="icon-btn header-logout" onClick={() => void signOut()} aria-label="خروج">
           <span className="text-[11px] font-extrabold text-brand">خروج</span>
@@ -339,7 +333,7 @@ function AuthSlot() {
   }
   return (
     <Link to="/login" className="icon-btn" aria-label="ورود" title="ورود">
-      <UserRound className="size-4" />
+      <FaIcon icon="fa-user" />
     </Link>
   );
 }

@@ -49,6 +49,21 @@ while ( have_posts() ) :
 		<?php
 	}
 
+	?>
+<section class="section">
+	<div class="container">
+		<div class="longcopy article-content tool-body" data-reveal>
+			<?php
+			if ( function_exists( 'teznevise_the_page_leftover_content' ) ) {
+				teznevise_the_page_leftover_content();
+			} else {
+				the_content();
+			}
+			?>
+		</div>
+	</div>
+</section>
+	<?php
 	if ( ! $has_builder_steps && $features ) :
 		?>
 <section class="section bg-soft">
@@ -78,14 +93,6 @@ while ( have_posts() ) :
 		teznevise_builder_render_sections( 0, array( 'only' => array( 'process_steps' ) ) );
 	endif;
 	?>
-
-<section class="section">
-	<div class="container">
-		<div class="longcopy article-content tool-body" data-reveal>
-			<?php the_content(); ?>
-		</div>
-	</div>
-</section>
 
 	<?php
 	if ( function_exists( 'teznevise_builder_render_sections' ) ) {

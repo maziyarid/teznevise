@@ -1,5 +1,14 @@
 # Changelog
 
+
+## 1.9.4 - 2026-08-21
+
+- RTL mega menu: full-width panel, icons at inline-start, nested lists no longer position LTR.
+- Classic-editor leftover ("مشاهده بیشتر") on homepage, default pages, and single tools.
+- Gravity Forms shortcodes always render the native lead form.
+- Telephone CTAs use `teznevise_tel_href()` so they never become `/tel:` routes.
+- React app: FA7 header/dashboard icons, tool AI chat with thinking/collab/credits, redesigned user dashboard.
+
 ## 1.9.3 — 2026-08-21 — Restore bootstrap, mega nav, tool AI, dashboard
 
 - Restore the 1.9.2 WordPress bootstrap. `functions.php` no longer requires missing Underscores files (`inc/template-functions.php` and friends), which fatally took the live site down.

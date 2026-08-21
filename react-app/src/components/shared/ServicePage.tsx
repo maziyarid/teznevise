@@ -10,6 +10,7 @@ import { stripEmoji } from "@/lib/utils";
 import { CheckGrid } from "./CheckGrid";
 import { FaqGrid } from "./FaqGrid";
 import { InquiryForm } from "./InquiryForm";
+import { MoreContent } from "./MoreContent";
 import { PageHero } from "./PageHero";
 import { Universities } from "./Universities";
 
@@ -81,13 +82,7 @@ export function ServicePage({ page, fieldSlug }: { page: PageBlock; fieldSlug?: 
       </section>
 
       {p.body?.length ? (
-        <section className="section">
-          <div className="container-tz max-w-3xl prose-fa">
-            {p.body.map((paragraph) => (
-              <p key={paragraph.slice(0, 24)}>{stripEmoji(paragraph)}</p>
-            ))}
-          </div>
-        </section>
+        <MoreContent paragraphs={p.body} />
       ) : null}
 
       <FaqGrid items={faqs} />

@@ -4,18 +4,23 @@ export async function grokChat(opts: {
   system: string;
   user: string;
   maxTokens?: number;
+  model?: string;
+  apiKey?: string;
+  apiBase?: string;
 }): Promise<{ ok: true; text: string } | { ok: false; error: string }> {
-  const apiKey = process.env.XAI_API_KEY;
+  const apiKey = opts.apiKey || process.env.XAI_API_KEY;
   if (!apiKey) return { ok: false, error: "AI is not available" };
+  const base = (opts.apiBase || "https://api.x.ai/v1").replace(/\/$/, "");
+  const model = opts.model || MODEL;
 
-  const res = await fetch("https://api.x.ai/v1/chat/completions", {
+  const res = await fetch(`${base}/chat/completions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: MODEL,
+      model,
       temperature: 0.2,
       max_tokens: opts.maxTokens ?? 500,
       messages: [
@@ -29,6 +34,12 @@ export async function grokChat(opts: {
   const text = body.choices?.[0]?.message?.content?.trim() ?? "";
   if (!text) return { ok: false, error: "پاسخ خالی بود" };
   return { ok: true, text };
+}
+
+export function splitThinking(text: string): { thinking: string; content: string } {
+  const m = text.match(/<think>([\s\S]*?)<\/think>/i);
+  if (!m) return { thinking: "", content: text.trim() };
+  return { thinking: m[1].trim(), content: text.replace(m[0], "").trim() };
 }
 
 export async function moderateComment(body: string, name: string) {

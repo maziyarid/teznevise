@@ -97,6 +97,13 @@ if ( $use_builder ) {
 	</div>
 	<button aria-controls="seoMoreContent" aria-expanded="false" class="seo-more-btn" data-seo-toggle type="button"><span aria-hidden="true" class="seo-more-mark">‹</span><span class="seo-more-text"><?php esc_html_e( 'مشاهده بیشتر', 'teznevise' ); ?></span></button>
 </div></div></section>
+<?php
+if ( function_exists( 'teznevise_the_page_leftover_content' ) ) {
+	echo '<div class="container" style="padding-bottom:48px">';
+	teznevise_the_page_leftover_content();
+	echo '</div>';
+}
+?>
 
 <?php get_footer();
 
