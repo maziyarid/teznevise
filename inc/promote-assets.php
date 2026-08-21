@@ -13,7 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Relative paths under assets/ to promote.
+ * Relative paths under assets/ to promote from teznevise_work.
+ * Public CSS from 1.8.5 (tokens/components/pages/chrome) ships in the
+ * theme tree — do not copy styles.css back from the work folder.
  *
  * @return string[]
  */
@@ -25,7 +27,6 @@ function teznevise_promotable_assets() {
 		'css/batch-fixes.css',
 		'css/ui-round2.css',
 		'css/site-polish.css',
-		'css/styles.css',
 		'css/service-thesis.css',
 		'css/service-statistics.css',
 		'css/service-simulation.css',
