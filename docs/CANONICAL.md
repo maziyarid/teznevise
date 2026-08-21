@@ -1,6 +1,6 @@
 # Teznevise Theme — Canonical Source
 
-**Version:** 1.0.0  
+**Version:** 1.8.5  
 **Date:** 2026-08-17  
 **Repository:** maziyarid/teznevise  
 

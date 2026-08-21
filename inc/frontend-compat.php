@@ -44,53 +44,45 @@ function teznevise_dequeue_block_styles() {
 add_action( 'wp_enqueue_scripts', 'teznevise_dequeue_block_styles', 100 );
 
 /**
- * Extra styles loaded last so they win over leftover WP/plugin CSS.
+ * Extra styles that stay outside the four public bundles.
+ * 1.8.5: header-form / page-extras / wp-compat are folded into components/pages.
+ * legacy-wpcode and service sheets load only when the page actually needs them.
  */
 function teznevise_enqueue_compat_assets() {
-	wp_enqueue_style(
-		'teznevise-header-form',
-		TEZNEVISE_URI . '/assets/css/header-form.css',
-		array( 'teznevise-header-fix' ),
-		TEZNEVISE_VERSION
-	);
-	wp_enqueue_style(
-		'teznevise-page-extras',
-		TEZNEVISE_URI . '/assets/css/page-extras.css',
-		array( 'teznevise-blog' ),
-		TEZNEVISE_VERSION
-	);
-	wp_enqueue_style(
-		'teznevise-legacy-wpcode',
-		TEZNEVISE_URI . '/assets/css/legacy-wpcode.css',
-		array( 'teznevise-page-extras' ),
-		TEZNEVISE_VERSION
-	);
-	wp_enqueue_style(
-		'teznevise-wp-compat',
-		TEZNEVISE_URI . '/assets/css/wp-compat.css',
-		array( 'teznevise-nav-touch', 'teznevise-legacy-wpcode' ),
-		TEZNEVISE_VERSION
-	);
-
+	$haystack = '';
 	if ( is_singular() ) {
+		$post = get_post();
+		if ( $post instanceof WP_Post ) {
+			$haystack  = (string) $post->post_content;
+			$haystack .= ' ' . (string) get_post_meta( $post->ID, '_teznevise_builder_sections', true );
+		}
+	}
+
+	if ( $haystack && preg_match( '/tzpc-|tzhub-|tz-careers|tz_price|tz_calculation|gravityform/i', $haystack ) ) {
 		wp_enqueue_style(
-			'teznevise-service-thesis',
-			TEZNEVISE_URI . '/assets/css/service-thesis.css',
-			array( 'teznevise-wp-compat' ),
+			'teznevise-legacy-wpcode',
+			TEZNEVISE_URI . '/assets/css/legacy-wpcode.css',
+			array( 'teznevise-chrome' ),
 			TEZNEVISE_VERSION
 		);
+	}
+
+	if ( is_singular() && ! is_front_page() ) {
 		$slug = get_post_field( 'post_name', get_queried_object_id() );
 		$map  = array(
+			'service-thesis'     => 'service-thesis.css',
+			'thesis'             => 'service-thesis.css',
+			'service-proposal'   => 'service-thesis.css',
 			'service-statistics' => 'service-statistics.css',
-			'service-simulation' => 'service-simulation.css',
 			'statistics'         => 'service-statistics.css',
+			'service-simulation' => 'service-simulation.css',
 			'simulation'         => 'service-simulation.css',
 		);
 		if ( isset( $map[ $slug ] ) ) {
 			wp_enqueue_style(
-				'teznevise-service-' . $slug,
+				'teznevise-service-' . sanitize_key( $slug ),
 				TEZNEVISE_URI . '/assets/css/' . $map[ $slug ],
-				array( 'teznevise-service-thesis' ),
+				array( 'teznevise-chrome' ),
 				TEZNEVISE_VERSION
 			);
 		}

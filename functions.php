@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.8.4' );
+define( 'TEZNEVISE_VERSION', '1.8.5' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -92,52 +92,24 @@ register_nav_menus( array(
 add_action( 'after_setup_theme', 'teznevise_setup' );
 
 function teznevise_enqueue_assets() {
-wp_enqueue_style( 'teznevise-style', get_stylesheet_uri(), array(), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-font-vazirmatn', 'https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css', array(), '33.003' );
-wp_enqueue_style( 'teznevise-fontawesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css', array(), '7.1.0' );
-wp_enqueue_style( 'teznevise-redesign', TEZNEVISE_URI . '/assets/css/redesign.css', array( 'teznevise-style' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-layout-refinements', TEZNEVISE_URI . '/assets/css/layout-refinements.css', array( 'teznevise-redesign' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-motion', TEZNEVISE_URI . '/assets/css/motion.css', array( 'teznevise-layout-refinements' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-batch-fixes', TEZNEVISE_URI . '/assets/css/batch-fixes.css', array( 'teznevise-motion' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-ui-round2', TEZNEVISE_URI . '/assets/css/ui-round2.css', array( 'teznevise-batch-fixes' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-site-polish', TEZNEVISE_URI . '/assets/css/site-polish.css', array( 'teznevise-ui-round2' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-header-fix', TEZNEVISE_URI . '/assets/css/header-fix.css', array( 'teznevise-site-polish' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-mobile-fixes', TEZNEVISE_URI . '/assets/css/mobile-fixes.css', array( 'teznevise-header-fix' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-blog', TEZNEVISE_URI . '/assets/css/blog.css', array( 'teznevise-mobile-fixes' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-nav-touch', TEZNEVISE_URI . '/assets/css/nav-touch.css', array( 'teznevise-blog' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-product', TEZNEVISE_URI . '/assets/css/product-1.7.css', array( 'teznevise-nav-touch' ), TEZNEVISE_VERSION );
-wp_enqueue_style( 'teznevise-nav-dropdown', TEZNEVISE_URI . '/assets/css/nav-dropdown.css', array( 'teznevise-product' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-style', get_stylesheet_uri(), array(), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-tokens', TEZNEVISE_URI . '/assets/css/tokens.css', array( 'teznevise-style' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-fontawesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css', array(), '7.1.0' );
+	wp_enqueue_style( 'teznevise-components', TEZNEVISE_URI . '/assets/css/components.css', array( 'teznevise-tokens' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-pages', TEZNEVISE_URI . '/assets/css/pages.css', array( 'teznevise-components' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-chrome', TEZNEVISE_URI . '/assets/css/chrome.css', array( 'teznevise-pages' ), TEZNEVISE_VERSION );
 
-wp_enqueue_script( 'teznevise-redesign', TEZNEVISE_URI . '/assets/js/redesign.js', array(), TEZNEVISE_VERSION, true );
-wp_enqueue_script( 'teznevise-main', TEZNEVISE_URI . '/assets/js/main.js', array( 'teznevise-redesign' ), TEZNEVISE_VERSION, true );
-wp_enqueue_script( 'teznevise-nav-touch', TEZNEVISE_URI . '/assets/js/nav-touch.js', array( 'teznevise-main' ), TEZNEVISE_VERSION, true );
-wp_enqueue_script( 'teznevise-product', TEZNEVISE_URI . '/assets/js/product-1.7.js', array( 'teznevise-nav-touch' ), TEZNEVISE_VERSION, true );
-wp_enqueue_script( 'teznevise-nav-dropdown', TEZNEVISE_URI . '/assets/js/nav-dropdown.js', array( 'teznevise-product' ), TEZNEVISE_VERSION, true );
-if ( function_exists( 'teznevise_localize_front_script' ) ) {
-	teznevise_localize_front_script();
-}
+	wp_enqueue_script( 'teznevise-chrome', TEZNEVISE_URI . '/assets/js/chrome.js', array(), TEZNEVISE_VERSION, true );
+	if ( function_exists( 'teznevise_localize_front_script' ) ) {
+		teznevise_localize_front_script();
+	}
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );
 
+/**
+ * 1.8.5: parity CSS/JS now lives in chrome.css / chrome.js.
+ * Keep this hook as a no-op so old callers do not fatal.
+ */
 function teznevise_enqueue_parity_css() {
-	wp_enqueue_style(
-		'teznevise-parity',
-		TEZNEVISE_URI . '/assets/css/react-parity.css',
-		array(),
-		TEZNEVISE_VERSION
-	);
-	wp_enqueue_style(
-		'teznevise-react-loader',
-		TEZNEVISE_URI . '/assets/css/react-loader.css',
-		array( 'teznevise-parity' ),
-		TEZNEVISE_VERSION
-	);
-	wp_enqueue_script(
-		'teznevise-react-loader',
-		TEZNEVISE_URI . '/assets/js/react-loader.js',
-		array( 'teznevise-nav-dropdown' ),
-		TEZNEVISE_VERSION,
-		true
-	);
+	return;
 }
-add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_parity_css', 999 );

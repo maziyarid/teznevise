@@ -40,8 +40,10 @@ if ( ! $items ) {
 		array( 'label' => __( 'تماس', 'teznevise' ), 'url' => 'tel:' . teznevise_get_contact( 'phone_intl' ) ),
 	);
 }
+$items = array_slice( $items, 0, 5 );
+$count = count( $items );
 ?>
-<nav class="bottom-nav" aria-label="<?php esc_attr_e( 'ناوبری سریع', 'teznevise' ); ?>">
+<nav class="bottom-nav" data-nav-count="<?php echo esc_attr( (string) $count ); ?>" aria-label="<?php esc_attr_e( 'ناوبری سریع', 'teznevise' ); ?>">
 	<?php foreach ( $items as $item ) : ?>
 		<a class="bottom-nav-item" href="<?php echo esc_url( $item['url'] ); ?>">
 			<i class="<?php echo esc_attr( function_exists( 'teznevise_bottom_icon' ) ? teznevise_bottom_icon( $item['url'], $item['label'] ) : 'fa-solid fa-circle' ); ?>" aria-hidden="true"></i>

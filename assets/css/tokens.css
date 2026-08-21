@@ -1,0 +1,93 @@
+/**
+ * Design tokens + local fonts. First public stylesheet after style.css.
+ * Project: Teznevise WordPress Theme
+ * Author: MAZ//ID (Maziyar)
+ * Brand: MΛZ — https://github.com/maziyarid/M-Z
+ * @package Teznevise
+ */
+
+@layer tez-tokens, tez-base, tez-components, tez-pages, tez-chrome, tez-fixes;
+
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("../fonts/Vazirmatn-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("../fonts/Vazirmatn-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("../fonts/Vazirmatn-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("../fonts/Vazirmatn-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer tez-tokens {
+  :root {
+    --tz-brand: #145D4A;
+    --tz-brand-dark: #0f4a3b;
+    --tz-brand-deep: #071f19;
+    --tz-brand-light: #1b765f;
+    --tz-primary: #145D4A;
+    --tz-primary-700: #0d4c3d;
+    --tz-primary-800: #083d31;
+    --tz-primary-900: #062e26;
+    --tz-primary-soft: #e8f5f1;
+    --tz-primary-soft-2: #f2faf7;
+    --tz-accent: #82d8b9;
+    --tz-accent-2: #bcebd9;
+    --tz-ink: #10231d;
+    --tz-text: #2f433c;
+    --tz-muted: #5a7268;
+    --tz-line: #dfe9e5;
+    --tz-surface: #ffffff;
+    --tz-surface-2: #f7fcfa;
+    --tz-soft: #f7fcfa;
+    --tz-warm: #fbf7ee;
+    --tz-content: 1180px;
+    --tz-font: "Vazirmatn", Tahoma, sans-serif;
+    --tz-radius: 24px;
+    --tz-radius-sm: 16px;
+    --tz-radius-card: 1.25rem;
+    --tz-radius-pill: 999px;
+    --tz-shadow: 0 18px 55px rgba(9, 62, 49, 0.10);
+    --tz-shadow-sm: 0 10px 30px rgba(9, 62, 49, 0.08);
+    --tz-bottom-nav-height: 72px;
+  }
+}
+
+@layer tez-base {
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+  body {
+    margin: 0;
+    background: var(--tz-surface);
+    color: var(--tz-ink);
+    font-family: var(--tz-font);
+    line-height: 1.9;
+    font-size: 16px;
+    direction: rtl;
+    text-align: right;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}

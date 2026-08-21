@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.8.5 — 2026-08-21 — CSS cascade collapse, local fonts, one chrome JS
+
+- Public CSS is four layered files: `tokens.css`, `components.css`, `pages.css`, `chrome.css`. The 24-file last-wins pile is no longer enqueued.
+- Vazirmatn is self-hosted from `assets/fonts/` (jsDelivr font-face stylesheet removed).
+- One public JS handle: `chrome.js`. Duplicate search-overlay bindings from `main.js` are gone. `tezneviseProduct` localizes onto `teznevise-chrome`.
+- Bottom nav is capped at 5 items, uses `data-nav-count` + `--tz-bottom-nav-height`, and no longer hard-codes `repeat(4, 1fr)` / 72px padding that covered CTAs.
+- `legacy-wpcode.css` (48 KB) and service sheets load only on pages that need them — not the homepage.
+- Unused `assets/css/styles.css` archived. Ban new `*-fix.css` overlay files.
+- Rebuild bundles with `python3 scripts/build-frontend-bundles.py`. Source sheets stay in `assets/css/` for that rebuild.
+
+
 ## 1.8.4 — 2026-08-20 — Nine services, six steps, FAQ boxes, mega isolation
 
 - Homepage services are 9 cards: تیم پژوهشگران → شبیه‌سازی, plus تحلیل کیفی, انجام پروژه دانشجویی, انجام مقاله. Render-time rewrite updates stale builder JSON so cPanel rsync shows them without an admin re-seed.

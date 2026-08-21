@@ -47,6 +47,7 @@
   --radius-card: 1.25rem;
   --shadow-nav: 0 16px 45px rgba(19, 54, 44, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.82);
   --shadow-card: 0 10px 30px rgba(9, 62, 49, 0.08);
+  --tz-bottom-nav-height: 72px;
 }
 
 @layer base {
@@ -1783,7 +1784,7 @@ textarea:focus {
   }
   .bottom-nav {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
     position: fixed;
     bottom: 0;
     left: 0;
@@ -1792,11 +1793,11 @@ textarea:focus {
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(16px);
     border-top: 1px solid rgba(20, 93, 74, 0.1);
-    padding: 6px 8px calc(8px + env(safe-area-inset-bottom));
+    padding: 6px 8px calc(8px + env(safe-area-inset-bottom, 0px));
     box-shadow: 0 -8px 28px rgba(9, 40, 32, 0.06);
   }
   body {
-    padding-bottom: 72px;
+    padding-bottom: calc(var(--tz-bottom-nav-height, 72px) + env(safe-area-inset-bottom, 0px));
   }
   .article-card {
     min-height: 0;

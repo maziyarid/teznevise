@@ -30,9 +30,11 @@ export function BottomNav() {
       .catch(() => {});
   }, []);
 
+  const visible = items.slice(0, 5);
+
   return (
-    <nav className="bottom-nav" aria-label="ناوبری سریع">
-      {items.map((item) => {
+    <nav className="bottom-nav" aria-label="ناوبری سریع" data-nav-count={visible.length}>
+      {visible.map((item) => {
         const Icon = ICONS[item.icon as keyof typeof ICONS] ?? Home;
         if (item.href.startsWith("tel:") || item.href.startsWith("http")) {
           return (

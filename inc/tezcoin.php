@@ -372,7 +372,7 @@ function teznevise_popular_searches() {
 
 function teznevise_localize_front_script() {
 	wp_localize_script(
-		'teznevise-product',
+		'teznevise-chrome',
 		'tezneviseProduct',
 		array(
 			'ajax'    => admin_url( 'admin-ajax.php' ),
