@@ -37,8 +37,7 @@
   font-display: swap;
 }
 
-@layer tez-tokens {
-  :root {
+:root {
     --tz-brand: #145D4A;
     --tz-brand-dark: #0f4a3b;
     --tz-brand-deep: #071f19;
@@ -69,25 +68,22 @@
     --tz-shadow-sm: 0 10px 30px rgba(9, 62, 49, 0.08);
     --tz-bottom-nav-height: 72px;
   }
-}
 
-@layer tez-base {
-  html {
-    scroll-behavior: smooth;
-    overflow-x: clip;
-  }
-  body {
-    margin: 0;
-    background: var(--tz-surface);
-    color: var(--tz-ink);
-    font-family: var(--tz-font);
-    line-height: 1.9;
-    font-size: 16px;
-    direction: rtl;
-    text-align: right;
-  }
-  button:not(:disabled),
-  [role="button"]:not(:disabled) {
-    cursor: pointer;
-  }
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+body {
+  margin: 0;
+  background: var(--tz-surface);
+  color: var(--tz-ink);
+  font-family: var(--tz-font);
+  line-height: 1.9;
+  font-size: 16px;
+  direction: rtl;
+  text-align: right;
+}
+button:not(:disabled),
+[role="button"]:not(:disabled) {
+  cursor: pointer;
 }

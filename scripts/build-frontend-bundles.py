@@ -32,17 +32,22 @@ def read_css(name: str) -> str:
 
 
 def wrap_layer(layer: str, files: list[str]) -> str:
-    chunks = [f"@layer {layer} {{\n"]
+    """Concatenate in source order. Do NOT wrap in @layer.
+
+    CSS cascade layers invert !important (earlier layer wins), which made
+    layout-refinements beat react-parity and turned the sticky header
+    transparent. File order is the contract: later files win.
+    """
+    chunks = []
     for name in files:
         body = read_css(name)
         open_n = body.count("{")
         close_n = body.count("}")
         if open_n != close_n:
             raise SystemExit(f"{name}: brace mismatch {{ {open_n} }} {close_n}")
-        chunks.append(f"  /* === {name} === */\n")
+        chunks.append(f"/* === {name} === */\n")
         chunks.append(body)
         chunks.append("\n")
-    chunks.append("}\n")
     return "".join(chunks)
 
 
@@ -94,66 +99,113 @@ def build_css() -> None:
         ],
     )
     chrome += """
-/* ===== 1.8.5 last-wins: bottom nav height + skip-link + overflow ===== */
-@layer tez-fixes {
-  .skip-link,
-  .skip-link.screen-reader-text,
-  a.skip-link {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
+/* ===== 1.8.6 unlayered last-wins (must stay OUT of @layer) ===== */
+.skip-link,
+.skip-link.screen-reader-text,
+a.skip-link {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.site-header-new,
+.site-header.site-header-new,
+body.tz-react-shell .site-header-new {
+  background: #fff !important;
+  isolation: isolate;
+}
+.announce,
+.announcement {
+  background: linear-gradient(135deg, rgba(247, 252, 250, 0.98), rgba(232, 245, 241, 0.96)) !important;
+  color: #38544b !important;
+}
+
+@media (min-width: 1051px) {
+  .main-nav {
+    height: 72px !important;
+    min-height: 72px !important;
+    gap: 8px !important;
+    overflow: visible !important;
+  }
+  .main-nav .nav-links > li > a,
+  .main-nav .nav-links > li > .nav-link {
+    font-size: 13px !important;
+    padding: 8px 8px !important;
     white-space: nowrap !important;
-    border: 0 !important;
   }
+}
 
+.hero-visual {
+  position: relative !important;
+  min-height: 520px !important;
+  overflow: visible !important;
+}
+.hero-network {
+  z-index: 2;
+}
+.hero-order-button {
+  width: 176px !important;
+  height: 176px !important;
+  z-index: 4 !important;
+}
+.orbit-tag {
+  z-index: 5 !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+}
+.ink-blot {
+  opacity: 0.42 !important;
+  z-index: 0 !important;
+}
+
+.bottom-nav {
+  --tz-bottom-nav-cols: 4;
+}
+.bottom-nav[data-nav-count="2"] { --tz-bottom-nav-cols: 2; }
+.bottom-nav[data-nav-count="3"] { --tz-bottom-nav-cols: 3; }
+.bottom-nav[data-nav-count="5"] { --tz-bottom-nav-cols: 5; }
+
+@media (max-width: 768px) {
+  html { overflow-x: clip; }
+  body,
+  body.tz-react-shell {
+    padding-bottom: calc(var(--tz-bottom-nav-height, 72px) + env(safe-area-inset-bottom, 0px)) !important;
+  }
   .bottom-nav {
-    --tz-bottom-nav-cols: 4;
+    display: grid !important;
+    grid-template-columns: repeat(var(--tz-bottom-nav-cols, 4), minmax(64px, 1fr)) !important;
+    align-items: stretch !important;
+    position: fixed !important;
+    inset-inline: 0 !important;
+    bottom: 0 !important;
+    z-index: 1100 !important;
+    background: rgba(255, 255, 255, 0.97) !important;
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(20, 93, 74, 0.1) !important;
+    padding: 6px 4px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    gap: 0 !important;
+    box-shadow: 0 -8px 28px rgba(9, 40, 32, 0.06);
   }
-  .bottom-nav[data-nav-count="2"] { --tz-bottom-nav-cols: 2; }
-  .bottom-nav[data-nav-count="3"] { --tz-bottom-nav-cols: 3; }
-  .bottom-nav[data-nav-count="5"] { --tz-bottom-nav-cols: 5; }
-
-  @media (max-width: 768px) {
-    html {
-      overflow-x: clip;
-    }
-    body,
-    body.tz-react-shell {
-      padding-bottom: calc(var(--tz-bottom-nav-height, 72px) + env(safe-area-inset-bottom, 0px)) !important;
-    }
-    .bottom-nav {
-      display: grid !important;
-      grid-template-columns: repeat(var(--tz-bottom-nav-cols, 4), minmax(64px, 1fr)) !important;
-      align-items: stretch !important;
-      position: fixed !important;
-      inset-inline: 0 !important;
-      bottom: 0 !important;
-      z-index: 1100 !important;
-      background: rgba(255, 255, 255, 0.97) !important;
-      backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(20, 93, 74, 0.1) !important;
-      padding: 6px 4px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
-      gap: 0 !important;
-      box-shadow: 0 -8px 28px rgba(9, 40, 32, 0.06);
-    }
-    .bottom-nav-item,
-    .bottom-nav a {
-      min-width: 0 !important;
-      flex: 1 1 0 !important;
-    }
+  .bottom-nav-item,
+  .bottom-nav a {
+    min-width: 0 !important;
+    flex: 1 1 0 !important;
   }
+  .hero-visual { min-height: 420px !important; }
+  .hero-order-button { width: 148px !important; height: 148px !important; }
+}
 
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 """

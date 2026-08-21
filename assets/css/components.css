@@ -6,8 +6,7 @@
  * @package Teznevise
  */
 
-@layer tez-components {
-  /* === redesign.css === */
+/* === redesign.css === */
 :root{
   --tz-primary:#145D4A;
   --tz-primary-700:#0d4c3d;
@@ -246,7 +245,7 @@ textarea{border:1px solid var(--tz-line);border-radius:11px;padding:11px 12px;ba
   color: var(--tz-primary);
 }
 
-  /* === layout-refinements.css === */
+/* === layout-refinements.css === */
 /* ==========================================================
    Teznevise — Layout & Gestalt Refinements
    Focus: spacing, hierarchy, sizing, responsive consistency
@@ -1013,7 +1012,7 @@ body{font-size:15px!important}
   .bridge-node:last-child{grid-column:1/-1!important}
 }
 
-  /* === motion.css === */
+/* === motion.css === */
 /* Teznevise motion + UX batch */
 :root{--motion-ease:cubic-bezier(.22,1,.36,1);--motion-ease-out:cubic-bezier(.16,1,.3,1);--motion-duration:.7s}
 .site-header-new{position:sticky;top:0;z-index:1000;background:transparent!important;border-bottom:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
@@ -1120,7 +1119,7 @@ body{font-size:15px!important}
 .service-card:hover,.article-card:hover{transform:translateY(-8px)!important}
 @media(prefers-reduced-motion:reduce){.network-ring,.orbit-tag,.hero-order-button,.ink-blot,.hero-particles span,.hero-copy .eyebrow,.hero-copy h1,.hero-copy>p,.hero-actions,.hero-points{animation:none!important}[data-reveal],[data-reveal-stagger]>*{opacity:1!important;transform:none!important;transition:none!important}.mobile-nav,.mobile-nav-panel,.seo-more-content{transition:none!important}}
 
-  /* === batch-fixes.css === */
+/* === batch-fixes.css === */
 /* =========================================================
    BATCH FIXES — load last on all pages
    ========================================================= */
@@ -1511,7 +1510,7 @@ important;
   min-width: 200px;
 }
 
-  /* === ui-round2.css === */
+/* === ui-round2.css === */
 /* ROUND 2 — pulse, articles, dropdown L3, FAB desktop */
 
 /* Eyebrow dots pulse */
@@ -1812,7 +1811,7 @@ important;
   .footer-quick-actions { display: none !important; }
 }
 
-  /* === site-polish.css === */
+/* === site-polish.css === */
 /* Site-wide polish — tools header, blog, footer, CTA, TOC */
 
 /* Hide keyboard shortcut noise in footers */
@@ -1992,7 +1991,7 @@ button[aria-label="حالت تاریک"] {
   display: none !important;
 }
 
-  /* === builder-frontend.css === */
+/* === builder-frontend.css === */
 /**
  * Teznevise flexible page builder — frontend section styles.
  * Loaded only on singular views that render builder sections.
@@ -2155,7 +2154,7 @@ button[aria-label="حالت تاریک"] {
 	display: block;
 }
 
-  /* === wp-compat.css === */
+/* === wp-compat.css === */
 /**
  * WordPress ↔ HTML design-parity layer.
  * Loaded last. Fixes Gutenberg resets, WP menu markup, media overflow,
@@ -2637,4 +2636,3 @@ body {
 	}
 }
 
-}

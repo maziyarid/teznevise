@@ -6,8 +6,7 @@
  * @package Teznevise
  */
 
-@layer tez-chrome {
-  /* === header-form.css === */
+/* === header-form.css === */
 /**
  * Alias + header polish. Production previously enqueued this filename
  * (404 after the HTML→WP move). Keep it as a real stylesheet.
@@ -59,7 +58,7 @@
 	}
 }
 
-  /* === header-fix.css === */
+/* === header-fix.css === */
 /*
  * Header logo size constraints — also inlined into site-polish.css.
  * Author: MAZ//ID (Maziyar)
@@ -104,7 +103,7 @@ a.custom-logo-link img.custom-logo {
   }
 }
 
-  /* === nav-touch.css === */
+/* === nav-touch.css === */
 /**
  * Touch-device support for the dropdown submenus defined in redesign.css.
  * redesign.css reveals .sub-menu on :hover / :focus-within, which doesn't
@@ -124,7 +123,7 @@ a.custom-logo-link img.custom-logo {
 	transform: translateX(0);
 }
 
-  /* === nav-dropdown.css === */
+/* === nav-dropdown.css === */
 /* Accessible dropdown styling for .nav-dropdown / .nav-dropdown-l3.
  * Shared by the desktop primary menu (.main-nav, floating panel) and the
  * mobile drawer menu (.mobile-nav-links, inline accordion) -- both render
@@ -308,7 +307,7 @@ a.custom-logo-link img.custom-logo {
   }
 }
 
-  /* === product-1.7.css === */
+/* === product-1.7.css === */
 /* Teznevise 1.7 — header, FAB, footer, blog, mobile, account */
 
 .nav-search-btn {
@@ -671,7 +670,7 @@ a.custom-logo-link img.custom-logo {
   .tz-fab-toggle { animation: none; }
 }
 
-  /* === mobile-fixes.css === */
+/* === mobile-fixes.css === */
 /*
  * Mobile tap/click fixes — Teznevise
  *
@@ -736,10 +735,8 @@ a.custom-logo-link img.custom-logo {
 	}
 }
 
-}
 
-@layer tez-fixes {
-  /* === react-parity.css === */
+/* === react-parity.css === */
 /* Teznevise 1.7.2 — last-loaded React parity. Wins the CSS pile. */
 
 /* ----- Header is opaque so the hero cannot paint through it ----- */
@@ -1532,7 +1529,7 @@ textarea { min-height: 44px; border-radius: 12px; }
   }
 }
 
-  /* === react-loader.css === */
+/* === react-loader.css === */
 /**
  * React SiteShell loader for the WordPress front-end.
  * Last-enqueued chrome layer. Mirrors src/components/layout/SiteShell.tsx.
@@ -2159,67 +2156,113 @@ body.tz-react-shell {
   }
 }
 
+
+/* ===== 1.8.6 unlayered last-wins (must stay OUT of @layer) ===== */
+.skip-link,
+.skip-link.screen-reader-text,
+a.skip-link {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
-/* ===== 1.8.5 last-wins: bottom nav height + skip-link + overflow ===== */
-@layer tez-fixes {
-  .skip-link,
-  .skip-link.screen-reader-text,
-  a.skip-link {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
+.site-header-new,
+.site-header.site-header-new,
+body.tz-react-shell .site-header-new {
+  background: #fff !important;
+  isolation: isolate;
+}
+.announce,
+.announcement {
+  background: linear-gradient(135deg, rgba(247, 252, 250, 0.98), rgba(232, 245, 241, 0.96)) !important;
+  color: #38544b !important;
+}
+
+@media (min-width: 1051px) {
+  .main-nav {
+    height: 72px !important;
+    min-height: 72px !important;
+    gap: 8px !important;
+    overflow: visible !important;
+  }
+  .main-nav .nav-links > li > a,
+  .main-nav .nav-links > li > .nav-link {
+    font-size: 13px !important;
+    padding: 8px 8px !important;
     white-space: nowrap !important;
-    border: 0 !important;
   }
+}
 
+.hero-visual {
+  position: relative !important;
+  min-height: 520px !important;
+  overflow: visible !important;
+}
+.hero-network {
+  z-index: 2;
+}
+.hero-order-button {
+  width: 176px !important;
+  height: 176px !important;
+  z-index: 4 !important;
+}
+.orbit-tag {
+  z-index: 5 !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+}
+.ink-blot {
+  opacity: 0.42 !important;
+  z-index: 0 !important;
+}
+
+.bottom-nav {
+  --tz-bottom-nav-cols: 4;
+}
+.bottom-nav[data-nav-count="2"] { --tz-bottom-nav-cols: 2; }
+.bottom-nav[data-nav-count="3"] { --tz-bottom-nav-cols: 3; }
+.bottom-nav[data-nav-count="5"] { --tz-bottom-nav-cols: 5; }
+
+@media (max-width: 768px) {
+  html { overflow-x: clip; }
+  body,
+  body.tz-react-shell {
+    padding-bottom: calc(var(--tz-bottom-nav-height, 72px) + env(safe-area-inset-bottom, 0px)) !important;
+  }
   .bottom-nav {
-    --tz-bottom-nav-cols: 4;
+    display: grid !important;
+    grid-template-columns: repeat(var(--tz-bottom-nav-cols, 4), minmax(64px, 1fr)) !important;
+    align-items: stretch !important;
+    position: fixed !important;
+    inset-inline: 0 !important;
+    bottom: 0 !important;
+    z-index: 1100 !important;
+    background: rgba(255, 255, 255, 0.97) !important;
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(20, 93, 74, 0.1) !important;
+    padding: 6px 4px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    gap: 0 !important;
+    box-shadow: 0 -8px 28px rgba(9, 40, 32, 0.06);
   }
-  .bottom-nav[data-nav-count="2"] { --tz-bottom-nav-cols: 2; }
-  .bottom-nav[data-nav-count="3"] { --tz-bottom-nav-cols: 3; }
-  .bottom-nav[data-nav-count="5"] { --tz-bottom-nav-cols: 5; }
-
-  @media (max-width: 768px) {
-    html {
-      overflow-x: clip;
-    }
-    body,
-    body.tz-react-shell {
-      padding-bottom: calc(var(--tz-bottom-nav-height, 72px) + env(safe-area-inset-bottom, 0px)) !important;
-    }
-    .bottom-nav {
-      display: grid !important;
-      grid-template-columns: repeat(var(--tz-bottom-nav-cols, 4), minmax(64px, 1fr)) !important;
-      align-items: stretch !important;
-      position: fixed !important;
-      inset-inline: 0 !important;
-      bottom: 0 !important;
-      z-index: 1100 !important;
-      background: rgba(255, 255, 255, 0.97) !important;
-      backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(20, 93, 74, 0.1) !important;
-      padding: 6px 4px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
-      gap: 0 !important;
-      box-shadow: 0 -8px 28px rgba(9, 40, 32, 0.06);
-    }
-    .bottom-nav-item,
-    .bottom-nav a {
-      min-width: 0 !important;
-      flex: 1 1 0 !important;
-    }
+  .bottom-nav-item,
+  .bottom-nav a {
+    min-width: 0 !important;
+    flex: 1 1 0 !important;
   }
+  .hero-visual { min-height: 420px !important; }
+  .hero-order-button { width: 148px !important; height: 148px !important; }
+}
 
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

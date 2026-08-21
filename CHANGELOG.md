@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.8.6 — 2026-08-21 — Unlayered last-wins (header, hero, nav)
+
+- Stop wrapping bundled CSS in `@layer`. Layers invert `!important`, so `layout-refinements` beat `react-parity` and the sticky header went transparent (green orbs showing through).
+- Unlayered last-wins restore a white header, compact 72px nav, 176px hero order button, visible orbit tags, and bottom-nav height token.
+- Snapshot of live content: `docs/wp-rest-export.json` (105 pages, 11 posts from the REST API). No WXR file existed in the repo.
+
+
 ## 1.8.5 — 2026-08-21 — CSS cascade collapse, local fonts, one chrome JS
 
 - Public CSS is four layered files: `tokens.css`, `components.css`, `pages.css`, `chrome.css`. The 24-file last-wins pile is no longer enqueued.
