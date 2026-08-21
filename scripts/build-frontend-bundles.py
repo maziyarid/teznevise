@@ -246,9 +246,9 @@ body.tz-react-shell .site-header-new {
 
 .blog-post__layout {
   display: grid !important;
-  grid-template-columns: minmax(0, 1fr) 300px !important;
-  grid-template-areas: "content aside" !important;
-  gap: 36px !important;
+  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr) !important;
+  grid-template-areas: "aside content" !important;
+  gap: clamp(28px, 3vw, 44px) !important;
   align-items: start !important;
 }
 .blog-post__content { grid-area: content !important; min-width: 0; }

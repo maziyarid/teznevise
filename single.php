@@ -70,7 +70,7 @@ while ( have_posts() ) :
 					<aside class="blog-post__aside">
 						<?php if ( $toc ) : ?>
 							<nav class="blog-post__toc entry-toc" aria-label="<?php esc_attr_e( 'فهرست مطالب', 'teznevise' ); ?>">
-								<p class="entry-toc__label"><?php esc_html_e( 'در این صفحه', 'teznevise' ); ?></p>
+								<p class="entry-toc__label"><?php esc_html_e( 'در این مقاله', 'teznevise' ); ?></p>
 								<?php echo wp_kses_post( $toc ); ?>
 							</nav>
 						<?php endif; ?>

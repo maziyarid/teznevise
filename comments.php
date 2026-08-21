@@ -47,9 +47,14 @@ if ( post_password_required() ) {
 		<?php
 	else :
 		comment_form( array(
+			'class_form'           => 'comment-form tez-comment-form',
+			'class_submit'         => 'submit btn-tz btn-primary-tz',
 			'title_reply'          => __( 'نظر خود را بنویسید', 'teznevise' ),
+			'title_reply_before'   => '<h2 id="reply-title" class="comment-reply-title">',
+			'title_reply_after'    => '</h2>',
 			'label_submit'         => __( 'ارسال دیدگاه', 'teznevise' ),
-			'comment_notes_before' => '<p class="comment-notes">' . esc_html__( 'نظر تأییدشده پاداش تزکوین دارد.', 'teznevise' ) . '</p>',
+			'comment_notes_before' => '<p class="comment-notes">' . esc_html__( 'نظر تأییدشده پاداش تزکوین دارد. بخش‌های ضروری با ستاره مشخص شده‌اند.', 'teznevise' ) . '</p>',
+			'comment_field'        => '<p class="comment-form-comment"><label for="comment">' . esc_html__( 'دیدگاه', 'teznevise' ) . ' <span class="required" aria-hidden="true">*</span><span class="screen-reader-text">' . esc_html__( 'ضروری', 'teznevise' ) . '</span></label><textarea id="comment" name="comment" cols="45" rows="7" maxlength="65525" required></textarea></p>',
 		) );
 	endif;
 	?>
