@@ -629,7 +629,8 @@ body.tz-react-shell {
   outline: 3px solid rgba(20, 93, 74, 0.3);
   outline-offset: 3px;
 }
-.skip-link:focus {
+.skip-link.screen-reader-text:focus {
+  display: inline-flex !important;
   position: fixed !important;
   inset-block-start: 12px !important;
   inset-inline-start: 12px !important;

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Concatenate the 1.8.4 CSS/JS cascade into layered bundles.
+"""Build the canonical Teznevise CSS/JS bundles from maintained sources.
 
 Source files stay in assets/css/ so we can rebuild. Only the bundled
 handles (tokens, components, pages, chrome + chrome.js) are enqueued.
@@ -246,8 +246,8 @@ body.tz-react-shell .site-header-new {
 
 .blog-post__layout {
   display: grid !important;
-  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr) !important;
-  grid-template-areas: "aside content" !important;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px) !important;
+  grid-template-areas: "content aside" !important;
   gap: clamp(28px, 3vw, 44px) !important;
   align-items: start !important;
 }

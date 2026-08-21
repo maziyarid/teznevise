@@ -1134,7 +1134,15 @@ a.custom-logo-link img.custom-logo {
  * WP menu items that duplicate the CTA buttons, the 1200px bar overflows. */
 .skip-link,
 .skip-link.screen-reader-text {
-  display: none !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 @media (min-width: 1051px) {
@@ -2161,7 +2169,8 @@ body.tz-react-shell {
   outline: 3px solid rgba(20, 93, 74, 0.3);
   outline-offset: 3px;
 }
-.skip-link:focus {
+.skip-link.screen-reader-text:focus {
+  display: inline-flex !important;
   position: fixed !important;
   inset-block-start: 12px !important;
   inset-inline-start: 12px !important;
@@ -2353,8 +2362,8 @@ body.tz-react-shell .site-header-new {
 
 .blog-post__layout {
   display: grid !important;
-  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr) !important;
-  grid-template-areas: "aside content" !important;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px) !important;
+  grid-template-areas: "content aside" !important;
   gap: clamp(28px, 3vw, 44px) !important;
   align-items: start !important;
 }

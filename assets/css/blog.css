@@ -31,8 +31,8 @@
 }
 .blog-post__layout {
   display: grid !important;
-  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr) !important;
-  grid-template-areas: "aside content" !important;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px) !important;
+  grid-template-areas: "content aside" !important;
   gap: clamp(28px, 3vw, 44px) !important;
   align-items: start !important;
 }
