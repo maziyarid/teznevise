@@ -1,0 +1,820 @@
+{
+  "source": "https://teznevise.ir/wp-json/",
+  "exported": "2026-08-21",
+  "pages": [
+    {
+      "id": 7592,
+      "slug": "service-article",
+      "title": "انجام مقاله",
+      "link": "https://teznevise.ir/service-article/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 7591,
+      "slug": "service-project",
+      "title": "انجام پروژه دانشجویی",
+      "link": "https://teznevise.ir/service-project/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 7590,
+      "slug": "service-qualitative",
+      "title": "تحلیل کیفی",
+      "link": "https://teznevise.ir/service-qualitative/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 7586,
+      "slug": "research-rules",
+      "title": "ضوابط پژوهش",
+      "link": "https://teznevise.ir/research-rules/",
+      "template": "page-privacy.php"
+    },
+    {
+      "id": 7585,
+      "slug": "refund",
+      "title": "بازپرداخت",
+      "link": "https://teznevise.ir/refund/",
+      "template": "page-privacy.php"
+    },
+    {
+      "id": 7584,
+      "slug": "cookies",
+      "title": "سیاست کوکی",
+      "link": "https://teznevise.ir/cookies/",
+      "template": "page-privacy.php"
+    },
+    {
+      "id": 7583,
+      "slug": "terms",
+      "title": "قوانین استفاده",
+      "link": "https://teznevise.ir/terms/",
+      "template": "page-privacy.php"
+    },
+    {
+      "id": 7582,
+      "slug": "account",
+      "title": "حساب کاربری",
+      "link": "https://teznevise.ir/account/",
+      "template": "page-account.php"
+    },
+    {
+      "id": 7572,
+      "slug": "tool-kruskal-wallis",
+      "title": "کروسکال–والیس",
+      "link": "https://teznevise.ir/tool-kruskal-wallis/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7571,
+      "slug": "tool-wilcoxon",
+      "title": "ویلکاکسون",
+      "link": "https://teznevise.ir/tool-wilcoxon/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7570,
+      "slug": "tool-mann-whitney",
+      "title": "مان–ویتنی",
+      "link": "https://teznevise.ir/tool-mann-whitney/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7569,
+      "slug": "tool-content-validity",
+      "title": "روایی محتوا",
+      "link": "https://teznevise.ir/tool-content-validity/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7568,
+      "slug": "tool-power-analysis",
+      "title": "تحلیل توان",
+      "link": "https://teznevise.ir/tool-power-analysis/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7567,
+      "slug": "tool-sample-size",
+      "title": "حجم نمونه",
+      "link": "https://teznevise.ir/tool-sample-size/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7566,
+      "slug": "tool-cronbach-alpha",
+      "title": "آلفای کرونباخ",
+      "link": "https://teznevise.ir/tool-cronbach-alpha/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7565,
+      "slug": "tool-regression",
+      "title": "رگرسیون",
+      "link": "https://teznevise.ir/tool-regression/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7564,
+      "slug": "tool-chi-square",
+      "title": "آزمون کای‌اسکوئر",
+      "link": "https://teznevise.ir/tool-chi-square/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7563,
+      "slug": "tool-anova",
+      "title": "آنالیز واریانس (ANOVA)",
+      "link": "https://teznevise.ir/tool-anova/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7562,
+      "slug": "tool-ttest",
+      "title": "آزمون t",
+      "link": "https://teznevise.ir/tool-ttest/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7561,
+      "slug": "tool-spearman",
+      "title": "همبستگی اسپیرمن",
+      "link": "https://teznevise.ir/tool-spearman/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7560,
+      "slug": "tool-pearson-correlation",
+      "title": "همبستگی پیرسون",
+      "link": "https://teznevise.ir/tool-pearson-correlation/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7539,
+      "slug": "sitemap",
+      "title": "نقشه سایت",
+      "link": "https://teznevise.ir/sitemap/",
+      "template": "page-sitemap.php"
+    },
+    {
+      "id": 7538,
+      "slug": "privacy",
+      "title": "حریم خصوصی",
+      "link": "https://teznevise.ir/privacy/",
+      "template": "page-privacy.php"
+    },
+    {
+      "id": 7537,
+      "slug": "contact",
+      "title": "تماس با ما",
+      "link": "https://teznevise.ir/contact/",
+      "template": "page-contact.php"
+    },
+    {
+      "id": 7536,
+      "slug": "team",
+      "title": "تیم پژوهشگران",
+      "link": "https://teznevise.ir/team/",
+      "template": "page-team.php"
+    },
+    {
+      "id": 7535,
+      "slug": "about",
+      "title": "درباره ما",
+      "link": "https://teznevise.ir/about/",
+      "template": "page-about.php"
+    },
+    {
+      "id": 7534,
+      "slug": "tool-descriptive-statistics",
+      "title": "آمار توصیفی",
+      "link": "https://teznevise.ir/tool-descriptive-statistics/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 7533,
+      "slug": "tools",
+      "title": "ابزارهای آنلاین",
+      "link": "https://teznevise.ir/tools/",
+      "template": "page-tools.php"
+    },
+    {
+      "id": 7532,
+      "slug": "service-simulation",
+      "title": "شبیه‌سازی",
+      "link": "https://teznevise.ir/service-simulation/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 7531,
+      "slug": "service-statistics",
+      "title": "تحلیل آماری",
+      "link": "https://teznevise.ir/service-statistics/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 7530,
+      "slug": "service-proposal",
+      "title": "انجام پروپوزال",
+      "link": "https://teznevise.ir/service-proposal/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 7529,
+      "slug": "service-thesis",
+      "title": "انجام پایان‌نامه",
+      "link": "https://teznevise.ir/service-thesis/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1678,
+      "slug": "gams",
+      "title": "انجام پروژه GAMS",
+      "link": "https://teznevise.ir/gams/",
+      "template": ""
+    },
+    {
+      "id": 1186,
+      "slug": "history",
+      "title": "انجام پایان نامه تاریخ",
+      "link": "https://teznevise.ir/thesis/humanities/history/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1181,
+      "slug": "philosophy",
+      "title": "انجام پایان نامه فلسفه",
+      "link": "https://teznevise.ir/thesis/humanities/philosophy/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1176,
+      "slug": "social-sciences",
+      "title": "انجام پایان نامه علوم اجتماعی",
+      "link": "https://teznevise.ir/thesis/humanities/social-sciences/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1171,
+      "slug": "law",
+      "title": "انجام پایان نامه حقوق",
+      "link": "https://teznevise.ir/thesis/humanities/law/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1153,
+      "slug": "psychology",
+      "title": "انجام پایان نامه روانشناسی",
+      "link": "https://teznevise.ir/thesis/humanities/psychology/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1148,
+      "slug": "management",
+      "title": "انجام پایان نامه مدیریت",
+      "link": "https://teznevise.ir/thesis/humanities/management/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1142,
+      "slug": "interdisciplinary",
+      "title": "انجام پایان نامه علوم بین‌رشته‌ای و کاربردی (ارشد و دکتری)",
+      "link": "https://teznevise.ir/thesis/interdisciplinary/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1133,
+      "slug": "animal-science-veterinary",
+      "title": "انجام پایان نامه علوم دامی و دامپزشکی",
+      "link": "https://teznevise.ir/thesis/animal-science-veterinary/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1127,
+      "slug": "agriculture-natural-resources",
+      "title": "انجام پایان نامه کشاورزی و منابع طبیعی",
+      "link": "https://teznevise.ir/thesis/agriculture-natural-resources/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1122,
+      "slug": "art-architecture-media",
+      "title": "انجام پایان نامه هنر و معماری و رسانه",
+      "link": "https://teznevise.ir/thesis/art-architecture-media/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1116,
+      "slug": "medical-health",
+      "title": "انجام پایان نامه علوم پزشکی و سلامت",
+      "link": "https://teznevise.ir/thesis/medical-health/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1114,
+      "slug": "pure-science",
+      "title": "انجام پایان نامه علوم پایه",
+      "link": "https://teznevise.ir/thesis/pure-science/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1102,
+      "slug": "engineering",
+      "title": "انجام پایان نامه فنی و مهندسی",
+      "link": "https://teznevise.ir/thesis/engineering/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1097,
+      "slug": "humanities",
+      "title": "انجام پایان نامه علوم انسانی",
+      "link": "https://teznevise.ir/thesis/humanities/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1088,
+      "slug": "international",
+      "title": "انجام پایان نامه انگلیسی برای دانشجویان خارج از کشور",
+      "link": "https://teznevise.ir/thesis/international/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1084,
+      "slug": "chapter-five",
+      "title": "انجام فصل پنجم پایان نامه (نتیجه گیری و پیشنهادها)",
+      "link": "https://teznevise.ir/thesis/chapter-five/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1079,
+      "slug": "chapter-four",
+      "title": "انجام فصل چهارم پایان نامه (تجزیه وتحلیل داده)",
+      "link": "https://teznevise.ir/thesis/chapter-four/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1073,
+      "slug": "chapter-three",
+      "title": "انجام فصل سوم پایان نامه (روش تحقیق)",
+      "link": "https://teznevise.ir/thesis/chapter-three/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1067,
+      "slug": "chapter-two",
+      "title": "نگارش فصل دوم پایان نامه",
+      "link": "https://teznevise.ir/thesis/chapter-two/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1063,
+      "slug": "chapter-one",
+      "title": "نگارش فصل اول پایان نامه",
+      "link": "https://teznevise.ir/thesis/chapter-one/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1053,
+      "slug": "phd",
+      "title": "انجام رساله دکتری",
+      "link": "https://teznevise.ir/thesis/phd/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1048,
+      "slug": "medical",
+      "title": "نگارش پروپوزال پزشکی و طرح تحقیقاتی",
+      "link": "https://teznevise.ir/proposal/medical/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1040,
+      "slug": "applied-research",
+      "title": "نگارش پروپوزال تحقیق کاربردی",
+      "link": "https://teznevise.ir/proposal/applied-research/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1032,
+      "slug": "quantitative",
+      "title": "نگارش پروپوزال کمی (Quantitative)",
+      "link": "https://teznevise.ir/proposal/quantitative/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1026,
+      "slug": "qualitative",
+      "title": "نگارش پروپوزال پژوهش کیفی (Qualitative)",
+      "link": "https://teznevise.ir/proposal/qualitative/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1020,
+      "slug": "english",
+      "title": "انجام پروپوزال انگلیسی",
+      "link": "https://teznevise.ir/proposal/english/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1015,
+      "slug": "project",
+      "title": "انجام پروپوزال کلاسی درس روش تحقیق",
+      "link": "https://teznevise.ir/proposal/project/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 1006,
+      "slug": "phd",
+      "title": "انجام پروپوزال دکتری",
+      "link": "https://teznevise.ir/proposal/phd/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 947,
+      "slug": "thesis",
+      "title": "انجام پایان نامه",
+      "link": "https://teznevise.ir/thesis/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 923,
+      "slug": "online-calculation-tools",
+      "title": "ابزارهای محاسبه آنلاین",
+      "link": "https://teznevise.ir/online-calculation-tools/",
+      "template": "page-tools.php"
+    },
+    {
+      "id": 912,
+      "slug": "icc-calculator",
+      "title": "محاسبه‌گر ضریب همبستگی درون‌کلاسی (Intraclass Correlation Coefficient &#8211; ICC)",
+      "link": "https://teznevise.ir/online-calculation-tools/icc-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 908,
+      "slug": "goodness-of-fit-calculator",
+      "title": "محاسبه‌گر آزمون‌های نیکویی برازش (Goodness of Fit Tests)",
+      "link": "https://teznevise.ir/online-calculation-tools/goodness-of-fit-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 905,
+      "slug": "chi-square-calculator",
+      "title": "محاسبه‌گر آزمون مجذور کای (Chi-Square Test)",
+      "link": "https://teznevise.ir/online-calculation-tools/chi-square-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 902,
+      "slug": "regression-calculator",
+      "title": "محاسبه‌گر تحلیل رگرسیون (Regression Analysis)",
+      "link": "https://teznevise.ir/online-calculation-tools/regression-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 899,
+      "slug": "kruskal-wallis-calculator",
+      "title": "محاسبه‌گر آزمون Kruskal-Wallis (ناپارامتری برای چند گروه)",
+      "link": "https://teznevise.ir/online-calculation-tools/kruskal-wallis-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 896,
+      "slug": "wilcoxon-calculator",
+      "title": "محاسبه گر آزمون Wilcoxon Signed-Rank Test (زوجی)",
+      "link": "https://teznevise.ir/online-calculation-tools/wilcoxon-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 893,
+      "slug": "mann-whitney-calculator",
+      "title": "محاسبه‌گر آزمون‌های ناپارامتری (Mann-Whitney U Test)",
+      "link": "https://teznevise.ir/online-calculation-tools/mann-whitney-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 890,
+      "slug": "anova-calculator",
+      "title": "محاسبه‌گر تحلیل واریانس (ANOVA)",
+      "link": "https://teznevise.ir/online-calculation-tools/anova-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 884,
+      "slug": "cohens-kappa-calculator",
+      "title": "محاسبه‌گر ضریب توافق کاپا (Cohen&#8217;s Kappa)",
+      "link": "https://teznevise.ir/online-calculation-tools/cohens-kappa-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 881,
+      "slug": "kr20-kr21-calculator",
+      "title": "محاسبه‌گر KR-20 / KR-21 (پایایی داده‌های دوحالتی)",
+      "link": "https://teznevise.ir/online-calculation-tools/kr20-kr21-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 879,
+      "slug": "descriptive-statistics-calculator",
+      "title": "محاسبه گر آمار توصیفی آنلاین (میانگین، انحراف معیار)",
+      "link": "https://teznevise.ir/online-calculation-tools/descriptive-statistics-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 866,
+      "slug": "t-test-calculator",
+      "title": "محاسبه‌گر آزمون t (تک‌نمونه‌ای، مستقل، زوجی)",
+      "link": "https://teznevise.ir/online-calculation-tools/t-test-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 853,
+      "slug": "spearman-correlation-calculator",
+      "title": "محاسبه‌گر همبستگی اسپیرمن",
+      "link": "https://teznevise.ir/online-calculation-tools/spearman-correlation-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 821,
+      "slug": "power-analysis-calculator",
+      "title": "محاسبه‌گر توان آزمون (Power Analysis)",
+      "link": "https://teznevise.ir/online-calculation-tools/power-analysis-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 818,
+      "slug": "content-validity-calculator",
+      "title": "محاسبه‌گر روایی محتوا (CVR &#038; CVI)",
+      "link": "https://teznevise.ir/online-calculation-tools/content-validity-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 816,
+      "slug": "pearson-correlation-calculator",
+      "title": "محاسبه‌گر ضریب همبستگی پیرسون",
+      "link": "https://teznevise.ir/online-calculation-tools/pearson-correlation-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 797,
+      "slug": "cronbachs-alpha-calculator",
+      "title": "محاسبه‌گر آلفای کرونباخ",
+      "link": "https://teznevise.ir/online-calculation-tools/cronbachs-alpha-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 786,
+      "slug": "careers",
+      "title": "موقعیت های شغلی",
+      "link": "https://teznevise.ir/careers/",
+      "template": ""
+    },
+    {
+      "id": 779,
+      "slug": "cookie-policy",
+      "title": "سیاست کوکی‌ها",
+      "link": "https://teznevise.ir/cookie-policy/",
+      "template": "page-privacy.php"
+    },
+    {
+      "id": 775,
+      "slug": "case-studies",
+      "title": "مطالعات موردی",
+      "link": "https://teznevise.ir/case-studies/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 768,
+      "slug": "sample-size-calculator",
+      "title": "محاسبه گر حجم نمونه",
+      "link": "https://teznevise.ir/online-calculation-tools/sample-size-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 760,
+      "slug": "price-calculator",
+      "title": "محاسبه‌گر هزینه",
+      "link": "https://teznevise.ir/price-calculator/",
+      "template": "page-tool.php"
+    },
+    {
+      "id": 719,
+      "slug": "downloads",
+      "title": "دانلودها",
+      "link": "https://teznevise.ir/downloads/",
+      "template": "page-downloads.php"
+    },
+    {
+      "id": 707,
+      "slug": "blog",
+      "title": "بلاگ",
+      "link": "https://teznevise.ir/blog/",
+      "template": ""
+    },
+    {
+      "id": 695,
+      "slug": "testimonials",
+      "title": "نظرات و رضایت متقاضیان",
+      "link": "https://teznevise.ir/testimonials/",
+      "template": ""
+    },
+    {
+      "id": 691,
+      "slug": "achievements",
+      "title": "افتخارات و سوابق",
+      "link": "https://teznevise.ir/achievements/",
+      "template": ""
+    },
+    {
+      "id": 686,
+      "slug": "our-story",
+      "title": "داستان ما",
+      "link": "https://teznevise.ir/our-story/",
+      "template": ""
+    },
+    {
+      "id": 648,
+      "slug": "join-us",
+      "title": "همکاری با تزنویسه",
+      "link": "https://teznevise.ir/join-us/",
+      "template": ""
+    },
+    {
+      "id": 641,
+      "slug": "our-team",
+      "title": "تیم پژوهشگران ما",
+      "link": "https://teznevise.ir/our-team/",
+      "template": "page-team.php"
+    },
+    {
+      "id": 625,
+      "slug": "proposal",
+      "title": "انجام پروپوزال تضمینی",
+      "link": "https://teznevise.ir/proposal/",
+      "template": "page-service.php"
+    },
+    {
+      "id": 603,
+      "slug": "service-commitments",
+      "title": "تعهدات موسسه به متقاضیان",
+      "link": "https://teznevise.ir/service-commitments/",
+      "template": "page-blank-title-center.php"
+    },
+    {
+      "id": 595,
+      "slug": "corporate-social-responsibility",
+      "title": "مسئولیت اجتماعی شرکتی و تعهدات اخلاقی",
+      "link": "https://teznevise.ir/corporate-social-responsibility/",
+      "template": "page-blank-title-center.php"
+    },
+    {
+      "id": 589,
+      "slug": "privacy-policy",
+      "title": "سیاست حریم خصوصی و امنیت داده‌ها",
+      "link": "https://teznevise.ir/privacy-policy/",
+      "template": "page-privacy.php"
+    },
+    {
+      "id": 586,
+      "slug": "originality-guarantee",
+      "title": "تضمین اصالت و سیاست عاری از سرقت ادبی",
+      "link": "https://teznevise.ir/originality-guarantee/",
+      "template": "page-blank-title-center.php"
+    },
+    {
+      "id": 579,
+      "slug": "revision-policy",
+      "title": "سیاست بازنگری و اصلاحات",
+      "link": "https://teznevise.ir/revision-policy/",
+      "template": "page-blank-title-center.php"
+    },
+    {
+      "id": 571,
+      "slug": "refund-policy",
+      "title": "سیاست بازگشت وجه و کنسل",
+      "link": "https://teznevise.ir/refund-policy/",
+      "template": "page-blank-title-center.php"
+    },
+    {
+      "id": 565,
+      "slug": "fair-use-policy",
+      "title": "سیاست استفاده منصفانه و یکپارچگی علمی",
+      "link": "https://teznevise.ir/fair-use-policy/",
+      "template": "page-blank-title-center.php"
+    },
+    {
+      "id": 560,
+      "slug": "terms-and-conditions",
+      "title": "شرایط و قوانین استفاده از خدمات تزنویسه",
+      "link": "https://teznevise.ir/terms-and-conditions/",
+      "template": "page-blank-title-center.php"
+    },
+    {
+      "id": 555,
+      "slug": "inquiry",
+      "title": "ثبت سفارش",
+      "link": "https://teznevise.ir/inquiry/",
+      "template": "page-contact.php"
+    },
+    {
+      "id": 545,
+      "slug": "contact-us",
+      "title": "تماس با ما",
+      "link": "https://teznevise.ir/contact-us/",
+      "template": "page-contact.php"
+    },
+    {
+      "id": 426,
+      "slug": "about-us",
+      "title": "درباره ما",
+      "link": "https://teznevise.ir/about-us/",
+      "template": "page-about.php"
+    },
+    {
+      "id": 275,
+      "slug": "home",
+      "title": "خانه",
+      "link": "https://teznevise.ir/",
+      "template": "front-page.php"
+    }
+  ],
+  "posts": [
+    {
+      "id": 7520,
+      "slug": "necessity-research",
+      "title": "اهمیت و ضرورت تحقیق در فصل اول را چگونه بنویسیم؟",
+      "link": "https://teznevise.ir/necessity-research/",
+      "date": "2026-08-19T23:15:40"
+    },
+    {
+      "id": 7518,
+      "slug": "statement-differences-proposal-first-chapter",
+      "title": "تفاوت بیان مسئله در پروپوزال و فصل اول چیست؟",
+      "link": "https://teznevise.ir/statement-differences-proposal-first-chapter/",
+      "date": "2026-08-18T21:39:03"
+    },
+    {
+      "id": 7510,
+      "slug": "how-to-write-first-chapter-thesis",
+      "title": "آموزش نگارش فصل اول پایان نامه: تبدیل پروپوزال به فصل اول + بخش ها",
+      "link": "https://teznevise.ir/how-to-write-first-chapter-thesis/",
+      "date": "2026-08-15T18:00:17"
+    },
+    {
+      "id": 7473,
+      "slug": "choosing-superviser",
+      "title": "نحوه انتخاب استاد راهنما و مشاور مناسب",
+      "link": "https://teznevise.ir/choosing-superviser/",
+      "date": "2026-08-12T19:55:24"
+    },
+    {
+      "id": 1265,
+      "slug": "ai-topic-brainstorming",
+      "title": "هوش مصنوعی برای ایده‌ یابی موضوع پایان‌ نامه",
+      "link": "https://teznevise.ir/ai-topic-brainstorming/",
+      "date": "2026-08-11T21:58:37"
+    },
+    {
+      "id": 1258,
+      "slug": "prove-thesis-innovation",
+      "title": "چگونه نوآوری موضوع پایان نامه را ثابت کنیم؟",
+      "link": "https://teznevise.ir/prove-thesis-innovation/",
+      "date": "2026-08-10T21:16:53"
+    },
+    {
+      "id": 1253,
+      "slug": "testing-topic",
+      "title": "موضوع پایان نامه کاربردی است یا فقط جذاب؟ آزمون امکان پذیری",
+      "link": "https://teznevise.ir/testing-topic/",
+      "date": "2026-08-09T19:35:43"
+    },
+    {
+      "id": 1241,
+      "slug": "research-gap-types",
+      "title": "انواع شکاف پژوهشی (Reseach Gap) در روش تحقیق",
+      "link": "https://teznevise.ir/research-gap-types/",
+      "date": "2026-08-08T15:44:54"
+    },
+    {
+      "id": 1230,
+      "slug": "how-to-find-research-gap",
+      "title": "چگونه شکاف پژوهشی پیدا کنیم؟ شیوه های آکادمیک",
+      "link": "https://teznevise.ir/how-to-find-research-gap/",
+      "date": "2026-08-07T19:40:58"
+    },
+    {
+      "id": 1220,
+      "slug": "research-abc",
+      "title": "از شروع کار تا پروپوزال: انتخاب موضوع، شکاف پژوهشی و استاد راهنما",
+      "link": "https://teznevise.ir/research-abc/",
+      "date": "2026-08-06T20:26:25"
+    },
+    {
+      "id": 1208,
+      "slug": "how-to-write-thesis-full-roadmap",
+      "title": "آموزش نگارش پایان نامه از مرحله صفر تا دفاع",
+      "link": "https://teznevise.ir/how-to-write-thesis-full-roadmap/",
+      "date": "2026-08-05T17:14:26"
+    }
+  ]
+}
