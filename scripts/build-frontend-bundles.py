@@ -208,6 +208,58 @@ body.tz-react-shell .site-header-new {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ===== 1.8.7 last-wins: header icons + post columns ===== */
+.fa-solid, .fas {
+  font-family: "Font Awesome 7 Free" !important;
+  font-weight: 900 !important;
+}
+.fa-regular, .far {
+  font-family: "Font Awesome 7 Free" !important;
+  font-weight: 400 !important;
+}
+.fa-brands, .fab {
+  font-family: "Font Awesome 7 Brands" !important;
+  font-weight: 400 !important;
+}
+
+@media (min-width: 1051px) {
+  .main-nav .nav-dropdown-toggle {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+  .main-nav .nav-links > li > a > .nav-item-icon,
+  .main-nav .nav-links > li > .nav-link > .nav-item-icon {
+    display: none !important;
+  }
+  .main-nav .nav-links > li > a,
+  .main-nav .nav-links > li > .nav-link {
+    font-size: 13.5px !important;
+    padding: 8px 10px !important;
+    white-space: nowrap !important;
+  }
+}
+
+.blog-post__layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 300px !important;
+  grid-template-areas: "content aside" !important;
+  gap: 36px !important;
+  align-items: start !important;
+}
+.blog-post__content { grid-area: content !important; min-width: 0; }
+.blog-post__aside { grid-area: aside !important; }
+.blog-post__toc { position: static !important; }
+@media (max-width: 900px) {
+  .blog-post__layout {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: "content" "aside" !important;
+  }
+}
 """
     write(CSS / "components.css", components)
     write(CSS / "pages.css", pages)

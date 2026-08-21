@@ -12,7 +12,7 @@ $categories = get_the_category();
 $category = $categories ? $categories[0] : null;
 ?>
 <article <?php post_class( 'post-card' ); ?>>
-	<a class="post-card__media" href="<?php echo esc_url( get_permalink() ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Read: %s', 'teznevise' ), get_the_title() ) ); ?>">
+	<a class="post-card__media" href="<?php echo esc_url( get_permalink() ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'مطالعه: %s', 'teznevise' ), get_the_title() ) ); ?>">
 		<?php if ( has_post_thumbnail() ) : ?><?php the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy', 'alt' => esc_attr( get_the_title() ) ) ); ?><?php endif; ?>
 	</a>
 	<div class="post-card__body">

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.8.7 — 2026-08-21 — Single-post layout, Persian chrome, local icons
+
+- Article body is the wide main column; table of contents is the 300px sticky sidebar. Named grid areas so RTL no longer swaps them.
+- TOC title is «در این صفحه» (was English “On this page”). Prev/next, related, and read-time copy are Persian.
+- Top-level desktop nav icons and empty chevron buttons are hidden so the 72px pill stops showing blank squares. Mega-menu and mobile keep icons.
+- Font Awesome 7.1 is self-hosted under `assets/vendor/fontawesome/` so icons no longer depend on jsDelivr.
+- Reading progress bar, breadcrumb, share-bar styling, and a post-sidebar inquiry card.
+
 ## 1.8.6 — 2026-08-21 — Unlayered last-wins (header, hero, nav)
 
 - Stop wrapping bundled CSS in `@layer`. Layers invert `!important`, so `layout-refinements` beat `react-parity` and the sticky header went transparent (green orbs showing through).

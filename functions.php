@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.8.6' );
+define( 'TEZNEVISE_VERSION', '1.8.7' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -94,7 +94,12 @@ add_action( 'after_setup_theme', 'teznevise_setup' );
 function teznevise_enqueue_assets() {
 	wp_enqueue_style( 'teznevise-style', get_stylesheet_uri(), array(), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-tokens', TEZNEVISE_URI . '/assets/css/tokens.css', array( 'teznevise-style' ), TEZNEVISE_VERSION );
-	wp_enqueue_style( 'teznevise-fontawesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css', array(), '7.1.0' );
+	$fa_rel = '/assets/vendor/fontawesome/css/all.min.css';
+	if ( is_readable( TEZNEVISE_DIR . $fa_rel ) ) {
+		wp_enqueue_style( 'teznevise-fontawesome', TEZNEVISE_URI . $fa_rel, array(), TEZNEVISE_VERSION );
+	} else {
+		wp_enqueue_style( 'teznevise-fontawesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css', array(), '7.1.0' );
+	}
 	wp_enqueue_style( 'teznevise-components', TEZNEVISE_URI . '/assets/css/components.css', array( 'teznevise-tokens' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-pages', TEZNEVISE_URI . '/assets/css/pages.css', array( 'teznevise-components' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-chrome', TEZNEVISE_URI . '/assets/css/chrome.css', array( 'teznevise-pages' ), TEZNEVISE_VERSION );

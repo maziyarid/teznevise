@@ -114,4 +114,44 @@
         .catch(function () { out.textContent = 'ارتباط برقرار نشد.'; });
     });
   }
+
+  /* 1.8.7 — reading progress + TOC spy on single posts */
+  var progressFill = document.querySelector('.reading-progress span');
+  var articleBody = document.querySelector('.blog-post__content');
+  if (progressFill && articleBody) {
+    var updateProgress = function () {
+      var top = articleBody.getBoundingClientRect().top + window.scrollY;
+      var height = Math.max(1, articleBody.offsetHeight - window.innerHeight * 0.45);
+      var p = (window.scrollY - top + 80) / height;
+      progressFill.style.width = (Math.max(0, Math.min(1, p)) * 100) + '%';
+    };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  }
+  var tocLinks = document.querySelectorAll('.blog-post__toc .post-toc-item');
+  if (tocLinks.length && 'IntersectionObserver' in window) {
+    var tocMap = [];
+    tocLinks.forEach(function (link) {
+      var raw = (link.getAttribute('href') || '').replace(/^#/, '');
+      var id = raw;
+      try { id = decodeURIComponent(raw); } catch (e) { id = raw; }
+      var heading = document.getElementById(raw) || document.getElementById(id);
+      if (heading) tocMap.push({ heading: heading, link: link });
+    });
+    if (tocMap.length) {
+      var setActive = function (active) {
+        tocLinks.forEach(function (l) { l.classList.remove('is-active'); });
+        if (active) active.classList.add('is-active');
+      };
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          tocMap.forEach(function (item) {
+            if (item.heading === entry.target) setActive(item.link);
+          });
+        });
+      }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+      tocMap.forEach(function (item) { observer.observe(item.heading); });
+    }
+  }
 })();
