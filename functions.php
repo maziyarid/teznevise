@@ -81,6 +81,12 @@ if ( ! function_exists( 'teznevise_get_contact' ) ) {
 function teznevise_setup() {
 add_theme_support( 'title-tag' );
 add_theme_support( 'post-thumbnails' );
+add_theme_support( 'responsive-embeds' );
+add_theme_support( 'align-wide' );
+add_theme_support( 'editor-styles' );
+add_editor_style( 'assets/css/tokens.css' );
+add_image_size( 'teznevise-card', 720, 450, true );
+add_image_size( 'teznevise-hero', 1440, 810, true );
 add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' ) );
 register_nav_menus( array(
 'primary' => __( 'Primary Menu', 'teznevise' ),
@@ -105,11 +111,29 @@ function teznevise_enqueue_assets() {
 	wp_enqueue_style( 'teznevise-chrome', TEZNEVISE_URI . '/assets/css/chrome.css', array( 'teznevise-pages' ), TEZNEVISE_VERSION );
 
 	wp_enqueue_script( 'teznevise-chrome', TEZNEVISE_URI . '/assets/js/chrome.js', array(), TEZNEVISE_VERSION, true );
+	wp_script_add_data( 'teznevise-chrome', 'strategy', 'defer' );
 	if ( function_exists( 'teznevise_localize_front_script' ) ) {
 		teznevise_localize_front_script();
 	}
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );
+
+/**
+ * Preload only the regular local font used above the fold.
+ *
+ * @param array $preload_resources Existing preload resources.
+ * @return array
+ */
+function teznevise_preload_resources( $preload_resources ) {
+	$preload_resources[] = array(
+		'href'        => TEZNEVISE_URI . '/assets/fonts/Vazirmatn-Regular.woff2',
+		'as'          => 'font',
+		'type'        => 'font/woff2',
+		'crossorigin' => 'anonymous',
+	);
+	return $preload_resources;
+}
+add_filter( 'wp_preload_resources', 'teznevise_preload_resources' );
 
 /**
  * 1.8.5: parity CSS/JS now lives in chrome.css / chrome.js.

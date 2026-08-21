@@ -1652,6 +1652,36 @@ body.tz-react-shell {
   outline: none !important;
 }
 
+.tz-search-results {
+  margin-top: var(--tz-space-4, 1rem);
+  border-top: 1px solid var(--tz-color-border, #dfe9e5);
+  padding-top: var(--tz-space-3, .75rem);
+}
+.tz-search-results__status {
+  margin: 0 0 var(--tz-space-2, .5rem);
+  color: var(--tz-color-muted, #5a7268);
+  font-size: var(--tz-text-sm, .875rem);
+}
+.tz-search-results__list {
+  display: grid;
+  gap: var(--tz-space-1, .25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tz-search-results__list a {
+  display: block;
+  padding: var(--tz-space-3, .75rem);
+  border-radius: var(--tz-radius-control, .75rem);
+  color: var(--tz-color-text, #2f433c);
+  font-weight: 700;
+}
+.tz-search-results__list a:hover,
+.tz-search-results__list a:focus-visible {
+  background: var(--tz-color-brand-soft, #e8f5f1);
+  color: var(--tz-color-brand, #145d4a);
+}
+
 @media (min-width: 1051px) {
   .main-nav .nav-links > li.nav-hide-desktop {
     display: none !important;

@@ -7,6 +7,8 @@
 - Stabilize desktop/tablet header density, responsive footer grids, long contact values, trust marks, and legal-link wrapping.
 - Restore a Persian keyboard skip link and add consistent visible focus indicators across interactive controls.
 - Document the production audit matrix, resolved defects, and CMS/server-owned follow-ups in `docs/LIVE-THEME-AUDIT-2026-08-21.md`.
+- Establish Teznevise Design System v2 with shared runtime/editor/React tokens, component contracts, editorial patterns, and a phased Premium v2 architecture roadmap.
+- Add progressively enhanced instant search, focus mode, bounded reading-size controls, responsive image presets, deferred public JavaScript, and local font preloading.
 
 ## 1.8.7 — 2026-08-21 — Single-post layout, Persian chrome, local icons
 

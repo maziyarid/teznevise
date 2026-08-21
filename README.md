@@ -16,7 +16,7 @@ The proprietary design-system contract lives in [`design-system/`](./design-syst
 - Classic PHP components use authored `tz-*` classes; Tailwind remains isolated to `react-app/`.
 - Extend the owning component stylesheet. Do not add another global `*-fix.css` file.
 
-The Premium v2 roadmap is incremental. WordPress remains server-rendered for speed, SEO, and compatibility; React/TypeScript is selective, and a future headless frontend replaces rather than duplicates the current TanStack runtime.
+The [Premium v2 roadmap](./docs/PREMIUM-V2-ROADMAP.md) is incremental. WordPress remains server-rendered for speed, SEO, and compatibility; React/TypeScript is selective, and a future headless frontend replaces rather than duplicates the current TanStack runtime.
 
 ## Production source and deployment
 
