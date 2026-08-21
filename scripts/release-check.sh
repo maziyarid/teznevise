@@ -46,7 +46,7 @@ check "frontend-compat loaded" grep -q "frontend-compat.php" functions.php
 check "wp-compat stylesheet present" test -s assets/css/wp-compat.css
 check "header-form stylesheet present" test -s assets/css/header-form.css
 check "placeholder corruption absent" bash -c '! grep -R -n -E "^PLACEHOLDER[0-9]*$" --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.vercel --include="*.php" --include="*.css" --include="*.js" .'
-check "no committed private keys" bash -c '! grep -R -n -E "BEGIN (RSA|OPENSSH|EC|PRIVATE) PRIVATE KEY" --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.vercel --exclude="*.md" .'
+check "no committed private keys" bash -c '! grep -R -n -E "BEGIN( (RSA|OPENSSH|EC))? PRIVATE KEY" --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.vercel --exclude="*.md" .'
 check "GitHub deployment workflow remains non-deploying" bash -c '! grep -n -E "appleboy/ssh-action|scp-action|FTP_|CPANEL.*TOKEN|ssh.*private" .github/workflows/deploy-cpanel.yml'
 check "cPanel excludes .git" grep -q -- "--exclude '.git'" .cpanel.yml
 check "cPanel target is production theme" grep -q -- "/home/maziyarid/public_html/teznevise.ir/wp-content/themes/teznevise" .cpanel.yml
