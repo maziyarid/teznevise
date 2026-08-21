@@ -168,6 +168,8 @@ function teznevise_interactive_shortcode_names() {
 		'tz_price_calculator',
 		'tz_price_box',
 		'tz_price_cta',
+		'tz_service_cta',
+		'tz_calculation_hub',
 		'tz_careers_terms',
 		'tz_join_form',
 		'tz_join_widget',
