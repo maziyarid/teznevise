@@ -14,3 +14,10 @@
 - [ ] Ensure unmatched pages retain classic-editor content through the shared disclosure instead of losing prose after a builder template renders.
 - [x] Update the calculator seed routine so existing tools retain functional markup while receiving missing template and presentation metadata.
 - [ ] Run the source verification suite, create and merge the template-coverage pull request, then verify key service, tool, legal, and navigation routes on production.
+
+## Isolated builder-route analysis branch
+
+- [x] Create a branch from the current merged `main` state for production-error analysis; do not make additional WordPress admin changes.
+- [x] Capture reproducible uncached HTTP response evidence for successful and failing routes, including deployment and theme-version observations (see `docs/PRODUCTION-BUILDER-ROUTE-ANALYSIS.md`).
+- [x] Trace the common builder execution path against the last stable source revision and document evidence-backed hypotheses only (see `docs/PRODUCTION-BUILDER-ROUTE-ANALYSIS.md`).
+- [ ] Add a narrowly scoped diagnostic or corrective change only after it is locally validated, then open a separate pull request for further analysis.
