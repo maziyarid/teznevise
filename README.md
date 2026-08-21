@@ -1,6 +1,6 @@
 # Teznevise WordPress Theme
 
-**Version:** 1.8.8
+**Version:** 1.9.0
 
 **Author:** MAZ//ID (Maziyar) · **Brand:** [MΛZ / maziyarid/M-Z](https://github.com/maziyarid/M-Z)
 
@@ -29,7 +29,7 @@ The [Premium v2 roadmap](./docs/PREMIUM-V2-ROADMAP.md) is incremental. WordPress
 
 ## Installation / setup
 
-1. Install WordPress with PHP 8.0+ and WordPress 6.4+.
+1. Install WordPress 6.9+ with PHP 8.3+; the theme has been reviewed for PHP 8.5 readiness.
 2. Upload/activate the theme under Appearance → Themes.
 3. Appearance → راه‌اندازی تزنویسه to seed recommended pages and builder defaults.
 4. Optionally promote assets from `teznevise_work/` into `assets/`.

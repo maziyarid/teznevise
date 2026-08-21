@@ -2315,4 +2315,34 @@ i.fa-brands {
   }
 }
 
-
+/* Editorial Signal refinements: selectively enhance entrances without replacing
+   the established Design System v2 animation contract for shared templates. */
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-brand) 38%, transparent);
+  outline-offset: 3px;
+}
+.tz-reveal {
+  animation: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tz-reveal {
+    animation: tz-rise 260ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+  .services-grid > .tz-reveal:nth-child(2),
+  .article-grid > .tz-reveal:nth-child(2),
+  .reason-list > .tz-reveal:nth-child(2),
+  .steps > .tz-reveal:nth-child(2),
+  .quote-grid > .tz-reveal:nth-child(2) { animation-delay: 45ms; }
+  .services-grid > .tz-reveal:nth-child(3),
+  .article-grid > .tz-reveal:nth-child(3),
+  .reason-list > .tz-reveal:nth-child(3),
+  .steps > .tz-reveal:nth-child(3),
+  .quote-grid > .tz-reveal:nth-child(3) { animation-delay: 90ms; }
+  .services-grid > .tz-reveal:nth-child(4),
+  .reason-list > .tz-reveal:nth-child(4),
+  .steps > .tz-reveal:nth-child(4) { animation-delay: 135ms; }
+  .services-grid > .tz-reveal:nth-child(5),
+  .steps > .tz-reveal:nth-child(5) { animation-delay: 180ms; }
+  .services-grid > .tz-reveal:nth-child(n + 6),
+  .steps > .tz-reveal:nth-child(n + 6) { animation-delay: 225ms; }
+}

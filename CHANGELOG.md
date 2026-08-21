@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.0 — 2026-08-21 — Editorial Signal modernization and compatibility hardening
+
+- Add `assets/css/modernization.css` as a final, namespaced compatibility layer for Bootstrap semantics, focus visibility, responsive sizing, safe-area behavior, and reduced motion.
+- Make selected React entrances opt in through `.tz-reveal` without disabling the established shared-template motion system.
+- Strengthen async ticket/comment loaders against stale responses, make the disabled-auth fallback hook-safe, and test Unicode sanitization for skin-tone modifiers and meaningful symbols.
+- Align metadata with WordPress 6.9 and PHP 8.3+, retaining the PHP 8.5 readiness review and source-only release validation.
+
 ## 1.8.8 — 2026-08-21 — Live-theme audit and RTL remediation
 
 - Correct the physical RTL article grid: the reading column is now the wide right-hand column and the bounded TOC is the left-hand sidebar.

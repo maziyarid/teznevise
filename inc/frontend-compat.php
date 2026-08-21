@@ -59,10 +59,10 @@ function teznevise_enqueue_compat_assets() {
 	}
 
 	if ( $haystack && preg_match( '/tzpc-|tzhub-|tz-careers|tz_price|tz_calculation|gravityform/i', $haystack ) ) {
-		wp_enqueue_style(
-			'teznevise-legacy-wpcode',
-			TEZNEVISE_URI . '/assets/css/legacy-wpcode.css',
-			array( 'teznevise-chrome' ),
+			wp_enqueue_style(
+				'teznevise-legacy-wpcode',
+				TEZNEVISE_URI . '/assets/css/legacy-wpcode.css',
+				array( 'teznevise-modernization' ),
 			TEZNEVISE_VERSION
 		);
 	}
@@ -79,10 +79,10 @@ function teznevise_enqueue_compat_assets() {
 			'simulation'         => 'service-simulation.css',
 		);
 		if ( isset( $map[ $slug ] ) ) {
-			wp_enqueue_style(
-				'teznevise-service-' . sanitize_key( $slug ),
-				TEZNEVISE_URI . '/assets/css/' . $map[ $slug ],
-				array( 'teznevise-chrome' ),
+				wp_enqueue_style(
+					'teznevise-service-' . sanitize_key( $slug ),
+					TEZNEVISE_URI . '/assets/css/' . $map[ $slug ],
+					array( 'teznevise-modernization' ),
 				TEZNEVISE_VERSION
 			);
 		}

@@ -4,6 +4,7 @@
  * Author: MAZ//ID (Maziyar)
  * Brand: MΛZ — https://github.com/maziyarid/M-Z
  * @package Teznevise
+ * Design: Editorial Signal compatibility additions follow the Design System v2 contract below.
  */
 
 @layer tez-tokens, tez-base, tez-components, tez-pages, tez-chrome, tez-fixes;
