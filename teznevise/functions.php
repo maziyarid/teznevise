@@ -9,30 +9,30 @@ define( 'TEZNEVISE_VERSION', '1.9.6' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
-require_once TEZNEVISE_DIR . '/inc/defaults.php';
-require_once TEZNEVISE_DIR . '/inc/helpers.php';
-require_once TEZNEVISE_DIR . '/inc/nav-walker.php';
-require_once TEZNEVISE_DIR . '/inc/brand.php';
-require_once TEZNEVISE_DIR . '/inc/customizer.php';
-require_once TEZNEVISE_DIR . '/inc/page-meta.php';
-require_once TEZNEVISE_DIR . '/inc/page-meta-extra.php';
-require_once TEZNEVISE_DIR . '/inc/class-teznevise-builder.php';
-require_once TEZNEVISE_DIR . '/inc/builder-defaults.php';
-require_once TEZNEVISE_DIR . '/inc/extracted-pages.php';
-require_once TEZNEVISE_DIR . '/inc/wxr-classic-content.php';
-require_once TEZNEVISE_DIR . '/inc/builder-seed.php';
-if ( is_admin() ) {
-require_once TEZNEVISE_DIR . '/inc/admin/builder-admin.php';
-require_once TEZNEVISE_DIR . '/inc/admin/builder-assets.php';
+/** Load an optional theme module without taking down the site if a patch is partial. */
+function teznevise_require_module( $relative_path ) {
+	$path = TEZNEVISE_DIR . '/' . ltrim( $relative_path, '/' );
+	if ( is_readable( $path ) ) {
+		require_once $path;
+	}
 }
-require_once TEZNEVISE_DIR . '/inc/cpts.php';
-require_once TEZNEVISE_DIR . '/inc/builder-download-catalog.php';
-require_once TEZNEVISE_DIR . '/inc/blog.php';
-require_once TEZNEVISE_DIR . '/inc/seo.php';
-require_once TEZNEVISE_DIR . '/inc/security.php';
-require_once TEZNEVISE_DIR . '/inc/setup-pages.php';
-require_once TEZNEVISE_DIR . '/inc/promote-assets.php';
-require_once TEZNEVISE_DIR . '/inc/screenshot-data.php';
+
+foreach ( array(
+	'inc/defaults.php', 'inc/helpers.php', 'inc/nav-walker.php', 'inc/brand.php',
+	'inc/customizer.php', 'inc/page-meta.php', 'inc/page-meta-extra.php',
+	'inc/class-teznevise-builder.php', 'inc/builder-defaults.php', 'inc/extracted-pages.php',
+	'inc/wxr-classic-content.php', 'inc/builder-seed.php', 'inc/cpts.php',
+	'inc/builder-download-catalog.php', 'inc/blog.php', 'inc/seo.php', 'inc/security.php',
+	'inc/setup-pages.php', 'inc/promote-assets.php', 'inc/screenshot-data.php',
+	'inc/frontend-compat.php', 'inc/tezcoin.php', 'inc/legal-pages.php', 'inc/dashboard.php',
+	'inc/ai-agents.php',
+) as $tez_module ) {
+	teznevise_require_module( $tez_module );
+}
+if ( is_admin() ) {
+	teznevise_require_module( 'inc/admin/builder-admin.php' );
+	teznevise_require_module( 'inc/admin/builder-assets.php' );
+}
 /*
  * Never load the shortcode migrator on the public front-end.
  * A parse error in that file (Unclosed '{' on line 370 / issue #425)
@@ -43,13 +43,8 @@ if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 	if ( is_readable( $tez_migrator ) ) {
 		require_once $tez_migrator;
 	}
-	require_once TEZNEVISE_DIR . '/inc/migration/auto-run.php';
+	teznevise_require_module( 'inc/migration/auto-run.php' );
 }
-require_once TEZNEVISE_DIR . '/inc/frontend-compat.php';
-require_once TEZNEVISE_DIR . '/inc/tezcoin.php';
-require_once TEZNEVISE_DIR . '/inc/legal-pages.php';
-require_once TEZNEVISE_DIR . '/inc/dashboard.php';
-require_once TEZNEVISE_DIR . '/inc/ai-agents.php';
 
 // Defensive fallback: this repo's functions.php has repeatedly lost this
 // helper during merges/rewrites (see commits 085c9c44, 75a32ee6). If none of
@@ -99,24 +94,33 @@ register_nav_menus( array(
 }
 add_action( 'after_setup_theme', 'teznevise_setup' );
 
+function teznevise_asset_url( $relative_path ) {
+	$relative_path = '/' . ltrim( $relative_path, '/' );
+	if ( is_readable( TEZNEVISE_DIR . $relative_path ) ) {
+		return TEZNEVISE_URI . $relative_path;
+	}
+	// This patch bundle may be deployed alongside the repository-level assets.
+	return home_url( '/assets' . $relative_path );
+}
+
 function teznevise_enqueue_assets() {
 	wp_enqueue_style( 'teznevise-style', get_stylesheet_uri(), array(), TEZNEVISE_VERSION );
-	wp_enqueue_style( 'teznevise-tokens', TEZNEVISE_URI . '/assets/css/tokens.css', array( 'teznevise-style' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-tokens', teznevise_asset_url( '/assets/css/tokens.css' ), array( 'teznevise-style' ), TEZNEVISE_VERSION );
 	$fa_rel = '/assets/vendor/fontawesome/css/all.min.css';
 	if ( is_readable( TEZNEVISE_DIR . $fa_rel ) ) {
 		wp_enqueue_style( 'teznevise-fontawesome', TEZNEVISE_URI . $fa_rel, array(), TEZNEVISE_VERSION );
 	} else {
 		wp_enqueue_style( 'teznevise-fontawesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css', array(), '7.1.0' );
 	}
-	wp_enqueue_style( 'teznevise-components', TEZNEVISE_URI . '/assets/css/components.css', array( 'teznevise-tokens' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-components', teznevise_asset_url( '/assets/css/components.css' ), array( 'teznevise-tokens' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-pages', TEZNEVISE_URI . '/assets/css/pages.css', array( 'teznevise-components' ), TEZNEVISE_VERSION );
 	wp_enqueue_style( 'teznevise-chrome', TEZNEVISE_URI . '/assets/css/chrome.css', array( 'teznevise-pages' ), TEZNEVISE_VERSION );
-	wp_enqueue_style( 'teznevise-modernization', TEZNEVISE_URI . '/assets/css/modernization.css', array( 'teznevise-chrome' ), TEZNEVISE_VERSION );
-	wp_enqueue_style( 'teznevise-legacy-wpcode', TEZNEVISE_URI . '/assets/css/legacy-wpcode.css', array( 'teznevise-modernization' ), TEZNEVISE_VERSION );
-	wp_enqueue_script( 'teznevise-calculators', TEZNEVISE_URI . '/assets/js/calculators.js', array(), TEZNEVISE_VERSION, true );
+	wp_enqueue_style( 'teznevise-modernization', teznevise_asset_url( '/assets/css/modernization.css' ), array( 'teznevise-chrome' ), TEZNEVISE_VERSION );
+	wp_enqueue_style( 'teznevise-legacy-wpcode', teznevise_asset_url( '/assets/css/legacy-wpcode.css' ), array( 'teznevise-modernization' ), TEZNEVISE_VERSION );
+	wp_enqueue_script( 'teznevise-calculators', teznevise_asset_url( '/assets/js/calculators.js' ), array(), TEZNEVISE_VERSION, true );
 	wp_script_add_data( 'teznevise-calculators', 'strategy', 'defer' );
 
-	wp_enqueue_script( 'teznevise-chrome', TEZNEVISE_URI . '/assets/js/chrome.js', array(), TEZNEVISE_VERSION, true );
+	wp_enqueue_script( 'teznevise-chrome', teznevise_asset_url( '/assets/js/chrome.js' ), array(), TEZNEVISE_VERSION, true );
 	wp_script_add_data( 'teznevise-chrome', 'strategy', 'defer' );
 	if ( function_exists( 'teznevise_localize_front_script' ) ) {
 		teznevise_localize_front_script();
@@ -132,7 +136,7 @@ add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );
  */
 function teznevise_preload_resources( $preload_resources ) {
 	$preload_resources[] = array(
-		'href'        => TEZNEVISE_URI . '/assets/fonts/Vazirmatn-Regular.woff2',
+		'href'        => teznevise_asset_url( '/assets/fonts/Vazirmatn-Regular.woff2' ),
 		'as'          => 'font',
 		'type'        => 'font/woff2',
 		'crossorigin' => 'anonymous',
