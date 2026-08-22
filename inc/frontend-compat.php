@@ -68,16 +68,19 @@ function teznevise_enqueue_compat_assets() {
 		wp_enqueue_style(
 			'teznevise-legacy-wpcode',
 			TEZNEVISE_URI . '/assets/css/legacy-wpcode.css',
-			array( 'teznevise-modernization' ),
+			array(),
 			TEZNEVISE_VERSION
 		);
-		wp_enqueue_script(
-			'teznevise-calculators',
-			TEZNEVISE_URI . '/assets/js/calculators.js',
-			array(),
-			TEZNEVISE_VERSION,
-			true
-		);
+		if ( ! wp_script_is( 'teznevise-calculators', 'enqueued' ) ) {
+			wp_enqueue_script(
+				'teznevise-calculators',
+				TEZNEVISE_URI . '/assets/js/calculators.js',
+				array(),
+				TEZNEVISE_VERSION,
+				true
+			);
+			wp_script_add_data( 'teznevise-calculators', 'strategy', 'defer' );
+		}
 	}
 
 	if ( is_singular() && ! is_front_page() ) {

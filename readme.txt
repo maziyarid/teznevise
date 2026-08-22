@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.9
 Requires PHP: 8.3
-Stable tag: 1.9.7
+Stable tag: 1.9.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,13 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 6. Assign menus: Primary, Mobile, Bottom
 
 == Changelog ==
+
+= 1.9.8 =
+* Instant first paint: inlined critical CSS, one async runtime stylesheet, delayed GTM/Clarity, eager LCP images.
+* Visual Elementor-like page builder canvas; advanced field tables collapsed.
+* You.com researches first; AI discussion is a per-post custom field with named, coloured, threaded speakers.
+* ChatGPT-style composer in tools (tools popover, model, send, fullscreen, new chat).
+* Professional agent fields: system prompt, role, language, temperature, tokens.
 
 = 1.9.7 =
 * Classic Editor re-import writes extracted page copy into post_content; hub shortcodes leave the editor.

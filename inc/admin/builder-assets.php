@@ -37,9 +37,9 @@ function teznevise_builder_admin_assets( $hook ) {
 	);
 	wp_enqueue_style(
 		'teznevise-fa-admin',
-		'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css',
+		TEZNEVISE_URI . '/assets/vendor/fontawesome/css/all.min.css',
 		array(),
-		'6.5.2'
+		TEZNEVISE_VERSION
 	);
 
 	wp_enqueue_script(

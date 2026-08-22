@@ -296,11 +296,11 @@ function teznevise_tracking_head() {
 	$ga      = (string) teznevise_tezcoin_get( 'ga_id' );
 	$clarity = (string) teznevise_tezcoin_get( 'clarity_id' );
 	if ( $ga && preg_match( '/^G-[A-Z0-9]+$/i', $ga ) ) {
-		echo '<script async src="https://www.googletagmanager.com/gtag/js?id=' . esc_attr( $ga ) . '"></script>';
-		echo '<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","' . esc_js( $ga ) . '");</script>' . "\n";
+		echo '<script type="text/plain" data-tz-delay="1" data-src="https://www.googletagmanager.com/gtag/js?id=' . esc_attr( $ga ) . '"></script>';
+		echo '<script type="text/plain" data-tz-delay-inline="gtag">window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","' . esc_js( $ga ) . '");</script>' . "\n";
 	}
 	if ( $clarity && preg_match( '/^[A-Za-z0-9]+$/', $clarity ) ) {
-		echo '<script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","' . esc_js( $clarity ) . '");</script>' . "\n";
+		echo '<script type="text/plain" data-tz-delay="1" data-src="https://www.clarity.ms/tag/' . esc_attr( $clarity ) . '"></script>' . "\n";
 	}
 }
 add_action( 'wp_head', 'teznevise_tracking_head', 20 );

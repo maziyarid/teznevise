@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.9.7' );
+define( 'TEZNEVISE_VERSION', '1.9.8' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -51,6 +51,7 @@ require_once TEZNEVISE_DIR . '/inc/legal-pages.php';
 require_once TEZNEVISE_DIR . '/inc/dashboard.php';
 require_once TEZNEVISE_DIR . '/inc/ai-agents.php';
 require_once TEZNEVISE_DIR . '/inc/ai-comments.php';
+require_once TEZNEVISE_DIR . '/inc/perf.php';
 
 // Defensive fallback: this repo's functions.php has repeatedly lost this
 // helper during merges/rewrites (see commits 085c9c44, 75a32ee6). If none of
@@ -91,6 +92,8 @@ add_editor_style( 'assets/css/tokens.css' );
 add_image_size( 'teznevise-card', 720, 450, true );
 add_image_size( 'teznevise-hero', 1440, 810, true );
 add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' ) );
+add_filter( 'pre_option_thread_comments', static function () { return '1'; } );
+add_filter( 'pre_option_thread_comments_depth', static function () { return '5'; } );
 register_nav_menus( array(
 'primary' => __( 'Primary Menu', 'teznevise' ),
 'mobile'  => __( 'Mobile Menu', 'teznevise' ),
@@ -101,61 +104,22 @@ register_nav_menus( array(
 add_action( 'after_setup_theme', 'teznevise_setup' );
 
 function teznevise_enqueue_assets() {
-	wp_enqueue_style( 'teznevise-style', get_stylesheet_uri(), array(), TEZNEVISE_VERSION );
-	wp_enqueue_style( 'teznevise-tokens', TEZNEVISE_URI . '/assets/css/tokens.css', array( 'teznevise-style' ), TEZNEVISE_VERSION );
-	$fa_rel = '/assets/vendor/fontawesome/css/all.min.css';
-	if ( is_readable( TEZNEVISE_DIR . $fa_rel ) ) {
-		wp_enqueue_style( 'teznevise-fontawesome', TEZNEVISE_URI . $fa_rel, array(), TEZNEVISE_VERSION );
-	} else {
-		wp_enqueue_style( 'teznevise-fontawesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css', array(), '7.1.0' );
+	$need_calc = function_exists( 'teznevise_page_needs_calculators' ) ? teznevise_page_needs_calculators() : false;
+	if ( $need_calc ) {
+		wp_enqueue_script( 'teznevise-calculators', TEZNEVISE_URI . '/assets/js/calculators.js', array(), TEZNEVISE_VERSION, true );
+		wp_script_add_data( 'teznevise-calculators', 'strategy', 'defer' );
 	}
-	wp_enqueue_style( 'teznevise-components', TEZNEVISE_URI . '/assets/css/components.css', array( 'teznevise-tokens' ), TEZNEVISE_VERSION );
-	wp_enqueue_style( 'teznevise-pages', TEZNEVISE_URI . '/assets/css/pages.css', array( 'teznevise-components' ), TEZNEVISE_VERSION );
-	wp_enqueue_style( 'teznevise-chrome', TEZNEVISE_URI . '/assets/css/chrome.css', array( 'teznevise-pages' ), TEZNEVISE_VERSION );
-	wp_enqueue_style( 'teznevise-modernization', TEZNEVISE_URI . '/assets/css/modernization.css', array( 'teznevise-chrome' ), TEZNEVISE_VERSION );
-	wp_enqueue_style( 'teznevise-legacy-wpcode', TEZNEVISE_URI . '/assets/css/legacy-wpcode.css', array( 'teznevise-modernization' ), TEZNEVISE_VERSION );
-	wp_enqueue_script( 'teznevise-calculators', TEZNEVISE_URI . '/assets/js/calculators.js', array(), TEZNEVISE_VERSION, true );
-	wp_script_add_data( 'teznevise-calculators', 'strategy', 'defer' );
 
 	wp_enqueue_script( 'teznevise-chrome', TEZNEVISE_URI . '/assets/js/chrome.js', array(), TEZNEVISE_VERSION, true );
 	wp_script_add_data( 'teznevise-chrome', 'strategy', 'defer' );
+	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+		wp_enqueue_script( 'comment-reply' );
+	}
 	if ( function_exists( 'teznevise_localize_front_script' ) ) {
 		teznevise_localize_front_script();
 	}
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );
-
-/**
- * Last-wins visual hotfix (mega RTL, mobile centering, compact SSL).
- * Priority 100 so it beats chrome, modernization, and per-service CSS.
- */
-function teznevise_enqueue_hotfix_196() {
-	wp_enqueue_style(
-		'teznevise-hotfix-196',
-		TEZNEVISE_URI . '/assets/css/hotfix-196.css',
-		array( 'teznevise-modernization' ),
-		TEZNEVISE_VERSION
-	);
-}
-add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_hotfix_196', 100 );
-
-/**
- * 1.9.7 last-wins (scoped mega, unboxed sections, blog/comments, dashboard).
- * Priority 110 so it beats hotfix-196.
- */
-function teznevise_enqueue_hotfix_197() {
-	$rel = '/assets/css/hotfix-197.css';
-	if ( ! is_readable( TEZNEVISE_DIR . $rel ) ) {
-		return;
-	}
-	wp_enqueue_style(
-		'teznevise-hotfix-197',
-		TEZNEVISE_URI . $rel,
-		array( 'teznevise-hotfix-196' ),
-		TEZNEVISE_VERSION
-	);
-}
-add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_hotfix_197', 110 );
 
 /**
  * Preload only the regular local font used above the fold.

@@ -6,7 +6,7 @@
 if (!defined('ABSPATH')) exit;
 
 class TezNevise_AI_Database {
-    const VERSION = '2.1.0';
+    const VERSION = '2.2.0';
     const PREFIX = 'teznevise_ai_';
     
     public static function init() {
@@ -43,7 +43,7 @@ class TezNevise_AI_Database {
             session_id VARCHAR(255) NOT NULL,
             agent_id VARCHAR(100) NOT NULL,
             model VARCHAR(100) NOT NULL,
-            collaboration_mode ENUM('single', 'collaborative', 'separate') NOT NULL DEFAULT 'single',
+            collaboration_mode VARCHAR(32) NOT NULL DEFAULT 'single',
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             ip_address VARCHAR(45) NULL,
@@ -114,6 +114,11 @@ class TezNevise_AI_Database {
             thinking_enabled TINYINT(1) NOT NULL DEFAULT 1,
             is_active TINYINT(1) NOT NULL DEFAULT 1,
             sort_order INT(11) NOT NULL DEFAULT 0,
+            system_prompt TEXT NULL,
+            role VARCHAR(40) NOT NULL DEFAULT 'general',
+            language VARCHAR(12) NOT NULL DEFAULT 'fa',
+            temperature FLOAT NOT NULL DEFAULT 0.7,
+            max_tokens INT(11) NOT NULL DEFAULT 1500,
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
@@ -155,6 +160,12 @@ class TezNevise_AI_Database {
         dbDelta($sql_agents);
         dbDelta($sql_tool_settings);
         dbDelta($sql_skills);
+        $sessions_table = $wpdb->prefix . $prefix . 'chat_sessions';
+        // Widen ENUM so research collaboration can persist. Ignore if already VARCHAR.
+        $suppress = $wpdb->hide_errors();
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is internal.
+        $wpdb->query( "ALTER TABLE {$sessions_table} MODIFY collaboration_mode VARCHAR(32) NOT NULL DEFAULT 'single'" );
+        $wpdb->show_errors( $suppress );
     }
     
     public static function insert_defaults() {
@@ -162,9 +173,10 @@ class TezNevise_AI_Database {
         $prefix = self::PREFIX;
         $agents_table = $wpdb->prefix . $prefix . 'agents';
         $default_agents = [
-            ['agent_id' => 'general', 'name' => 'دستیار پژوهشی', 'description' => 'دستیار عمومی برای روش تحقیق، نگارش و ابزارها', 'provider' => 'openai', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4o-mini', 'color' => '#145d4a', 'icon' => 'brain', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 0],
-            ['agent_id' => 'math', 'name' => 'متخصص ریاضی', 'description' => 'محاسبات و توضیح گام‌به‌گام ریاضی', 'provider' => 'openai', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4o-mini', 'color' => '#1d4ed8', 'icon' => 'sparkles', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 1],
-            ['agent_id' => 'stats', 'name' => 'یاور آمار', 'description' => 'انتخاب آزمون و تفسیر نتایج آماری', 'provider' => 'openai', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4o-mini', 'color' => '#7c3aed', 'icon' => 'brain', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 2],
+            ['agent_id' => 'you', 'name' => 'You', 'description' => 'پژوهشگر You.com: جستجوی جامع و بازگرداندن یافته‌ها با منبع برای بقیه عامل‌ها', 'provider' => 'you', 'api_endpoint' => 'https://api.ydc-index.io/v1/search', 'api_key' => '', 'model' => 'you-search', 'color' => '#111827', 'icon' => 'search', 'thinking_enabled' => 0, 'is_active' => 1, 'sort_order' => -1, 'system_prompt' => 'You are You.com, the research agent for Teznevise. Search comprehensively. Return Findings (claims, counterpoints) and Sources. Prefer Persian academic sources when the user writes in Persian. Never invent citations.', 'role' => 'researcher', 'language' => 'fa', 'temperature' => 0.2, 'max_tokens' => 1800],
+            ['agent_id' => 'general', 'name' => 'دستیار پژوهشی', 'description' => 'دستیار عمومی برای روش تحقیق، نگارش و ابزارها', 'provider' => 'openai', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4o-mini', 'color' => '#145d4a', 'icon' => 'brain', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 0, 'system_prompt' => 'You are Teznevise’s research assistant. Read the user question and any You.com research brief. Answer in Persian for Persian questions. Cite the brief. Be concrete for graduate students.', 'role' => 'general', 'language' => 'fa', 'temperature' => 0.6, 'max_tokens' => 1800],
+            ['agent_id' => 'math', 'name' => 'متخصص ریاضی', 'description' => 'محاسبات و توضیح گام‌به‌گام ریاضی', 'provider' => 'openai', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4o-mini', 'color' => '#1d4ed8', 'icon' => 'sparkles', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 1, 'system_prompt' => 'You are a mathematics specialist. Show steps. If a You.com brief is present, use its formulas only when they match the question.', 'role' => 'analyst', 'language' => 'fa', 'temperature' => 0.2, 'max_tokens' => 2000],
+            ['agent_id' => 'stats', 'name' => 'یاور آمار', 'description' => 'انتخاب آزمون و تفسیر نتایج آماری', 'provider' => 'openai', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4o-mini', 'color' => '#7c3aed', 'icon' => 'brain', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 2, 'system_prompt' => 'You are an applied statistician. Recommend tests, assumptions, and interpretation. Ground answers in the user’s data description and any You research brief.', 'role' => 'statistician', 'language' => 'fa', 'temperature' => 0.35, 'max_tokens' => 1800],
             ['agent_id' => 'gemini_flash', 'name' => 'Gemini Flash', 'description' => 'مدل رایگان‌تر گوگل برای پاسخ سریع فارسی', 'provider' => 'gemini', 'api_endpoint' => 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', 'api_key' => '', 'model' => 'gemini-2.0-flash', 'color' => '#0369a1', 'icon' => 'sparkles', 'thinking_enabled' => 1, 'is_active' => 0, 'sort_order' => 3],
             ['agent_id' => 'openrouter_free', 'name' => 'OpenRouter', 'description' => 'مسیریاب مدل‌های متن‌باز و رایگان OpenRouter', 'provider' => 'openrouter', 'api_endpoint' => 'https://openrouter.ai/api/v1/chat/completions', 'api_key' => '', 'model' => 'openrouter/auto', 'color' => '#b45309', 'icon' => 'brain', 'thinking_enabled' => 1, 'is_active' => 0, 'sort_order' => 4],
         ];
@@ -264,6 +276,11 @@ class TezNevise_AI_Database {
             'thinking_enabled' => empty($data['thinking_enabled']) ? 0 : 1,
             'is_active' => empty($data['is_active']) ? 0 : 1,
             'sort_order' => (int) ($data['sort_order'] ?? 0),
+            'system_prompt' => sanitize_textarea_field($data['system_prompt'] ?? ''),
+            'role' => sanitize_key($data['role'] ?? 'general') ?: 'general',
+            'language' => sanitize_text_field($data['language'] ?? 'fa'),
+            'temperature' => (float) ($data['temperature'] ?? 0.7),
+            'max_tokens' => (int) ($data['max_tokens'] ?? 1500),
         ];
         $exists = $wpdb->get_var($wpdb->prepare("SELECT id FROM $table WHERE agent_id = %s", $agent_id));
         if ($exists) {

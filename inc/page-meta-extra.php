@@ -143,8 +143,9 @@ function teznevise_render_page_meta_box_extra( $post ) {
 		'tools'     => __( 'ابزارها', 'teznevise' ),
 		'downloads' => __( 'دانلودها', 'teznevise' ),
 	);
-	echo '<p style="color:#646970;">' . esc_html__( 'این فیلدها برای قالب‌های About / Team / Tools / Downloads استفاده می‌شوند. فرمت لیست‌ها با جداکننده | است.', 'teznevise' ) . '</p>';
+	echo '<p style="color:#646970;">' . esc_html__( 'این فیلدها برای قالب‌های About / Team / Tools / Downloads است. اگر صفحه‌ساز را پر کرده‌اید نیازی به پر کردن همه نیست.', 'teznevise' ) . '</p>';
 	$current = '';
+	echo '<details class="tez-meta-advanced"><summary>' . esc_html__( 'فهرست‌های پیشرفته صفحه', 'teznevise' ) . '</summary>';
 	echo '<table class="form-table"><tbody>';
 	foreach ( $schema as $key => $args ) {
 		$group = isset( $args['group'] ) ? $args['group'] : 'about';
@@ -168,7 +169,7 @@ function teznevise_render_page_meta_box_extra( $post ) {
 		}
 		echo '</td></tr>';
 	}
-	echo '</tbody></table>';
+	echo '</tbody></table></details>';
 }
 
 /**

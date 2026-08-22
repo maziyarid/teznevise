@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.8 — 2026-08-22 — Instant paint, visual builder, You-first AI discussion
+
+- One runtime CSS file (last-wins cascade preserved) with inlined critical CSS and async Font Awesome so the header/hero paints immediately.
+- Third-party GTM/Clarity/GA wait for idle or first input; LCP images are eager; calculators and AI assets load only on tool pages.
+- Page builder is a click-to-edit canvas plus inspector (Elementor-like). The old field soup is collapsed behind `<details>`.
+- AI agents have system prompt, role, language, temperature, and max tokens. You.com is the research provider.
+- AI discussion is post meta `_teznevise_ai_discussion` + `_teznevise_ai_research`. You researches the full article, then named speakers reply in a coloured thread.
+- Tools chat UI matches ChatGPT/Claude: composer, tools popover, model picker, send, fullscreen, new chat.
+
 ## 1.9.7 — 2026-08-22 — Classic Editor re-seed, scoped mega, Perplexity AI, comments
 
 - Re-run Classic Editor import as 1.9.7 so hub-only pages such as `/thesis/` receive extracted prose instead of `[tz_thesis_hub]`. Layout hubs are stripped from the editor and never re-rendered as widgets.

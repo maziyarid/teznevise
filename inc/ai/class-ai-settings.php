@@ -30,7 +30,7 @@ class TezNevise_AI_Settings {
 	}
 
 	public static function register_settings() {
-		$keys = array( 'openai_key', 'gemini_key', 'openrouter_key', 'groq_key', 'xai_key', 'anthropic_key', 'mistral_key', 'together_key', 'deepseek_key', 'default_agent', 'free_tier_limit', 'signed_in_limit', 'cost_per_message' );
+		$keys = array( 'openai_key', 'gemini_key', 'openrouter_key', 'groq_key', 'xai_key', 'anthropic_key', 'mistral_key', 'together_key', 'deepseek_key', 'you_key', 'default_agent', 'free_tier_limit', 'signed_in_limit', 'cost_per_message' );
 		foreach ( $keys as $key ) {
 			register_setting( 'teznevise_ai_settings', self::OPTION_PREFIX . $key );
 		}
@@ -62,6 +62,11 @@ class TezNevise_AI_Settings {
 					'thinking_enabled'  => ! empty( $_POST['thinking_enabled'] ),
 					'is_active'         => ! empty( $_POST['is_active'] ),
 					'sort_order'        => isset( $_POST['sort_order'] ) ? (int) $_POST['sort_order'] : 0,
+					'system_prompt'     => isset( $_POST['system_prompt'] ) ? sanitize_textarea_field( wp_unslash( $_POST['system_prompt'] ) ) : '',
+					'role'              => isset( $_POST['role'] ) ? sanitize_key( wp_unslash( $_POST['role'] ) ) : 'general',
+					'language'          => isset( $_POST['language'] ) ? sanitize_text_field( wp_unslash( $_POST['language'] ) ) : 'fa',
+					'temperature'       => isset( $_POST['temperature'] ) ? (float) $_POST['temperature'] : 0.7,
+					'max_tokens'        => isset( $_POST['max_tokens'] ) ? (int) $_POST['max_tokens'] : 1500,
 				)
 			);
 		}
@@ -155,6 +160,23 @@ class TezNevise_AI_Settings {
 					<tr><th><?php esc_html_e( 'شناسه لاتین', 'teznevise' ); ?></th><td><input required name="agent_id" class="regular-text" placeholder="research_editor" /></td></tr>
 					<tr><th><?php esc_html_e( 'نام نمایشی', 'teznevise' ); ?></th><td><input required name="name" class="regular-text" placeholder="ویراستار علمی" /></td></tr>
 					<tr><th><?php esc_html_e( 'توضیح / پرامپت نقش', 'teznevise' ); ?></th><td><textarea name="description" class="large-text" rows="3"></textarea></td></tr>
+					<tr><th><?php esc_html_e( 'پرامپت سیستم (جزئی)', 'teznevise' ); ?></th><td><textarea name="system_prompt" class="large-text" rows="6" placeholder="<?php esc_attr_e( 'نقش، لحن، منابع مجاز، قالب خروجی، زبان…', 'teznevise' ); ?>"></textarea></td></tr>
+					<tr>
+						<th><?php esc_html_e( 'نقش عامل', 'teznevise' ); ?></th>
+						<td>
+							<select name="role">
+								<option value="general"><?php esc_html_e( 'عمومی', 'teznevise' ); ?></option>
+								<option value="researcher"><?php esc_html_e( 'پژوهشگر (You)', 'teznevise' ); ?></option>
+								<option value="analyst"><?php esc_html_e( 'تحلیل‌گر', 'teznevise' ); ?></option>
+								<option value="methodologist"><?php esc_html_e( 'روش‌شناس', 'teznevise' ); ?></option>
+								<option value="statistician"><?php esc_html_e( 'آمار', 'teznevise' ); ?></option>
+								<option value="editor"><?php esc_html_e( 'ویراستار علمی', 'teznevise' ); ?></option>
+							</select>
+							<input name="language" class="small-text" value="fa" />
+							<label><?php esc_html_e( 'دما', 'teznevise' ); ?> <input name="temperature" type="number" step="0.1" min="0" max="2" value="0.7" class="small-text" /></label>
+							<label><?php esc_html_e( 'حداکثر توکن', 'teznevise' ); ?> <input name="max_tokens" type="number" value="1800" class="small-text" /></label>
+						</td>
+					</tr>
 					<tr>
 						<th><?php esc_html_e( 'ارائه‌دهنده', 'teznevise' ); ?></th>
 						<td>

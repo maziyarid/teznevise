@@ -68,10 +68,14 @@ function teznevise_builder_admin_config() {
 			'confirmSection' => __( 'کل این بخش حذف شود؟', 'teznevise' ),
 			'chooseImage'    => __( 'انتخاب تصویر', 'teznevise' ),
 			'clearImage'     => __( 'حذف تصویر', 'teznevise' ),
-			'emptyState'     => __( 'هنوز بخشی اضافه نشده است. یک نوع بخش را انتخاب و اضافه کنید.', 'teznevise' ),
+			'emptyState'     => __( 'هنوز بخشی اضافه نشده. از نوار بالا یک نوع را اضافه کنید و روی بوم کلیک کنید.', 'teznevise' ),
 			'noItems'        => __( 'موردی وجود ندارد.', 'teznevise' ),
 			'untitled'       => __( 'بدون عنوان', 'teznevise' ),
 			'dragHint'       => __( 'برای جابه‌جایی بکشید', 'teznevise' ),
+			'clickToEdit'    => __( 'روی یک بخش در بوم کلیک کنید تا همان‌جا ویرایش شود.', 'teznevise' ),
+			'inspector'      => __( 'بازرسی بخش', 'teznevise' ),
+			'canvas'         => __( 'پیش‌نمایش زنده', 'teznevise' ),
+			'advanced'       => __( 'فیلدهای بیشتر', 'teznevise' ),
 		),
 	);
 }
@@ -90,9 +94,9 @@ function teznevise_builder_render_meta_box( $post ) {
 		$json = '[]';
 	}
 	?>
-	<div class="tez-builder" data-tez-builder>
+	<div class="tez-builder tez-builder--visual" data-tez-builder>
 		<p class="tez-builder-intro">
-			<?php esc_html_e( 'بخش‌ها را اضافه، تکثیر، جابه‌جا یا حذف کنید. تعداد موردها در هر بخش محدودیتی ندارد.', 'teznevise' ); ?>
+			<?php esc_html_e( 'مثل صفحه‌سازهای بصری: روی بخش کلیک کنید و همان‌جا عنوان و متن را عوض کنید. فیلدهای جزئی در ستون بازرسی سمت چپ باز می‌شوند.', 'teznevise' ); ?>
 		</p>
 		<div class="tez-builder-toolbar">
 			<select data-tez-builder-type aria-label="<?php esc_attr_e( 'نوع بخش', 'teznevise' ); ?>">
@@ -104,16 +108,19 @@ function teznevise_builder_render_meta_box( $post ) {
 				<?php esc_html_e( 'افزودن بخش', 'teznevise' ); ?>
 			</button>
 		</div>
-		<div class="tez-builder-sections" data-tez-builder-sections></div>
+		<div class="tez-builder-workspace">
+			<div class="tez-builder-canvas" data-tez-builder-canvas data-tez-builder-sections></div>
+			<aside class="tez-builder-inspector" data-tez-builder-inspector>
+				<p class="description"><?php esc_html_e( 'روی یک بخش در بوم کلیک کنید تا همان‌جا ویرایش شود.', 'teznevise' ); ?></p>
+			</aside>
+		</div>
 		<textarea
 			class="tez-builder-payload"
 			name="teznevise_builder_payload"
 			data-tez-builder-payload
 			rows="4"
+			hidden
 		><?php echo esc_textarea( $json ); ?></textarea>
-		<p class="description tez-builder-fallback-note">
-			<?php esc_html_e( 'اگر جاوااسکریپت غیرفعال باشد، همین JSON مستقیماً قابل ویرایش است.', 'teznevise' ); ?>
-		</p>
 	</div>
 	<?php
 }

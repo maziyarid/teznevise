@@ -155,7 +155,7 @@ class TezNevise_AI_API {
             'session_id' => $session_token,
             'agent_id' => $agent_id,
             'model' => $model,
-            'collaboration_mode' => in_array($collaboration_mode, ['single','collaborative','separate'], true) ? $collaboration_mode : 'single',
+            'collaboration_mode' => in_array($collaboration_mode, ['single','collaborative','separate'], true) ? $collaboration_mode : 'collaborative',
 			'ip_address' => null,
             'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? substr(sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])), 0, 255) : '',
         ];
@@ -212,32 +212,58 @@ class TezNevise_AI_API {
     }
     
     private static function run_collaboration($message, $tool, $primary, $model, $mode, $thinking_enabled, $skill_id) {
-        $agents = array($primary);
-        if (in_array($mode, array('collaborative', 'separate'), true)) {
+        $replies = array();
+        $prior   = '';
+        $agents  = array($primary);
+
+        if ($mode === 'research') {
+            $researcher = TezNevise_AI_Database::get_agent('you');
+            if (!$researcher) {
+                foreach ((array) TezNevise_AI_Database::get_all_agents() as $row) {
+                    if (($row['role'] ?? '') === 'researcher' || ($row['agent_id'] ?? '') === 'you') {
+                        $researcher = $row;
+                        break;
+                    }
+                }
+            }
+            if ($researcher) {
+                $rprompt = trim((string) ($researcher['system_prompt'] ?? '')) ?: 'You are You.com, a research agent. Search and summarize the topic with sources, claims, and counterpoints. Prefer Persian academic sources when the user writes in Persian. Return markdown with a Findings section and a Sources section.';
+                $research = self::call_ai_api($message, $rprompt, $researcher, $researcher['model'] ?? $model, $thinking_enabled);
+                if (is_wp_error($research)) {
+                    return $research;
+                }
+                $replies[] = array(
+                    'content' => $research['content'],
+                    'agent_name' => $researcher['name'] ?? 'You',
+                    'model' => $researcher['model'] ?? $model,
+                    'thinking_process' => $research['thinking_process'] ?? null,
+                );
+                $prior = $research['content'];
+            }
+        }
+
+        if (in_array($mode, array('collaborative', 'separate', 'research'), true)) {
             $ids = $tool['recommended_agents'] ?? array();
             foreach ((array) $ids as $id) {
                 $row = TezNevise_AI_Database::get_agent($id);
-                if ($row && ($row['agent_id'] ?? '') !== ($primary['agent_id'] ?? '')) {
+                if ($row && ($row['agent_id'] ?? '') !== ($primary['agent_id'] ?? '') && ($row['role'] ?? '') !== 'researcher') {
                     $agents[] = $row;
                 }
             }
         }
-        $replies = array();
-        $prior = '';
         foreach ($agents as $i => $ag) {
+            if (($ag['role'] ?? '') === 'researcher' && $mode === 'research') {
+                continue;
+            }
             $is_last = ($i === count($agents) - 1);
             $prompt = self::build_system_prompt($tool, $ag, $skill_id, $mode);
-            if ($mode === 'collaborative' && $prior !== '') {
-                $prompt .= "\n\nPrevious agent notes:\n" . $prior;
+            if ($prior !== '' && in_array($mode, array('collaborative', 'research'), true)) {
+                $prompt .= "\n\nResearch brief from You:\n" . $prior;
             }
             if ($mode === 'separate' && $is_last && $prior !== '') {
                 $prompt .= "\n\nYou are the reflecting agent. Summarize and reconcile these independent answers:\n" . $prior;
             }
-            $payload = $message;
-            if ($mode === 'separate' && ! $is_last) {
-                $payload = $message;
-            }
-            $response = self::call_ai_api($payload, $prompt, $ag, $ag['model'] ?? $model, $thinking_enabled);
+            $response = self::call_ai_api($message, $prompt, $ag, $ag['model'] ?? $model, $thinking_enabled);
             if (is_wp_error($response)) {
                 return $response;
             }
@@ -278,13 +304,20 @@ class TezNevise_AI_API {
 
     private static function build_system_prompt($tool, $agent, $skill_id, $collaboration_mode) {
         $prompt_parts = [];
+        if (!empty($agent['system_prompt'])) $prompt_parts[] = $agent['system_prompt'];
         if (!empty($agent['description'])) $prompt_parts[] = $agent['description'];
+        if (!empty($agent['role'])) $prompt_parts[] = 'Role: ' . $agent['role'];
         if (!empty($tool['context'])) $prompt_parts[] = "Tool Context: " . json_encode($tool['context']);
         if ($skill_id && isset($tool['skills'][$skill_id])) {
             $prompt_parts[] = $tool['skills'][$skill_id]['prompt'];
         }
         $prompt_parts[] = "Collaboration Mode: {$collaboration_mode}";
-        $prompt_parts[] = "If the user writes in Persian, always respond in Persian. Otherwise, respond in English.";
+        $lang = !empty($agent['language']) ? $agent['language'] : 'fa';
+        if ($lang === 'fa') {
+            $prompt_parts[] = "If the user writes in Persian, always respond in Persian. Otherwise, respond in English.";
+        } else {
+            $prompt_parts[] = "Respond in language code: {$lang}.";
+        }
 		$prompt_parts[] = "Give a concise, evidence-based answer. Do not reveal private chain-of-thought; provide a short conclusion and useful supporting explanation instead.";
         return implode("\n\n", $prompt_parts);
     }
@@ -351,6 +384,72 @@ class TezNevise_AI_API {
         return self::call_ai_api($message, $system_prompt, $agent, $model, $thinking_enabled);
     }
 
+    public static function research($query, $agent = null) {
+        if (!$agent && class_exists('TezNevise_AI_Database')) {
+            $agent = TezNevise_AI_Database::get_agent('you');
+        }
+        if (!$agent && class_exists('TezNevise_AI_Database')) {
+            foreach ((array) TezNevise_AI_Database::get_all_agents() as $row) {
+                if (($row['role'] ?? '') === 'researcher') {
+                    $agent = $row;
+                    break;
+                }
+            }
+        }
+        if (!$agent) {
+            return new WP_Error('no_researcher', 'عامل You/پژوهش پیکربندی نشده است', ['status' => 400]);
+        }
+        $prompt = trim((string) ($agent['system_prompt'] ?? '')) ?: 'You are You.com. Research comprehensively. Return Findings and Sources in Persian if the query is Persian.';
+        return self::call_ai_api($query, $prompt, $agent, $agent['model'] ?? '', false);
+    }
+
+    private static function you_search($api_key, $query, $endpoint) {
+        $base = $endpoint ? $endpoint : 'https://api.ydc-index.io/v1/search';
+        $url  = add_query_arg('query', rawurlencode(wp_strip_all_tags((string) $query)), $base);
+        $response = wp_remote_get($url, array(
+            'headers' => array(
+                'X-API-Key' => $api_key,
+                'Accept'    => 'application/json',
+            ),
+            'timeout' => 45,
+            'redirection' => 0,
+        ));
+        if (is_wp_error($response)) {
+            return $response;
+        }
+        $status = (int) wp_remote_retrieve_response_code($response);
+        if ($status < 200 || $status >= 300) {
+            return new WP_Error('api_http_error', 'You.com returned an unsuccessful response', ['status' => 502]);
+        }
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        if (!is_array($body)) {
+            return new WP_Error('api_error', 'پاسخ You.com نامعتبر بود', ['status' => 502]);
+        }
+        $hits = $body['hits'] ?? $body['results'] ?? $body['news'] ?? array();
+        $lines = array("## یافته‌های You");
+        $n = 0;
+        foreach ((array) $hits as $hit) {
+            if ($n >= 8) {
+                break;
+            }
+            $title = $hit['title'] ?? $hit['name'] ?? '';
+            $snip  = $hit['snippet'] ?? $hit['description'] ?? $hit['summary'] ?? '';
+            $link  = $hit['url'] ?? $hit['link'] ?? '';
+            if (!$title && !$snip) {
+                continue;
+            }
+            ++$n;
+            $lines[] = ($n) . '. **' . $title . '** — ' . wp_strip_all_tags((string) $snip) . ($link ? ' (' . $link . ')' : '');
+        }
+        if ($n === 0 && !empty($body['answer'])) {
+            $lines[] = (string) $body['answer'];
+        }
+        if ($n === 0 && count($lines) === 1) {
+            $lines[] = wp_json_encode($body, JSON_UNESCAPED_UNICODE);
+        }
+        return array('content' => implode("\n", $lines), 'thinking_process' => null);
+    }
+
     private static function call_ai_api($message, $system_prompt, $agent, $model, $thinking_enabled) {
         $provider = self::detect_provider($agent);
         $api_endpoint = self::endpoint_for($agent, $provider, $model);
@@ -374,7 +473,11 @@ class TezNevise_AI_API {
             $system_prompt .= "\n\nWhen useful, wrap a short working outline in <think>...</think> before the final answer. Keep the visible answer concise and in the user's language.";
         }
 
-        $built = self::build_provider_request($provider, $api_endpoint, $api_key, $model, $system_prompt, $message);
+        if ($provider === 'you') {
+            return self::you_search($api_key, $message, $api_endpoint);
+        }
+
+        $built = self::build_provider_request($provider, $api_endpoint, $api_key, $model, $system_prompt, $message, $agent);
         if (is_wp_error($built)) {
             return $built;
         }
@@ -416,6 +519,8 @@ class TezNevise_AI_API {
             'api.together.xyz',
             'api.anthropic.com',
             'api.deepseek.com',
+            'api.ydc-index.io',
+            'api.you.com',
         );
     }
 
@@ -430,6 +535,7 @@ class TezNevise_AI_API {
             'mistral'    => array('label' => 'Mistral', 'option' => 'teznevise_ai_mistral_key', 'host' => 'api.mistral.ai', 'endpoint' => 'https://api.mistral.ai/v1/chat/completions'),
             'together'   => array('label' => 'Together', 'option' => 'teznevise_ai_together_key', 'host' => 'api.together.xyz', 'endpoint' => 'https://api.together.xyz/v1/chat/completions'),
             'deepseek'   => array('label' => 'DeepSeek', 'option' => 'teznevise_ai_deepseek_key', 'host' => 'api.deepseek.com', 'endpoint' => 'https://api.deepseek.com/v1/chat/completions'),
+            'you'        => array('label' => 'You.com Research', 'option' => 'teznevise_ai_you_key', 'host' => 'api.ydc-index.io', 'endpoint' => 'https://api.ydc-index.io/v1/search'),
         );
     }
 
@@ -473,21 +579,31 @@ class TezNevise_AI_API {
         return (string) get_option($option, '');
     }
 
-    private static function build_provider_request($provider, $url, $api_key, $model, $system_prompt, $message) {
+    private static function build_provider_request($provider, $url, $api_key, $model, $system_prompt, $message, $agent = null) {
         $headers = array('Content-Type' => 'application/json');
+        $temp = 0.7;
+        $tokens = 1500;
+        if (is_array($agent)) {
+            if (isset($agent['temperature'])) {
+                $temp = max(0, min(2, (float) $agent['temperature']));
+            }
+            if (!empty($agent['max_tokens'])) {
+                $tokens = max(64, min(8000, (int) $agent['max_tokens']));
+            }
+        }
         if ($provider === 'gemini') {
             $headers['x-goog-api-key'] = $api_key;
             $body = array(
                 'systemInstruction' => array('parts' => array(array('text' => $system_prompt))),
                 'contents' => array(array('role' => 'user', 'parts' => array(array('text' => $message)))),
-                'generationConfig' => array('temperature' => 0.7, 'maxOutputTokens' => 1500),
+                'generationConfig' => array('temperature' => $temp, 'maxOutputTokens' => $tokens),
             );
         } elseif ($provider === 'anthropic') {
             $headers['x-api-key'] = $api_key;
             $headers['anthropic-version'] = '2023-06-01';
             $body = array(
                 'model' => $model,
-                'max_tokens' => 1500,
+                'max_tokens' => $tokens,
                 'system' => $system_prompt,
                 'messages' => array(array('role' => 'user', 'content' => $message)),
             );
@@ -503,8 +619,8 @@ class TezNevise_AI_API {
                     array('role' => 'system', 'content' => $system_prompt),
                     array('role' => 'user', 'content' => $message),
                 ),
-                'temperature' => 0.7,
-                'max_tokens' => 1500,
+                'temperature' => $temp,
+                'max_tokens' => $tokens,
             );
         }
         return array(

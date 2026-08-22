@@ -12,6 +12,11 @@
     return n;
   }
 
+  function autosize(ta) {
+    ta.style.height = 'auto';
+    ta.style.height = Math.min(220, Math.max(24, ta.scrollHeight)) + 'px';
+  }
+
   function appendMsg(log, role, text, name, thinking, model) {
     var art = el('article', 'tz-ai-msg is-' + role);
     if (name || model) {
@@ -22,7 +27,6 @@
     }
     if (thinking) {
       var det = el('details', 'tz-ai-think');
-      det.open = false;
       var sum = el('summary', '', 'فرآیند فکر');
       det.appendChild(sum);
       var pre = el('pre');
@@ -47,8 +51,15 @@
     var collabSel = root.querySelector('[data-ai-collab]');
     var thinkBox = root.querySelector('[data-ai-thinking]');
     var fullBtn = root.querySelector('[data-ai-full]');
+    var newBtn = root.querySelector('[data-ai-new]');
     if (!form || !input || !log) return;
     var sessionId = '';
+    var greeting = log.innerHTML;
+
+    if (input) {
+      input.addEventListener('input', function () { autosize(input); });
+      autosize(input);
+    }
 
     if (fullBtn) {
       fullBtn.addEventListener('click', function () {
@@ -59,12 +70,23 @@
       });
     }
 
+    if (newBtn) {
+      newBtn.addEventListener('click', function () {
+        sessionId = '';
+        log.innerHTML = greeting;
+        input.value = '';
+        autosize(input);
+        input.focus();
+      });
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var text = (input.value || '').trim();
       if (text.length < 4) return;
       appendMsg(log, 'user', text, cfg().isLoggedIn ? 'شما' : 'مهمان');
       input.value = '';
+      autosize(input);
       if (status) {
         status.hidden = false;
         status.innerHTML = '<span class="tz-ai-dots" aria-hidden="true"><i></i><i></i><i></i></span> در حال فکر کردن…';
@@ -109,7 +131,7 @@
     input.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', { cancelable: true }));
       }
     });
   }

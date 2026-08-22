@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Release gates for the Teznevise WordPress theme root.
 
-Fails if the 1.9.7 patch is packaged one directory too deep, if versions
+Fails if the 1.9.8 patch is packaged one directory too deep, if versions
 drift, if require_once targets are missing, or if JSON seed files are invalid.
 """
 from __future__ import annotations
@@ -70,6 +70,9 @@ def check_requires() -> None:
         "inc/wxr-classic-content.php",
         "inc/extracted-pages.php",
         "inc/ai/class-ai-api.php",
+        "inc/perf.php",
+        "assets/css/critical.css",
+        "assets/css/hotfix-198.css",
         "footer.php",
         "header.php",
         "index.php",
@@ -128,6 +131,29 @@ def check_source_contracts() -> None:
     faq = (ROOT / "assets/css/react-loader.css").read_text(encoding="utf-8")
     if re.search(r"\.faq-a[\s\S]{0,180}display:\s*block\s*!important", faq):
         error("FAQ answers are forced visible and will break accordion collapse")
+
+    comments = (ROOT / "inc/ai-comments.php").read_text(encoding="utf-8")
+    if "function teznevise_ai_discussion_get" not in comments:
+        error("AI discussion custom-field helper is missing")
+    if "function teznevise_render_ai_discussion_thread" not in comments:
+        error("AI discussion thread renderer is missing")
+    if "wp_trim_words" in comments and "220" in comments and "900" not in comments:
+        error("AI discussion still trims the article to 220 words")
+
+    perf = (ROOT / "inc/perf.php").read_text(encoding="utf-8")
+    if "media='print'" not in perf and 'media="print"' not in perf:
+        error("Runtime CSS is not loaded asynchronously")
+    if "data-tz-delay" not in perf:
+        error("Third-party trackers are not delayed")
+
+    if "function research" not in ai and "public static function research" not in ai:
+        error("You.com research() helper is missing from the AI API")
+    if "api.ydc-index.io" not in ai:
+        error("You.com host is not allow-listed")
+
+    builder = (ROOT / "inc/admin/builder-admin.php").read_text(encoding="utf-8")
+    if "tez-builder--visual" not in builder:
+        error("Visual page-builder canvas markup is missing")
 
 
 def check_whitespace() -> None:

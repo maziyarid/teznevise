@@ -82,10 +82,13 @@
 
 	function Builder(root) {
 		this.$root = $(root);
-		this.$sections = this.$root.find('[data-tez-builder-sections]');
+		this.$canvas = this.$root.find('[data-tez-builder-canvas]');
+		this.$inspector = this.$root.find('[data-tez-builder-inspector]');
+		this.$sections = this.$canvas.length ? this.$canvas : this.$root.find('[data-tez-builder-sections]');
 		this.$payload = this.$root.find('[data-tez-builder-payload]');
 		this.$typeSelect = this.$root.find('[data-tez-builder-type]');
 		this.state = this.readPayload();
+		this.selected = 0;
 		this.bind();
 		this.render();
 	}
@@ -117,6 +120,7 @@
 				return;
 			}
 			self.state.push(newSection(typeKey));
+			self.selected = self.state.length - 1;
 			self.render();
 		});
 
@@ -179,6 +183,30 @@
 		this.$root.closest('form').on('submit', function () {
 			self.sync();
 		});
+
+		this.$root.on('click', '[data-canvas-section]', function (event) {
+			if ($(event.target).closest('.tez-builder-drag, [data-action]').length) {
+				return;
+			}
+			var index = parseInt($(this).attr('data-canvas-section'), 10);
+			if (isNaN(index) || index === self.selected) {
+				return;
+			}
+			self.selected = index;
+			self.render();
+		});
+
+		this.$root.on('input', '[data-live-field]', function () {
+			var $el = $(this);
+			var key = $el.attr('data-live-field');
+			var sectionIndex = parseInt($el.closest('[data-section-index]').attr('data-section-index'), 10);
+			if (isNaN(sectionIndex) || !self.state[sectionIndex] || !key) {
+				return;
+			}
+			self.state[sectionIndex][key] = $el.text();
+			self.sync();
+			self.$inspector.find('[data-field-key="' + key + '"]').val(self.state[sectionIndex][key]);
+		});
 	};
 
 	Builder.prototype.resolveTarget = function ($input) {
@@ -223,21 +251,27 @@
 					return;
 				}
 				this.state.splice(sectionIndex, 1);
+				if (this.selected >= this.state.length) {
+					this.selected = Math.max(0, this.state.length - 1);
+				}
 				break;
 			case 'section-duplicate':
 				this.state.splice(sectionIndex + 1, 0, clone(section));
+				this.selected = sectionIndex + 1;
 				break;
 			case 'section-up':
 				if (sectionIndex === 0) {
 					return;
 				}
 				this.state.splice(sectionIndex - 1, 0, this.state.splice(sectionIndex, 1)[0]);
+				this.selected = sectionIndex - 1;
 				break;
 			case 'section-down':
 				if (sectionIndex >= this.state.length - 1) {
 					return;
 				}
 				this.state.splice(sectionIndex + 1, 0, this.state.splice(sectionIndex, 1)[0]);
+				this.selected = sectionIndex + 1;
 				break;
 			case 'section-toggle-body':
 				this.$sections
@@ -381,6 +415,38 @@
 		return html;
 	};
 
+	Builder.prototype.renderCanvasCard = function (section, sectionIndex) {
+		var definition = types[section.type] || {};
+		var selected = sectionIndex === this.selected ? ' is-selected' : '';
+		var off = section.enabled === false ? ' is-off' : '';
+		var html = '<article class="tez-canvas-card' + selected + off + '" data-section-index="' + sectionIndex + '" data-canvas-section="' + sectionIndex + '">';
+		html += '<header class="tez-canvas-card__bar">';
+		html += '<span class="tez-builder-drag tez-builder-section-drag" title="' + esc(t('dragHint')) + '" aria-hidden="true">⋮⋮</span>';
+		html += '<span class="tez-builder-type-label">' + esc(definition.label || section.type) + '</span>';
+		html += '<span class="tez-builder-section-actions">';
+		html += '<button type="button" class="button-link" data-action="section-up">' + esc(t('moveUp')) + '</button>';
+		html += '<button type="button" class="button-link" data-action="section-down">' + esc(t('moveDown')) + '</button>';
+		html += '<button type="button" class="button-link" data-action="section-duplicate">' + esc(t('duplicate')) + '</button>';
+		html += '<button type="button" class="button-link tez-builder-danger" data-action="section-remove">' + esc(t('remove')) + '</button>';
+		html += '</span></header>';
+		if (section.eyebrow) {
+			html += '<p class="tez-canvas-eyebrow" data-live-field="eyebrow" contenteditable="true">' + esc(section.eyebrow) + '</p>';
+		}
+		html += '<h3 data-live-field="title" contenteditable="true">' + esc(section.title || t('untitled')) + '</h3>';
+		if (typeof section.text === 'string' && section.text) {
+			html += '<div class="tez-canvas-text" data-live-field="text" contenteditable="true">' + esc(section.text) + '</div>';
+		}
+		if (section.items && section.items.length) {
+			html += '<ul class="tez-canvas-items">';
+			section.items.slice(0, 6).forEach(function (item) {
+				html += '<li><i class="' + esc(item.icon || 'fa-solid fa-circle') + '" aria-hidden="true"></i> ' + esc(item.title || item.text || t('untitled')) + '</li>';
+			});
+			html += '</ul>';
+		}
+		html += '</article>';
+		return html;
+	};
+
 	Builder.prototype.renderSection = function (section, sectionIndex) {
 		var self = this;
 		var definition = types[section.type];
@@ -432,17 +498,40 @@
 
 	Builder.prototype.render = function () {
 		var self = this;
-		var html = '';
-
-		if (!this.state.length) {
-			html = '<p class="description tez-builder-empty">' + esc(t('emptyState')) + '</p>';
-		} else {
-			this.state.forEach(function (section, index) {
-				html += self.renderSection(section, index);
-			});
+		if (this.selected >= this.state.length) {
+			this.selected = Math.max(0, this.state.length - 1);
 		}
 
-		this.$sections.html(html);
+		if (this.$canvas.length && this.$inspector.length) {
+			var canvas = '';
+			if (!this.state.length) {
+				canvas = '<p class="description tez-builder-empty">' + esc(t('emptyState')) + '</p>';
+			} else {
+				this.state.forEach(function (section, index) {
+					canvas += self.renderCanvasCard(section, index);
+				});
+			}
+			this.$canvas.html(canvas);
+			if (this.state[this.selected]) {
+				this.$inspector.html(
+					'<h3 class="tez-builder-inspector-title">' + esc(t('inspector')) + '</h3>' +
+					this.renderSection(this.state[this.selected], this.selected)
+				);
+			} else {
+				this.$inspector.html('<p class="description">' + esc(t('clickToEdit')) + '</p>');
+			}
+		} else {
+			var html = '';
+			if (!this.state.length) {
+				html = '<p class="description tez-builder-empty">' + esc(t('emptyState')) + '</p>';
+			} else {
+				this.state.forEach(function (section, index) {
+					html += self.renderSection(section, index);
+				});
+			}
+			this.$sections.html(html);
+		}
+
 		this.initSortable();
 		this.sync();
 	};
@@ -455,7 +544,7 @@
 
 		this.$sections.sortable({
 			handle: '.tez-builder-section-drag',
-			items: '> .tez-builder-section',
+			items: '> .tez-canvas-card, > .tez-builder-section',
 			axis: 'y',
 			start: function (event, ui) {
 				ui.item.data('startIndex', ui.item.index());
@@ -467,11 +556,13 @@
 					return;
 				}
 				self.state.splice(to, 0, self.state.splice(from, 1)[0]);
+				self.selected = to;
 				self.render();
 			}
 		});
 
-		this.$sections.find('[data-tez-builder-items]').each(function () {
+		var $itemRoots = this.$inspector.length ? this.$inspector : this.$sections;
+		$itemRoots.find('[data-tez-builder-items]').each(function () {
 			var $items = $(this);
 			var sectionIndex = parseInt($items.closest('[data-section-index]').attr('data-section-index'), 10);
 			$items.sortable({

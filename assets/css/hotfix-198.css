@@ -1,0 +1,90 @@
+/**
+ * 1.9.8 last-wins — paint, threaded comments, visual builder leftovers.
+ * Concatenated into runtime.css after hotfix-197.
+ * @package Teznevise
+ */
+
+.section:not(.page-hero-new):not(.hero-new):not(.service-hero) {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 720px;
+}
+
+.comment-list,
+.tz-thread {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.comment-list .comment,
+.tz-thread .tz-thread-item {
+  position: relative;
+  margin: 0 0 14px;
+  padding: 14px 16px 14px 14px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(20, 93, 74, 0.1);
+  border-inline-start: 4px solid var(--tz-commenter, #145d4a);
+  box-shadow: 0 8px 24px rgba(9, 40, 32, 0.05);
+}
+.comment-list .children,
+.tz-thread .tz-thread {
+  margin: 12px 0 0 0;
+  padding-inline-start: 18px;
+  border-inline-start: 2px dashed color-mix(in srgb, var(--tz-commenter, #145d4a) 35%, transparent);
+}
+.comment-author,
+.tz-thread-item__name {
+  font-weight: 800;
+  color: var(--tz-commenter, #145d4a);
+}
+.tz-thread-item__meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: #3d5c54;
+  margin-bottom: 6px;
+}
+.tz-thread-item__role {
+  background: color-mix(in srgb, var(--tz-commenter, #145d4a) 12%, #fff);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+body.tz-ai-lock { overflow: hidden; }
+
+.tz-ai-research {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #f4faf7;
+  border: 1px solid rgba(20, 93, 74, 0.12);
+}
+.tz-ai-research__body {
+  margin-top: 8px;
+  font-size: 0.92rem;
+  color: #3d5c54;
+}
+.tz-comment-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.tz-comment-tabs button {
+  border: 0;
+  background: #eef6f2;
+  color: #145d4a;
+  border-radius: 999px;
+  min-height: 40px;
+  padding: 6px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.tz-comment-tabs button[aria-selected="true"] {
+  background: #145d4a;
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal], [data-reveal-stagger] > * { animation: none !important; }
+}

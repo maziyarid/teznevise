@@ -324,9 +324,9 @@ function teznevise_admin_assets( $hook ) {
 	}
 	wp_enqueue_style(
 		'teznevise-fa-admin',
-		'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css',
+		TEZNEVISE_URI . '/assets/vendor/fontawesome/css/all.min.css',
 		array(),
-		'6.5.2'
+		TEZNEVISE_VERSION
 	);
 	wp_add_inline_style(
 		'teznevise-fa-admin',
@@ -344,8 +344,9 @@ function teznevise_render_page_meta_box( $post ) {
 	wp_nonce_field( 'teznevise_save_page_meta', 'teznevise_page_meta_nonce' );
 	$schema = teznevise_page_meta_schema();
 	$groups = teznevise_page_meta_groups();
-	echo '<p style="margin-top:0;color:#646970;">' . esc_html__( 'محتوای قابل‌ویرایش قالب. آیکون را از لیست انتخاب یا دستی وارد کنید.', 'teznevise' ) . '</p>';
+	echo '<p style="margin-top:0;color:#646970;">' . esc_html__( 'برای ویرایش ظاهری صفحه از «صفحه‌ساز تزنویسه» استفاده کنید. فیلدهای زیر فقط برای موارد پیشرفته‌اند و پیش‌فرض بسته‌اند.', 'teznevise' ) . '</p>';
 	$current_group = '';
+	echo '<details class="tez-meta-advanced"><summary>' . esc_html__( 'فیلدهای پیشرفته قالب', 'teznevise' ) . '</summary>';
 	echo '<table class="form-table" role="presentation"><tbody>';
 	foreach ( $schema as $key => $args ) {
 		$group = isset( $args['group'] ) ? $args['group'] : 'content';
@@ -389,7 +390,7 @@ function teznevise_render_page_meta_box( $post ) {
 		}
 		echo '</td></tr>';
 	}
-	echo '</tbody></table>';
+	echo '</tbody></table></details>';
 }
 
 /**

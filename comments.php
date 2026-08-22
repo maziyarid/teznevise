@@ -11,15 +11,8 @@ if ( post_password_required() ) {
 
 $post_id     = get_the_ID();
 $ai_enabled  = function_exists( 'teznevise_ai_comment_settings' ) ? ! empty( teznevise_ai_comment_settings()['enabled'] ) : false;
-$ai_comments = $ai_enabled ? get_comments(
-	array(
-		'post_id' => $post_id,
-		'type'    => 'tz_ai',
-		'status'  => 'approve',
-		'orderby' => 'comment_date_gmt',
-		'order'   => 'ASC',
-	)
-) : array();
+$ai_thread   = ( $ai_enabled && function_exists( 'teznevise_ai_discussion_get' ) ) ? teznevise_ai_discussion_get( $post_id ) : array( 'items' => array() );
+$ai_count    = $ai_enabled && function_exists( 'teznevise_ai_comment_count' ) ? teznevise_ai_comment_count( $post_id ) : 0;
 $human_count = get_comments(
 	array(
 		'post_id' => $post_id,
@@ -28,7 +21,6 @@ $human_count = get_comments(
 		'count'   => true,
 	)
 );
-$ai_count = is_array( $ai_comments ) ? count( $ai_comments ) : 0;
 ?>
 
 <section id="comments" class="comments-area section-sm tz-comments">
@@ -49,14 +41,16 @@ $ai_count = is_array( $ai_comments ) ? count( $ai_comments ) : 0;
 				);
 				?>
 			</h2>
-			<ol class="comment-list" data-reveal>
+			<ol class="comment-list tz-thread" data-reveal>
 				<?php
+				$walker = class_exists( 'Teznevise_Walker_Comment' ) ? new Teznevise_Walker_Comment() : null;
 				wp_list_comments(
 					array(
 						'style'       => 'ol',
 						'short_ping'  => true,
 						'avatar_size' => 48,
 						'type'        => 'comment',
+						'walker'      => $walker,
 					)
 				);
 				?>
@@ -84,10 +78,11 @@ $ai_count = is_array( $ai_comments ) ? count( $ai_comments ) : 0;
 					'submit_button'        => '<button name="%1$s" type="submit" id="%2$s" class="%3$s">%4$s</button>',
 					'submit_field'         => '<p class="form-submit">%1$s %2$s</p>',
 					'title_reply'          => __( 'نظر خود را بنویسید', 'teznevise' ),
+					'title_reply_to'       => __( 'پاسخ به %s', 'teznevise' ),
 					'title_reply_before'   => '<h2 id="reply-title" class="comment-reply-title">',
 					'title_reply_after'    => '</h2>',
 					'label_submit'         => __( 'ارسال دیدگاه', 'teznevise' ),
-					'comment_notes_before' => '<p class="comment-notes">' . esc_html__( 'نظر تأییدشده پاداش تزکوین دارد. بخش‌های ضروری با ستاره مشخص شده‌اند.', 'teznevise' ) . '</p>',
+					'comment_notes_before' => '<p class="comment-notes">' . esc_html__( 'نظر تأییدشده پاداش تزکوین دارد. پاسخ‌ها شاخه‌ای نمایش داده می‌شوند.', 'teznevise' ) . '</p>',
 					'comment_field'        => '<p class="comment-form-comment"><label for="comment">' . esc_html__( 'دیدگاه', 'teznevise' ) . ' <span class="required" aria-hidden="true">*</span><span class="screen-reader-text">' . esc_html__( 'ضروری', 'teznevise' ) . '</span></label><textarea id="comment" name="comment" cols="45" rows="6" maxlength="65525" required placeholder="' . esc_attr__( 'تجربه یا پرسش خود را بنویسید…', 'teznevise' ) . '"></textarea></p>',
 				)
 			);
@@ -98,34 +93,16 @@ $ai_count = is_array( $ai_comments ) ? count( $ai_comments ) : 0;
 	<?php if ( $ai_enabled ) : ?>
 		<div id="ai-discussion" class="tz-comment-panel" role="tabpanel" hidden aria-labelledby="tab-ai">
 			<h2><?php esc_html_e( 'گفتگوی عامل‌های پژوهشی', 'teznevise' ); ?></h2>
-			<p class="tz-ai-discuss-lead"><?php esc_html_e( 'این تب بحث ساختگی عامل‌های نام‌دار است؛ برای غنای مطلب و خزش‌پذیری، با نام، نقش و برچسب منتشر می‌شود. کارشناس تزنویسه می‌تواند به‌عنوان انسان وارد گفتگو شود.', 'teznevise' ); ?></p>
-			<?php if ( $ai_comments ) : ?>
-				<ol class="comment-list tz-ai-thread">
-					<?php foreach ( $ai_comments as $c ) : ?>
-						<li id="ai-comment-<?php echo (int) $c->comment_ID; ?>" class="tz-ai-comment <?php echo get_comment_meta( $c->comment_ID, 'tz_human_moderator', true ) ? 'is-human' : ''; ?>">
-							<article>
-								<header class="comment-author">
-									<strong><?php echo esc_html( $c->comment_author ); ?></strong>
-									<?php
-									$role = get_comment_meta( $c->comment_ID, 'tz_ai_role', true );
-									$tags = get_comment_meta( $c->comment_ID, 'tz_ai_tags', true );
-									if ( $role ) {
-										echo ' <span class="tz-ai-role">' . esc_html( $role ) . '</span>';
-									}
-									?>
-									<time datetime="<?php echo esc_attr( mysql2date( 'c', $c->comment_date_gmt, false ) ); ?>"><?php echo esc_html( mysql2date( get_option( 'date_format' ), $c->comment_date ) ); ?></time>
-								</header>
-								<div class="comment-content"><?php echo wp_kses_post( wpautop( $c->comment_content ) ); ?></div>
-								<?php if ( $tags ) : ?>
-									<p class="tz-ai-tags"><?php echo esc_html( $tags ); ?></p>
-								<?php endif; ?>
-							</article>
-						</li>
-					<?php endforeach; ?>
-				</ol>
-			<?php else : ?>
-				<p><?php esc_html_e( 'هنوز گفتگویی تولید نشده است.', 'teznevise' ); ?></p>
-			<?php endif; ?>
+			<p class="tz-ai-discuss-lead"><?php esc_html_e( 'You ابتدا پژوهش می‌کند؛ سپس عامل‌ها متن همین مطلب را می‌خوانند و شاخه‌به‌شاخه جواب می‌دهند. رنگ هر گوینده در تنظیمات قابل انتخاب است.', 'teznevise' ); ?></p>
+			<?php
+			if ( ! empty( $ai_thread['research'] ) ) {
+				echo '<details class="tz-ai-research"><summary>' . esc_html__( 'خلاصه پژوهش You', 'teznevise' ) . '</summary>';
+				echo '<div class="tz-ai-research__body">' . wp_kses_post( wpautop( $ai_thread['research'] ) ) . '</div></details>';
+			}
+			if ( function_exists( 'teznevise_render_ai_discussion_thread' ) ) {
+				teznevise_render_ai_discussion_thread( $post_id );
+			}
+			?>
 			<?php if ( current_user_can( 'moderate_comments' ) ) : ?>
 				<form class="tez-comment-form tz-ai-human-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 					<?php wp_nonce_field( 'teznevise_ai_human', '_tz_ai_human' ); ?>

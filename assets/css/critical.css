@@ -1,0 +1,30 @@
+/**
+ * Above-the-fold first paint. Inlined in <head>; keep small.
+ * @package Teznevise
+ */
+html{direction:rtl}
+html,body{margin:0;padding:0;background:#fff;color:#10231d;font-family:"Vazirmatn",Tahoma,sans-serif;font-size:16px;line-height:1.7}
+body{min-height:100vh}
+a{color:#145d4a}
+img{max-width:100%;height:auto}
+.skip-link{position:absolute;inset-inline-start:-999px;top:0}
+.skip-link:focus{inset-inline-start:12px;z-index:100;background:#145d4a;color:#fff;padding:8px 12px}
+.container{width:min(1120px,calc(100% - 32px));margin-inline:auto}
+.site-header{background:#fff;border-bottom:1px solid rgba(20,93,74,.12);position:sticky;top:0;z-index:40}
+.announcement,.announce{background:#145d4a;color:#fff;font-size:.82rem}
+.announcement-inner,.announce-inner{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:36px}
+.announce-pill,.pill{display:inline-flex;align-items:center;gap:6px}
+.main-nav{display:flex;align-items:center;gap:12px;min-height:64px;padding:8px 0}
+.brand img{display:block;width:106px;height:48px;object-fit:contain}
+.nav-links{display:flex;gap:6px;list-style:none;margin:0;padding:0}
+.nav-cta,.btn-tz{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 16px;border-radius:999px;text-decoration:none;font-weight:800}
+.btn-primary-tz,.nav-cta-solid{background:#145d4a;color:#fff}
+.hero-new,.page-hero-new,.service-hero{padding:28px 0 36px}
+.hero-new h1,.page-hero-new h1,.service-hero h1{font-size:clamp(1.6rem,4.4vw,2.6rem);line-height:1.35;margin:0 0 12px;max-width:22ch}
+.eyebrow{display:inline-block;color:#145d4a;font-weight:800;font-size:.82rem;margin-bottom:8px}
+.menu-btn{display:none;border:0;background:transparent;width:44px;height:44px}
+@media (max-width:1050px){
+  .nav-links,.announce-desktop,.desktop-cta-group,.nav-quick-actions{display:none}
+  .menu-btn{display:inline-flex;align-items:center;justify-content:center}
+}
+.tz-hero-inquiry{margin-top:18px}
