@@ -60,6 +60,11 @@ while ( have_posts() ) :
 				<p><?php echo esc_html( $subtitle ); ?></p>
 			<?php endif; ?>
 		</div>
+		<?php
+		if ( function_exists( 'teznevise_render_hero_inquiry' ) ) {
+			echo teznevise_render_hero_inquiry( 'tools' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+		?>
 	</div>
 </section>
 

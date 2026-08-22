@@ -563,12 +563,40 @@ function teznevise_builder_icon_markup( $item, $fallback_icon = 'fa-solid fa-cir
 	$color = teznevise_builder_sanitize_color( isset( $item['color'] ) ? $item['color'] : '' );
 	$svg   = isset( $item['icon_svg'] ) ? $item['icon_svg'] : '';
 	$icon  = isset( $item['icon'] ) && $item['icon'] ? $item['icon'] : $fallback_icon;
+	if ( ! teznevise_builder_item_has_custom_icon( array( 'icon' => $icon ) ) && ! $svg ) {
+		$icon = $fallback_icon;
+	}
 
 	$inner = $svg
 		? '<img src="' . esc_url( $svg ) . '" alt="" width="28" height="28" loading="lazy" decoding="async" />'
 		: '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
 
 	return '<div class="icon-box ' . esc_attr( $color ) . '">' . $inner . '</div>';
+}
+
+/**
+ * Cycle of distinct Font Awesome icons so feature lists are not all ticks.
+ *
+ * @param int $index 1-based item index.
+ * @return string
+ */
+function teznevise_builder_varied_icon( $index ) {
+	$icons = array(
+		'fa-solid fa-graduation-cap',
+		'fa-solid fa-book-open',
+		'fa-solid fa-pen-nib',
+		'fa-solid fa-flask',
+		'fa-solid fa-chart-line',
+		'fa-solid fa-comments',
+		'fa-solid fa-shield-halved',
+		'fa-solid fa-lightbulb',
+		'fa-solid fa-compass',
+		'fa-solid fa-file-lines',
+		'fa-solid fa-user-graduate',
+		'fa-solid fa-microscope',
+	);
+	$index = max( 1, (int) $index );
+	return $icons[ ( $index - 1 ) % count( $icons ) ];
 }
 
 /**
@@ -680,11 +708,15 @@ function teznevise_builder_render_hero( $section ) {
 
 	if ( ! empty( $section['items'] ) ) {
 		echo '<ul class="tez-builder-points" data-reveal-stagger>';
+		$point = 0;
 		foreach ( $section['items'] as $item ) {
 			if ( empty( $item['title'] ) ) {
 				continue;
 			}
-			$icon = ! empty( $item['icon'] ) ? $item['icon'] : 'fa-solid fa-check';
+			++$point;
+			$icon = ! empty( $item['icon'] ) && function_exists( 'teznevise_builder_item_has_custom_icon' ) && teznevise_builder_item_has_custom_icon( $item )
+				? $item['icon']
+				: teznevise_builder_varied_icon( $point );
 			printf(
 				'<li><i class="%1$s" aria-hidden="true"></i><span>%2$s</span></li>',
 				esc_attr( $icon ),
@@ -692,6 +724,10 @@ function teznevise_builder_render_hero( $section ) {
 			);
 		}
 		echo '</ul>';
+	}
+
+	if ( function_exists( 'teznevise_render_hero_inquiry' ) ) {
+		echo teznevise_render_hero_inquiry( 'builder-hero' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	teznevise_builder_close_section();
@@ -723,7 +759,7 @@ function teznevise_builder_render_card_grid( $section ) {
 		$has_svg = ! empty( $item['icon_svg'] );
 
 		echo '<' . $tag . ' class="service-card tez-builder-card' . $tone . ( $has_svg ? ' has-svg-icon' : '' ) . '"' . $attrs . '>';
-		echo teznevise_builder_icon_markup( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.
+		echo teznevise_builder_icon_markup( $item, teznevise_builder_varied_icon( $index ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.
 
 		if ( ! empty( $item['badge'] ) ) {
 			echo '<span class="tez-builder-badge">' . esc_html( $item['badge'] ) . '</span>';
@@ -774,7 +810,7 @@ function teznevise_builder_render_feature_list( $section ) {
 		if ( $is_faq ) {
 			echo '<span class="faq-num" aria-hidden="true">' . esc_html( number_format_i18n( $index ) ) . '</span>';
 		} else {
-			echo teznevise_builder_icon_markup( $item, 'fa-solid fa-check' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.
+			echo teznevise_builder_icon_markup( $item, teznevise_builder_varied_icon( $index ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.
 		}
 		echo '<div>';
 		if ( ! empty( $item['title'] ) ) {

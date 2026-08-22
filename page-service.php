@@ -77,6 +77,11 @@ while ( have_posts() ) :
 				<?php endif; ?>
 			</div>
 		</div>
+		<?php
+		if ( function_exists( 'teznevise_render_hero_inquiry' ) ) {
+			echo teznevise_render_hero_inquiry( 'service' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+		?>
 	</div>
 </section>
 

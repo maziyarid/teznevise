@@ -407,6 +407,60 @@ function teznevise_render_native_lead_form( $context = 'contact' ) {
 }
 
 /**
+ * Compact inquiry form for page heroes. Posts to the same first-party lead handler.
+ *
+ * @param string $context Form context slug.
+ * @return string
+ */
+function teznevise_render_hero_inquiry( $context = 'hero' ) {
+	if ( is_page( array( 'account', 'contact-us', 'contact', 'inquiry' ) ) || is_page_template( 'page-account.php' ) || is_page_template( 'page-contact.php' ) ) {
+		return '';
+	}
+	$title = get_the_title();
+	$uid   = sanitize_html_class( $context . '-' . (int) get_the_ID() );
+	$ok    = isset( $_GET['lead'] ) && in_array( sanitize_key( wp_unslash( $_GET['lead'] ) ), array( 'ok', 'queued' ), true ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$error = isset( $_GET['lead'] ) ? sanitize_key( wp_unslash( $_GET['lead'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	ob_start();
+	echo '<div class="tz-hero-inquiry">';
+	if ( $ok ) {
+		echo '<p class="tz-hero-inquiry__ok" role="status"><strong>' . esc_html__( 'درخواست شما ثبت شد. کارشناس تزنویسه تماس می‌گیرد.', 'teznevise' ) . '</strong></p>';
+		echo '</div>';
+		return ob_get_clean();
+	}
+	if ( in_array( $error, array( 'err', 'rate' ), true ) ) {
+		echo '<p class="account-flash is-warn" role="alert">' . esc_html( 'rate' === $error ? __( 'تعداد درخواست‌ها زیاد است؛ لطفاً کمی بعد دوباره تلاش کنید.', 'teznevise' ) : __( 'نام و شماره موبایل را بررسی کنید.', 'teznevise' ) ) . '</p>';
+	}
+	?>
+	<p class="tz-hero-inquiry__label"><?php esc_html_e( 'مشاوره رایگان — همین حالا درخواست بدهید', 'teznevise' ); ?></p>
+	<form class="tz-form tz-hero-inquiry__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-tz-lead data-test="hero-<?php echo esc_attr( $uid ); ?>">
+		<input type="hidden" name="action" value="teznevise_lead" />
+		<?php wp_nonce_field( 'teznevise_lead', 'teznevise_lead_nonce' ); ?>
+		<input type="hidden" name="context" value="<?php echo esc_attr( 'hero-' . sanitize_key( $context ) ); ?>" />
+		<input type="hidden" name="service" value="<?php echo esc_attr( $title ); ?>" />
+		<input type="hidden" name="_tz_redirect" value="<?php echo esc_url( get_permalink() ? get_permalink() : home_url( '/inquiry/' ) ); ?>" />
+		<label class="tz-honeypot" aria-hidden="true" tabindex="-1">Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+		<div class="form-grid">
+			<div class="field">
+				<label for="tz-h-name-<?php echo esc_attr( $uid ); ?>"><?php esc_html_e( 'نام', 'teznevise' ); ?></label>
+				<input id="tz-h-name-<?php echo esc_attr( $uid ); ?>" name="name" type="text" required autocomplete="name" maxlength="80" />
+			</div>
+			<div class="field">
+				<label for="tz-h-phone-<?php echo esc_attr( $uid ); ?>"><?php esc_html_e( 'موبایل', 'teznevise' ); ?></label>
+				<input id="tz-h-phone-<?php echo esc_attr( $uid ); ?>" name="phone" type="tel" required autocomplete="tel" inputmode="tel" dir="ltr" placeholder="0912xxxxxxx" pattern="^(?:\+98|0)?9\d{9}$" />
+			</div>
+			<div class="field full">
+				<label for="tz-h-msg-<?php echo esc_attr( $uid ); ?>"><?php esc_html_e( 'موضوع کوتاه', 'teznevise' ); ?></label>
+				<input id="tz-h-msg-<?php echo esc_attr( $uid ); ?>" name="message" type="text" maxlength="240" placeholder="<?php esc_attr_e( 'رشته، مقطع و موضوع', 'teznevise' ); ?>" />
+			</div>
+			<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ارسال درخواست', 'teznevise' ); ?></button>
+		</div>
+	</form>
+	<?php
+	echo '</div>';
+	return ob_get_clean();
+}
+
+/**
  * First-party lead intake (no WhatsApp GET, no PII in the URL).
  */
 function teznevise_handle_lead() {

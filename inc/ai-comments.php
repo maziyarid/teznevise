@@ -1,0 +1,395 @@
+<?php
+/**
+ * Two-tab comments: human readers vs curated AI discussion.
+ *
+ * AI comments are stored as WordPress comments with comment_type `tz_ai`
+ * so they keep native moderation, dates, and schema. Administrators can
+ * join the AI thread as humans. Prompts and speaker order live in options.
+ *
+ * @package Teznevise
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+function teznevise_ai_comment_defaults() {
+	return array(
+		'enabled'            => '1',
+		'auto_on_publish'    => '0',
+		'interaction'        => 'round_robin',
+		'max_turns'          => 4,
+		'model'              => '',
+		'agent_id'           => 'general',
+		'discussion_prompt'  => 'You are a panel of Persian academic reviewers discussing this article. Be specific, cite claims from the post, disagree politely, and end with a practical takeaway for graduate students. Never invent sources.',
+		'speakers'           => array(
+			array(
+				'name'     => 'دکتر آوا — روش تحقیق',
+				'slug'     => 'ava-method',
+				'role'     => 'methodologist',
+				'tags'     => 'روش تحقیق,روایی',
+				'prompt'   => 'Focus on research design, sampling, and validity. Speak in Persian as a senior methodologist.',
+				'order'    => 1,
+				'active'   => 1,
+			),
+			array(
+				'name'     => 'پارسا — آمار کاربردی',
+				'slug'     => 'parsa-stats',
+				'role'     => 'statistician',
+				'tags'     => 'آمار,تحلیل',
+				'prompt'   => 'Challenge measurement and analysis choices. Offer a concrete test or metric. Persian, concise.',
+				'order'    => 2,
+				'active'   => 1,
+			),
+			array(
+				'name'     => 'نیکا — نگارش علمی',
+				'slug'     => 'nika-writing',
+				'role'     => 'editor',
+				'tags'     => 'نگارش,ساختار',
+				'prompt'   => 'Comment on argument structure and what a thesis chapter should take from this post. Persian.',
+				'order'    => 3,
+				'active'   => 1,
+			),
+		),
+	);
+}
+
+function teznevise_ai_comment_settings() {
+	$stored = get_option( 'teznevise_ai_comments', array() );
+	$stored = is_array( $stored ) ? $stored : array();
+	$defaults = teznevise_ai_comment_defaults();
+	$out      = array_merge( $defaults, $stored );
+	if ( empty( $out['speakers'] ) || ! is_array( $out['speakers'] ) ) {
+		$out['speakers'] = $defaults['speakers'];
+	}
+	usort(
+		$out['speakers'],
+		static function ( $a, $b ) {
+			return (int) ( $a['order'] ?? 0 ) <=> (int) ( $b['order'] ?? 0 );
+		}
+	);
+	return $out;
+}
+
+function teznevise_ai_comments_admin_menu() {
+	add_submenu_page(
+		'edit.php',
+		__( 'گفتگوی هوش مصنوعی', 'teznevise' ),
+		__( 'گفتگوی هوش مصنوعی', 'teznevise' ),
+		'manage_options',
+		'teznevise-ai-comments',
+		'teznevise_ai_comments_render_settings'
+	);
+}
+add_action( 'admin_menu', 'teznevise_ai_comments_admin_menu' );
+
+function teznevise_ai_comments_register_meta_box() {
+	add_meta_box(
+		'teznevise_ai_discussion',
+		__( 'گفتگوی هوش مصنوعی', 'teznevise' ),
+		'teznevise_ai_comments_render_meta_box',
+		'post',
+		'side',
+		'default'
+	);
+}
+add_action( 'add_meta_boxes_post', 'teznevise_ai_comments_register_meta_box' );
+
+function teznevise_ai_comments_render_meta_box( $post ) {
+	$settings = teznevise_ai_comment_settings();
+	$count    = teznevise_ai_comment_count( $post->ID );
+	wp_nonce_field( 'teznevise_ai_discuss', '_tz_ai_discuss' );
+	echo '<p>' . esc_html( sprintf( __( 'هم‌اکنون %s دیدگاه هوش مصنوعی روی این مطلب است.', 'teznevise' ), number_format_i18n( $count ) ) ) . '</p>';
+	if ( empty( $settings['enabled'] ) ) {
+		echo '<p>' . esc_html__( 'گفتگوی هوش مصنوعی در تنظیمات خاموش است.', 'teznevise' ) . '</p>';
+		return;
+	}
+	echo '<p><button class="button button-primary" name="teznevise_ai_generate" value="1" type="submit">' . esc_html__( 'تولید / تمدید گفتگو', 'teznevise' ) . '</button></p>';
+	echo '<p class="description">' . esc_html__( 'عامل‌ها طبق ترتیب و پرامپت تنظیمات با هم بحث می‌کنند. شما می‌توانید به‌عنوان انسان در همان تب پاسخ بدهید.', 'teznevise' ) . '</p>';
+}
+
+function teznevise_ai_comments_maybe_generate( $post_id, $post, $update ) {
+	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) || 'post' !== get_post_type( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+	$settings = teznevise_ai_comment_settings();
+	$clicked  = isset( $_POST['teznevise_ai_generate'] ) && isset( $_POST['_tz_ai_discuss'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_tz_ai_discuss'] ) ), 'teznevise_ai_discuss' );
+	$auto     = ! empty( $settings['auto_on_publish'] ) && ! $update && 'publish' === $post->post_status;
+	if ( $clicked || $auto ) {
+		teznevise_ai_comments_generate( $post_id );
+	}
+}
+add_action( 'save_post_post', 'teznevise_ai_comments_maybe_generate', 30, 3 );
+
+function teznevise_ai_comment_count( $post_id ) {
+	$n = get_comments(
+		array(
+			'post_id' => (int) $post_id,
+			'type'    => 'tz_ai',
+			'count'   => true,
+			'status'  => 'approve',
+		)
+	);
+	return (int) $n;
+}
+
+function teznevise_ai_comments_generate( $post_id ) {
+	$settings = teznevise_ai_comment_settings();
+	if ( empty( $settings['enabled'] ) ) {
+		return 0;
+	}
+	$post = get_post( $post_id );
+	if ( ! $post || 'publish' !== $post->post_status ) {
+		return 0;
+	}
+	$speakers = array_values(
+		array_filter(
+			(array) $settings['speakers'],
+			static function ( $row ) {
+				return ! empty( $row['active'] ) && ! empty( $row['name'] );
+			}
+		)
+	);
+	if ( ! $speakers ) {
+		return 0;
+	}
+	$excerpt = wp_trim_words( wp_strip_all_tags( $post->post_content ), 220 );
+	$prior   = '';
+	$turns   = max( 1, min( 8, (int) $settings['max_turns'] ) );
+	$created = 0;
+	$parent  = 0;
+	for ( $i = 0; $i < $turns; $i++ ) {
+		$speaker = $speakers[ $i % count( $speakers ) ];
+		$prompt  = trim( (string) $settings['discussion_prompt'] ) . "\n\nSpeaker: " . $speaker['name'] . "\nRole: " . ( $speaker['role'] ?? '' ) . "\nSpeaker instructions: " . ( $speaker['prompt'] ?? '' );
+		if ( $prior ) {
+			$prompt .= "\n\nPrevious panel remarks:\n" . $prior;
+		}
+		$message = 'Article title: ' . $post->post_title . "\n\n" . $excerpt . "\n\nWrite the next discussion comment in Persian (120–180 words). Do not repeat earlier speakers.";
+		$body    = '';
+		if ( class_exists( 'TezNevise_AI_API' ) && class_exists( 'TezNevise_AI_Database' ) ) {
+			$agent = TezNevise_AI_Database::get_agent( $settings['agent_id'] ?: 'general' );
+			if ( ! $agent ) {
+				$agent = TezNevise_AI_Database::get_agent( 'general' );
+			}
+			if ( $agent && method_exists( 'TezNevise_AI_API', 'complete' ) ) {
+				$model    = $settings['model'] ?: ( $agent['model'] ?? 'gpt-4o-mini' );
+				$response = TezNevise_AI_API::complete( $message, $prompt, $agent, $model, false );
+				if ( ! is_wp_error( $response ) && ! empty( $response['content'] ) ) {
+					$body = $response['content'];
+				}
+			}
+		}
+		if ( '' === $body ) {
+			$body = teznevise_ai_comments_placeholder( $speaker, $post, $i );
+		}
+		$comment_id = wp_insert_comment(
+			array(
+				'comment_post_ID'      => (int) $post_id,
+				'comment_author'       => $speaker['name'],
+				'comment_author_email' => sanitize_key( $speaker['slug'] ?? $speaker['name'] ) . '@ai.teznevise.ir',
+				'comment_author_url'   => home_url( '/' ),
+				'comment_content'      => wp_kses_post( $body ),
+				'comment_type'         => 'tz_ai',
+				'comment_parent'       => $parent,
+				'comment_approved'     => 1,
+				'user_id'              => 0,
+			)
+		);
+		if ( $comment_id ) {
+			update_comment_meta( $comment_id, 'tz_ai_slug', sanitize_title( $speaker['slug'] ?? $speaker['name'] ) );
+			update_comment_meta( $comment_id, 'tz_ai_role', sanitize_text_field( $speaker['role'] ?? '' ) );
+			update_comment_meta( $comment_id, 'tz_ai_tags', sanitize_text_field( $speaker['tags'] ?? '' ) );
+			update_comment_meta( $comment_id, 'tz_ai_name', sanitize_text_field( $speaker['name'] ) );
+			$parent  = (int) $comment_id;
+			$prior  .= "\n- " . $speaker['name'] . ': ' . wp_strip_all_tags( $body );
+			++$created;
+		}
+	}
+	return $created;
+}
+
+function teznevise_ai_comments_placeholder( $speaker, $post, $index ) {
+	$openers = array(
+		'نکته اصلی این مطلب برای پژوهشگر این است که ادعا را به روش و داده گره بزند، نه به شعار.',
+		'از نگاه آماری، مقاله وقتی قوی است که واحد تحلیل، حجم نمونه و آزمون را شفاف بگوید.',
+		'ساختار نگارش اینجا می‌تواند الگوی فصل مرور ادبیات باشد؛ فقط ارجاع‌ها باید دقیق بمانند.',
+	);
+	$lead = $openers[ $index % count( $openers ) ];
+	return '<p><strong>' . esc_html( $speaker['name'] ) . '</strong> — ' . esc_html( $lead ) . ' «' . esc_html( get_the_title( $post ) ) . '» را از زاویه ' . esc_html( $speaker['role'] ?? 'پژوهش' ) . ' می‌خوانم. کلیدواژه‌ها: ' . esc_html( $speaker['tags'] ?? '' ) . '.</p>';
+}
+
+function teznevise_ai_comments_render_settings() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	if ( isset( $_POST['teznevise_ai_comments_save'] ) && isset( $_POST['_tz_ai_c'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_tz_ai_c'] ) ), 'teznevise_ai_comments' ) ) {
+		$speakers = array();
+		$names    = isset( $_POST['speaker_name'] ) ? (array) wp_unslash( $_POST['speaker_name'] ) : array();
+		foreach ( $names as $i => $name ) {
+			$name = sanitize_text_field( $name );
+			if ( '' === $name ) {
+				continue;
+			}
+			$speakers[] = array(
+				'name'   => $name,
+				'slug'   => sanitize_title( isset( $_POST['speaker_slug'][ $i ] ) ? wp_unslash( $_POST['speaker_slug'][ $i ] ) : $name ),
+				'role'   => sanitize_text_field( isset( $_POST['speaker_role'][ $i ] ) ? wp_unslash( $_POST['speaker_role'][ $i ] ) : '' ),
+				'tags'   => sanitize_text_field( isset( $_POST['speaker_tags'][ $i ] ) ? wp_unslash( $_POST['speaker_tags'][ $i ] ) : '' ),
+				'prompt' => sanitize_textarea_field( isset( $_POST['speaker_prompt'][ $i ] ) ? wp_unslash( $_POST['speaker_prompt'][ $i ] ) : '' ),
+				'order'  => isset( $_POST['speaker_order'][ $i ] ) ? (int) $_POST['speaker_order'][ $i ] : ( $i + 1 ),
+				'active' => ! empty( $_POST['speaker_active'][ $i ] ) ? 1 : 0,
+			);
+		}
+		update_option(
+			'teznevise_ai_comments',
+			array(
+				'enabled'           => empty( $_POST['enabled'] ) ? '0' : '1',
+				'auto_on_publish'   => empty( $_POST['auto_on_publish'] ) ? '0' : '1',
+				'interaction'       => sanitize_key( wp_unslash( $_POST['interaction'] ?? 'round_robin' ) ),
+				'max_turns'         => max( 1, min( 8, (int) ( $_POST['max_turns'] ?? 4 ) ) ),
+				'model'             => sanitize_text_field( wp_unslash( $_POST['model'] ?? '' ) ),
+				'agent_id'          => sanitize_key( wp_unslash( $_POST['agent_id'] ?? 'general' ) ),
+				'discussion_prompt' => sanitize_textarea_field( wp_unslash( $_POST['discussion_prompt'] ?? '' ) ),
+				'speakers'          => $speakers,
+			),
+			false
+		);
+		echo '<div class="updated"><p>' . esc_html__( 'تنظیمات گفتگوی هوش مصنوعی ذخیره شد.', 'teznevise' ) . '</p></div>';
+	}
+	$s       = teznevise_ai_comment_settings();
+	$agents  = class_exists( 'TezNevise_AI_Database' ) ? TezNevise_AI_Database::get_all_agents_admin() : array();
+	?>
+	<div class="wrap">
+		<h1><?php esc_html_e( 'گفتگوی هوش مصنوعی مطالب', 'teznevise' ); ?></h1>
+		<form method="post">
+			<?php wp_nonce_field( 'teznevise_ai_comments', '_tz_ai_c' ); ?>
+			<input type="hidden" name="teznevise_ai_comments_save" value="1" />
+			<table class="form-table">
+				<tr><th><?php esc_html_e( 'فعال', 'teznevise' ); ?></th><td><label><input type="checkbox" name="enabled" value="1" <?php checked( $s['enabled'], '1' ); ?> /> <?php esc_html_e( 'تب گفتگوی هوش مصنوعی در مطالب', 'teznevise' ); ?></label></td></tr>
+				<tr><th><?php esc_html_e( 'تولید خودکار', 'teznevise' ); ?></th><td><label><input type="checkbox" name="auto_on_publish" value="1" <?php checked( $s['auto_on_publish'], '1' ); ?> /> <?php esc_html_e( 'با انتشار مطلب تازه', 'teznevise' ); ?></label></td></tr>
+				<tr><th><?php esc_html_e( 'شیوه تعامل', 'teznevise' ); ?></th>
+					<td>
+						<select name="interaction">
+							<option value="round_robin" <?php selected( $s['interaction'], 'round_robin' ); ?>><?php esc_html_e( 'نوبتی (هر عامل یک‌بار)', 'teznevise' ); ?></option>
+							<option value="debate" <?php selected( $s['interaction'], 'debate' ); ?>><?php esc_html_e( 'مناظره (مخالفت مؤدبانه)', 'teznevise' ); ?></option>
+							<option value="build" <?php selected( $s['interaction'], 'build' ); ?>><?php esc_html_e( 'تکمیل زنجیره‌ای', 'teznevise' ); ?></option>
+						</select>
+					</td>
+				</tr>
+				<tr><th><?php esc_html_e( 'تعداد نوبت', 'teznevise' ); ?></th><td><input type="number" min="1" max="8" name="max_turns" value="<?php echo esc_attr( $s['max_turns'] ); ?>" /></td></tr>
+				<tr><th><?php esc_html_e( 'عامل API', 'teznevise' ); ?></th>
+					<td>
+						<select name="agent_id">
+							<?php foreach ( $agents as $ag ) : $ag = (array) $ag; ?>
+								<option value="<?php echo esc_attr( $ag['agent_id'] ?? '' ); ?>" <?php selected( $s['agent_id'], $ag['agent_id'] ?? '' ); ?>><?php echo esc_html( $ag['name'] ?? '' ); ?></option>
+							<?php endforeach; ?>
+						</select>
+						<input name="model" class="regular-text" placeholder="<?php esc_attr_e( 'مدل اختیاری', 'teznevise' ); ?>" value="<?php echo esc_attr( $s['model'] ); ?>" />
+					</td>
+				</tr>
+				<tr><th><?php esc_html_e( 'پرامپت گفتگو', 'teznevise' ); ?></th><td><textarea name="discussion_prompt" class="large-text" rows="5"><?php echo esc_textarea( $s['discussion_prompt'] ); ?></textarea></td></tr>
+			</table>
+			<h2><?php esc_html_e( 'گویندگان', 'teznevise' ); ?></h2>
+			<p><?php esc_html_e( 'نام، نقش، برچسب و پرامپت هر گوینده را مشخص کنید. ترتیب عدد کوچک‌تر زودتر حرف می‌زند.', 'teznevise' ); ?></p>
+			<table class="widefat">
+				<thead><tr><th><?php esc_html_e( 'نام', 'teznevise' ); ?></th><th>slug</th><th><?php esc_html_e( 'نقش', 'teznevise' ); ?></th><th><?php esc_html_e( 'برچسب', 'teznevise' ); ?></th><th><?php esc_html_e( 'ترتیب', 'teznevise' ); ?></th><th><?php esc_html_e( 'فعال', 'teznevise' ); ?></th></tr></thead>
+				<tbody>
+					<?php
+					$speakers = $s['speakers'];
+					$speakers[] = array( 'name' => '', 'slug' => '', 'role' => '', 'tags' => '', 'prompt' => '', 'order' => count( $speakers ) + 1, 'active' => 1 );
+					foreach ( $speakers as $i => $sp ) :
+						?>
+						<tr>
+							<td><input name="speaker_name[<?php echo (int) $i; ?>]" value="<?php echo esc_attr( $sp['name'] ?? '' ); ?>" /></td>
+							<td><input name="speaker_slug[<?php echo (int) $i; ?>]" value="<?php echo esc_attr( $sp['slug'] ?? '' ); ?>" /></td>
+							<td><input name="speaker_role[<?php echo (int) $i; ?>]" value="<?php echo esc_attr( $sp['role'] ?? '' ); ?>" /></td>
+							<td><input name="speaker_tags[<?php echo (int) $i; ?>]" value="<?php echo esc_attr( $sp['tags'] ?? '' ); ?>" /></td>
+							<td><input type="number" name="speaker_order[<?php echo (int) $i; ?>]" value="<?php echo esc_attr( $sp['order'] ?? $i ); ?>" /></td>
+							<td><input type="checkbox" name="speaker_active[<?php echo (int) $i; ?>]" value="1" <?php checked( ! empty( $sp['active'] ) ); ?> /></td>
+						</tr>
+						<tr><td colspan="6"><textarea name="speaker_prompt[<?php echo (int) $i; ?>]" rows="2" class="large-text" placeholder="<?php esc_attr_e( 'پرامپت این گوینده', 'teznevise' ); ?>"><?php echo esc_textarea( $sp['prompt'] ?? '' ); ?></textarea></td></tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+			<?php submit_button(); ?>
+		</form>
+	</div>
+	<?php
+}
+
+function teznevise_ai_comments_schema( $post_id ) {
+	$comments = get_comments(
+		array(
+			'post_id' => (int) $post_id,
+			'type'    => 'tz_ai',
+			'status'  => 'approve',
+			'orderby' => 'comment_date_gmt',
+			'order'   => 'ASC',
+			'number'  => 20,
+		)
+	);
+	if ( ! $comments ) {
+		return '';
+	}
+	$graph = array();
+	foreach ( $comments as $c ) {
+		$graph[] = array(
+			'@type'        => 'Comment',
+			'@id'          => get_permalink( $post_id ) . '#ai-comment-' . (int) $c->comment_ID,
+			'datePublished'=> mysql2date( 'c', $c->comment_date_gmt, false ),
+			'text'         => wp_strip_all_tags( $c->comment_content ),
+			'author'       => array(
+				'@type' => 'Person',
+				'name'  => $c->comment_author,
+				'jobTitle' => (string) get_comment_meta( $c->comment_ID, 'tz_ai_role', true ),
+			),
+			'keywords'     => (string) get_comment_meta( $c->comment_ID, 'tz_ai_tags', true ),
+		);
+	}
+	$data = array(
+		'@context'        => 'https://schema.org',
+		'@type'           => 'DiscussionForumPosting',
+		'headline'        => get_the_title( $post_id ),
+		'url'             => get_permalink( $post_id ),
+		'commentCount'    => count( $graph ),
+		'comment'         => $graph,
+	);
+	return '<script type="application/ld+json">' . wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>';
+}
+
+function teznevise_handle_human_ai_reply() {
+	if ( empty( $_POST['teznevise_ai_human_reply'] ) || ! is_user_logged_in() ) {
+		return;
+	}
+	if ( ! isset( $_POST['_tz_ai_human'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_tz_ai_human'] ) ), 'teznevise_ai_human' ) ) {
+		return;
+	}
+	if ( ! current_user_can( 'moderate_comments' ) ) {
+		return;
+	}
+	$post_id = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
+	$body    = isset( $_POST['ai_human_body'] ) ? wp_kses_post( wp_unslash( $_POST['ai_human_body'] ) ) : '';
+	if ( $post_id <= 0 || strlen( wp_strip_all_tags( $body ) ) < 4 ) {
+		return;
+	}
+	$user = wp_get_current_user();
+	$cid  = wp_insert_comment(
+		array(
+			'comment_post_ID'      => $post_id,
+			'comment_author'       => $user->display_name . ' — ' . __( 'کارشناس تزنویسه', 'teznevise' ),
+			'comment_author_email' => $user->user_email,
+			'comment_content'      => $body,
+			'comment_type'         => 'tz_ai',
+			'comment_approved'     => 1,
+			'user_id'              => (int) $user->ID,
+		)
+	);
+	if ( $cid ) {
+		update_comment_meta( $cid, 'tz_ai_role', 'human-moderator' );
+		update_comment_meta( $cid, 'tz_ai_name', $user->display_name );
+		update_comment_meta( $cid, 'tz_human_moderator', '1' );
+	}
+	wp_safe_redirect( get_permalink( $post_id ) . '#ai-discussion' );
+	exit;
+}
+add_action( 'admin_post_teznevise_ai_human_reply', 'teznevise_handle_human_ai_reply' );

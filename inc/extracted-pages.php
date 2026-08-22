@@ -179,6 +179,40 @@ function teznevise_interactive_shortcode_names() {
 		'teznevise_download_category',
 		'tz_case_studies',
 		'teznevise_blog',
+		'tz_thesis_hub',
+		'tz_thesis_phd',
+		'tz_thesis_ch1',
+		'tz_thesis_ch2',
+		'tz_thesis_ch3',
+		'tz_thesis_ch4',
+		'tz_thesis_ch5',
+		'tz_thesis_engineering',
+		'tz_thesis_humanities',
+		'tz_thesis_medhealth',
+		'tz_thesis_purescience',
+		'tz_thesis_interdisciplinary',
+		'tz_thesis_agriculture',
+		'tz_thesis_animal_vet',
+		'tz_thesis_art_arch_media',
+		'tz_thesis_intl',
+		'tz_thesis_psychology',
+		'tz_thesis_history',
+		'tz_thesis_philosophy',
+		'tz_thesis_social_sciences',
+		'tz_thesis_law',
+		'tz_thesis_management',
+		'tz_proposal_hub',
+		'tz_proposal_phd',
+		'tz_proposal_master',
+		'tz_proposal_project',
+		'tz_proposal_qual',
+		'tz_proposal_quan',
+		'tz_proposal_applied',
+		'tz_proposal_medical',
+		'tz_proposal_english',
+		'tz_statistics_hub',
+		'tz_simulation_hub',
+		'tz_home',
 	);
 }
 
@@ -397,6 +431,59 @@ function teznevise_classic_html_from_page_fields( $post_id ) {
 }
 
 /**
+ * Semantic HTML from live builder JSON when WXR/extracted sources are empty.
+ * Hero and CTA bands are omitted so the Classic Editor does not duplicate the H1.
+ *
+ * @param int $post_id Page ID.
+ * @return string
+ */
+function teznevise_classic_html_from_builder( $post_id ) {
+	if ( ! function_exists( 'teznevise_builder_get_sections' ) ) {
+		return '';
+	}
+	$sections = teznevise_builder_get_sections( $post_id );
+	if ( ! $sections ) {
+		return '';
+	}
+	$skip = array( 'hero', 'cta_band' );
+	$out  = array();
+	foreach ( $sections as $section ) {
+		if ( ! is_array( $section ) || in_array( $section['type'] ?? '', $skip, true ) ) {
+			continue;
+		}
+		$title = trim( wp_strip_all_tags( (string) ( $section['title'] ?? '' ) ) );
+		$text  = trim( wp_strip_all_tags( (string) ( $section['text'] ?? '' ) ) );
+		$items = isset( $section['items'] ) && is_array( $section['items'] ) ? $section['items'] : array();
+		if ( '' !== $title ) {
+			$out[] = '<h2>' . esc_html( $title ) . '</h2>';
+		}
+		if ( '' !== $text ) {
+			$out[] = '<p>' . nl2br( esc_html( $text ) ) . '</p>';
+		}
+		$list = array();
+		foreach ( $items as $item ) {
+			if ( ! is_array( $item ) ) {
+				continue;
+			}
+			$item_title = trim( wp_strip_all_tags( (string) ( $item['title'] ?? '' ) ) );
+			$item_text  = trim( wp_strip_all_tags( (string) ( $item['text'] ?? '' ) ) );
+			if ( '' === $item_title && '' === $item_text ) {
+				continue;
+			}
+			$line = '' !== $item_title ? '<strong>' . esc_html( $item_title ) . '</strong>' : '';
+			if ( '' !== $item_text ) {
+				$line .= ( '' !== $line ? ' — ' : '' ) . esc_html( $item_text );
+			}
+			$list[] = '<li>' . $line . '</li>';
+		}
+		if ( $list ) {
+			$out[] = '<ul>' . implode( '', $list ) . '</ul>';
+		}
+	}
+	return implode( "\n", $out );
+}
+
+/**
  * Get editorial HTML for the pre-footer disclosure in priority order:
  * administrator Classic Editor copy, WXR recovery by full path, then the
  * structured page export. Functional shortcodes never enter this result.
@@ -421,6 +508,12 @@ function teznevise_page_classic_source( $post_id ) {
 	$classic = teznevise_classic_html_from_extracted_page( $post_id );
 	if ( teznevise_page_has_editorial_copy( $classic ) ) {
 		return $classic;
+	}
+	if ( function_exists( 'teznevise_classic_html_from_builder' ) ) {
+		$classic = teznevise_classic_html_from_builder( $post_id );
+		if ( teznevise_page_has_editorial_copy( $classic ) ) {
+			return $classic;
+		}
 	}
 	$classic = teznevise_classic_html_from_page_fields( $post_id );
 	if ( teznevise_page_has_editorial_copy( $classic ) ) {
@@ -548,13 +641,29 @@ function teznevise_interactive_shortcodes_markup( $content ) {
 		return '';
 	}
 	$unique = array();
-	foreach ( $matches[0] as $tag ) {
+	foreach ( $matches[0] as $i => $tag ) {
+		$name = isset( $matches[1][ $i ] ) ? strtolower( (string) $matches[1][ $i ] ) : '';
+		if ( $name && teznevise_is_layout_hub_shortcode( $name ) ) {
+			continue;
+		}
 		$tag = trim( $tag );
 		if ( '' !== $tag && ! in_array( $tag, $unique, true ) ) {
 			$unique[] = $tag;
 		}
 	}
 	return implode( "\n", $unique );
+}
+
+/**
+ * Hub/layout shortcodes that must leave Classic Editor but never re-render
+ * as functional widgets (the Flexible Page Builder already owns the layout).
+ *
+ * @param string $name Shortcode tag.
+ * @return bool
+ */
+function teznevise_is_layout_hub_shortcode( $name ) {
+	$name = strtolower( (string) $name );
+	return (bool) preg_match( '/^tz_(?:thesis|proposal|statistics|simulation)_/', $name ) || 'tz_home' === $name;
 }
 
 /**

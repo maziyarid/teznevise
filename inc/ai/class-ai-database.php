@@ -6,7 +6,7 @@
 if (!defined('ABSPATH')) exit;
 
 class TezNevise_AI_Database {
-    const VERSION = '2.0.0';
+    const VERSION = '2.1.0';
     const PREFIX = 'teznevise_ai_';
     
     public static function init() {
@@ -105,6 +105,7 @@ class TezNevise_AI_Database {
             agent_id VARCHAR(100) NOT NULL,
             name VARCHAR(255) NOT NULL,
             description TEXT NULL,
+            provider VARCHAR(50) NOT NULL DEFAULT 'openai',
             api_endpoint VARCHAR(500) NOT NULL,
             api_key TEXT NULL,
             model VARCHAR(100) NOT NULL DEFAULT 'gpt-4',
@@ -161,9 +162,11 @@ class TezNevise_AI_Database {
         $prefix = self::PREFIX;
         $agents_table = $wpdb->prefix . $prefix . 'agents';
         $default_agents = [
-            ['agent_id' => 'general', 'name' => 'Assistants', 'description' => 'General purpose assistant for all tools', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4', 'color' => '#3b82f6', 'icon' => 'brain', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 0],
-            ['agent_id' => 'math', 'name' => 'Math Expert', 'description' => 'Specialized in mathematical calculations and explanations', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4', 'color' => '#10b981', 'icon' => 'sparkles', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 1],
-            ['agent_id' => 'stats', 'name' => 'Statistics Helper', 'description' => 'Expert in statistical analysis and interpretation', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4', 'color' => '#8b5cf6', 'icon' => 'brain', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 2],
+            ['agent_id' => 'general', 'name' => 'دستیار پژوهشی', 'description' => 'دستیار عمومی برای روش تحقیق، نگارش و ابزارها', 'provider' => 'openai', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4o-mini', 'color' => '#145d4a', 'icon' => 'brain', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 0],
+            ['agent_id' => 'math', 'name' => 'متخصص ریاضی', 'description' => 'محاسبات و توضیح گام‌به‌گام ریاضی', 'provider' => 'openai', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4o-mini', 'color' => '#1d4ed8', 'icon' => 'sparkles', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 1],
+            ['agent_id' => 'stats', 'name' => 'یاور آمار', 'description' => 'انتخاب آزمون و تفسیر نتایج آماری', 'provider' => 'openai', 'api_endpoint' => 'https://api.openai.com/v1/chat/completions', 'api_key' => '', 'model' => 'gpt-4o-mini', 'color' => '#7c3aed', 'icon' => 'brain', 'thinking_enabled' => 1, 'is_active' => 1, 'sort_order' => 2],
+            ['agent_id' => 'gemini_flash', 'name' => 'Gemini Flash', 'description' => 'مدل رایگان‌تر گوگل برای پاسخ سریع فارسی', 'provider' => 'gemini', 'api_endpoint' => 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', 'api_key' => '', 'model' => 'gemini-2.0-flash', 'color' => '#0369a1', 'icon' => 'sparkles', 'thinking_enabled' => 1, 'is_active' => 0, 'sort_order' => 3],
+            ['agent_id' => 'openrouter_free', 'name' => 'OpenRouter', 'description' => 'مسیریاب مدل‌های متن‌باز و رایگان OpenRouter', 'provider' => 'openrouter', 'api_endpoint' => 'https://openrouter.ai/api/v1/chat/completions', 'api_key' => '', 'model' => 'openrouter/auto', 'color' => '#b45309', 'icon' => 'brain', 'thinking_enabled' => 1, 'is_active' => 0, 'sort_order' => 4],
         ];
         foreach ($default_agents as $agent) {
             $exists = $wpdb->get_var($wpdb->prepare("SELECT agent_id FROM $agents_table WHERE agent_id = %s", $agent['agent_id']));
@@ -181,7 +184,10 @@ class TezNevise_AI_Database {
             ['agent_id' => 'stats', 'skill_id' => 'select_tests', 'name' => 'Select Tests', 'description' => 'Helps select statistical tests', 'prompt' => 'You are a statistics consultant. Help users select the appropriate statistical test for their data and research question.', 'temperature' => 0.5, 'max_tokens' => 1500],
         ];
         foreach ($default_skills as $skill) {
-            $wpdb->replace($skills_table, $skill);
+            $exists = $wpdb->get_var($wpdb->prepare("SELECT skill_id FROM $skills_table WHERE agent_id = %s AND skill_id = %s", $skill['agent_id'], $skill['skill_id']));
+            if (!$exists) {
+                $wpdb->insert($skills_table, $skill);
+            }
         }
     }
     
@@ -219,8 +225,66 @@ class TezNevise_AI_Database {
     public static function save_session($data) {
         global $wpdb;
         $table = $wpdb->prefix . self::PREFIX . 'chat_sessions';
+        $token = isset($data['session_id']) ? (string) $data['session_id'] : '';
+        $uid   = isset($data['user_id']) ? (int) $data['user_id'] : 0;
+        if ($token !== '') {
+            $existing = $wpdb->get_row($wpdb->prepare("SELECT id, user_id FROM $table WHERE session_id = %s LIMIT 1", $token), ARRAY_A);
+            if ($existing) {
+                if ((int) $existing['user_id'] !== $uid) {
+                    $data['session_id'] = wp_generate_uuid4();
+                    $wpdb->insert($table, $data);
+                    return array('id' => (int) $wpdb->insert_id, 'session_id' => (string) $data['session_id']);
+                }
+                return array('id' => (int) $existing['id'], 'session_id' => $token);
+            }
+        } else {
+            $data['session_id'] = wp_generate_uuid4();
+        }
         $wpdb->insert($table, $data);
-        return $wpdb->insert_id;
+        return array('id' => (int) $wpdb->insert_id, 'session_id' => (string) $data['session_id']);
+    }
+
+    public static function save_agent($data) {
+        global $wpdb;
+        $table = $wpdb->prefix . self::PREFIX . 'agents';
+        $agent_id = sanitize_key($data['agent_id'] ?? '');
+        if ($agent_id === '') {
+            return false;
+        }
+        $row = [
+            'agent_id' => $agent_id,
+            'name' => sanitize_text_field($data['name'] ?? $agent_id),
+            'description' => sanitize_textarea_field($data['description'] ?? ''),
+            'provider' => sanitize_key($data['provider'] ?? 'openai'),
+            'api_endpoint' => esc_url_raw($data['api_endpoint'] ?? ''),
+            'api_key' => sanitize_text_field($data['api_key'] ?? ''),
+            'model' => sanitize_text_field($data['model'] ?? ''),
+            'color' => sanitize_hex_color($data['color'] ?? '#145d4a') ?: '#145d4a',
+            'icon' => sanitize_text_field($data['icon'] ?? 'brain'),
+            'thinking_enabled' => empty($data['thinking_enabled']) ? 0 : 1,
+            'is_active' => empty($data['is_active']) ? 0 : 1,
+            'sort_order' => (int) ($data['sort_order'] ?? 0),
+        ];
+        $exists = $wpdb->get_var($wpdb->prepare("SELECT id FROM $table WHERE agent_id = %s", $agent_id));
+        if ($exists) {
+            if ($row['api_key'] === '') {
+                unset($row['api_key']);
+            }
+            return false !== $wpdb->update($table, $row, ['agent_id' => $agent_id]);
+        }
+        return false !== $wpdb->insert($table, $row);
+    }
+
+    public static function delete_agent($agent_id) {
+        global $wpdb;
+        $table = $wpdb->prefix . self::PREFIX . 'agents';
+        return false !== $wpdb->delete($table, ['agent_id' => sanitize_key($agent_id)]);
+    }
+
+    public static function get_all_agents_admin() {
+        global $wpdb;
+        $table = $wpdb->prefix . self::PREFIX . 'agents';
+        return $wpdb->get_results("SELECT * FROM $table ORDER BY sort_order ASC, id ASC", ARRAY_A);
     }
     
     public static function save_message($data) {

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Release gates for the Teznevise WordPress theme root.
 
-Fails if the 1.9.6 patch is packaged one directory too deep, if versions
+Fails if the 1.9.7 patch is packaged one directory too deep, if versions
 drift, if require_once targets are missing, or if JSON seed files are invalid.
 """
 from __future__ import annotations

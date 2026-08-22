@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.7 — 2026-08-22 — Classic Editor re-seed, scoped mega, Perplexity AI, comments
+
+- Re-run Classic Editor import as 1.9.7 so hub-only pages such as `/thesis/` receive extracted prose instead of `[tz_thesis_hub]`. Layout hubs are stripped from the editor and never re-rendered as widgets.
+- Desktop mega menus open only from the top-level item (tools/proposal included); the empty page centre is no longer a hover target.
+- Perplexity-style AI chat: bubbles, thinking details, fullscreen, named agents, collaboration modes. Backend CRUD for agents plus Gemini, OpenRouter, Groq, xAI, Anthropic, Mistral, Together, DeepSeek keys.
+- Custom `/account/` dashboard stays the customer UI; subscribers are redirected out of wp-admin. Generator, RSD, XML-RPC, and core asset versions are hidden.
+- Compact inquiry form in every page hero (including builder heroes). Titles centred; extra H1s demoted.
+- Blog: 16:9 `teznevise-hero` featured image with sizes, takeaways + AI overview, richer meta pills, 4 related posts by category or tag.
+- Comments split into reader vs AI discussion tabs, with named speakers, prompts, order, schema, and a human-moderator reply.
+- Service graphics unboxed except FAQ/steps; nine unique tones; varied Font Awesome icons instead of a wall of ticks.
+
 ## 1.9.6 — 2026-08-22 — WordPress-wide Classic content and mobile/backend hardening
 
 - Flatten the 1.9.6 files into the active theme root so cPanel deploys them over production, not into an unused nested `teznevise/` folder.

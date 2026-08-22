@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.9
 Requires PHP: 8.3
-Stable tag: 1.9.6
+Stable tag: 1.9.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,13 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 6. Assign menus: Primary, Mobile, Bottom
 
 == Changelog ==
+
+= 1.9.7 =
+* Classic Editor re-import writes extracted page copy into post_content; hub shortcodes leave the editor.
+* Desktop mega menus open only from the menu item, not the empty page centre.
+* Perplexity-style AI chat (fullscreen, thinking, named agents, Gemini/OpenRouter/Groq/xAI/Anthropic).
+* Custom account dashboard, hero inquiry on every page, two-tab comments (users vs AI discussion).
+* Unboxed service graphics, unique tones, varied icons, centred titles, larger blog featured images.
 
 = 1.9.6 =
 * Every WordPress page now receives one dynamic Classic Editor disclosure immediately before the footer.

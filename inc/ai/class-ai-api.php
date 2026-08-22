@@ -160,7 +160,13 @@ class TezNevise_AI_API {
             'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? substr(sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])), 0, 255) : '',
         ];
         
-        $session_id_db = TezNevise_AI_Database::save_session($session_data);
+        $session_saved = TezNevise_AI_Database::save_session($session_data);
+        if (is_array($session_saved)) {
+            $session_token = $session_saved['session_id'] ?: $session_token;
+            $session_id_db = (int) $session_saved['id'];
+        } else {
+            $session_id_db = (int) $session_saved;
+        }
         
         TezNevise_AI_Database::save_message([
             'session_id' => $session_id_db,
@@ -239,7 +245,7 @@ class TezNevise_AI_API {
                 'content' => $response['content'],
                 'agent_name' => $ag['name'] ?? 'Assistants',
                 'model' => $ag['model'] ?? $model,
-				'thinking_process' => null,
+				'thinking_process' => $response['thinking_process'] ?? null,
             );
             $prior .= "\n- " . ($ag['name'] ?? 'agent') . ': ' . $response['content'];
             if ($mode === 'single') {
@@ -341,8 +347,13 @@ class TezNevise_AI_API {
 		});
 	}
     
+    public static function complete($message, $system_prompt, $agent, $model, $thinking_enabled = false) {
+        return self::call_ai_api($message, $system_prompt, $agent, $model, $thinking_enabled);
+    }
+
     private static function call_ai_api($message, $system_prompt, $agent, $model, $thinking_enabled) {
-		$api_endpoint = esc_url_raw($agent['api_endpoint'] ?? 'https://api.openai.com/v1/chat/completions');
+        $provider = self::detect_provider($agent);
+        $api_endpoint = self::endpoint_for($agent, $provider, $model);
 		$parsed = is_string($api_endpoint) ? wp_parse_url($api_endpoint) : false;
 		if (!is_array($parsed)) {
 			return new WP_Error('invalid_api_endpoint', 'AI provider URL is invalid', ['status' => 400]);
@@ -352,45 +363,176 @@ class TezNevise_AI_API {
 		if ($scheme !== 'https' || $api_host === '' || !empty($parsed['user']) || !empty($parsed['pass'])) {
 			return new WP_Error('invalid_api_endpoint', 'AI provider must use HTTPS without embedded credentials', ['status' => 400]);
 		}
-		$allowed_hosts = (array) apply_filters('teznevise_ai_allowed_api_hosts', ['api.openai.com']);
+		$allowed_hosts = (array) apply_filters('teznevise_ai_allowed_api_hosts', self::allowed_hosts());
 		if (!in_array($api_host, array_map('strtolower', $allowed_hosts), true)) {
 			return new WP_Error('invalid_api_host', 'AI provider host is not allow-listed', ['status' => 400]);
 		}
-		$api_key = defined('TEZNEVISE_AI_OPENAI_KEY') ? TEZNEVISE_AI_OPENAI_KEY : ($agent['api_key'] ?? get_option('teznevise_ai_openai_key', ''));
-        if (empty($api_key)) return new WP_Error('no_api_key', 'No API key configured');
-        
-        $temperature = 0.7;
-        $max_tokens = 1500;
-        
-        $body = [
-            'model' => $model,
-            'messages' => [
-                ['role' => 'system', 'content' => $system_prompt],
-                ['role' => 'user', 'content' => $message],
-            ],
-            'temperature' => $temperature,
-            'max_tokens' => $max_tokens,
-        ];
-        
-        $args = [
-            'headers' => ['Content-Type' => 'application/json', 'Authorization' => 'Bearer ' . $api_key],
-            'body' => json_encode($body),
-            'timeout' => 60,
-			'redirection' => 0,
-        ];
-        
-        $response = wp_remote_post($api_endpoint, $args);
+		$api_key = self::key_for($agent, $provider);
+        if (empty($api_key)) return new WP_Error('no_api_key', 'کلید API این عامل تنظیم نشده است', ['status' => 400]);
+
+        if ($thinking_enabled) {
+            $system_prompt .= "\n\nWhen useful, wrap a short working outline in <think>...</think> before the final answer. Keep the visible answer concise and in the user's language.";
+        }
+
+        $built = self::build_provider_request($provider, $api_endpoint, $api_key, $model, $system_prompt, $message);
+        if (is_wp_error($built)) {
+            return $built;
+        }
+
+        $response = wp_remote_post($built['url'], $built['args']);
         if (is_wp_error($response)) return $response;
 		$status = (int) wp_remote_retrieve_response_code($response);
 		if ($status < 200 || $status >= 300) {
 			return new WP_Error('api_http_error', 'AI provider returned an unsuccessful response', ['status' => 502]);
 		}
-        
+
         $response_body = json_decode(wp_remote_retrieve_body($response), true);
-        if (isset($response_body['error'])) return new WP_Error('api_error', $response_body['error']['message'] ?? 'API error');
-        
-        $content = $response_body['choices'][0]['message']['content'] ?? '';
-		return ['content' => $content, 'thinking_process' => null];
+        if (!is_array($response_body)) {
+            return new WP_Error('api_error', 'پاسخ ارائه‌دهنده نامعتبر بود', ['status' => 502]);
+        }
+        if (isset($response_body['error'])) {
+            $err = $response_body['error'];
+            $msg = is_array($err) ? ($err['message'] ?? 'API error') : (string) $err;
+            return new WP_Error('api_error', $msg);
+        }
+
+        $content = self::extract_content($provider, $response_body);
+        $thinking = '';
+        if ($thinking_enabled && preg_match('/<think>(.*?)<\/think>/is', $content, $m)) {
+            $thinking = trim($m[1]);
+            $content = trim(preg_replace('/<think>.*?<\/think>/is', '', $content));
+        }
+		return ['content' => $content, 'thinking_process' => $thinking !== '' ? $thinking : null];
+    }
+
+    public static function allowed_hosts() {
+        return array(
+            'api.openai.com',
+            'generativelanguage.googleapis.com',
+            'openrouter.ai',
+            'api.groq.com',
+            'api.x.ai',
+            'api.mistral.ai',
+            'api.together.xyz',
+            'api.anthropic.com',
+            'api.deepseek.com',
+        );
+    }
+
+    public static function providers() {
+        return array(
+            'openai'     => array('label' => 'OpenAI', 'option' => 'teznevise_ai_openai_key', 'host' => 'api.openai.com', 'endpoint' => 'https://api.openai.com/v1/chat/completions'),
+            'gemini'     => array('label' => 'Google Gemini', 'option' => 'teznevise_ai_gemini_key', 'host' => 'generativelanguage.googleapis.com', 'endpoint' => 'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent'),
+            'openrouter' => array('label' => 'OpenRouter', 'option' => 'teznevise_ai_openrouter_key', 'host' => 'openrouter.ai', 'endpoint' => 'https://openrouter.ai/api/v1/chat/completions'),
+            'groq'       => array('label' => 'Groq', 'option' => 'teznevise_ai_groq_key', 'host' => 'api.groq.com', 'endpoint' => 'https://api.groq.com/openai/v1/chat/completions'),
+            'xai'        => array('label' => 'xAI', 'option' => 'teznevise_ai_xai_key', 'host' => 'api.x.ai', 'endpoint' => 'https://api.x.ai/v1/chat/completions'),
+            'anthropic'  => array('label' => 'Anthropic', 'option' => 'teznevise_ai_anthropic_key', 'host' => 'api.anthropic.com', 'endpoint' => 'https://api.anthropic.com/v1/messages'),
+            'mistral'    => array('label' => 'Mistral', 'option' => 'teznevise_ai_mistral_key', 'host' => 'api.mistral.ai', 'endpoint' => 'https://api.mistral.ai/v1/chat/completions'),
+            'together'   => array('label' => 'Together', 'option' => 'teznevise_ai_together_key', 'host' => 'api.together.xyz', 'endpoint' => 'https://api.together.xyz/v1/chat/completions'),
+            'deepseek'   => array('label' => 'DeepSeek', 'option' => 'teznevise_ai_deepseek_key', 'host' => 'api.deepseek.com', 'endpoint' => 'https://api.deepseek.com/v1/chat/completions'),
+        );
+    }
+
+    private static function detect_provider($agent) {
+        $explicit = sanitize_key($agent['provider'] ?? '');
+        $catalog  = self::providers();
+        if ($explicit && isset($catalog[$explicit])) {
+            return $explicit;
+        }
+        $host = strtolower((string) (wp_parse_url((string) ($agent['api_endpoint'] ?? ''), PHP_URL_HOST) ?: ''));
+        foreach ($catalog as $id => $row) {
+            if ($host && false !== strpos($host, str_replace('api.', '', $row['host']))) {
+                return $id;
+            }
+            if ($host === $row['host']) {
+                return $id;
+            }
+        }
+        return 'openai';
+    }
+
+    private static function endpoint_for($agent, $provider, $model) {
+        $custom = esc_url_raw($agent['api_endpoint'] ?? '');
+        if ($custom) {
+            return $custom;
+        }
+        $catalog = self::providers();
+        $url = $catalog[$provider]['endpoint'] ?? $catalog['openai']['endpoint'];
+        return str_replace('{model}', rawurlencode((string) $model), $url);
+    }
+
+    private static function key_for($agent, $provider) {
+        if (!empty($agent['api_key'])) {
+            return (string) $agent['api_key'];
+        }
+        $catalog = self::providers();
+        $option = $catalog[$provider]['option'] ?? 'teznevise_ai_openai_key';
+        if ($provider === 'openai' && defined('TEZNEVISE_AI_OPENAI_KEY') && TEZNEVISE_AI_OPENAI_KEY) {
+            return TEZNEVISE_AI_OPENAI_KEY;
+        }
+        return (string) get_option($option, '');
+    }
+
+    private static function build_provider_request($provider, $url, $api_key, $model, $system_prompt, $message) {
+        $headers = array('Content-Type' => 'application/json');
+        if ($provider === 'gemini') {
+            $headers['x-goog-api-key'] = $api_key;
+            $body = array(
+                'systemInstruction' => array('parts' => array(array('text' => $system_prompt))),
+                'contents' => array(array('role' => 'user', 'parts' => array(array('text' => $message)))),
+                'generationConfig' => array('temperature' => 0.7, 'maxOutputTokens' => 1500),
+            );
+        } elseif ($provider === 'anthropic') {
+            $headers['x-api-key'] = $api_key;
+            $headers['anthropic-version'] = '2023-06-01';
+            $body = array(
+                'model' => $model,
+                'max_tokens' => 1500,
+                'system' => $system_prompt,
+                'messages' => array(array('role' => 'user', 'content' => $message)),
+            );
+        } else {
+            $headers['Authorization'] = 'Bearer ' . $api_key;
+            if ($provider === 'openrouter') {
+                $headers['HTTP-Referer'] = home_url('/');
+                $headers['X-Title'] = wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES);
+            }
+            $body = array(
+                'model' => $model,
+                'messages' => array(
+                    array('role' => 'system', 'content' => $system_prompt),
+                    array('role' => 'user', 'content' => $message),
+                ),
+                'temperature' => 0.7,
+                'max_tokens' => 1500,
+            );
+        }
+        return array(
+            'url' => $url,
+            'args' => array(
+                'headers' => $headers,
+                'body' => wp_json_encode($body),
+                'timeout' => 60,
+                'redirection' => 0,
+            ),
+        );
+    }
+
+    private static function extract_content($provider, $body) {
+        if ($provider === 'gemini') {
+            return (string) ($body['candidates'][0]['content']['parts'][0]['text'] ?? '');
+        }
+        if ($provider === 'anthropic') {
+            $parts = $body['content'] ?? array();
+            $text = '';
+            foreach ((array) $parts as $part) {
+                if (($part['type'] ?? '') === 'text') {
+                    $text .= (string) ($part['text'] ?? '');
+                }
+            }
+            return $text;
+        }
+        return (string) ($body['choices'][0]['message']['content'] ?? '');
     }
     
     private static function get_client_ip() {
@@ -438,7 +580,7 @@ class TezNevise_AI_API {
         $agents = TezNevise_AI_Database::get_all_agents();
         $formatted = [];
         foreach ($agents as $agent) {
-            $formatted[] = ['id' => $agent['agent_id'], 'name' => $agent['name'], 'description' => $agent['description'], 'model' => $agent['model'], 'color' => $agent['color'], 'icon' => $agent['icon'], 'thinking_enabled' => (bool) $agent['thinking_enabled']];
+            $formatted[] = ['id' => $agent['agent_id'], 'name' => $agent['name'], 'description' => $agent['description'], 'model' => $agent['model'], 'provider' => $agent['provider'] ?? 'openai', 'color' => $agent['color'], 'icon' => $agent['icon'], 'thinking_enabled' => (bool) $agent['thinking_enabled']];
         }
         return $formatted;
     }
@@ -475,7 +617,13 @@ class TezNevise_AI_API {
 			'ip_address' => null,
             'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
         ];
-        $session_id_db = TezNevise_AI_Database::save_session($session_data);
+        $session_saved = TezNevise_AI_Database::save_session($session_data);
+        if (is_array($session_saved)) {
+            $session_id = $session_saved['session_id'] ?: $session_id;
+            $session_id_db = (int) $session_saved['id'];
+        } else {
+            $session_id_db = (int) $session_saved;
+        }
         return ['success' => true, 'session_id' => $session_id, 'session_id_db' => $session_id_db];
     }
 }

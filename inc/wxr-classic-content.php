@@ -137,6 +137,9 @@ function teznevise_wxr_import_classic_editor( $limit = -1, $offset = 0 ) {
 		if ( ( ! function_exists( 'teznevise_page_has_editorial_copy' ) || ! teznevise_page_has_editorial_copy( $html ) ) && function_exists( 'teznevise_classic_html_from_page_fields' ) ) {
 			$html = teznevise_classic_html_from_page_fields( (int) $page->ID );
 		}
+		if ( ( ! function_exists( 'teznevise_page_has_editorial_copy' ) || ! teznevise_page_has_editorial_copy( $html ) ) && function_exists( 'teznevise_classic_html_from_builder' ) ) {
+			$html = teznevise_classic_html_from_builder( (int) $page->ID );
+		}
 		if ( ! function_exists( 'teznevise_page_has_editorial_copy' ) || ! teznevise_page_has_editorial_copy( $html ) ) {
 			++$result['skipped'];
 			continue;
@@ -148,7 +151,7 @@ function teznevise_wxr_import_classic_editor( $limit = -1, $offset = 0 ) {
 			(int) $page->ID,
 			'_teznevise_classic_import_backup',
 			array(
-				'version' => '1.9.6',
+				'version' => '1.9.7',
 				'time'    => time(),
 				'content' => $raw,
 			)
@@ -167,7 +170,7 @@ function teznevise_wxr_import_classic_editor( $limit = -1, $offset = 0 ) {
 			$result['errors'][ (int) $page->ID ] = $updated->get_error_message();
 			continue;
 		}
-		update_post_meta( (int) $page->ID, '_teznevise_classic_seed_version', '1.9.6' );
+		update_post_meta( (int) $page->ID, '_teznevise_classic_seed_version', '1.9.7' );
 		++$result['updated'];
 	}
 	return $result;
@@ -175,7 +178,7 @@ function teznevise_wxr_import_classic_editor( $limit = -1, $offset = 0 ) {
 
 /** Run the import once per release for authorized administrators. */
 function teznevise_maybe_import_classic_editor() {
-	if ( ! is_admin() || ! current_user_can( 'manage_options' ) || '1.9.6' === get_option( 'teznevise_classic_import_version' ) ) {
+	if ( ! is_admin() || ! current_user_can( 'manage_options' ) || '1.9.7' === get_option( 'teznevise_classic_import_version' ) ) {
 		return;
 	}
 	$batch_size = 10;
@@ -191,13 +194,24 @@ function teznevise_maybe_import_classic_editor() {
 	$report['errors'] = array_replace( (array) ( $report['errors'] ?? array() ), (array) $result['errors'] );
 	update_option( 'teznevise_classic_import_report', $report, false );
 	if ( $result['scanned'] < $batch_size ) {
-		update_option( 'teznevise_classic_import_version', '1.9.6', false );
+		update_option( 'teznevise_classic_import_version', '1.9.7', false );
 		delete_option( 'teznevise_classic_import_cursor' );
 	} else {
 		update_option( 'teznevise_classic_import_cursor', $cursor + $result['scanned'], false );
 	}
 }
 add_action( 'admin_init', 'teznevise_maybe_import_classic_editor', 40 );
+
+function teznevise_classic_import_admin_notice() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	if ( '1.9.7' === get_option( 'teznevise_classic_import_version' ) ) {
+		return;
+	}
+	echo '<div class="notice notice-info"><p>' . esc_html__( 'تزنویسه ۱.۹.۷ در حال انتقال محتوای قدیمی به ویرایشگر کلاسیک است. همین صفحه مدیریت را چند بار باز بگذارید تا نوار پیشرفت تمام شود، یا از WP-CLI دستور wp teznevise classic-content import را اجرا کنید.', 'teznevise' ) . '</p></div>';
+}
+add_action( 'admin_notices', 'teznevise_classic_import_admin_notice' );
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	WP_CLI::add_command( 'teznevise classic-content import', static function () {

@@ -101,16 +101,23 @@ while ( have_posts() ) :
 				</div>
 			<?php endif; ?>
 		</div>
+		<?php
+		if ( function_exists( 'teznevise_render_hero_inquiry' ) ) {
+			echo teznevise_render_hero_inquiry( 'page' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+		?>
 		<?php endif; ?>
 
 		<?php if ( $features ) : ?>
 			<ul class="reason-list page-features" data-reveal-stagger style="margin:24px 0;list-style:none;padding:0;display:grid;gap:12px;">
 				<?php
-				$lines = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $features ) ) );
+				$lines   = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $features ) ) );
+				$line_i  = 0;
 				foreach ( $lines as $line ) :
+					++$line_i;
 					?>
 					<li class="reason-item" style="display:flex;gap:10px;align-items:flex-start;">
-						<span class="icon-box icon-teal" style="width:36px;height:36px;flex-shrink:0;"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
+						<span class="icon-box icon-teal" style="width:36px;height:36px;flex-shrink:0;"><i class="<?php echo esc_attr( function_exists( 'teznevise_builder_varied_icon' ) ? teznevise_builder_varied_icon( (int) $line_i ) : 'fa-solid fa-book-open' ); ?>" aria-hidden="true"></i></span>
 						<span><?php echo esc_html( $line ); ?></span>
 					</li>
 				<?php endforeach; ?>

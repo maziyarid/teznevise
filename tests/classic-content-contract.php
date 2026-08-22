@@ -40,8 +40,8 @@ function wp_kses_post( $content ) {
 function esc_html__( $text, $domain = 'default' ) {
 	return $text;
 }
-function esc_html_e( $text, $domain = 'default' ) {
-	echo $text;
+function esc_html( $text ) {
+	return htmlspecialchars( (string) $text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8' );
 }
 
 require dirname( __DIR__ ) . '/inc/extracted-pages.php';
@@ -60,6 +60,9 @@ function tz_assert( $condition, $message ) {
 tz_assert( false === teznevise_page_has_owned_editor_content( '' ), 'empty content is not owned' );
 tz_assert( false === teznevise_page_has_owned_editor_content( '[tz_home]' ), 'shortcode-only content is not owned' );
 tz_assert( false === teznevise_page_has_owned_editor_content( "[gravityform id='1']\n[tz_thesis_hub]" ), 'mixed layout shortcodes are not owned' );
+tz_assert( '' === teznevise_interactive_shortcodes_markup( '[tz_thesis_hub]' ), 'hub shortcodes are not kept as functional widgets' );
+tz_assert( '' === teznevise_interactive_shortcodes_markup( '[tz_proposal_hub][tz_home]' ), 'proposal/home hubs are layout-only' );
+tz_assert( true === teznevise_is_layout_hub_shortcode( 'tz_thesis_hub' ), 'thesis hub is a layout shortcode' );
 tz_assert( true === teznevise_page_has_owned_editor_content( 'x' ), '1-character editor copy is owned' );
 tz_assert( true === teznevise_page_has_owned_editor_content( str_repeat( 'a', 20 ) ), '20-character editor copy is owned' );
 tz_assert( true === teznevise_page_has_owned_editor_content( str_repeat( 'a', 39 ) ), '39-character editor copy is owned' );

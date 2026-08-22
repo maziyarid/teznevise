@@ -43,6 +43,11 @@ while ( have_posts() ) :
 			<p style="font-size:13px;margin-top:8px;">
 				<a href="<?php echo esc_url( home_url( '/online-calculation-tools/' ) ); ?>"><?php esc_html_e( '← بازگشت به همه ابزارها', 'teznevise' ); ?></a>
 			</p>
+			<?php
+			if ( function_exists( 'teznevise_render_hero_inquiry' ) ) {
+				echo teznevise_render_hero_inquiry( 'tool' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+			?>
 		</div>
 	</div>
 </section>

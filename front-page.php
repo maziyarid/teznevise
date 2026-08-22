@@ -18,10 +18,15 @@ get_header();
 					<a class="btn-tz btn-primary-tz btn-lg-tz" href="<?php echo esc_url( teznevise_url( teznevise_mod( 'hero_btn_primary_url' ) ) ); ?>"><i class="fa-solid fa-rocket" aria-hidden="true"></i> <?php echo esc_html( teznevise_mod( 'hero_btn_primary' ) ); ?></a>
 					<a class="btn-tz btn-light-tz btn-lg-tz" href="#services"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> <?php echo esc_html( teznevise_mod( 'hero_btn_secondary' ) ); ?></a>
 				</div>
+				<?php
+				if ( function_exists( 'teznevise_render_hero_inquiry' ) ) {
+					echo teznevise_render_hero_inquiry( 'home' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				}
+				?>
 				<div class="hero-points">
-					<span class="hero-point"><i aria-hidden="true">✓</i> <?php echo esc_html( teznevise_mod( 'hero_point_1' ) ); ?></span>
-					<span class="hero-point"><i aria-hidden="true">✓</i> <?php echo esc_html( teznevise_mod( 'hero_point_2' ) ); ?></span>
-					<span class="hero-point"><i aria-hidden="true">✓</i> <?php echo esc_html( teznevise_mod( 'hero_point_3' ) ); ?></span>
+					<span class="hero-point"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> <?php echo esc_html( teznevise_mod( 'hero_point_1' ) ); ?></span>
+					<span class="hero-point"><i class="fa-solid fa-flask" aria-hidden="true"></i> <?php echo esc_html( teznevise_mod( 'hero_point_2' ) ); ?></span>
+					<span class="hero-point"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> <?php echo esc_html( teznevise_mod( 'hero_point_3' ) ); ?></span>
 				</div>
 			</div>
 			<div class="hero-visual" aria-label="<?php esc_attr_e( 'نمایی خلاقانه از خدمات تزنویسه', 'teznevise' ); ?>">

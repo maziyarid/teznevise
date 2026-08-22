@@ -18,6 +18,8 @@ function teznevise_blog_fields() {
 		'_teznevise_author_label'    => array( 'label' => __( 'Author label override', 'teznevise' ), 'type' => 'text' ),
 		'_teznevise_hide_toc'        => array( 'label' => __( 'Hide table of contents', 'teznevise' ), 'type' => 'checkbox' ),
 		'_teznevise_related_heading' => array( 'label' => __( 'Related posts heading', 'teznevise' ), 'type' => 'text' ),
+		'_teznevise_takeaways'       => array( 'label' => __( 'Key takeaways (one per line)', 'teznevise' ), 'type' => 'textarea' ),
+		'_teznevise_ai_overview'     => array( 'label' => __( 'AI overview', 'teznevise' ), 'type' => 'textarea' ),
 	);
 }
 
@@ -171,7 +173,38 @@ function teznevise_render_toc( $content ) {
 
 function teznevise_related_posts( $post_id = 0 ) {
 	$post_id = $post_id ? $post_id : get_the_ID();
-	$terms = wp_get_post_categories( $post_id, array( 'fields' => 'ids' ) );
-	if ( empty( $terms ) ) { return null; }
-	return new WP_Query( array( 'post_type' => 'post', 'posts_per_page' => 3, 'post__not_in' => array( $post_id ), 'category__in' => $terms, 'ignore_sticky_posts' => true, 'no_found_rows' => true, 'orderby' => 'date', 'order' => 'DESC' ) );
+	$terms   = wp_get_post_categories( $post_id, array( 'fields' => 'ids' ) );
+	$tags    = wp_get_post_tags( $post_id, array( 'fields' => 'ids' ) );
+	if ( empty( $terms ) && empty( $tags ) ) {
+		return null;
+	}
+	$args = array(
+		'post_type'           => 'post',
+		'posts_per_page'      => 4,
+		'post__not_in'        => array( $post_id ),
+		'ignore_sticky_posts' => true,
+		'no_found_rows'       => true,
+		'orderby'             => 'date',
+		'order'               => 'DESC',
+	);
+	if ( $terms && $tags ) {
+		$args['tax_query'] = array(
+			'relation' => 'OR',
+			array(
+				'taxonomy' => 'category',
+				'field'    => 'term_id',
+				'terms'    => $terms,
+			),
+			array(
+				'taxonomy' => 'post_tag',
+				'field'    => 'term_id',
+				'terms'    => $tags,
+			),
+		);
+	} elseif ( $terms ) {
+		$args['category__in'] = $terms;
+	} else {
+		$args['tag__in'] = $tags;
+	}
+	return new WP_Query( $args );
 }

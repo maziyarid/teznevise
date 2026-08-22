@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.9.6' );
+define( 'TEZNEVISE_VERSION', '1.9.7' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -50,6 +50,7 @@ require_once TEZNEVISE_DIR . '/inc/tezcoin.php';
 require_once TEZNEVISE_DIR . '/inc/legal-pages.php';
 require_once TEZNEVISE_DIR . '/inc/dashboard.php';
 require_once TEZNEVISE_DIR . '/inc/ai-agents.php';
+require_once TEZNEVISE_DIR . '/inc/ai-comments.php';
 
 // Defensive fallback: this repo's functions.php has repeatedly lost this
 // helper during merges/rewrites (see commits 085c9c44, 75a32ee6). If none of
@@ -137,6 +138,24 @@ function teznevise_enqueue_hotfix_196() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_hotfix_196', 100 );
+
+/**
+ * 1.9.7 last-wins (scoped mega, unboxed sections, blog/comments, dashboard).
+ * Priority 110 so it beats hotfix-196.
+ */
+function teznevise_enqueue_hotfix_197() {
+	$rel = '/assets/css/hotfix-197.css';
+	if ( ! is_readable( TEZNEVISE_DIR . $rel ) ) {
+		return;
+	}
+	wp_enqueue_style(
+		'teznevise-hotfix-197',
+		TEZNEVISE_URI . $rel,
+		array( 'teznevise-hotfix-196' ),
+		TEZNEVISE_VERSION
+	);
+}
+add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_hotfix_197', 110 );
 
 /**
  * Preload only the regular local font used above the fold.

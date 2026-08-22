@@ -49,17 +49,18 @@ while ( have_posts() ) :
 					<h1 class="blog-post__title"><?php the_title(); ?></h1>
 					<?php if ( $subtitle ) : ?><p class="blog-post__subtitle"><?php echo esc_html( $subtitle ); ?></p><?php endif; ?>
 					<div class="blog-post__meta article-meta">
-						<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
+						<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><i class="fa-regular fa-calendar" aria-hidden="true"></i> <?php echo esc_html( get_the_date() ); ?></time>
 						<?php if ( get_the_modified_time( 'U' ) !== get_the_time( 'U' ) ) : ?>
-							<time datetime="<?php echo esc_attr( get_the_modified_date( DATE_W3C ) ); ?>"><?php echo esc_html( sprintf( __( 'به‌روزرسانی %s', 'teznevise' ), get_the_modified_date() ) ); ?></time>
+							<time datetime="<?php echo esc_attr( get_the_modified_date( DATE_W3C ) ); ?>"><i class="fa-solid fa-rotate" aria-hidden="true"></i> <?php echo esc_html( sprintf( __( 'به‌روزرسانی %s', 'teznevise' ), get_the_modified_date() ) ); ?></time>
 						<?php endif; ?>
-						<?php if ( $author_label ) : ?><span><?php echo esc_html( $author_label ); ?></span><?php endif; ?>
-						<span><?php echo esc_html( teznevise_read_time( $post_id ) ); ?></span>
+						<?php if ( $author_label ) : ?><span><i class="fa-regular fa-user" aria-hidden="true"></i> <?php echo esc_html( $author_label ); ?></span><?php endif; ?>
+						<span><i class="fa-regular fa-clock" aria-hidden="true"></i> <?php echo esc_html( teznevise_read_time( $post_id ) ); ?></span>
+						<?php if ( $primary_cat ) : ?><span><i class="fa-solid fa-folder-open" aria-hidden="true"></i> <?php echo esc_html( $primary_cat->name ); ?></span><?php endif; ?>
 					</div>
 				</header>
 				<?php if ( has_post_thumbnail() ) : ?>
 					<figure class="blog-post__featured-image article-cover" data-reveal>
-						<?php the_post_thumbnail( 'large', array( 'alt' => esc_attr( get_the_title() ), 'loading' => 'eager', 'decoding' => 'async', 'fetchpriority' => 'high' ) ); ?>
+						<?php the_post_thumbnail( 'teznevise-hero', array( 'alt' => esc_attr( get_the_title() ), 'loading' => 'eager', 'decoding' => 'async', 'fetchpriority' => 'high', 'sizes' => '(min-width: 1100px) 720px, 100vw' ) ); ?>
 					</figure>
 				<?php endif; ?>
 				<?php if ( $toc ) : ?>
@@ -70,7 +71,34 @@ while ( have_posts() ) :
 				<?php endif; ?>
 				<div class="blog-post__layout">
 					<div class="blog-post__content entry-content article-content longcopy" data-reveal>
-						<?php echo $content; ?>
+						<?php
+						$takeaways = teznevise_blog_field( 'takeaways', $post_id );
+						$overview  = teznevise_blog_field( 'ai_overview', $post_id );
+						if ( $overview ) :
+							?>
+							<section class="tz-ai-overview">
+								<h2><?php esc_html_e( 'نمای کلی هوش مصنوعی', 'teznevise' ); ?></h2>
+								<p><?php echo esc_html( $overview ); ?></p>
+							</section>
+							<?php
+						endif;
+						if ( $takeaways ) :
+							$lines = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $takeaways ) ) );
+							if ( $lines ) :
+								?>
+							<section class="tz-takeaways">
+								<h2><?php esc_html_e( 'نکات کلیدی', 'teznevise' ); ?></h2>
+								<ol>
+									<?php foreach ( $lines as $line ) : ?>
+										<li><?php echo esc_html( $line ); ?></li>
+									<?php endforeach; ?>
+								</ol>
+							</section>
+								<?php
+							endif;
+						endif;
+						echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						?>
 					</div>
 					<aside class="blog-post__aside">
 						<?php if ( $toc ) : ?>

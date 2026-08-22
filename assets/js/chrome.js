@@ -674,16 +674,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     if (supportsHover && !inMobileDrawer) {
-      var link = parentItem.querySelector(':scope > a.nav-link, :scope > a, :scope > .nav-link');
-      var hoverTargets = [panel];
-      if (link) hoverTargets.push(link);
-      hoverTargets.forEach(function (el) {
-        el.addEventListener('mouseenter', function () {
-          openToggle(toggle, panel);
-        });
-        el.addEventListener('mouseleave', function () {
-          scheduleClose(toggle, panel);
-        });
+      // Hover the top-level item only. The panel is a child of the relatively
+      // positioned <li>, so moving into the open submenu keeps the same hover
+      // target. Binding mouseenter on the panel itself was opening the mega
+      // when the pointer was in the empty page centre under a full-width panel.
+      parentItem.addEventListener('mouseenter', function () {
+        openToggle(toggle, panel);
+      });
+      parentItem.addEventListener('mouseleave', function () {
+        scheduleClose(toggle, panel);
       });
     }
 
@@ -734,5 +733,23 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!box.hasAttribute('aria-live')) {
       box.setAttribute('aria-live', 'polite');
     }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('[data-comment-tabs]').forEach(function (tabs) {
+    var root = tabs.closest('.tz-comments') || document;
+    tabs.querySelectorAll('[role="tab"]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = btn.getAttribute('aria-controls');
+        tabs.querySelectorAll('[role="tab"]').forEach(function (other) {
+          other.setAttribute('aria-selected', other === btn ? 'true' : 'false');
+        });
+        root.querySelectorAll('.tz-comment-panel').forEach(function (panel) {
+          var on = panel.id === target;
+          panel.hidden = !on;
+        });
+      });
+    });
   });
 });

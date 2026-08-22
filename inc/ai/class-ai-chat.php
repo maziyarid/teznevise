@@ -102,7 +102,7 @@ class TezNevise_AI_Chat {
         self::enqueue_assets();
         $instance_id = 'teznevise-ai-chat-' . sanitize_html_class( $tool_id ) . '-' . wp_generate_password( 4, false );
         $initial     = $tool_config['initial_message'] ?? 'اگه نتونستی با ابزار کار کنی میتونی از من کمک بگیری';
-        $agent_name  = $tool_config['default_agent_name'] ?? 'Assistants';
+        $agent_name  = $tool_config['default_agent_name'] ?? 'دستیار پژوهشی';
         $free        = (int) ( $tool_config['free_tier_limit'] ?? get_option( 'teznevise_ai_free_tier_limit', 10 ) );
         $signed      = (int) ( $tool_config['signed_in_limit'] ?? get_option( 'teznevise_ai_signed_in_limit', 100 ) );
         $cost        = (float) ( $tool_config['cost_per_message'] ?? get_option( 'teznevise_ai_cost_per_message', 0 ) );
@@ -117,19 +117,22 @@ class TezNevise_AI_Chat {
                     <span class="eyebrow"><?php esc_html_e( 'دستیار پژوهشی', 'teznevise' ); ?></span>
                     <h2><?php echo esc_html( $tool_config['name'] ?? __( 'گفتگو با هوش مصنوعی', 'teznevise' ) ); ?></h2>
                 </div>
-                <p class="tz-ai-chat__meta"><?php echo esc_html( sprintf( __( 'مهمان: %1$d پیام رایگان — عضو: %2$d — هزینه هر پیام: %3$s تزکوین', 'teznevise' ), $free, $signed, number_format_i18n( $cost ) ) ); ?></p>
+                <div class="tz-ai-chat__head-actions">
+                    <p class="tz-ai-chat__meta"><?php echo esc_html( sprintf( __( 'مهمان: %1$d — عضو: %2$d — هر پیام: %3$s تزکوین', 'teznevise' ), $free, $signed, number_format_i18n( $cost ) ) ); ?></p>
+                    <button type="button" class="tz-ai-full" data-ai-full aria-pressed="false"><?php esc_html_e( 'تمام‌صفحه', 'teznevise' ); ?></button>
+                </div>
             </header>
             <div class="tz-ai-chat__toolbar">
                 <label><?php esc_html_e( 'عامل', 'teznevise' ); ?>
                     <select data-ai-agent>
                         <?php foreach ( $agents as $ag ) : $ag = (array) $ag; ?>
-                            <option value="<?php echo esc_attr( $ag['agent_id'] ?? '' ); ?>" <?php selected( $atts['agent_id'], $ag['agent_id'] ?? '' ); ?>><?php echo esc_html( $ag['name'] ?? '' ); ?> — <?php echo esc_html( $ag['model'] ?? '' ); ?></option>
+                            <option value="<?php echo esc_attr( $ag['agent_id'] ?? '' ); ?>" <?php selected( $atts['agent_id'], $ag['agent_id'] ?? '' ); ?>><?php echo esc_html( $ag['name'] ?? '' ); ?> — <?php echo esc_html( ( $ag['provider'] ?? '' ) . ' / ' . ( $ag['model'] ?? '' ) ); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </label>
                 <label><?php esc_html_e( 'همکاری', 'teznevise' ); ?>
                     <select data-ai-collab>
-                        <option value="single" <?php selected( $collab, 'single' ); ?>><?php esc_html_e( 'جداگانه', 'teznevise' ); ?></option>
+                        <option value="single" <?php selected( $collab, 'single' ); ?>><?php esc_html_e( 'یک عامل', 'teznevise' ); ?></option>
                         <option value="collaborative" <?php selected( $collab, 'collaborative' ); ?>><?php esc_html_e( 'همکاری زنجیره‌ای', 'teznevise' ); ?></option>
                         <option value="separate" <?php selected( $collab, 'separate' ); ?>><?php esc_html_e( 'جدا + بازتاب پایانی', 'teznevise' ); ?></option>
                     </select>
@@ -138,13 +141,13 @@ class TezNevise_AI_Chat {
             </div>
             <div class="tz-ai-chat__log" data-ai-log>
                 <article class="tz-ai-msg is-assistant">
+                    <header class="tz-ai-msg__meta"><strong><?php echo esc_html( $agent_name ); ?></strong></header>
                     <div class="tz-ai-msg__bubble"><?php echo esc_html( $initial ); ?></div>
-                    <footer class="tz-ai-msg__name"><?php echo esc_html( $agent_name ); ?></footer>
                 </article>
             </div>
             <form class="tz-ai-chat__form" data-ai-form>
                 <label class="screen-reader-text" for="<?php echo esc_attr( $instance_id ); ?>-q"><?php esc_html_e( 'پیام', 'teznevise' ); ?></label>
-                <textarea id="<?php echo esc_attr( $instance_id ); ?>-q" data-ai-input rows="3" required minlength="4" placeholder="<?php esc_attr_e( 'سؤال خود را بنویسید…', 'teznevise' ); ?>"></textarea>
+                <textarea id="<?php echo esc_attr( $instance_id ); ?>-q" data-ai-input rows="3" required minlength="4" placeholder="<?php esc_attr_e( 'سؤال خود را بنویسید… Enter برای ارسال، Shift+Enter خط جدید', 'teznevise' ); ?>"></textarea>
                 <button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ارسال', 'teznevise' ); ?></button>
             </form>
             <p class="tz-ai-chat__status" data-ai-status hidden></p>
