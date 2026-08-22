@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.9.5' );
+define( 'TEZNEVISE_VERSION', '1.9.6' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -122,6 +122,20 @@ function teznevise_enqueue_assets() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_assets' );
+
+/**
+ * Last-wins visual hotfix (mega RTL, mobile centering, compact SSL).
+ * Priority 100 so it beats chrome, modernization, and per-service CSS.
+ */
+function teznevise_enqueue_hotfix_196() {
+	wp_enqueue_style(
+		'teznevise-hotfix-196',
+		TEZNEVISE_URI . '/assets/css/hotfix-196.css',
+		array( 'teznevise-modernization' ),
+		TEZNEVISE_VERSION
+	);
+}
+add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_hotfix_196', 100 );
 
 /**
  * Preload only the regular local font used above the fold.

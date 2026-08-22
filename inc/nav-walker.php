@@ -121,7 +121,7 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 
 			$item_output = isset( $args->before ) ? $args->before : '';
 			$icon        = '';
-			if ( $depth > 0 && function_exists( 'teznevise_nav_icon' ) ) {
+			if ( function_exists( 'teznevise_nav_icon' ) ) {
 				$icon = teznevise_nav_icon( $href, $title );
 			}
 			if ( $is_group_heading ) {
@@ -137,6 +137,9 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 					$item_output .= '<i class="' . esc_attr( $icon ) . ' nav-item-icon" aria-hidden="true"></i>';
 				}
 				$item_output .= ( isset( $args->link_before ) ? $args->link_before : '' ) . $title . ( isset( $args->link_after ) ? $args->link_after : '' );
+				if ( $has_children && 0 === $depth ) {
+					$item_output .= '<span class="nav-chevron" aria-hidden="true"></span>';
+				}
 				$item_output .= '</a>';
 			}
 			$item_output .= isset( $args->after ) ? $args->after : '';

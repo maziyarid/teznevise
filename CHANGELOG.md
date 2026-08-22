@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.6 — 2026-08-22 — Mobile centering, compact SSL, FAQ boxes, drawer
+
+- Mobile cards, steps, FAQs, stats, testimonials, service tiles, and the footer are centred on every sitemap page (icon on top, title and copy in the middle). Live WordPress was right-hugging because builder cards used `align-items: flex-start` in RTL.
+- Footer SSL/enamad seals are a compact inline badge, not a giant white tile. Footer is a single centred column under 720px.
+- FAQ titles no longer print leftover accordion arrows (`▾`). Boxes keep the numbered colourful tile and never show a chevron.
+- Process steps keep the colourful number; a generic check/arrow icon is not printed next to it. Custom FA7 icons (chat, document, …) still show.
+- Mobile drawer is a column accordion. Opening «پایان‌نامه» no longer leaves a vertical leftover tab of «انجام پایان نامه» on the right edge. Short labels apply to the mobile menu as well as desktop.
+- Desktop mega menu stays RTL with `auto-fit` (no empty left column). FA6 `\f078` tofu chevrons are gone; CSS-triangle chevrons + FA7 icons in the mega/drawer.
+- `hotfix-196.css` is enqueued last (priority 100) so it beats chrome, modernization, and per-service styles.
+
+
 ## 1.9.5 — 2026-08-22 — RTL nav, classic «مشاهده بیشتر», WXR copy, UI audit
 
 - Top-level menu no longer prints Font Awesome icons (those empty squares). Dropdown chevron is a CSS triangle so it cannot tofu. Mega panel is RTL with wrapping labels.
