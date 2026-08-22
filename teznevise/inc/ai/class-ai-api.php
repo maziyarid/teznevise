@@ -282,6 +282,10 @@ class TezNevise_AI_API {
     
     private static function call_ai_api($message, $system_prompt, $agent, $model, $thinking_enabled) {
 		$api_endpoint = esc_url_raw($agent['api_endpoint'] ?? 'https://api.openai.com/v1/chat/completions');
+		$api_scheme = strtolower((string) wp_parse_url($api_endpoint, PHP_URL_SCHEME));
+		if ('https' !== $api_scheme) {
+			return new WP_Error('invalid_api_scheme', 'AI provider must use HTTPS', array('status' => 400));
+		}
 		$api_host = strtolower((string) wp_parse_url($api_endpoint, PHP_URL_HOST));
 		$allowed_hosts = (array) apply_filters('teznevise_ai_allowed_api_hosts', ['api.openai.com']);
 		if (!in_array($api_host, array_map('strtolower', $allowed_hosts), true)) {
