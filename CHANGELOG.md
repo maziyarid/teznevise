@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.6 — 2026-08-22 — WordPress-wide Classic content and mobile/backend hardening
+
+- Flatten the 1.9.6 files into the active theme root so cPanel deploys them over production, not into an unused nested `teznevise/` folder.
+- Replace the homepage-only static «مشاهده بیشتر» block with one dynamic, sanitized Classic Editor disclosure on every page immediately before the footer.
+- Separate calculators/forms from editorial copy. A versioned non-destructive importer moves recovered prose into `post_content` and preserves functional shortcodes in private meta.
+- Never overwrite administrator-authored Classic Editor content, including copy shorter than 40 characters; store a backup/revision first. Display-quality length is used only for fallback copy.
+- Demote embedded H1 headings and namespace editor DOM IDs with a per-ID occurrence counter so pages keep one H1 and unique IDs.
+- Centre repeated mobile card systems and the mobile footer; constrain drawer scrolling and reserve safe-area space for bottom navigation/contact controls. FAQ accordions stay collapsible while answers remain RTL start-aligned.
+- Redirect the dead `/statistics/` URL to the published `/service-statistics/` page and update internal theme links.
+- Restrict public REST user routes, public author archives, and `?author=` probes; harden browser headers; rate-limit accepted lead submissions after validation; distinguish stored vs delivered leads; require HTTPS for AI providers; and use atomic quota/burst locks.
+
 ## 1.9.5 — 2026-08-22 — RTL nav, classic «مشاهده بیشتر», WXR copy, UI audit
 
 - Top-level menu no longer prints Font Awesome icons (those empty squares). Dropdown chevron is a CSS triangle so it cannot tofu. Mega panel is RTL with wrapping labels.

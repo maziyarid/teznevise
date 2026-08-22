@@ -17,7 +17,7 @@ The homepage hard-coded guide was removed. Page templates render only functional
 
 ### Import
 
-Authorized wp-admin requests run a non-destructive versioned import in batches of ten pages, avoiding a long blocking admin request. It only writes pages that are empty or shortcode-only; administrator prose is never overwritten. Functional shortcodes are retained in `_teznevise_functional_shortcodes` and therefore do not remain in Classic Editor content.
+Authorized administrators (`manage_options`) run a non-destructive versioned import in batches of ten pages, avoiding a long blocking admin request. It only writes pages that are empty or shortcode-only; any non-empty administrator prose is never overwritten, including copy shorter than 40 characters. The previous `post_content` is stored in `_teznevise_classic_import_backup` and a revision is created before the write. Functional shortcodes are retained in `_teznevise_functional_shortcodes` and therefore do not remain in Classic Editor content.
 
 The equivalent deterministic CLI command is:
 
@@ -38,10 +38,10 @@ The last automatic result is stored in `teznevise_classic_import_report`. Review
 ## Backend hardening
 
 - `/statistics/` now 301-redirects to `/service-statistics/`; theme defaults and footer use the published URL.
-- `/wp-json/wp/v2/users*` is unavailable unless the requester can `list_users`.
+- `/wp-json/wp/v2/users*` is unavailable unless the requester can `list_users`. Public author archives and `?author=` probes redirect home for anonymous visitors. This is REST + author-archive restriction, not a claim of complete user-enumeration prevention.
 - XML-RPC is disabled at application scope; login errors are generic.
-- Lead POSTs have a honeypot, same-origin return target, three-per-minute rate limit, 90-day retention, and no stored raw IP.
-- AI chat validates inputs, isolates guest quotas using a daily HMAC subject, rate-limits bursts, prevents anonymous multi-agent amplification, allow-lists provider hosts/models, stops raw IP storage, and never returns or persists private chain-of-thought.
+- Lead POSTs have a honeypot, same-origin return target, three-per-minute accepted-submission limit (invalid requests use a separate cap), 90-day retention, no stored raw IP, and a stored-vs-delivered visitor/admin state.
+- AI chat validates inputs, isolates guest quotas using a daily HMAC subject, rate-limits bursts with a MySQL lock, prevents anonymous multi-agent amplification, allow-lists provider hosts/models, requires HTTPS, stops raw IP storage, and never returns or persists private chain-of-thought.
 
 ## Deployment checks
 

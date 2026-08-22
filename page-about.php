@@ -25,8 +25,8 @@ while ( have_posts() ) :
 	<div class="container">
 		<div class="longcopy article-content about-story" data-reveal>
 			<?php
-			if ( function_exists( 'teznevise_the_page_leftover_content' ) ) {
-				teznevise_the_page_leftover_content();
+			if ( function_exists( 'teznevise_the_page_interactive_content' ) ) {
+				teznevise_the_page_interactive_content();
 			} else {
 				the_content();
 			}

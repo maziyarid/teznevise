@@ -22,10 +22,14 @@ function teznevise_seo_description() {
 	if ( is_front_page() ) {
 		$description = function_exists( 'teznevise_mod' ) ? teznevise_mod( 'hero_text', get_bloginfo( 'description' ) ) : get_bloginfo( 'description' );
 	} elseif ( is_singular() ) {
-		$post_id = get_queried_object_id();
+		$post_id     = get_queried_object_id();
 		$description = get_post_field( 'post_excerpt', $post_id );
 		if ( ! $description ) {
 			$description = get_post_field( 'post_content', $post_id );
+		}
+		$plain = trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( strip_shortcodes( (string) $description ) ) ) );
+		if ( '' === $plain && function_exists( 'teznevise_page_classic_source' ) ) {
+			$description = teznevise_page_classic_source( $post_id );
 		}
 	} elseif ( is_category() || is_tag() || is_tax() ) {
 		$description = term_description();
@@ -137,7 +141,7 @@ function teznevise_alias_redirects() {
 		'/privacy-policy'     => array( 'privacy' ),
 		'/service-thesis'     => array( 'thesis' ),
 		'/service-proposal'   => array( 'proposal' ),
-		'/service-statistics' => array( 'statistics' ),
+		'/statistics'         => array( 'service-statistics' ),
 		'/posts'              => array( 'blog' ),
 		'/tools'              => array( 'online-calculation-tools' ),
 	);

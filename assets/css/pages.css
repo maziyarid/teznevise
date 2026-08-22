@@ -412,6 +412,14 @@ body.tz-reading-focus .blog-post__content { max-width: none; }
 	border-radius: 16px;
 }
 
+.tz-honeypot {
+	position: absolute !important;
+	inset-inline-start: -10000px !important;
+	width: 1px !important;
+	height: 1px !important;
+	overflow: hidden !important;
+}
+
 .faq-group {
 	display: grid;
 	gap: 10px;

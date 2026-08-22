@@ -1,15 +1,20 @@
 # Teznevise 1.9.6 patch manifest
 
-Apply every path relative to the active `teznevise` theme directory.
+Apply every path relative to the active `teznevise` theme directory (the
+repository root). Do not ship a nested `/teznevise/` theme package.
 
 ## Added
 
 - `docs/CHANGELOG-1.9.6.md`
 - `docs/PATCH-MANIFEST-1.9.6.md`
 - `inc/security.php`
+- `scripts/check-release.py`
+- `tests/classic-content-contract.php`
 
 ## Modified
 
+- `.github/workflows/guard-functions-php.yml`
+- `.github/workflows/guard-theme-integrity.yml`
 - `CHANGELOG.md`
 - `README.md`
 - `assets/css/chrome.css` (generated)
@@ -38,6 +43,3 @@ Apply every path relative to the active `teznevise` theme directory.
 - `readme.txt`
 - `scripts/build-frontend-bundles.py`
 - `style.css`
-
-`assets/js/chrome.js` was rebuilt and remained byte-equivalent to the baseline after the accessibility block was moved into the authoritative source/build contract, so it is not included as a changed file.
-

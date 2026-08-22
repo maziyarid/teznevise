@@ -2,14 +2,8 @@ name: Guard theme integrity
 
 on:
   pull_request:
-    paths:
-      - '**/*.php'
-      - 'style.css'
   push:
-    branches: [ main ]
-    paths:
-      - '**/*.php'
-      - 'style.css'
+    branches: [ main, modifications ]
 
 permissions:
   contents: read
@@ -23,7 +17,8 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.3'
+          coverage: none
 
       - name: Lint every PHP file for syntax errors
         run: |
@@ -33,7 +28,7 @@ jobs:
               cat /tmp/lint_out
               status=1
             fi
-          done < <(find . -name '*.php' -not -path './node_modules/*' -not -path './vendor/*' -print0)
+          done < <(find . -name '*.php' -not -path './node_modules/*' -not -path './vendor/*' -not -path './teznevise_work/*' -print0)
           exit $status
 
   verify-style-header:
@@ -70,8 +65,97 @@ jobs:
           missing=0
           for fn in $(grep -oE 'teznevise_[a-zA-Z_]+\s*\(' header.php | sed -E 's/[[:space:]]*\($//' | sort -u); do
             if ! grep -rqE "function[[:space:]]+${fn}[[:space:]]*\(" --include='*.php' .; then
-              echo "::error file=header.php::header.php calls ${fn}() but no function definition was found anywhere in the theme. This is the same failure mode that took down production (missing teznevise_get_contact())."
+              echo "::error file=header.php::header.php calls ${fn}() but no function definition was found anywhere in the theme."
               missing=1
             fi
           done
           if [ "$missing" -eq 1 ]; then exit 1; fi
+
+  release-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Reject a nested theme package
+        run: |
+          if [ -f teznevise/style.css ] || [ -f teznevise/functions.php ]; then
+            echo "::error::Nested theme at teznevise/ is not deployable. Flatten into the repository root."
+            exit 1
+          fi
+
+      - name: Verify every TEZNEVISE_DIR require_once target exists
+        run: python3 scripts/check-release.py
+
+      - name: Classic Editor contract tests
+        run: php tests/classic-content-contract.php
+
+      - name: Rebuild frontend bundles and fail on drift
+        run: |
+          python3 scripts/build-frontend-bundles.py
+          git diff --check
+          if ! git diff --exit-code -- assets/css/chrome.css assets/css/pages.css assets/js/chrome.js; then
+            echo "::error::Generated bundles drifted from source. Commit the rebuilt files."
+            exit 1
+          fi
+
+      - name: Node syntax check for theme JavaScript
+        run: |
+          node --check assets/js/chrome.js
+          node --check assets/js/react-loader.js
+          node --check assets/js/calculators.js
+
+  wordpress-theme-activate:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: theme-src
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mysqli, zip
+          coverage: none
+          tools: wp-cli
+
+      - name: Install and activate the root theme
+        env:
+          MYSQL_HOST: 127.0.0.1
+        run: |
+          curl -sS -o /tmp/wordpress.tar.gz https://wordpress.org/latest.tar.gz
+          tar -xzf /tmp/wordpress.tar.gz -C /tmp
+          WP=/tmp/wordpress
+          mkdir -p "$WP/wp-content/themes/teznevise"
+          rsync -a --exclude '.git' --exclude 'teznevise_work' --exclude 'react-app' --exclude 'node_modules' theme-src/ "$WP/wp-content/themes/teznevise/"
+          wp config create --path="$WP" --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check
+          wp core install --path="$WP" --url=https://teznevise.ir --title=Teznevise --admin_user=admin --admin_password=admin --admin_email=admin@example.com --skip-email
+          wp theme activate teznevise --path="$WP"
+          wp eval --path="$WP" 'if (!defined("TEZNEVISE_VERSION") || TEZNEVISE_VERSION !== "1.9.6") { fwrite(STDERR, "version mismatch\n"); exit(1); } echo TEZNEVISE_VERSION, "\n";'
+          wp eval --path="$WP" '
+            $page = wp_insert_post(array("post_type"=>"page","post_status"=>"publish","post_title"=>"Owned","post_content"=>"Hi","post_name"=>"owned-short"), true);
+            if (is_wp_error($page)) { fwrite(STDERR, $page->get_error_message()); exit(1); }
+            $result = teznevise_wxr_import_classic_editor(-1, 0);
+            $fresh = get_post_field("post_content", $page);
+            if (trim($fresh) !== "Hi") { fwrite(STDERR, "short owned content was overwritten\n"); exit(1); }
+            echo "importer preserved short owned content\n";
+          '
