@@ -11,7 +11,7 @@ while ( have_posts() ) :
 	$kicker          = teznevise_blog_field( 'kicker', $post_id );
 	$subtitle        = teznevise_blog_field( 'subtitle', $post_id );
 	$featured_label  = teznevise_blog_field( 'featured_label', $post_id );
-	$author_label    = teznevise_blog_field( 'author_label', $post_id, get_the_author() );
+	$author_label    = teznevise_blog_field( 'author_label', $post_id, function_exists( 'teznevise_public_author_name' ) ? teznevise_public_author_name() : get_bloginfo( 'name' ) );
 	$hide_toc        = '1' === teznevise_blog_field( 'hide_toc', $post_id );
 	$related_heading = teznevise_blog_field( 'related_heading', $post_id, __( 'مقالات مرتبط', 'teznevise' ) );
 	$content         = teznevise_prepare_post_content( apply_filters( 'the_content', get_the_content() ) );

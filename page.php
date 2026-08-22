@@ -118,13 +118,7 @@ while ( have_posts() ) :
 		<?php endif; ?>
 
 		<div class="longcopy article-content" data-reveal>
-			<?php
-			if ( function_exists( 'teznevise_the_page_leftover_content' ) ) {
-				teznevise_the_page_leftover_content();
-			} else {
-				the_content();
-			}
-			?>
+			<?php the_content(); ?>
 		</div>
 	</div>
 </section>

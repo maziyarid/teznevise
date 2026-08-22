@@ -122,6 +122,90 @@ function teznevise_tel_href( $raw ) {
 }
 
 /**
+ * Persian/Arabic digits → Latin digits.
+ *
+ * @param string $raw Input.
+ * @return string
+ */
+function teznevise_latin_digits( $raw ) {
+	$map = array(
+		'۰' => '0', '۱' => '1', '۲' => '2', '۳' => '3', '۴' => '4',
+		'۵' => '5', '۶' => '6', '۷' => '7', '۸' => '8', '۹' => '9',
+		'٠' => '0', '١' => '1', '٢' => '2', '٣' => '3', '٤' => '4',
+		'٥' => '5', '٦' => '6', '٧' => '7', '٨' => '8', '٩' => '9',
+	);
+	return strtr( (string) $raw, $map );
+}
+
+/**
+ * Iranian mobile number as +989xxxxxxxxx, or empty if invalid.
+ *
+ * @param string $raw Raw phone.
+ * @return string
+ */
+function teznevise_iran_mobile( $raw ) {
+	$digits = preg_replace( '/\D+/', '', teznevise_latin_digits( $raw ) );
+	if ( 0 === strpos( $digits, '0098' ) ) {
+		$digits = substr( $digits, 4 );
+	} elseif ( 0 === strpos( $digits, '98' ) ) {
+		$digits = substr( $digits, 2 );
+	}
+	if ( 0 === strpos( $digits, '0' ) ) {
+		$digits = substr( $digits, 1 );
+	}
+	if ( ! preg_match( '/^9\d{9}$/', $digits ) ) {
+		return '';
+	}
+	return '+98' . $digits;
+}
+
+/**
+ * Public byline: never expose raw WP logins like akumumono.
+ *
+ * @param int $user_id Author ID.
+ * @return string
+ */
+function teznevise_public_author_name( $user_id = 0 ) {
+	$user_id = $user_id ? (int) $user_id : (int) get_the_author_meta( 'ID' );
+	$first   = trim( (string) get_the_author_meta( 'first_name', $user_id ) );
+	$last    = trim( (string) get_the_author_meta( 'last_name', $user_id ) );
+	if ( $first || $last ) {
+		return trim( $first . ' ' . $last );
+	}
+	$display = trim( (string) get_the_author_meta( 'display_name', $user_id ) );
+	$login   = strtolower( (string) get_the_author_meta( 'user_login', $user_id ) );
+	$blocked = array( 'akumumono', 'admin', 'administrator', 'maziyarid', 'root', 'user' );
+	if ( '' === $display || strtolower( $display ) === $login || in_array( $login, $blocked, true ) ) {
+		return get_bloginfo( 'name' );
+	}
+	return $display;
+}
+
+/**
+ * Rewrite tel: hrefs and stale phone numbers in HTML.
+ *
+ * @param string $html HTML.
+ * @return string
+ */
+function teznevise_rewrite_tel_html( $html ) {
+	if ( ! is_string( $html ) || '' === $html ) {
+		return $html;
+	}
+	$current = function_exists( 'teznevise_get_contact' ) ? teznevise_get_contact( 'phone_display' ) : '۰۹۳۰۲۸۲۲۰۹۱';
+	$html    = str_replace( array( '09331663849', '۰۹۳۳۱۶۶۳۸۴۹', '9331663849' ), $current, $html );
+	$html    = preg_replace_callback(
+		'/href=(["\'])\s*(?:\/)?tel:([^"\']+)\1/i',
+		static function ( $m ) {
+			$href = function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( $m[2] ) : ( 'tel:' . $m[2] );
+			return 'href=' . $m[1] . esc_attr( $href ) . $m[1];
+		},
+		$html
+	);
+	return is_string( $html ) ? $html : '';
+}
+add_filter( 'the_content', 'teznevise_rewrite_tel_html', 20 );
+
+/**
  * Site logo URL for header and footer.
  *
  * @return string

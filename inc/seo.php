@@ -119,6 +119,41 @@ function teznevise_seo_canonical_filter( $canonical ) {
 }
 add_filter( 'get_canonical_url', 'teznevise_seo_canonical_filter' );
 
+/**
+ * 301 competing URLs onto one canonical slug (TZ-004).
+ */
+function teznevise_alias_redirects() {
+	if ( is_admin() || wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || wp_doing_cron() ) {
+		return;
+	}
+	if ( empty( $_SERVER['REQUEST_URI'] ) ) {
+		return;
+	}
+	$path = (string) wp_parse_url( wp_unslash( $_SERVER['REQUEST_URI'] ), PHP_URL_PATH );
+	$path = untrailingslashit( $path );
+	$map  = array(
+		'/contact'            => array( 'contact-us' ),
+		'/team'               => array( 'our-team' ),
+		'/privacy-policy'     => array( 'privacy' ),
+		'/service-thesis'     => array( 'thesis' ),
+		'/service-proposal'   => array( 'proposal' ),
+		'/service-statistics' => array( 'statistics' ),
+		'/posts'              => array( 'blog' ),
+		'/tools'              => array( 'online-calculation-tools' ),
+	);
+	if ( ! isset( $map[ $path ] ) ) {
+		return;
+	}
+	foreach ( $map[ $path ] as $slug ) {
+		$page = get_page_by_path( $slug );
+		if ( $page && 'publish' === $page->post_status && $page->post_name !== trim( $path, '/' ) ) {
+			wp_safe_redirect( get_permalink( $page ), 301 );
+			exit;
+		}
+	}
+}
+add_action( 'template_redirect', 'teznevise_alias_redirects', 1 );
+
 function teznevise_schema_data() {
 	if ( teznevise_seo_plugin_active() ) {
 		return array();
@@ -146,7 +181,7 @@ function teznevise_schema_data() {
 			'headline'         => wp_strip_all_tags( get_the_title( $post_id ) ),
 			'datePublished'    => get_the_date( DATE_W3C, $post_id ),
 			'dateModified'     => get_the_modified_date( DATE_W3C, $post_id ),
-			'author'           => array( '@type' => 'Person', 'name' => get_the_author_meta( 'display_name', $author_id ) ),
+			'author'           => array( '@type' => 'Organization', 'name' => function_exists( 'teznevise_public_author_name' ) ? teznevise_public_author_name( $author_id ) : get_bloginfo( 'name' ) ),
 			'publisher'        => $publisher,
 			'description'      => teznevise_seo_description(),
 		);

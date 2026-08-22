@@ -31,7 +31,7 @@
           "enabled": true,
           "eyebrow": "خدمات پژوهشی تزنویسه",
           "title": "هر مرحله از پروژه را با یک پل تخصصی جلو ببرید",
-          "text": "ساختار کلی صفحه به‌صورت پیوسته طراحی شده تا کاربر از یک خدمت به خدمت بعدی روان حرکت کند.",
+          "text": "از انتخاب موضوع تا دفاع، هر خدمت به خدمت بعدی وصل است تا مسیر پژوهش‌تان یکپارچه بماند.",
           "columns": "3",
           "background": "default",
           "items": [
@@ -40,28 +40,28 @@
               "text": "از انتخاب موضوع تا نگارش فصل‌ها، تحلیل آماری و آمادگی دفاع برای ارشد و دکتری.",
               "icon": "fa-solid fa-graduation-cap",
               "color": "icon-indigo",
-              "url": "/service-thesis/"
+              "url": "/thesis/"
             },
             {
               "title": "انجام پروپوزال",
               "text": "بیان مسئله، مرور ادبیات، اهداف، فرضیه‌ها و روش‌شناسی با ساختار علمی و منابع به‌روز.",
               "icon": "fa-solid fa-file-circle-check",
               "color": "icon-teal",
-              "url": "/service-proposal/"
+              "url": "/proposal/"
             },
             {
               "title": "تحلیل آماری",
               "text": "تحلیل داده‌ها با SPSS، R، Python، LISREL، Matlab و AMOS همراه با تفسیر علمی نتایج.",
               "icon": "fa-solid fa-chart-line",
               "color": "icon-cyan",
-              "url": "/service-statistics/"
+              "url": "/statistics/"
             },
             {
               "title": "ابزارهای آنلاین",
               "text": "ماشین‌حساب‌های آماری رایگان برای آمار توصیفی، همبستگی و آزمون‌های پرکاربرد.",
               "icon": "fa-solid fa-calculator",
               "color": "icon-amber",
-              "url": "/tools/"
+              "url": "/online-calculation-tools/"
             },
             {
               "title": "مرکز دانش",

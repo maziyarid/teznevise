@@ -41,7 +41,7 @@ while ( have_posts() ) :
 				<p class="service-lead"><?php echo esc_html( $subtitle ); ?></p>
 			<?php endif; ?>
 			<p style="font-size:13px;margin-top:8px;">
-				<a href="<?php echo esc_url( home_url( '/tools/' ) ); ?>"><?php esc_html_e( '← بازگشت به همه ابزارها', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/online-calculation-tools/' ) ); ?>"><?php esc_html_e( '← بازگشت به همه ابزارها', 'teznevise' ); ?></a>
 			</p>
 		</div>
 	</div>
@@ -53,13 +53,7 @@ while ( have_posts() ) :
 <section class="section">
 	<div class="container">
 		<div class="longcopy article-content tool-body" data-reveal>
-			<?php
-			if ( function_exists( 'teznevise_the_page_leftover_content' ) ) {
-				teznevise_the_page_leftover_content();
-			} else {
-				the_content();
-			}
-			?>
+			<?php the_content(); ?>
 		</div>
 	</div>
 </section>

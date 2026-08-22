@@ -387,21 +387,55 @@ function teznevise_page_should_print_content( $post_id = 0 ) {
  * @param int $post_id Optional post ID.
  */
 function teznevise_the_page_leftover_content( $post_id = 0 ) {
+	static $printed = false;
+	if ( $printed ) {
+		return;
+	}
 	$post_id = $post_id ? (int) $post_id : (int) get_the_ID();
 	$raw     = (string) get_post_field( 'post_content', $post_id );
-	if ( function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections() ) {
+	$slug    = (string) get_post_field( 'post_name', $post_id );
+	$has_builder = function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections();
+
+	// Builder pages never call the_content(); run leftover calculators/forms here.
+	if ( $has_builder && function_exists( 'teznevise_interactive_shortcodes_markup' ) ) {
 		$markup = teznevise_interactive_shortcodes_markup( $raw );
 		if ( '' !== $markup ) {
 			echo '<div class="tz-interactive-page-content">' . do_shortcode( $markup ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
-		$classic = teznevise_render_classic_page_content( teznevise_page_without_interactive_shortcodes( $raw ) );
-		$classic = teznevise_page_content_disclosure_markup( $classic, $post_id );
-		if ( '' !== $classic ) {
-			echo $classic; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		}
+	}
+
+	$classic_raw = function_exists( 'teznevise_page_without_interactive_shortcodes' )
+		? teznevise_page_without_interactive_shortcodes( $raw )
+		: $raw;
+	if ( function_exists( 'strip_shortcodes' ) ) {
+		$classic_raw = strip_shortcodes( $classic_raw );
+	}
+	$classic_raw = trim( (string) $classic_raw );
+	$classic_txt = trim( wp_strip_all_tags( $classic_raw ) );
+	if ( '' === $classic_txt && function_exists( 'teznevise_wxr_classic_for_slug' ) ) {
+		$classic_raw = teznevise_wxr_classic_for_slug( $slug );
+		$classic_txt = trim( wp_strip_all_tags( $classic_raw ) );
+	}
+
+	if ( '' === $classic_txt ) {
+		$printed = true;
 		return;
 	}
-	the_content();
+
+	// Classic-only pages already print this as the main body.
+	if ( ! $has_builder && $classic_raw === trim( $raw ) ) {
+		$printed = true;
+		return;
+	}
+
+	$html = function_exists( 'teznevise_render_classic_page_content' )
+		? teznevise_render_classic_page_content( $classic_raw )
+		: wp_kses_post( $classic_raw );
+	$box  = teznevise_page_content_disclosure_markup( $html, $post_id );
+	if ( '' !== $box ) {
+		echo $box; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+	$printed = true;
 }
 
 /**

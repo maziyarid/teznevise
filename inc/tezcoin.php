@@ -365,7 +365,20 @@ function teznevise_popular_searches() {
 	$log = get_option( 'teznevise_search_log', array() );
 	if ( is_array( $log ) && $log ) {
 		arsort( $log );
-		return array_slice( array_keys( $log ), 0, 6 );
+		$terms = array();
+		foreach ( array_keys( $log ) as $term ) {
+			$term = str_replace( array( 'پرپوزال', 'پزوپوزال' ), 'پروپوزال', (string) $term );
+			if ( '' === trim( $term ) ) {
+				continue;
+			}
+			$terms[] = $term;
+			if ( count( $terms ) >= 6 ) {
+				break;
+			}
+		}
+		if ( $terms ) {
+			return $terms;
+		}
 	}
 	return array( 'پایان‌نامه', 'پروپوزال', 'SPSS', 'حجم نمونه', 'آلفای کرونباخ', 'فصل چهارم' );
 }

@@ -120,7 +120,10 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 			$is_group_heading = ( 1 === (int) $depth && $has_children && ( '' === $href || '#' === $href || '' === $path ) );
 
 			$item_output = isset( $args->before ) ? $args->before : '';
-			$icon        = function_exists( 'teznevise_nav_icon' ) ? teznevise_nav_icon( $href, $title ) : '';
+			$icon        = '';
+			if ( $depth > 0 && function_exists( 'teznevise_nav_icon' ) ) {
+				$icon = teznevise_nav_icon( $href, $title );
+			}
 			if ( $is_group_heading ) {
 				$item_output .= '<h4 class="mega-heading">';
 				if ( $icon ) {
@@ -145,7 +148,7 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 			if ( $has_children && 0 === $depth ) {
 				$menu_id_attr  = ! empty( $item->ID ) ? ' data-menu-item="' . esc_attr( $item->ID ) . '"' : '';
 				$item_output  .= '<button type="button" class="nav-dropdown-toggle" aria-expanded="false"' . $menu_id_attr . ' aria-label="' . esc_attr__( 'نمایش زیرمنو', 'teznevise' ) . '">';
-				$item_output  .= '<span class="nav-chevron" aria-hidden="true"><i class="fa-solid fa-chevron-down"></i></span>';
+				$item_output  .= '<span class="nav-chevron" aria-hidden="true"></span>';
 				$item_output  .= '</button>';
 			}
 

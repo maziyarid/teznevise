@@ -369,3 +369,72 @@
 }
 .account-shell .account-tabs a.is-on { background: #145d4a; color: #fff; }
 .account-ai-log { display: grid; gap: 10px; padding: 0; list-style: none; }
+
+/* 1.9.5 — top-level nav has no FA icons (those empty squares); mega is RTL */
+.tz-react-shell .nav-chevron i { display: none !important; }
+.tz-react-shell .nav-chevron {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-inline-start: 4px solid transparent;
+  border-inline-end: 4px solid transparent;
+  border-top: 5px solid currentColor;
+  font-size: 0;
+  line-height: 0;
+}
+.tz-react-shell .footer-col .footer-heading {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 800;
+  color: inherit;
+}
+@media (min-width: 1051px) {
+  .tz-react-shell .main-nav .nav-links {
+    direction: rtl !important;
+  }
+  .tz-react-shell .main-nav .nav-links > li > a > .nav-item-icon,
+  .tz-react-shell .main-nav .nav-links > li > .nav-link > .nav-item-icon,
+  .tz-react-shell .main-nav .nav-links > li > a .nav-item-icon {
+    display: none !important;
+  }
+  .tz-react-shell .main-nav ul.nav-dropdown,
+  .tz-react-shell .main-nav ul.nav-dropdown.mega {
+    direction: rtl !important;
+    text-align: right !important;
+    left: 12px !important;
+    right: 12px !important;
+    inset-inline: 12px !important;
+    width: auto !important;
+    max-width: none !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: minmax(200px, 1fr) !important;
+    grid-template-columns: none !important;
+  }
+  .tz-react-shell .main-nav ul.nav-dropdown.is-open,
+  .tz-react-shell .main-nav .has-dropdown:hover > ul.nav-dropdown,
+  .tz-react-shell .main-nav .has-dropdown:focus-within > ul.nav-dropdown {
+    display: grid !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+  }
+  .tz-react-shell .main-nav ul.nav-dropdown a,
+  .tz-react-shell .main-nav ul.nav-dropdown .mega-heading {
+    flex-direction: row !important;
+    direction: rtl !important;
+    text-align: right !important;
+    justify-content: flex-start !important;
+    white-space: normal !important;
+  }
+  .tz-react-shell .main-nav ul.nav-dropdown .nav-item-icon {
+    order: 0 !important;
+    margin-inline-end: 8px !important;
+  }
+}
+.tz-classic-more-wrap:empty { display: none; }
+.tz-lead-thanks {
+  padding: 20px;
+  border-radius: 16px;
+  background: #eef8f3;
+}

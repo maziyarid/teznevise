@@ -36,29 +36,6 @@ while ( have_posts() ) :
 
 <section class="section">
 	<div class="container">
-		<div class="reason-list contact-cards" data-reveal-stagger style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-bottom:32px;">
-			<div class="reason-item">
-				<div class="icon-box icon-teal"><i class="fa-solid fa-phone" aria-hidden="true"></i></div>
-				<b><?php esc_html_e( 'تلفن', 'teznevise' ); ?></b>
-				<p><a href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( teznevise_get_contact( 'phone_intl' ) ) : 'tel:+989302822091' ); ?>"><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></a></p>
-			</div>
-			<div class="reason-item">
-				<div class="icon-box icon-indigo"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
-				<b><?php esc_html_e( 'واتساپ', 'teznevise' ); ?></b>
-				<p><a href="<?php echo esc_url( teznevise_get_contact( 'whatsapp' ) ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'شروع گفتگو', 'teznevise' ); ?></a></p>
-			</div>
-			<div class="reason-item">
-				<div class="icon-box icon-cyan"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
-				<b><?php esc_html_e( 'ایمیل', 'teznevise' ); ?></b>
-				<p><a href="mailto:<?php echo esc_attr( teznevise_get_contact( 'email' ) ); ?>"><?php echo esc_html( teznevise_get_contact( 'email' ) ); ?></a></p>
-			</div>
-			<div class="reason-item">
-				<div class="icon-box icon-amber"><i class="fa-regular fa-clock" aria-hidden="true"></i></div>
-				<b><?php esc_html_e( 'ساعات پاسخ‌گویی', 'teznevise' ); ?></b>
-				<p><?php echo esc_html( teznevise_get_contact( 'hours' ) ); ?></p>
-			</div>
-		</div>
-
 		<div class="longcopy article-content" id="inquiry-form" data-reveal>
 			<?php
 			$slug        = get_post_field( 'post_name', get_the_ID() );
@@ -68,20 +45,15 @@ while ( have_posts() ) :
 			$is_shortcode_only = (bool) preg_match( '/^\[[a-zA-Z][^\]]{0,120}\]$/u', html_entity_decode( $plain, ENT_QUOTES, 'UTF-8' ) );
 
 			if ( $is_inquiry ) :
-				$phone = preg_replace( '/\D+/', '', (string) teznevise_get_contact( 'phone_intl' ) );
 				?>
 			<div class="inquiry-grid">
 				<div>
 					<?php echo function_exists( 'teznevise_render_native_lead_form' ) ? teznevise_render_native_lead_form( 'inquiry' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</div>
 				<div>
-					<form class="call-me-card" id="callMeForm" method="get" action="<?php echo esc_url( 'https://wa.me/' . $phone ); ?>" data-test="call-me-form">
-						<label class="screen-reader-text" for="callMePhone"><?php esc_html_e( 'شماره تماس', 'teznevise' ); ?></label>
-						<input id="callMePhone" name="text" type="tel" required placeholder="<?php esc_attr_e( 'شماره تماس برای تماس برگشتی', 'teznevise' ); ?>" />
-						<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'با من تماس بگیرید', 'teznevise' ); ?></button>
-					</form>
+					<p class="privacy-note"><?php esc_html_e( 'اگر ترجیح می‌دهید مستقیم پیام بدهید، از راه‌های زیر استفاده کنید. شرح پروژه را در نشانی واتساپ ننویسید.', 'teznevise' ); ?></p>
 					<div class="inquiry-messengers" style="margin-top:16px;">
-						<a class="inq-msg" href="<?php echo esc_url( 'https://wa.me/' . $phone ); ?>"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> واتساپ</a>
+						<a class="inq-msg" href="<?php echo esc_url( teznevise_get_contact( 'whatsapp' ) ); ?>"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> واتساپ</a>
 						<a class="inq-msg" href="<?php echo esc_url( teznevise_get_contact( 'telegram' ) ); ?>"><i class="fa-brands fa-telegram" aria-hidden="true"></i> تلگرام</a>
 						<a class="inq-msg" href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( teznevise_get_contact( 'phone_intl' ) ) : 'tel:+989302822091' ); ?>"><i class="fa-solid fa-phone" aria-hidden="true"></i> تماس</a>
 					</div>
@@ -92,7 +64,7 @@ while ( have_posts() ) :
 				<div class="faq-wrap" style="margin-top:28px;">
 					<div class="faq-item">
 						<button type="button" class="faq-q" aria-expanded="false"><?php esc_html_e( 'چقدر طول می‌کشد تا پاسخ بگیرم؟', 'teznevise' ); ?></button>
-						<div class="faq-a"><?php esc_html_e( 'در ساعات کاری معمولاً در کمتر از چند ساعت پاسخ اولیه داده می‌شود.', 'teznevise' ); ?></div>
+						<div class="faq-a"><?php esc_html_e( 'در ساعات کاری (شنبه تا پنجشنبه، ۹ تا ۲۱) معمولاً در کمتر از چند ساعت پاسخ اولیه داده می‌شود.', 'teznevise' ); ?></div>
 					</div>
 					<div class="faq-item">
 						<button type="button" class="faq-q" aria-expanded="false"><?php esc_html_e( 'آیا مشاوره اولیه رایگان است؟', 'teznevise' ); ?></button>
@@ -114,6 +86,29 @@ while ( have_posts() ) :
 			<?php elseif ( ! function_exists( 'teznevise_page_should_print_content' ) ) : ?>
 				<?php the_content(); ?>
 			<?php endif; ?>
+		</div>
+
+		<div class="reason-list contact-cards" data-reveal-stagger style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:32px;">
+			<div class="reason-item">
+				<div class="icon-box icon-teal"><i class="fa-solid fa-phone" aria-hidden="true"></i></div>
+				<b><?php esc_html_e( 'تلفن', 'teznevise' ); ?></b>
+				<p><a href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( teznevise_get_contact( 'phone_intl' ) ) : 'tel:+989302822091' ); ?>"><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></a></p>
+			</div>
+			<div class="reason-item">
+				<div class="icon-box icon-indigo"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+				<b><?php esc_html_e( 'واتساپ', 'teznevise' ); ?></b>
+				<p><a href="<?php echo esc_url( teznevise_get_contact( 'whatsapp' ) ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'شروع گفتگو', 'teznevise' ); ?></a></p>
+			</div>
+			<div class="reason-item">
+				<div class="icon-box icon-cyan"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+				<b><?php esc_html_e( 'ایمیل', 'teznevise' ); ?></b>
+				<p><a href="mailto:<?php echo esc_attr( teznevise_get_contact( 'email' ) ); ?>"><?php echo esc_html( teznevise_get_contact( 'email' ) ); ?></a></p>
+			</div>
+			<div class="reason-item">
+				<div class="icon-box icon-amber"><i class="fa-regular fa-clock" aria-hidden="true"></i></div>
+				<b><?php esc_html_e( 'ساعات پاسخ‌گویی', 'teznevise' ); ?></b>
+				<p><?php echo esc_html( teznevise_get_contact( 'hours' ) ); ?></p>
+			</div>
 		</div>
 	</div>
 </section>

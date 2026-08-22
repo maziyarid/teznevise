@@ -4,6 +4,11 @@
  *
  * @package Teznevise
  */
+if ( is_singular( array( 'page', 'post' ) ) && function_exists( 'teznevise_the_page_leftover_content' ) ) {
+	echo '<div class="container tz-classic-more-wrap">';
+	teznevise_the_page_leftover_content();
+	echo '</div>';
+}
 ?></main>
 <footer class="site-footer site-footer-new footer-new">
 	<div class="container">
@@ -30,14 +35,14 @@
 				</div>
 			</div>
 			<div class="footer-col">
-				<h4><?php esc_html_e( 'خدمات', 'teznevise' ); ?></h4>
+				<p class="footer-heading"><?php esc_html_e( 'خدمات', 'teznevise' ); ?></p>
 				<a href="<?php echo esc_url( home_url( '/thesis/' ) ); ?>"><?php esc_html_e( 'انجام پایان‌نامه', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/proposal/' ) ); ?>"><?php esc_html_e( 'انجام پروپوزال', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/statistics/' ) ); ?>"><?php esc_html_e( 'تحلیل آماری', 'teznevise' ); ?></a>
-				<a href="<?php echo esc_url( home_url( '/tools/' ) ); ?>"><?php esc_html_e( 'ابزارهای آنلاین', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/online-calculation-tools/' ) ); ?>"><?php esc_html_e( 'ابزارهای آنلاین', 'teznevise' ); ?></a>
 			</div>
 			<div class="footer-col">
-				<h4><?php esc_html_e( 'ارتباط با ما', 'teznevise' ); ?></h4>
+				<p class="footer-heading"><?php esc_html_e( 'ارتباط با ما', 'teznevise' ); ?></p>
 				<a href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( teznevise_get_contact( 'phone_intl' ) ) : 'tel:+989302822091' ); ?>"><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></a>
 				<a href="mailto:<?php echo esc_attr( teznevise_get_contact( 'email' ) ); ?>"><?php echo esc_html( teznevise_get_contact( 'email' ) ); ?></a>
 				<p><?php echo esc_html( teznevise_get_contact( 'address' ) ); ?></p>

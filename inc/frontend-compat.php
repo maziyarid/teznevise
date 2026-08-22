@@ -331,23 +331,33 @@ function teznevise_hub_shortcode_fallback( $atts = array(), $content = '', $tag 
  * @return string
  */
 function teznevise_render_native_lead_form( $context = 'contact' ) {
-	$phone = function_exists( 'teznevise_get_contact' ) ? teznevise_get_contact( 'phone_intl' ) : '989302822091';
-	$phone = preg_replace( '/\D+/', '', (string) $phone );
-	$wa    = 'https://wa.me/' . $phone;
 	$title = get_the_title();
 	$uid   = sanitize_html_class( $context );
+	$ok    = isset( $_GET['lead'] ) && 'ok' === $_GET['lead']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	ob_start();
+	if ( $ok ) :
+		?>
+	<div class="lead-card tz-lead-thanks" role="status">
+		<p><strong><?php esc_html_e( 'درخواست شما ثبت شد.', 'teznevise' ); ?></strong></p>
+		<p><?php esc_html_e( 'کارشناس تزنویسه در ساعات کاری (شنبه تا پنجشنبه، ۹ تا ۲۱) با شما تماس می‌گیرد. اطلاعات فقط برای بررسی همین درخواست استفاده می‌شود.', 'teznevise' ); ?></p>
+	</div>
+		<?php
+		return ob_get_clean();
+	endif;
 	?>
-	<form class="tz-form lead-card" method="get" action="<?php echo esc_url( $wa ); ?>" data-test="<?php echo esc_attr( $uid ); ?>-form">
-		<input type="hidden" name="text" value="" data-wa-template="1" />
+	<form class="tz-form lead-card" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-test="<?php echo esc_attr( $uid ); ?>-form" data-tz-lead>
+		<input type="hidden" name="action" value="teznevise_lead" />
+		<?php wp_nonce_field( 'teznevise_lead', 'teznevise_lead_nonce' ); ?>
+		<input type="hidden" name="context" value="<?php echo esc_attr( $context ); ?>" />
+		<input type="hidden" name="_tz_redirect" value="<?php echo esc_url( get_permalink() ? get_permalink() : home_url( '/inquiry/' ) ); ?>" />
 		<div class="form-grid">
 			<div class="field">
 				<label for="tz-name-<?php echo esc_attr( $uid ); ?>"><?php esc_html_e( 'نام و نام خانوادگی', 'teznevise' ); ?></label>
-				<input id="tz-name-<?php echo esc_attr( $uid ); ?>" name="name" type="text" required autocomplete="name" />
+				<input id="tz-name-<?php echo esc_attr( $uid ); ?>" name="name" type="text" required autocomplete="name" maxlength="80" />
 			</div>
 			<div class="field">
-				<label for="tz-phone-<?php echo esc_attr( $uid ); ?>"><?php esc_html_e( 'شماره تماس', 'teznevise' ); ?></label>
-				<input id="tz-phone-<?php echo esc_attr( $uid ); ?>" name="phone" type="tel" required autocomplete="tel" inputmode="tel" />
+				<label for="tz-phone-<?php echo esc_attr( $uid ); ?>"><?php esc_html_e( 'شماره موبایل', 'teznevise' ); ?></label>
+				<input id="tz-phone-<?php echo esc_attr( $uid ); ?>" name="phone" type="tel" required autocomplete="tel" inputmode="tel" dir="ltr" placeholder="0912xxxxxxx" pattern="^(?:\+98|0)?9\d{9}$" />
 			</div>
 			<div class="field full">
 				<label for="tz-service-<?php echo esc_attr( $uid ); ?>"><?php esc_html_e( 'نوع خدمت', 'teznevise' ); ?></label>
@@ -361,33 +371,71 @@ function teznevise_render_native_lead_form( $context = 'contact' ) {
 			</div>
 			<div class="field full">
 				<label for="tz-msg-<?php echo esc_attr( $uid ); ?>"><?php esc_html_e( 'شرح کوتاه پروژه', 'teznevise' ); ?></label>
-				<textarea id="tz-msg-<?php echo esc_attr( $uid ); ?>" name="message" rows="5" placeholder="<?php esc_attr_e( 'رشته، مقطع، موضوع و مرحله فعلی را بنویسید.', 'teznevise' ); ?>"></textarea>
+				<textarea id="tz-msg-<?php echo esc_attr( $uid ); ?>" name="message" rows="5" maxlength="2000" placeholder="<?php esc_attr_e( 'رشته، مقطع، موضوع و مرحله فعلی را بنویسید.', 'teznevise' ); ?>"></textarea>
 			</div>
 		</div>
 		<button class="btn-tz btn-primary-tz btn-lg-tz" type="submit">
-			<i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
-			<?php esc_html_e( 'ارسال درخواست در واتساپ', 'teznevise' ); ?>
+			<?php esc_html_e( 'ارسال درخواست', 'teznevise' ); ?>
 		</button>
-		<p class="privacy-note"><?php esc_html_e( 'اطلاعات شما فقط برای بررسی درخواست استفاده می‌شود و محرمانه می‌ماند.', 'teznevise' ); ?></p>
+		<p class="privacy-note"><?php esc_html_e( 'اطلاعات فقط برای بررسی درخواست در تزنویسه ذخیره می‌شود و در نشانی صفحه نمایش داده نمی‌شود. مشاوره اولیه رایگان است.', 'teznevise' ); ?></p>
 	</form>
 	<script>
 	(function(){
 		var form = document.querySelector('[data-test="<?php echo esc_js( $uid ); ?>-form"]');
 		if (!form) return;
-		form.addEventListener('submit', function () {
-			var name = (form.querySelector('[name="name"]') || {}).value || '';
-			var phone = (form.querySelector('[name="phone"]') || {}).value || '';
-			var service = (form.querySelector('[name="service"]') || {}).value || '';
-			var message = (form.querySelector('[name="message"]') || {}).value || '';
-			var text = 'درخواست مشاوره تزنویسه' + '\n' + 'نام: ' + name + '\n' + 'تلفن: ' + phone + '\n' + 'خدمت: ' + service + '\n' + message;
-			var hidden = form.querySelector('[data-wa-template]');
-			if (hidden) hidden.value = text;
+		var phone = form.querySelector('[name="phone"]');
+		if (!phone) return;
+		phone.addEventListener('input', function () {
+			var map = {'۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9','٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9'};
+			phone.value = phone.value.replace(/[۰-۹٠-٩]/g, function (d) { return map[d] || d; });
 		});
 	})();
 	</script>
 	<?php
 	return ob_get_clean();
 }
+
+/**
+ * First-party lead intake (no WhatsApp GET, no PII in the URL).
+ */
+function teznevise_handle_lead() {
+	$nonce = isset( $_POST['teznevise_lead_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['teznevise_lead_nonce'] ) ) : '';
+	if ( ! wp_verify_nonce( $nonce, 'teznevise_lead' ) ) {
+		wp_die( esc_html__( 'درخواست نامعتبر است. لطفاً دوباره تلاش کنید.', 'teznevise' ), '', array( 'response' => 400 ) );
+	}
+	$name    = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+	$phone   = isset( $_POST['phone'] ) ? ( function_exists( 'teznevise_iran_mobile' ) ? teznevise_iran_mobile( wp_unslash( $_POST['phone'] ) ) : sanitize_text_field( wp_unslash( $_POST['phone'] ) ) ) : '';
+	$service = isset( $_POST['service'] ) ? sanitize_text_field( wp_unslash( $_POST['service'] ) ) : '';
+	$message = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
+	$redirect = isset( $_POST['_tz_redirect'] ) ? esc_url_raw( wp_unslash( $_POST['_tz_redirect'] ) ) : home_url( '/inquiry/' );
+	if ( '' === $name || '' === $phone ) {
+		wp_safe_redirect( add_query_arg( 'lead', 'err', $redirect ) );
+		exit;
+	}
+	$to      = function_exists( 'teznevise_get_contact' ) ? teznevise_get_contact( 'email' ) : get_option( 'admin_email' );
+	$subject = 'درخواست جدید تزنویسه — ' . $service;
+	$body    = "نام: {$name}\nتلفن: {$phone}\nخدمت: {$service}\n\n{$message}\n";
+	wp_mail( $to ? $to : get_option( 'admin_email' ), $subject, $body );
+	$stored = get_option( 'teznevise_leads', array() );
+	if ( ! is_array( $stored ) ) {
+		$stored = array();
+	}
+	$stored[] = array(
+		'time'    => time(),
+		'name'    => $name,
+		'phone'   => $phone,
+		'service' => $service,
+		'ip'      => isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '',
+	);
+	if ( count( $stored ) > 200 ) {
+		$stored = array_slice( $stored, -200 );
+	}
+	update_option( 'teznevise_leads', $stored, false );
+	wp_safe_redirect( add_query_arg( 'lead', 'ok', $redirect ) );
+	exit;
+}
+add_action( 'admin_post_teznevise_lead', 'teznevise_handle_lead' );
+add_action( 'admin_post_nopriv_teznevise_lead', 'teznevise_handle_lead' );
 
 /**
  * Hub copy based on leftover shortcode tag.

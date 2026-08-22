@@ -40,29 +40,29 @@ function teznevise_content_defaults() {
 
 		'services_eyebrow' => 'خدمات پژوهشی تزنویسه',
 		'services_title'   => 'هر مرحله از پروژه را با یک پل تخصصی جلو ببرید',
-		'services_text'    => 'ساختار کلی صفحه به‌صورت پیوسته و Bridge طراحی شده تا کاربر از یک خدمت به خدمت بعدی، روان و هدفمند حرکت کند.',
+		'services_text'    => 'از انتخاب موضوع تا دفاع، هر خدمت به خدمت بعدی وصل است تا مسیر پژوهش‌تان یکپارچه بماند.',
 
 		'svc1_title' => 'انجام پایان‌نامه',
 		'svc1_text'  => 'از انتخاب موضوع تا نگارش فصل‌ها، تحلیل آماری و آمادگی دفاع برای ارشد و دکتری.',
-		'svc1_url'   => '/service-thesis/',
+		'svc1_url'   => '/thesis/',
 		'svc1_icon'  => 'fa-solid fa-graduation-cap',
 		'svc1_color' => 'icon-indigo',
 
 		'svc2_title' => 'انجام پروپوزال',
 		'svc2_text'  => 'بیان مسئله، مرور ادبیات، اهداف، فرضیه‌ها و روش‌شناسی با ساختار علمی و منابع به‌روز.',
-		'svc2_url'   => '/service-proposal/',
+		'svc2_url'   => '/proposal/',
 		'svc2_icon'  => 'fa-solid fa-file-circle-check',
 		'svc2_color' => 'icon-teal',
 
 		'svc3_title' => 'تحلیل آماری',
 		'svc3_text'  => 'تحلیل داده‌ها با SPSS، R، Python، LISREL، Matlab و AMOS همراه با تفسیر علمی نتایج.',
-		'svc3_url'   => '/service-statistics/',
+		'svc3_url'   => '/statistics/',
 		'svc3_icon'  => 'fa-solid fa-chart-line',
 		'svc3_color' => 'icon-cyan',
 
 		'svc4_title' => 'ابزارهای آنلاین',
 		'svc4_text'  => 'ماشین‌حساب‌های آماری رایگان برای آمار توصیفی، همبستگی و آزمون‌های پرکاربرد.',
-		'svc4_url'   => '/tools/',
+		'svc4_url'   => '/online-calculation-tools/',
 		'svc4_icon'  => 'fa-solid fa-calculator',
 		'svc4_color' => 'icon-amber',
 
@@ -100,7 +100,7 @@ function teznevise_content_defaults() {
 		'about_title'   => 'پژوهش خوب فقط تحویل فایل نیست.',
 		'about_text'    => 'تزنویسه با تمرکز بر کیفیت علمی، شفافیت مسیر و پاسخ‌گویی، دانشجویان و پژوهشگران را از انتخاب موضوع تا دفاع همراهی می‌کند. تیم متخصص، محرمانگی کامل و پشتیبانی منظم بخشی از همین مسیر است.',
 		'about_btn'     => 'درباره ما',
-		'about_btn_url' => '/about/',
+		'about_btn_url' => '/about-us/',
 		'reason1_title' => 'محرمانگی کامل',
 		'reason1_text'  => 'اطلاعات و فایل‌های پروژه با رویکرد محرمانه مدیریت می‌شوند.',
 		'reason2_title' => 'روش‌مندی علمی',
@@ -108,7 +108,7 @@ function teznevise_content_defaults() {
 		'reason3_title' => 'پاسخ‌گویی سریع',
 		'reason3_text'  => 'درخواست اولیه شما در کوتاه‌ترین زمان بررسی و مسیر بعدی شفاف می‌شود.',
 		'reason4_title' => 'خلاقیت آکادمیک',
-		'reason4_text'  => 'تم بصری سایت با عناصر نموداری، ماتریسی و لکه‌های جوهر، حس آکادمی و پژوهش را تقویت می‌کند.',
+		'reason4_text'  => 'ایده‌پژوهی و نگارش خلاق، در کنار دقت روش‌شناختی، خروجی قابل دفاع می‌سازد.',
 
 		'steps_eyebrow' => 'از کجا شروع کنم؟',
 		'steps_title'   => 'شش قدم تا یک مسیر پژوهشی روشن',
@@ -128,7 +128,7 @@ function teznevise_content_defaults() {
 
 		'articles_eyebrow' => 'تازه‌های مرکز دانش',
 		'articles_title'   => 'مطالب جدید و کاربردی',
-		'articles_text'    => 'به‌جای لینک‌های ساده با فلش، اقدام‌ها به‌صورت دکمه‌های واضح و مدرن طراحی شده‌اند تا تجربه کاربر حرفه‌ای‌تر باشد.',
+		'articles_text'    => 'راهنماهای کوتاه برای انتخاب موضوع، ساختار فصل‌ها، تحلیل داده و آمادگی دفاع.',
 
 		'cta_title' => 'پروژه پژوهشی‌ات را همین امروز شروع کن',
 		'cta_text'  => 'موضوع را بفرست؛ کارشناسان تزنویسه مسیر، زمان و برآورد اولیه را با شما بررسی می‌کنند.',

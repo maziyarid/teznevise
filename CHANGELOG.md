@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.9.5 — 2026-08-22 — RTL nav, classic «مشاهده بیشتر», WXR copy, UI audit
+
+- Top-level menu no longer prints Font Awesome icons (those empty squares). Dropdown chevron is a CSS triangle so it cannot tofu. Mega panel is RTL with wrapping labels.
+- Shared «مشاهده بیشتر» box on every singular page: classic-editor HTML, never raw shortcodes. Footer prints it once if a template forgot. Calculators still run even when the page has no builder sections.
+- 22 legal/about/team pages from the 2026-08-21 WordPress export are seeded (`inc/wxr-classic-content.json`). Visiting wp-admin once writes that HTML into the classic editor when the live page still only has `[tz_*]`. Old `tel:0933…` numbers in that copy rewrite to the current line.
+- `[gravityform]` is not Gravity Forms — it always renders the native lead form. Lead forms POST to WordPress (no PII in the URL / WhatsApp GET).
+- Inquiry form sits above contact cards. Hours stay «شنبه تا پنجشنبه، ۹ تا ۲۱». Discount copy stays ۱۰٪.
+- Competing URLs 301 to one canonical (`/contact/` → `/contact-us/`, `/service-thesis/` → `/thesis/`, `/tools/` → `/online-calculation-tools/`, …).
+- Homepage no longer shows internal design-note copy. Article bylines never print raw logins like `akumumono`. Footer section titles are not heading-level skips.
+- PR #448 (builder-route 500 analysis) was already merged; leftover rendering no longer calls `the_content()` a second time, which was a likely source of those fatals.
+
+
 
 ## 1.9.4 - 2026-08-21
 
