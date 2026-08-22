@@ -450,6 +450,43 @@ function teznevise_builder_section_is_faq( $section ) {
 }
 
 /**
+ * Strip leftover accordion markers (▾ ▼ +) from stored FAQ titles.
+ *
+ * @param string $title Raw title.
+ * @return string
+ */
+function teznevise_builder_plain_title( $title ) {
+	$title = (string) $title;
+	$title = preg_replace( '/[\s\x{00A0}]*[▼▽▾▴▸▹◁◀▶＋+]+$/u', '', $title );
+	return is_string( $title ) ? trim( $title ) : '';
+}
+
+/**
+ * True when the item carries a real icon, not the generic check/arrow fallback.
+ *
+ * @param array $item Item data.
+ * @return bool
+ */
+function teznevise_builder_item_has_custom_icon( $item ) {
+	if ( ! empty( $item['icon_svg'] ) ) {
+		return true;
+	}
+	$icon = isset( $item['icon'] ) ? trim( (string) $item['icon'] ) : '';
+	if ( '' === $icon ) {
+		return false;
+	}
+	$generic = array(
+		'fa-solid fa-check',
+		'fa-solid fa-arrow-down',
+		'fa-solid fa-circle-check',
+		'fa-check',
+		'fa-arrow-down',
+		'fa-circle-check',
+	);
+	return ! in_array( $icon, $generic, true );
+}
+
+/**
  * Persist sections for a post.
  *
  * @param int   $post_id  Post ID.
@@ -741,7 +778,7 @@ function teznevise_builder_render_feature_list( $section ) {
 		}
 		echo '<div>';
 		if ( ! empty( $item['title'] ) ) {
-			echo '<h3>' . esc_html( $item['title'] ) . '</h3>';
+			echo '<h3>' . esc_html( teznevise_builder_plain_title( $item['title'] ) ) . '</h3>';
 		}
 		if ( ! empty( $item['text'] ) ) {
 			echo '<p>' . esc_html( $item['text'] ) . '</p>';
@@ -774,9 +811,11 @@ function teznevise_builder_render_process_steps( $section ) {
 		echo '<li class="tez-builder-step' . esc_attr( $tone ) . '">';
 		echo '<div class="tez-builder-step-body">';
 		echo '<span class="tez-builder-step-number" aria-hidden="true">' . esc_html( number_format_i18n( $index ) ) . '</span>';
-		echo teznevise_builder_icon_markup( $item, 'fa-solid fa-arrow-down' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.
+		if ( teznevise_builder_item_has_custom_icon( $item ) ) {
+			echo teznevise_builder_icon_markup( $item, 'fa-solid fa-arrow-down' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.
+		}
 		if ( ! empty( $item['title'] ) ) {
-			echo '<h3>' . esc_html( $item['title'] ) . '</h3>';
+			echo '<h3>' . esc_html( teznevise_builder_plain_title( $item['title'] ) ) . '</h3>';
 		}
 		if ( ! empty( $item['text'] ) ) {
 			echo '<p>' . esc_html( $item['text'] ) . '</p>';

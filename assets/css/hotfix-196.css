@@ -1,0 +1,663 @@
+/**
+ * 1.9.6 last-wins — RTL mega, FA7 nav, mobile drawer, centred cards.
+ * Enqueued last (priority 100) so it always beats chrome/modernization/service CSS.
+ * @package Teznevise
+ */
+
+/* Kill the Font Awesome 6 tofu chevron (font-family name is wrong on FA7). */
+.nav-links .menu-item-has-children > a::after,
+.nav-links .menu-item-has-children:hover > a::after,
+.mobile-nav-links .menu-item-has-children > a::after,
+.main-nav .nav-link::after,
+.mobile-nav-links .nav-link::after {
+  content: none !important;
+  display: none !important;
+  font-family: inherit !important;
+}
+
+.nav-chevron {
+  display: inline-block !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin-inline-start: 6px !important;
+  border-inline-start: 4px solid transparent !important;
+  border-inline-end: 4px solid transparent !important;
+  border-top: 5px solid currentColor !important;
+  border-bottom: 0 !important;
+  background: none !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  opacity: 0.65;
+  flex: 0 0 auto;
+}
+.nav-chevron i,
+.nav-chevron .fa-chevron-down {
+  display: none !important;
+}
+.menu-item.has-dropdown.is-open > .nav-link .nav-chevron,
+.menu-item.has-dropdown:hover > .nav-link .nav-chevron,
+.nav-dropdown-toggle[aria-expanded="true"] .nav-chevron {
+  transform: rotate(180deg);
+  transform-origin: center 2px;
+}
+
+/* Desktop mega: full width of the nav, RTL, auto-fit (no empty left column). */
+@media (min-width: 1051px) {
+  html[dir="rtl"] .main-nav,
+  [dir="rtl"] .main-nav,
+  .main-nav {
+    position: relative !important;
+    overflow: visible !important;
+    direction: rtl !important;
+  }
+  .main-nav .nav-links {
+    direction: rtl !important;
+  }
+  .main-nav .menu-item.has-dropdown {
+    position: static !important;
+  }
+  .main-nav ul.nav-dropdown,
+  .main-nav ul.nav-dropdown.nav-panel,
+  .main-nav ul.nav-dropdown.mega,
+  .main-nav .nav-links > li > ul.sub-menu {
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    inset-inline: 12px !important;
+    left: auto !important;
+    right: auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+    direction: rtl !important;
+    text-align: right !important;
+    display: none !important;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+    grid-auto-flow: row !important;
+    grid-auto-columns: unset !important;
+    justify-items: stretch !important;
+    gap: 12px !important;
+    padding: 16px !important;
+    margin: 0 !important;
+    background: #fff !important;
+    border: 1px solid rgba(20, 93, 74, 0.12) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 22px 48px rgba(9, 40, 32, 0.16) !important;
+    z-index: 90 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    max-height: min(70vh, 560px) !important;
+  }
+  .main-nav .menu-item.has-dropdown:hover > ul.nav-dropdown,
+  .main-nav .menu-item.has-dropdown:focus-within > ul.nav-dropdown,
+  .main-nav .menu-item.has-dropdown.is-open > ul.nav-dropdown,
+  .main-nav ul.nav-dropdown.is-open {
+    display: grid !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    height: auto !important;
+  }
+  .main-nav ul.nav-dropdown > .mega-col,
+  .main-nav ul.nav-dropdown > .menu-item-has-children {
+    min-width: 0 !important;
+    background: #f7fcfa !important;
+    border: 1px solid rgba(20, 93, 74, 0.08) !important;
+    border-radius: 14px !important;
+    padding: 10px !important;
+    direction: rtl !important;
+    text-align: right !important;
+  }
+  .main-nav .mega-heading,
+  .main-nav ul.nav-dropdown .nav-link {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    direction: rtl !important;
+    text-align: right !important;
+    white-space: normal !important;
+  }
+  .main-nav .nav-item-icon {
+    order: 0 !important;
+    margin: 0 !important;
+    flex: 0 0 auto !important;
+    width: 1.15em !important;
+    text-align: center !important;
+    color: #145d4a !important;
+    font-family: "Font Awesome 7 Free", "Font Awesome 6 Free", "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    -webkit-font-smoothing: antialiased;
+  }
+  .main-nav .nav-links > li > a,
+  .main-nav .nav-links > li > .nav-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    direction: rtl !important;
+  }
+  /* Top-level desktop icons stay hidden (1.8.7 density). Mega + mobile keep them. */
+  .main-nav .nav-links > li > a > .nav-item-icon,
+  .main-nav .nav-links > li > .nav-link > .nav-item-icon {
+    display: none !important;
+  }
+  .main-nav .nav-dropdown-toggle {
+    display: none !important;
+  }
+  .main-nav ul.nav-dropdown-l3,
+  .main-nav ul.nav-dropdown .sub-menu {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    inset: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: auto !important;
+    min-width: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 4px 0 0 !important;
+  }
+}
+
+/* FAQ boxes: numbered colourful tiles, never accordion arrows. */
+.faq-q span:last-child,
+.faq-item .faq-q::after,
+.faq-card .faq-q::after,
+.faq-item h3::after,
+.faq-card h3::after,
+.faq-icon,
+.faq-item .chevron,
+.faq-item [class*="chevron"],
+.tzss-faq-icon,
+.tzca-faq-icon,
+.tzt-faq-icon,
+.tzhub-faq-icon,
+.faq-item svg,
+.faq-card svg {
+  display: none !important;
+}
+
+/* Chevrons are hidden, so answers must remain readable as static boxes. */
+.faq-a,
+.faq-answer,
+.tzss-faq-a,
+.tzca-faq-a,
+.tzt-faq-a,
+.tzhub-faq-a {
+  display: block !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Footer: compact SSL, no huge white tile. */
+.trust-seal,
+.footer-certs .trust-seal,
+.site-footer-new .trust-seal {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 8px 14px !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #d7ece4 !important;
+}
+.trust-seal svg,
+.footer-certs .trust-seal svg,
+.site-footer-new .trust-seal svg {
+  width: 22px !important;
+  height: 22px !important;
+  flex: 0 0 auto;
+}
+.footer-heading,
+.footer-col .footer-heading,
+.footer-col h4 {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: #e8f5f1 !important;
+}
+
+/* Mobile drawer: column accordion, never a vertical leftover tab. */
+@media (max-width: 1050px) {
+  .main-nav .nav-links {
+    display: none !important;
+  }
+  .main-nav ul.nav-dropdown,
+  .main-nav .nav-links .sub-menu {
+    display: none !important;
+  }
+  .mobile-nav {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 4000 !important;
+  }
+  .mobile-nav-panel {
+    position: absolute !important;
+    inset-block: 0 !important;
+    inset-inline-end: 0 !important;
+    inset-inline-start: auto !important;
+    width: min(100%, 420px) !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    overflow: auto !important;
+    background: #fff !important;
+    direction: rtl !important;
+    writing-mode: horizontal-tb !important;
+  }
+  .mobile-nav-links,
+  .mobile-nav-links ul,
+  .mobile-nav-links li,
+  .mobile-nav-links a,
+  .mobile-nav-links .nav-link,
+  .mobile-nav-links .mega-heading {
+    writing-mode: horizontal-tb !important;
+    white-space: normal !important;
+    direction: rtl !important;
+    text-align: right !important;
+  }
+  .mobile-nav-links .menu-item.has-dropdown,
+  .mobile-nav-links .menu-item.menu-item-has-children {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    position: relative !important;
+    width: 100% !important;
+  }
+  .mobile-nav-links .menu-item.has-dropdown > .nav-link,
+  .mobile-nav-links .menu-item.menu-item-has-children > .nav-link {
+    width: 100% !important;
+    max-width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    padding-inline-end: 48px !important;
+    writing-mode: horizontal-tb !important;
+  }
+  .mobile-nav-links .nav-link .nav-chevron {
+    display: none !important;
+  }
+  .mobile-nav-links .nav-dropdown-toggle {
+    position: absolute !important;
+    inset-inline-end: 8px !important;
+    inset-inline-start: auto !important;
+    top: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+    z-index: 2;
+  }
+  .mobile-nav-links .nav-dropdown-toggle .nav-chevron {
+    display: inline-block !important;
+  }
+  .mobile-nav-links ul.nav-dropdown,
+  .mobile-nav-links ul.sub-menu {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 0 0 auto !important;
+    inset: auto !important;
+    display: none !important;
+    background: #f7fcfa !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    padding: 6px 8px 10px !important;
+    margin: 0 !important;
+    writing-mode: horizontal-tb !important;
+  }
+  .mobile-nav-links ul.nav-dropdown.is-open,
+  .mobile-nav-links li.is-open > ul.nav-dropdown,
+  .mobile-nav-links li.submenu-open > ul {
+    display: block !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  .mobile-nav-links .nav-item-icon {
+    display: inline-block !important;
+    margin-inline-end: 8px !important;
+    color: #145d4a !important;
+  }
+}
+
+/* ===== Mobile: centre every card / step / faq / stat / footer on all pages ===== */
+@media (max-width: 720px) {
+  .section-head,
+  .section-head.center,
+  .page-hero-inner,
+  .page-hero-new,
+  .page-hero-new .section-head,
+  .tez-builder-section-hero .section-head,
+  .service-hero .section-head,
+  .hero-copy,
+  .blog-archive__header,
+  .account-head,
+  .tzhub-hero,
+  .tzhub-hero-inner,
+  .tzc-section-head,
+  .tzss-hero,
+  .lead-card-head {
+    text-align: center !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .section-head h1,
+  .section-head h2,
+  .section-head p,
+  .page-hero-inner h1,
+  .page-hero-new h1,
+  .hero-copy h1,
+  .hero-copy p {
+    margin-inline: auto !important;
+    text-align: center !important;
+  }
+
+  .reason-list,
+  .reason-list.cols-2,
+  .reason-list.cols-3,
+  .reason-list.contact-cards,
+  .services-grid,
+  .field-as-services.services-grid,
+  .steps,
+  .steps.steps-6,
+  .tez-builder-steps,
+  .tez-builder-steps.steps-6,
+  .tez-builder-grid,
+  .tez-builder-cols-2,
+  .tez-builder-cols-3,
+  .tez-builder-cols-4,
+  .faq-grid,
+  .faq-wrap,
+  .faq-group,
+  .tzss-faq,
+  .tzca-faq,
+  .tzt-faq,
+  .tzhub-faq,
+  .tzhub-grid,
+  .tzhub-stats,
+  .field-grid,
+  .challenge-grid,
+  .service-bullets,
+  .check-grid,
+  .trust-grid,
+  .stats-grid,
+  .testimonial-grid,
+  .quote-grid,
+  .people-grid,
+  .cta-band,
+  .inquiry-grid {
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+  }
+
+  .reason-item,
+  .reason-item.tez-builder-feature,
+  .tez-builder-feature,
+  .service-card,
+  .tez-builder-card,
+  .step,
+  .tez-builder-step,
+  .tez-builder-step-body,
+  .faq-item,
+  .faq-card,
+  .tzss-faq-item,
+  .tzca-faq-item,
+  .tzt-faq-item,
+  .tzhub-faq-item,
+  .tzhub-card,
+  .tzhub-stat,
+  .check-card,
+  .trust-card,
+  .stat-card,
+  .testimonial,
+  .quote-card,
+  .challenge,
+  .process-item,
+  .surface-card,
+  .tools-ai-card,
+  .tone-1, .tone-2, .tone-3, .tone-4, .tone-5,
+  .tone-6, .tone-7, .tone-8, .tone-9 {
+    width: 100% !important;
+    max-width: 520px !important;
+    margin-inline: auto !important;
+    text-align: center !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .reason-item > div,
+  .tez-builder-feature > div,
+  .faq-item > div,
+  .faq-card > div,
+  .tez-builder-step-body > div,
+  .service-card > div,
+  .check-card > div {
+    text-align: center !important;
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  .reason-item h3,
+  .reason-item b,
+  .service-card h3,
+  .step h3,
+  .faq-item h3,
+  .faq-card h3,
+  .faq-q,
+  .faq-question,
+  .tzss-faq-q,
+  .tzca-faq-q,
+  .tzt-faq-q,
+  .tzhub-faq-q,
+  .tez-builder-step h3,
+  .tez-builder-step-body h3,
+  .tez-builder-feature h3,
+  .check-card p,
+  .challenge h3,
+  .stat-card .stat-value,
+  .stat-card .stat-label,
+  .tzhub-stat,
+  .tz-mini-stat {
+    text-align: center !important;
+    margin-inline: auto !important;
+  }
+  .reason-item p,
+  .service-card p,
+  .step p,
+  .faq-item p,
+  .faq-card p,
+  .faq-a,
+  .faq-answer,
+  .tzss-faq-a,
+  .tzca-faq-a,
+  .tzt-faq-a,
+  .tez-builder-step p,
+  .tez-builder-step-body p,
+  .challenge p,
+  .check-card p,
+  .quote-card p,
+  .testimonial p {
+    text-align: center !important;
+    margin-inline: auto !important;
+  }
+
+  .icon-box,
+  .step-icon,
+  .faq-num,
+  .tez-builder-step-number,
+  .check-icon,
+  .check-card .mark,
+  .step .n,
+  .challenge .num,
+  .service-card .icon-box,
+  .reason-item .icon-box,
+  .tez-builder-feature .icon-box,
+  .tez-builder-step .icon-box,
+  .tez-builder-step-body .icon-box {
+    margin-inline: auto !important;
+    float: none !important;
+    align-self: center !important;
+  }
+
+  .cta-band {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 28px 20px !important;
+  }
+  .cta-band h2,
+  .cta-band p,
+  .cta-band > div {
+    text-align: center !important;
+    width: 100%;
+  }
+  .cta-band .btn-tz {
+    width: 100% !important;
+    max-width: 360px !important;
+    justify-content: center !important;
+    margin-inline: auto !important;
+  }
+
+  .hero-actions,
+  .hero-points,
+  .tez-builder-actions,
+  .tez-builder-points {
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .tez-builder-points li {
+    justify-content: center !important;
+  }
+
+  .seo-panel,
+  .tz-classic-disclosure,
+  .seo-disclosure {
+    text-align: center !important;
+    padding: 22px 16px !important;
+  }
+  .seo-more-btn {
+    margin-inline: auto !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+  }
+
+  /* Footer: one centred column, compact seals. */
+  .footer-grid,
+  .site-footer-new .footer-grid,
+  .footer-new .footer-grid {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+    justify-items: center !important;
+    gap: 28px !important;
+  }
+  .footer-brand,
+  .footer-col,
+  .footer-utility,
+  .footer-certs,
+  .footer-bottom,
+  .footer-legal,
+  .footer-menu-list,
+  .footer-social,
+  .site-footer-new .footer-brand,
+  .site-footer-new .footer-col,
+  .site-footer-new .footer-utility,
+  .site-footer-new .footer-certs,
+  .site-footer-new .footer-bottom {
+    text-align: center !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+  .footer-brand {
+    grid-column: auto !important;
+  }
+  .footer-brand p,
+  .footer-col a,
+  .footer-col p,
+  .footer-legal,
+  .footer-menu-list,
+  .site-footer-new .footer-menu-list,
+  .site-footer-new .footer-legal {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    grid-template-columns: 1fr !important;
+  }
+  .footer-brand img,
+  .footer-logo img,
+  .footer-logo-wrap {
+    margin-inline: auto !important;
+    display: block !important;
+  }
+  .footer-social,
+  .site-footer-new .footer-social {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 10px !important;
+  }
+  .footer-certs,
+  .site-footer-new .footer-certs {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 10px !important;
+  }
+  .lead-card,
+  .tz-form.lead-card {
+    max-width: 520px !important;
+    margin-inline: auto !important;
+  }
+}
+
+/* Steps: one visual. Hide a generic check sitting next to the number. */
+.tez-builder-step-body .tez-builder-step-number + .icon-box:has(.fa-check),
+.tez-builder-step-body .tez-builder-step-number + .icon-box:has(.fa-arrow-down),
+.tez-builder-step-body .tez-builder-step-number + .icon-box:has(.fa-circle-check) {
+  display: none !important;
+}
+
+/* Classic more-box always readable. */
+.tz-classic-disclosure.seo-panel,
+.seo-panel.tz-classic-disclosure,
+.seo-panel.seo-disclosure {
+  background: #f7fcfa;
+  border: 1px solid rgba(20, 93, 74, 0.1);
+  border-radius: 24px;
+  padding: 28px 24px;
+  margin: 24px auto 8px;
+  max-width: 920px;
+}
+.tz-classic-more-wrap {
+  padding-block: 12px 32px;
+}
+
+/* Phone links never look like internal routes (href is handled in PHP). */
+a[href^="/tel:"] {
+  pointer-events: none;
+}

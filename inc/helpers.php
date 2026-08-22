@@ -388,7 +388,8 @@ function teznevise_nav_is_cta_duplicate( $url ) {
  */
 function teznevise_nav_item_title_short( $title, $item, $args = null, $depth = 0 ) {
 	unset( $item, $depth );
-	if ( ! is_object( $args ) || empty( $args->theme_location ) || 'primary' !== $args->theme_location ) {
+	$loc = ( is_object( $args ) && ! empty( $args->theme_location ) ) ? (string) $args->theme_location : '';
+	if ( ! in_array( $loc, array( 'primary', 'mobile' ), true ) ) {
 		return $title;
 	}
 	$map = array(
