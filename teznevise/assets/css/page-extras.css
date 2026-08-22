@@ -1,0 +1,66 @@
+/**
+ * Page extras used by team/tools/inquiry after the HTML→WP conversion.
+ */
+
+.filter-tabs,
+.tools-filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 0 0 28px;
+}
+.filter-tab,
+.tools-filters [data-filter] {
+	border: 1px solid var(--tz-line, #dfe9e5);
+	background: #fff;
+	color: #2f433c;
+	border-radius: 999px;
+	padding: 8px 16px;
+	font-weight: 800;
+	font-size: 13.5px;
+}
+.filter-tab.is-active,
+.filter-tab.active,
+.tools-filters [data-filter].is-active,
+.tools-filters [data-filter].active {
+	background: #145D4A;
+	color: #fff;
+	border-color: #145D4A;
+}
+[data-cat][hidden],
+[data-category][hidden] {
+	display: none !important;
+}
+
+.inquiry-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+	gap: 24px;
+	align-items: start;
+}
+@media (max-width: 900px) {
+	.inquiry-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.results-empty {
+	padding: 24px;
+	text-align: center;
+	color: var(--tz-muted, #607069);
+	border: 1px dashed var(--tz-line, #dfe9e5);
+	border-radius: 16px;
+}
+
+.tz-honeypot {
+	position: absolute !important;
+	inset-inline-start: -10000px !important;
+	width: 1px !important;
+	height: 1px !important;
+	overflow: hidden !important;
+}
+
+.faq-group {
+	display: grid;
+	gap: 10px;
+}

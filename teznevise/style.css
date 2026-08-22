@@ -1,0 +1,23 @@
+/*
+Theme Name: Teznevise
+Theme URI: https://teznevise.ir/
+Author: MAZ//ID (Maziyar)
+Author URI: https://maziyarid.com/
+Description: RTL-first WordPress theme for Teznevise — thesis, proposal, research, and statistical analysis consulting.
+Version: 1.9.6
+Requires at least: 6.4
+Tested up to: 6.9
+Requires PHP: 8.3
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: teznevise
+Tags: rtl-language-support, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready, blog, education
+
+Author signature: MAZ//ID (Maziyar)
+Brand: maziyarid/M-Z — A brand new repository with my complete brand identity, story, and website prototype.
+https://github.com/maziyarid/M-Z
+*/
+
+/* Runtime styles are enqueued from assets/css via functions.php.
+ * teznevise_work/assets remains a migration fallback until root asset parity is verified.
+ */
