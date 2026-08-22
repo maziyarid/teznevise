@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.9.10 — 2026-08-22 — Enamad, consulting copy, waitlist, professional AI
+
+- Exact Enamad trust seal in the footer; SSL plus placeholder ساماندهی / اتحادیه / ثبت ملی in the same row.
+- Delayed Analytics `G-ZTB0ERWJYN` and Clarity `xf2anzt0a3` (idle / first input).
+- Public copy filter: «انجام پایان نامه/پروپوزال» always reads «مشاوره انجام …» (Enamad-safe).
+- Tools waitlist bar stores name + phone encrypted; Tools → اطلاع‌رسانی ابزارها.
+- Chat UI: ChatGPT-style composer, avatars, 44px send, identity lock via handwritten `displayed_model_name`.
+- Per-post SKILL.md media library button; per-post / per-agent API keys vs global vault.
+- Provider status cards + last-failure log on Settings → TezNevise AI.
+- Official university SVG/WebP crests with alt (Commons / Wikipedia sources).
+- You.com research still falls back to Tavily; LLM cascade retries the next provider on failure.
+
 ## 1.9.9 — 2026-08-22 — AI engine, SERP, mega/dropdown, dashboard
 
 - Companion `teznevise-core`: encrypted key vault, identity-locked agents, free-first OpenRouter router, You.com → Tavily research, async debate, summarise/regenerate REST.

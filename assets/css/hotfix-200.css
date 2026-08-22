@@ -1,0 +1,137 @@
+/**
+ * 1.9.10 last-wins — waitlist bar, Enamad row, university marks, chat polish.
+ * Concatenated after hotfix-199.
+ * @package Teznevise
+ */
+
+.tz-waitlist-bar {
+  background: #145d4a;
+  color: #fff;
+  padding-block: 10px;
+}
+.tz-waitlist-bar__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.tz-waitlist-bar__copy {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.7;
+  flex: 1 1 18rem;
+}
+.tz-waitlist-bar__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.tz-waitlist-bar__form input {
+  min-height: 44px;
+  border: 0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  min-width: 9rem;
+}
+.tz-waitlist-bar__form .btn-tz {
+  min-height: 44px;
+  background: #82d8b9;
+  color: #10231d;
+}
+.tz-waitlist-bar__ok {
+  margin: 0;
+  font-weight: 700;
+}
+
+.footer-certs {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+.footer-certs__enamad {
+  display: inline-flex;
+  align-items: center;
+  min-height: 86px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #dfe9e5;
+  border-radius: 14px;
+}
+.footer-certs__enamad img {
+  display: block;
+  max-height: 78px;
+  width: auto;
+}
+.trust-seal.is-soon {
+  opacity: 0.72;
+}
+
+.uni-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--tz-space-4, 1rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+.uni-row img,
+.uni-row svg {
+  max-height: 64px;
+  width: auto;
+  margin-inline: auto;
+  display: block;
+}
+.uni-strip {
+  text-align: center;
+  padding-block: var(--tz-space-12, 3rem);
+}
+.uni-kicker {
+  color: #145d4a;
+  font-weight: 800;
+}
+.uni-mark {
+  margin: 0;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.uni-mark img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid #e4eee9;
+  border-radius: 16px;
+  padding: 8px;
+  max-height: none;
+}
+.uni-mark figcaption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #145d4a;
+}
+
+.tz-gpt-send {
+  min-height: 44px !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.tz-gpt-hint {
+  margin: 8px 6px 0;
+  font-size: 0.78rem;
+  color: #5a7268;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tz-waitlist-bar,
+  .footer-certs__enamad {
+    transition: none !important;
+  }
+}

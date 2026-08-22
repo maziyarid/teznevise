@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Teznevise Core
  * Description: Key vault, free-first model router, research oracle, async debate engine.
- * Version: 1.9.9
+ * Version: 1.9.10
  * Author: MAZ//ID (Maziyar)
  * Text Domain: teznevise
  *
@@ -21,7 +21,7 @@ if ( defined( 'TEZNEVISE_CORE_LOADED' ) ) {
 }
 define( 'TEZNEVISE_CORE_LOADED', true );
 define( 'TEZNEVISE_CORE_DIR', __DIR__ );
-define( 'TEZNEVISE_CORE_VERSION', '1.9.9' );
+define( 'TEZNEVISE_CORE_VERSION', '1.9.10' );
 
 require_once TEZNEVISE_CORE_DIR . '/config/free-models.php';
 require_once TEZNEVISE_CORE_DIR . '/inc/class-key-vault.php';
@@ -37,6 +37,7 @@ Teznevise_Key_Vault::hook_option_encryption();
 
 add_action( 'rest_api_init', array( 'Teznevise_REST', 'register' ) );
 add_action( 'add_meta_boxes', array( 'Teznevise_Meta_Boxes', 'register' ) );
+add_action( 'admin_enqueue_scripts', array( 'Teznevise_Meta_Boxes', 'enqueue_admin' ) );
 add_action( 'save_post_post', array( 'Teznevise_Meta_Boxes', 'save' ), 20, 2 );
 add_action( 'save_post_page', array( 'Teznevise_Meta_Boxes', 'save' ), 20, 2 );
 add_action( 'teznevise_core_run_debate', array( 'Teznevise_Debate_Orchestrator', 'run' ) );

@@ -25,11 +25,12 @@ class Teznevise_Agent_Registry {
 			return false;
 		}
 		$all = self::profiles();
+		$prev = isset( $all[ $agent_id ] ) && is_array( $all[ $agent_id ] ) ? $all[ $agent_id ] : array();
 		$all[ $agent_id ] = array(
-			'alias'                => sanitize_text_field( $profile['alias'] ?? '' ),
-			'displayed_model_name' => sanitize_text_field( $profile['displayed_model_name'] ?? '' ),
-			'avatar'               => esc_url_raw( $profile['avatar'] ?? '' ),
-			'pre_computed'         => sanitize_textarea_field( $profile['pre_computed'] ?? '' ),
+			'alias'                => array_key_exists( 'alias', $profile ) ? sanitize_text_field( $profile['alias'] ) : sanitize_text_field( $prev['alias'] ?? '' ),
+			'displayed_model_name' => array_key_exists( 'displayed_model_name', $profile ) ? sanitize_text_field( $profile['displayed_model_name'] ) : sanitize_text_field( $prev['displayed_model_name'] ?? '' ),
+			'avatar'               => array_key_exists( 'avatar', $profile ) ? esc_url_raw( $profile['avatar'] ) : esc_url_raw( $prev['avatar'] ?? '' ),
+			'pre_computed'         => array_key_exists( 'pre_computed', $profile ) ? sanitize_textarea_field( $profile['pre_computed'] ) : sanitize_textarea_field( $prev['pre_computed'] ?? '' ),
 		);
 		return update_option( 'teznevise_core_agent_profiles', $all, false );
 	}

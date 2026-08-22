@@ -612,14 +612,14 @@ function teznevise_migration_default_home_sections() {
 			'background' => 'default',
 			'items'      => array(
 				array(
-					'title' => __( 'انجام پایان‌نامه', 'teznevise' ),
+					'title' => __( 'مشاوره انجام پایان‌نامه', 'teznevise' ),
 					'text'  => __( 'از انتخاب موضوع تا دفاع', 'teznevise' ),
 					'icon'  => 'fa-solid fa-graduation-cap',
 					'color' => 'icon-indigo',
 					'url'   => '/service-thesis/',
 				),
 				array(
-					'title' => __( 'انجام پروپوزال', 'teznevise' ),
+					'title' => __( 'مشاوره انجام پروپوزال', 'teznevise' ),
 					'text'  => __( 'بیان مسئله و روش‌شناسی', 'teznevise' ),
 					'icon'  => 'fa-solid fa-file-circle-check',
 					'color' => 'icon-teal',

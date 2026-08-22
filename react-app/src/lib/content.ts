@@ -165,13 +165,13 @@ export const ARTICLES: Article[] = [
 export const SERVICES = [
 	{
 		to: "/thesis",
-		title: "انجام پایان‌نامه",
+		title: "مشاوره انجام پایان‌نامه",
 		text: "از انتخاب موضوع تا نگارش فصل‌ها، تحلیل آماری و آمادگی دفاع برای ارشد و دکتری.",
 		icon: "grad"
 	},
 	{
 		to: "/proposal",
-		title: "انجام پروپوزال",
+		title: "مشاوره انجام پروپوزال",
 		text: "بیان مسئله، مرور ادبیات، اهداف، فرضیه‌ها و روش‌شناسی با ساختار علمی و منابع به‌روز.",
 		icon: "file"
 	},
@@ -270,7 +270,7 @@ export const SERVICE_PAGES: Record<string, PageBlock> = {
 	thesis: {
 		slug: "thesis",
 		eyebrow: "خدمات پژوهشی",
-		title: "انجام پایان‌نامه ارشد و دکتری",
+		title: "مشاوره انجام پایان‌نامه ارشد و دکتری",
 		lead: "از انتخاب موضوع تا نگارش فصل‌ها، تحلیل آماری و آمادگی دفاع؛ مسیر پایان‌نامه را مرحله‌به‌مرحله و قابل پیگیری پیش می‌بریم.",
 		features: [
 			"انتخاب و تثبیت موضوع قابل دفاع",
@@ -283,7 +283,7 @@ export const SERVICE_PAGES: Record<string, PageBlock> = {
 	proposal: {
 		slug: "proposal",
 		eyebrow: "خدمات پژوهشی",
-		title: "انجام پروپوزال تضمینی",
+		title: "مشاوره انجام پروپوزال تضمینی",
 		lead: "بیان مسئله، پیشینه، اهداف و روش‌شناسی را طوری می‌نویسیم که ارتباط منطقی پژوهش از همان صفحه اول روشن باشد.",
 		features: [
 			"تدوین بیان مسئله و شکاف دانش",
@@ -404,7 +404,7 @@ export const THESIS_PAGES: Record<string, PageBlock> = {
 	humanities: {
 		slug: "humanities",
 		eyebrow: "بر اساس رشته",
-		title: "انجام پایان‌نامه علوم انسانی",
+		title: "مشاوره انجام پایان‌نامه علوم انسانی",
 		lead: "مدیریت، روانشناسی، حقوق، علوم اجتماعی و رشته‌های وابسته با روش کمی، کیفی یا ترکیبی.",
 		features: [
 			"روش متناسب با پارادایم",
@@ -415,7 +415,7 @@ export const THESIS_PAGES: Record<string, PageBlock> = {
 	engineering: {
 		slug: "engineering",
 		eyebrow: "بر اساس رشته",
-		title: "انجام پایان‌نامه فنی و مهندسی",
+		title: "مشاوره انجام پایان‌نامه فنی و مهندسی",
 		lead: "پروژه‌های مهندسی با مدل‌سازی، شبیه‌سازی، داده آزمایشگاهی یا مطالعه موردی.",
 		features: [
 			"روش عددی و آزمایشگاهی",
@@ -426,7 +426,7 @@ export const THESIS_PAGES: Record<string, PageBlock> = {
 	"pure-science": {
 		slug: "pure-science",
 		eyebrow: "بر اساس رشته",
-		title: "انجام پایان‌نامه علوم پایه",
+		title: "مشاوره انجام پایان‌نامه علوم پایه",
 		lead: "پژوهش‌های علوم پایه با تأکید بر دقت روش، داده و استناد علمی.",
 		features: [
 			"طراحی آزمایش",
@@ -437,7 +437,7 @@ export const THESIS_PAGES: Record<string, PageBlock> = {
 	"medical-health": {
 		slug: "medical-health",
 		eyebrow: "بر اساس رشته",
-		title: "انجام پایان‌نامه علوم پزشکی و سلامت",
+		title: "مشاوره انجام پایان‌نامه علوم پزشکی و سلامت",
 		lead: "مطالعات بالینی، اپیدمیولوژی و سلامت با رعایت اخلاق پژوهش و تحلیل زیست‌آمار.",
 		features: [
 			"زیست‌آمار",
@@ -448,7 +448,7 @@ export const THESIS_PAGES: Record<string, PageBlock> = {
 	"art-architecture-media": {
 		slug: "art-architecture-media",
 		eyebrow: "بر اساس رشته",
-		title: "انجام پایان‌نامه هنر، معماری و رسانه",
+		title: "مشاوره انجام پایان‌نامه هنر، معماری و رسانه",
 		lead: "پژوهش‌های طراحی‌محور، کیفی و بین‌رشته‌ای در هنر و معماری.",
 		features: [
 			"مطالعه موردی",
@@ -505,7 +505,7 @@ export const PROPOSAL_PAGES: Record<string, PageBlock> = {
 	phd: {
 		slug: "phd",
 		eyebrow: "پروپوزال",
-		title: "انجام پروپوزال دکتری",
+		title: "مشاوره انجام پروپوزال دکتری",
 		lead: "پیشنهاد پژوهشی با نوآوری مشخص، پیشینه عمیق و روش قابل دفاع در کمیته.",
 		features: [
 			"نوآوری و سهم دانش",
@@ -527,7 +527,7 @@ export const PROPOSAL_PAGES: Record<string, PageBlock> = {
 	english: {
 		slug: "english",
 		eyebrow: "پروپوزال",
-		title: "انجام پروپوزال انگلیسی",
+		title: "مشاوره انجام پروپوزال انگلیسی",
 		lead: "نگارش پروپوزال به زبان انگلیسی با ساختار دانشگاه‌های خارج از کشور.",
 		features: [
 			"Academic English",

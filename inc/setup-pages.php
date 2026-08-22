@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function teznevise_recommended_pages() {
 	return array(
 		'service-thesis'     => array(
-			'title'    => 'انجام پایان‌نامه',
+			'title'    => 'مشاوره انجام پایان‌نامه',
 			'template' => 'page-service.php',
 			'meta'     => array(
 				'eyebrow'       => 'خدمات پژوهشی',
@@ -34,7 +34,7 @@ function teznevise_recommended_pages() {
 			),
 		),
 		'service-proposal'   => array(
-			'title'    => 'انجام پروپوزال',
+			'title'    => 'مشاوره انجام پروپوزال',
 			'template' => 'page-service.php',
 			'meta'     => array(
 				'eyebrow'       => 'خدمات پژوهشی',

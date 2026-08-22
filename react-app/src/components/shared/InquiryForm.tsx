@@ -4,8 +4,8 @@ import { toast } from "sonner";
 import { submitInquiry, type InquiryInput } from "@/lib/inquiries";
 
 const SERVICES = [
-  "انجام پایان‌نامه",
-  "انجام پروپوزال",
+  "مشاوره انجام پایان‌نامه",
+  "مشاوره انجام پروپوزال",
   "تحلیل آماری",
   "شبیه‌سازی",
   "تحلیل کیفی",

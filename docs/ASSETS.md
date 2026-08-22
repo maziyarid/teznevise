@@ -13,7 +13,7 @@ Canonical production assets live under **`assets/`** at theme root.
 | `assets/css/_archive/styles.css` | never enqueued |
 | `assets/js/chrome.js` | one public JS bundle (generated) |
 | `assets/fonts/*.woff2` | Vazirmatn Regular / Medium / Bold / ExtraBold |
-| `assets/img/logo.jpg` | brand logo fallback |
+| `assets/img/universities/` | official SVG/WebP partner crests (`SOURCES.txt`) |
 | `assets/icons/sprite.svg` | optional SVG sprite |
 
 Rebuild generated files:

@@ -377,8 +377,8 @@ function teznevise_render_native_lead_form( $context = 'contact' ) {
 				<label for="tz-service-<?php echo esc_attr( $uid ); ?>"><?php esc_html_e( 'نوع خدمت', 'teznevise' ); ?></label>
 				<select id="tz-service-<?php echo esc_attr( $uid ); ?>" name="service">
 					<option value="<?php echo esc_attr( $title ); ?>"><?php echo esc_html( $title ); ?></option>
-					<option value="پایان‌نامه"><?php esc_html_e( 'انجام پایان‌نامه', 'teznevise' ); ?></option>
-					<option value="پروپوزال"><?php esc_html_e( 'انجام پروپوزال', 'teznevise' ); ?></option>
+					<option value="پایان‌نامه"><?php esc_html_e( 'مشاوره انجام پایان‌نامه', 'teznevise' ); ?></option>
+					<option value="پروپوزال"><?php esc_html_e( 'مشاوره انجام پروپوزال', 'teznevise' ); ?></option>
 					<option value="تحلیل آماری"><?php esc_html_e( 'تحلیل آماری', 'teznevise' ); ?></option>
 					<option value="شبیه‌سازی"><?php esc_html_e( 'شبیه‌سازی', 'teznevise' ); ?></option>
 				</select>

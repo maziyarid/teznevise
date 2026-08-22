@@ -117,17 +117,23 @@ class TezNevise_AI_Chat {
 			<header class="tz-gpt__top">
 				<div class="tz-gpt__brand">
 					<span class="tz-gpt__dot" aria-hidden="true"></span>
-					<strong><?php echo esc_html( $tool_config['name'] ?? __( 'گفتگو', 'teznevise' ) ); ?></strong>
+					<div>
+						<strong><?php echo esc_html( $tool_config['name'] ?? __( 'گفتگو', 'teznevise' ) ); ?></strong>
+						<small><?php echo esc_html( $agent_name ); ?></small>
+					</div>
 				</div>
 				<div class="tz-gpt__top-actions">
 					<button type="button" class="tz-gpt__iconbtn" data-ai-new><?php esc_html_e( 'گفتگوی تازه', 'teznevise' ); ?></button>
 					<button type="button" class="tz-gpt__iconbtn" data-ai-full aria-pressed="false"><?php esc_html_e( 'تمام‌صفحه', 'teznevise' ); ?></button>
 				</div>
 			</header>
-			<div class="tz-ai-chat__log tz-gpt__log" data-ai-log>
+			<div class="tz-ai-chat__log tz-gpt__log" data-ai-log role="log" aria-live="polite">
 				<article class="tz-ai-msg is-assistant">
-					<header class="tz-ai-msg__meta"><strong><?php echo esc_html( $agent_name ); ?></strong></header>
-					<div class="tz-ai-msg__bubble"><?php echo esc_html( $initial ); ?></div>
+					<span class="tz-ai-msg__avatar" aria-hidden="true"><?php echo esc_html( mb_substr( $agent_name, 0, 1 ) ); ?></span>
+					<div class="tz-ai-msg__stack">
+						<header class="tz-ai-msg__meta"><strong><?php echo esc_html( $agent_name ); ?></strong></header>
+						<div class="tz-ai-msg__bubble"><?php echo esc_html( $initial ); ?></div>
+					</div>
 				</article>
 			</div>
 			<form class="tz-gpt-composer" data-ai-form>
@@ -158,11 +164,13 @@ class TezNevise_AI_Chat {
 							</div>
 						</details>
 						<button class="tz-gpt-send" type="submit" aria-label="<?php esc_attr_e( 'ارسال', 'teznevise' ); ?>">
+							<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M3.4 20.6 21 12 3.4 3.4l.1 7.2L15 12 3.5 13.4z"/></svg>
 							<span><?php esc_html_e( 'ارسال', 'teznevise' ); ?></span>
 						</button>
 					</div>
 				</div>
 				<p class="tz-ai-chat__status" data-ai-status hidden></p>
+				<p class="tz-gpt-hint"><?php esc_html_e( 'Enter برای ارسال · Shift+Enter خط جدید · هویت عامل قفل است.', 'teznevise' ); ?></p>
 			</form>
 		</section>
 		<?php

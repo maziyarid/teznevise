@@ -86,6 +86,13 @@ class Teznevise_Key_Vault {
 		}
 		$post_id = (int) $post_id;
 		if ( $post_id > 0 && 'custom' === get_post_meta( $post_id, '_teznevise_api_source', true ) ) {
+			$agent_id = sanitize_key( (string) get_post_meta( $post_id, '_teznevise_active_agent', true ) );
+			if ( $agent_id ) {
+				$agent_key = self::get_post_key( $post_id, '_teznevise_api_key_agent_' . $agent_id );
+				if ( '' !== $agent_key ) {
+					return $agent_key;
+				}
+			}
 			$custom = self::get_post_key( $post_id, '_teznevise_api_key_' . $provider );
 			if ( '' !== $custom ) {
 				return $custom;

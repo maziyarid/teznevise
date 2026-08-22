@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.9.9' );
+define( 'TEZNEVISE_VERSION', '1.9.10' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -48,7 +48,9 @@ if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 require_once TEZNEVISE_DIR . '/inc/frontend-compat.php';
 require_once TEZNEVISE_DIR . '/inc/tezcoin.php';
 require_once TEZNEVISE_DIR . '/inc/legal-pages.php';
+require_once TEZNEVISE_DIR . '/inc/legal-copy.php';
 require_once TEZNEVISE_DIR . '/inc/dashboard.php';
+require_once TEZNEVISE_DIR . '/inc/waitlist.php';
 require_once TEZNEVISE_DIR . '/inc/ai-agents.php';
 require_once TEZNEVISE_DIR . '/inc/ai-comments.php';
 require_once TEZNEVISE_DIR . '/inc/perf.php';

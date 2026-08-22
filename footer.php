@@ -27,7 +27,7 @@ if ( is_page() && function_exists( 'teznevise_the_page_leftover_content' ) ) {
 					}
 					?>
 				</a>
-				<p><?php esc_html_e( 'تزنویسه همراه پژوهشی دانشجویان و پژوهشگران؛ از انتخاب موضوع و تدوین پروپوزال تا تحلیل آماری، نگارش و آمادگی دفاع.', 'teznevise' ); ?></p>
+				<p><?php esc_html_e( 'تزنویسه همراه پژوهشی دانشجویان همه رشته‌هاست: ابزارهای آنلاین، عامل‌های هوش مصنوعی و مشاوران متخصص برای مسیر پایان‌نامه، پروپوزال، تحلیل آماری و آمادگی دفاع.', 'teznevise' ); ?></p>
 				<p><?php esc_html_e( 'پژوهش بهتر، آینده روشن‌تر.', 'teznevise' ); ?></p>
 				<div class="footer-social">
 					<a href="<?php echo esc_url( teznevise_get_contact( 'telegram' ) ); ?>" aria-label="<?php esc_attr_e( 'تلگرام', 'teznevise' ); ?>"><i class="fa-brands fa-telegram"></i></a>
@@ -36,8 +36,8 @@ if ( is_page() && function_exists( 'teznevise_the_page_leftover_content' ) ) {
 			</div>
 			<div class="footer-col">
 				<p class="footer-heading"><?php esc_html_e( 'خدمات', 'teznevise' ); ?></p>
-				<a href="<?php echo esc_url( home_url( '/thesis/' ) ); ?>"><?php esc_html_e( 'انجام پایان‌نامه', 'teznevise' ); ?></a>
-				<a href="<?php echo esc_url( home_url( '/proposal/' ) ); ?>"><?php esc_html_e( 'انجام پروپوزال', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/thesis/' ) ); ?>"><?php esc_html_e( 'مشاوره انجام پایان‌نامه', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/proposal/' ) ); ?>"><?php esc_html_e( 'مشاوره انجام پروپوزال', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/service-statistics/' ) ); ?>"><?php esc_html_e( 'تحلیل آماری', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/online-calculation-tools/' ) ); ?>"><?php esc_html_e( 'ابزارهای آنلاین', 'teznevise' ); ?></a>
 			</div>
@@ -59,25 +59,24 @@ if ( is_page() && function_exists( 'teznevise_the_page_leftover_content' ) ) {
 			</div>
 		</nav>
 		<div class="footer-certs" aria-label="<?php esc_attr_e( 'نمادهای اعتماد', 'teznevise' ); ?>">
-			<?php
-			$enamad    = function_exists( 'teznevise_tezcoin_get' ) ? teznevise_tezcoin_get( 'enamad_url' ) : '';
-			$samandehi = function_exists( 'teznevise_tezcoin_get' ) ? teznevise_tezcoin_get( 'samandehi_url' ) : '';
-			?>
-			<?php if ( $enamad && false === strpos( $enamad, '/privacy' ) ) : ?>
-			<a class="trust-seal" href="<?php echo esc_url( $enamad ); ?>" rel="noopener noreferrer" target="_blank" title="<?php esc_attr_e( 'اینماد', 'teznevise' ); ?>">
-				<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="#145D4A"/><path d="M16 25.2l5 5 11-13" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-				<span><?php esc_html_e( 'اینماد', 'teznevise' ); ?></span>
-			</a>
-			<?php endif; ?>
-			<?php if ( $samandehi && false === strpos( $samandehi, '/privacy' ) ) : ?>
-			<a class="trust-seal" href="<?php echo esc_url( $samandehi ); ?>" rel="noopener noreferrer" target="_blank" title="<?php esc_attr_e( 'ساماندهی', 'teznevise' ); ?>">
-				<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="10" width="32" height="28" rx="6" fill="#1b765f"/><path d="M16 24h16M24 16v16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
-				<span><?php esc_html_e( 'ساماندهی', 'teznevise' ); ?></span>
-			</a>
-			<?php endif; ?>
-			<span class="trust-seal" title="<?php esc_attr_e( 'SSL', 'teznevise' ); ?>">
+			<div class="footer-certs__enamad">
+<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP' alt='' style='cursor:pointer' code='HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'></a>
+			</div>
+			<span class="trust-seal" title="<?php esc_attr_e( 'ارتباط امن HTTPS', 'teznevise' ); ?>">
 				<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="20" width="24" height="16" rx="4" fill="#0f4a3b"/><path d="M18 20v-4a6 6 0 0112 0v4" fill="none" stroke="#82d8b9" stroke-width="3"/></svg>
 				<span>SSL</span>
+			</span>
+			<span class="trust-seal is-soon" title="<?php esc_attr_e( 'ساماندهی — به‌زودی', 'teznevise' ); ?>">
+				<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="10" width="32" height="28" rx="6" fill="#e8f3ee"/><path d="M16 24h16M24 16v16" stroke="#145d4a" stroke-width="3" stroke-linecap="round"/></svg>
+				<span><?php esc_html_e( 'ساماندهی', 'teznevise' ); ?></span>
+			</span>
+			<span class="trust-seal is-soon" title="<?php esc_attr_e( 'اتحادیه کسب‌وکارهای مجازی — به‌زودی', 'teznevise' ); ?>">
+				<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="16" fill="#e8f3ee"/><path d="M16 26l8-10 8 10" fill="none" stroke="#145d4a" stroke-width="3" stroke-linecap="round"/></svg>
+				<span><?php esc_html_e( 'اتحادیه', 'teznevise' ); ?></span>
+			</span>
+			<span class="trust-seal is-soon" title="<?php esc_attr_e( 'نماد ملی ثبت — به‌زودی', 'teznevise' ); ?>">
+				<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="10" y="12" width="28" height="24" rx="4" fill="#e8f3ee"/><text x="24" y="29" text-anchor="middle" fill="#145d4a" font-size="11" font-family="Tahoma,sans-serif">ثبت</text></svg>
+				<span><?php esc_html_e( 'ثبت ملی', 'teznevise' ); ?></span>
 			</span>
 		</div>
 		<div class="footer-bottom">

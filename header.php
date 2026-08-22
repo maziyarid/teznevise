@@ -55,6 +55,11 @@ if ( $logo_url ) {
 </div>
 </nav>
 </header>
+<?php
+if ( function_exists( 'do_action' ) ) {
+	do_action( 'teznevise_after_header' );
+}
+?>
 <?php get_template_part( 'template-parts/mobile-nav' ); ?>
 <?php get_template_part( 'template-parts/search-overlay' ); ?>
 <main id="main-content" class="flex-1">

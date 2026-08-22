@@ -783,7 +783,7 @@ export function GoodnessCalc() {
 }
 
 export function PriceCalc() {
-  const [service, setService] = useState("انجام پایان‌نامه");
+  const [service, setService] = useState("مشاوره انجام پایان‌نامه");
   const [degree, setDegree] = useState("کارشناسی ارشد");
   const extras = [
     { id: "en", label: "نگارش یا ویرایش انگلیسی" },
@@ -804,7 +804,7 @@ export function PriceCalc() {
       <div className="field">
         <label>خدمت</label>
         <select value={service} onChange={(e) => setService(e.target.value)}>
-          {["انجام پایان‌نامه", "انجام پروپوزال", "تحلیل آماری", "شبیه‌سازی", "تحلیل کیفی", "پروژه دانشجویی", "انجام مقاله", "پروژه GAMS"].map((s) => (
+          {["مشاوره انجام پایان‌نامه", "مشاوره انجام پروپوزال", "تحلیل آماری", "شبیه‌سازی", "تحلیل کیفی", "پروژه دانشجویی", "انجام مقاله", "پروژه GAMS"].map((s) => (
             <option key={s} value={s}>{s}</option>
           ))}
         </select>

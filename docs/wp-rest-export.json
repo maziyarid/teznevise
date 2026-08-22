@@ -215,14 +215,14 @@
     {
       "id": 7530,
       "slug": "service-proposal",
-      "title": "انجام پروپوزال",
+      "title": "مشاوره انجام پروپوزال",
       "link": "https://teznevise.ir/service-proposal/",
       "template": "page-service.php"
     },
     {
       "id": 7529,
       "slug": "service-thesis",
-      "title": "انجام پایان‌نامه",
+      "title": "مشاوره انجام پایان‌نامه",
       "link": "https://teznevise.ir/service-thesis/",
       "template": "page-service.php"
     },
@@ -236,105 +236,105 @@
     {
       "id": 1186,
       "slug": "history",
-      "title": "انجام پایان نامه تاریخ",
+      "title": "مشاوره انجام پایان نامه تاریخ",
       "link": "https://teznevise.ir/thesis/humanities/history/",
       "template": "page-service.php"
     },
     {
       "id": 1181,
       "slug": "philosophy",
-      "title": "انجام پایان نامه فلسفه",
+      "title": "مشاوره انجام پایان نامه فلسفه",
       "link": "https://teznevise.ir/thesis/humanities/philosophy/",
       "template": "page-service.php"
     },
     {
       "id": 1176,
       "slug": "social-sciences",
-      "title": "انجام پایان نامه علوم اجتماعی",
+      "title": "مشاوره انجام پایان نامه علوم اجتماعی",
       "link": "https://teznevise.ir/thesis/humanities/social-sciences/",
       "template": "page-service.php"
     },
     {
       "id": 1171,
       "slug": "law",
-      "title": "انجام پایان نامه حقوق",
+      "title": "مشاوره انجام پایان نامه حقوق",
       "link": "https://teznevise.ir/thesis/humanities/law/",
       "template": "page-service.php"
     },
     {
       "id": 1153,
       "slug": "psychology",
-      "title": "انجام پایان نامه روانشناسی",
+      "title": "مشاوره انجام پایان نامه روانشناسی",
       "link": "https://teznevise.ir/thesis/humanities/psychology/",
       "template": "page-service.php"
     },
     {
       "id": 1148,
       "slug": "management",
-      "title": "انجام پایان نامه مدیریت",
+      "title": "مشاوره انجام پایان نامه مدیریت",
       "link": "https://teznevise.ir/thesis/humanities/management/",
       "template": "page-service.php"
     },
     {
       "id": 1142,
       "slug": "interdisciplinary",
-      "title": "انجام پایان نامه علوم بین‌رشته‌ای و کاربردی (ارشد و دکتری)",
+      "title": "مشاوره انجام پایان نامه علوم بین‌رشته‌ای و کاربردی (ارشد و دکتری)",
       "link": "https://teznevise.ir/thesis/interdisciplinary/",
       "template": "page-service.php"
     },
     {
       "id": 1133,
       "slug": "animal-science-veterinary",
-      "title": "انجام پایان نامه علوم دامی و دامپزشکی",
+      "title": "مشاوره انجام پایان نامه علوم دامی و دامپزشکی",
       "link": "https://teznevise.ir/thesis/animal-science-veterinary/",
       "template": "page-service.php"
     },
     {
       "id": 1127,
       "slug": "agriculture-natural-resources",
-      "title": "انجام پایان نامه کشاورزی و منابع طبیعی",
+      "title": "مشاوره انجام پایان نامه کشاورزی و منابع طبیعی",
       "link": "https://teznevise.ir/thesis/agriculture-natural-resources/",
       "template": "page-service.php"
     },
     {
       "id": 1122,
       "slug": "art-architecture-media",
-      "title": "انجام پایان نامه هنر و معماری و رسانه",
+      "title": "مشاوره انجام پایان نامه هنر و معماری و رسانه",
       "link": "https://teznevise.ir/thesis/art-architecture-media/",
       "template": "page-service.php"
     },
     {
       "id": 1116,
       "slug": "medical-health",
-      "title": "انجام پایان نامه علوم پزشکی و سلامت",
+      "title": "مشاوره انجام پایان نامه علوم پزشکی و سلامت",
       "link": "https://teznevise.ir/thesis/medical-health/",
       "template": "page-service.php"
     },
     {
       "id": 1114,
       "slug": "pure-science",
-      "title": "انجام پایان نامه علوم پایه",
+      "title": "مشاوره انجام پایان نامه علوم پایه",
       "link": "https://teznevise.ir/thesis/pure-science/",
       "template": "page-service.php"
     },
     {
       "id": 1102,
       "slug": "engineering",
-      "title": "انجام پایان نامه فنی و مهندسی",
+      "title": "مشاوره انجام پایان نامه فنی و مهندسی",
       "link": "https://teznevise.ir/thesis/engineering/",
       "template": "page-service.php"
     },
     {
       "id": 1097,
       "slug": "humanities",
-      "title": "انجام پایان نامه علوم انسانی",
+      "title": "مشاوره انجام پایان نامه علوم انسانی",
       "link": "https://teznevise.ir/thesis/humanities/",
       "template": "page-service.php"
     },
     {
       "id": 1088,
       "slug": "international",
-      "title": "انجام پایان نامه انگلیسی برای دانشجویان خارج از کشور",
+      "title": "مشاوره انجام پایان نامه انگلیسی برای دانشجویان خارج از کشور",
       "link": "https://teznevise.ir/thesis/international/",
       "template": "page-service.php"
     },
@@ -411,28 +411,28 @@
     {
       "id": 1020,
       "slug": "english",
-      "title": "انجام پروپوزال انگلیسی",
+      "title": "مشاوره انجام پروپوزال انگلیسی",
       "link": "https://teznevise.ir/proposal/english/",
       "template": "page-service.php"
     },
     {
       "id": 1015,
       "slug": "project",
-      "title": "انجام پروپوزال کلاسی درس روش تحقیق",
+      "title": "مشاوره انجام پروپوزال کلاسی درس روش تحقیق",
       "link": "https://teznevise.ir/proposal/project/",
       "template": "page-service.php"
     },
     {
       "id": 1006,
       "slug": "phd",
-      "title": "انجام پروپوزال دکتری",
+      "title": "مشاوره انجام پروپوزال دکتری",
       "link": "https://teznevise.ir/proposal/phd/",
       "template": "page-service.php"
     },
     {
       "id": 947,
       "slug": "thesis",
-      "title": "انجام پایان نامه",
+      "title": "مشاوره انجام پایان نامه",
       "link": "https://teznevise.ir/thesis/",
       "template": "page-service.php"
     },
@@ -649,7 +649,7 @@
     {
       "id": 625,
       "slug": "proposal",
-      "title": "انجام پروپوزال تضمینی",
+      "title": "مشاوره انجام پروپوزال تضمینی",
       "link": "https://teznevise.ir/proposal/",
       "template": "page-service.php"
     },

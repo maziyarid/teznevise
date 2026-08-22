@@ -130,7 +130,7 @@ class Teznevise_Debate_Orchestrator {
 				$prompt .= "\n\nPrevious panel remarks:\n" . $prior;
 			}
 			$message = 'Article title: ' . $post->post_title . "\n\nFull article:\n" . $article . "\n\nWrite the next discussion comment in Persian.";
-			$body    = self::complete_cascade( $message, $prompt, $agent, $article . ' ' . $brief_text );
+			$body    = self::complete_cascade( $message, $prompt, $agent, $article . ' ' . $brief_text, $post_id );
 			if ( '' === $body ) {
 				continue;
 			}
@@ -194,18 +194,19 @@ class Teznevise_Debate_Orchestrator {
 		return $created;
 	}
 
-	public static function complete_cascade( $message, $prompt, $agent, $corpus ) {
+	public static function complete_cascade( $message, $prompt, $agent, $corpus, $post_id = 0 ) {
 		if ( ! class_exists( 'TezNevise_AI_API' ) || ! method_exists( 'TezNevise_AI_API', 'complete' ) ) {
 			return '';
 		}
-		$chain = Teznevise_Model_Router::chain( $agent, $corpus, 'debate' );
+		$chain   = Teznevise_Model_Router::chain( $agent, $corpus, 'debate' );
+		$post_id = (int) $post_id;
 		foreach ( $chain as $i => $attempt ) {
 			$try            = $agent;
 			$try['provider'] = $attempt['provider'];
 			$try['model']    = $attempt['model'];
+			$try['api_key']  = Teznevise_Key_Vault::get_provider_key( $attempt['provider'], $post_id );
 			if ( 'openrouter' === $attempt['provider'] ) {
 				$try['api_endpoint'] = 'https://openrouter.ai/api/v1/chat/completions';
-				$try['api_key']      = Teznevise_Key_Vault::get_provider_key( 'openrouter' );
 			}
 			$response = TezNevise_AI_API::complete( $message, $prompt, $try, $attempt['model'], true );
 			if ( ! is_wp_error( $response ) && ! empty( $response['content'] ) ) {
@@ -266,7 +267,7 @@ class Teznevise_Debate_Orchestrator {
 		}
 		$prompt  = Teznevise_Agent_Registry::identity_lock( $agent );
 		$prompt .= "\nReturn 5–8 Persian bullet key points. No preamble.";
-		$body    = self::complete_cascade( $post->post_title . "\n\n" . $article, $prompt, $agent, $article );
+		$body    = self::complete_cascade( $post->post_title . "\n\n" . $article, $prompt, $agent, $article, (int) $post->ID );
 		$lines   = array_values(
 			array_filter(
 				array_map(

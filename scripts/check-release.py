@@ -74,6 +74,9 @@ def check_requires() -> None:
         "assets/css/critical.css",
         "assets/css/hotfix-198.css",
         "assets/css/hotfix-199.css",
+        "assets/css/hotfix-200.css",
+        "inc/legal-copy.php",
+        "inc/waitlist.php",
         "teznevise-core/teznevise-core.php",
         "footer.php",
         "header.php",
@@ -194,6 +197,46 @@ def check_source_contracts() -> None:
     ):
         if a1 in text:
             error(f"A1 dummy string still present in {rel}")
+
+    footer = (ROOT / "footer.php").read_text(encoding="utf-8")
+    if "trustseal.enamad.ir/?id=7413817" not in footer:
+        error("Exact Enamad trustseal HTML is missing from footer.php")
+    if "مشاوره انجام پایان" not in footer:
+        error("Footer services are missing مشاوره انجام phrasing")
+    legal = (ROOT / "inc" / "legal-copy.php").read_text(encoding="utf-8")
+    if "function teznevise_consult_copy" not in legal:
+        error("Legal consulting copy helper is missing")
+    waitlist = (ROOT / "inc" / "waitlist.php").read_text(encoding="utf-8")
+    if "teznevise_tool_waitlist" not in waitlist:
+        error("Waitlist table installer is missing")
+    tezcoin = (ROOT / "inc" / "tezcoin.php").read_text(encoding="utf-8")
+    if "G-ZTB0ERWJYN" not in tezcoin:
+        error("Google Analytics G-ZTB0ERWJYN is not the default ga_id")
+    if "xf2anzt0a3" not in tezcoin:
+        error("Clarity xf2anzt0a3 is not the default clarity_id")
+    settings = (ROOT / "inc" / "ai" / "class-ai-settings.php").read_text(encoding="utf-8")
+    if "displayed_model_name" not in settings:
+        error("Agent form is missing the handwritten displayed_model_name field")
+    meta = (ROOT / "teznevise-core" / "inc" / "class-meta-boxes.php").read_text(encoding="utf-8")
+    if "tz-skill-md-pick" not in meta:
+        error("Per-post SKILL.md media button is missing")
+    if "teznevise_api_key_agent" not in meta:
+        error("Per-agent post API key fields are missing")
+    unis = (ROOT / "template-parts" / "universities.php").read_text(encoding="utf-8")
+    if "assets/img/universities/" not in unis:
+        error("University partner row does not load official marks")
+    for mark in (
+        "assets/img/universities/tehran.svg",
+        "assets/img/universities/amirkabir.svg",
+        "assets/img/universities/sbu.svg",
+        "assets/img/universities/sharif.webp",
+        "assets/img/universities/tmu.webp",
+        "assets/img/universities/iust.webp",
+        "assets/img/universities/isfahan.webp",
+        "assets/img/universities/shiraz.webp",
+    ):
+        if not (ROOT / mark).is_file():
+            error(f"University mark missing: {mark}")
 
 
 def check_whitespace() -> None:

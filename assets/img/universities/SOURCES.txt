@@ -1,0 +1,14 @@
+Official university marks used in the partner row (1.9.10).
+
+SVG preferred; WebP when the Commons/Wikipedia original is raster.
+
+- tehran.svg     University of Tehran — Wikipedia File:University_of_Tehran_logo.svg
+- amirkabir.svg  Amirkabir University of Technology — Commons File:AKUT.svg (official seal)
+- sbu.svg        Shahid Beheshti University — Commons File:Sbu-logo.svg
+- sharif.webp    Sharif University of Technology — Commons File:Sharif-University-of-Technology.jpg
+- tmu.webp       Tarbiat Modares University — Commons File:Tarbiat_Modares_University.png
+- isfahan.webp   University of Isfahan — Commons File:University of Isfahan Logo.png
+- iust.webp      Iran University of Science and Technology — Wikipedia File:IUST_logo_color.png
+- shiraz.webp    Shiraz University — Wikipedia File:Shiraz_University_logo.png
+
+Replace with university-supplied assets if a rights-holder requests it.

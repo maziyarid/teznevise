@@ -42,13 +42,13 @@ function teznevise_content_defaults() {
 		'services_title'   => 'هر مرحله از پروژه را با یک پل تخصصی جلو ببرید',
 		'services_text'    => 'از انتخاب موضوع تا دفاع، هر خدمت به خدمت بعدی وصل است تا مسیر پژوهش‌تان یکپارچه بماند.',
 
-		'svc1_title' => 'انجام پایان‌نامه',
+		'svc1_title' => 'مشاوره انجام پایان‌نامه',
 		'svc1_text'  => 'از انتخاب موضوع تا نگارش فصل‌ها، تحلیل آماری و آمادگی دفاع برای ارشد و دکتری.',
 		'svc1_url'   => '/thesis/',
 		'svc1_icon'  => 'fa-solid fa-graduation-cap',
 		'svc1_color' => 'icon-indigo',
 
-		'svc2_title' => 'انجام پروپوزال',
+		'svc2_title' => 'مشاوره انجام پروپوزال',
 		'svc2_text'  => 'بیان مسئله، مرور ادبیات، اهداف، فرضیه‌ها و روش‌شناسی با ساختار علمی و منابع به‌روز.',
 		'svc2_url'   => '/proposal/',
 		'svc2_icon'  => 'fa-solid fa-file-circle-check',
@@ -149,7 +149,11 @@ function teznevise_mod( $key, $default = null ) {
 	if ( null === $default ) {
 		$default = isset( $defaults[ $key ] ) ? $defaults[ $key ] : '';
 	}
-	return get_theme_mod( 'teznevise_' . $key, $default );
+	$val = get_theme_mod( 'teznevise_' . $key, $default );
+	if ( function_exists( 'teznevise_consult_copy' ) && is_string( $val ) ) {
+		return teznevise_consult_copy( $val );
+	}
+	return $val;
 }
 
 /**

@@ -1,12 +1,12 @@
 const UNIVERSITIES = [
-  { name: "دانشگاه تهران", mark: "ته" },
-  { name: "شریف", mark: "شر" },
-  { name: "امیرکبیر", mark: "ام" },
-  { name: "علم و صنعت", mark: "صن" },
-  { name: "شهید بهشتی", mark: "به" },
-  { name: "تربیت مدرس", mark: "تم" },
-  { name: "دانشگاه اصفهان", mark: "اص" },
-  { name: "دانشگاه شیراز", mark: "شی" },
+  { name: "دانشگاه تهران", file: "tehran.svg" },
+  { name: "دانشگاه صنعتی شریف", file: "sharif.webp" },
+  { name: "دانشگاه صنعتی امیرکبیر", file: "amirkabir.svg" },
+  { name: "دانشگاه علم و صنعت ایران", file: "iust.webp" },
+  { name: "دانشگاه شهید بهشتی", file: "sbu.svg" },
+  { name: "دانشگاه تربیت مدرس", file: "tmu.webp" },
+  { name: "دانشگاه اصفهان", file: "isfahan.webp" },
+  { name: "دانشگاه شیراز", file: "shiraz.webp" },
 ];
 
 export function Universities({ compact }: { compact?: boolean }) {
@@ -17,13 +17,14 @@ export function Universities({ compact }: { compact?: boolean }) {
         <ul className="uni-row">
           {UNIVERSITIES.map((u) => (
             <li key={u.name} className="uni-logo">
-              <svg viewBox="0 0 72 72" width={compact ? 40 : 52} height={compact ? 40 : 52} role="img" aria-labelledby={`uni-${u.mark}`}>
-                <title id={`uni-${u.mark}`}>{u.name}</title>
-                <circle cx="36" cy="36" r="34" fill="#e8f5f1" stroke="#145D4A" strokeWidth="2" />
-                <text x="36" y="42" textAnchor="middle" fontSize="18" fontWeight="800" fill="#145D4A" fontFamily="Vazirmatn, Tahoma, sans-serif">
-                  {u.mark}
-                </text>
-              </svg>
+              <img
+                src={`/assets/img/universities/${u.file}`}
+                alt={u.name}
+                width={compact ? 40 : 72}
+                height={compact ? 40 : 72}
+                loading="lazy"
+                decoding="async"
+              />
               <span>{u.name}</span>
             </li>
           ))}

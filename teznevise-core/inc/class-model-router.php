@@ -78,6 +78,7 @@ class Teznevise_Model_Router {
 		if ( $own_is_free ) {
 			$push( $own_provider, $own_model );
 		}
+		$push( $own_provider, $own_model );
 		if ( ! empty( $catalog['paid_fallback'] ) ) {
 			$push( 'openrouter', $catalog['paid_fallback'] );
 		}

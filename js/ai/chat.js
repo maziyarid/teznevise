@@ -23,10 +23,14 @@
     text = parsed.public;
     var art = el('article', 'tz-ai-msg is-' + role);
     art.setAttribute('role', 'listitem');
+    var av = el('span', 'tz-ai-msg__avatar', (name || (role === 'user' ? 'ش' : 'ت')).slice(0, 1));
+    av.setAttribute('aria-hidden', 'true');
+    art.appendChild(av);
+    var stack = el('div', 'tz-ai-msg__stack');
     if (name) {
       var meta = el('header', 'tz-ai-msg__meta');
       meta.appendChild(el('strong', '', name));
-      art.appendChild(meta);
+      stack.appendChild(meta);
     }
     if (thinking) {
       var det = el('details', 'tz-ai-think');
@@ -35,17 +39,20 @@
       var pre = el('pre');
       pre.textContent = thinking;
       det.appendChild(pre);
-      art.appendChild(det);
+      stack.appendChild(det);
     }
     var bubble = el('div', 'tz-ai-msg__bubble');
     renderRich(bubble, text);
-    art.appendChild(bubble);
-    var copy = el('button', 'tz-gpt__iconbtn', 'کپی');
-    copy.type = 'button';
-    copy.addEventListener('click', function () {
-      if (navigator.clipboard) navigator.clipboard.writeText(text);
-    });
-    art.appendChild(copy);
+    stack.appendChild(bubble);
+    if (role !== 'user') {
+      var copy = el('button', 'tz-gpt__iconbtn', 'کپی');
+      copy.type = 'button';
+      copy.addEventListener('click', function () {
+        if (navigator.clipboard) navigator.clipboard.writeText(text);
+      });
+      stack.appendChild(copy);
+    }
+    art.appendChild(stack);
     log.appendChild(art);
     log.scrollTop = log.scrollHeight;
     return art;

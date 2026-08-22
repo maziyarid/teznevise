@@ -21,8 +21,7 @@ export function SiteFooter() {
               />
             </Link>
             <p>
-              تزنویسه همراه پژوهشی دانشجویان و پژوهشگران؛ از انتخاب موضوع و تدوین
-              پروپوزال تا تحلیل آماری، نگارش و آمادگی دفاع.
+            تزنویسه همراه پژوهشی دانشجویان همه رشته‌هاست: ابزارهای آنلاین، عامل‌های هوش مصنوعی و مشاوران متخصص برای مسیر پایان‌نامه، پروپوزال، تحلیل آماری و آمادگی دفاع.
             </p>
             <p>{SITE.tagline}</p>
             <div className="footer-social">
@@ -76,35 +75,25 @@ export function SiteFooter() {
         </nav>
 
         <div className="footer-certs" aria-label="نمادها و گواهی‌ها">
-          <a className="trust-badge" href="/privacy" title="نماد اعتماد الکترونیکی">
-            <svg viewBox="0 0 88 88" width={72} height={72} role="img" aria-labelledby="enamad-title">
-              <title id="enamad-title">نماد اعتماد الکترونیکی</title>
-              <rect x="4" y="4" width="80" height="80" rx="16" fill="#f7fcfa" stroke="#145D4A" />
-              <text x="44" y="40" textAnchor="middle" fontSize="11" fontWeight="800" fill="#145D4A" fontFamily="Vazirmatn, Tahoma, sans-serif">
-                اینماد
-              </text>
-              <text x="44" y="58" textAnchor="middle" fontSize="9" fill="#5a7268" fontFamily="Vazirmatn, Tahoma, sans-serif">
-                Enamad
-              </text>
-            </svg>
-            <span>اینماد</span>
-          </a>
-          <div className="trust-badge">
-            <svg viewBox="0 0 88 88" width={72} height={72} role="img" aria-labelledby="samandehi-title">
-              <title id="samandehi-title">ساماندهی</title>
-              <rect x="4" y="4" width="80" height="80" rx="16" fill="#fbf7ee" stroke="#8a6a22" />
-              <text x="44" y="40" textAnchor="middle" fontSize="11" fontWeight="800" fill="#8a6a22" fontFamily="Vazirmatn, Tahoma, sans-serif">
-                ساماندهی
-              </text>
-              <text x="44" y="58" textAnchor="middle" fontSize="9" fill="#5a7268" fontFamily="Vazirmatn, Tahoma, sans-serif">
-                Samandehi
-              </text>
-            </svg>
-            <span>ساماندهی</span>
-          </div>
+          <div
+            className="footer-certs__enamad"
+            dangerouslySetInnerHTML={{
+              __html:
+                "<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP' alt='' style='cursor:pointer' code='HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'></a>",
+            }}
+          />
           <div className="trust-badge">
             <ShieldCheck className="size-10 text-brand" aria-hidden />
             <span>SSL امن</span>
+          </div>
+          <div className="trust-badge is-soon">
+            <span>ساماندهی</span>
+          </div>
+          <div className="trust-badge is-soon">
+            <span>اتحادیه</span>
+          </div>
+          <div className="trust-badge is-soon">
+            <span>ثبت ملی</span>
           </div>
         </div>
 

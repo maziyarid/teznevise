@@ -135,8 +135,8 @@ export const UTILITY_LINKS = [
 ] as const;
 
 export const FOOTER_SERVICES = [
-  { label: "انجام پایان‌نامه", to: "/thesis" },
-  { label: "انجام پروپوزال", to: "/proposal" },
+  { label: "مشاوره انجام پایان‌نامه", to: "/thesis" },
+  { label: "مشاوره انجام پروپوزال", to: "/proposal" },
   { label: "تحلیل آماری", to: "/statistics" },
   { label: "شبیه‌سازی", to: "/simulation" },
   { label: "تحلیل کیفی", to: "/proposal/qualitative" },
