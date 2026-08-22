@@ -56,7 +56,7 @@ function teznevise_content_defaults() {
 
 		'svc3_title' => 'تحلیل آماری',
 		'svc3_text'  => 'تحلیل داده‌ها با SPSS، R، Python، LISREL، Matlab و AMOS همراه با تفسیر علمی نتایج.',
-		'svc3_url'   => '/statistics/',
+		'svc3_url'   => '/service-statistics/',
 		'svc3_icon'  => 'fa-solid fa-chart-line',
 		'svc3_color' => 'icon-cyan',
 

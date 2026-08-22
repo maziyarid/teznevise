@@ -16,6 +16,20 @@ class TezNevise_AI_API {
             'methods' => 'POST',
             'callback' => [__CLASS__, 'handle_chat'],
             'permission_callback' => [__CLASS__, 'check_chat_permission'],
+			'args' => [
+				'tool_id' => ['required' => true, 'sanitize_callback' => 'sanitize_key'],
+				'message' => [
+					'required' => true,
+					'sanitize_callback' => 'sanitize_textarea_field',
+					'validate_callback' => static function ($value) {
+						$length = function_exists('mb_strlen') ? mb_strlen((string) $value) : strlen((string) $value);
+						return $length > 0 && $length <= 12000;
+					},
+				],
+				'session_id' => ['required' => false, 'sanitize_callback' => 'sanitize_text_field'],
+				'agent_id' => ['required' => false, 'sanitize_callback' => 'sanitize_key'],
+				'model' => ['required' => false, 'sanitize_callback' => 'sanitize_text_field'],
+			],
         ]);
         
         register_rest_route('teznevise-ai/v1', '/skills', [
@@ -52,8 +66,8 @@ class TezNevise_AI_API {
         
         $user_id = get_current_user_id();
         $is_logged_in = $user_id > 0;
-        $today = date('Y-m-d');
-        $usage_key = 'usage_' . $today . '_' . $user_id;
+		$today = gmdate('Y-m-d');
+		$usage_key = 'usage_' . $today . '_' . self::usage_subject();
         $usage = TezNevise_AI_Database::get_setting($tool_id, $usage_key, []);
         $message_count = $usage['message_count'] ?? 0;
         $limit = $is_logged_in ? ($tool['signed_in_limit'] ?? 100) : ($tool['free_tier_limit'] ?? 10);
@@ -67,10 +81,10 @@ class TezNevise_AI_API {
     public static function handle_chat($request) {
         $params = $request->get_params();
         $tool_id = $params['tool_id'];
-        $message = $params['message'];
-        $session_id = $params['session_id'];
+		$message = isset($params['message']) ? sanitize_textarea_field((string) $params['message']) : '';
+		$session_id = isset($params['session_id']) ? $params['session_id'] : '';
         $agent_id = $params['agent_id'] ?? 'general';
-        $model = $params['model'] ?? 'gpt-4';
+		$requested_model = isset($params['model']) ? sanitize_text_field((string) $params['model']) : '';
         $collaboration_mode = $params['collaboration_mode'] ?? 'single';
         $thinking_enabled = $params['thinking_enabled'] ?? true;
         $skill_id = $params['skill_id'] ?? null;
@@ -84,7 +98,7 @@ class TezNevise_AI_API {
         $user_id = get_current_user_id();
         $is_logged_in = $user_id > 0;
         $today = gmdate('Y-m-d');
-        $usage_key = 'usage_' . $today . '_' . ( $is_logged_in ? $user_id : 'guest' );
+		$usage_key = 'usage_' . $today . '_' . self::usage_subject();
         $usage = TezNevise_AI_Database::get_setting($tool_id, $usage_key, []);
         $message_count = $usage['message_count'] ?? 0;
         $free = (int) get_option('teznevise_ai_free_tier_limit', $tool['free_tier_limit'] ?? 10);
@@ -109,9 +123,29 @@ class TezNevise_AI_API {
         
         $agent = TezNevise_AI_Database::get_agent($agent_id);
         if (!$agent) $agent = TezNevise_AI_Database::get_agent('general');
+		$model = (string) ($agent['model'] ?? 'gpt-4');
+		$allowed_models = (array) apply_filters('teznevise_ai_allowed_models', [$model], $tool, $agent);
+		if ($requested_model && in_array($requested_model, $allowed_models, true)) {
+			$model = $requested_model;
+		}
+		if (!$is_logged_in) {
+			$collaboration_mode = 'single';
+		}
+		$burst_key = 'tez_ai_' . substr(hash('sha256', self::usage_subject() . '|' . $tool_id), 0, 32);
+		$burst = self::increment_burst($burst_key, 5);
+		if (is_wp_error($burst)) {
+			return $burst;
+		}
+
+		$reserved = self::reserve_quota($tool_id, $usage_key, $limit);
+		if (is_wp_error($reserved)) {
+			return $reserved;
+		}
+		$usage = $reserved;
         
         $replies = self::run_collaboration($message, $tool, $agent, $model, $collaboration_mode, $thinking_enabled, $skill_id);
         if (is_wp_error($replies)) {
+			self::release_quota($tool_id, $usage_key);
             return $replies;
         }
         
@@ -122,7 +156,7 @@ class TezNevise_AI_API {
             'agent_id' => $agent_id,
             'model' => $model,
             'collaboration_mode' => in_array($collaboration_mode, ['single','collaborative','separate'], true) ? $collaboration_mode : 'single',
-            'ip_address' => self::get_client_ip(),
+			'ip_address' => null,
             'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? substr(sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])), 0, 255) : '',
         ];
         
@@ -151,9 +185,6 @@ class TezNevise_AI_API {
             ]);
         }
         
-        $usage['message_count'] = ($usage['message_count'] ?? 0) + 1;
-        TezNevise_AI_Database::update_setting($tool_id, $usage_key, $usage);
-
         $cost = (float) get_option('teznevise_ai_cost_per_message', $tool['cost_per_message'] ?? 0);
         if ($is_logged_in && $cost > 0 && function_exists('teznevise_tezcoin_credit')) {
             teznevise_tezcoin_credit($user_id, -1 * (int) ceil($cost), 'ai-chat', $session_token);
@@ -208,7 +239,7 @@ class TezNevise_AI_API {
                 'content' => $response['content'],
                 'agent_name' => $ag['name'] ?? 'Assistants',
                 'model' => $ag['model'] ?? $model,
-                'thinking_process' => $thinking_enabled ? ($response['thinking_process'] ?? $response['content']) : null,
+				'thinking_process' => null,
             );
             $prior .= "\n- " . ($ag['name'] ?? 'agent') . ': ' . $response['content'];
             if ($mode === 'single') {
@@ -248,13 +279,84 @@ class TezNevise_AI_API {
         }
         $prompt_parts[] = "Collaboration Mode: {$collaboration_mode}";
         $prompt_parts[] = "If the user writes in Persian, always respond in Persian. Otherwise, respond in English.";
-        $prompt_parts[] = "If thinking is enabled, show your thought process step by step before giving the final answer.";
+		$prompt_parts[] = "Give a concise, evidence-based answer. Do not reveal private chain-of-thought; provide a short conclusion and useful supporting explanation instead.";
         return implode("\n\n", $prompt_parts);
     }
+
+	/** MySQL GET_LOCK wrapper; fails closed when a lock cannot be acquired. */
+	private static function with_named_lock($name, $callback) {
+		global $wpdb;
+		$lock = 'tez_ai_' . substr(md5((string) $name), 0, 24);
+		$got = $wpdb->get_var($wpdb->prepare('SELECT GET_LOCK(%s, %d)', $lock, 5));
+		if ((string) $got !== '1') {
+			return new WP_Error('busy', 'سرویس موقتاً شلوغ است؛ دوباره تلاش کنید', ['status' => 429]);
+		}
+		try {
+			return $callback();
+		} finally {
+			$wpdb->get_var($wpdb->prepare('SELECT RELEASE_LOCK(%s)', $lock));
+		}
+	}
+
+	/** Reserve one daily quota unit before the provider call. */
+	private static function reserve_quota($tool_id, $usage_key, $limit) {
+		return self::with_named_lock($usage_key . '|' . $tool_id, static function () use ($tool_id, $usage_key, $limit) {
+			$usage = TezNevise_AI_Database::get_setting($tool_id, $usage_key, []);
+			if (!is_array($usage)) {
+				$usage = [];
+			}
+			$count = (int) ($usage['message_count'] ?? 0);
+			if ($count >= (int) $limit) {
+				return new WP_Error('limit_reached', 'سهمیه پیام امروز تمام شده است', ['status' => 402]);
+			}
+			$usage['message_count'] = $count + 1;
+			TezNevise_AI_Database::update_setting($tool_id, $usage_key, $usage);
+			return $usage;
+		});
+	}
+
+	/** Release a reserved quota unit after a provider failure. */
+	private static function release_quota($tool_id, $usage_key) {
+		self::with_named_lock($usage_key . '|' . $tool_id, static function () use ($tool_id, $usage_key) {
+			$usage = TezNevise_AI_Database::get_setting($tool_id, $usage_key, []);
+			if (!is_array($usage)) {
+				$usage = [];
+			}
+			$count = (int) ($usage['message_count'] ?? 0);
+			$usage['message_count'] = max(0, $count - 1);
+			TezNevise_AI_Database::update_setting($tool_id, $usage_key, $usage);
+			return true;
+		});
+	}
+
+	/** Atomic 5/min burst counter. */
+	private static function increment_burst($burst_key, $max) {
+		return self::with_named_lock('burst|' . $burst_key, static function () use ($burst_key, $max) {
+			$burst = (int) get_transient($burst_key);
+			if ($burst >= (int) $max) {
+				return new WP_Error('rate_limited', 'درخواست‌های پیاپی بیش از حد مجاز است', ['status' => 429]);
+			}
+			set_transient($burst_key, $burst + 1, MINUTE_IN_SECONDS);
+			return $burst + 1;
+		});
+	}
     
     private static function call_ai_api($message, $system_prompt, $agent, $model, $thinking_enabled) {
-        $api_endpoint = $agent['api_endpoint'] ?? 'https://api.openai.com/v1/chat/completions';
-        $api_key = $agent['api_key'] ?? get_option('teznevise_ai_openai_key', '');
+		$api_endpoint = esc_url_raw($agent['api_endpoint'] ?? 'https://api.openai.com/v1/chat/completions');
+		$parsed = is_string($api_endpoint) ? wp_parse_url($api_endpoint) : false;
+		if (!is_array($parsed)) {
+			return new WP_Error('invalid_api_endpoint', 'AI provider URL is invalid', ['status' => 400]);
+		}
+		$scheme = strtolower((string) ($parsed['scheme'] ?? ''));
+		$api_host = strtolower((string) ($parsed['host'] ?? ''));
+		if ($scheme !== 'https' || $api_host === '' || !empty($parsed['user']) || !empty($parsed['pass'])) {
+			return new WP_Error('invalid_api_endpoint', 'AI provider must use HTTPS without embedded credentials', ['status' => 400]);
+		}
+		$allowed_hosts = (array) apply_filters('teznevise_ai_allowed_api_hosts', ['api.openai.com']);
+		if (!in_array($api_host, array_map('strtolower', $allowed_hosts), true)) {
+			return new WP_Error('invalid_api_host', 'AI provider host is not allow-listed', ['status' => 400]);
+		}
+		$api_key = defined('TEZNEVISE_AI_OPENAI_KEY') ? TEZNEVISE_AI_OPENAI_KEY : ($agent['api_key'] ?? get_option('teznevise_ai_openai_key', ''));
         if (empty($api_key)) return new WP_Error('no_api_key', 'No API key configured');
         
         $temperature = 0.7;
@@ -274,22 +376,37 @@ class TezNevise_AI_API {
             'headers' => ['Content-Type' => 'application/json', 'Authorization' => 'Bearer ' . $api_key],
             'body' => json_encode($body),
             'timeout' => 60,
+			'redirection' => 0,
         ];
         
         $response = wp_remote_post($api_endpoint, $args);
         if (is_wp_error($response)) return $response;
+		$status = (int) wp_remote_retrieve_response_code($response);
+		if ($status < 200 || $status >= 300) {
+			return new WP_Error('api_http_error', 'AI provider returned an unsuccessful response', ['status' => 502]);
+		}
         
         $response_body = json_decode(wp_remote_retrieve_body($response), true);
         if (isset($response_body['error'])) return new WP_Error('api_error', $response_body['error']['message'] ?? 'API error');
         
         $content = $response_body['choices'][0]['message']['content'] ?? '';
-        return ['content' => $content, 'thinking_process' => $thinking_enabled ? $content : null];
+		return ['content' => $content, 'thinking_process' => null];
     }
     
     private static function get_client_ip() {
         $ip = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '0.0.0.0';
         return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '0.0.0.0';
     }
+
+	/** Stable, non-reversible daily quota subject for a user or guest. */
+	private static function usage_subject() {
+		$user_id = get_current_user_id();
+		if ($user_id > 0) {
+			return 'user_' . $user_id;
+		}
+		$material = self::get_client_ip() . '|' . (isset($_SERVER['HTTP_USER_AGENT']) ? (string) wp_unslash($_SERVER['HTTP_USER_AGENT']) : '');
+		return 'guest_' . substr(hash_hmac('sha256', $material, wp_salt('nonce')), 0, 24);
+	}
     
     private static function count_tokens($text) {
         return max(1, ceil(strlen($text) / 4));
@@ -330,8 +447,8 @@ class TezNevise_AI_API {
         $tool_id = $request->get_param('tool_id') ?? '';
         $user_id = get_current_user_id();
         $is_logged_in = $user_id > 0;
-        $today = date('Y-m-d');
-        $usage_key = 'usage_' . $today . '_' . $user_id;
+		$today = gmdate('Y-m-d');
+		$usage_key = 'usage_' . $today . '_' . self::usage_subject();
         $usage = TezNevise_AI_Database::get_setting($tool_id, $usage_key, []);
         $tool = TezNevise_AI_Core::get_tool($tool_id);
         $limit = $is_logged_in ? ($tool['signed_in_limit'] ?? 100) : ($tool['free_tier_limit'] ?? 10);
@@ -355,7 +472,7 @@ class TezNevise_AI_API {
             'agent_id' => $params['agent_id'] ?? 'general',
             'model' => $params['model'] ?? 'gpt-4',
             'collaboration_mode' => $params['collaboration_mode'] ?? 'single',
-            'ip_address' => self::get_client_ip(),
+			'ip_address' => null,
             'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
         ];
         $session_id_db = TezNevise_AI_Database::save_session($session_data);

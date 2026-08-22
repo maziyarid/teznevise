@@ -4,7 +4,7 @@
  *
  * @package Teznevise
  */
-if ( is_singular( array( 'page', 'post' ) ) && function_exists( 'teznevise_the_page_leftover_content' ) ) {
+if ( is_page() && function_exists( 'teznevise_the_page_leftover_content' ) ) {
 	echo '<div class="container tz-classic-more-wrap">';
 	teznevise_the_page_leftover_content();
 	echo '</div>';
@@ -38,7 +38,7 @@ if ( is_singular( array( 'page', 'post' ) ) && function_exists( 'teznevise_the_p
 				<p class="footer-heading"><?php esc_html_e( 'خدمات', 'teznevise' ); ?></p>
 				<a href="<?php echo esc_url( home_url( '/thesis/' ) ); ?>"><?php esc_html_e( 'انجام پایان‌نامه', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/proposal/' ) ); ?>"><?php esc_html_e( 'انجام پروپوزال', 'teznevise' ); ?></a>
-				<a href="<?php echo esc_url( home_url( '/statistics/' ) ); ?>"><?php esc_html_e( 'تحلیل آماری', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/service-statistics/' ) ); ?>"><?php esc_html_e( 'تحلیل آماری', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/online-calculation-tools/' ) ); ?>"><?php esc_html_e( 'ابزارهای آنلاین', 'teznevise' ); ?></a>
 			</div>
 			<div class="footer-col">

@@ -177,6 +177,8 @@ function teznevise_interactive_shortcode_names() {
 		'gravityforms',
 		'teznevise_downloads',
 		'teznevise_download_category',
+		'tz_case_studies',
+		'teznevise_blog',
 	);
 }
 
@@ -240,6 +242,56 @@ function teznevise_page_classic_copy( $content ) {
 }
 
 /**
+ * Remaining Classic Editor markup after layout shortcodes are stripped.
+ *
+ * Unlike the display-quality helper, this does not apply a length threshold.
+ * Any leftover markup means an administrator already owns the editor field.
+ *
+ * @param string $content Raw post content.
+ * @return string
+ */
+function teznevise_page_owned_editor_markup( $content ) {
+	$content = (string) $content;
+	if ( function_exists( 'teznevise_normalize_shortcode_quotes' ) ) {
+		$content = teznevise_normalize_shortcode_quotes( $content );
+	}
+	if ( function_exists( 'strip_shortcodes' ) ) {
+		$content = strip_shortcodes( $content );
+	}
+	return trim( $content );
+}
+
+/**
+ * Whether the Classic Editor already contains administrator-authored content.
+ *
+ * Any non-empty remainder after shortcodes are removed is owned content,
+ * including copy shorter than the display-quality threshold.
+ *
+ * @param string $content Raw post content.
+ * @return bool
+ */
+function teznevise_page_has_owned_editor_content( $content ) {
+	return '' !== teznevise_page_owned_editor_markup( $content );
+}
+
+/**
+ * Whether HTML contains human-readable editorial copy after all shortcodes
+ * are removed. A small threshold is used only when choosing fallback display
+ * copy, never as an overwrite/ownership test.
+ *
+ * @param string $content Candidate HTML.
+ * @return bool
+ */
+function teznevise_page_has_editorial_copy( $content ) {
+	$copy = teznevise_page_classic_copy( $content );
+	$copy = preg_replace( '/\s+/u', ' ', $copy );
+	if ( ! is_string( $copy ) ) {
+		return false;
+	}
+	return function_exists( 'mb_strlen' ) ? mb_strlen( $copy ) >= 40 : strlen( $copy ) >= 40;
+}
+
+/**
  * Remove only the interactive shortcode tags that already render above the
  * disclosure, leaving administrator-authored classic prose untouched.
  *
@@ -272,6 +324,168 @@ function teznevise_render_classic_page_content( $content ) {
 }
 
 /**
+ * Convert the structured page-builder export into conservative semantic HTML.
+ * This is a bootstrap source for pages whose Classic Editor contains only a
+ * functional shortcode. It deliberately excludes hero/CTA repetitions.
+ *
+ * @param int $post_id Page ID.
+ * @return string
+ */
+function teznevise_classic_html_from_extracted_page( $post_id ) {
+	$entry = teznevise_extracted_entry_for_post( $post_id );
+	if ( empty( $entry['sections'] ) || ! is_array( $entry['sections'] ) ) {
+		return '';
+	}
+	$skip = array( 'hero', 'cta_band' );
+	$out  = array();
+	foreach ( $entry['sections'] as $section ) {
+		if ( ! is_array( $section ) || ( isset( $section['enabled'] ) && ! $section['enabled'] ) || in_array( $section['type'] ?? '', $skip, true ) ) {
+			continue;
+		}
+		$title = trim( wp_strip_all_tags( (string) ( $section['title'] ?? '' ) ) );
+		$text  = trim( wp_strip_all_tags( (string) ( $section['text'] ?? '' ) ) );
+		$items = isset( $section['items'] ) && is_array( $section['items'] ) ? $section['items'] : array();
+		if ( '' !== $title ) {
+			$out[] = '<h2>' . esc_html( $title ) . '</h2>';
+		}
+		if ( '' !== $text ) {
+			$out[] = '<p>' . nl2br( esc_html( $text ) ) . '</p>';
+		}
+		$list = array();
+		foreach ( $items as $item ) {
+			if ( ! is_array( $item ) ) {
+				continue;
+			}
+			$item_title = trim( wp_strip_all_tags( (string) ( $item['title'] ?? '' ) ) );
+			$item_text  = trim( wp_strip_all_tags( (string) ( $item['text'] ?? '' ) ) );
+			if ( '' === $item_title && '' === $item_text ) {
+				continue;
+			}
+			$line = '' !== $item_title ? '<strong>' . esc_html( $item_title ) . '</strong>' : '';
+			if ( '' !== $item_text ) {
+				$line .= ( '' !== $line ? ' — ' : '' ) . esc_html( $item_text );
+			}
+			$list[] = '<li>' . $line . '</li>';
+		}
+		if ( $list ) {
+			$out[] = '<ul>' . implode( '', $list ) . '</ul>';
+		}
+	}
+	return implode( "\n", $out );
+}
+
+/**
+ * Build minimal editorial HTML from ordinary page fields when neither WXR nor
+ * structured sections contain copy.
+ *
+ * @param int $post_id Page ID.
+ * @return string
+ */
+function teznevise_classic_html_from_page_fields( $post_id ) {
+	$parts    = array();
+	$excerpt  = trim( wp_strip_all_tags( (string) get_post_field( 'post_excerpt', $post_id ) ) );
+	$subtitle = trim( wp_strip_all_tags( (string) get_post_meta( $post_id, '_teznevise_subtitle', true ) ) );
+	$features = trim( wp_strip_all_tags( (string) get_post_meta( $post_id, '_teznevise_features', true ) ) );
+	foreach ( array_unique( array_filter( array( $excerpt, $subtitle ) ) ) as $paragraph ) {
+		$parts[] = '<p>' . esc_html( $paragraph ) . '</p>';
+	}
+	$items = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $features ) ) );
+	if ( $items ) {
+		$parts[] = '<ul><li>' . implode( '</li><li>', array_map( 'esc_html', $items ) ) . '</li></ul>';
+	}
+	return implode( "\n", $parts );
+}
+
+/**
+ * Get editorial HTML for the pre-footer disclosure in priority order:
+ * administrator Classic Editor copy, WXR recovery by full path, then the
+ * structured page export. Functional shortcodes never enter this result.
+ *
+ * @param int $post_id Page ID.
+ * @return string
+ */
+function teznevise_page_classic_source( $post_id ) {
+	$post_id = (int) $post_id;
+	$raw     = (string) get_post_field( 'post_content', $post_id );
+	$classic = strip_shortcodes( teznevise_page_without_interactive_shortcodes( $raw ) );
+	if ( teznevise_page_has_owned_editor_content( $classic ) ) {
+		return trim( $classic );
+	}
+	$path = teznevise_page_path( $post_id );
+	if ( function_exists( 'teznevise_wxr_classic_for_page' ) ) {
+		$classic = teznevise_wxr_classic_for_page( $post_id, $path );
+		if ( teznevise_page_has_editorial_copy( $classic ) ) {
+			return trim( $classic );
+		}
+	}
+	$classic = teznevise_classic_html_from_extracted_page( $post_id );
+	if ( teznevise_page_has_editorial_copy( $classic ) ) {
+		return $classic;
+	}
+	$classic = teznevise_classic_html_from_page_fields( $post_id );
+	if ( teznevise_page_has_editorial_copy( $classic ) ) {
+		return $classic;
+	}
+	return '<p>' . esc_html__( 'برای این صفحه هنوز محتوای تکمیلی در ویرایشگر کلاسیک ثبت نشده است.', 'teznevise' ) . '</p>';
+}
+
+/**
+ * Make Classic Editor HTML safe to embed below a page that already owns its
+ * H1 and DOM IDs. Internal references are namespaced with the page ID.
+ *
+ * @param string $content Rendered HTML.
+ * @param int    $post_id Page ID.
+ * @return string
+ */
+function teznevise_prepare_classic_disclosure_html( $content, $post_id ) {
+	$prefix  = 'tz-editor-' . (int) $post_id . '-';
+	$content = preg_replace_callback(
+		'/<\/?h1\b/iu',
+		static function ( $match ) {
+			return 0 === strpos( $match[0], '</' ) ? '</h2' : '<h2';
+		},
+		(string) $content
+	);
+	$canonical = array();
+	$seen      = array();
+	$content   = preg_replace_callback(
+		'/\bid=([' . "'\"" . '])([^' . "'\"" . ']*)\1/iu',
+		static function ( $match ) use ( $prefix, &$canonical, &$seen ) {
+			$raw = trim( (string) $match[2] );
+			$old = sanitize_title( $raw );
+			if ( '' === $old ) {
+				$old = 'id-' . substr( md5( $raw . ':' . (string) count( $seen ) ), 0, 8 );
+			}
+			$n            = isset( $seen[ $old ] ) ? (int) $seen[ $old ] + 1 : 1;
+			$seen[ $old ] = $n;
+			$new          = $prefix . $old . ( $n > 1 ? '-' . $n : '' );
+			if ( ! isset( $canonical[ $old ] ) ) {
+				$canonical[ $old ] = $new;
+			}
+			if ( '' !== $raw && ! isset( $canonical[ $raw ] ) ) {
+				$canonical[ $raw ] = $new;
+			}
+			return 'id="' . esc_attr( $new ) . '"';
+		},
+		$content
+	);
+	foreach ( $canonical as $old => $new ) {
+		if ( '' === $old ) {
+			continue;
+		}
+		$content = preg_replace_callback(
+			'/\b(href|aria-controls)=([' . "'\"" . '])#?' . preg_quote( $old, '/' ) . '\2/iu',
+			static function ( $match ) use ( $new ) {
+				$value = 'href' === strtolower( $match[1] ) ? '#' . $new : $new;
+				return $match[1] . '="' . esc_attr( $value ) . '"';
+			},
+			$content
+		);
+	}
+	return wp_kses_post( $content );
+}
+
+/**
  * Wrap classic-editor content in the shared accessible "show more" pattern.
  *
  * @param string $content Rendered page content.
@@ -280,6 +494,7 @@ function teznevise_render_classic_page_content( $content ) {
  */
 function teznevise_page_content_disclosure_markup( $content, $post_id = 0 ) {
 	$post_id = $post_id ? (int) $post_id : (int) get_the_ID();
+	$content = teznevise_prepare_classic_disclosure_html( $content, $post_id );
 	if ( '' === teznevise_page_classic_copy( $content ) ) {
 		return '';
 	}
@@ -312,26 +527,8 @@ function teznevise_filter_page_content_disclosure( $content ) {
 	if ( ! empty( $teznevise_rendering_classic_page_content ) || is_admin() || ! is_singular( 'page' ) || ! in_the_loop() || ! is_main_query() ) {
 		return $content;
 	}
-	$raw = (string) get_post_field( 'post_content', get_the_ID() );
-	if ( function_exists( 'teznevise_is_legacy_shortcode_content' ) && teznevise_is_legacy_shortcode_content( $raw ) ) {
-		return $content;
-	}
-	// Builder leftover is printed by teznevise_the_page_leftover_content().
-	if ( function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections() ) {
-		return $content;
-	}
-	if ( teznevise_is_interactive_shortcode_content( $raw ) ) {
-		$interactive = teznevise_interactive_shortcodes_markup( $raw );
-		$classic     = teznevise_render_classic_page_content( teznevise_page_without_interactive_shortcodes( $raw ) );
-		$markup      = teznevise_page_content_disclosure_markup( $classic );
-		$output      = '';
-		if ( '' !== $interactive ) {
-			$output .= '<div class="tz-interactive-page-content">' . do_shortcode( $interactive ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		}
-		return $output . $markup;
-	}
-	// Classic-only pages keep their body visible. Do not hide it behind "مشاهده بیشتر".
-	return $content;
+	$interactive = teznevise_interactive_shortcodes_for_page( get_the_ID() );
+	return '' !== $interactive ? '<div class="tz-interactive-page-content">' . teznevise_prepare_interactive_html( do_shortcode( $interactive ) ) . '</div>' : '';
 }
 add_filter( 'the_content', 'teznevise_filter_page_content_disclosure', 50 );
 
@@ -361,6 +558,28 @@ function teznevise_interactive_shortcodes_markup( $content ) {
 }
 
 /**
+ * Functional shortcode markup retained separately when Classic Editor prose
+ * is imported into post_content. This keeps calculators/forms working without
+ * forcing editors to manage layout shortcodes in the editor.
+ *
+ * @param int $post_id Page ID.
+ * @return string
+ */
+function teznevise_interactive_shortcodes_for_page( $post_id ) {
+	$post_id = (int) $post_id;
+	$raw     = (string) get_post_field( 'post_content', $post_id );
+	$saved   = (string) get_post_meta( $post_id, '_teznevise_functional_shortcodes', true );
+	return teznevise_interactive_shortcodes_markup( $saved . "\n" . $raw );
+}
+
+/** A page template owns the single H1; embedded tools use H2 headings. */
+function teznevise_prepare_interactive_html( $html ) {
+	return (string) preg_replace_callback( '/<\/?h1\b/iu', static function ( $match ) {
+		return 0 === strpos( $match[0], '</' ) ? '</h2' : '<h2';
+	}, (string) $html );
+}
+
+/**
  * Whether the current page should still print post_content alongside builder fields.
  *
  * @param int $post_id Optional post ID.
@@ -368,16 +587,20 @@ function teznevise_interactive_shortcodes_markup( $content ) {
  */
 function teznevise_page_should_print_content( $post_id = 0 ) {
 	$post_id = $post_id ? (int) $post_id : (int) get_the_ID();
-	$raw     = (string) get_post_field( 'post_content', $post_id );
-	if ( '' === trim( $raw ) ) {
-		return false;
+	return '' !== teznevise_interactive_shortcodes_for_page( $post_id );
+}
+
+/**
+ * Print only calculators/forms at the normal template location.
+ *
+ * @param int $post_id Optional page ID.
+ */
+function teznevise_the_page_interactive_content( $post_id = 0 ) {
+	$post_id = $post_id ? (int) $post_id : (int) get_the_ID();
+	$markup  = teznevise_interactive_shortcodes_for_page( $post_id );
+	if ( '' !== $markup ) {
+		echo '<div class="tz-interactive-page-content">' . teznevise_prepare_interactive_html( do_shortcode( $markup ) ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
-	if ( function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections() ) {
-		// Keep forms/calculators in place and expose remaining classic-editor copy
-		// through the shared disclosure instead of silently dropping it.
-		return teznevise_is_interactive_shortcode_content( $raw ) || '' !== teznevise_page_classic_copy( $raw );
-	}
-	return true;
 }
 
 /**
@@ -387,55 +610,21 @@ function teznevise_page_should_print_content( $post_id = 0 ) {
  * @param int $post_id Optional post ID.
  */
 function teznevise_the_page_leftover_content( $post_id = 0 ) {
-	static $printed = false;
-	if ( $printed ) {
-		return;
-	}
+	static $printed = array();
 	$post_id = $post_id ? (int) $post_id : (int) get_the_ID();
-	$raw     = (string) get_post_field( 'post_content', $post_id );
-	$slug    = (string) get_post_field( 'post_name', $post_id );
-	$has_builder = function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections();
-
-	// Builder pages never call the_content(); run leftover calculators/forms here.
-	if ( $has_builder && function_exists( 'teznevise_interactive_shortcodes_markup' ) ) {
-		$markup = teznevise_interactive_shortcodes_markup( $raw );
-		if ( '' !== $markup ) {
-			echo '<div class="tz-interactive-page-content">' . do_shortcode( $markup ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		}
-	}
-
-	$classic_raw = function_exists( 'teznevise_page_without_interactive_shortcodes' )
-		? teznevise_page_without_interactive_shortcodes( $raw )
-		: $raw;
-	if ( function_exists( 'strip_shortcodes' ) ) {
-		$classic_raw = strip_shortcodes( $classic_raw );
-	}
-	$classic_raw = trim( (string) $classic_raw );
-	$classic_txt = trim( wp_strip_all_tags( $classic_raw ) );
-	if ( '' === $classic_txt && function_exists( 'teznevise_wxr_classic_for_slug' ) ) {
-		$classic_raw = teznevise_wxr_classic_for_slug( $slug );
-		$classic_txt = trim( wp_strip_all_tags( $classic_raw ) );
-	}
-
-	if ( '' === $classic_txt ) {
-		$printed = true;
+	if ( $post_id <= 0 || isset( $printed[ $post_id ] ) ) {
 		return;
 	}
-
-	// Classic-only pages already print this as the main body.
-	if ( ! $has_builder && $classic_raw === trim( $raw ) ) {
-		$printed = true;
+	$printed[ $post_id ] = true;
+	$classic_raw         = teznevise_page_classic_source( $post_id );
+	if ( '' === teznevise_page_classic_copy( $classic_raw ) ) {
 		return;
 	}
-
-	$html = function_exists( 'teznevise_render_classic_page_content' )
-		? teznevise_render_classic_page_content( $classic_raw )
-		: wp_kses_post( $classic_raw );
+	$html = teznevise_render_classic_page_content( $classic_raw );
 	$box  = teznevise_page_content_disclosure_markup( $html, $post_id );
 	if ( '' !== $box ) {
 		echo $box; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
-	$printed = true;
 }
 
 /**

@@ -2,12 +2,9 @@ name: Guard functions.php bootstrap
 
 on:
   pull_request:
-    paths:
-      - 'functions.php'
   push:
-    branches: [ main ]
-    paths:
-      - 'functions.php'
+    branches: [ main, modifications ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,7 +18,8 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.3'
+          coverage: none
 
       - name: Lint functions.php
         run: php -l functions.php
@@ -51,12 +49,21 @@ jobs:
             "inc/builder-seed.php"
             "inc/blog.php"
             "inc/seo.php"
+            "inc/security.php"
             "inc/setup-pages.php"
+            "inc/extracted-pages.php"
+            "inc/wxr-classic-content.php"
+            "inc/frontend-compat.php"
+            "inc/ai-agents.php"
           )
           missing=0
           for f in "${required_files[@]}"; do
             if ! grep -q "require_once TEZNEVISE_DIR . '/${f}'" functions.php; then
               echo "::error file=functions.php::Missing require_once for ${f}"
+              missing=1
+            fi
+            if [ ! -f "$f" ]; then
+              echo "::error file=$f::$f is required by functions.php but is missing from the repository root."
               missing=1
             fi
           done
@@ -72,5 +79,5 @@ jobs:
               exit 0
             fi
           done
-          echo "::error file=functions.php::teznevise_get_contact() is not defined in functions.php or any required inc/ file. This exact symbol has caused a production fatal error 3+ times before (see commits 085c9c44, 75a32ee6, 0746732)."
+          echo "::error file=functions.php::teznevise_get_contact() is not defined in functions.php or any required inc/ file."
           exit 1

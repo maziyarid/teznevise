@@ -1,15 +1,18 @@
 # Changelog
 
-## 1.9.6 — 2026-08-22 — Mobile centering, compact SSL, FAQ boxes, drawer
+## 1.9.6 — 2026-08-22 — WordPress-wide Classic content and mobile/backend hardening
 
-- Mobile cards, steps, FAQs, stats, testimonials, service tiles, and the footer are centred on every sitemap page (icon on top, title and copy in the middle). Live WordPress was right-hugging because builder cards used `align-items: flex-start` in RTL.
-- Footer SSL/enamad seals are a compact inline badge, not a giant white tile. Footer is a single centred column under 720px.
-- FAQ titles no longer print leftover accordion arrows (`▾`). Boxes keep the numbered colourful tile and never show a chevron.
-- Process steps keep the colourful number; a generic check/arrow icon is not printed next to it. Custom FA7 icons (chat, document, …) still show.
-- Mobile drawer is a column accordion. Opening «پایان‌نامه» no longer leaves a vertical leftover tab of «انجام پایان نامه» on the right edge. Short labels apply to the mobile menu as well as desktop.
-- Desktop mega menu stays RTL with `auto-fit` (no empty left column). FA6 `\f078` tofu chevrons are gone; CSS-triangle chevrons + FA7 icons in the mega/drawer.
-- `hotfix-196.css` is enqueued last (priority 100) so it beats chrome, modernization, and per-service styles.
-
+- Flatten the 1.9.6 files into the active theme root so cPanel deploys them over production, not into an unused nested `teznevise/` folder.
+- Replace the homepage-only static «مشاهده بیشتر» block with one dynamic, sanitized Classic Editor disclosure on every page immediately before the footer.
+- Separate calculators/forms from editorial copy. A versioned non-destructive importer moves recovered prose into `post_content` and preserves functional shortcodes in private meta.
+- Never overwrite administrator-authored Classic Editor content, including copy shorter than 40 characters; store a backup/revision first. Display-quality length is used only for fallback copy.
+- Demote embedded H1 headings and namespace editor DOM IDs with a per-ID occurrence counter so pages keep one H1 and unique IDs.
+- Centre repeated mobile card systems and the mobile footer; constrain drawer scrolling and reserve safe-area space for bottom navigation/contact controls.
+- Mobile cards, steps, FAQs, stats, testimonials, service tiles, and the footer are centred (icon on top, title and copy in the middle). Footer SSL/enamad seals are a compact inline badge.
+- FAQ titles no longer print leftover accordion arrows; answers stay visible as numbered boxes. Process steps keep the colourful number.
+- Mobile drawer is a column accordion. Desktop mega menu stays RTL with `auto-fit`. `hotfix-196.css` is enqueued last (priority 100).
+- Redirect the dead `/statistics/` URL to the published `/service-statistics/` page and update internal theme links.
+- Restrict public REST user routes, public author archives, and `?author=` probes; harden browser headers; rate-limit accepted lead submissions after validation; distinguish stored vs delivered leads; require HTTPS for AI providers; and use atomic quota/burst locks.
 
 ## 1.9.5 — 2026-08-22 — RTL nav, classic «مشاهده بیشتر», WXR copy, UI audit
 

@@ -220,8 +220,9 @@ function teznevise_gravityform_fallback( $atts = array() ) {
  * Register fallbacks only when the original plugin shortcode is missing.
  */
 function teznevise_register_missing_shortcodes() {
-	remove_shortcode( 'gravityform' );
-	add_shortcode( 'gravityform', 'teznevise_gravityform_fallback' );
+	if ( ! shortcode_exists( 'gravityform' ) ) {
+		add_shortcode( 'gravityform', 'teznevise_gravityform_fallback' );
+	}
 	if ( ! shortcode_exists( 'teznevise_blog' ) ) {
 		add_shortcode( 'teznevise_blog', 'teznevise_blog_shortcode_fallback' );
 	}
@@ -333,16 +334,25 @@ function teznevise_hub_shortcode_fallback( $atts = array(), $content = '', $tag 
 function teznevise_render_native_lead_form( $context = 'contact' ) {
 	$title = get_the_title();
 	$uid   = sanitize_html_class( $context );
-	$ok    = isset( $_GET['lead'] ) && 'ok' === $_GET['lead']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$ok      = isset( $_GET['lead'] ) && in_array( sanitize_key( wp_unslash( $_GET['lead'] ) ), array( 'ok', 'queued' ), true ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$error   = isset( $_GET['lead'] ) ? sanitize_key( wp_unslash( $_GET['lead'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$queued  = 'queued' === $error;
 	ob_start();
 	if ( $ok ) :
 		?>
 	<div class="lead-card tz-lead-thanks" role="status">
-		<p><strong><?php esc_html_e( 'درخواست شما ثبت شد.', 'teznevise' ); ?></strong></p>
-		<p><?php esc_html_e( 'کارشناس تزنویسه در ساعات کاری (شنبه تا پنجشنبه، ۹ تا ۲۱) با شما تماس می‌گیرد. اطلاعات فقط برای بررسی همین درخواست استفاده می‌شود.', 'teznevise' ); ?></p>
+		<p><strong><?php echo esc_html( $queued ? __( 'درخواست شما ذخیره شد.', 'teznevise' ) : __( 'درخواست شما ثبت شد.', 'teznevise' ) ); ?></strong></p>
+		<p><?php echo esc_html( $queued ? __( 'ارسال ایمیل با تأخیر روبه‌رو شد؛ درخواست در پنل ذخیره شده و کارشناس تزنویسه در ساعات کاری با شما تماس می‌گیرد.', 'teznevise' ) : __( 'کارشناس تزنویسه در ساعات کاری (شنبه تا پنجشنبه، ۹ تا ۲۱) با شما تماس می‌گیرد. اطلاعات فقط برای بررسی همین درخواست استفاده می‌شود.', 'teznevise' ) ); ?></p>
 	</div>
 		<?php
 		return ob_get_clean();
+	endif;
+	if ( in_array( $error, array( 'err', 'rate' ), true ) ) :
+		?>
+	<div class="account-flash is-warn" role="alert">
+		<?php echo esc_html( 'rate' === $error ? __( 'تعداد درخواست‌ها زیاد است؛ لطفاً یک دقیقه دیگر دوباره تلاش کنید.', 'teznevise' ) : __( 'نام و شماره موبایل معتبر را بررسی و دوباره ارسال کنید.', 'teznevise' ) ); ?>
+	</div>
+		<?php
 	endif;
 	?>
 	<form class="tz-form lead-card" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-test="<?php echo esc_attr( $uid ); ?>-form" data-tz-lead>
@@ -350,6 +360,7 @@ function teznevise_render_native_lead_form( $context = 'contact' ) {
 		<?php wp_nonce_field( 'teznevise_lead', 'teznevise_lead_nonce' ); ?>
 		<input type="hidden" name="context" value="<?php echo esc_attr( $context ); ?>" />
 		<input type="hidden" name="_tz_redirect" value="<?php echo esc_url( get_permalink() ? get_permalink() : home_url( '/inquiry/' ) ); ?>" />
+		<label class="tz-honeypot" aria-hidden="true" tabindex="-1">Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
 		<div class="form-grid">
 			<div class="field">
 				<label for="tz-name-<?php echo esc_attr( $uid ); ?>"><?php esc_html_e( 'نام و نام خانوادگی', 'teznevise' ); ?></label>
@@ -408,34 +419,103 @@ function teznevise_handle_lead() {
 	$service = isset( $_POST['service'] ) ? sanitize_text_field( wp_unslash( $_POST['service'] ) ) : '';
 	$message = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
 	$redirect = isset( $_POST['_tz_redirect'] ) ? esc_url_raw( wp_unslash( $_POST['_tz_redirect'] ) ) : home_url( '/inquiry/' );
+	$home_host = (string) wp_parse_url( home_url( '/' ), PHP_URL_HOST );
+	if ( $home_host !== (string) wp_parse_url( $redirect, PHP_URL_HOST ) ) {
+		$redirect = home_url( '/inquiry/' );
+	}
+	$honeypot = isset( $_POST['website'] ) ? trim( (string) wp_unslash( $_POST['website'] ) ) : '';
+	if ( '' !== $honeypot ) {
+		wp_safe_redirect( add_query_arg( 'lead', 'ok', $redirect ) );
+		exit;
+	}
+	$client_ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : 'unknown';
+	$rate_hash = substr( hash_hmac( 'sha256', $client_ip, wp_salt( 'nonce' ) ), 0, 32 );
 	if ( '' === $name || '' === $phone ) {
+		$invalid_key   = 'tez_lead_bad_' . $rate_hash;
+		$invalid_count = (int) get_transient( $invalid_key );
+		if ( $invalid_count >= 20 ) {
+			wp_safe_redirect( add_query_arg( 'lead', 'rate', $redirect ) );
+			exit;
+		}
+		set_transient( $invalid_key, $invalid_count + 1, MINUTE_IN_SECONDS );
 		wp_safe_redirect( add_query_arg( 'lead', 'err', $redirect ) );
 		exit;
 	}
-	$to      = function_exists( 'teznevise_get_contact' ) ? teznevise_get_contact( 'email' ) : get_option( 'admin_email' );
-	$subject = 'درخواست جدید تزنویسه — ' . $service;
-	$body    = "نام: {$name}\nتلفن: {$phone}\nخدمت: {$service}\n\n{$message}\n";
-	wp_mail( $to ? $to : get_option( 'admin_email' ), $subject, $body );
-	$stored = get_option( 'teznevise_leads', array() );
+	$rate_key   = 'tez_lead_' . $rate_hash;
+	$rate_count = (int) get_transient( $rate_key );
+	if ( $rate_count >= 3 ) {
+		wp_safe_redirect( add_query_arg( 'lead', 'rate', $redirect ) );
+		exit;
+	}
+	set_transient( $rate_key, $rate_count + 1, MINUTE_IN_SECONDS );
+	$to        = function_exists( 'teznevise_get_contact' ) ? teznevise_get_contact( 'email' ) : get_option( 'admin_email' );
+	$subject   = 'درخواست جدید تزنویسه — ' . $service;
+	$body      = "نام: {$name}\nتلفن: {$phone}\nخدمت: {$service}\n\n{$message}\n";
+	$mail_sent = wp_mail( $to ? $to : get_option( 'admin_email' ), $subject, $body );
+	$stored    = get_option( 'teznevise_leads', array() );
 	if ( ! is_array( $stored ) ) {
 		$stored = array();
 	}
+	$stored = array_values(
+		array_filter(
+			$stored,
+			static function ( $lead ) {
+				return is_array( $lead ) && isset( $lead['time'] ) && (int) $lead['time'] >= time() - ( 90 * DAY_IN_SECONDS );
+			}
+		)
+	);
 	$stored[] = array(
 		'time'    => time(),
 		'name'    => $name,
 		'phone'   => $phone,
 		'service' => $service,
-		'ip'      => isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '',
+		'message' => $message,
+		'mail'    => (bool) $mail_sent,
 	);
 	if ( count( $stored ) > 200 ) {
 		$stored = array_slice( $stored, -200 );
 	}
 	update_option( 'teznevise_leads', $stored, false );
-	wp_safe_redirect( add_query_arg( 'lead', 'ok', $redirect ) );
+	if ( $mail_sent ) {
+		delete_option( 'teznevise_lead_mail_failures' );
+		wp_safe_redirect( add_query_arg( 'lead', 'ok', $redirect ) );
+		exit;
+	}
+	update_option( 'teznevise_lead_mail_failures', (int) get_option( 'teznevise_lead_mail_failures', 0 ) + 1, false );
+	update_option( 'teznevise_lead_last_mail_fail', time(), false );
+	wp_safe_redirect( add_query_arg( 'lead', 'queued', $redirect ) );
 	exit;
 }
 add_action( 'admin_post_teznevise_lead', 'teznevise_handle_lead' );
 add_action( 'admin_post_nopriv_teznevise_lead', 'teznevise_handle_lead' );
+
+/**
+ * Surface undelivered leads to administrators so stored-but-unsent rows are not silent.
+ */
+function teznevise_lead_mail_admin_notice() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	$failures = (int) get_option( 'teznevise_lead_mail_failures', 0 );
+	if ( $failures <= 0 ) {
+		return;
+	}
+	echo '<div class="notice notice-warning"><p>';
+	echo esc_html(
+		sprintf(
+			/* translators: %d: number of failed mail attempts */
+			_n(
+				'%d lead was stored but email delivery failed. Review Appearance → Teznevise leads / the teznevise_leads option and retry sending.',
+				'%d leads were stored but email delivery failed. Review Appearance → Teznevise leads / the teznevise_leads option and retry sending.',
+				$failures,
+				'teznevise'
+			),
+			$failures
+		)
+	);
+	echo '</p></div>';
+}
+add_action( 'admin_notices', 'teznevise_lead_mail_admin_notice' );
 
 /**
  * Hub copy based on leftover shortcode tag.

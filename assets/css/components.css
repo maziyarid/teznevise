@@ -212,37 +212,32 @@ textarea{border:1px solid var(--tz-line);border-radius:11px;padding:11px 12px;ba
   color: var(--tz-primary);
 }
 
-/* Nested submenus */
+/* Nested submenus — RTL flyout, not LTR left:100% */
 .nav-links .sub-menu .sub-menu {
   top: 0;
-  left: 100%;
-  margin-left: 10px;
+  inset-inline-start: 100%;
+  inset-inline-end: auto;
+  left: auto;
+  margin-inline-start: 10px;
+  margin-left: 0;
 }
 
 .nav-links > li:hover > .sub-menu > li:hover > .sub-menu,
 .nav-links > li:focus-within > .sub-menu > li:focus-within > .sub-menu {
   opacity: 1;
   visibility: visible;
-  transform: translateX(0);
+  transform: none;
 }
 
 .nav-links .sub-menu .sub-menu {
-  transform: translateX(-10px);
+  transform: none;
 }
 
-/* Menu items with children indicator */
+/* Chevrons are rendered as CSS triangles / FA7 <i> in the walker.
+ * Never use Font Awesome 6 unicode content — it tofus on FA7. */
 .nav-links .menu-item-has-children > a::after {
-  content: '\f078';
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  font-size: 12px;
-  margin-right: 6px;
-  color: var(--tz-muted);
-}
-
-.nav-links
- .menu-item-has-children:hover > a::after {
-  color: var(--tz-primary);
+  content: none;
+  display: none;
 }
 
 /* === layout-refinements.css === */

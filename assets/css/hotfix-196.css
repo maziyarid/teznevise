@@ -187,6 +187,18 @@
   display: none !important;
 }
 
+/* Chevrons are hidden, so answers must remain readable as static boxes. */
+.faq-a,
+.faq-answer,
+.tzss-faq-a,
+.tzca-faq-a,
+.tzt-faq-a,
+.tzhub-faq-a {
+  display: block !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
 /* Footer: compact SSL, no huge white tile. */
 .trust-seal,
 .footer-certs .trust-seal,

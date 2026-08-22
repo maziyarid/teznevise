@@ -59,3 +59,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
+/** Add accessible result semantics to legacy calculator tables. */
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.tz-interactive-page-content table, .tool-body table, [class*="tz"] table').forEach(function (table) {
+    if (table.querySelector('caption')) return;
+    var caption = document.createElement('caption');
+    caption.className = 'screen-reader-text';
+    caption.textContent = 'نتایج محاسبه';
+    table.insertBefore(caption, table.firstChild);
+  });
+  document.querySelectorAll('.tz-interactive-page-content, .tool-body').forEach(function (box) {
+    if (!box.hasAttribute('aria-live')) {
+      box.setAttribute('aria-live', 'polite');
+    }
+  });
+});
