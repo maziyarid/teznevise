@@ -304,8 +304,13 @@ class TezNevise_AI_API {
 
     private static function build_system_prompt($tool, $agent, $skill_id, $collaboration_mode) {
         $prompt_parts = [];
-        if (!empty($agent['system_prompt'])) $prompt_parts[] = $agent['system_prompt'];
-        if (!empty($agent['description'])) $prompt_parts[] = $agent['description'];
+        $lock = apply_filters( 'teznevise_ai_system_prompt_prefix', '', $agent );
+        if ( $lock ) {
+            $prompt_parts[] = $lock;
+        } elseif (!empty($agent['system_prompt'])) {
+            $prompt_parts[] = $agent['system_prompt'];
+        }
+        if (!empty($agent['description']) && ! $lock) $prompt_parts[] = $agent['description'];
         if (!empty($agent['role'])) $prompt_parts[] = 'Role: ' . $agent['role'];
         if (!empty($tool['context'])) $prompt_parts[] = "Tool Context: " . json_encode($tool['context']);
         if ($skill_id && isset($tool['skills'][$skill_id])) {
@@ -318,7 +323,7 @@ class TezNevise_AI_API {
         } else {
             $prompt_parts[] = "Respond in language code: {$lang}.";
         }
-		$prompt_parts[] = "Give a concise, evidence-based answer. Do not reveal private chain-of-thought; provide a short conclusion and useful supporting explanation instead.";
+		$prompt_parts[] = "Give a concise, evidence-based answer. First enclose ALL internal reasoning in <thought>...</thought>, then the public reply outside those tags.";
         return implode("\n\n", $prompt_parts);
     }
 
@@ -521,6 +526,7 @@ class TezNevise_AI_API {
             'api.deepseek.com',
             'api.ydc-index.io',
             'api.you.com',
+            'api.tavily.com',
         );
     }
 
@@ -536,6 +542,7 @@ class TezNevise_AI_API {
             'together'   => array('label' => 'Together', 'option' => 'teznevise_ai_together_key', 'host' => 'api.together.xyz', 'endpoint' => 'https://api.together.xyz/v1/chat/completions'),
             'deepseek'   => array('label' => 'DeepSeek', 'option' => 'teznevise_ai_deepseek_key', 'host' => 'api.deepseek.com', 'endpoint' => 'https://api.deepseek.com/v1/chat/completions'),
             'you'        => array('label' => 'You.com Research', 'option' => 'teznevise_ai_you_key', 'host' => 'api.ydc-index.io', 'endpoint' => 'https://api.ydc-index.io/v1/search'),
+            'tavily'     => array('label' => 'Tavily Research', 'option' => 'teznevise_ai_tavily_key', 'host' => 'api.tavily.com', 'endpoint' => 'https://api.tavily.com/search'),
         );
     }
 
@@ -569,14 +576,22 @@ class TezNevise_AI_API {
 
     private static function key_for($agent, $provider) {
         if (!empty($agent['api_key'])) {
-            return (string) $agent['api_key'];
+            $own = (string) $agent['api_key'];
+            return class_exists('Teznevise_Key_Vault') ? Teznevise_Key_Vault::decrypt($own) : $own;
+        }
+        if (class_exists('Teznevise_Key_Vault')) {
+            $from_vault = Teznevise_Key_Vault::get_provider_key($provider);
+            if ($from_vault !== '') {
+                return $from_vault;
+            }
         }
         $catalog = self::providers();
         $option = $catalog[$provider]['option'] ?? 'teznevise_ai_openai_key';
         if ($provider === 'openai' && defined('TEZNEVISE_AI_OPENAI_KEY') && TEZNEVISE_AI_OPENAI_KEY) {
             return TEZNEVISE_AI_OPENAI_KEY;
         }
-        return (string) get_option($option, '');
+        $raw = (string) get_option($option, '');
+        return class_exists('Teznevise_Key_Vault') ? Teznevise_Key_Vault::decrypt($raw) : $raw;
     }
 
     private static function build_provider_request($provider, $url, $api_key, $model, $system_prompt, $message, $agent = null) {

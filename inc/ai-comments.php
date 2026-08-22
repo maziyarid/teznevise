@@ -136,12 +136,17 @@ function teznevise_ai_discussion_get( $post_id ) {
 				'tags'    => (string) get_comment_meta( $c->comment_ID, 'tz_ai_tags', true ),
 				'color'   => teznevise_commenter_color_for_comment( $c ),
 				'content' => $c->comment_content,
+				'thought' => (string) get_comment_meta( $c->comment_ID, 'tz_ai_thought', true ),
 				'human'   => (bool) get_comment_meta( $c->comment_ID, 'tz_human_moderator', true ),
 			);
 		}
 	}
+	$research_meta = get_post_meta( (int) $post_id, '_teznevise_ai_research', true );
+	if ( is_array( $research_meta ) ) {
+		$research_meta = (string) ( $research_meta['brief'] ?? '' );
+	}
 	return array(
-		'research' => isset( $decoded['research'] ) ? (string) $decoded['research'] : (string) get_post_meta( (int) $post_id, '_teznevise_ai_research', true ),
+		'research' => isset( $decoded['research'] ) ? (string) $decoded['research'] : (string) $research_meta,
 		'items'    => $items,
 	);
 }
@@ -194,6 +199,9 @@ function teznevise_render_ai_discussion_branch( $by_parent, $parent_id ) {
 		}
 		echo '</header>';
 		echo '<div class="comment-content">' . wp_kses_post( wpautop( (string) ( $item['content'] ?? '' ) ) ) . '</div>';
+		if ( ! empty( $item['thought'] ) ) {
+			echo '<details class="tz-ai-think"><summary>' . esc_html__( 'مشاهده استدلال درونی', 'teznevise' ) . '</summary><pre>' . esc_html( $item['thought'] ) . '</pre></details>';
+		}
 		if ( ! empty( $item['tags'] ) ) {
 			echo '<p class="tz-ai-tags">' . esc_html( $item['tags'] ) . '</p>';
 		}
@@ -234,7 +242,12 @@ add_action( 'add_meta_boxes_post', 'teznevise_ai_comments_register_meta_box' );
 function teznevise_ai_comments_render_meta_box( $post ) {
 	wp_nonce_field( 'teznevise_ai_discuss', '_tz_ai_discuss' );
 	$thread   = teznevise_ai_discussion_get( $post->ID );
-	$research = (string) get_post_meta( $post->ID, '_teznevise_ai_research', true );
+	$research_raw = get_post_meta( $post->ID, '_teznevise_ai_research', true );
+	if ( is_array( $research_raw ) ) {
+		$research = (string) ( $research_raw['brief'] ?? '' );
+	} else {
+		$research = (string) $research_raw;
+	}
 	if ( ! $research && ! empty( $thread['research'] ) ) {
 		$research = (string) $thread['research'];
 	}
@@ -260,7 +273,14 @@ function teznevise_ai_comments_maybe_generate( $post_id, $post, $update ) {
 	}
 	if ( isset( $_POST['_tz_ai_discuss'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_tz_ai_discuss'] ) ), 'teznevise_ai_discuss' ) ) {
 		if ( isset( $_POST['teznevise_ai_research'] ) ) {
-			update_post_meta( $post_id, '_teznevise_ai_research', sanitize_textarea_field( wp_unslash( $_POST['teznevise_ai_research'] ) ) );
+			$brief    = sanitize_textarea_field( wp_unslash( $_POST['teznevise_ai_research'] ) );
+			$existing = get_post_meta( $post_id, '_teznevise_ai_research', true );
+			if ( is_array( $existing ) ) {
+				$existing['brief'] = $brief;
+				update_post_meta( $post_id, '_teznevise_ai_research', $existing );
+			} else {
+				update_post_meta( $post_id, '_teznevise_ai_research', $brief );
+			}
 		}
 		if ( isset( $_POST['teznevise_ai_discussion'] ) && ! isset( $_POST['teznevise_ai_generate'] ) ) {
 			$raw = json_decode( wp_unslash( $_POST['teznevise_ai_discussion'] ), true );
@@ -273,7 +293,11 @@ function teznevise_ai_comments_maybe_generate( $post_id, $post, $update ) {
 	$clicked  = isset( $_POST['teznevise_ai_generate'] ) && isset( $_POST['_tz_ai_discuss'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_tz_ai_discuss'] ) ), 'teznevise_ai_discuss' );
 	$auto     = ! empty( $settings['auto_on_publish'] ) && ! $update && 'publish' === $post->post_status;
 	if ( $clicked || $auto ) {
-		teznevise_ai_comments_generate( $post_id );
+		if ( class_exists( 'Teznevise_Debate_Orchestrator' ) ) {
+			Teznevise_Debate_Orchestrator::schedule( $post_id, true );
+		} else {
+			teznevise_ai_comments_generate( $post_id );
+		}
 	}
 }
 add_action( 'save_post_post', 'teznevise_ai_comments_maybe_generate', 30, 3 );
@@ -380,8 +404,10 @@ function teznevise_ai_comments_generate( $post_id ) {
 			}
 		}
 		if ( '' === $body ) {
-			$body = teznevise_ai_comments_placeholder( $speaker, $post, $i, $article );
+			continue;
 		}
+		$parsed = class_exists( 'Teznevise_Debate_Orchestrator' ) ? Teznevise_Debate_Orchestrator::split_thought( $body ) : array( 'public' => $body, 'thought' => '' );
+		$body   = $parsed['public'];
 
 		$comment_parent = 0;
 		if ( $i > 0 ) {
@@ -407,6 +433,10 @@ function teznevise_ai_comments_generate( $post_id ) {
 			update_comment_meta( $comment_id, 'tz_ai_tags', sanitize_text_field( $speaker['tags'] ?? '' ) );
 			update_comment_meta( $comment_id, 'tz_ai_name', sanitize_text_field( $speaker['name'] ) );
 			update_comment_meta( $comment_id, 'tz_ai_color', sanitize_hex_color( $color ) ?: '#145d4a' );
+			update_comment_meta( $comment_id, '_is_ai_agent', '1' );
+			if ( ! empty( $parsed['thought'] ) ) {
+				update_comment_meta( $comment_id, 'tz_ai_thought', $parsed['thought'] );
+			}
 			$items[] = array(
 				'id'      => (string) $comment_id,
 				'parent'  => (string) $comment_parent,
@@ -416,6 +446,7 @@ function teznevise_ai_comments_generate( $post_id ) {
 				'tags'    => $speaker['tags'] ?? '',
 				'color'   => sanitize_hex_color( $color ) ?: '#145d4a',
 				'content' => $body,
+				'thought' => $parsed['thought'] ?? '',
 				'human'   => false,
 			);
 			$parent = (int) $comment_id;

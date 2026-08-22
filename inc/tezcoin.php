@@ -388,9 +388,11 @@ function teznevise_localize_front_script() {
 		'teznevise-chrome',
 		'tezneviseProduct',
 		array(
-			'ajax'    => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'teznevise_share' ),
-			'logged'  => is_user_logged_in() ? 1 : 0,
+			'ajax'      => admin_url( 'admin-ajax.php' ),
+			'nonce'     => wp_create_nonce( 'teznevise_share' ),
+			'restUrl'   => esc_url_raw( rest_url() ),
+			'restNonce' => wp_create_nonce( 'wp_rest' ),
+			'logged'    => is_user_logged_in() ? 1 : 0,
 		)
 	);
 }

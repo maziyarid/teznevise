@@ -30,7 +30,7 @@ class TezNevise_AI_Settings {
 	}
 
 	public static function register_settings() {
-		$keys = array( 'openai_key', 'gemini_key', 'openrouter_key', 'groq_key', 'xai_key', 'anthropic_key', 'mistral_key', 'together_key', 'deepseek_key', 'you_key', 'default_agent', 'free_tier_limit', 'signed_in_limit', 'cost_per_message' );
+		$keys = array( 'openai_key', 'gemini_key', 'openrouter_key', 'groq_key', 'xai_key', 'anthropic_key', 'mistral_key', 'together_key', 'deepseek_key', 'you_key', 'tavily_key', 'default_agent', 'free_tier_limit', 'signed_in_limit', 'cost_per_message' );
 		foreach ( $keys as $key ) {
 			register_setting( 'teznevise_ai_settings', self::OPTION_PREFIX . $key );
 		}
@@ -55,7 +55,9 @@ class TezNevise_AI_Settings {
 					'description'       => isset( $_POST['description'] ) ? sanitize_textarea_field( wp_unslash( $_POST['description'] ) ) : '',
 					'provider'          => isset( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : 'openai',
 					'api_endpoint'      => isset( $_POST['api_endpoint'] ) ? esc_url_raw( wp_unslash( $_POST['api_endpoint'] ) ) : '',
-					'api_key'           => isset( $_POST['api_key'] ) ? sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) : '',
+					'api_key'           => ( isset( $_POST['api_key'] ) && '' !== trim( (string) wp_unslash( $_POST['api_key'] ) ) )
+						? ( class_exists( 'Teznevise_Key_Vault' ) ? Teznevise_Key_Vault::encrypt( sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) ) : sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) )
+						: '',
 					'model'             => isset( $_POST['model'] ) ? sanitize_text_field( wp_unslash( $_POST['model'] ) ) : '',
 					'color'             => isset( $_POST['color'] ) ? sanitize_hex_color( wp_unslash( $_POST['color'] ) ) : '#145d4a',
 					'icon'              => isset( $_POST['icon'] ) ? sanitize_text_field( wp_unslash( $_POST['icon'] ) ) : 'brain',
@@ -96,8 +98,12 @@ class TezNevise_AI_Settings {
 						<tr>
 							<th scope="row"><label for="<?php echo esc_attr( self::OPTION_PREFIX . $row['option'] ); ?>"><?php echo esc_html( $row['label'] ); ?></label></th>
 							<td>
-								<input class="regular-text" type="password" autocomplete="new-password" id="<?php echo esc_attr( self::OPTION_PREFIX . $row['option'] ); ?>" name="<?php echo esc_attr( $row['option'] === 'teznevise_ai_openai_key' ? 'teznevise_ai_openai_key' : $row['option'] ); ?>" value="<?php echo esc_attr( get_option( $row['option'], '' ) ); ?>" />
-								<p class="description"><code><?php echo esc_html( $row['host'] ); ?></code></p>
+								<?php
+								$stored = (string) get_option( $row['option'], '' );
+								$has    = '' !== $stored;
+								?>
+								<input class="regular-text" type="password" autocomplete="new-password" id="<?php echo esc_attr( self::OPTION_PREFIX . $row['option'] ); ?>" name="<?php echo esc_attr( $row['option'] ); ?>" value="" placeholder="<?php echo $has ? esc_attr__( 'ذخیره شده — برای جایگزینی بنویسید', 'teznevise' ) : ''; ?>" />
+								<p class="description"><code><?php echo esc_html( $row['host'] ); ?></code><?php echo $has ? ' — ' . esc_html__( 'کلید ذخیره است. برای پاک‌کردن یک خط تیره (-) بگذارید.', 'teznevise' ) : ''; ?></p>
 							</td>
 						</tr>
 					<?php endforeach; ?>

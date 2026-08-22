@@ -64,17 +64,20 @@
   --tz-leading-tight: 1.45;
   --tz-leading-body: 1.9;
 
-  --tz-space-1: 0.25rem;
-  --tz-space-2: 0.5rem;
-  --tz-space-3: 0.75rem;
-  --tz-space-4: 1rem;
-  --tz-space-6: 1.5rem;
-  --tz-space-8: 2rem;
-  --tz-space-10: 2.5rem;
-  --tz-space-12: 3rem;
-  --tz-space-16: 4rem;
-  --tz-space-20: 5rem;
-  --tz-space-24: 6rem;
+  --tz-space-1: 0.25rem;   /* 4px  — micro gaps */
+  --tz-space-2: 0.5rem;    /* 8px */
+  --tz-space-3: 0.75rem;   /* 12px */
+  --tz-space-4: 1rem;      /* 16px — control padding */
+  --tz-space-6: 1.5rem;    /* 24px */
+  --tz-space-8: 2rem;      /* 32px — block gap */
+  --tz-space-10: 2.5rem;   /* 40px — small section */
+  --tz-space-12: 3rem;     /* 48px */
+  --tz-space-16: 4rem;     /* 64px — default section padding */
+  --tz-space-20: 5rem;     /* 80px */
+  --tz-space-24: 6rem;     /* 96px — hero */
+
+  --tz-block-gap: var(--tz-space-8);
+  --tz-section-pad: var(--tz-space-16);
 
   --tz-radius-control: 0.75rem;
   --tz-radius-card: 1.25rem;

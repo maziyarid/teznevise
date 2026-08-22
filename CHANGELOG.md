@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.9 — 2026-08-22 — AI engine, SERP, mega/dropdown, dashboard
+
+- Companion `teznevise-core`: encrypted key vault, identity-locked agents, free-first OpenRouter router, You.com → Tavily research, async debate, summarise/regenerate REST.
+- Dummy A1 disclaimer removed; AI comments are never published from placeholder copy.
+- Search is SERP-grouped (tools / posts / images) with a cached AI overview and a 44px branded close control.
+- Desktop nav: hover-intent delay; only menu items flagged «مگا» open as full panels; others are vertical dropdowns.
+- Two-column RTL hero (form visual-left, copy visual-right), documented `--tz-space-*` rhythm, centred comparable section heads.
+- Classic «ادامه مطلب» shows the first three blocks; the rest stays in the HTML and collapses only when JS is present.
+- University marks are honest SVG wordmarks (official crests flagged as unavailable).
+- `/account/` dashboard: sidebar, tools, AI history, tickets, settings.
+
 ## 1.9.8 — 2026-08-22 — Instant paint, visual builder, You-first AI discussion
 
 - One runtime CSS file (last-wins cascade preserved) with inlined critical CSS and async Font Awesome so the header/hero paints immediately.

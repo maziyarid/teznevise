@@ -1,0 +1,397 @@
+/**
+ * 1.9.9 last-wins — spacing, hero split, SERP, dashboard, disclosure,
+ * mega vs dropdown, search close, AI thoughts, motion.
+ * Concatenated into runtime.css after hotfix-198.
+ * @package Teznevise
+ */
+
+/* --- E2 spacing scale (see tokens.css --tz-space-*) --- */
+.section {
+  padding-block: var(--tz-space-16);
+}
+.section-sm,
+.comments-area {
+  padding-block: var(--tz-space-10);
+}
+.hero-new,
+.page-hero-new,
+.service-hero,
+.tz-hero-split {
+  padding-block: var(--tz-space-20);
+}
+.container {
+  width: min(var(--tz-content-wide), calc(100% - 2 * var(--tz-space-4)));
+  margin-inline: auto;
+}
+.section-head {
+  margin-bottom: var(--tz-space-8);
+  gap: var(--tz-space-2);
+}
+.surface-card,
+.service-card,
+.reason-item {
+  padding: var(--tz-space-6);
+}
+
+/* --- E1 consistent centred section heads --- */
+.section-head.center,
+.tez-builder-section-card_grid .section-head,
+.tez-builder-section-stats .section-head,
+.tez-builder-section-faq .section-head,
+.tez-builder-section-testimonials .section-head,
+.tez-builder-section-process_steps .section-head,
+.uni-strip h2,
+.uni-strip .uni-kicker,
+.uni-strip p {
+  text-align: center !important;
+  margin-inline: auto;
+}
+.section-head.center,
+.tez-builder-section-card_grid .section-head,
+.tez-builder-section-stats .section-head,
+.tez-builder-section-faq .section-head,
+.tez-builder-section-testimonials .section-head,
+.tez-builder-section-process_steps .section-head {
+  align-items: center !important;
+  justify-content: center !important;
+  max-width: 46rem;
+}
+.uni-strip {
+  text-align: center;
+  padding-block: var(--tz-space-12);
+}
+.uni-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--tz-space-4);
+  list-style: none;
+  margin: var(--tz-space-6) 0 0;
+  padding: 0;
+}
+.uni-mark svg {
+  display: block;
+}
+
+/* --- E3 two-column hero: copy first in DOM (visual right in RTL) --- */
+@media (min-width: 901px) {
+  .tz-hero-split > .container,
+  .tz-hero-split__grid,
+  .page-hero-new > .container:has(.tz-hero-inquiry),
+  .page-content-section > .container:has(.tz-hero-inquiry),
+  .hero-new .hero-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.15fr) minmax(280px, 22rem) !important;
+    gap: var(--tz-space-8) !important;
+    align-items: start !important;
+  }
+  .tz-hero-split__form,
+  .hero-aside.tz-hero-split__form {
+    min-width: 0;
+  }
+}
+@media (max-width: 900px) {
+  .tz-hero-split > .container,
+  .tz-hero-split__grid,
+  .page-hero-new > .container:has(.tz-hero-inquiry),
+  .hero-new .hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* --- F2 crawler-safe disclosure (collapse only when html.js) --- */
+html.js .tz-classic-disclosure.is-collapsed .tz-classic-disclosure__rest {
+  display: none;
+}
+html.js .tz-classic-disclosure:not(.is-collapsed) .tz-classic-disclosure__rest {
+  display: block;
+}
+html:not(.js) .seo-more-btn,
+html:not(.js) [data-seo-toggle] {
+  display: none !important;
+}
+.seo-more-btn,
+[data-seo-toggle] {
+  min-height: 44px;
+  min-width: 44px;
+  margin-top: var(--tz-space-4);
+}
+
+/* --- C SERP --- */
+.tz-serp-overview {
+  background: var(--tz-color-brand-soft, #f4faf7);
+  border: 1px solid var(--tz-color-border);
+  border-radius: var(--tz-radius-card);
+  padding: var(--tz-space-6);
+  margin-bottom: var(--tz-space-8);
+}
+.tz-serp-group {
+  margin-bottom: var(--tz-space-10);
+}
+.tz-serp-group__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--tz-space-4);
+  margin-bottom: var(--tz-space-4);
+}
+.tz-serp-group__head h2 span {
+  color: var(--tz-color-muted);
+  font-weight: 600;
+  font-size: 0.9em;
+}
+.tz-serp-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--tz-space-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tz-serp-images a {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tz-space-2);
+  text-decoration: none;
+  color: inherit;
+}
+.tz-serp-images img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: var(--tz-radius-control);
+}
+
+/* --- C3 search close --- */
+.search-overlay-form .search-close,
+.search-close.icon-btn {
+  inline-size: 44px;
+  block-size: 44px;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--tz-color-brand, #145d4a);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform var(--tz-duration-control, 200ms) var(--tz-ease-standard, cubic-bezier(.2, .8, .2, 1)),
+    background var(--tz-duration-control, 200ms) var(--tz-ease-standard, cubic-bezier(.2, .8, .2, 1));
+}
+.search-overlay-form .search-close:hover,
+.search-overlay-form .search-close:focus-visible,
+.search-close.icon-btn:hover,
+.search-close.icon-btn:focus-visible {
+  transform: rotate(90deg);
+  background: var(--tz-color-brand-strong, #0f4638);
+  color: #fff;
+}
+
+/* --- D mega vs vertical dropdown; JS .is-open only (no CSS hover-open) --- */
+@media (min-width: 1051px) {
+  .main-nav .menu-item.has-dropdown:hover > ul.nav-dropdown,
+  .main-nav .menu-item.has-dropdown:focus-within > ul.nav-dropdown,
+  .main-nav .nav-links > li.has-dropdown:hover > ul.nav-dropdown,
+  .main-nav .nav-links > li.has-dropdown:focus-within > ul.nav-dropdown {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  .main-nav .menu-item.has-dropdown.is-open > ul.nav-dropdown,
+  .main-nav .nav-links > li.has-dropdown.is-open > ul.nav-dropdown,
+  .main-nav ul.nav-dropdown.is-open {
+    display: grid !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+  }
+  .main-nav .menu-item.has-dropdown.is-mega {
+    position: static !important;
+  }
+  .main-nav .menu-item.has-dropdown.is-dropdown {
+    position: relative !important;
+  }
+  .main-nav .menu-item.is-dropdown > ul.nav-dropdown,
+  .main-nav .menu-item.is-dropdown > ul.nav-dropdown.is-open {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    grid-auto-flow: row !important;
+    grid-auto-columns: unset !important;
+    inset-inline: auto !important;
+    inset-inline-end: 0 !important;
+    left: auto !important;
+    right: auto !important;
+    width: min(280px, 92vw) !important;
+    min-width: 220px !important;
+    max-width: 320px !important;
+  }
+  .main-nav .menu-item.is-dropdown > ul.nav-dropdown:not(.is-open) {
+    display: none !important;
+  }
+  .main-nav .menu-item.is-dropdown > ul.nav-dropdown > li {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+  }
+  .main-nav ul.nav-dropdown {
+    transition: opacity var(--tz-duration-control, 200ms) var(--tz-ease-standard, cubic-bezier(.2, .8, .2, 1)),
+      transform var(--tz-duration-layout, 320ms) var(--tz-ease-standard, cubic-bezier(.2, .8, .2, 1)),
+      visibility var(--tz-duration-control, 200ms) linear;
+  }
+}
+
+/* --- B7 / B8 thinking + tabs --- */
+.tz-comment-tabs {
+  display: flex;
+  gap: var(--tz-space-2);
+  margin-bottom: var(--tz-space-6);
+}
+.tz-comment-tabs [role="tab"] {
+  min-height: 44px;
+  padding: 0 var(--tz-space-4);
+  border: 1px solid var(--tz-color-border);
+  border-radius: var(--tz-radius-pill);
+  background: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tz-comment-tabs [role="tab"][aria-selected="true"] {
+  background: var(--tz-color-brand, #145d4a);
+  color: #fff;
+  border-color: transparent;
+}
+.tz-ai-think {
+  margin-top: var(--tz-space-3);
+  border-radius: var(--tz-radius-control);
+  background: color-mix(in srgb, var(--tz-commenter, #145d4a) 8%, #fff);
+  padding: var(--tz-space-3);
+}
+.tz-ai-think pre {
+  white-space: pre-wrap;
+  font-size: 0.85rem;
+  margin: var(--tz-space-2) 0 0;
+}
+.tz-ai-overview {
+  background: var(--tz-color-brand-soft, #f4faf7);
+  border-radius: var(--tz-radius-card);
+  padding: var(--tz-space-6);
+  margin-bottom: var(--tz-space-6);
+}
+.tz-ai-overview__out ul {
+  margin: var(--tz-space-3) 0 0;
+  padding-inline-start: 1.2em;
+}
+
+/* --- H dashboard --- */
+.tz-dash__grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 16rem) minmax(0, 1fr);
+  gap: var(--tz-space-8);
+  align-items: start;
+}
+.tz-dash__nav {
+  background: #fff;
+  border: 1px solid var(--tz-color-border);
+  border-radius: var(--tz-radius-panel);
+  padding: var(--tz-space-6);
+  box-shadow: var(--tz-shadow-card);
+}
+.tz-dash__avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tz-space-2);
+  text-align: center;
+  margin-bottom: var(--tz-space-6);
+}
+.tz-dash__avatar img {
+  border-radius: 999px;
+}
+.tz-dash .account-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tz-space-2);
+}
+.tz-dash .account-tabs a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--tz-space-4);
+  border-radius: var(--tz-radius-control);
+  text-decoration: none;
+  font-weight: 700;
+  color: var(--tz-color-ink);
+  background: var(--tz-color-mist);
+}
+.tz-dash .account-tabs a.is-on {
+  background: var(--tz-color-brand);
+  color: #fff;
+}
+.tz-dash .surface-card:nth-of-type(1) { border-inline-start: 4px solid #145d4a; }
+.tz-dash .surface-card:nth-of-type(2) { border-inline-start: 4px solid #1d4ed8; }
+.tz-dash .surface-card:nth-of-type(3) { border-inline-start: 4px solid #7c3aed; }
+.tz-dash .surface-card:nth-of-type(4) { border-inline-start: 4px solid #b45309; }
+@media (max-width: 800px) {
+  .tz-dash__grid {
+    grid-template-columns: 1fr;
+  }
+  .tz-dash .account-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+/* --- E4 motion --- */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity var(--tz-duration-layout, 320ms) var(--tz-ease-standard, cubic-bezier(.2, .8, .2, 1)),
+    transform var(--tz-duration-layout, 320ms) var(--tz-ease-standard, cubic-bezier(.2, .8, .2, 1));
+}
+html.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+html.js [data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: tz-stagger-in 480ms var(--tz-ease-standard, cubic-bezier(.2, .8, .2, 1)) forwards;
+}
+html.js [data-reveal-stagger] > *:nth-child(1) { animation-delay: 40ms; }
+html.js [data-reveal-stagger] > *:nth-child(2) { animation-delay: 90ms; }
+html.js [data-reveal-stagger] > *:nth-child(3) { animation-delay: 140ms; }
+html.js [data-reveal-stagger] > *:nth-child(4) { animation-delay: 190ms; }
+html.js [data-reveal-stagger] > *:nth-child(5) { animation-delay: 240ms; }
+html.js [data-reveal-stagger] > *:nth-child(6) { animation-delay: 290ms; }
+@keyframes tz-stagger-in {
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal],
+  html.js [data-reveal-stagger] > *,
+  .main-nav ul.nav-dropdown,
+  .search-close {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Chat composer copy + code */
+.tz-ai-code {
+  overflow-x: auto;
+  background: #0f231c;
+  color: #e7fff6;
+  padding: var(--tz-space-3);
+  border-radius: var(--tz-radius-control);
+  font-size: 0.85rem;
+}
+.tz-gpt-composer [data-ai-input] {
+  min-height: 44px;
+}

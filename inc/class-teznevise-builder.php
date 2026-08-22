@@ -613,7 +613,7 @@ function teznevise_builder_section_head( $section ) {
 		return;
 	}
 	?>
-	<div class="section-head<?php echo ( isset( $section['type'] ) && 'process_steps' === $section['type'] ) ? ' center' : ''; ?>" data-reveal>
+	<div class="section-head<?php echo in_array( isset( $section['type'] ) ? $section['type'] : '', array( 'process_steps', 'card_grid', 'stats', 'faq', 'testimonials' ), true ) ? ' center' : ''; ?>" data-reveal>
 		<?php if ( $eyebrow ) : ?>
 			<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
 		<?php endif; ?>
@@ -677,12 +677,14 @@ function teznevise_builder_cta( $section, $class = 'btn-tz btn-primary-tz btn-lg
  * @param array $section Section data.
  */
 function teznevise_builder_render_hero( $section ) {
-	teznevise_builder_open_section( $section, 'page-hero-new' );
+	teznevise_builder_open_section( $section, 'page-hero-new tz-hero-split' );
 
 	$eyebrow = isset( $section['eyebrow'] ) ? $section['eyebrow'] : '';
 	$title   = isset( $section['title'] ) ? $section['title'] : '';
 	$text    = isset( $section['text'] ) ? $section['text'] : '';
 
+	echo '<div class="tz-hero-split__grid">';
+	echo '<div class="tz-hero-split__copy">';
 	if ( '' !== $eyebrow || '' !== $title || '' !== $text ) {
 		echo '<div class="section-head" data-reveal>';
 		if ( $eyebrow ) {
@@ -725,10 +727,12 @@ function teznevise_builder_render_hero( $section ) {
 		}
 		echo '</ul>';
 	}
-
+	echo '</div>';
+	echo '<div class="tz-hero-split__form">';
 	if ( function_exists( 'teznevise_render_hero_inquiry' ) ) {
 		echo teznevise_render_hero_inquiry( 'builder-hero' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
+	echo '</div></div>';
 
 	teznevise_builder_close_section();
 }

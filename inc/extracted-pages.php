@@ -592,15 +592,24 @@ function teznevise_page_content_disclosure_markup( $content, $post_id = 0 ) {
 		return '';
 	}
 	$target_id = 'tz-classic-content-' . $post_id;
+	$blocks    = preg_split( '/(?=(?:<p\b|<h[1-6]\b|<ul\b|<ol\b|<blockquote\b|<table\b))/i', $content, -1, PREG_SPLIT_NO_EMPTY );
+	$blocks    = array_values( array_filter( array_map( 'trim', (array) $blocks ) ) );
+	$preview   = array_slice( $blocks, 0, 3 );
+	$rest      = array_slice( $blocks, 3 );
 	ob_start();
 	?>
-	<div class="seo-panel seo-disclosure tz-classic-disclosure" data-reveal>
-		<div class="seo-label"><?php esc_html_e( 'محتوای تکمیلی', 'teznevise' ); ?></div>
-		<h2><?php esc_html_e( 'جزئیات و توضیحات بیشتر', 'teznevise' ); ?></h2>
+	<div class="seo-panel seo-disclosure tz-classic-disclosure is-collapsed" data-reveal>
 		<div class="seo-more-content article-content longcopy" id="<?php echo esc_attr( $target_id ); ?>">
-			<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rendered through the_content. ?>
+			<div class="tz-classic-disclosure__visible">
+				<?php echo implode( "\n", $preview ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already prepared HTML. ?>
+			</div>
+			<?php if ( $rest ) : ?>
+				<div class="tz-classic-disclosure__rest">
+					<?php echo implode( "\n", $rest ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</div>
+				<button aria-controls="<?php echo esc_attr( $target_id ); ?>" aria-expanded="false" class="seo-more-btn" data-seo-toggle type="button"><span class="seo-more-text"><?php esc_html_e( 'ادامه مطلب', 'teznevise' ); ?></span></button>
+			<?php endif; ?>
 		</div>
-		<button aria-controls="<?php echo esc_attr( $target_id ); ?>" aria-expanded="false" class="seo-more-btn" data-seo-toggle type="button"><span aria-hidden="true" class="seo-more-mark">‹</span><span class="seo-more-text"><?php esc_html_e( 'مشاهده بیشتر', 'teznevise' ); ?></span></button>
 	</div>
 	<?php
 	return (string) ob_get_clean();

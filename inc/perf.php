@@ -23,6 +23,7 @@ function teznevise_runtime_css_files() {
 		'assets/css/hotfix-196.css',
 		'assets/css/hotfix-197.css',
 		'assets/css/hotfix-198.css',
+		'assets/css/hotfix-199.css',
 	);
 	return array_values(
 		array_filter(

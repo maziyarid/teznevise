@@ -5,7 +5,7 @@
  * @package Teznevise
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-define( 'TEZNEVISE_VERSION', '1.9.8' );
+define( 'TEZNEVISE_VERSION', '1.9.9' );
 define( 'TEZNEVISE_DIR', get_template_directory() );
 define( 'TEZNEVISE_URI', get_template_directory_uri() );
 
@@ -52,6 +52,9 @@ require_once TEZNEVISE_DIR . '/inc/dashboard.php';
 require_once TEZNEVISE_DIR . '/inc/ai-agents.php';
 require_once TEZNEVISE_DIR . '/inc/ai-comments.php';
 require_once TEZNEVISE_DIR . '/inc/perf.php';
+if ( is_readable( TEZNEVISE_DIR . '/teznevise-core/teznevise-core.php' ) ) {
+	require_once TEZNEVISE_DIR . '/teznevise-core/teznevise-core.php';
+}
 
 // Defensive fallback: this repo's functions.php has repeatedly lost this
 // helper during merges/rewrites (see commits 085c9c44, 75a32ee6). If none of

@@ -49,9 +49,9 @@ while ( have_posts() ) :
 		$sec_url    = teznevise_page_field( 'secondary_cta_url', 0, teznevise_get_contact( 'whatsapp' ) );
 		?>
 
-<section class="service-hero service-hero-aligned section">
-	<div class="container">
-		<div class="section-head" data-reveal>
+<section class="service-hero service-hero-aligned section tz-hero-split">
+	<div class="container tz-hero-split__grid">
+		<div class="section-head tz-hero-split__copy" data-reveal>
 			<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
 			<div class="icon-box <?php echo esc_attr( $icon_color ); ?>" style="margin-bottom:14px;">
 				<i class="<?php echo esc_attr( $icon ); ?>" aria-hidden="true"></i>
@@ -77,11 +77,13 @@ while ( have_posts() ) :
 				<?php endif; ?>
 			</div>
 		</div>
+		<div class="tz-hero-split__form">
 		<?php
 		if ( function_exists( 'teznevise_render_hero_inquiry' ) ) {
 			echo teznevise_render_hero_inquiry( 'service' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		?>
+		</div>
 	</div>
 </section>
 

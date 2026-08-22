@@ -126,6 +126,22 @@ function teznevise_handle_account_post() {
 		exit;
 	}
 
+	if ( 'settings' === $action ) {
+		if ( isset( $_POST['display_name'] ) ) {
+			wp_update_user(
+				array(
+					'ID'           => $user_id,
+					'display_name' => sanitize_text_field( wp_unslash( $_POST['display_name'] ) ),
+				)
+			);
+		}
+		if ( isset( $_POST['teznevise_telegram'] ) ) {
+			update_user_meta( $user_id, 'teznevise_telegram', sanitize_text_field( wp_unslash( $_POST['teznevise_telegram'] ) ) );
+		}
+		wp_safe_redirect( add_query_arg( array( 'saved' => '1', 'tab' => 'settings' ), home_url( '/account/' ) ) );
+		exit;
+	}
+
 	if ( 'ticket' === $action ) {
 		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
 		$body    = isset( $_POST['body'] ) ? sanitize_textarea_field( wp_unslash( $_POST['body'] ) ) : '';

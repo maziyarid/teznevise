@@ -26,8 +26,8 @@ $human_count = get_comments(
 <section id="comments" class="comments-area section-sm tz-comments">
 	<?php if ( $ai_enabled ) : ?>
 		<div class="tz-comment-tabs" role="tablist" data-comment-tabs>
-			<button type="button" role="tab" aria-selected="true" aria-controls="human-comments" id="tab-human"><?php echo esc_html( sprintf( __( 'دیدگاه خوانندگان (%s)', 'teznevise' ), number_format_i18n( (int) $human_count ) ) ); ?></button>
-			<button type="button" role="tab" aria-selected="false" aria-controls="ai-discussion" id="tab-ai"><?php echo esc_html( sprintf( __( 'گفتگوی هوش مصنوعی (%s)', 'teznevise' ), number_format_i18n( $ai_count ) ) ); ?></button>
+			<button type="button" role="tab" aria-selected="true" aria-controls="human-comments" id="tab-human"><?php echo esc_html( sprintf( __( 'کاربران (%s)', 'teznevise' ), number_format_i18n( (int) $human_count ) ) ); ?></button>
+			<button type="button" role="tab" aria-selected="false" aria-controls="ai-discussion" id="tab-ai"><?php echo esc_html( sprintf( __( 'هوش مصنوعی (%s)', 'teznevise' ), number_format_i18n( $ai_count ) ) ); ?></button>
 		</div>
 	<?php endif; ?>
 
@@ -93,7 +93,6 @@ $human_count = get_comments(
 	<?php if ( $ai_enabled ) : ?>
 		<div id="ai-discussion" class="tz-comment-panel" role="tabpanel" hidden aria-labelledby="tab-ai">
 			<h2><?php esc_html_e( 'گفتگوی عامل‌های پژوهشی', 'teznevise' ); ?></h2>
-			<p class="tz-ai-discuss-lead"><?php esc_html_e( 'You ابتدا پژوهش می‌کند؛ سپس عامل‌ها متن همین مطلب را می‌خوانند و شاخه‌به‌شاخه جواب می‌دهند. رنگ هر گوینده در تنظیمات قابل انتخاب است.', 'teznevise' ); ?></p>
 			<?php
 			if ( ! empty( $ai_thread['research'] ) ) {
 				echo '<details class="tz-ai-research"><summary>' . esc_html__( 'خلاصه پژوهش You', 'teznevise' ) . '</summary>';

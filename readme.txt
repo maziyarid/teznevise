@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.9
 Requires PHP: 8.3
-Stable tag: 1.9.8
+Stable tag: 1.9.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,10 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 6. Assign menus: Primary, Mobile, Bottom
 
 == Changelog ==
+
+= 1.9.9 =
+* Companion teznevise-core engine: encrypted keys, free-first router, You→Tavily research, async debate.
+* SERP search, two-column hero, threaded AI thoughts, visual dashboard, crawler-safe read-more.
 
 = 1.9.8 =
 * Instant first paint: inlined critical CSS, one async runtime stylesheet, delayed GTM/Clarity, eager LCP images.

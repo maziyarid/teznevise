@@ -87,9 +87,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  document.documentElement.classList.add('js');
   document.querySelectorAll('[data-seo-toggle], [data-content-toggle]').forEach(function (seoToggle) {
+    const wrap = seoToggle.closest('.tz-classic-disclosure, .seo-disclosure, .seo-panel');
     const targetId = seoToggle.getAttribute('aria-controls');
     let seoMore = targetId ? document.getElementById(targetId) : null;
+    if (!seoMore && wrap) {
+      seoMore = wrap.querySelector('.seo-more-content');
+    }
     if (!seoMore) {
       seoMore = seoToggle.closest('.seo-disclosure, .seo-panel, .tz-classic-disclosure');
       if (seoMore) seoMore = seoMore.querySelector('.seo-more-content');
@@ -97,18 +102,16 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!seoMore) return;
     seoMore.hidden = false;
     seoMore.removeAttribute('hidden');
-    seoMore.classList.remove('is-open');
-    seoToggle.setAttribute('aria-expanded', 'false');
+    seoToggle.setAttribute('aria-expanded', wrap && !wrap.classList.contains('is-collapsed') ? 'true' : 'false');
     seoToggle.addEventListener('click', function (e) {
       e.preventDefault();
       const isOpen = seoToggle.getAttribute('aria-expanded') === 'true';
       const next = !isOpen;
       seoToggle.setAttribute('aria-expanded', String(next));
       seoMore.classList.toggle('is-open', next);
+      if (wrap) wrap.classList.toggle('is-collapsed', !next);
       const label = seoToggle.querySelector('.seo-more-text');
-      const mark = seoToggle.querySelector('.seo-more-mark');
-      if (label) label.textContent = next ? 'مشاهده کمتر' : 'مشاهده بیشتر';
-      if (mark) mark.textContent = next ? '⌃' : '‹';
+      if (label) label.textContent = next ? 'بستن' : 'ادامه مطلب';
     });
   });
 
@@ -616,8 +619,10 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!toggles.length) return;
 
   var supportsHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;
-  var closeDelay = 160;
+  var closeDelay = 180;
+  var openDelay = 140;
   var closeTimer = null;
+  var openTimer = null;
 
   function closeAll(except) {
     toggles.forEach(function (toggle) {
@@ -674,14 +679,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     if (supportsHover && !inMobileDrawer) {
-      // Hover the top-level item only. The panel is a child of the relatively
-      // positioned <li>, so moving into the open submenu keeps the same hover
-      // target. Binding mouseenter on the panel itself was opening the mega
-      // when the pointer was in the empty page centre under a full-width panel.
       parentItem.addEventListener('mouseenter', function () {
-        openToggle(toggle, panel);
+        if (closeTimer) {
+          clearTimeout(closeTimer);
+          closeTimer = null;
+        }
+        if (openTimer) clearTimeout(openTimer);
+        openTimer = setTimeout(function () {
+          openToggle(toggle, panel);
+          openTimer = null;
+        }, openDelay);
       });
       parentItem.addEventListener('mouseleave', function () {
+        if (openTimer) {
+          clearTimeout(openTimer);
+          openTimer = null;
+        }
         scheduleClose(toggle, panel);
       });
     }
@@ -751,5 +764,67 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       });
     });
+  });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('[data-ai-summary]').forEach(function (box) {
+    var btn = box.querySelector('[data-ai-summary-btn]');
+    var out = box.querySelector('[data-ai-summary-out]');
+    if (!btn || !out) return;
+    btn.addEventListener('click', function () {
+      var postId = box.getAttribute('data-ai-summary');
+      btn.disabled = true;
+      btn.textContent = 'در حال خلاصه‌کردن…';
+      out.hidden = false;
+      out.textContent = 'در حال آماده‌سازی نکات کلیدی…';
+      var rest = (window.tezneviseProduct && window.tezneviseProduct.restUrl) || '/wp-json/';
+      var nonce = (window.tezneviseProduct && window.tezneviseProduct.restNonce) || '';
+      fetch(rest + 'teznevise-core/v1/summarise', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-WP-Nonce': nonce
+        },
+        body: JSON.stringify({ post_id: parseInt(postId, 10) || 0, nonce: nonce })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          btn.disabled = false;
+          btn.textContent = 'خلاصه‌کردن نکات کلیدی';
+          if (!j || !j.success || !j.bullets || !j.bullets.length) {
+            out.textContent = 'خلاصه‌ای در دسترس نیست.';
+            return;
+          }
+          var ul = document.createElement('ul');
+          j.bullets.forEach(function (line) {
+            var li = document.createElement('li');
+            li.textContent = line;
+            ul.appendChild(li);
+          });
+          out.replaceChildren(ul);
+        })
+        .catch(function () {
+          btn.disabled = false;
+          btn.textContent = 'خلاصه‌کردن نکات کلیدی';
+          out.textContent = 'ارتباط برقرار نشد.';
+        });
+    });
+  });
+
+  document.querySelectorAll('[data-search-overview]').forEach(function (box) {
+    var q = box.getAttribute('data-q') || '';
+    var body = box.querySelector('[data-overview-body]');
+    if (!q || !body) return;
+    var rest = (window.tezneviseProduct && window.tezneviseProduct.restUrl) || '/wp-json/';
+    fetch(rest + 'teznevise-core/v1/search-overview?q=' + encodeURIComponent(q), { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        body.textContent = (j && j.overview) ? j.overview : 'جمع‌بندی در دسترس نیست.';
+      })
+      .catch(function () {
+        body.textContent = 'جمع‌بندی در دسترس نیست.';
+      });
   });
 });

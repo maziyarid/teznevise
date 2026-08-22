@@ -73,6 +73,8 @@ def check_requires() -> None:
         "inc/perf.php",
         "assets/css/critical.css",
         "assets/css/hotfix-198.css",
+        "assets/css/hotfix-199.css",
+        "teznevise-core/teznevise-core.php",
         "footer.php",
         "header.php",
         "index.php",
@@ -154,6 +156,44 @@ def check_source_contracts() -> None:
     builder = (ROOT / "inc/admin/builder-admin.php").read_text(encoding="utf-8")
     if "tez-builder--visual" not in builder:
         error("Visual page-builder canvas markup is missing")
+
+    core = (ROOT / "teznevise-core" / "teznevise-core.php").read_text(encoding="utf-8")
+    if "TEZNEVISE_CORE_LOADED" not in core:
+        error("teznevise-core bootstrap is missing TEZNEVISE_CORE_LOADED")
+    registry = (ROOT / "teznevise-core" / "inc" / "class-agent-registry.php").read_text(encoding="utf-8")
+    if "function identity_lock" not in registry:
+        error("Agent identity lock is missing")
+    if "CRITICAL DIRECTIVE" not in registry:
+        error("Identity lock does not include the mandatory identity template")
+    vault = (ROOT / "teznevise-core" / "inc" / "class-key-vault.php").read_text(encoding="utf-8")
+    if "AES-256-CBC" not in vault:
+        error("Key vault is not using AES-256-CBC")
+    router = (ROOT / "teznevise-core" / "inc" / "class-model-router.php").read_text(encoding="utf-8")
+    if "function complexity" not in router:
+        error("Model router complexity metric is missing")
+    extracted = (ROOT / "inc" / "extracted-pages.php").read_text(encoding="utf-8")
+    if "ادامه مطلب" not in extracted:
+        error("Classic disclosure button is not labelled ادامه مطلب")
+    if "جزئیات و توضیحات بیشتر" in extracted:
+        error("Visible F1 title still remains in extracted-pages.php")
+    nav = (ROOT / "inc" / "nav-walker.php").read_text(encoding="utf-8")
+    if "is-mega" not in nav or "is-dropdown" not in nav:
+        error("Nav walker does not distinguish mega vs dropdown items")
+    chrome = (ROOT / "assets" / "js" / "chrome.js").read_text(encoding="utf-8")
+    if "classList.add('js')" not in chrome and 'classList.add("js")' not in chrome:
+        error("chrome.js does not mark html.js for crawler-safe disclosure")
+    if "data-ai-summary" not in chrome:
+        error("Interactive AI summary handler is missing from chrome.js")
+    comments = (ROOT / "comments.php").read_text(encoding="utf-8")
+    if "کاربران" not in comments or "هوش مصنوعی" not in comments:
+        error("Dual comment tabs are missing")
+    a1 = "این تب بحث ساختگی عامل‌های نام‌دار است"
+    for rel, text in (
+        ("comments.php", comments),
+        ("inc/ai-comments.php", (ROOT / "inc" / "ai-comments.php").read_text(encoding="utf-8")),
+    ):
+        if a1 in text:
+            error(f"A1 dummy string still present in {rel}")
 
 
 def check_whitespace() -> None:

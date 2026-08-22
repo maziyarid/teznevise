@@ -49,13 +49,14 @@ class TezNevise_AI_Chat {
 		$agents = array();
 		if ( class_exists( 'TezNevise_AI_Database' ) ) {
 			foreach ( (array) TezNevise_AI_Database::get_all_agents() as $agent ) {
-				$row      = (array) $agent;
+				$row = (array) $agent;
+				if ( class_exists( 'Teznevise_Agent_Registry' ) ) {
+					$row = Teznevise_Agent_Registry::hydrate( $row );
+				}
 				$agents[] = array(
 					'id'               => $row['agent_id'] ?? '',
-					'name'             => $row['name'] ?? '',
+					'name'             => $row['alias'] ?? $row['name'] ?? '',
 					'description'      => $row['description'] ?? '',
-					'model'            => $row['model'] ?? '',
-					'provider'         => $row['provider'] ?? '',
 					'color'            => $row['color'] ?? '#145d4a',
 					'icon'             => $row['icon'] ?? 'brain',
 					'role'             => $row['role'] ?? 'general',
@@ -107,6 +108,9 @@ class TezNevise_AI_Chat {
 		$collab      = $atts['collaboration_mode'];
 		$thinking    = ! empty( $atts['thinking_enabled'] );
 		$agents      = class_exists( 'TezNevise_AI_Database' ) ? (array) TezNevise_AI_Database::get_all_agents() : array();
+		if ( class_exists( 'Teznevise_Agent_Registry' ) ) {
+			$agents = array_map( array( 'Teznevise_Agent_Registry', 'hydrate' ), $agents );
+		}
 		ob_start();
 		?>
 		<section class="tz-ai-chat tz-gpt" id="<?php echo esc_attr( $instance_id ); ?>" data-tool-id="<?php echo esc_attr( $tool_id ); ?>" data-agent-id="<?php echo esc_attr( $atts['agent_id'] ); ?>" data-collaboration-mode="<?php echo esc_attr( $collab ); ?>" data-thinking="<?php echo $thinking ? '1' : '0'; ?>">
@@ -134,10 +138,10 @@ class TezNevise_AI_Chat {
 						<details class="tz-gpt-tools">
 							<summary><?php esc_html_e( 'ابزارها', 'teznevise' ); ?></summary>
 							<div class="tz-gpt-tools__panel">
-								<label><?php esc_html_e( 'عامل / مدل', 'teznevise' ); ?>
+								<label><?php esc_html_e( 'عامل', 'teznevise' ); ?>
 									<select data-ai-agent>
 										<?php foreach ( $agents as $ag ) : $ag = (array) $ag; ?>
-											<option value="<?php echo esc_attr( $ag['agent_id'] ?? '' ); ?>" <?php selected( $atts['agent_id'], $ag['agent_id'] ?? '' ); ?>><?php echo esc_html( ( $ag['name'] ?? '' ) . ' · ' . ( $ag['model'] ?? '' ) ); ?></option>
+											<option value="<?php echo esc_attr( $ag['agent_id'] ?? '' ); ?>" <?php selected( $atts['agent_id'], $ag['agent_id'] ?? '' ); ?>><?php echo esc_html( $ag['alias'] ?? $ag['name'] ?? '' ); ?></option>
 										<?php endforeach; ?>
 									</select>
 								</label>
@@ -146,9 +150,10 @@ class TezNevise_AI_Chat {
 										<option value="single" <?php selected( $collab, 'single' ); ?>><?php esc_html_e( 'یک عامل', 'teznevise' ); ?></option>
 										<option value="collaborative" <?php selected( $collab, 'collaborative' ); ?>><?php esc_html_e( 'همکاری زنجیره‌ای', 'teznevise' ); ?></option>
 										<option value="separate" <?php selected( $collab, 'separate' ); ?>><?php esc_html_e( 'جدا + بازتاب', 'teznevise' ); ?></option>
-										<option value="research" <?php selected( $collab, 'research' ); ?>><?php esc_html_e( 'You تحقیق می‌کند، بقیه تحلیل', 'teznevise' ); ?></option>
+										<option value="research" <?php selected( $collab, 'research' ); ?>><?php esc_html_e( 'You.com — پژوهش اول', 'teznevise' ); ?></option>
 									</select>
 								</label>
+								<label class="tz-ai-chat__check"><input type="checkbox" data-ai-research <?php checked( $collab, 'research' ); ?>> <?php esc_html_e( 'پژوهش You.com اول', 'teznevise' ); ?></label>
 								<label class="tz-ai-chat__check"><input type="checkbox" data-ai-thinking <?php checked( $thinking ); ?>> <?php esc_html_e( 'فرآیند فکر', 'teznevise' ); ?></label>
 							</div>
 						</details>

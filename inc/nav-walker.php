@@ -40,7 +40,7 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 		 */
 		public function start_lvl( &$output, $depth = 0, $args = null ) {
 			$indent      = str_repeat( "\t", $depth );
-			$level_class = $depth > 0 ? ' nav-dropdown-l3' : ' nav-dropdown nav-panel mega';
+			$level_class = $depth > 0 ? ' nav-dropdown-l3' : ' nav-dropdown nav-panel';
 			$output     .= "{$indent}<ul class=\"sub-menu{$level_class}\">\n";
 		}
 
@@ -79,6 +79,12 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 
 			if ( $has_children && 0 === $depth ) {
 				$classes[] = 'has-dropdown';
+				$mega_flag = get_post_meta( $item->ID, '_teznevise_mega', true );
+				if ( '0' === (string) $mega_flag ) {
+					$classes[] = 'is-dropdown';
+				} else {
+					$classes[] = 'is-mega';
+				}
 			}
 			if ( 1 === (int) $depth ) {
 				$classes[] = 'mega-col';
@@ -159,3 +165,31 @@ if ( ! class_exists( 'Teznevise_Nav_Walker' ) && class_exists( 'Walker_Nav_Menu'
 		}
 	}
 }
+
+add_action(
+	'wp_nav_menu_item_custom_fields',
+	static function ( $item_id, $item ) {
+		if ( (int) $item->menu_item_parent ) {
+			return;
+		}
+		$val = get_post_meta( $item_id, '_teznevise_mega', true );
+		if ( '' === $val ) {
+			$val = '1';
+		}
+		echo '<p class="description description-wide"><label><input type="checkbox" name="teznevise_mega[' . esc_attr( $item_id ) . ']" value="1" ' . checked( '1', (string) $val, false ) . ' /> ' . esc_html__( 'منوی مگا (پنل پهن)', 'teznevise' ) . '</label></p>';
+	},
+	10,
+	2
+);
+add_action(
+	'wp_update_nav_menu_item',
+	static function ( $menu_id, $menu_item_db_id ) {
+		if ( ! current_user_can( 'edit_theme_options' ) ) {
+			return;
+		}
+		$on = isset( $_POST['teznevise_mega'][ $menu_item_db_id ] ) ? '1' : '0'; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		update_post_meta( $menu_item_db_id, '_teznevise_mega', $on );
+	},
+	10,
+	2
+);
