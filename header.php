@@ -25,7 +25,14 @@ if ( ! $logo_url && has_custom_logo() ) {
 	$logo_url = wp_get_attachment_image_url( (int) get_theme_mod( 'custom_logo' ), 'full' );
 }
 if ( $logo_url ) {
-	printf( '<img src="%s" alt="%s" width="106" height="48" decoding="async" fetchpriority="high">', esc_url( $logo_url ), esc_attr( get_bloginfo( 'name' ) ) );
+	$logo_2x = function_exists( 'teznevise_logo_url_2x' ) ? teznevise_logo_url_2x() : $logo_url;
+	printf(
+		'<img src="%s" srcset="%s 198w, %s 397w" sizes="106px" alt="%s" width="106" height="48" decoding="async" fetchpriority="high">',
+		esc_url( $logo_url ),
+		esc_url( $logo_url ),
+		esc_url( $logo_2x ),
+		esc_attr( get_bloginfo( 'name' ) )
+	);
 } else {
 	echo '<span class="site-title">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
 }

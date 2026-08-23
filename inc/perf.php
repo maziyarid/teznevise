@@ -30,6 +30,7 @@ function teznevise_runtime_css_files() {
 		'assets/css/hotfix-203.css',
 		'assets/css/hotfix-204.css',
 		'assets/css/hotfix-205.css',
+		'assets/css/hotfix-206.css',
 	);
 	return array_values(
 		array_filter(
@@ -71,7 +72,7 @@ function teznevise_runtime_stylesheet() {
 		foreach ( $files as $rel ) {
 			$chunk = (string) file_get_contents( TEZNEVISE_DIR . '/' . $rel );
 			$chunk = preg_replace( '#url\((["\']?)\.\./fonts/#', 'url($1' . TEZNEVISE_URI . '/assets/fonts/', $chunk );
-			$css  .= "\n/* {$rel} */\n" . $chunk;
+			$css  .= "\n/* {$rel} */\n" . teznevise_minify_css( $chunk );
 		}
 		if ( false === file_put_contents( $file, $css, LOCK_EX ) ) {
 			return null;
@@ -85,6 +86,19 @@ function teznevise_runtime_stylesheet() {
 		'url' => $url,
 		'ver' => $hash,
 	);
+}
+
+/**
+ * Conservative CSS minify (comments + whitespace). Keeps calc() spaces.
+ *
+ * @param string $css Raw CSS.
+ * @return string
+ */
+function teznevise_minify_css( $css ) {
+	$css = (string) $css;
+	$css = preg_replace( '#/\*[^*]*\*+(?:[^/*][^*]*\*+)*/#', '', $css );
+	$css = preg_replace( '/\s+/', ' ', $css );
+	return trim( (string) $css );
 }
 
 /** Inline critical CSS before any render-blocking styles. */
@@ -152,16 +166,36 @@ add_action( 'wp_enqueue_scripts', 'teznevise_enqueue_runtime_css', 120 );
  * @return string
  */
 function teznevise_async_styles( $tag, $handle ) {
-	$async = array( 'teznevise-runtime', 'teznevise-fontawesome', 'teznevise-legacy-wpcode', 'teznevise-tokens', 'teznevise-components', 'teznevise-pages', 'teznevise-chrome', 'teznevise-modernization', 'teznevise-hotfix-196', 'teznevise-hotfix-197', 'teznevise-hotfix-198' );
+	$async = array(
+		'teznevise-runtime',
+		'teznevise-fontawesome',
+		'teznevise-legacy-wpcode',
+		'teznevise-tokens',
+		'teznevise-components',
+		'teznevise-pages',
+		'teznevise-chrome',
+		'teznevise-modernization',
+		'teznevise-hotfix-196',
+		'teznevise-hotfix-197',
+		'teznevise-hotfix-198',
+		'teznevise-ai',
+		'teznevise-ai-chat',
+	);
 	if ( 0 === strpos( $handle, 'teznevise-service-' ) ) {
 		$async[] = $handle;
 	}
 	if ( ! in_array( $handle, $async, true ) ) {
 		return $tag;
 	}
-	$tag = str_replace( "rel='stylesheet'", "rel='stylesheet' media='print' onload=\"this.media='all'\"", $tag );
-	$tag = str_replace( 'rel="stylesheet"', 'rel="stylesheet" media="print" onload="this.media=\'all\'"', $tag );
-	return $tag . '<noscript>' . str_replace( array( ' media="print"', " media='print'", ' onload="this.media=\'all\'"', ' onload="this.media="all""' ), '', $tag ) . '</noscript>';
+	// Never concatenate a second link tag. HTML minifiers unwrap noscript
+	// fallbacks and the leftover copy is render-blocking (live PSI: CSS loaded twice).
+	$tag = preg_replace( "/\smedia=(['\"])[^'\"]*\\1/", '', $tag );
+	if ( false !== strpos( $tag, "rel='stylesheet'" ) ) {
+		$tag = str_replace( "rel='stylesheet'", "rel='stylesheet' media='print' onload=\"this.onload=null;this.media='all'\"", $tag );
+	} elseif ( false !== strpos( $tag, 'rel="stylesheet"' ) ) {
+		$tag = str_replace( 'rel="stylesheet"', 'rel="stylesheet" media="print" onload="this.onload=null;this.media=\'all\'"', $tag );
+	}
+	return $tag;
 }
 add_filter( 'style_loader_tag', 'teznevise_async_styles', 20, 2 );
 
@@ -196,7 +230,7 @@ function teznevise_delay_tracker_scripts( $tag, $handle, $src ) {
 	if ( ! is_string( $src ) || '' === $src ) {
 		return $tag;
 	}
-	if ( ! preg_match( '/googletagmanager|google-analytics|clarity\.ms|gtag\/js/i', $src ) ) {
+	if ( ! preg_match( '/googletagmanager|google-analytics|clarity\.ms|gtag\/js|ywxi\.net/i', $src ) ) {
 		return $tag;
 	}
 	$src = esc_url( $src );
@@ -283,24 +317,22 @@ function teznevise_loading_attrs( $attr, $tag, $context ) {
 	if ( 'img' !== $tag ) {
 		return $attr;
 	}
-	static $n = 0;
-	++$n;
-	if ( $n <= 2 || ( isset( $attr['fetchpriority'] ) && 'high' === $attr['fetchpriority'] ) ) {
-		$attr['loading'] = 'eager';
+	if ( isset( $attr['fetchpriority'] ) && 'high' === $attr['fetchpriority'] ) {
+		$attr['loading']  = 'eager';
 		$attr['decoding'] = 'async';
-		if ( $n === 1 && empty( $attr['fetchpriority'] ) ) {
-			$attr['fetchpriority'] = 'high';
-		}
-	} else {
-		$attr['loading'] = 'lazy';
-		$attr['decoding'] = 'async';
+		return $attr;
 	}
+	$attr['loading']  = 'lazy';
+	$attr['decoding'] = 'async';
 	return $attr;
 }
 add_filter( 'wp_get_loading_optimization_attributes', 'teznevise_loading_attrs', 10, 3 );
 
 /** Calculators only on tool pages (not every URL). */
 function teznevise_page_needs_calculators() {
+	if ( is_front_page() || is_home() ) {
+		return false;
+	}
 	if ( is_page_template( 'page-tool.php' ) || is_page_template( 'page-tools.php' ) ) {
 		return true;
 	}
@@ -312,5 +344,5 @@ function teznevise_page_needs_calculators() {
 		return false;
 	}
 	$hay = $post->post_content . ' ' . (string) get_post_meta( $post->ID, '_teznevise_builder_sections', true ) . ' ' . $post->post_name;
-	return (bool) preg_match( '/tzss-|tzpc-|tzt-|tzc-|tzca-|tzhub-|tz_price|tz_calculation|tz_sample|tz_cronbach|tz_pearson|tz_cvr|tz_power|tz_spearman|tz_ttest|tz_descriptive|calculator/i', $hay );
+	return (bool) preg_match( '/\[tz(ss|pc|t|c|ca|hub|_price|_calculation|_sample|_cronbach|_pearson|_cvr|_power|_spearman|_ttest|_descriptive|_kr20|_cohens|_anova|_mann|_wilcoxon|_kruskal|_regression|_chi|_goodness|_icc)/i', $hay );
 }

@@ -952,7 +952,7 @@ class TezNevise_AI_API {
                 return $id;
             }
         }
-        return 'openai';
+        return 'openrouter';
     }
 
     private static function endpoint_for($agent, $provider, $model) {
@@ -979,6 +979,7 @@ class TezNevise_AI_API {
     }
 
     private static function key_for($agent, $provider) {
+        $provider = sanitize_key((string) $provider);
         if (!empty($agent['api_key'])) {
             $own = (string) $agent['api_key'];
             return class_exists('Teznevise_Key_Vault') ? Teznevise_Key_Vault::decrypt($own) : $own;
@@ -996,7 +997,35 @@ class TezNevise_AI_API {
         }
         $raw = (string) get_option($option, '');
         $dec = class_exists('Teznevise_Key_Vault') ? Teznevise_Key_Vault::decrypt($raw) : $raw;
-        return $dec !== '' ? $dec : '';
+        if ($dec !== '') {
+            return $dec;
+        }
+        if ($provider === 'openrouter' && function_exists('teznevise_tezcoin_get')) {
+            $legacy = (string) teznevise_tezcoin_get('openrouter_key');
+            if ($legacy !== '') {
+                return class_exists('Teznevise_Key_Vault') ? Teznevise_Key_Vault::decrypt($legacy) : $legacy;
+            }
+        }
+        foreach (array('OPENROUTER_API_KEY', 'XAI_API_KEY', 'OPENAI_API_KEY', 'GROQ_API_KEY', 'GENSPARK_API_KEY') as $env_name) {
+            $want = array(
+                'OPENROUTER_API_KEY' => 'openrouter',
+                'XAI_API_KEY'        => 'xai',
+                'OPENAI_API_KEY'     => 'openai',
+                'GROQ_API_KEY'       => 'groq',
+                'GENSPARK_API_KEY'   => 'genspark',
+            );
+            if (($want[$env_name] ?? '') !== $provider) {
+                continue;
+            }
+            $env = getenv($env_name);
+            if (is_string($env) && $env !== '') {
+                return $env;
+            }
+            if (defined($env_name) && constant($env_name)) {
+                return (string) constant($env_name);
+            }
+        }
+        return '';
     }
 
     /**

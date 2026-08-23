@@ -25,7 +25,8 @@ get_header();
 				</div>
 			</div>
 			<div class="hero-aside">
-			<div class="hero-visual" aria-label="<?php esc_attr_e( 'نمایی خلاقانه از خدمات تزنویسه', 'teznevise' ); ?>">
+			<div class="hero-visual tz-hero-orbit" aria-label="<?php esc_attr_e( 'نمایی خلاقانه از خدمات تزنویسه', 'teznevise' ); ?>">
+				<div class="hero-orb" aria-hidden="true"></div>
 				<div class="ink-blot blot-one"></div><div class="ink-blot blot-two"></div><div class="ink-blot blot-three"></div>
 				<div class="hero-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
 				<div class="hero-network">

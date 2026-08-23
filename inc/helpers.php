@@ -285,6 +285,10 @@ add_filter( 'the_content', 'teznevise_rewrite_tel_html', 20 );
  * @return string
  */
 function teznevise_logo_url() {
+	$optimized = '/assets/img/logo-header.webp';
+	if ( defined( 'TEZNEVISE_DIR' ) && is_readable( TEZNEVISE_DIR . $optimized ) ) {
+		return TEZNEVISE_URI . $optimized;
+	}
 	if ( has_custom_logo() ) {
 		$url = wp_get_attachment_image_url( (int) get_theme_mod( 'custom_logo' ), 'full' );
 		if ( $url ) {
@@ -292,6 +296,19 @@ function teznevise_logo_url() {
 		}
 	}
 	return '';
+}
+
+/**
+ * 2x header logo for retina srcset.
+ *
+ * @return string
+ */
+function teznevise_logo_url_2x() {
+	$optimized = '/assets/img/logo-header-2x.webp';
+	if ( defined( 'TEZNEVISE_DIR' ) && is_readable( TEZNEVISE_DIR . $optimized ) ) {
+		return TEZNEVISE_URI . $optimized;
+	}
+	return teznevise_logo_url();
 }
 
 /**

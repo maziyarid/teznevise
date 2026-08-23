@@ -1,0 +1,162 @@
+/* 1.9.18 — CWV + remaining UI: LCP logo box, section rhythm, cards, FAQ, orb, contact */
+.brand img,
+.footer-logo img,
+.footer-logo-wrap img {
+  width: 106px;
+  height: 48px;
+  object-fit: contain;
+  aspect-ratio: 106 / 48;
+}
+
+.hero-orb {
+  position: absolute;
+  inset: 12% 18%;
+  margin: auto;
+  width: min(280px, 70%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.55), transparent 42%),
+    radial-gradient(circle at 50% 50%, #1c7a64 0%, #0e3d32 68%, #08241e 100%);
+  box-shadow: 0 18px 48px rgba(14, 61, 50, .28);
+  z-index: 0;
+}
+.hero-visual,
+.tz-hero-orbit {
+  position: relative;
+}
+.hero-new {
+  padding-top: 48px;
+}
+@media (min-width: 1051px) {
+  .hero-new { padding-top: 72px; }
+}
+
+.section,
+.page-hero-new,
+.service-hero {
+  padding: 84px 0;
+}
+@media (max-width: 1050px) {
+  .section,
+  .page-hero-new,
+  .service-hero { padding: 56px 0; }
+}
+@media (max-width: 640px) {
+  .section,
+  .page-hero-new,
+  .service-hero { padding: 40px 0; }
+}
+.section-sm:last-child { padding-bottom: 0; }
+
+.service-card,
+.reason-item,
+.step,
+.faq-card,
+.article-card,
+.check-card,
+.quote-card,
+.tz-contact-card,
+.tez-builder-card,
+.tez-builder-step {
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.07);
+  text-align: center;
+}
+.service-card:hover,
+.reason-item:hover,
+.step:hover,
+.faq-card:hover,
+.article-card:hover,
+.check-card:hover,
+.quote-card:hover,
+.tz-contact-card:hover {
+  box-shadow: 0 8px 28px rgba(0,0,0,.12);
+  transform: translateY(-3px);
+}
+
+.faq-card {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.faq-card__head,
+.faq-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+.faq-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6em;
+  height: 1.6em;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.tz-contact-cards {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.tz-contact-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 22px 18px;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border: 1px solid #e8ecf5;
+}
+.tz-contact-card .icon-box { margin-bottom: 10px; }
+
+.footer-certs__enamad {
+  min-height: 80px;
+  min-width: 120px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 0.8fr 0.9fr;
+  gap: 28px;
+}
+@media (max-width: 900px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}
+
+.seo-panel,
+.tz-classic-more-wrap .seo-panel {
+  background: #f7f8fc;
+  border: 1px solid #e8ecf5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card,
+  .reason-item,
+  .step,
+  .faq-card,
+  .article-card,
+  .check-card,
+  .quote-card,
+  .tz-contact-card,
+  .tez-builder-card,
+  .tez-builder-step {
+    transition: none !important;
+  }
+  .service-card:hover,
+  .reason-item:hover,
+  .step:hover,
+  .faq-card:hover,
+  .article-card:hover,
+  .tz-contact-card:hover {
+    transform: none !important;
+  }
+}

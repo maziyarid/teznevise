@@ -51,7 +51,7 @@ add_action( 'wp_enqueue_scripts', 'teznevise_dequeue_block_styles', 100 );
 function teznevise_enqueue_compat_assets() {
 	$need_calc = is_page_template( 'page-tool.php' ) || is_page_template( 'page-tools.php' );
 	$haystack = '';
-	if ( is_singular() ) {
+	if ( ! is_front_page() && ! is_home() && is_singular() ) {
 		$post = get_post();
 		if ( $post instanceof WP_Post ) {
 			$haystack  = (string) $post->post_content;
@@ -60,7 +60,7 @@ function teznevise_enqueue_compat_assets() {
 		}
 	}
 
-	if ( $haystack && preg_match( '/tzss-|tzpc-|tzt-|tzc-|tzca-|tzhub-|tz-careers|tz_price|tz_calculation|tz_sample|tz_cronbach|tz_pearson|tz_cvr|tz_power|tz_spearman|tz_ttest|tz_descriptive|tz_kr20|tz_cohens|tz_anova|tz_mann|tz_wilcoxon|tz_kruskal|tz_regression|tz_chi|tz_goodness|tz_icc|calculator|gravityform/i', $haystack ) ) {
+	if ( $haystack && preg_match( '/\[tz(ss|pc|t|c|ca|hub|_price|_calculation|_sample|_cronbach|_pearson|_cvr|_power|_spearman|_ttest|_descriptive|_kr20|_cohens|_anova|_mann|_wilcoxon|_kruskal|_regression|_chi|_goodness|_icc)|\[gravityform/i', $haystack ) ) {
 		$need_calc = true;
 	}
 

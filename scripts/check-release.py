@@ -80,6 +80,7 @@ def check_requires() -> None:
         "assets/css/hotfix-203.css",
         "assets/css/hotfix-204.css",
         "assets/css/hotfix-205.css",
+        "assets/css/hotfix-206.css",
         "inc/legal-copy.php",
         "inc/waitlist.php",
         "teznevise-core/teznevise-core.php",
@@ -155,6 +156,8 @@ def check_source_contracts() -> None:
         error("Runtime CSS is not loaded asynchronously")
     if "data-tz-delay" not in perf:
         error("Third-party trackers are not delayed")
+    if "<noscript>" in perf:
+        error("Async CSS must not concatenate a noscript stylesheet (live PSI duplicate)")
 
     if "function research" not in ai and "public static function research" not in ai:
         error("You.com research() helper is missing from the AI API")
@@ -251,6 +254,8 @@ def check_source_contracts() -> None:
         error("hotfix-204.css is not in the runtime CSS concat")
     if "hotfix-205.css" not in perf:
         error("hotfix-205.css is not in the runtime CSS concat")
+    if "hotfix-206.css" not in perf:
+        error("hotfix-206.css is not in the runtime CSS concat")
 
     skills_cfg = (ROOT / "teznevise-core" / "config" / "skills.php").read_text(encoding="utf-8")
     for skill_agent in ("teznevise", "christina", "ada", "professor", "parantez", "elara", "cyrus", "mira"):

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.18 — 2026-08-23 — Core Web Vitals + key resolution
+
+- PageSpeed: runtime/Font Awesome/legacy CSS were emitted twice (async copy + a blocking copy). HTML minifiers unwrapped the `<noscript>` fallback. Async styles now use a single `media=print` link and never concatenate a second tag.
+- Concatenated runtime CSS is minified. AI chat CSS is async. Calculator CSS/JS no longer load on the homepage just because a URL contains the word “calculator”.
+- Header LCP logo is a 11 KB WebP (was a 401 KB PNG). Only `fetchpriority=high` images stay eager; post cards are lazy. Enamad stays exact but is lazy. TrustedSite is delayed like GTM.
+- OpenRouter key is read from the AI vault, then the TezCoin screen, then env. Default provider is OpenRouter, not OpenAI. Legacy TezCoin keys are copied into the vault on `init`.
+- Chat remains free (cost_per_message 0, limits 9999). hotfix-206: section rhythm, card shadows, FAQ numbers beside titles, hero orb, 4-col footer, contact cards.
+
 ## 1.9.17 — 2026-08-23 — OpenRouter free models were 404ing
 
 - Live `llm_fail AI provider returned an unsuccessful response` was every OpenRouter call using retired `:free` IDs (`llama-3.3-70b-instruct:free`, `gpt-oss-20b:free`, `qwen-2.5-72b:free`, `deepseek-r1:free`). Those slugs are gone from OpenRouter as of this date.

@@ -80,11 +80,14 @@ class Teznevise_Key_Vault {
 		);
 		$option = $map[ $provider ] ?? '';
 		$global = $option ? self::get_option_key( $option ) : '';
-		if ( 'you' === $provider && '' === $global && function_exists( 'teznevise_tezcoin_get' ) ) {
-			$global = self::decrypt( (string) teznevise_tezcoin_get( 'youcom_key' ) );
-		}
-		if ( 'tavily' === $provider && '' === $global && function_exists( 'teznevise_tezcoin_get' ) ) {
-			$global = self::decrypt( (string) teznevise_tezcoin_get( 'tavily_key' ) );
+		if ( '' === $global && function_exists( 'teznevise_tezcoin_get' ) ) {
+			if ( 'you' === $provider ) {
+				$global = self::decrypt( (string) teznevise_tezcoin_get( 'youcom_key' ) );
+			} elseif ( 'tavily' === $provider ) {
+				$global = self::decrypt( (string) teznevise_tezcoin_get( 'tavily_key' ) );
+			} elseif ( 'openrouter' === $provider ) {
+				$global = self::decrypt( (string) teznevise_tezcoin_get( 'openrouter_key' ) );
+			}
 		}
 		$post_id = (int) $post_id;
 		if ( $post_id > 0 && 'custom' === get_post_meta( $post_id, '_teznevise_api_source', true ) ) {
@@ -121,5 +124,24 @@ class Teznevise_Key_Vault {
 				}
 			);
 		}
+		add_action( 'init', array( __CLASS__, 'migrate_legacy_openrouter' ), 5 );
+	}
+
+	/**
+	 * Copy an OpenRouter key saved on the TezCoin screen into the AI vault.
+	 */
+	public static function migrate_legacy_openrouter() {
+		$current = self::decrypt( (string) get_option( 'teznevise_ai_openrouter_key', '' ) );
+		if ( '' !== $current ) {
+			return;
+		}
+		if ( ! function_exists( 'teznevise_tezcoin_get' ) ) {
+			return;
+		}
+		$legacy = self::decrypt( (string) teznevise_tezcoin_get( 'openrouter_key' ) );
+		if ( '' === $legacy ) {
+			return;
+		}
+		update_option( 'teznevise_ai_openrouter_key', $legacy, false );
 	}
 }
