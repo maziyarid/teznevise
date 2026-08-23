@@ -1,0 +1,49 @@
+/**
+ * 1.9.12 last-wins: named-agent marks, AI comment avatars, hub-safe comment meta.
+ */
+.tz-agent-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: #fff;
+  display: inline-block;
+  vertical-align: middle;
+}
+.tz-ai-comment .tz-thread-item__meta,
+.tz-ai-thread .tz-thread-item__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.tz-ai-comment .tz-agent-mark,
+.tz-ai-thread .tz-agent-mark {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+}
+.tz-ai-role {
+  font-size: 0.78rem;
+  color: var(--tz-commenter, #145d4a);
+  background: color-mix(in srgb, var(--tz-commenter, #145d4a) 12%, #fff);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.tz-ai-think {
+  margin-top: 8px;
+  border-radius: 12px;
+  background: #eef4ff;
+  padding: 8px 10px;
+}
+.tz-ai-think pre {
+  white-space: pre-wrap;
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+}
+@media (max-width: 640px) {
+  .tz-agent-mark {
+    width: 32px;
+    height: 32px;
+  }
+}

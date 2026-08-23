@@ -123,6 +123,12 @@ class TezNevise_AI_API {
         
         $agent = TezNevise_AI_Database::get_agent($agent_id);
         if (!$agent) $agent = TezNevise_AI_Database::get_agent('general');
+        if (!$agent && class_exists('Teznevise_Agent_Registry')) {
+            $agent = Teznevise_Agent_Registry::get($agent_id) ?: Teznevise_Agent_Registry::get('teznevise');
+        }
+        if ($agent && class_exists('Teznevise_Agent_Registry')) {
+            $agent = Teznevise_Agent_Registry::hydrate((array) $agent);
+        }
 		$model = (string) ($agent['model'] ?? 'gpt-4');
 		$allowed_models = (array) apply_filters('teznevise_ai_allowed_models', [$model], $tool, $agent);
 		if ($requested_model && in_array($requested_model, $allowed_models, true)) {
@@ -269,11 +275,11 @@ class TezNevise_AI_API {
             }
             $replies[] = array(
                 'content' => $response['content'],
-                'agent_name' => $ag['name'] ?? 'Assistants',
-                'model' => $ag['model'] ?? $model,
+                'agent_name' => $ag['alias'] ?? $ag['name'] ?? 'Assistants',
+                'model' => $ag['displayed_model_name'] ?? $ag['model'] ?? $model,
 				'thinking_process' => $response['thinking_process'] ?? null,
             );
-            $prior .= "\n- " . ($ag['name'] ?? 'agent') . ': ' . $response['content'];
+            $prior .= "\n- " . ($ag['alias'] ?? $ag['name'] ?? 'agent') . ': ' . $response['content'];
             if ($mode === 'single') {
                 break;
             }
@@ -711,7 +717,21 @@ class TezNevise_AI_API {
         $agents = TezNevise_AI_Database::get_all_agents();
         $formatted = [];
         foreach ($agents as $agent) {
-            $formatted[] = ['id' => $agent['agent_id'], 'name' => $agent['name'], 'description' => $agent['description'], 'model' => $agent['model'], 'provider' => $agent['provider'] ?? 'openai', 'color' => $agent['color'], 'icon' => $agent['icon'], 'thinking_enabled' => (bool) $agent['thinking_enabled']];
+            $row = $agent;
+            if (class_exists('Teznevise_Agent_Registry')) {
+                $row = Teznevise_Agent_Registry::hydrate((array) $agent);
+            }
+            $formatted[] = [
+                'id' => $row['agent_id'] ?? '',
+                'name' => $row['alias'] ?? $row['name'] ?? '',
+                'description' => $row['description'] ?? '',
+                'model' => $row['displayed_model_name'] ?? $row['model'] ?? '',
+                'provider' => $row['provider'] ?? 'openai',
+                'color' => $row['color'] ?? '',
+                'icon' => $row['icon'] ?? '',
+                'avatar' => $row['avatar'] ?? '',
+                'thinking_enabled' => ! empty($row['thinking_enabled']),
+            ];
         }
         return $formatted;
     }

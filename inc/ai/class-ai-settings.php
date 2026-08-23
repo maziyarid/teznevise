@@ -82,9 +82,20 @@ class TezNevise_AI_Settings {
 			}
 		}
 		if ( 'delete' === $action && ! empty( $_POST['agent_id'] ) && class_exists( 'TezNevise_AI_Database' ) ) {
-			TezNevise_AI_Database::delete_agent( sanitize_key( wp_unslash( $_POST['agent_id'] ) ) );
+			$del_id = sanitize_key( wp_unslash( $_POST['agent_id'] ) );
+			$protected = function_exists( 'teznevise_core_named_ids' ) ? teznevise_core_named_ids() : array();
+			$protected = array_merge( $protected, array( 'you', 'general', 'math', 'stats' ) );
+			if ( ! in_array( $del_id, $protected, true ) ) {
+				TezNevise_AI_Database::delete_agent( $del_id );
+			}
 		}
-		wp_safe_redirect( add_query_arg( array( 'page' => 'teznevise-ai-settings', 'updated' => '1' ), admin_url( 'options-general.php' ) ) );
+		$redirect = admin_url( 'admin.php?page=teznevise-ai-settings' );
+		if ( isset( $_POST['_wp_http_referer'] ) && false !== strpos( (string) wp_unslash( $_POST['_wp_http_referer'] ), 'options-general.php' ) ) {
+			$redirect = add_query_arg( array( 'page' => 'teznevise-ai-settings', 'updated' => '1' ), admin_url( 'options-general.php' ) );
+		} else {
+			$redirect = add_query_arg( array( 'page' => 'teznevise-ai-settings', 'updated' => '1' ), admin_url( 'admin.php' ) );
+		}
+		wp_safe_redirect( $redirect );
 		exit;
 	}
 
@@ -253,6 +264,10 @@ class TezNevise_AI_Settings {
 								<option value="methodologist"><?php esc_html_e( 'روش‌شناس', 'teznevise' ); ?></option>
 								<option value="statistician"><?php esc_html_e( 'آمار', 'teznevise' ); ?></option>
 								<option value="editor"><?php esc_html_e( 'ویراستار علمی', 'teznevise' ); ?></option>
+								<option value="synthesizer"><?php esc_html_e( 'ترکیب‌گر', 'teznevise' ); ?></option>
+								<option value="qualitative"><?php esc_html_e( 'کیفی / اخلاق', 'teznevise' ); ?></option>
+								<option value="legal"><?php esc_html_e( 'حقوق / سیاست', 'teznevise' ); ?></option>
+								<option value="medical"><?php esc_html_e( 'پزشکی / STEM', 'teznevise' ); ?></option>
 							</select>
 							<input name="language" class="small-text" value="fa" />
 							<label><?php esc_html_e( 'دما', 'teznevise' ); ?> <input name="temperature" type="number" step="0.1" min="0" max="2" value="0.7" class="small-text" /></label>

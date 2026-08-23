@@ -6,7 +6,7 @@
 if (!defined('ABSPATH')) exit;
 
 class TezNevise_AI_Database {
-    const VERSION = '2.2.0';
+    const VERSION = '2.3.0';
     const PREFIX = 'teznevise_ai_';
     
     public static function init() {
@@ -180,6 +180,30 @@ class TezNevise_AI_Database {
             ['agent_id' => 'gemini_flash', 'name' => 'Gemini Flash', 'description' => 'مدل رایگان‌تر گوگل برای پاسخ سریع فارسی', 'provider' => 'gemini', 'api_endpoint' => 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', 'api_key' => '', 'model' => 'gemini-2.0-flash', 'color' => '#0369a1', 'icon' => 'sparkles', 'thinking_enabled' => 1, 'is_active' => 0, 'sort_order' => 3],
             ['agent_id' => 'openrouter_free', 'name' => 'OpenRouter', 'description' => 'مسیریاب مدل‌های متن‌باز و رایگان OpenRouter', 'provider' => 'openrouter', 'api_endpoint' => 'https://openrouter.ai/api/v1/chat/completions', 'api_key' => '', 'model' => 'openrouter/auto', 'color' => '#b45309', 'icon' => 'brain', 'thinking_enabled' => 1, 'is_active' => 0, 'sort_order' => 4],
         ];
+        if ( function_exists( 'teznevise_core_agent_roster' ) ) {
+            foreach ( teznevise_core_agent_roster() as $id => $row ) {
+                $models = function_exists( 'teznevise_core_agent_models' ) ? teznevise_core_agent_models( $id ) : array( 'primary' => 'meta-llama/llama-3.3-70b-instruct:free' );
+                $default_agents[] = array(
+                    'agent_id' => $id,
+                    'name' => $row['name'],
+                    'description' => $row['description'],
+                    'provider' => 'openrouter',
+                    'api_endpoint' => 'https://openrouter.ai/api/v1/chat/completions',
+                    'api_key' => '',
+                    'model' => $models['primary'],
+                    'color' => $row['color'],
+                    'icon' => $row['icon'],
+                    'thinking_enabled' => 1,
+                    'is_active' => 1,
+                    'sort_order' => (int) $row['sort_order'],
+                    'system_prompt' => $row['system_prompt'],
+                    'role' => $row['role'],
+                    'language' => 'fa',
+                    'temperature' => (float) $row['temperature'],
+                    'max_tokens' => (int) $row['max_tokens'],
+                );
+            }
+        }
         foreach ($default_agents as $agent) {
             $exists = $wpdb->get_var($wpdb->prepare("SELECT agent_id FROM $agents_table WHERE agent_id = %s", $agent['agent_id']));
             if (!$exists) {

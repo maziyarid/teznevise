@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="paTitle paDesc">
+  <title id="paTitle">Parantez</title>
+  <desc id="paDesc">نشان Parantez — آمار کاربردی</desc>
+  <rect width="64" height="64" rx="16" fill="#0369a1"/>
+  <path d="M18 12c-8 8-8 32 0 40" fill="none" stroke="#e0f2fe" stroke-width="5" stroke-linecap="round"/>
+  <path d="M46 12c8 8 8 32 0 40" fill="none" stroke="#e0f2fe" stroke-width="5" stroke-linecap="round"/>
+  <path d="M24 24h16L28 32h12L24 44" fill="none" stroke="#fde68a" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

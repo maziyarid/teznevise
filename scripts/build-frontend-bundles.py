@@ -315,6 +315,7 @@ def build_js() -> None:
     nav_touch = (JS / "nav-touch.js").read_text(encoding="utf-8")
     product = (JS / "product-1.7.js").read_text(encoding="utf-8")
     dropdown = (JS / "nav-dropdown.js").read_text(encoding="utf-8")
+    extras = (JS / "chrome-extras.js").read_text(encoding="utf-8")
     loader = slim_react_loader((JS / "react-loader.js").read_text(encoding="utf-8"))
     out = (
         BANNER
@@ -328,6 +329,8 @@ def build_js() -> None:
         + product.rstrip()
         + "\n\n/* ===== nav-dropdown.js ===== */\n"
         + dropdown.rstrip()
+        + "\n\n/* ===== chrome-extras.js ===== */\n"
+        + extras.rstrip()
         + "\n\n/* ===== react-loader.js ===== */\n"
         + loader.rstrip()
         + "\n"

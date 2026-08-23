@@ -76,6 +76,7 @@ def check_requires() -> None:
         "assets/css/hotfix-199.css",
         "assets/css/hotfix-200.css",
         "assets/css/hotfix-201.css",
+        "assets/css/hotfix-202.css",
         "inc/legal-copy.php",
         "inc/waitlist.php",
         "teznevise-core/teznevise-core.php",
@@ -239,6 +240,48 @@ def check_source_contracts() -> None:
     perf = (ROOT / "inc" / "perf.php").read_text(encoding="utf-8")
     if "hotfix-201.css" not in perf:
         error("hotfix-201.css is not in the runtime CSS concat")
+    if "hotfix-202.css" not in perf:
+        error("hotfix-202.css is not in the runtime CSS concat")
+
+    agents_cfg = (ROOT / "teznevise-core" / "config" / "agents.php").read_text(encoding="utf-8")
+    for agent_id in ("teznevise", "christina", "ada", "professor", "parantez", "elara", "cyrus", "mira"):
+        if f"'{agent_id}'" not in agents_cfg and f'"{agent_id}"' not in agents_cfg:
+            error(f"Named agent {agent_id} missing from roster config")
+        skill = ROOT / "teznevise-core" / "skills" / f"{agent_id}.md"
+        if not skill.is_file():
+            error(f"SKILL.md missing for {agent_id}")
+        mark = ROOT / "assets" / "img" / "agents" / f"{agent_id}.svg"
+        if not mark.is_file():
+            error(f"Agent SVG missing: {agent_id}")
+    debate = (ROOT / "teznevise-core" / "inc" / "class-debate-orchestrator.php").read_text(encoding="utf-8")
+    if "visualizer" not in debate or "synthesis" not in debate:
+        error("Debate orchestrator is missing visualizer/synthesis steps")
+    if "teznevise_core_debate_sequence" not in (ROOT / "teznevise-core" / "config" / "agents.php").read_text(encoding="utf-8"):
+        error("Debate sequence helper is missing")
+    seq = (ROOT / "teznevise-core" / "config" / "agents.php").read_text(encoding="utf-8")
+    if "'ada', 'professor', 'parantez', 'elara', 'cyrus', 'mira'" not in seq:
+        error("Debate sequence is not Ada→Professor→Parantez→Elara→Cyrus→Mira")
+    hub = (ROOT / "teznevise-core" / "inc" / "class-admin-hub.php").read_text(encoding="utf-8")
+    if "teznevise-hub" not in hub:
+        error("Admin hub menu slug is missing")
+    nav = (ROOT / "assets" / "js" / "nav-dropdown.js").read_text(encoding="utf-8")
+    if "scheduleOpen" not in nav or "openDelay" not in nav:
+        error("Mega-menu hover-intent open delay is missing")
+    tezcoin = (ROOT / "inc" / "tezcoin.php").read_text(encoding="utf-8")
+    if "ساماندهی" in tezcoin or "samandehi_url" in tezcoin:
+        error("Samandehi leftover must not remain in tezcoin admin")
+    footer = (ROOT / "footer.php").read_text(encoding="utf-8")
+    if "cdn.ywxi.net/js/1.js" not in footer:
+        error("TrustedSite script missing from footer during 1.9.12 check")
+    chat = (ROOT / "js" / "ai" / "chat.js").read_text(encoding="utf-8")
+    if "typewrite" not in chat:
+        error("Chat composer is missing typewriter streaming")
+    chat_php = (ROOT / "inc" / "ai" / "class-ai-chat.php").read_text(encoding="utf-8")
+    if "data-agent-pick" not in chat_php:
+        error("Chat composer is missing the named-agent picker")
+    comments = (ROOT / "inc" / "ai-comments.php").read_text(encoding="utf-8")
+    if "ava-method" in comments and "teznevise_core_agent_roster" not in comments:
+        error("AI comment defaults still use آوا/پارسا/نیکا without roster mapping")
 
     settings = (ROOT / "inc" / "ai" / "class-ai-settings.php").read_text(encoding="utf-8")
     if "displayed_model_name" not in settings:

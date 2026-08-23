@@ -1,6 +1,7 @@
 <?php
 /**
- * Async research → debate pipeline. Never blocks save_post.
+ * Async research → overview → first responder → peer → debate → visualizer → synthesis.
+ * Never blocks save_post.
  *
  * @package Teznevise_Core
  */
@@ -48,59 +49,23 @@ class Teznevise_Debate_Orchestrator {
 		update_post_meta( $post_id, '_teznevise_ai_research', $research );
 		update_post_meta( $post_id, '_teznevise_ai_research_hash', $hash );
 		if ( is_array( $research ) && ! empty( $research['brief'] ) ) {
-			// Keep the 1.9.8 string meta readable in the classic textarea.
 			update_post_meta( $post_id, '_teznevise_ai_research_text', $research['brief'] );
 		}
 
-		$skill   = (string) get_post_meta( $post_id, '_teznevise_skill_md', true );
-		$pre     = (string) get_post_meta( $post_id, '_pre_computed_thoughts', true );
-		$refs    = get_post_meta( $post_id, '_teznevise_references', true );
-		$refs    = is_array( $refs ) ? $refs : array();
-		$chosen  = get_post_meta( $post_id, '_teznevise_debate_agents', true );
-		$agents  = array();
-		if ( is_array( $chosen ) && $chosen ) {
-			foreach ( $chosen as $id ) {
-				$row = Teznevise_Agent_Registry::get( $id );
-				if ( $row && ( $row['role'] ?? '' ) !== 'researcher' ) {
-					$agents[] = $row;
+		$pre  = (string) get_post_meta( $post_id, '_pre_computed_thoughts', true );
+		$refs = get_post_meta( $post_id, '_teznevise_references', true );
+		$refs = is_array( $refs ) ? $refs : array();
+		if ( is_array( $research ) && ! empty( $research['sources'] ) && is_array( $research['sources'] ) ) {
+			foreach ( $research['sources'] as $src ) {
+				if ( is_array( $src ) ) {
+					$refs[] = $src;
+				} elseif ( is_string( $src ) ) {
+					$refs[] = array( 'title' => $src, 'url' => '' );
 				}
 			}
 		}
-		if ( ! $agents && function_exists( 'teznevise_ai_comment_settings' ) ) {
-			$settings = teznevise_ai_comment_settings();
-			$primary  = Teznevise_Agent_Registry::get( $settings['agent_id'] ?? 'general' );
-			if ( $primary ) {
-				$agents[] = $primary;
-			}
-		}
-		if ( ! $agents ) {
-			$fallback = Teznevise_Agent_Registry::get( 'general' );
-			if ( $fallback ) {
-				$agents[] = $fallback;
-			}
-		}
 
-		$turns    = 4;
-		if ( function_exists( 'teznevise_ai_comment_settings' ) ) {
-			$turns = max( 1, min( 8, (int) teznevise_ai_comment_settings()['max_turns'] ) );
-		}
-		$speakers = array();
-		if ( function_exists( 'teznevise_ai_comment_settings' ) ) {
-			$speakers = array_values(
-				array_filter(
-					(array) teznevise_ai_comment_settings()['speakers'],
-					static function ( $row ) {
-						return ! empty( $row['active'] ) && ! empty( $row['name'] );
-					}
-				)
-			);
-		}
-
-		$parent  = 0;
-		$prior   = '';
-		$items   = array();
-		$created = 0;
-		$old     = get_comments(
+		$old = get_comments(
 			array(
 				'post_id' => $post_id,
 				'type'    => 'tz_ai',
@@ -114,74 +79,108 @@ class Teznevise_Debate_Orchestrator {
 		}
 
 		$brief_text = is_array( $research ) ? (string) $research['brief'] : '';
-		$n_speakers = $speakers ? count( $speakers ) : 1;
+		$ctx        = array(
+			'post'    => $post,
+			'article' => $article,
+			'brief'   => $brief_text,
+			'pre'     => $pre,
+			'refs'    => $refs,
+			'post_id' => $post_id,
+		);
 
-		for ( $i = 0; $i < $turns; $i++ ) {
-			$speaker = $speakers ? $speakers[ $i % $n_speakers ] : array( 'name' => $agents[0]['alias'] ?? 'عامل', 'role' => 'analyst', 'color' => '#145d4a', 'slug' => 'agent', 'prompt' => '', 'tags' => '' );
-			$agent   = $agents[ $i % count( $agents ) ];
-			$prompt  = Teznevise_Agent_Registry::identity_lock( $agent, $skill, $refs, $pre );
-			if ( ! empty( $speaker['prompt'] ) ) {
-				$prompt .= "\nSpeaker instructions: " . $speaker['prompt'];
-			}
-			if ( $brief_text ) {
-				$prompt .= "\n\nResearch brief:\n" . $brief_text;
-			}
-			if ( $prior ) {
-				$prompt .= "\n\nPrevious panel remarks:\n" . $prior;
-			}
-			$message = 'Article title: ' . $post->post_title . "\n\nFull article:\n" . $article . "\n\nWrite the next discussion comment in Persian.";
-			$body    = self::complete_cascade( $message, $prompt, $agent, $article . ' ' . $brief_text, $post_id );
-			if ( '' === $body ) {
-				continue;
-			}
-			$parsed = self::split_thought( $body );
-			$cid    = wp_insert_comment(
-				array(
-					'comment_post_ID'      => $post_id,
-					'comment_author'       => $speaker['name'],
-					'comment_author_email' => sanitize_key( $speaker['slug'] ?? $speaker['name'] ) . '@ai.teznevise.ir',
-					'comment_author_url'   => home_url( '/' ),
-					'comment_content'      => wp_kses_post( $parsed['public'] ),
-					'comment_type'         => 'tz_ai',
-					'comment_parent'       => $parent,
-					'comment_approved'     => 1,
-					'user_id'              => 0,
-				)
-			);
-			if ( ! $cid ) {
-				continue;
-			}
-			update_comment_meta( $cid, '_is_ai_agent', '1' );
-			update_comment_meta( $cid, 'tz_ai_slug', sanitize_title( $speaker['slug'] ?? $speaker['name'] ) );
-			update_comment_meta( $cid, 'tz_ai_role', sanitize_text_field( $speaker['role'] ?? '' ) );
-			update_comment_meta( $cid, 'tz_ai_tags', sanitize_text_field( $speaker['tags'] ?? '' ) );
-			update_comment_meta( $cid, 'tz_ai_name', sanitize_text_field( $speaker['name'] ) );
-			update_comment_meta( $cid, 'tz_ai_color', sanitize_hex_color( $speaker['color'] ?? '#145d4a' ) ?: '#145d4a' );
-			update_comment_meta( $cid, 'tz_ai_thought', $parsed['thought'] );
-			update_comment_meta( $cid, 'tz_ai_alias', sanitize_text_field( $agent['alias'] ?? $speaker['name'] ) );
-			update_comment_meta( $cid, 'tz_ai_displayed_model', sanitize_text_field( $agent['displayed_model_name'] ?? '' ) );
-			$items[] = array(
-				'id'      => (string) $cid,
-				'parent'  => (string) $parent,
-				'name'    => $speaker['name'],
-				'slug'    => $speaker['slug'] ?? '',
-				'role'    => $speaker['role'] ?? '',
-				'color'   => $speaker['color'] ?? '#145d4a',
-				'tags'    => $speaker['tags'] ?? '',
-				'content' => $parsed['public'],
-				'thought' => $parsed['thought'],
-				'alias'   => $agent['alias'] ?? $speaker['name'],
-			);
-			$parent = (int) $cid;
-			$prior .= "\n- " . $speaker['name'] . ': ' . wp_strip_all_tags( $parsed['public'] );
-			++$created;
-		}
-
-		$thread = array(
-			'version'   => 2,
+		$parent  = 0;
+		$prior   = '';
+		$items   = array();
+		$created = 0;
+		$spoken  = array();
+		$pipeline = array(
+			'version'   => 3,
 			'research'  => $brief_text,
 			'sources'   => is_array( $research ) ? ( $research['sources'] ?? array() ) : array(),
 			'generated' => time(),
+			'steps'     => array(),
+		);
+
+		$overview = self::speak( 'teznevise', 'overview', $ctx, $prior, $parent );
+		if ( $overview ) {
+			$items[]  = $overview['item'];
+			$parent   = (int) $overview['id'];
+			$prior   .= $overview['prior'];
+			$spoken[] = 'teznevise';
+			++$created;
+			$pipeline['steps'][] = 'overview';
+			update_post_meta( $post_id, '_teznevise_ai_overview', $overview['item']['content'] );
+		}
+
+		$first_id = Teznevise_Agent_Registry::first_responder( $query . ' ' . $brief_text );
+		$first    = self::speak( $first_id, 'first', $ctx, $prior, $parent );
+		if ( $first ) {
+			$items[]  = $first['item'];
+			$parent   = (int) $first['id'];
+			$prior   .= $first['prior'];
+			$spoken[] = $first_id;
+			++$created;
+			$pipeline['steps'][]     = 'first:' . $first_id;
+			$pipeline['first']       = $first_id;
+		}
+
+		$peer_id = Teznevise_Agent_Registry::peer_reviewer( $first_id );
+		if ( $peer_id && $peer_id !== $first_id ) {
+			$peer = self::speak( $peer_id, 'peer', $ctx, $prior, $parent );
+			if ( $peer ) {
+				$items[]  = $peer['item'];
+				$parent   = (int) $peer['id'];
+				$prior   .= $peer['prior'];
+				$spoken[] = $peer_id;
+				++$created;
+				$pipeline['steps'][] = 'peer:' . $peer_id;
+				$pipeline['peer']    = $peer_id;
+			}
+		}
+
+		$sequence = function_exists( 'teznevise_core_debate_sequence' ) ? teznevise_core_debate_sequence() : array();
+		foreach ( $sequence as $id ) {
+			if ( in_array( $id, $spoken, true ) ) {
+				continue;
+			}
+			$turn = self::speak( $id, 'debate', $ctx, $prior, $parent );
+			if ( ! $turn ) {
+				continue;
+			}
+			$items[]  = $turn['item'];
+			$parent   = (int) $turn['id'];
+			$prior   .= $turn['prior'];
+			$spoken[] = $id;
+			++$created;
+			$pipeline['steps'][] = 'debate:' . $id;
+		}
+
+		$want_viz = (bool) preg_match( '/figure|chart|plot|diagram|جدول|نمودار|شکل|گراف|slide|اسلاید/iu', $query . ' ' . $brief_text );
+		if ( $want_viz ) {
+			$viz = self::speak( 'ada', 'visualizer', $ctx, $prior, $parent );
+			if ( $viz ) {
+				$items[]             = $viz['item'];
+				$parent              = (int) $viz['id'];
+				$prior              .= $viz['prior'];
+				++$created;
+				$pipeline['steps'][] = 'visualizer';
+			}
+		}
+
+		$synth = self::speak( 'teznevise', 'synthesis', $ctx, $prior, $parent );
+		if ( $synth ) {
+			$items[]             = $synth['item'];
+			++$created;
+			$pipeline['steps'][] = 'synthesis';
+		}
+
+		$thread = array(
+			'version'   => 3,
+			'research'  => $brief_text,
+			'sources'   => $pipeline['sources'],
+			'generated' => time(),
+			'overview'  => (string) get_post_meta( $post_id, '_teznevise_ai_overview', true ),
+			'pipeline'  => $pipeline['steps'],
 			'items'     => $items,
 		);
 		if ( function_exists( 'teznevise_ai_discussion_save' ) ) {
@@ -189,9 +188,124 @@ class Teznevise_Debate_Orchestrator {
 		} else {
 			update_post_meta( $post_id, '_teznevise_ai_discussion', wp_slash( wp_json_encode( $thread, JSON_UNESCAPED_UNICODE ) ) );
 		}
+		update_post_meta( $post_id, '_teznevise_ai_pipeline', $pipeline );
 		update_post_meta( $post_id, '_teznevise_ai_job', 'done' );
 		update_post_meta( $post_id, '_teznevise_ai_content_hash', $hash );
 		return $created;
+	}
+
+	/**
+	 * One named-agent turn.
+	 *
+	 * @param string               $agent_id Agent id.
+	 * @param string               $job      overview|first|peer|debate|visualizer|synthesis.
+	 * @param array<string,mixed>  $ctx      Shared article context.
+	 * @param string               $prior    Previous public remarks.
+	 * @param int                  $parent   Parent comment id.
+	 * @return array{id:int,item:array,prior:string}|null
+	 */
+	private static function speak( $agent_id, $job, $ctx, $prior, $parent ) {
+		$agent = Teznevise_Agent_Registry::get( $agent_id );
+		if ( ! $agent ) {
+			return null;
+		}
+		$post_id = (int) $ctx['post_id'];
+		$skill   = Teznevise_Agent_Registry::skill_md( $agent_id, $post_id );
+		$prompt  = Teznevise_Agent_Registry::identity_lock( $agent, $skill, $ctx['refs'], $ctx['pre'] );
+		$prompt .= "\nJob: " . $job . '. Token-frugal. Public reply in Persian, ≤140 words.';
+		switch ( $job ) {
+			case 'overview':
+				$prompt .= "\nWrite the SERP/blog AI overview of this article using the research brief. 80–120 words. Cite [n]. No ghostwriting.";
+				break;
+			case 'first':
+				$prompt .= "\nYou are the first responder for this topic. Open the discussion. Ground every claim in the article and the brief.";
+				break;
+			case 'peer':
+				$prompt .= "\nYou are the peer reviewer. Critique the first response: gaps, overclaim, missing method. Be specific and polite.";
+				break;
+			case 'debate':
+				$prompt .= "\nContinue the panel. Add a new angle. Do not repeat earlier speakers. Reply to the last remark when useful.";
+				break;
+			case 'visualizer':
+				$prompt .= "\nVisualizer job: describe 1–2 figures or slides in text (title, axes/labels, what it shows). No image URLs, no dummy data, no generated pictures.";
+				break;
+			case 'synthesis':
+				$prompt .= "\nSynthesize the whole panel into a final reflection: agreements, remaining disagreement, one practical next step for the graduate student. Consulting only.";
+				break;
+		}
+		if ( ! empty( $ctx['brief'] ) ) {
+			$prompt .= "\n\nResearch brief:\n" . $ctx['brief'];
+		}
+		if ( $prior ) {
+			$prompt .= "\n\nPrevious panel remarks:\n" . $prior;
+		}
+		$post    = $ctx['post'];
+		$message = 'Article title: ' . $post->post_title . "\n\nFull article:\n" . $ctx['article'] . "\n\nWrite the next discussion comment in Persian.";
+		$body    = self::complete_cascade( $message, $prompt, $agent, $ctx['article'] . ' ' . $ctx['brief'], $post_id );
+		if ( '' === $body ) {
+			return null;
+		}
+		$parsed = self::split_thought( $body );
+		$role   = (string) ( $agent['role'] ?? $job );
+		$tags   = $job;
+		$name   = (string) ( $agent['alias'] ?? $agent['name'] ?? $agent_id );
+		if ( 'visualizer' === $job ) {
+			$name .= ' — تصویرساز';
+			$role  = 'visualizer';
+		} elseif ( 'overview' === $job ) {
+			$name .= ' — نمای کلی';
+		} elseif ( 'synthesis' === $job ) {
+			$name .= ' — بازتاب';
+		} elseif ( 'peer' === $job ) {
+			$name .= ' — داور همتا';
+		}
+		$color = sanitize_hex_color( $agent['color'] ?? '' ) ?: '#145d4a';
+		$cid   = wp_insert_comment(
+			array(
+				'comment_post_ID'      => $post_id,
+				'comment_author'       => $name,
+				'comment_author_email' => sanitize_key( $agent_id ) . '@ai.teznevise.ir',
+				'comment_author_url'   => home_url( '/' ),
+				'comment_content'      => wp_kses_post( $parsed['public'] ),
+				'comment_type'         => 'tz_ai',
+				'comment_parent'       => (int) $parent,
+				'comment_approved'     => 1,
+				'user_id'              => 0,
+			)
+		);
+		if ( ! $cid ) {
+			return null;
+		}
+		update_comment_meta( $cid, '_is_ai_agent', '1' );
+		update_comment_meta( $cid, 'tz_ai_slug', sanitize_title( $agent_id ) );
+		update_comment_meta( $cid, 'tz_ai_role', sanitize_text_field( $role ) );
+		update_comment_meta( $cid, 'tz_ai_tags', sanitize_text_field( $tags ) );
+		update_comment_meta( $cid, 'tz_ai_name', sanitize_text_field( $name ) );
+		update_comment_meta( $cid, 'tz_ai_color', $color );
+		update_comment_meta( $cid, 'tz_ai_thought', $parsed['thought'] );
+		update_comment_meta( $cid, 'tz_ai_alias', sanitize_text_field( $agent['alias'] ?? $name ) );
+		update_comment_meta( $cid, 'tz_ai_displayed_model', sanitize_text_field( $agent['displayed_model_name'] ?? '' ) );
+		update_comment_meta( $cid, 'tz_ai_avatar', esc_url_raw( $agent['avatar'] ?? '' ) );
+		update_comment_meta( $cid, 'tz_ai_job', sanitize_key( $job ) );
+		$item = array(
+			'id'      => (string) $cid,
+			'parent'  => (string) $parent,
+			'name'    => $name,
+			'slug'    => $agent_id,
+			'role'    => $role,
+			'color'   => $color,
+			'tags'    => $tags,
+			'content' => $parsed['public'],
+			'thought' => $parsed['thought'],
+			'alias'   => $agent['alias'] ?? $name,
+			'avatar'  => $agent['avatar'] ?? '',
+			'job'     => $job,
+		);
+		return array(
+			'id'    => (int) $cid,
+			'item'  => $item,
+			'prior' => "\n- " . $name . ': ' . wp_strip_all_tags( $parsed['public'] ),
+		);
 	}
 
 	public static function complete_cascade( $message, $prompt, $agent, $corpus, $post_id = 0 ) {
@@ -201,7 +315,7 @@ class Teznevise_Debate_Orchestrator {
 		$chain   = Teznevise_Model_Router::chain( $agent, $corpus, 'debate' );
 		$post_id = (int) $post_id;
 		foreach ( $chain as $i => $attempt ) {
-			$try            = $agent;
+			$try             = $agent;
 			$try['provider'] = $attempt['provider'];
 			$try['model']    = $attempt['model'];
 			$try['api_key']  = Teznevise_Key_Vault::get_provider_key( $attempt['provider'], $post_id );
@@ -256,16 +370,21 @@ class Teznevise_Debate_Orchestrator {
 		if ( is_array( $cached ) && $hash === $now ) {
 			return $cached;
 		}
-		$agent = Teznevise_Agent_Registry::get( 'general' );
+		$agent = Teznevise_Agent_Registry::get( 'teznevise' );
+		if ( ! $agent ) {
+			$agent = Teznevise_Agent_Registry::get( 'general' );
+		}
 		if ( ! $agent ) {
 			$agent = array(
-				'provider' => 'openrouter',
-				'model'    => '',
-				'alias'    => 'خلاصه تزنویسه',
-				'displayed_model_name' => 'خلاصه تزنویسه',
+				'provider'             => 'openrouter',
+				'model'                => '',
+				'alias'                => 'تزنویسه',
+				'displayed_model_name' => 'تزنویسه',
+				'agent_id'             => 'teznevise',
 			);
 		}
-		$prompt  = Teznevise_Agent_Registry::identity_lock( $agent );
+		$skill   = Teznevise_Agent_Registry::skill_md( 'teznevise', $post_id );
+		$prompt  = Teznevise_Agent_Registry::identity_lock( $agent, $skill );
 		$prompt .= "\nReturn 5–8 Persian bullet key points. No preamble.";
 		$body    = self::complete_cascade( $post->post_title . "\n\n" . $article, $prompt, $agent, $article, (int) $post->ID );
 		$lines   = array_values(

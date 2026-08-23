@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.12 — 2026-08-23 — Named 8-agent roster, debate pipeline, admin hub
+
+- Eight named agents (Teznevise, Christina AI, Ada AI, Professor, Parantez, Elara Voss, Cyrus Lex, Dr. Mira Sato) with original SVG marks, identity lock, per-agent SKILL.md, and OpenRouter free primary/fallback slots.
+- Debate pipeline: You/Tavily research → Teznevise overview → topic first-responder → peer reviewer → Ada→Professor→Parantez→Elara→Cyrus→Mira → optional text visualizer → Teznevise synthesis. Internal reasoning stays in `<thought>` tags.
+- wp-admin hub «تزنویسه»: keys, roster models, last jobs, waitlist count, free-model catalog.
+- ChatGPT composer: named-agent picker, thinking mode, typewriter streaming of the public reply.
+- Dual-tab AI comments use the named roster (avatars + collapsible thoughts). Legacy آوا/پارسا/نیکا defaults are replaced on render if still stored.
+- Mega-menu hover-intent open delay + grace timeout. Samandehi admin leftover removed; footer stays Enamad + TrustedSite.
+
 ## 1.9.11 — 2026-08-23 — Consulting site, Enamad, dashboard
 
 - Public copy is consulting + tools: runtime rewrite of ghostwriting claims on titles, content, builder sections, and page fields.

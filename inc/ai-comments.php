@@ -14,46 +14,46 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function teznevise_ai_comment_defaults() {
+	$speakers = array();
+	$order    = 1;
+	if ( function_exists( 'teznevise_core_agent_roster' ) ) {
+		foreach ( teznevise_core_agent_roster() as $id => $row ) {
+			$speakers[] = array(
+				'name'   => $row['name'],
+				'slug'   => $id,
+				'role'   => $row['role'],
+				'tags'   => $row['role'],
+				'prompt' => $row['system_prompt'],
+				'color'  => $row['color'],
+				'order'  => $order,
+				'active' => 1,
+			);
+			++$order;
+		}
+	}
+	if ( ! $speakers ) {
+		$speakers = array(
+			array(
+				'name'   => 'Teznevise',
+				'slug'   => 'teznevise',
+				'role'   => 'synthesizer',
+				'tags'   => 'ترکیب',
+				'prompt' => 'Synthesize the panel in Persian.',
+				'color'  => '#145d4a',
+				'order'  => 1,
+				'active' => 1,
+			),
+		);
+	}
 	return array(
-		'enabled'            => '1',
-		'auto_on_publish'    => '0',
-		'interaction'        => 'round_robin',
-		'max_turns'          => 4,
-		'model'              => '',
-		'agent_id'           => 'general',
-		'discussion_prompt'  => 'You are a panel of Persian academic reviewers discussing this article. Be specific, cite claims from the post AND from the You research brief, disagree politely, and end with a practical takeaway for graduate students. Never invent sources. Quote the article when you challenge it.',
-		'speakers'           => array(
-			array(
-				'name'     => 'دکتر آوا — روش تحقیق',
-				'slug'     => 'ava-method',
-				'role'     => 'methodologist',
-				'tags'     => 'روش تحقیق,روایی',
-				'prompt'   => 'Focus on research design, sampling, and validity. Speak in Persian as a senior methodologist. Cite the post, then the You research brief.',
-				'color'    => '#0f766e',
-				'order'    => 1,
-				'active'   => 1,
-			),
-			array(
-				'name'     => 'پارسا — آمار کاربردی',
-				'slug'     => 'parsa-stats',
-				'role'     => 'statistician',
-				'tags'     => 'آمار,تحلیل',
-				'prompt'   => 'Challenge measurement and analysis choices. Offer a concrete test or metric. Persian. Reply to the previous speaker when useful.',
-				'color'    => '#1d4ed8',
-				'order'    => 2,
-				'active'   => 1,
-			),
-			array(
-				'name'     => 'نیکا — نگارش علمی',
-				'slug'     => 'nika-writing',
-				'role'     => 'editor',
-				'tags'     => 'نگارش,ساختار',
-				'prompt'   => 'Comment on argument structure and what a thesis chapter should take from this post. Persian. Branch from the statistician when you disagree.',
-				'color'    => '#7c3aed',
-				'order'    => 3,
-				'active'   => 1,
-			),
-		),
+		'enabled'           => '1',
+		'auto_on_publish'   => '0',
+		'interaction'       => 'named_roster',
+		'max_turns'         => 8,
+		'model'             => '',
+		'agent_id'          => 'teznevise',
+		'discussion_prompt' => 'You are a named Teznevise consulting panel. Be specific, cite the post and the research brief, disagree politely, and never ghostwrite. Never invent sources.',
+		'speakers'          => $speakers,
 	);
 }
 
@@ -62,6 +62,16 @@ function teznevise_ai_comment_settings() {
 	$stored   = is_array( $stored ) ? $stored : array();
 	$defaults = teznevise_ai_comment_defaults();
 	$out      = array_merge( $defaults, $stored );
+	$slugs    = array();
+	foreach ( (array) ( $out['speakers'] ?? array() ) as $row ) {
+		$slugs[] = $row['slug'] ?? '';
+	}
+	$legacy = array( 'ava-method', 'parsa-stats', 'nika-writing' );
+	if ( $slugs === $legacy || ! array_intersect( $slugs, function_exists( 'teznevise_core_named_ids' ) ? teznevise_core_named_ids() : array() ) ) {
+		$out['speakers'] = $defaults['speakers'];
+		$out['agent_id'] = 'teznevise';
+		$out['interaction'] = 'named_roster';
+	}
 	if ( empty( $out['speakers'] ) || ! is_array( $out['speakers'] ) ) {
 		$out['speakers'] = $defaults['speakers'];
 	}
@@ -138,6 +148,7 @@ function teznevise_ai_discussion_get( $post_id ) {
 				'content' => $c->comment_content,
 				'thought' => (string) get_comment_meta( $c->comment_ID, 'tz_ai_thought', true ),
 				'human'   => (bool) get_comment_meta( $c->comment_ID, 'tz_human_moderator', true ),
+				'avatar'  => (string) get_comment_meta( $c->comment_ID, 'tz_ai_avatar', true ),
 			);
 		}
 	}
@@ -193,6 +204,14 @@ function teznevise_render_ai_discussion_branch( $by_parent, $parent_id ) {
 		echo '<li id="ai-comment-' . esc_attr( $id ) . '" class="tz-ai-comment tz-thread-item' . ( $human ? ' is-human' : '' ) . '" style="--tz-commenter:' . esc_attr( $color ) . '">';
 		echo '<article>';
 		echo '<header class="comment-author tz-thread-item__meta">';
+		$avatar = (string) ( $item['avatar'] ?? '' );
+		$slug   = sanitize_key( $item['slug'] ?? '' );
+		if ( ! $avatar && $slug && function_exists( 'teznevise_core_agent_logo_url' ) ) {
+			$avatar = teznevise_core_agent_logo_url( $slug );
+		}
+		if ( $avatar ) {
+			echo '<img class="tz-agent-mark" src="' . esc_url( $avatar ) . '" width="36" height="36" alt="' . esc_attr( $item['name'] ?? '' ) . '" title="' . esc_attr( $item['name'] ?? '' ) . '" />';
+		}
 		echo '<strong class="tz-thread-item__name">' . esc_html( $item['name'] ?? '' ) . '</strong>';
 		if ( ! empty( $item['role'] ) ) {
 			echo ' <span class="tz-ai-role tz-thread-item__role">' . esc_html( $item['role'] ) . '</span>';

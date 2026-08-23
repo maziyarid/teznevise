@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  document.documentElement.classList.add('js');
   document.querySelectorAll('[data-seo-toggle], [data-content-toggle]').forEach(function (seoToggle) {
     const targetId = seoToggle.getAttribute('aria-controls');
     let seoMore = targetId ? document.getElementById(targetId) : null;

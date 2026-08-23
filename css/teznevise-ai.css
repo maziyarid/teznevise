@@ -270,6 +270,47 @@
   gap: 8px;
 }
 .tz-gpt-hint { margin: 8px 6px 0; font-size: 0.78rem; color: #5a7268; }
+.tz-gpt-agents {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 16px 0;
+  scrollbar-width: thin;
+}
+.tz-gpt-agent {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(20, 93, 74, 0.16);
+  background: #fff;
+  color: #145d4a;
+  border-radius: 999px;
+  min-height: 40px;
+  padding: 4px 12px 4px 4px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tz-gpt-agent img {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+.tz-gpt-agent.is-on,
+.tz-gpt-agent[aria-selected="true"] {
+  background: #145d4a;
+  color: #fff;
+  border-color: #145d4a;
+}
+.tz-ai-msg__avatar img {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+}
 .tz-ai-msg.is-user {
   margin-inline-start: auto;
   grid-template-columns: minmax(0, 1fr) 36px;

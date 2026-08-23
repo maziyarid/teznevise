@@ -70,6 +70,13 @@ class Teznevise_Model_Router {
 		$own_model    = (string) ( $agent['model'] ?? '' );
 		$own_is_free  = ( false !== strpos( $own_model, ':free' ) );
 
+		$agent_id = sanitize_key( $agent['agent_id'] ?? '' );
+		if ( $agent_id && function_exists( 'teznevise_core_agent_models' ) && function_exists( 'teznevise_core_named_ids' ) && in_array( $agent_id, teznevise_core_named_ids(), true ) ) {
+			$assigned = teznevise_core_agent_models( $agent_id );
+			$push( 'openrouter', $assigned['primary'] ?? '' );
+			$push( 'openrouter', $assigned['fallback'] ?? '' );
+		}
+
 		$free = self::pick( $text, $job );
 		$push( 'openrouter', $free );
 		foreach ( array( 'simple', 'medium', 'complex', 'long_context', 'reasoning' ) as $slot ) {

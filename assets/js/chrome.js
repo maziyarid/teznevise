@@ -89,12 +89,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.documentElement.classList.add('js');
   document.querySelectorAll('[data-seo-toggle], [data-content-toggle]').forEach(function (seoToggle) {
-    const wrap = seoToggle.closest('.tz-classic-disclosure, .seo-disclosure, .seo-panel');
     const targetId = seoToggle.getAttribute('aria-controls');
     let seoMore = targetId ? document.getElementById(targetId) : null;
-    if (!seoMore && wrap) {
-      seoMore = wrap.querySelector('.seo-more-content');
-    }
     if (!seoMore) {
       seoMore = seoToggle.closest('.seo-disclosure, .seo-panel, .tz-classic-disclosure');
       if (seoMore) seoMore = seoMore.querySelector('.seo-more-content');
@@ -102,16 +98,18 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!seoMore) return;
     seoMore.hidden = false;
     seoMore.removeAttribute('hidden');
-    seoToggle.setAttribute('aria-expanded', wrap && !wrap.classList.contains('is-collapsed') ? 'true' : 'false');
+    seoMore.classList.remove('is-open');
+    seoToggle.setAttribute('aria-expanded', 'false');
     seoToggle.addEventListener('click', function (e) {
       e.preventDefault();
       const isOpen = seoToggle.getAttribute('aria-expanded') === 'true';
       const next = !isOpen;
       seoToggle.setAttribute('aria-expanded', String(next));
       seoMore.classList.toggle('is-open', next);
-      if (wrap) wrap.classList.toggle('is-collapsed', !next);
       const label = seoToggle.querySelector('.seo-more-text');
-      if (label) label.textContent = next ? 'بستن' : 'ادامه مطلب';
+      const mark = seoToggle.querySelector('.seo-more-mark');
+      if (label) label.textContent = next ? 'مشاهده کمتر' : 'مشاهده بیشتر';
+      if (mark) mark.textContent = next ? '⌃' : '‹';
     });
   });
 
@@ -619,8 +617,8 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!toggles.length) return;
 
   var supportsHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;
-  var closeDelay = 180;
-  var openDelay = 140;
+  var openDelay = 180;
+  var closeDelay = 220;
   var closeTimer = null;
   var openTimer = null;
 
@@ -640,10 +638,26 @@ document.addEventListener('DOMContentLoaded', function () {
       clearTimeout(closeTimer);
       closeTimer = null;
     }
+    if (openTimer) {
+      clearTimeout(openTimer);
+      openTimer = null;
+    }
     closeAll(toggle);
     toggle.setAttribute('aria-expanded', 'true');
     panel.classList.add('is-open');
     toggle.parentElement.classList.add('is-open');
+  }
+
+  function scheduleOpen(toggle, panel) {
+    if (closeTimer) {
+      clearTimeout(closeTimer);
+      closeTimer = null;
+    }
+    if (openTimer) clearTimeout(openTimer);
+    openTimer = setTimeout(function () {
+      openToggle(toggle, panel);
+      openTimer = null;
+    }, openDelay);
   }
 
   function closeToggle(toggle, panel) {
@@ -680,15 +694,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (supportsHover && !inMobileDrawer) {
       parentItem.addEventListener('mouseenter', function () {
-        if (closeTimer) {
-          clearTimeout(closeTimer);
-          closeTimer = null;
-        }
-        if (openTimer) clearTimeout(openTimer);
-        openTimer = setTimeout(function () {
-          openToggle(toggle, panel);
-          openTimer = null;
-        }, openDelay);
+        scheduleOpen(toggle, panel);
       });
       parentItem.addEventListener('mouseleave', function () {
         if (openTimer) {
@@ -718,37 +724,12 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-/* ===== react-loader.js ===== */
+/* ===== chrome-extras.js ===== */
 /**
- * Front-end boot that matches the React SiteShell loader.
- * Search overlay behaviour lives in the product-1.7 block of chrome.js.
+ * Front-end extras that must ship with chrome.js: crawler-safe tabs, AI summary, SERP overview.
+ *
+ * @package Teznevise
  */
-document.addEventListener('DOMContentLoaded', function () {
-  var root = document.documentElement;
-  if (!root.getAttribute('lang')) {
-    root.setAttribute('lang', 'fa');
-  }
-  if (!root.getAttribute('dir')) {
-    root.setAttribute('dir', 'rtl');
-  }
-  document.body.classList.add('tz-react-shell');
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.tz-interactive-page-content table, .tool-body table, [class*="tz"] table').forEach(function (table) {
-    if (table.querySelector('caption')) return;
-    var caption = document.createElement('caption');
-    caption.className = 'screen-reader-text';
-    caption.textContent = 'نتایج محاسبه';
-    table.insertBefore(caption, table.firstChild);
-  });
-  document.querySelectorAll('.tz-interactive-page-content, .tool-body').forEach(function (box) {
-    if (!box.hasAttribute('aria-live')) {
-      box.setAttribute('aria-live', 'polite');
-    }
-  });
-});
-
 document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('[data-comment-tabs]').forEach(function (tabs) {
     var root = tabs.closest('.tz-comments') || document;
@@ -826,5 +807,36 @@ document.addEventListener('DOMContentLoaded', function () {
       .catch(function () {
         body.textContent = 'جمع‌بندی در دسترس نیست.';
       });
+  });
+});
+
+/* ===== react-loader.js ===== */
+/**
+ * Front-end boot that matches the React SiteShell loader.
+ * Search overlay behaviour lives in the product-1.7 block of chrome.js.
+ */
+document.addEventListener('DOMContentLoaded', function () {
+  var root = document.documentElement;
+  if (!root.getAttribute('lang')) {
+    root.setAttribute('lang', 'fa');
+  }
+  if (!root.getAttribute('dir')) {
+    root.setAttribute('dir', 'rtl');
+  }
+  document.body.classList.add('tz-react-shell');
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.tz-interactive-page-content table, .tool-body table, [class*="tz"] table').forEach(function (table) {
+    if (table.querySelector('caption')) return;
+    var caption = document.createElement('caption');
+    caption.className = 'screen-reader-text';
+    caption.textContent = 'نتایج محاسبه';
+    table.insertBefore(caption, table.firstChild);
+  });
+  document.querySelectorAll('.tz-interactive-page-content, .tool-body').forEach(function (box) {
+    if (!box.hasAttribute('aria-live')) {
+      box.setAttribute('aria-live', 'polite');
+    }
   });
 });

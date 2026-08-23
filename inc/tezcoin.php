@@ -24,7 +24,6 @@ function teznevise_tezcoin_defaults() {
 		'pack_3_coins'    => 3000,
 		'pack_3_irr'      => 2200000,
 		'enamad_url'      => '',
-		'samandehi_url'   => '',
 		'openrouter_key'  => '',
 		'youcom_key'      => '',
 		'tavily_key'      => '',
@@ -195,8 +194,6 @@ function teznevise_tezcoin_admin_page() {
 					<td>سکه <input name="pack_3_coins" dir="ltr" value="<?php echo esc_attr( $d['pack_3_coins'] ); ?>"> ریال <input name="pack_3_irr" dir="ltr" value="<?php echo esc_attr( $d['pack_3_irr'] ); ?>"></td></tr>
 				<tr><th><label for="enamad_url"><?php esc_html_e( 'لینک اینماد', 'teznevise' ); ?></label></th>
 					<td><input name="enamad_url" id="enamad_url" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['enamad_url'] ); ?>"></td></tr>
-				<tr><th><label for="samandehi_url"><?php esc_html_e( 'لینک ساماندهی', 'teznevise' ); ?></label></th>
-					<td><input name="samandehi_url" id="samandehi_url" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['samandehi_url'] ); ?>"></td></tr>
 				<tr><th><label for="openrouter_key"><?php esc_html_e( 'کلید OpenRouter', 'teznevise' ); ?></label></th>
 					<td><input name="openrouter_key" id="openrouter_key" class="regular-text" dir="ltr" value="<?php echo esc_attr( $d['openrouter_key'] ); ?>"></td></tr>
 				<tr><th><label for="youcom_key"><?php esc_html_e( 'کلید you.com', 'teznevise' ); ?></label></th>

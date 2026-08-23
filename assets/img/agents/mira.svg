@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="miTitle miDesc">
+  <title id="miTitle">Dr. Mira Sato</title>
+  <desc id="miDesc">نشان Dr. Mira Sato — علوم پزشکی و STEM</desc>
+  <rect width="64" height="64" rx="16" fill="#be123c"/>
+  <path d="M24 12c8 10 8 30 0 40M40 12c-8 10-8 30 0 40" fill="none" stroke="#fecdd3" stroke-width="3"/>
+  <circle cx="32" cy="22" r="4" fill="#fecdd3"/>
+  <circle cx="32" cy="42" r="4" fill="#fecdd3"/>
+  <circle cx="24" cy="32" r="4" fill="#fde68a"/>
+  <circle cx="40" cy="32" r="4" fill="#fde68a"/>
+  <path d="M44 44l8 8" stroke="#ffedd5" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="52" cy="52" r="4" fill="none" stroke="#ffedd5" stroke-width="3"/>
+</svg>

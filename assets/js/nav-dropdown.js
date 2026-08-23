@@ -14,8 +14,10 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!toggles.length) return;
 
   var supportsHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;
-  var closeDelay = 160;
+  var openDelay = 180;
+  var closeDelay = 220;
   var closeTimer = null;
+  var openTimer = null;
 
   function closeAll(except) {
     toggles.forEach(function (toggle) {
@@ -33,10 +35,26 @@ document.addEventListener('DOMContentLoaded', function () {
       clearTimeout(closeTimer);
       closeTimer = null;
     }
+    if (openTimer) {
+      clearTimeout(openTimer);
+      openTimer = null;
+    }
     closeAll(toggle);
     toggle.setAttribute('aria-expanded', 'true');
     panel.classList.add('is-open');
     toggle.parentElement.classList.add('is-open');
+  }
+
+  function scheduleOpen(toggle, panel) {
+    if (closeTimer) {
+      clearTimeout(closeTimer);
+      closeTimer = null;
+    }
+    if (openTimer) clearTimeout(openTimer);
+    openTimer = setTimeout(function () {
+      openToggle(toggle, panel);
+      openTimer = null;
+    }, openDelay);
   }
 
   function closeToggle(toggle, panel) {
@@ -72,16 +90,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     if (supportsHover && !inMobileDrawer) {
-      var link = parentItem.querySelector(':scope > a.nav-link, :scope > a, :scope > .nav-link');
-      var hoverTargets = [panel];
-      if (link) hoverTargets.push(link);
-      hoverTargets.forEach(function (el) {
-        el.addEventListener('mouseenter', function () {
-          openToggle(toggle, panel);
-        });
-        el.addEventListener('mouseleave', function () {
-          scheduleClose(toggle, panel);
-        });
+      parentItem.addEventListener('mouseenter', function () {
+        scheduleOpen(toggle, panel);
+      });
+      parentItem.addEventListener('mouseleave', function () {
+        if (openTimer) {
+          clearTimeout(openTimer);
+          openTimer = null;
+        }
+        scheduleClose(toggle, panel);
       });
     }
 

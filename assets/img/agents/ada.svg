@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="adaTitle adaDesc">
+  <title id="adaTitle">Ada AI</title>
+  <desc id="adaDesc">نشان Ada AI — تحلیل‌گر داده و کد</desc>
+  <rect width="64" height="64" rx="16" fill="#1d4ed8"/>
+  <path d="M32 12l16 40h-8l-3-8H27l-3 8h-8L32 12zm0 14l-5 14h10l-5-14z" fill="#dbeafe"/>
+  <circle cx="14" cy="18" r="2" fill="#93c5fd"/>
+  <circle cx="20" cy="18" r="2" fill="#93c5fd"/>
+  <circle cx="14" cy="24" r="2" fill="#93c5fd"/>
+  <circle cx="50" cy="46" r="2" fill="#93c5fd"/>
+</svg>

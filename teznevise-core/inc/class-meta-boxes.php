@@ -88,7 +88,7 @@ JS;
 		echo '<p><button type="button" class="button" id="tz-skill-md-pick">' . esc_html__( 'بارگذاری فایل SKILL.md از رسانه', 'teznevise' ) . '</button> ';
 		echo '<input type="hidden" name="teznevise_skill_md_id" id="tz-skill-md-id" value="' . esc_attr( (string) $skill_id ) . '" />';
 		echo '<span id="tz-skill-md-name">' . esc_html( $skill_name ? $skill_name : ( $skill_id ? '#' . $skill_id : '' ) ) . '</span></p>';
-		echo '<p class="description">' . esc_html__( 'فقط فایل .md یا .txt همین نوشته. فایل سراسری وجود ندارد.', 'teznevise' ) . '</p></fieldset>';
+		echo '<p class="description">' . esc_html__( 'این متن روی SKILL.md سراسری همان عامل می‌نشیند. فایل سراسری در teznevise-core/skills/{id}.md است.', 'teznevise' ) . '</p></fieldset>';
 
 		echo '<p><label>' . esc_html__( 'پیش‌اندیشه‌ها (کاهش توکن)', 'teznevise' ) . '</label><textarea class="widefat" rows="4" name="pre_computed_thoughts">' . esc_textarea( $pre ) . '</textarea></p>';
 		echo '<p>' . esc_html__( 'منابع اجباری', 'teznevise' ) . '</p>';

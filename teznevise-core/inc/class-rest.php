@@ -98,11 +98,12 @@ class Teznevise_REST {
 		$tools = self::collect_titles( $q, array( 'page' ), 6 );
 		$posts = self::collect_titles( $q, array( 'post' ), 6 );
 		$blob  = $q . "\n" . implode( "\n", $tools ) . "\n" . implode( "\n", $posts );
-		$agent = Teznevise_Agent_Registry::get( 'general' ) ?: array(
-			'alias'                => 'مرور تزنویسه',
-			'displayed_model_name' => 'مرور تزنویسه',
+		$agent = Teznevise_Agent_Registry::get( 'teznevise' ) ?: Teznevise_Agent_Registry::get( 'general' ) ?: array(
+			'alias'                => 'تزنویسه',
+			'displayed_model_name' => 'تزنویسه',
 			'provider'             => 'openrouter',
 			'model'                => '',
+			'agent_id'             => 'teznevise',
 		);
 		$prompt = Teznevise_Agent_Registry::identity_lock( $agent );
 		$prompt .= "\nWrite a short Persian AI overview of this search, citing [1] [2] for the listed results. 80–120 words.";

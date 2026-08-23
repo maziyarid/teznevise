@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="prTitle prDesc">
+  <title id="prTitle">Professor</title>
+  <desc id="prDesc">نشان Professor — روش‌شناس پژوهش</desc>
+  <rect width="64" height="64" rx="16" fill="#0f766e"/>
+  <path d="M8 28l24-12 24 12-24 8z" fill="#ccfbf1"/>
+  <path d="M16 32v10c6 6 26 6 32 0V32" fill="none" stroke="#99f6e4" stroke-width="3"/>
+  <rect x="30" y="36" width="4" height="14" fill="#fde68a"/>
+  <circle cx="32" cy="22" r="3" fill="#0f766e"/>
+</svg>

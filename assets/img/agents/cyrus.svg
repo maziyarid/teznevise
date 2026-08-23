@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="cyTitle cyDesc">
+  <title id="cyTitle">Cyrus Lex</title>
+  <desc id="cyDesc">نشان Cyrus Lex — استدلال حقوقی و سیاستی</desc>
+  <rect width="64" height="64" rx="16" fill="#b45309"/>
+  <rect x="28" y="14" width="8" height="36" rx="1" fill="#ffedd5"/>
+  <rect x="16" y="48" width="32" height="5" rx="1" fill="#ffedd5"/>
+  <path d="M12 28h16M36 28h16M20 28v8M44 28v8" stroke="#fde68a" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="20" cy="24" r="4" fill="#fde68a"/>
+  <circle cx="44" cy="24" r="4" fill="#fde68a"/>
+</svg>
