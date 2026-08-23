@@ -81,7 +81,8 @@ JS;
 		if ( $job ) {
 			echo '<p><strong>' . esc_html( sprintf( __( 'وضعیت صف: %s', 'teznevise' ), $job ) ) . '</strong></p>';
 		}
-		echo '<p><label><input type="checkbox" name="teznevise_ai_generate" value="1" /> ' . esc_html__( 'با ذخیره مطلب، پژوهش و مناظره تولید شود', 'teznevise' ) . '</label></p>';
+		echo '<p><label><input type="checkbox" name="teznevise_ai_generate" value="1" /> ' . esc_html__( 'با ذخیره مطلب، پژوهش و مناظره (دوباره) تولید شود', 'teznevise' ) . '</label></p>';
+		echo '<p><label><input type="checkbox" name="teznevise_ai_overview_force" value="1" /> ' . esc_html__( 'بازنویسی نمای کلی (برچسب بازبینی انسانی پاک می‌شود)', 'teznevise' ) . '</label></p>';
 
 		echo '<fieldset class="tz-skill-box" style="border:1px solid #dfe9e5;padding:12px 14px;border-radius:8px;margin:12px 0"><legend>' . esc_html__( 'SKILL.md همین مطلب (نه سراسری)', 'teznevise' ) . '</legend>';
 		echo '<p><textarea class="widefat" rows="6" name="teznevise_skill_md" placeholder="' . esc_attr__( 'مهارت، قالب خروجی، منابع مجاز…', 'teznevise' ) . '">' . esc_textarea( $skill ) . '</textarea></p>';
@@ -211,6 +212,9 @@ JS;
 		$auto    = false;
 		if ( function_exists( 'teznevise_ai_comment_settings' ) ) {
 			$auto = ! empty( teznevise_ai_comment_settings()['auto_on_publish'] ) && 'publish' === $post->post_status;
+		}
+		if ( ! empty( $_POST['teznevise_ai_overview_force'] ) ) {
+			update_post_meta( $post_id, '_teznevise_ai_overview_force', '1' );
 		}
 		if ( $clicked || $auto ) {
 			Teznevise_Debate_Orchestrator::schedule( $post_id, (bool) $clicked );

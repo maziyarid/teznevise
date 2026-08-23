@@ -1,0 +1,82 @@
+/**
+ * 1.9.13 last-wins: auto AI overview + human-review badge + skill chips.
+ */
+.tz-ai-overview {
+  margin: 0 0 var(--tz-space-6, 1.5rem);
+  padding: 16px 18px 18px;
+  border: 1px solid rgba(20, 93, 74, 0.14);
+  border-radius: 18px;
+  background:
+    radial-gradient(800px 160px at 100% 0%, rgba(130, 216, 185, 0.16), transparent 55%),
+    #f7fbf9;
+}
+.tz-ai-overview__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.tz-ai-overview__head h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.tz-human-review {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #145d4a;
+  background: #e7f6ef;
+  border: 1px solid #82d8b9;
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.tz-human-review::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  background: #145d4a;
+}
+.tz-ai-overview.is-human-reviewed {
+  border-color: #82d8b9;
+}
+.tz-ai-overview__body {
+  line-height: 1.85;
+  color: #10231d;
+}
+.tz-ai-overview__pending {
+  margin: 0;
+  color: #4d655c;
+}
+.tz-ai-overview .btn-tz {
+  margin-top: 10px;
+}
+.tz-gpt-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 16px 0;
+}
+.tz-gpt-skill {
+  border: 1px solid rgba(20, 93, 74, 0.16);
+  background: #fff;
+  color: #145d4a;
+  border-radius: 999px;
+  min-height: 36px;
+  padding: 4px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tz-gpt-skill.is-on,
+.tz-gpt-skill[aria-pressed="true"] {
+  background: #145d4a;
+  color: #fff;
+  border-color: #145d4a;
+}
+.wrap .tz-human-review {
+  margin-top: 6px;
+}

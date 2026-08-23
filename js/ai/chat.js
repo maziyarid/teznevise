@@ -146,11 +146,39 @@
     var fullBtn = root.querySelector('[data-ai-full]');
     var newBtn = root.querySelector('[data-ai-new]');
     var chips = root.querySelectorAll('[data-agent-pick]');
+    var skillBox = root.querySelector('[data-ai-skills]');
+    var activeSkill = '';
     if (!form || !input || !log) return;
     var sessionId = '';
     var greeting = log.innerHTML;
     var history = [];
     var storageKey = 'tz-ai-chat-' + (root.getAttribute('data-tool-id') || 'general');
+
+    function renderSkills(id) {
+      activeSkill = '';
+      if (!skillBox) return;
+      var list = (cfg().skills && cfg().skills[id]) ? cfg().skills[id] : [];
+      skillBox.innerHTML = '';
+      if (!list.length) {
+        skillBox.hidden = true;
+        return;
+      }
+      skillBox.hidden = false;
+      list.forEach(function (sk) {
+        var b = el('button', 'tz-gpt-skill', sk.name || sk.id);
+        b.type = 'button';
+        b.setAttribute('data-skill-pick', sk.id);
+        b.title = sk.description || sk.name || '';
+        b.addEventListener('click', function () {
+          var on = activeSkill === sk.id;
+          activeSkill = on ? '' : sk.id;
+          skillBox.querySelectorAll('[data-skill-pick]').forEach(function (n) {
+            n.classList.toggle('is-on', n.getAttribute('data-skill-pick') === activeSkill);
+          });
+        });
+        skillBox.appendChild(b);
+      });
+    }
 
     function syncChips(id) {
       chips.forEach(function (btn) {
@@ -158,6 +186,7 @@
         btn.classList.toggle('is-on', on);
         btn.setAttribute('aria-selected', on ? 'true' : 'false');
       });
+      renderSkills(id);
     }
 
     chips.forEach(function (btn) {
@@ -172,6 +201,9 @@
       agentSel.addEventListener('change', function () {
         syncChips(agentSel.value);
       });
+      renderSkills(agentSel.value);
+    } else {
+      renderSkills(root.getAttribute('data-agent-id') || '');
     }
 
     function persist() {
@@ -259,6 +291,7 @@
           message: text,
           session_id: sessionId,
           agent_id: agentId,
+          skill_id: activeSkill || '',
           collaboration_mode: collab,
           thinking_enabled: thinkingOn,
         }),

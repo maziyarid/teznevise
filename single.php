@@ -73,13 +73,10 @@ while ( have_posts() ) :
 					<div class="blog-post__content entry-content article-content longcopy" data-reveal>
 						<?php
 						$takeaways = teznevise_blog_field( 'takeaways', $post_id );
+						if ( function_exists( 'teznevise_render_ai_overview' ) ) {
+							teznevise_render_ai_overview( $post_id );
+						}
 						?>
-							<section class="tz-ai-overview" data-ai-summary="<?php echo (int) $post_id; ?>">
-								<h2><?php esc_html_e( 'خلاصهٔ نکات کلیدی با هوش مصنوعی', 'teznevise' ); ?></h2>
-								<button type="button" class="btn-tz btn-light-tz" data-ai-summary-btn><?php esc_html_e( 'خلاصه‌کردن نکات کلیدی', 'teznevise' ); ?></button>
-								<div class="tz-ai-overview__out" data-ai-summary-out hidden></div>
-							</section>
-						<?php
 						if ( $takeaways ) :
 							$lines = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $takeaways ) ) );
 							if ( $lines ) :

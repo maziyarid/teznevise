@@ -47,7 +47,7 @@ function teznevise_ai_comment_defaults() {
 	}
 	return array(
 		'enabled'           => '1',
-		'auto_on_publish'   => '0',
+		'auto_on_publish'   => '1',
 		'interaction'       => 'named_roster',
 		'max_turns'         => 8,
 		'model'             => '',

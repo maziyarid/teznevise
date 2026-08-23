@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.13 — 2026-08-23 — Auto overview, human review, agent skills
+
+- Named agents now ship with relevant skills (overview, chapter outline, test choice, ethics, etc.) in SKILL.md, the skills table, chat chips, and the تزنویسه hub.
+- AI overview is generated automatically for every published post (new + existing backfill queue) together with the named-agent debate. One post at a time so the API quota is not burned.
+- Editing the overview in the post editor adds a public «بازبینی انسانی» badge. Later AI runs keep the human text unless you explicitly force a rewrite.
+
 ## 1.9.12 — 2026-08-23 — Named 8-agent roster, debate pipeline, admin hub
 
 - Eight named agents (Teznevise, Christina AI, Ada AI, Professor, Parantez, Elara Voss, Cyrus Lex, Dr. Mira Sato) with original SVG marks, identity lock, per-agent SKILL.md, and OpenRouter free primary/fallback slots.

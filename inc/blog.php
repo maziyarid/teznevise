@@ -19,7 +19,7 @@ function teznevise_blog_fields() {
 		'_teznevise_hide_toc'        => array( 'label' => __( 'Hide table of contents', 'teznevise' ), 'type' => 'checkbox' ),
 		'_teznevise_related_heading' => array( 'label' => __( 'Related posts heading', 'teznevise' ), 'type' => 'text' ),
 		'_teznevise_takeaways'       => array( 'label' => __( 'Key takeaways (one per line)', 'teznevise' ), 'type' => 'textarea' ),
-		'_teznevise_ai_overview'     => array( 'label' => __( 'AI overview', 'teznevise' ), 'type' => 'textarea' ),
+		'_teznevise_ai_overview'     => array( 'label' => __( 'نمای کلی هوش مصنوعی', 'teznevise' ), 'type' => 'textarea' ),
 	);
 }
 
@@ -35,7 +35,14 @@ function teznevise_render_blog_meta_box( $post ) {
 	foreach ( teznevise_blog_fields() as $key => $field ) {
 		echo '<tr><th scope="row"><label for="' . esc_attr( $key ) . '">' . esc_html( $field['label'] ) . '</label></th><td>';
 		if ( 'textarea' === $field['type'] ) {
-			printf( '<textarea class="large-text" rows="3" id="%1$s" name="%1$s">%2$s</textarea>', esc_attr( $key ), esc_textarea( get_post_meta( $post->ID, $key, true ) ) );
+			printf( '<textarea class="large-text" rows="5" id="%1$s" name="%1$s">%2$s</textarea>', esc_attr( $key ), esc_textarea( get_post_meta( $post->ID, $key, true ) ) );
+			if ( '_teznevise_ai_overview' === $key ) {
+				$reviewed = '1' === (string) get_post_meta( $post->ID, '_teznevise_ai_overview_reviewed', true );
+				echo '<p class="description">' . esc_html__( 'اگر این متن را ویرایش و ذخیره کنید، برچسب «بازبینی انسانی» روی مطلب نمایش داده می‌شود. تولید مجدد هوش مصنوعی آن را بازنویسی نمی‌کند مگر گزینه بازنویسی را بزنید.', 'teznevise' ) . '</p>';
+				if ( $reviewed ) {
+					echo '<p><span class="tz-human-review">' . esc_html__( 'بازبینی انسانی', 'teznevise' ) . '</span></p>';
+				}
+			}
 		} elseif ( 'checkbox' === $field['type'] ) {
 			printf( '<label><input type="checkbox" id="%1$s" name="%1$s" value="1" %2$s> %3$s</label>', esc_attr( $key ), checked( get_post_meta( $post->ID, $key, true ), '1', false ), esc_html__( 'Disable the table of contents for this post.', 'teznevise' ) );
 		} else {
@@ -57,6 +64,9 @@ function teznevise_save_blog_fields( $post_id ) {
 		}
 		$value = isset( $_POST[ $key ] ) ? wp_unslash( $_POST[ $key ] ) : '';
 		$value = 'textarea' === $field['type'] ? sanitize_textarea_field( $value ) : sanitize_text_field( $value );
+		if ( '_teznevise_ai_overview' === $key ) {
+			teznevise_mark_overview_human_review( $post_id, $value );
+		}
 		'' === $value ? delete_post_meta( $post_id, $key ) : update_post_meta( $post_id, $key, $value );
 	}
 }
@@ -65,6 +75,76 @@ add_action( 'save_post_post', 'teznevise_save_blog_fields' );
 function teznevise_blog_field( $key, $post_id = 0, $fallback = '' ) {
 	$value = get_post_meta( $post_id ? $post_id : get_the_ID(), '_teznevise_' . $key, true );
 	return '' !== $value ? $value : $fallback;
+}
+
+/**
+ * Flag an edited AI overview as human-reviewed.
+ *
+ * @param int    $post_id Post ID.
+ * @param string $value   Submitted overview text.
+ */
+function teznevise_mark_overview_human_review( $post_id, $value ) {
+	$post_id  = (int) $post_id;
+	$value    = trim( (string) $value );
+	$previous = trim( (string) get_post_meta( $post_id, '_teznevise_ai_overview', true ) );
+	$ai_copy  = trim( (string) get_post_meta( $post_id, '_teznevise_ai_overview_ai', true ) );
+	if ( '' === $value ) {
+		return;
+	}
+	if ( '' !== $ai_copy && $value === $ai_copy ) {
+		delete_post_meta( $post_id, '_teznevise_ai_overview_reviewed' );
+		delete_post_meta( $post_id, '_teznevise_ai_overview_reviewed_at' );
+		delete_post_meta( $post_id, '_teznevise_ai_overview_reviewed_by' );
+		return;
+	}
+	if ( $value !== $previous ) {
+		update_post_meta( $post_id, '_teznevise_ai_overview_reviewed', '1' );
+		update_post_meta( $post_id, '_teznevise_ai_overview_reviewed_at', time() );
+		update_post_meta( $post_id, '_teznevise_ai_overview_reviewed_by', get_current_user_id() );
+	}
+}
+
+function teznevise_overview_is_human_reviewed( $post_id = 0 ) {
+	$post_id = $post_id ? (int) $post_id : (int) get_the_ID();
+	return '1' === (string) get_post_meta( $post_id, '_teznevise_ai_overview_reviewed', true );
+}
+
+/**
+ * Front-end AI overview: auto-rendered, with human-review badge when edited.
+ *
+ * @param int $post_id Post ID.
+ */
+function teznevise_render_ai_overview( $post_id ) {
+	$post_id  = (int) $post_id;
+	$text     = teznevise_blog_field( 'ai_overview', $post_id );
+	$reviewed = teznevise_overview_is_human_reviewed( $post_id );
+	$job      = (string) get_post_meta( $post_id, '_teznevise_ai_job', true );
+	$bullets  = get_post_meta( $post_id, '_teznevise_ai_summary_bullets', true );
+	echo '<section class="tz-ai-overview' . ( $text ? ' is-ready' : ' is-pending' ) . ( $reviewed ? ' is-human-reviewed' : '' ) . '" data-ai-summary="' . esc_attr( (string) $post_id ) . '">';
+	echo '<header class="tz-ai-overview__head">';
+	echo '<h2>' . esc_html__( 'نمای کلی هوش مصنوعی', 'teznevise' ) . '</h2>';
+	if ( $reviewed && $text ) {
+		echo '<span class="tz-human-review">' . esc_html__( 'بازبینی انسانی', 'teznevise' ) . '</span>';
+	}
+	echo '</header>';
+	if ( $text ) {
+		echo '<div class="tz-ai-overview__body">' . wp_kses_post( wpautop( $text ) ) . '</div>';
+	} elseif ( in_array( $job, array( 'queued', 'running' ), true ) ) {
+		echo '<p class="tz-ai-overview__pending">' . esc_html__( 'نمای کلی در صف تولید است و به‌زودی اینجا می‌آید.', 'teznevise' ) . '</p>';
+	} else {
+		echo '<p class="tz-ai-overview__pending">' . esc_html__( 'نمای کلی هنوز آماده نیست؛ پس از انتشار به‌صورت خودکار ساخته می‌شود.', 'teznevise' ) . '</p>';
+	}
+	if ( is_array( $bullets ) && $bullets ) {
+		echo '<div class="tz-ai-overview__out" data-ai-summary-out><ul>';
+		foreach ( $bullets as $line ) {
+			echo '<li>' . esc_html( $line ) . '</li>';
+		}
+		echo '</ul></div>';
+	} else {
+		echo '<button type="button" class="btn-tz btn-light-tz" data-ai-summary-btn>' . esc_html__( 'نکات کلیدی بیشتر', 'teznevise' ) . '</button>';
+		echo '<div class="tz-ai-overview__out" data-ai-summary-out hidden></div>';
+	}
+	echo '</section>';
 }
 
 function teznevise_read_time( $post_id = 0 ) {

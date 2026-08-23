@@ -6,7 +6,7 @@
 if (!defined('ABSPATH')) exit;
 
 class TezNevise_AI_Database {
-    const VERSION = '2.3.0';
+    const VERSION = '2.4.0';
     const PREFIX = 'teznevise_ai_';
     
     public static function init() {
@@ -219,6 +219,21 @@ class TezNevise_AI_Database {
             ['agent_id' => 'stats', 'skill_id' => 'interpret_results', 'name' => 'Interpret Results', 'description' => 'Interprets statistical results', 'prompt' => 'You are a statistics expert. Interpret p-values, confidence intervals, and effect sizes for non-technical users.', 'temperature' => 0.4, 'max_tokens' => 1800],
             ['agent_id' => 'stats', 'skill_id' => 'select_tests', 'name' => 'Select Tests', 'description' => 'Helps select statistical tests', 'prompt' => 'You are a statistics consultant. Help users select the appropriate statistical test for their data and research question.', 'temperature' => 0.5, 'max_tokens' => 1500],
         ];
+        if ( function_exists( 'teznevise_core_agent_skills' ) ) {
+            foreach ( teznevise_core_agent_skills() as $agent_id => $skills ) {
+                foreach ( (array) $skills as $skill ) {
+                    $default_skills[] = array(
+                        'agent_id'    => $agent_id,
+                        'skill_id'    => $skill['skill_id'],
+                        'name'        => $skill['name'],
+                        'description' => $skill['description'],
+                        'prompt'      => $skill['prompt'],
+                        'temperature' => (float) ( $skill['temperature'] ?? 0.5 ),
+                        'max_tokens'  => (int) ( $skill['max_tokens'] ?? 900 ),
+                    );
+                }
+            }
+        }
         foreach ($default_skills as $skill) {
             $exists = $wpdb->get_var($wpdb->prepare("SELECT skill_id FROM $skills_table WHERE agent_id = %s AND skill_id = %s", $skill['agent_id'], $skill['skill_id']));
             if (!$exists) {

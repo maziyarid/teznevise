@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Teznevise Core
  * Description: Key vault, free-first model router, research oracle, async debate engine, named 8-agent roster.
- * Version: 1.9.12
+ * Version: 1.9.13
  * Author: MAZ//ID (Maziyar)
  * Text Domain: teznevise
  *
@@ -21,10 +21,11 @@ if ( defined( 'TEZNEVISE_CORE_LOADED' ) ) {
 }
 define( 'TEZNEVISE_CORE_LOADED', true );
 define( 'TEZNEVISE_CORE_DIR', __DIR__ );
-define( 'TEZNEVISE_CORE_VERSION', '1.9.12' );
+define( 'TEZNEVISE_CORE_VERSION', '1.9.13' );
 
 require_once TEZNEVISE_CORE_DIR . '/config/free-models.php';
 require_once TEZNEVISE_CORE_DIR . '/config/agents.php';
+require_once TEZNEVISE_CORE_DIR . '/config/skills.php';
 require_once TEZNEVISE_CORE_DIR . '/inc/class-key-vault.php';
 require_once TEZNEVISE_CORE_DIR . '/inc/class-logger.php';
 require_once TEZNEVISE_CORE_DIR . '/inc/class-agent-registry.php';
@@ -43,9 +44,24 @@ add_action( 'admin_enqueue_scripts', array( 'Teznevise_Meta_Boxes', 'enqueue_adm
 add_action( 'save_post_post', array( 'Teznevise_Meta_Boxes', 'save' ), 20, 2 );
 add_action( 'save_post_page', array( 'Teznevise_Meta_Boxes', 'save' ), 20, 2 );
 add_action( 'teznevise_core_run_debate', array( 'Teznevise_Debate_Orchestrator', 'run' ) );
+add_action( 'teznevise_core_backfill_tick', array( 'Teznevise_Debate_Orchestrator', 'tick_queue' ) );
 add_action( 'admin_menu', array( 'Teznevise_Admin_Hub', 'register' ) );
 add_action( 'admin_init', array( 'Teznevise_Admin_Hub', 'handle_post' ) );
 add_action( 'admin_init', array( 'Teznevise_Agent_Registry', 'seed_named_roster' ), 20 );
+add_action( 'init', array( 'Teznevise_Debate_Orchestrator', 'maybe_start_backfill' ), 30 );
+add_action(
+	'transition_post_status',
+	static function ( $new, $old, $post ) {
+		if ( ! $post || 'post' !== $post->post_type ) {
+			return;
+		}
+		if ( 'publish' === $new && 'publish' !== $old && class_exists( 'Teznevise_Debate_Orchestrator' ) ) {
+			Teznevise_Debate_Orchestrator::schedule( (int) $post->ID, false );
+		}
+	},
+	20,
+	3
+);
 
 add_action(
 	'admin_menu',

@@ -66,6 +66,36 @@ class TezNevise_AI_Chat {
 				);
 			}
 		}
+		$skills_map = array();
+		if ( function_exists( 'teznevise_core_agent_skills' ) ) {
+			foreach ( teznevise_core_agent_skills() as $aid => $list ) {
+				$skills_map[ $aid ] = array();
+				foreach ( (array) $list as $skill ) {
+					$skills_map[ $aid ][] = array(
+						'id'          => $skill['skill_id'],
+						'name'        => $skill['name'],
+						'description' => $skill['description'],
+					);
+				}
+			}
+		}
+		if ( class_exists( 'TezNevise_AI_Database' ) ) {
+			foreach ( $agents as $row ) {
+				$aid = $row['id'] ?? '';
+				if ( ! $aid || isset( $skills_map[ $aid ] ) ) {
+					continue;
+				}
+				$db_skills = TezNevise_AI_Database::get_skills( $aid );
+				foreach ( (array) $db_skills as $skill ) {
+					$skill = (array) $skill;
+					$skills_map[ $aid ][] = array(
+						'id'          => $skill['skill_id'] ?? '',
+						'name'        => $skill['name'] ?? '',
+						'description' => $skill['description'] ?? '',
+					);
+				}
+			}
+		}
 		wp_localize_script(
 			'teznevise-ai-chat',
 			'tezneviseAiConfig',
@@ -81,6 +111,7 @@ class TezNevise_AI_Chat {
 					'cost_per_message'        => (float) get_option( 'teznevise_ai_cost_per_message', 0 ),
 				),
 				'agents'     => $agents,
+				'skills'     => $skills_map,
 			)
 		);
 	}
@@ -154,6 +185,7 @@ class TezNevise_AI_Chat {
 				<?php endforeach; ?>
 			</div>
 			<?php endif; ?>
+			<div class="tz-gpt-skills" data-ai-skills hidden></div>
 			<div class="tz-ai-chat__log tz-gpt__log" data-ai-log role="log" aria-live="polite">
 				<article class="tz-ai-msg is-assistant">
 					<span class="tz-ai-msg__avatar" aria-hidden="true"><?php echo esc_html( mb_substr( $agent_name, 0, 1 ) ); ?></span>

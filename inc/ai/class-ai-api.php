@@ -87,7 +87,7 @@ class TezNevise_AI_API {
 		$requested_model = isset($params['model']) ? sanitize_text_field((string) $params['model']) : '';
         $collaboration_mode = $params['collaboration_mode'] ?? 'single';
         $thinking_enabled = $params['thinking_enabled'] ?? true;
-        $skill_id = $params['skill_id'] ?? null;
+        $skill_id = isset($params['skill_id']) ? sanitize_key($params['skill_id']) : '';
         
         $tool = TezNevise_AI_Core::get_tool($tool_id);
         if (!$tool) {
@@ -321,7 +321,16 @@ class TezNevise_AI_API {
         if (!empty($tool['context'])) $prompt_parts[] = "Tool Context: " . json_encode($tool['context']);
         if ($skill_id && isset($tool['skills'][$skill_id])) {
             $prompt_parts[] = $tool['skills'][$skill_id]['prompt'];
-        }
+        } elseif ( $skill_id && class_exists( 'TezNevise_AI_Database' ) ) {
+			$agent_skills = TezNevise_AI_Database::get_skills( $agent['agent_id'] ?? '' );
+			foreach ( (array) $agent_skills as $row ) {
+				$row = (array) $row;
+				if ( ( $row['skill_id'] ?? '' ) === $skill_id && ! empty( $row['prompt'] ) ) {
+					$prompt_parts[] = $row['prompt'];
+					break;
+				}
+			}
+		}
         $prompt_parts[] = "Collaboration Mode: {$collaboration_mode}";
         $lang = !empty($agent['language']) ? $agent['language'] : 'fa';
         if ($lang === 'fa') {

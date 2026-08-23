@@ -44,6 +44,9 @@ class Teznevise_Admin_Hub {
 		if ( ! empty( $_POST['seed_roster'] ) && class_exists( 'Teznevise_Agent_Registry' ) ) {
 			Teznevise_Agent_Registry::seed_named_roster();
 		}
+		if ( ! empty( $_POST['backfill_all'] ) && class_exists( 'Teznevise_Debate_Orchestrator' ) ) {
+			Teznevise_Debate_Orchestrator::enqueue_published( ! empty( $_POST['backfill_force'] ) );
+		}
 		$models = isset( $_POST['hub_agent_models'] ) && is_array( $_POST['hub_agent_models'] ) ? wp_unslash( $_POST['hub_agent_models'] ) : array();
 		$clean  = array();
 		foreach ( (array) $models as $id => $row ) {
@@ -106,7 +109,9 @@ class Teznevise_Admin_Hub {
 				'fields'         => 'ids',
 			)
 		);
-		$log = class_exists( 'Teznevise_Logger' ) ? Teznevise_Logger::all() : array();
+		$queue   = get_option( 'teznevise_core_backfill_queue', array() );
+		$queue_n = is_array( $queue ) ? count( $queue ) : 0;
+		$log     = class_exists( 'Teznevise_Logger' ) ? Teznevise_Logger::all() : array();
 		?>
 		<div class="wrap tz-hub">
 			<h1><?php esc_html_e( 'پیشخوان تزنویسه', 'teznevise' ); ?></h1>
@@ -138,6 +143,10 @@ class Teznevise_Admin_Hub {
 					<a href="<?php echo esc_url( admin_url( 'tools.php?page=teznevise-waitlist' ) ); ?>"><?php esc_html_e( 'مشاهده', 'teznevise' ); ?></a>
 				</article>
 				<article>
+					<strong><?php esc_html_e( 'صف نمای کلی / مناظره', 'teznevise' ); ?></strong>
+					<p><?php echo esc_html( number_format_i18n( $queue_n ) ); ?></p>
+				</article>
+				<article>
 					<strong><?php esc_html_e( 'مهر اعتماد', 'teznevise' ); ?></strong>
 					<p><?php esc_html_e( 'اینماد + TrustedSite', 'teznevise' ); ?></p>
 				</article>
@@ -159,6 +168,17 @@ class Teznevise_Admin_Hub {
 								<strong><?php echo esc_html( $row['name'] ); ?></strong>
 								<div class="description"><?php echo esc_html( $row['displayed_model_name'] ); ?> · <?php echo esc_html( $row['role'] ); ?></div>
 								<p><?php echo esc_html( $row['description'] ); ?></p>
+								<?php
+								$skills = function_exists( 'teznevise_core_agent_skills' ) ? teznevise_core_agent_skills( $id ) : array();
+								if ( $skills ) :
+									echo '<p class="description">' . esc_html__( 'مهارت‌ها: ', 'teznevise' );
+									$names = array();
+									foreach ( $skills as $skill ) {
+										$names[] = $skill['name'];
+									}
+									echo esc_html( implode( ' · ', $names ) ) . '</p>';
+								endif;
+								?>
 								<p>
 									<label><?php esc_html_e( 'اصلی', 'teznevise' ); ?>
 										<select name="hub_agent_models[<?php echo esc_attr( $id ); ?>][primary_slot]">
@@ -195,11 +215,18 @@ class Teznevise_Admin_Hub {
 				<p>
 					<label><input type="checkbox" name="seed_roster" value="1" /> <?php esc_html_e( 'اگر هشت عامل در پایگاه نیستند، درج کن (هرگز حذف نمی‌کند)', 'teznevise' ); ?></label>
 				</p>
+				<p>
+					<label><input type="checkbox" name="backfill_all" value="1" /> <?php esc_html_e( 'نمای کلی و مناظره را برای مطالب بدون خروجی در صف بگذار', 'teznevise' ); ?></label>
+				</p>
+				<p>
+					<label><input type="checkbox" name="backfill_force" value="1" /> <?php esc_html_e( 'بازنویسی همه (نمای کلی بازبینی‌شده انسانی حفظ می‌شود مگر همین را هم بخواهید از ویرایش مطلب)', 'teznevise' ); ?></label>
+				</p>
 				<?php submit_button( __( 'ذخیره مدل‌ها و عامل‌ها', 'teznevise' ) ); ?>
 			</form>
 
 			<h2><?php esc_html_e( 'آخرین کارهای مناظره', 'teznevise' ); ?></h2>
-			<?php if ( ! $jobs ) : ?>
+				<p><?php esc_html_e( 'صف پس‌زمینه هر مطلب را جداگانه پژوهش و مناظره می‌کند تا سهمیه API نترکد. پس از همگام‌سازی یک‌بار پیشخوان را باز کنید.', 'teznevise' ); ?></p>
+				<?php if ( ! $jobs ) : ?>
 				<p><?php esc_html_e( 'هنوز کاری در صف نیست. از ویرایش مطلب «پژوهش و مناظره تولید شود» را بزنید.', 'teznevise' ); ?></p>
 			<?php else : ?>
 				<table class="widefat striped">

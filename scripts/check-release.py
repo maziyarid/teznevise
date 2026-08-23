@@ -77,6 +77,7 @@ def check_requires() -> None:
         "assets/css/hotfix-200.css",
         "assets/css/hotfix-201.css",
         "assets/css/hotfix-202.css",
+        "assets/css/hotfix-203.css",
         "inc/legal-copy.php",
         "inc/waitlist.php",
         "teznevise-core/teznevise-core.php",
@@ -242,6 +243,33 @@ def check_source_contracts() -> None:
         error("hotfix-201.css is not in the runtime CSS concat")
     if "hotfix-202.css" not in perf:
         error("hotfix-202.css is not in the runtime CSS concat")
+    if "hotfix-203.css" not in perf:
+        error("hotfix-203.css is not in the runtime CSS concat")
+
+    skills_cfg = (ROOT / "teznevise-core" / "config" / "skills.php").read_text(encoding="utf-8")
+    for skill_agent in ("teznevise", "christina", "ada", "professor", "parantez", "elara", "cyrus", "mira"):
+        if f"'{skill_agent}'" not in skills_cfg:
+            error(f"Skills catalog missing agent {skill_agent}")
+    blog = (ROOT / "inc" / "blog.php").read_text(encoding="utf-8")
+    if "function teznevise_render_ai_overview" not in blog:
+        error("Auto AI overview renderer is missing")
+    if "بازبینی انسانی" not in blog:
+        error("Human-review label is missing from overview helper")
+    if "teznevise_mark_overview_human_review" not in blog:
+        error("Human-review marker on overview edit is missing")
+    debate = (ROOT / "teznevise-core" / "inc" / "class-debate-orchestrator.php").read_text(encoding="utf-8")
+    if "function enqueue_published" not in debate:
+        error("Existing-post overview/debate backfill is missing")
+    if "store_overview" not in debate:
+        error("Overview store does not preserve human review")
+    single = (ROOT / "single.php").read_text(encoding="utf-8")
+    if "teznevise_render_ai_overview" not in single:
+        error("Single post does not auto-render the AI overview")
+    core = (ROOT / "teznevise-core" / "teznevise-core.php").read_text(encoding="utf-8")
+    if "config/skills.php" not in core:
+        error("skills.php is not loaded from teznevise-core")
+    if "teznevise_core_backfill_tick" not in core:
+        error("Backfill cron hook is not registered")
 
     agents_cfg = (ROOT / "teznevise-core" / "config" / "agents.php").read_text(encoding="utf-8")
     for agent_id in ("teznevise", "christina", "ada", "professor", "parantez", "elara", "cyrus", "mira"):

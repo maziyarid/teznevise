@@ -166,6 +166,16 @@ class Teznevise_Agent_Registry {
 				$chunks[] = trim( $overlay );
 			}
 		}
+		if ( function_exists( 'teznevise_core_agent_skills' ) ) {
+			$skills = teznevise_core_agent_skills( $agent_id );
+			if ( $skills ) {
+				$lines = array( 'Skills (pick the matching one; stay token-frugal):' );
+				foreach ( $skills as $skill ) {
+					$lines[] = '- ' . ( $skill['name'] ?? '' ) . ': ' . ( $skill['description'] ?? '' );
+				}
+				$chunks[] = implode( "\n", $lines );
+			}
+		}
 		return implode( "\n\n", $chunks );
 	}
 
@@ -295,6 +305,42 @@ class Teznevise_Agent_Registry {
 						'displayed_model_name' => $prev['displayed_model_name'] ?? $row['displayed_model_name'],
 						'avatar'               => $prev['avatar'] ?? teznevise_core_agent_logo_url( $id ),
 						'pre_computed'         => $prev['pre_computed'] ?? '',
+					)
+				);
+			}
+		}
+		self::seed_named_skills();
+	}
+
+	public static function seed_named_skills() {
+		if ( ! function_exists( 'teznevise_core_agent_skills' ) || ! class_exists( 'TezNevise_AI_Database' ) ) {
+			return;
+		}
+		global $wpdb;
+		$table = $wpdb->prefix . TezNevise_AI_Database::PREFIX . 'skills';
+		foreach ( teznevise_core_agent_skills() as $agent_id => $skills ) {
+			foreach ( (array) $skills as $skill ) {
+				$exists = $wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT skill_id FROM {$table} WHERE agent_id = %s AND skill_id = %s",
+						$agent_id,
+						$skill['skill_id']
+					)
+				);
+				if ( $exists ) {
+					continue;
+				}
+				$wpdb->insert(
+					$table,
+					array(
+						'agent_id'    => $agent_id,
+						'skill_id'    => $skill['skill_id'],
+						'name'        => $skill['name'],
+						'description' => $skill['description'],
+						'prompt'      => $skill['prompt'],
+						'temperature' => (float) ( $skill['temperature'] ?? 0.5 ),
+						'max_tokens'  => (int) ( $skill['max_tokens'] ?? 900 ),
+						'is_active'   => 1,
 					)
 				);
 			}
