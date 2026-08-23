@@ -280,6 +280,32 @@ export const PROPOSAL_CONSEQUENCES = [
 		text: "پروپوزال ضعیف فقط وقت و بودجه را هدر نمی‌دهد؛ اعتبار علمی شما را هم نزد استاد راهنما و کمیته آسیب می‌زند. اصلاح دیرهنگام معمولاً سخت‌تر از یک طرح منسجم از ابتدا است.",
 	},
 ];
+export const PROPOSAL_SERVICES = [
+	"نگارش بیان مسئله و شکاف دانش",
+	"مرور ادبیات هدفمند با منابع به‌روز",
+	"طراحی سوال، فرضیه و مدل مفهومی",
+	"روش‌شناسی متناسب با رشته و مقطع",
+	"ویرایش نهایی و آماده‌سازی برای دفاع",
+];
+
+export const PROPOSAL_TYPES = [
+	"پروپوزال ارشد (۱۵–۳۰ صفحه)",
+	"پروپوزال دکتری (۳۰–۶۰ صفحه)",
+	"پروپوزال کاربردی و صنعتی",
+	"پروپوزال به زبان انگلیسی (IMRaD)",
+	"پروپوزال مطالعه کیفی",
+	"پروپوزال مطالعه کمی",
+];
+
+export const PROPOSAL_STAGES = [
+	"تعیین موضوع و خلاء پژوهشی",
+	"طراحی عنوان و اهداف",
+	"مرور پیشینه و منابع",
+	"نگارش روش‌شناسی",
+	"ویرایش و بازخورد استاد",
+	"آماده‌سازی فرم کمیته",
+];
+
 export const SERVICE_PAGES: Record<string, PageBlock> = {
 	thesis: {
 		slug: "thesis",
@@ -801,13 +827,15 @@ absorbImported(THESIS_PAGES, IMPORTED_THESIS);
 absorbImported(PROPOSAL_PAGES, IMPORTED_PROPOSAL, ["hub"]);
 
 if (IMPORTED_PROPOSAL.hub) {
+  const baseline = SERVICE_PAGES.proposal;
   const hub = importedToPage({ ...IMPORTED_PROPOSAL.hub, slug: "proposal" });
   SERVICE_PAGES.proposal = {
-    ...SERVICE_PAGES.proposal,
+    ...baseline,
     ...hub,
     slug: "proposal",
-    features: hub.features.length ? hub.features : SERVICE_PAGES.proposal.features,
-    faqs: hub.faqs?.length ? hub.faqs : SERVICE_PAGES.proposal.faqs,
+    features: hub.features.length ? hub.features : baseline.features,
+    faqs: hub.faqs?.length ? hub.faqs : baseline.faqs,
+    body: hub.body?.length ? hub.body : baseline.body,
   };
 }
 

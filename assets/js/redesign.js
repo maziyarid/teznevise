@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
       seoMore.classList.toggle('is-open', next);
       const label = seoToggle.querySelector('.seo-more-text');
       const mark = seoToggle.querySelector('.seo-more-mark');
-      if (label) label.textContent = next ? 'مشاهده کمتر' : 'مشاهده بیشتر';
+      if (label) label.textContent = next ? 'بستن' : 'ادامه مطلب';
       if (mark) mark.textContent = next ? '⌃' : '‹';
     });
   });

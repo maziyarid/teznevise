@@ -155,6 +155,7 @@ export function HomePage() {
           <div className="steps steps-6">
             {STEPS.map((s, i) => (
               <div key={s.title} className={`step tone-${(i % 6) + 1}`}>
+                <div className="n">{faNum(i + 1)}</div>
                 <h3>{s.title}</h3>
                 <p>{s.text}</p>
               </div>

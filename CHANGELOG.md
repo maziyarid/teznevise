@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.15 — 2026-08-23 — CI-clean UI pass, OpenRouter fallback, proposal grids
+
+- React: guest credits hidden; homepage orb (no fake project card); slower 0.42s hovers; RTL-anchored step numbers; «مشاهده بیشتر» panel no longer a white slab; 4-column footer; Enamad sized; service heroes split with inquiry form; proposal consequences/services/types/stages restored after splitFaqs merge; FAQ cards stretch; FAB left + live chat right.
+- WordPress: `teznevise_parse_pipe_list` remains the row parser used by about/tools/team/downloads. `teznevise_page_field` and REST sanitizers coerce arrays. Provider cascade strips agent-owned keys so a global OpenRouter key can serve any agent. Disclosure PHP label stays «ادامه مطلب» (CI). FAB source CSS no longer forces `display:flex !important` on the right. AI stub files documented.
+- Perplexity + Genspark remain in the backup chain.
+
 ## 1.9.14 — 2026-08-23 — Visual repair, live chat, Genspark + Perplexity fallback
 
 - Header تزکوین chip is hidden for guests; it remains on the account dashboard for signed-in users.

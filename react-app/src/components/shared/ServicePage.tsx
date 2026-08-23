@@ -1,11 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import type { PageBlock } from "@/lib/content";
-import { SERVICES, STEPS, PROPOSAL_CONSEQUENCES } from "@/lib/content";
+import { SERVICES, STEPS, PROPOSAL_CONSEQUENCES, PROPOSAL_SERVICES, PROPOSAL_TYPES, PROPOSAL_STAGES } from "@/lib/content";
 import { mergePageBlock, usePageOverlay } from "@/lib/page-overlay";
 import { splitFaqs } from "@/lib/page-copy";
 import { AppLink } from "@/components/AppLink";
 import { FaIcon } from "@/components/ui/FaIcon";
-import { stripEmoji } from "@/lib/utils";
+import { faNum } from "@/lib/format";
 import { CheckGrid } from "./CheckGrid";
 import { FaqGrid } from "./FaqGrid";
 import { InquiryForm } from "./InquiryForm";
@@ -38,18 +38,25 @@ export function ServicePage({ page, fieldSlug }: { page: PageBlock; fieldSlug?: 
 
   return (
     <>
-      <PageHero eyebrow={p.eyebrow} title={p.title} lead={p.lead} />
+      <PageHero
+        eyebrow={p.eyebrow}
+        title={p.title}
+        lead={p.lead}
+        aside={<InquiryForm compact />}
+      />
 
       {page.slug === "proposal" ? (
+        <>
         <section className="section">
           <div className="container-tz">
             <div className="section-head center">
               <span className="eyebrow">اگر بدون مشاوره جلو بروید</span>
               <h2>عواقب یک پروپوزال ضعیف</h2>
             </div>
-            <div className="reason-list" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0,1fr))", gap: 14, maxWidth: 960, marginInline: "auto" }}>
-              {PROPOSAL_CONSEQUENCES.map((c) => (
-                <div key={c.title} className="reason-item">
+            <div className="check-grid check-grid--danger">
+              {PROPOSAL_CONSEQUENCES.map((c, i) => (
+                <div key={c.title} className={`check-card reason-item tone-${i + 1}`}>
+                  <span className="mark">{faNum(i + 1)}</span>
                   <h3>{c.title}</h3>
                   <p>{c.text}</p>
                 </div>
@@ -57,6 +64,23 @@ export function ServicePage({ page, fieldSlug }: { page: PageBlock; fieldSlug?: 
             </div>
           </div>
         </section>
+        <section className="section bg-soft">
+          <div className="container-tz">
+            <div className="section-head center">
+              <h2>خدمات پروپوزال</h2>
+            </div>
+            <CheckGrid items={PROPOSAL_SERVICES} />
+          </div>
+        </section>
+        <section className="section">
+          <div className="container-tz">
+            <div className="section-head center">
+              <h2>انواع پروپوزال</h2>
+            </div>
+            <CheckGrid items={PROPOSAL_TYPES} />
+          </div>
+        </section>
+        </>
       ) : null}
 
       {features.length ? (
@@ -80,6 +104,24 @@ export function ServicePage({ page, fieldSlug }: { page: PageBlock; fieldSlug?: 
         </section>
       ) : null}
 
+      {page.slug === "proposal" ? (
+        <section className="section bg-soft">
+          <div className="container-tz">
+            <div className="section-head center">
+              <span className="eyebrow">مسیر پروپوزال</span>
+              <h2>مراحل انجام پروپوزال</h2>
+            </div>
+            <div className="steps steps-6">
+              {PROPOSAL_STAGES.map((s, i) => (
+                <div key={s} className={`step tone-${(i % 6) + 1}`}>
+                  <div className="n">{faNum(i + 1)}</div>
+                  <p>{s}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : (
       <section className="section bg-soft">
         <div className="container-tz">
           <div className="section-head center">
@@ -90,6 +132,7 @@ export function ServicePage({ page, fieldSlug }: { page: PageBlock; fieldSlug?: 
           <div className="steps steps-6">
             {STEPS.map((s, i) => (
               <div key={s.title} className={`step tone-${(i % 6) + 1}`}>
+                <div className="n">{faNum(i + 1)}</div>
                 <h3>{s.title}</h3>
                 <p>{s.text}</p>
               </div>
@@ -97,6 +140,7 @@ export function ServicePage({ page, fieldSlug }: { page: PageBlock; fieldSlug?: 
           </div>
         </div>
       </section>
+      )}
 
       {p.body?.length ? (
         <MoreContent paragraphs={p.body} />
@@ -122,7 +166,9 @@ export function ServicePage({ page, fieldSlug }: { page: PageBlock; fieldSlug?: 
               </AppLink>
             </div>
           </div>
-          <InquiryForm compact />
+          <div className="service-page-form-slot">
+            <InquiryForm compact />
+          </div>
         </div>
       </section>
 

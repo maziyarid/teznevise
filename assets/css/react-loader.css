@@ -843,7 +843,8 @@ body.tz-react-shell {
     padding-bottom: 16px;
   }
   .tz-fab-wrap {
-    right: 14px !important;
+    left: 14px !important;
+    right: auto !important;
     bottom: calc(94px + env(safe-area-inset-bottom)) !important;
   }
   .tz-fab-toggle {

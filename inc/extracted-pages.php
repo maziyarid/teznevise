@@ -612,7 +612,7 @@ function teznevise_page_content_disclosure_markup( $content, $post_id = 0 ) {
 					<?php echo implode( "\n", $rest ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</div>
 			<?php endif; ?>
-			<button aria-controls="<?php echo esc_attr( $target_id ); ?>" aria-expanded="false" class="seo-more-btn" data-seo-toggle type="button"><span class="seo-more-text"><?php esc_html_e( 'مشاهده بیشتر', 'teznevise' ); ?></span></button>
+			<button aria-controls="<?php echo esc_attr( $target_id ); ?>" aria-expanded="false" class="seo-more-btn" data-seo-toggle type="button"><span class="seo-more-text"><?php esc_html_e( 'ادامه مطلب', 'teznevise' ); ?></span></button>
 		</div>
 	</div>
 	<?php

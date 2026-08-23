@@ -193,6 +193,11 @@ function teznevise_page_field( $key, $post_id = 0, $default = '' ) {
 	if ( $value === '' || $value === null || $value === false ) {
 		$value = $default;
 	}
+	if ( is_array( $value ) ) {
+		$value = function_exists( 'teznevise_plain' )
+			? teznevise_plain( $value, is_string( $default ) ? $default : '' )
+			: implode( "\n", array_filter( array_map( 'strval', $value ) ) );
+	}
 	if ( function_exists( 'teznevise_consult_copy_deep' ) ) {
 		return teznevise_consult_copy_deep( $value );
 	}

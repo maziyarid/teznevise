@@ -276,6 +276,11 @@ li.tez-builder-step {
   object-fit: contain;
 }
 .footer-certs__enamad {
+  min-width: 120px;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 8px;
   overflow: hidden;
   flex: 0 0 125px;

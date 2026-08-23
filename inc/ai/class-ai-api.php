@@ -681,6 +681,8 @@ class TezNevise_AI_API {
         foreach (array('openrouter', 'xai', 'openai', 'groq', 'genspark', 'perplexity', 'deepseek', 'mistral') as $p) {
             $ag = is_array($agent) ? $agent : array();
             $ag['provider'] = $p;
+            // Do not reuse the agent's private key on a different host.
+            unset($ag['api_key']);
             $ag['api_endpoint'] = ($p === 'genspark') ? (string) get_option('teznevise_ai_genspark_endpoint', '') : '';
             $mdl = $model;
             if ($p === 'openrouter' && (false === strpos((string) $mdl, '/') && false === strpos((string) $mdl, ':'))) {
@@ -696,6 +698,13 @@ class TezNevise_AI_API {
                 }
             }
             $push($p, $ag, $mdl);
+        }
+        if (!$chain) {
+            $ag = is_array($agent) ? $agent : array();
+            unset($ag['api_key']);
+            $ag['provider'] = 'openrouter';
+            $ag['api_endpoint'] = '';
+            $push('openrouter', $ag, 'openai/gpt-oss-20b:free');
         }
         return $chain;
     }

@@ -153,14 +153,14 @@
   transform: none !important;
 }
 
-/* ----- FAB: physical RIGHT, items open toward the left ----- */
+/* ----- FAB: physical LEFT; live chat owns the right ----- */
 .tz-fab-wrap {
-  display: flex !important;
+  display: flex;
   flex-direction: column !important;
-  align-items: flex-end !important;
+  align-items: flex-start !important;
   position: fixed !important;
-  right: 18px !important;
-  left: auto !important;
+  left: 18px !important;
+  right: auto !important;
   bottom: 22px !important;
   z-index: 1200 !important;
   gap: 10px !important;
@@ -169,7 +169,7 @@
   position: static !important;
   display: none !important;
   flex-direction: column !important;
-  align-items: flex-end !important;
+  align-items: flex-start !important;
   gap: 8px !important;
   inset: auto !important;
 }
@@ -185,9 +185,15 @@
   min-width: 148px;
   justify-content: flex-start !important;
 }
-@media (max-width: 768px) {
+@media (min-width: 1051px) {
   .tz-fab-wrap {
-    right: 14px !important;
+    display: flex;
+  }
+}
+@media (max-width: 1050px) {
+  .tz-fab-wrap {
+    left: 16px !important;
+    right: auto !important;
     bottom: calc(84px + env(safe-area-inset-bottom)) !important;
   }
 }

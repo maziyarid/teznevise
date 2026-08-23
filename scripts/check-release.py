@@ -179,8 +179,8 @@ def check_source_contracts() -> None:
     if "function complexity" not in router:
         error("Model router complexity metric is missing")
     extracted = (ROOT / "inc" / "extracted-pages.php").read_text(encoding="utf-8")
-    if "مشاهده بیشتر" not in extracted:
-        error("Classic disclosure button is not labelled مشاهده بیشتر")
+    if "ادامه مطلب" not in extracted:
+        error("Classic disclosure button is not labelled ادامه مطلب")
     if "جزئیات و توضیحات بیشتر" in extracted:
         error("Visible F1 title still remains in extracted-pages.php")
     nav = (ROOT / "inc" / "nav-walker.php").read_text(encoding="utf-8")

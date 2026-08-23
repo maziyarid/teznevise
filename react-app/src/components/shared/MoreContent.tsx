@@ -20,7 +20,7 @@ export function MoreContent({
   const rest = items.slice(3);
 
   return (
-    <section className="section section-sm">
+    <section className="section-sm tz-more-content">
       <div className="container-tz">
         <div className="seo-panel tz-classic-disclosure">
           <div className="text-xs font-extrabold text-brand">{eyebrow}</div>
