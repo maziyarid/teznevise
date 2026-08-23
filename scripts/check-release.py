@@ -79,6 +79,7 @@ def check_requires() -> None:
         "assets/css/hotfix-202.css",
         "assets/css/hotfix-203.css",
         "assets/css/hotfix-204.css",
+        "assets/css/hotfix-205.css",
         "inc/legal-copy.php",
         "inc/waitlist.php",
         "teznevise-core/teznevise-core.php",
@@ -248,6 +249,8 @@ def check_source_contracts() -> None:
         error("hotfix-203.css is not in the runtime CSS concat")
     if "hotfix-204.css" not in perf:
         error("hotfix-204.css is not in the runtime CSS concat")
+    if "hotfix-205.css" not in perf:
+        error("hotfix-205.css is not in the runtime CSS concat")
 
     skills_cfg = (ROOT / "teznevise-core" / "config" / "skills.php").read_text(encoding="utf-8")
     for skill_agent in ("teznevise", "christina", "ada", "professor", "parantez", "elara", "cyrus", "mira"):

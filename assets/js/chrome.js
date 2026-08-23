@@ -536,7 +536,7 @@ document.addEventListener('DOMContentLoaded', function () {
           if (d && d.success && d.data && d.data.text) out.textContent = d.data.text;
           else if (d && d.data && d.data.message === 'no-key') out.textContent = 'کلید OpenRouter در تنظیمات تزکوین وارد نشده است.';
           else if (d && d.data && d.data.message === 'login') out.textContent = 'وارد شوید.';
-          else if (d && d.data && d.data.message === 'no-coins') out.textContent = 'موجودی تزکوین کافی نیست.';
+          else if (d && d.data && d.data.message === 'no-coins') out.textContent = 'امکان ثبت این درخواست نیست.';
           else out.textContent = 'پاسخ آماده نشد.';
         })
         .catch(function () { out.textContent = 'ارتباط برقرار نشد.'; });

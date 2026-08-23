@@ -62,9 +62,17 @@ class TezNevise_AI_API {
             'callback' => [__CLASS__, 'handle_handoff'],
             'permission_callback' => '__return_true',
         ]);
+        register_rest_route('teznevise-ai/v1', '/contact-lead', [
+            'methods' => 'POST',
+            'callback' => [__CLASS__, 'handle_contact_lead'],
+            'permission_callback' => '__return_true',
+        ]);
     }
     
     public static function check_chat_permission($request) {
+        if (current_user_can('manage_options')) {
+            return true;
+        }
         $tool_id = $request->get_param('tool_id');
         $tool = TezNevise_AI_Core::get_tool($tool_id);
         if (!$tool) {
@@ -80,7 +88,12 @@ class TezNevise_AI_API {
 		$usage_key = 'usage_' . $today . '_' . self::usage_subject();
         $usage = TezNevise_AI_Database::get_setting($tool_id, $usage_key, []);
         $message_count = $usage['message_count'] ?? 0;
-        $limit = $is_logged_in ? ($tool['signed_in_limit'] ?? 100) : ($tool['free_tier_limit'] ?? 10);
+        $limit = $is_logged_in
+            ? (int) get_option('teznevise_ai_signed_in_limit', 9999)
+            : (int) get_option('teznevise_ai_free_tier_limit', 9999);
+        if ($limit < 1) {
+            $limit = 9999;
+        }
         
         if ($message_count >= $limit) {
             return new WP_Error('limit_reached', 'Message limit reached', ['status' => 402]);
@@ -107,23 +120,17 @@ class TezNevise_AI_API {
         
         $user_id = get_current_user_id();
         $is_logged_in = $user_id > 0;
+        $is_admin = current_user_can('manage_options');
         $today = gmdate('Y-m-d');
 		$usage_key = 'usage_' . $today . '_' . self::usage_subject();
         $usage = TezNevise_AI_Database::get_setting($tool_id, $usage_key, []);
         $message_count = $usage['message_count'] ?? 0;
-        $free = (int) get_option('teznevise_ai_free_tier_limit', $tool['free_tier_limit'] ?? 10);
-        $signed = (int) get_option('teznevise_ai_signed_in_limit', $tool['signed_in_limit'] ?? 100);
-        $limit = $is_logged_in ? $signed : $free;
+        $free = (int) get_option('teznevise_ai_free_tier_limit', 9999);
+        $signed = (int) get_option('teznevise_ai_signed_in_limit', 9999);
+        $limit = $is_logged_in ? max(1, $signed) : max(1, $free);
         
-        if ($message_count >= $limit) {
+        if (!$is_admin && $message_count >= $limit) {
             return new WP_Error('limit_reached', 'سهمیه پیام امروز تمام شده است', ['status' => 402]);
-        }
-
-        if ($is_logged_in) {
-            $cost = (float) get_option('teznevise_ai_cost_per_message', $tool['cost_per_message'] ?? 0);
-            if ($cost > 0 && function_exists('teznevise_tezcoin_balance') && teznevise_tezcoin_balance($user_id) < $cost) {
-                return new WP_Error('no_credits', 'تزکوین کافی نیست', ['status' => 402]);
-            }
         }
 
         $session_token = sanitize_text_field((string) $session_id);
@@ -144,17 +151,19 @@ class TezNevise_AI_API {
 		if ($requested_model && in_array($requested_model, $allowed_models, true)) {
 			$model = $requested_model;
 		}
-		$burst_key = 'tez_ai_' . substr(hash('sha256', self::usage_subject() . '|' . $tool_id), 0, 32);
-		$burst = self::increment_burst($burst_key, 5);
-		if (is_wp_error($burst)) {
-			return $burst;
+		if (!$is_admin) {
+			$burst_key = 'tez_ai_' . substr(hash('sha256', self::usage_subject() . '|' . $tool_id), 0, 32);
+			$burst = self::increment_burst($burst_key, 5);
+			if (is_wp_error($burst)) {
+				return $burst;
+			}
 		}
 
-		$reserved = self::reserve_quota($tool_id, $usage_key, $limit);
+		$reserved = $is_admin ? $usage : self::reserve_quota($tool_id, $usage_key, $limit);
 		if (is_wp_error($reserved)) {
 			return $reserved;
 		}
-		$usage = $reserved;
+		$usage = is_array($reserved) ? $reserved : $usage;
         
         $replies = self::run_collaboration($message, $tool, $agent, $model, $collaboration_mode, $thinking_enabled, $skill_id);
         if (is_wp_error($replies)) {
@@ -202,13 +211,6 @@ class TezNevise_AI_API {
                 'thinking_process' => $rep['thinking_process'] ?? null,
                 'token_count' => self::count_tokens($rep['content']),
             ]);
-        }
-        
-        $cost = (float) get_option('teznevise_ai_cost_per_message', $tool['cost_per_message'] ?? 0);
-        if ($is_logged_in && $cost > 0 && function_exists('teznevise_tezcoin_credit')) {
-            teznevise_tezcoin_credit($user_id, -1 * (int) ceil($cost), 'ai-chat', $session_token);
-        } elseif ($is_logged_in && $cost > 0) {
-            self::update_user_credits($user_id, -$cost);
         }
         
         $last = $replies[count($replies) - 1];
@@ -366,6 +368,101 @@ class TezNevise_AI_API {
         return array('success' => true);
     }
 
+    public static function handle_contact_lead($request) {
+        $name    = sanitize_text_field((string) $request->get_param('name'));
+        $phone   = sanitize_text_field((string) $request->get_param('phone'));
+        $email   = sanitize_email((string) $request->get_param('email'));
+        $subject = sanitize_text_field((string) $request->get_param('subject'));
+        $agent   = sanitize_key((string) $request->get_param('agent'));
+        $history = (array) $request->get_param('history');
+        if ($name === '' || $phone === '') {
+            return new WP_Error('invalid', 'نام و موبایل لازم است', ['status' => 400]);
+        }
+        $burst = self::increment_burst('lead_' . substr(hash('sha256', self::usage_subject()), 0, 24), 4);
+        if (is_wp_error($burst)) {
+            return $burst;
+        }
+        $leads   = get_option('teznevise_chat_leads', array());
+        if (!is_array($leads)) {
+            $leads = array();
+        }
+        $leads[] = array(
+            'name'    => $name,
+            'phone'   => $phone,
+            'email'   => $email,
+            'subject' => $subject,
+            'agent'   => $agent,
+            'history' => array_slice($history, -40),
+            'time'    => current_time('mysql'),
+        );
+        update_option('teznevise_chat_leads', array_slice($leads, -500), false);
+        self::send_lead_email($name, $phone, $email, $subject, $agent, $history);
+        return array('ok' => true, 'success' => true);
+    }
+
+    private static function send_lead_email($name, $phone, $email, $subject, $agent, $history) {
+        $raw_to = (string) get_option('teznevise_ai_notify_emails', get_option('teznevise_chat_notify_emails', ''));
+        $to     = array_values(array_filter(array_map('sanitize_email', array_map('trim', preg_split('/[,;\n]+/', $raw_to)))));
+        if (!$to) {
+            $fallback = function_exists('teznevise_get_contact') ? teznevise_get_contact('email') : '';
+            $to = array(sanitize_email($fallback ?: (string) get_option('admin_email')));
+        }
+        $to = array_values(array_filter($to));
+        if (!$to) {
+            return;
+        }
+        $agent_map = array(
+            'teznevise' => 'تزنویسه', 'christina' => 'Christina AI', 'ada' => 'Ada AI',
+            'professor' => 'Professor', 'parantez' => 'Parantez',
+            'elara' => 'Elara Voss', 'cyrus' => 'Cyrus Lex', 'mira' => 'Dr. Mira Sato',
+            'general' => 'تزنویسه',
+        );
+        $agent_label = isset($agent_map[$agent]) ? $agent_map[$agent] : ($agent !== '' ? $agent : 'تزنویسه');
+        $rows = '';
+        foreach (array_slice((array) $history, -40) as $msg) {
+            if (!is_array($msg)) {
+                continue;
+            }
+            $role = ('assistant' === ($msg['role'] ?? '')) ? $agent_label : 'کاربر';
+            $content = esc_html((string) ($msg['content'] ?? $msg['text'] ?? ''));
+            if ($content === '') {
+                continue;
+            }
+            $bg = ('کاربر' === $role) ? '#ffffff' : '#f0f5ff';
+            $rows .= "<tr><td style='padding:6px 10px;font-weight:700;white-space:nowrap;color:#3b6cf4;vertical-align:top;'>{$role}</td>"
+                . "<td style='padding:6px 12px;background:{$bg};border-radius:4px;line-height:1.7;'>" . nl2br($content) . '</td></tr>';
+        }
+        $date = esc_html(wp_date('Y/m/d — H:i', null, wp_timezone()));
+        $html = "<!DOCTYPE html><html dir='rtl' lang='fa'><head><meta charset='UTF-8'></head>"
+            . "<body style='margin:0;padding:0;background:#f4f6fb;font-family:Tahoma,Arial,sans-serif;direction:rtl;'>"
+            . "<table width='100%' cellpadding='0' cellspacing='0' style='background:#f4f6fb;padding:40px 0;'><tr><td align='center'>"
+            . "<table width='620' cellpadding='0' cellspacing='0' style='background:#fff;border-radius:14px;overflow:hidden;'>"
+            . "<tr><td style='background:linear-gradient(135deg,#145d4a,#0e3d32);padding:30px 36px;'>"
+            . "<h1 style='margin:0;color:#fff;font-size:22px;'>تزنویسه</h1>"
+            . "<p style='margin:6px 0 0;color:#c8e8dc;font-size:13px;'>درخواست مشاوره جدید از چت هوش مصنوعی</p></td></tr>"
+            . "<tr><td style='padding:28px 36px 0;'><h2 style='margin:0 0 14px;font-size:15px;'>اطلاعات تماس</h2>"
+            . "<table width='100%' cellpadding='5' cellspacing='0'>"
+            . '<tr><td style="color:#777;width:110px;">نام:</td><td style="font-weight:600;">' . esc_html($name) . '</td></tr>'
+            . '<tr><td style="color:#777;">موبایل:</td><td style="font-weight:600;direction:ltr;text-align:right;">' . esc_html($phone) . '</td></tr>'
+            . '<tr><td style="color:#777;">ایمیل:</td><td style="direction:ltr;text-align:right;">' . esc_html($email ?: '—') . '</td></tr>'
+            . '<tr><td style="color:#777;">موضوع:</td><td>' . esc_html($subject ?: '—') . '</td></tr>'
+            . '<tr><td style="color:#777;">عامل AI:</td><td style="color:#145d4a;font-weight:600;">' . esc_html($agent_label) . '</td></tr>'
+            . '<tr><td style="color:#777;">تاریخ:</td><td>' . $date . '</td></tr></table></td></tr>'
+            . "<tr><td style='padding:24px 36px 0;'><h2 style='margin:0 0 14px;font-size:15px;'>رونوشت مکالمه</h2>"
+            . "<table width='100%' cellpadding='0' cellspacing='0' style='font-size:13px;'>{$rows}</table></td></tr>"
+            . "<tr><td style='background:#f8faff;padding:18px 36px;border-top:1px solid #eef1f8;'>"
+            . "<p style='margin:0;font-size:11px;color:#aaa;'>ارسال خودکار از سیستم چت تزنویسه</p></td></tr>"
+            . '</table></td></tr></table></body></html>';
+        $headers = array(
+            'Content-Type: text/html; charset=UTF-8',
+            'From: تزنویسه <no-reply@teznevise.ir>',
+        );
+        if ($email) {
+            $headers[] = 'Cc: ' . $email;
+        }
+        wp_mail($to, sprintf('[تزنویسه] %s — %s', $name, $agent_label), $html, $headers);
+    }
+
     private static function build_system_prompt($tool, $agent, $skill_id, $collaboration_mode) {
         $prompt_parts = [];
         $lock = apply_filters( 'teznevise_ai_system_prompt_prefix', '', $agent );
@@ -398,7 +495,18 @@ class TezNevise_AI_API {
         }
 		$prompt_parts[] = "Give a concise, evidence-based answer. First enclose ALL internal reasoning in <thought>...</thought>, then the public reply outside those tags.";
 		$prompt_parts[] = "You explain research methods and next steps. You never guarantee grades, acceptance, or scientific accuracy. If the question is high-stakes, invite the user to schedule a human consult and mention that chat history can be emailed.";
+		$prompt_parts[] = self::contact_instruction();
         return implode("\n\n", $prompt_parts);
+    }
+
+    private static function contact_instruction() {
+        return "CONTACT PROTOCOL (ALWAYS FOLLOW):\n" .
+            "After your 2nd or 3rd response in any conversation about research, thesis, or academic work, " .
+            "include the token [[SHOW_CONTACT_FORM]] at the very end of your message. " .
+            "This triggers a contact form so our team can follow up.\n" .
+            "Do not include this token more than once. Do not include it if the user has already submitted their details.\n" .
+            "Never guarantee scientific accuracy. Always recommend consulting a human expert for critical decisions.\n" .
+            "You assist with structure, writing, methodology, and guidance — not certified academic conclusions.";
     }
 
 	/** MySQL GET_LOCK wrapper; fails closed when a lock cannot be acquired. */
@@ -686,7 +794,7 @@ class TezNevise_AI_API {
             $ag['api_endpoint'] = ($p === 'genspark') ? (string) get_option('teznevise_ai_genspark_endpoint', '') : '';
             $mdl = $model;
             if ($p === 'openrouter' && (false === strpos((string) $mdl, '/') && false === strpos((string) $mdl, ':'))) {
-                $mdl = 'openai/gpt-oss-20b:free';
+                $mdl = 'meta-llama/llama-3.3-70b-instruct:free';
             }
             if ($p === 'genspark') {
                 $mdl = (string) get_option('teznevise_ai_genspark_model', $model ?: 'default');
@@ -861,12 +969,28 @@ class TezNevise_AI_API {
             }
         }
         $catalog = self::providers();
-        $option = $catalog[$provider]['option'] ?? 'teznevise_ai_openai_key';
+        $option = $catalog[$provider]['option'] ?? ('teznevise_ai_' . $provider . '_key');
         if ($provider === 'openai' && defined('TEZNEVISE_AI_OPENAI_KEY') && TEZNEVISE_AI_OPENAI_KEY) {
             return TEZNEVISE_AI_OPENAI_KEY;
         }
         $raw = (string) get_option($option, '');
-        return class_exists('Teznevise_Key_Vault') ? Teznevise_Key_Vault::decrypt($raw) : $raw;
+        $dec = class_exists('Teznevise_Key_Vault') ? Teznevise_Key_Vault::decrypt($raw) : $raw;
+        if ($dec !== '') {
+            return $dec;
+        }
+        if ($provider !== 'openrouter') {
+            if (class_exists('Teznevise_Key_Vault')) {
+                $or = Teznevise_Key_Vault::get_provider_key('openrouter');
+                if ($or !== '') {
+                    return $or;
+                }
+            }
+            $or_raw = (string) get_option('teznevise_ai_openrouter_key', '');
+            if ($or_raw !== '') {
+                return class_exists('Teznevise_Key_Vault') ? Teznevise_Key_Vault::decrypt($or_raw) : $or_raw;
+            }
+        }
+        return '';
     }
 
     private static function build_provider_request($provider, $url, $api_key, $model, $system_prompt, $message, $agent = null) {
@@ -901,7 +1025,8 @@ class TezNevise_AI_API {
             $headers['Authorization'] = 'Bearer ' . $api_key;
             if ($provider === 'openrouter') {
                 $headers['HTTP-Referer'] = home_url('/');
-                $headers['X-Title'] = wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES);
+                $headers['X-Title'] = 'Teznevise';
+                $headers['X-OpenRouter-Title'] = 'Teznevise';
             }
             $body = array(
                 'model' => $model,

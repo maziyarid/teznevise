@@ -72,6 +72,7 @@
     var parsed = splitThought(text);
     if (!thinking && parsed.thought) thinking = parsed.thought;
     text = parsed.public;
+    var showForm = String(text || '').indexOf('[[SHOW_CONTACT_FORM]]') !== -1;
     var art = el('article', 'tz-ai-msg is-' + role);
     art.setAttribute('role', 'listitem');
     art.appendChild(avatarNode(role, name, agentId));
@@ -92,6 +93,7 @@
       stack.appendChild(det);
     }
     var bubble = el('div', 'tz-ai-msg__bubble');
+    text = String(text || '').replace(FORM_TOKEN, '').trim();
     if (stream && role !== 'user') {
       typewrite(bubble, text);
     } else {
@@ -108,8 +110,74 @@
     }
     art.appendChild(stack);
     log.appendChild(art);
+    if (role !== 'user' && showForm) {
+      renderContactForm(log);
+    }
     log.scrollTop = log.scrollHeight;
     return art;
+  }
+
+  var FORM_TOKEN = '[[SHOW_CONTACT_FORM]]';
+
+  function renderContactForm(container) {
+    if (!container) return;
+    try {
+      if (sessionStorage.getItem('tz_contact_done')) return;
+    } catch (err) {}
+    if (container.querySelector('.tz-contact-form-inline')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'tz-contact-form-inline';
+    wrap.innerHTML = '<form class="tz-cf-form" novalidate>' +
+      '<h4 class="tz-cf-title">اطلاعات تماس</h4>' +
+      '<p class="tz-cf-sub">برای پیگیری توسط متخصص و دریافت رونوشت این مکالمه، اطلاعاتتان را وارد کنید.</p>' +
+      '<div class="tz-cf-row"><div class="tz-cf-field"><label>نام کامل *</label>' +
+      '<input name="name" type="text" required placeholder="علی محمدی" autocomplete="name"/></div>' +
+      '<div class="tz-cf-field"><label>موبایل *</label>' +
+      '<input name="phone" type="tel" required placeholder="09XXXXXXXXX" dir="ltr" autocomplete="tel"/></div></div>' +
+      '<div class="tz-cf-field"><label>ایمیل <span>(اختیاری — رونوشت دریافت کنید)</span></label>' +
+      '<input name="email" type="email" placeholder="you@example.com" dir="ltr" autocomplete="email"/></div>' +
+      '<div class="tz-cf-field"><label>موضوع پژوهش</label>' +
+      '<input name="subject" type="text" placeholder="مثلاً پروپوزال دکتری روانشناسی"/></div>' +
+      '<div class="tz-cf-actions"><button type="submit" class="tz-cf-submit">ارسال و دریافت رونوشت</button>' +
+      '<button type="button" class="tz-cf-skip">بعداً</button></div>' +
+      '<p class="tz-cf-privacy">اطلاعات شما کاملاً محرمانه است.</p></form>' +
+      '<div class="tz-cf-success" hidden><span class="tz-cf-icon">✓</span><strong>ممنون!</strong> تیم ما با شما تماس خواهد گرفت.</div>';
+    var form = wrap.querySelector('form');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var fd = new FormData(form);
+      var payload = {
+        name: (fd.get('name') || '').toString().trim(),
+        phone: (fd.get('phone') || '').toString().trim(),
+        email: (fd.get('email') || '').toString().trim(),
+        subject: (fd.get('subject') || '').toString().trim(),
+        agent: (container.closest('.tz-ai-chat') && container.closest('.tz-ai-chat').getAttribute('data-agent-id')) || 'general',
+        history: (window.__tzChatHistory || []).map(function (m) {
+          return { role: m.role, content: m.text || m.content || '', name: m.name || '' };
+        }),
+      };
+      if (!payload.name || !payload.phone) {
+        if (form.reportValidity) form.reportValidity();
+        return;
+      }
+      fetch((cfg().rest_url || '') + 'contact-lead', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': cfg().nonce || '' },
+        body: JSON.stringify(payload),
+      }).then(function (r) {
+        if (r.ok) {
+          wrap.querySelector('.tz-cf-form').hidden = true;
+          wrap.querySelector('.tz-cf-success').hidden = false;
+          try { sessionStorage.setItem('tz_contact_done', '1'); } catch (err) {}
+        }
+      });
+    });
+    wrap.querySelector('.tz-cf-skip').addEventListener('click', function () {
+      wrap.remove();
+      try { sessionStorage.setItem('tz_contact_done', 'skipped'); } catch (err) {}
+    });
+    container.appendChild(wrap);
   }
 
   function splitThought(text) {
@@ -228,7 +296,8 @@
     }
 
     function remember(role, text, name, thinking, agentId) {
-      history.push({ role: role, text: text, name: name || '', thinking: thinking || '', agentId: agentId || '' });
+      history.push({ role: role, text: String(text || '').replace('[[SHOW_CONTACT_FORM]]', '').trim(), name: name || '', thinking: thinking || '', agentId: agentId || '' });
+      window.__tzChatHistory = history;
       if (history.length > 40) history = history.slice(-40);
       persist();
     }

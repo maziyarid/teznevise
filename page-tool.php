@@ -114,23 +114,6 @@ while ( have_posts() ) :
 		<?php
 	endif;
 
-	$tool_slug = get_post_field( 'post_name', get_the_ID() );
-	$tool_map  = array(
-		't-test-calculator'                    => 't-test',
-		'mann-whitney-calculator'              => 'mann-whitney',
-		'pearson-correlation-calculator'       => 'correlation',
-		'spearman-correlation-calculator'      => 'correlation',
-		'regression-calculator'                => 'regression',
-	);
-	$ai_tool = isset( $tool_map[ $tool_slug ] ) ? $tool_map[ $tool_slug ] : 'general';
-	if ( function_exists( 'teznevise_ai_shortcode' ) ) {
-		echo '<div class="container" style="padding-bottom:48px">';
-		echo teznevise_ai_shortcode( array( 'tool' => $ai_tool ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo '</div>';
-	} elseif ( function_exists( 'get_template_part' ) ) {
-		get_template_part( 'template-parts/tools-ai' );
-	}
-
 endwhile;
 
 get_footer();

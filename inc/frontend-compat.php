@@ -240,6 +240,9 @@ function teznevise_register_missing_shortcodes() {
 			}
 		);
 	}
+	if ( ! shortcode_exists( 'tz_latest_posts' ) ) {
+		add_shortcode( 'tz_latest_posts', 'teznevise_latest_posts_shortcode' );
+	}
 
 	$hubs = array(
 		'tz_thesis_hub',
@@ -314,6 +317,44 @@ function teznevise_blog_shortcode_fallback() {
 	}
 	echo '</div>';
 	return ob_get_clean();
+}
+
+/**
+ * Homepage latest-posts shortcode. Renders cards, never the raw tag.
+ *
+ * @param array $atts Shortcode attributes.
+ * @return string
+ */
+function teznevise_latest_posts_shortcode( $atts = array() ) {
+	$atts  = shortcode_atts( array( 'count' => 4 ), $atts, 'tz_latest_posts' );
+	$count = max( 1, min( 12, (int) $atts['count'] ) );
+	$q     = new WP_Query(
+		array(
+			'post_type'           => 'post',
+			'post_status'         => 'publish',
+			'posts_per_page'      => $count,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+		)
+	);
+	if ( ! $q->have_posts() ) {
+		return '';
+	}
+	$out = '<div class="tz-latest-posts article-grid" data-reveal-stagger>';
+	while ( $q->have_posts() ) {
+		$q->the_post();
+		$out .= sprintf(
+			'<article class="article-card"><a href="%1$s"><h3>%2$s</h3></a><time datetime="%3$s">%4$s</time></article>',
+			esc_url( get_permalink() ),
+			esc_html( get_the_title() ),
+			esc_attr( get_the_date( 'c' ) ),
+			esc_html( get_the_date() )
+		);
+	}
+	wp_reset_postdata();
+	return $out . '</div>';
 }
 
 /**

@@ -72,25 +72,21 @@ while ( have_posts() ) :
 				<div class="blog-post__layout">
 					<div class="blog-post__content entry-content article-content longcopy" data-reveal>
 						<?php
-						$takeaways = teznevise_blog_field( 'takeaways', $post_id );
+						$takeaways = function_exists( 'teznevise_plain' ) ? teznevise_plain( teznevise_blog_field( 'takeaways', $post_id ) ) : (string) teznevise_blog_field( 'takeaways', $post_id );
 						if ( function_exists( 'teznevise_render_ai_overview' ) ) {
 							teznevise_render_ai_overview( $post_id );
 						}
 						$lines = function_exists( 'teznevise_lines' )
 							? teznevise_lines( $takeaways )
-							: array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', is_string( $takeaways ) ? $takeaways : '' ) ) );
-						if ( $lines ) :
-							?>
-							<section class="tz-takeaways">
-								<h2><?php esc_html_e( 'نکات کلیدی', 'teznevise' ); ?></h2>
-								<ol>
-									<?php foreach ( $lines as $line ) : ?>
-										<li><?php echo esc_html( $line ); ?></li>
-									<?php endforeach; ?>
-								</ol>
-							</section>
-							<?php
-						endif;
+							: array_values( array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $takeaways ) ) ) );
+						if ( $lines ) {
+							echo '<section class="tz-takeaways">';
+							echo '<h2>' . esc_html__( 'نکات کلیدی', 'teznevise' ) . '</h2><ol>';
+							foreach ( $lines as $line ) {
+								echo '<li>' . esc_html( is_scalar( $line ) ? (string) $line : '' ) . '</li>';
+							}
+							echo '</ol></section>';
+						}
 						echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						?>
 					</div>

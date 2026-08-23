@@ -33,9 +33,11 @@ function teznevise_render_blog_meta_box( $post ) {
 	echo '<p>' . esc_html__( 'Optional presentation controls. Core title, content, excerpt, featured image, categories, tags, author, dates, status, revisions, and comments remain native WordPress fields.', 'teznevise' ) . '</p>';
 	echo '<table class="form-table" role="presentation"><tbody>';
 	foreach ( teznevise_blog_fields() as $key => $field ) {
+		$raw = get_post_meta( $post->ID, $key, true );
+		$raw = function_exists( 'teznevise_plain' ) ? teznevise_plain( $raw ) : ( is_scalar( $raw ) ? (string) $raw : '' );
 		echo '<tr><th scope="row"><label for="' . esc_attr( $key ) . '">' . esc_html( $field['label'] ) . '</label></th><td>';
 		if ( 'textarea' === $field['type'] ) {
-			printf( '<textarea class="large-text" rows="5" id="%1$s" name="%1$s">%2$s</textarea>', esc_attr( $key ), esc_textarea( get_post_meta( $post->ID, $key, true ) ) );
+			printf( '<textarea class="large-text" rows="5" id="%1$s" name="%1$s">%2$s</textarea>', esc_attr( $key ), esc_textarea( $raw ) );
 			if ( '_teznevise_ai_overview' === $key ) {
 				$reviewed = '1' === (string) get_post_meta( $post->ID, '_teznevise_ai_overview_reviewed', true );
 				echo '<p class="description">' . esc_html__( 'اگر این متن را ویرایش و ذخیره کنید، برچسب «بازبینی انسانی» روی مطلب نمایش داده می‌شود. تولید مجدد هوش مصنوعی آن را بازنویسی نمی‌کند مگر گزینه بازنویسی را بزنید.', 'teznevise' ) . '</p>';
@@ -46,7 +48,7 @@ function teznevise_render_blog_meta_box( $post ) {
 		} elseif ( 'checkbox' === $field['type'] ) {
 			printf( '<label><input type="checkbox" id="%1$s" name="%1$s" value="1" %2$s> %3$s</label>', esc_attr( $key ), checked( get_post_meta( $post->ID, $key, true ), '1', false ), esc_html__( 'Disable the table of contents for this post.', 'teznevise' ) );
 		} else {
-			printf( '<input class="regular-text" type="text" id="%1$s" name="%1$s" value="%2$s" placeholder="%3$s">', esc_attr( $key ), esc_attr( get_post_meta( $post->ID, $key, true ) ), esc_attr( $field['placeholder'] ?? '' ) );
+			printf( '<input class="regular-text" type="text" id="%1$s" name="%1$s" value="%2$s" placeholder="%3$s">', esc_attr( $key ), esc_attr( $raw ), esc_attr( $field['placeholder'] ?? '' ) );
 		}
 		echo '</td></tr>';
 	}
@@ -75,12 +77,15 @@ add_action( 'save_post_post', 'teznevise_save_blog_fields' );
 function teznevise_blog_field( $key, $post_id = 0, $fallback = '' ) {
 	$value = get_post_meta( $post_id ? $post_id : get_the_ID(), '_teznevise_' . $key, true );
 	if ( '' === $value || null === $value || false === $value ) {
-		return $fallback;
+		$value = $fallback;
 	}
-	if ( is_array( $value ) && is_string( $fallback ) ) {
-		return function_exists( 'teznevise_plain' ) ? teznevise_plain( $value, $fallback ) : $fallback;
+	if ( function_exists( 'teznevise_plain' ) ) {
+		return teznevise_plain( $value, is_string( $fallback ) ? $fallback : '' );
 	}
-	return $value;
+	if ( is_array( $value ) ) {
+		return implode( "\n", array_filter( array_map( 'strval', $value ) ) );
+	}
+	return is_scalar( $value ) || null === $value ? (string) $value : ( is_string( $fallback ) ? $fallback : '' );
 }
 
 /**

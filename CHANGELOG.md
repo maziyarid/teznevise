@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.16 — 2026-08-23 — Live crash repair, free chat, contact leads
+
+- `single.php` takeaways no longer uses alternative `if/endif` (the live parse error at line 93).
+- Blog/page meta always coerced to string before `esc_html` / `esc_textarea` (array-to-string in core `formatting.php`).
+- `[tz_latest_posts]` is registered and renders post cards.
+- Chat is free: TezCoin checks and deductions removed from the chat path. Admins skip quota. OpenRouter free-model default + Referer headers. Contact form token emails an HTML transcript.
+- Chaty/FAB left, AI live chat right. Tools pages no longer embed inline AI.
+- hotfix-205.css for widget positions and the inline contact form.
+
 ## 1.9.15 — 2026-08-23 — CI-clean UI pass, OpenRouter fallback, proposal grids
 
 - React: guest credits hidden; homepage orb (no fake project card); slower 0.42s hovers; RTL-anchored step numbers; «مشاهده بیشتر» panel no longer a white slab; 4-column footer; Enamad sized; service heroes split with inquiry form; proposal consequences/services/types/stages restored after splitFaqs merge; FAQ cards stretch; FAB left + live chat right.

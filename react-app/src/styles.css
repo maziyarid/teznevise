@@ -2738,15 +2738,7 @@ i.fa-brands {
   position: relative;
 }
 .step .n {
-  display: flex !important;
-  width: 42px;
-  height: 42px;
-  margin: 0 0 12px auto;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  font-weight: 700;
-  border-radius: 50%;
+  display: none !important;
 }
 .check-card .mark { display: flex !important; }
 .faq-card { min-height: 0 !important; padding: 14px 16px !important; height: 100%; }
