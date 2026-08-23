@@ -1,6 +1,13 @@
 # Changelog
 
-## 1.9.16 — 2026-08-23 — Live crash repair, free chat, contact leads
+## 1.9.17 — 2026-08-23 — OpenRouter free models were 404ing
+
+- Live `llm_fail AI provider returned an unsuccessful response` was every OpenRouter call using retired `:free` IDs (`llama-3.3-70b-instruct:free`, `gpt-oss-20b:free`, `qwen-2.5-72b:free`, `deepseek-r1:free`). Those slugs are gone from OpenRouter as of this date.
+- New free map: Gemma 4 31B, GLM 5.2, Nemotron Super/Lightning/Reasoning. Retired IDs in the stored option are ignored and wiped on `init`.
+- OpenRouter keys are no longer sent to Groq/OpenAI/xAI hosts. HTTP errors now include status, model, and provider message.
+- Mobile drawer text is right-aligned (RTL), panel pinned to the right edge.
+
+
 
 - `single.php` takeaways no longer uses alternative `if/endif` (the live parse error at line 93).
 - Blog/page meta always coerced to string before `esc_html` / `esc_textarea` (array-to-string in core `formatting.php`).
@@ -9,7 +16,9 @@
 - Chaty/FAB left, AI live chat right. Tools pages no longer embed inline AI.
 - hotfix-205.css for widget positions and the inline contact form.
 
-## 1.9.15 — 2026-08-23 — CI-clean UI pass, OpenRouter fallback, proposal grids
+## 1.9.16 — 2026-08-23 — Live crash repair, free chat, contact leads
+
+- `single.php` takeaways no longer uses alternative `if/endif` (the live parse error at line 93).
 
 - React: guest credits hidden; homepage orb (no fake project card); slower 0.42s hovers; RTL-anchored step numbers; «مشاهده بیشتر» panel no longer a white slab; 4-column footer; Enamad sized; service heroes split with inquiry form; proposal consequences/services/types/stages restored after splitFaqs merge; FAQ cards stretch; FAB left + live chat right.
 - WordPress: `teznevise_parse_pipe_list` remains the row parser used by about/tools/team/downloads. `teznevise_page_field` and REST sanitizers coerce arrays. Provider cascade strips agent-owned keys so a global OpenRouter key can serve any agent. Disclosure PHP label stays «ادامه مطلب» (CI). FAB source CSS no longer forces `display:flex !important` on the right. AI stub files documented.

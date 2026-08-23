@@ -182,7 +182,7 @@ class TezNevise_AI_Database {
         ];
         if ( function_exists( 'teznevise_core_agent_roster' ) ) {
             foreach ( teznevise_core_agent_roster() as $id => $row ) {
-                $models = function_exists( 'teznevise_core_agent_models' ) ? teznevise_core_agent_models( $id ) : array( 'primary' => 'meta-llama/llama-3.3-70b-instruct:free' );
+                $models = function_exists( 'teznevise_core_agent_models' ) ? teznevise_core_agent_models( $id ) : array( 'primary' => 'google/gemma-4-31b-it:free' );
                 $default_agents[] = array(
                     'agent_id' => $id,
                     'name' => $row['name'],

@@ -18,6 +18,35 @@ div[id^="chaty-"],
 }
 
 @media (max-width: 1050px) {
+  .mobile-nav-panel {
+    right: 0 !important;
+    left: auto !important;
+    inset-inline-end: 0 !important;
+    inset-inline-start: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    transform-origin: right center;
+  }
+  .mobile-nav-links,
+  .mobile-nav-links ul,
+  .mobile-nav-links li,
+  .mobile-menu-list,
+  .mobile-nav-links a,
+  .mobile-nav-links .nav-link,
+  .mobile-menu-list a {
+    text-align: right !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    direction: rtl !important;
+  }
+  .mobile-nav-header {
+    justify-content: space-between !important;
+    flex-direction: row !important;
+  }
+  .mobile-nav-title {
+    text-align: right !important;
+    margin-inline-end: auto;
+  }
   #chaty-channel-list-icon,
   .chaty-channel-list-wrap,
   .chaty-widget-wrap,

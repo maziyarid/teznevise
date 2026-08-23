@@ -55,6 +55,9 @@ class Teznevise_Model_Router {
 			if ( '' === $model ) {
 				return;
 			}
+			if ( function_exists( 'teznevise_core_retired_free_models' ) && in_array( $model, teznevise_core_retired_free_models(), true ) ) {
+				return;
+			}
 			$key = $provider . '|' . $model;
 			if ( isset( $seen[ $key ] ) ) {
 				return;

@@ -785,7 +785,11 @@ class TezNevise_AI_API {
             );
         };
         $primary = self::detect_provider($agent);
-        $push($primary, $agent, $model);
+        $primary_model = $model;
+        if ($primary === 'openrouter') {
+            $primary_model = self::openrouter_model($model);
+        }
+        $push($primary, $agent, $primary_model);
         foreach (array('openrouter', 'xai', 'openai', 'groq', 'genspark', 'perplexity', 'deepseek', 'mistral') as $p) {
             $ag = is_array($agent) ? $agent : array();
             $ag['provider'] = $p;
@@ -793,8 +797,8 @@ class TezNevise_AI_API {
             unset($ag['api_key']);
             $ag['api_endpoint'] = ($p === 'genspark') ? (string) get_option('teznevise_ai_genspark_endpoint', '') : '';
             $mdl = $model;
-            if ($p === 'openrouter' && (false === strpos((string) $mdl, '/') && false === strpos((string) $mdl, ':'))) {
-                $mdl = 'meta-llama/llama-3.3-70b-instruct:free';
+            if ($p === 'openrouter') {
+                $mdl = self::openrouter_model($mdl);
             }
             if ($p === 'genspark') {
                 $mdl = (string) get_option('teznevise_ai_genspark_model', $model ?: 'default');
@@ -812,7 +816,7 @@ class TezNevise_AI_API {
             unset($ag['api_key']);
             $ag['provider'] = 'openrouter';
             $ag['api_endpoint'] = '';
-            $push('openrouter', $ag, 'openai/gpt-oss-20b:free');
+            $push('openrouter', $ag, self::openrouter_model(''));
         }
         return $chain;
     }
@@ -853,11 +857,24 @@ class TezNevise_AI_API {
         $response = wp_remote_post($built['url'], $built['args']);
         if (is_wp_error($response)) return $response;
 		$status = (int) wp_remote_retrieve_response_code($response);
+		$body_raw = (string) wp_remote_retrieve_body($response);
 		if ($status < 200 || $status >= 300) {
-			return new WP_Error('api_http_error', 'AI provider returned an unsuccessful response', ['status' => 502]);
+			$hint = '';
+			$decoded = json_decode($body_raw, true);
+			if (is_array($decoded) && isset($decoded['error'])) {
+				$err = $decoded['error'];
+				$hint = is_array($err) ? (string) ($err['message'] ?? '') : (string) $err;
+			} elseif ($body_raw !== '') {
+				$hint = wp_strip_all_tags(substr($body_raw, 0, 180));
+			}
+			$msg = sprintf('AI provider %s HTTP %d (%s)', $provider, $status, $model);
+			if ($hint !== '') {
+				$msg .= ': ' . $hint;
+			}
+			return new WP_Error('api_http_error', $msg, ['status' => 502, 'provider' => $provider, 'http' => $status, 'model' => $model]);
 		}
 
-        $response_body = json_decode(wp_remote_retrieve_body($response), true);
+        $response_body = json_decode($body_raw, true);
         if (!is_array($response_body)) {
             return new WP_Error('api_error', 'پاسخ ارائه‌دهنده نامعتبر بود', ['status' => 502]);
         }
@@ -941,7 +958,11 @@ class TezNevise_AI_API {
     private static function endpoint_for($agent, $provider, $model) {
         $custom = esc_url_raw($agent['api_endpoint'] ?? '');
         if ($custom) {
-            return $custom;
+            $custom_host = strtolower((string) (wp_parse_url($custom, PHP_URL_HOST) ?: ''));
+            $expected    = strtolower((string) (self::providers()[$provider]['host'] ?? ''));
+            if ($custom_host !== '' && $expected !== '' && ( $custom_host === $expected || false !== strpos($custom_host, $expected) )) {
+                return $custom;
+            }
         }
         if ($provider === 'genspark') {
             $override = esc_url_raw((string) get_option('teznevise_ai_genspark_endpoint', ''));
@@ -975,22 +996,33 @@ class TezNevise_AI_API {
         }
         $raw = (string) get_option($option, '');
         $dec = class_exists('Teznevise_Key_Vault') ? Teznevise_Key_Vault::decrypt($raw) : $raw;
-        if ($dec !== '') {
-            return $dec;
-        }
-        if ($provider !== 'openrouter') {
-            if (class_exists('Teznevise_Key_Vault')) {
-                $or = Teznevise_Key_Vault::get_provider_key('openrouter');
-                if ($or !== '') {
-                    return $or;
-                }
+        return $dec !== '' ? $dec : '';
+    }
+
+    /**
+     * Map a requested model onto a currently-served OpenRouter free ID.
+     * Dead `:free` slugs 404 and produced the live llm_fail cascade.
+     */
+    private static function openrouter_model($requested = '') {
+        $catalog  = function_exists('teznevise_core_free_models') ? teznevise_core_free_models() : array();
+        $retired  = function_exists('teznevise_core_retired_free_models') ? teznevise_core_retired_free_models() : array();
+        $requested = trim((string) $requested);
+        $usable = static function ($id) use ($retired) {
+            $id = trim((string) $id);
+            if ($id === '' || in_array($id, $retired, true)) {
+                return false;
             }
-            $or_raw = (string) get_option('teznevise_ai_openrouter_key', '');
-            if ($or_raw !== '') {
-                return class_exists('Teznevise_Key_Vault') ? Teznevise_Key_Vault::decrypt($or_raw) : $or_raw;
+            return false !== strpos($id, ':free');
+        };
+        if ($usable($requested)) {
+            return $requested;
+        }
+        foreach (array('medium', 'simple', 'complex', 'reasoning', 'long_context') as $slot) {
+            if ($usable($catalog[$slot] ?? '')) {
+                return (string) $catalog[$slot];
             }
         }
-        return '';
+        return 'google/gemma-4-31b-it:free';
     }
 
     private static function build_provider_request($provider, $url, $api_key, $model, $system_prompt, $message, $agent = null) {
