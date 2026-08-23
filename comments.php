@@ -95,7 +95,7 @@ $human_count = get_comments(
 			<h2><?php esc_html_e( 'گفتگوی عامل‌های پژوهشی', 'teznevise' ); ?></h2>
 			<?php
 			if ( ! empty( $ai_thread['research'] ) ) {
-				echo '<details class="tz-ai-research"><summary>' . esc_html__( 'خلاصه پژوهش You', 'teznevise' ) . '</summary>';
+				echo '<details class="tz-ai-research"><summary>' . esc_html__( 'پژوهش زنده You.com', 'teznevise' ) . '</summary>';
 				echo '<div class="tz-ai-research__body">' . wp_kses_post( wpautop( $ai_thread['research'] ) ) . '</div></details>';
 			}
 			if ( function_exists( 'teznevise_render_ai_discussion_thread' ) ) {

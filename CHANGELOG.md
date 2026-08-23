@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.20 — 2026-08-23 — Closable agent menu, You.com modes, real debate
+
+- Agent picker: dimmed scrim + ✕ «بازگشت به گفتگو». `hidden` now wins over `display:grid` so the list actually closes. Escape/header ✕ dismiss the menu first, then the chat. FAB no longer sits on the composer.
+- You.com uses Answer + Search (`language=FA`, `country=IR`, academic `boost_domains`) and Research lite when the globe is on. Legacy `api.ydc-index.io` stays as fallback. Raw JSON dumps are gone.
+- Debate is affirm → dissent → cross → verdict. Each turn must quote a different passage of the article with « », name the previous speaker, and prove or refute. Instruction leakage is stripped from «استدلال».
+
 ## 1.9.19 — 2026-08-23 — Professional chat UI + working summary/debate
 
 - ChatGPT/Perplexity-style agent dropdown in the header; open/close/new/send/think/collab/research are icon-only with labels in `aria-label`/`title`.

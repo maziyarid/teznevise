@@ -378,20 +378,52 @@
       if (!menuList || !menuBtn) return;
       menuList.hidden = true;
       menuBtn.setAttribute('aria-expanded', 'false');
+      root.classList.remove('is-picking');
+      var scrim = root.querySelector('[data-agent-menu-scrim]');
+      if (scrim) scrim.hidden = true;
     }
     function openMenu() {
       if (!menuList || !menuBtn) return;
       menuList.hidden = false;
       menuBtn.setAttribute('aria-expanded', 'true');
+      root.classList.add('is-picking');
+      var scrim = root.querySelector('[data-agent-menu-scrim]');
+      if (!scrim) {
+        scrim = el('button', 'tz-gpt-model__scrim');
+        scrim.type = 'button';
+        scrim.setAttribute('data-agent-menu-scrim', '');
+        scrim.setAttribute('aria-label', 'بازگشت به گفتگو');
+        scrim.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          closeMenu();
+        });
+        var header = root.querySelector('.tz-gpt__top');
+        if (header && header.nextSibling) root.insertBefore(scrim, header.nextSibling);
+        else root.appendChild(scrim);
+      }
+      scrim.hidden = false;
     }
     if (menuBtn && menuList) {
       menuBtn.addEventListener('click', function (e) {
+        e.preventDefault();
         e.stopPropagation();
         if (menuList.hidden) openMenu(); else closeMenu();
       });
       document.addEventListener('click', function (e) {
-        if (menu && !menu.contains(e.target)) closeMenu();
+        var s = root.querySelector('[data-agent-menu-scrim]');
+        if (menu && !menu.contains(e.target) && !(s && s.contains(e.target))) {
+          closeMenu();
+        }
       });
+      var doneBtn = menu.querySelector('[data-agent-menu-done]');
+      if (doneBtn) {
+        doneBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          closeMenu();
+          menuBtn.focus();
+        });
+      }
       menuBtn.addEventListener('keydown', function (e) {
         if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -678,8 +710,19 @@
     var toggle = document.getElementById('tzLiveChatToggle');
     var panel = document.getElementById('tzLiveChatPanel');
     var closeBtn = document.getElementById('tzLiveChatClose');
+    function dismissPicker(rootEl) {
+      if (!rootEl) return;
+      rootEl.classList.remove('is-picking');
+      var list = rootEl.querySelector('.tz-gpt-model__list');
+      var btn = rootEl.querySelector('[data-agent-menu-toggle]');
+      var scrim = rootEl.querySelector('[data-agent-menu-scrim]');
+      if (list) list.hidden = true;
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+      if (scrim) scrim.hidden = true;
+    }
     function setOpen(on) {
       if (!panel || !toggle) return;
+      if (!on) dismissPicker(panel);
       panel.hidden = !on;
       toggle.setAttribute('aria-expanded', on ? 'true' : 'false');
       document.body.classList.toggle('tz-livechat-open', on);
@@ -694,13 +737,25 @@
       });
     }
     if (closeBtn) {
-      closeBtn.addEventListener('click', function () { setOpen(false); });
+      closeBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (panel && panel.classList.contains('is-picking')) {
+          dismissPicker(panel);
+          return;
+        }
+        setOpen(false);
+      });
     }
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && panel && !panel.hidden) {
-        setOpen(false);
-        if (toggle) toggle.focus();
+      if (e.key !== 'Escape' || !panel || panel.hidden) return;
+      if (panel.classList.contains('is-picking')) {
+        dismissPicker(panel);
+        var mb = panel.querySelector('[data-agent-menu-toggle]');
+        if (mb) mb.focus();
+        return;
       }
+      setOpen(false);
+      if (toggle) toggle.focus();
     });
   }
   if (document.readyState === 'loading') {

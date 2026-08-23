@@ -79,13 +79,19 @@ class Teznevise_Debate_Orchestrator {
 		}
 
 		$brief_text = is_array( $research ) ? (string) $research['brief'] : '';
+		if ( function_exists( 'mb_strlen' ) && mb_strlen( $brief_text ) > 1400 ) {
+			$brief_text = mb_substr( $brief_text, 0, 1400 ) . '…';
+		}
+		$passages = self::extract_passages( $post->post_content, 12 );
 		$ctx        = array(
-			'post'    => $post,
-			'article' => $article,
-			'brief'   => $brief_text,
-			'pre'     => $pre,
-			'refs'    => $refs,
-			'post_id' => $post_id,
+			'post'         => $post,
+			'article'      => $article,
+			'brief'        => $brief_text,
+			'pre'          => $pre,
+			'refs'         => $refs,
+			'post_id'      => $post_id,
+			'passages'     => $passages,
+			'used_quotes'  => array(),
 		);
 
 		$parent  = 0;
@@ -113,6 +119,9 @@ class Teznevise_Debate_Orchestrator {
 		}
 
 		$first_id = Teznevise_Agent_Registry::first_responder( $query . ' ' . $brief_text );
+		if ( 'teznevise' === $first_id ) {
+			$first_id = 'christina';
+		}
 		$first    = self::speak( $first_id, 'first', $ctx, $prior, $parent );
 		if ( $first ) {
 			$items[]  = $first['item'];
@@ -468,6 +477,87 @@ class Teznevise_Debate_Orchestrator {
 	}
 
 	/**
+	 * Distinct quote-worthy sentences from the article.
+	 *
+	 * @param string $html  Post content.
+	 * @param int    $limit Max passages.
+	 * @return string[]
+	 */
+	public static function extract_passages( $html, $limit = 10 ) {
+		$text  = trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( (string) $html ) ) );
+		$parts = preg_split( '/(?<=[.!؟?؛;\n])\s+/u', $text );
+		$out   = array();
+		$seen  = array();
+		foreach ( (array) $parts as $p ) {
+			$p = trim( $p );
+			$len = function_exists( 'mb_strlen' ) ? mb_strlen( $p ) : strlen( $p );
+			if ( $len < 42 || $len > 260 ) {
+				continue;
+			}
+			$key = function_exists( 'mb_strtolower' ) ? mb_strtolower( $p ) : strtolower( $p );
+			if ( isset( $seen[ $key ] ) ) {
+				continue;
+			}
+			$seen[ $key ] = true;
+			$out[]        = $p;
+			if ( count( $out ) >= (int) $limit ) {
+				break;
+			}
+		}
+		return $out;
+	}
+
+	/**
+	 * Drop instruction leakage and CJK garbage from a model turn.
+	 *
+	 * @param array{thought:string,public:string} $parsed Split body.
+	 * @return array{thought:string,public:string}
+	 */
+	public static function scrub_turn( $parsed ) {
+		$thought = trim( (string) ( $parsed['thought'] ?? '' ) );
+		$public  = trim( (string) ( $parsed['public'] ?? '' ) );
+		$public  = preg_replace( '/[\x{4E00}-\x{9FFF}\x{3040}-\x{30FF}\x{AC00}-\x{D7AF}]+/u', '', $public );
+		$public  = trim( preg_replace( '/[ \t]{2,}/', ' ', $public ) );
+		if ( preg_match( '/CRITICAL DIRECTIVE|token-frugal|ghostwrite|OUTPUT FORMAT|I need to outline|You are (Teznevise|Christina|Ada|Professor|Parantez|Elara|Cyrus|Mira)|Public reply ≤|never break character|SKILL\.md|Job: overview/i', $thought ) ) {
+			$thought = '';
+		}
+		if ( preg_match( '/CRITICAL DIRECTIVE|OUTPUT FORMAT|token-frugal/i', $public ) ) {
+			$public = trim( preg_replace( '/CRITICAL DIRECTIVE[\s\S]{0,400}/i', '', $public ) );
+		}
+		return array(
+			'thought' => $thought,
+			'public'  => $public,
+		);
+	}
+
+	/**
+	 * Pick unused article quotes for this speaker.
+	 *
+	 * @param array<string,mixed> $ctx Context.
+	 * @param int                 $n   How many.
+	 * @return string[]
+	 */
+	private static function take_quotes( &$ctx, $n = 2 ) {
+		$pool = isset( $ctx['passages'] ) && is_array( $ctx['passages'] ) ? $ctx['passages'] : array();
+		$used = isset( $ctx['used_quotes'] ) && is_array( $ctx['used_quotes'] ) ? $ctx['used_quotes'] : array();
+		$out  = array();
+		foreach ( $pool as $p ) {
+			if ( in_array( $p, $used, true ) ) {
+				continue;
+			}
+			$out[]                = $p;
+			$ctx['used_quotes'][] = $p;
+			if ( count( $out ) >= $n ) {
+				break;
+			}
+		}
+		if ( ! $out && $pool ) {
+			$out[] = $pool[0];
+		}
+		return $out;
+	}
+
+	/**
 	 * One named-agent turn.
 	 *
 	 * @param string               $agent_id Agent id.
@@ -477,60 +567,80 @@ class Teznevise_Debate_Orchestrator {
 	 * @param int                  $parent   Parent comment id.
 	 * @return array{id:int,item:array,prior:string}|null
 	 */
-	private static function speak( $agent_id, $job, $ctx, $prior, $parent ) {
+	private static function speak( $agent_id, $job, &$ctx, $prior, $parent ) {
 		$agent = Teznevise_Agent_Registry::get( $agent_id );
 		if ( ! $agent ) {
 			return null;
 		}
 		$post_id = (int) $ctx['post_id'];
-		$skill   = Teznevise_Agent_Registry::skill_md( $agent_id, $post_id );
-		$prompt  = Teznevise_Agent_Registry::identity_lock( $agent, $skill, $ctx['refs'], $ctx['pre'] );
-		$prompt .= "\nJob: " . $job . '. Token-frugal. Public reply in Persian, ≤140 words.';
+		$quotes  = self::take_quotes( $ctx, 'overview' === $job || 'synthesis' === $job ? 3 : 2 );
+		$qblock  = '';
+		foreach ( $quotes as $i => $q ) {
+			$qblock .= ( $i + 1 ) . '. «' . $q . "»\n";
+		}
+		$fa_name = (string) ( $agent['fa_name'] ?? $agent['alias'] ?? $agent['name'] ?? $agent_id );
+		$role    = (string) ( $agent['role'] ?? $job );
+		$prompt  = "CRITICAL DIRECTIVE: You are {$fa_name} ({$role}). Stay in character. Public reply MUST be Persian. Never English outlines, never Chinese, never restate these instructions.\n";
+		$prompt .= "Debate architecture: quote the article with « », name the previous speaker when you attack or defend them, and try to prove or refute a concrete claim. Consulting only — no ghostwriting.\n";
+		$prompt .= 'Private reasoning goes in <thought>…</thought> and may only discuss which quote you picked and the hole in the previous claim. Then the public Persian reply outside the tags.' . "\n";
 		switch ( $job ) {
 			case 'overview':
-				$prompt .= "\nWrite the SERP/blog AI overview of this article using the research brief. 80–120 words. Cite [n]. No ghostwriting.";
+				$prompt .= "Job: frame. List the 3 actual claims THIS article makes (not generic SERP fluff). Each claim in one Persian sentence. Then name the clash the panel should fight over. 80–120 words.";
 				break;
 			case 'first':
-				$prompt .= "\nYou are the first responder for this topic. Open the discussion. Ground every claim in the article and the brief.";
+				$prompt .= "Job: AFFIRM. Open by quoting one unused passage with « ». Prove that the article's claim stands. State a falsifiable claim others can attack. 90–160 Persian words.";
 				break;
 			case 'peer':
-				$prompt .= "\nYou are the peer reviewer. Critique the first response: gaps, overclaim, missing method. Be specific and polite.";
+				$prompt .= "Job: DISSENT. Address the last speaker by name. Quote a DIFFERENT unused passage with « ». Refute or limit their claim. Point at overclaim, missing method, or a counter-example in the same article. 90–160 Persian words.";
 				break;
 			case 'debate':
-				$prompt .= "\nContinue the panel. Add a new angle. Do not repeat earlier speakers. Reply to the last remark when useful.";
+				$prompt .= "Job: CROSS. Name the speaker you answer. Quote an unused passage. Either prove their claim with new evidence from the article, or refute it. Do not repeat their quote. 90–160 Persian words.";
 				break;
 			case 'visualizer':
-				$prompt .= "\nVisualizer job: describe 1–2 figures or slides in text (title, axes/labels, what it shows). No image URLs, no dummy data, no generated pictures.";
+				$prompt .= "Job: visualizer. Describe 1 figure the article implies (title, axes, what it would show) using a quote. No image URLs, no dummy data. Persian. ≤120 words.";
 				break;
 			case 'synthesis':
-				$prompt .= "\nSynthesize the whole panel into a final reflection: agreements, remaining disagreement, one practical next step for the graduate student. Consulting only.";
+				$prompt .= "Job: synthesis/verdict. For each disputed claim: stood, fell, or unresolved — one line. Then one practical next step for the graduate student. Consulting only. 90–140 Persian words.";
 				break;
 		}
+		if ( $qblock ) {
+			$prompt .= "\n\nUnused article quotes (pick from these, mark them with « »):\n" . $qblock;
+		}
 		if ( ! empty( $ctx['brief'] ) ) {
-			$prompt .= "\n\nResearch brief:\n" . $ctx['brief'];
+			$prompt .= "\n\nLive research brief (do not dump; cite [n] only if it matches a quote):\n" . $ctx['brief'];
 		}
 		if ( $prior ) {
-			$prompt .= "\n\nPrevious panel remarks:\n" . $prior;
+			$tail = $prior;
+			if ( function_exists( 'mb_strlen' ) && mb_strlen( $tail ) > 1800 ) {
+				$tail = mb_substr( $tail, -1800 );
+			}
+			$prompt .= "\n\nPrevious panel remarks:\n" . $tail;
 		}
 		$post    = $ctx['post'];
-		$message = 'Article title: ' . $post->post_title . "\n\nFull article:\n" . $ctx['article'] . "\n\nWrite the next discussion comment in Persian.";
+		$message = 'عنوان مقاله: ' . $post->post_title . "\n\nمتن مقاله (خلاصه):\n" . $ctx['article'] . "\n\nپاسخ عمومی را فقط به فارسی بنویس. یک نقل‌قول «» از مقاله بیاور و ادعا را ثابت یا رد کن.";
 		$body    = self::complete_cascade( $message, $prompt, $agent, $ctx['article'] . ' ' . $ctx['brief'], $post_id );
 		if ( '' === $body ) {
 			return null;
 		}
-		$parsed = self::split_thought( $body );
-		$role   = (string) ( $agent['role'] ?? $job );
+		$parsed = self::scrub_turn( self::split_thought( $body ) );
+		if ( '' === $parsed['public'] ) {
+			return null;
+		}
 		$tags   = $job;
-		$name   = (string) ( $agent['alias'] ?? $agent['name'] ?? $agent_id );
+		$name   = $fa_name;
 		if ( 'visualizer' === $job ) {
 			$name .= ' — تصویرساز';
 			$role  = 'visualizer';
 		} elseif ( 'overview' === $job ) {
 			$name .= ' — نمای کلی';
 		} elseif ( 'synthesis' === $job ) {
-			$name .= ' — بازتاب';
+			$name .= ' — رأی نهایی';
 		} elseif ( 'peer' === $job ) {
-			$name .= ' — داور همتا';
+			$name .= ' — مخالف';
+		} elseif ( 'first' === $job ) {
+			$name .= ' — مدافع';
+		} elseif ( 'debate' === $job ) {
+			$name .= ' — تقاطع';
 		}
 		$color = sanitize_hex_color( $agent['color'] ?? '' ) ?: '#145d4a';
 		$cid   = wp_insert_comment(

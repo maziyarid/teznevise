@@ -232,7 +232,15 @@ class TezNevise_AI_API {
         $agents  = array($primary);
 
         if ($mode === 'research') {
-            $research = self::research_web($message);
+            $research = null;
+            $ykey     = self::key_for(array('provider' => 'you'), 'you');
+            if ($ykey !== '') {
+                $q = function_exists('mb_substr') ? mb_substr($message, 0, 380) : substr($message, 0, 380);
+                $research = self::you_bundle($ykey, $q, 'deep');
+            }
+            if (is_wp_error($research) || !is_array($research)) {
+                $research = self::research_web($message);
+            }
             if (is_wp_error($research)) {
                 $researcher = TezNevise_AI_Database::get_agent('you');
                 if (!$researcher) {
@@ -594,9 +602,263 @@ class TezNevise_AI_API {
         return self::call_ai_api($query, $prompt, $agent, $agent['model'] ?? '', false);
     }
 
+    /**
+     * You.com: Answer + Search + optional Research lite.
+     * New host api.you.com; legacy api.ydc-index.io remains a fallback.
+     *
+     * @param string $api_key  Key.
+     * @param string $query    Query.
+     * @param string $endpoint Optional override.
+     * @return array|WP_Error
+     */
     private static function you_search($api_key, $query, $endpoint) {
+        $query = wp_strip_all_tags((string) $query);
+        $short = function_exists('mb_substr') ? mb_substr($query, 0, 380) : substr($query, 0, 380);
+        $bundle = self::you_bundle($api_key, $short, 'brief');
+        if (!is_wp_error($bundle) && !empty($bundle['content'])) {
+            return $bundle;
+        }
+        $legacy = self::you_search_legacy($api_key, $short, $endpoint);
+        if (!is_wp_error($legacy) && !empty($legacy['content'])) {
+            return $legacy;
+        }
+        return is_wp_error($bundle) ? $bundle : $legacy;
+    }
+
+    /**
+     * Academic domains to boost (not exclusive).
+     *
+     * @return string[]
+     */
+    private static function you_academic_domains() {
+        return array(
+            'sid.ir',
+            'magiran.com',
+            'civilica.com',
+            'noormags.ir',
+            'ensani.ir',
+            'irandoc.ac.ir',
+            'nih.gov',
+            'who.int',
+            'nature.com',
+            'springer.com',
+            'arxiv.org',
+            'sciencedirect.com',
+            'tandfonline.com',
+            'wiley.com',
+            'jstor.org',
+            'researchgate.net',
+        );
+    }
+
+    /**
+     * POST https://api.you.com{path}
+     *
+     * @param string               $path     /v1/search|/v1/answer|/v1/research
+     * @param array<string,mixed>  $payload  JSON body.
+     * @param string               $api_key  Key.
+     * @param int                  $timeout  Seconds.
+     * @return array|WP_Error
+     */
+    private static function you_http($path, $payload, $api_key, $timeout = 45) {
+        $response = wp_remote_post(
+            'https://api.you.com' . $path,
+            array(
+                'headers'     => array(
+                    'X-API-Key'     => $api_key,
+                    'Authorization' => 'Bearer ' . $api_key,
+                    'Content-Type'  => 'application/json',
+                    'Accept'        => 'application/json',
+                ),
+                'body'        => wp_json_encode($payload),
+                'timeout'     => $timeout,
+                'redirection' => 0,
+            )
+        );
+        if (is_wp_error($response)) {
+            return $response;
+        }
+        $status = (int) wp_remote_retrieve_response_code($response);
+        $raw    = (string) wp_remote_retrieve_body($response);
+        if ($status < 200 || $status >= 300) {
+            return new WP_Error('api_http_error', 'You.com HTTP ' . $status, array('status' => 502));
+        }
+        $body = json_decode($raw, true);
+        return is_array($body) ? $body : new WP_Error('api_error', 'پاسخ You.com نامعتبر بود', array('status' => 502));
+    }
+
+    /**
+     * Combine You.com modes into a Persian brief with numbered sources.
+     *
+     * @param string $api_key Key.
+     * @param string $query   Short query.
+     * @param string $intent  brief|deep.
+     * @return array|WP_Error
+     */
+    public static function you_bundle($api_key, $query, $intent = 'brief') {
+        $query   = trim(wp_strip_all_tags((string) $query));
+        $chunks  = array();
+        $sources = array();
+        $used    = array();
+        $domains = self::you_academic_domains();
+
+        if ('deep' === $intent) {
+            $research = self::you_http(
+                '/v1/research',
+                array(
+                    'input'            => $query,
+                    'research_effort'  => 'lite',
+                    'source_control'   => array(
+                        'boost_domains' => $domains,
+                        'freshness'     => 'year',
+                        'country'       => 'IR',
+                    ),
+                ),
+                $api_key,
+                55
+            );
+            if (is_wp_error($research)) {
+                $research = self::you_http(
+                    '/v1/research',
+                    array(
+                        'input'           => $query,
+                        'research_effort' => 'lite',
+                    ),
+                    $api_key,
+                    55
+                );
+            }
+            if (is_array($research)) {
+                $content = $research['output']['content'] ?? '';
+                if (is_array($content)) {
+                    $content = wp_json_encode($content, JSON_UNESCAPED_UNICODE);
+                }
+                if (is_string($content) && '' !== trim($content)) {
+                    $chunks[] = trim($content);
+                    $used[]   = 'research-lite';
+                }
+                foreach ((array) ($research['output']['sources'] ?? array()) as $src) {
+                    if (is_array($src)) {
+                        $sources[] = $src;
+                    }
+                }
+            }
+        }
+
+        $answer_payload = array(
+            'query'         => $query,
+            'language'      => 'FA',
+            'country'       => 'IR',
+            'freshness'     => 'year',
+            'safesearch'    => 'moderate',
+            'boost_domains' => $domains,
+        );
+        $answer = self::you_http('/v1/answer', $answer_payload, $api_key, 40);
+        if (is_wp_error($answer)) {
+            unset($answer_payload['boost_domains']);
+            $answer = self::you_http('/v1/answer', $answer_payload, $api_key, 40);
+        }
+        if (is_array($answer) && !empty($answer['answer'])) {
+            $chunks[] = trim((string) $answer['answer']);
+            $used[]   = 'answer';
+            foreach ((array) ($answer['citations'] ?? array()) as $cit) {
+                $sources[] = array(
+                    'url'      => $cit['source'] ?? ($cit['url'] ?? ''),
+                    'title'    => $cit['title'] ?? '',
+                    'snippets' => $cit['excerpts'] ?? array(),
+                );
+            }
+        }
+
+        $search_payload = array(
+            'query'         => $query,
+            'count'         => 8,
+            'language'      => 'FA',
+            'country'       => 'IR',
+            'freshness'     => 'year',
+            'safesearch'    => 'moderate',
+            'boost_domains' => $domains,
+        );
+        $search = self::you_http('/v1/search', $search_payload, $api_key, 40);
+        if (is_wp_error($search)) {
+            unset($search_payload['boost_domains']);
+            $search = self::you_http('/v1/search', $search_payload, $api_key, 40);
+        }
+        $web = array();
+        if (is_array($search)) {
+            $web = $search['results']['web'] ?? $search['results'] ?? $search['hits'] ?? array();
+            if (!empty($web)) {
+                $used[] = 'search';
+            }
+            foreach ((array) $web as $hit) {
+                if (!is_array($hit)) {
+                    continue;
+                }
+                $sources[] = array(
+                    'url'      => $hit['url'] ?? '',
+                    'title'    => $hit['title'] ?? '',
+                    'snippets' => $hit['snippets'] ?? array( $hit['description'] ?? '' ),
+                );
+            }
+        }
+
+        $lines = array( '## یافته‌های You.com' );
+        foreach ($chunks as $chunk) {
+            $lines[] = wp_strip_all_tags($chunk);
+        }
+        $seen = array();
+        $n    = 0;
+        $src_lines = array( '## منابع' );
+        foreach ($sources as $src) {
+            $url = esc_url_raw((string) ($src['url'] ?? ''));
+            if ('' === $url || isset($seen[ $url ])) {
+                continue;
+            }
+            $seen[ $url ] = true;
+            ++$n;
+            $title = wp_strip_all_tags((string) ($src['title'] ?? ''));
+            $snip  = '';
+            if (!empty($src['snippets']) && is_array($src['snippets'])) {
+                $snip = wp_strip_all_tags((string) $src['snippets'][0]);
+            }
+            $src_lines[] = $n . '. **' . ($title !== '' ? $title : $url) . '** — ' . $snip . ' (' . $url . ')';
+            if ($n >= 10) {
+                break;
+            }
+        }
+        if ($n > 0) {
+            $lines[] = implode("\n", $src_lines);
+        }
+        $text = trim(implode("\n\n", array_filter($lines)));
+        if ('' === $text || '## یافته‌های You.com' === $text) {
+            return new WP_Error('api_error', 'You.com نتیجه‌ای برنگرداند', array('status' => 502));
+        }
+        if (function_exists('mb_strlen') && mb_strlen($text) > 3500) {
+            $text = mb_substr($text, 0, 3500) . '…';
+        }
+        return array(
+            'content'          => $text,
+            'thinking_process' => null,
+            'agent_name'       => 'You.com',
+            'model'            => implode('+', $used) ?: 'you-search',
+        );
+    }
+
+    /**
+     * Legacy GET api.ydc-index.io/v1/search
+     *
+     * @param string $api_key  Key.
+     * @param string $query    Query.
+     * @param string $endpoint Optional URL.
+     * @return array|WP_Error
+     */
+    private static function you_search_legacy($api_key, $query, $endpoint) {
         $base = $endpoint ? $endpoint : 'https://api.ydc-index.io/v1/search';
-        $url  = add_query_arg('query', rawurlencode(wp_strip_all_tags((string) $query)), $base);
+        $host = strtolower((string) (wp_parse_url($base, PHP_URL_HOST) ?: ''));
+        if ($host !== 'api.ydc-index.io') {
+            $base = 'https://api.ydc-index.io/v1/search';
+        }
+        $url  = add_query_arg('query', rawurlencode($query), $base);
         $response = wp_remote_get($url, array(
             'headers' => array(
                 'X-API-Key' => $api_key,
@@ -616,15 +878,18 @@ class TezNevise_AI_API {
         if (!is_array($body)) {
             return new WP_Error('api_error', 'پاسخ You.com نامعتبر بود', ['status' => 502]);
         }
-        $hits = $body['hits'] ?? $body['results'] ?? $body['news'] ?? array();
+        $hits = $body['hits'] ?? $body['results']['web'] ?? $body['results'] ?? $body['news'] ?? array();
         $lines = array("## یافته‌های You");
         $n = 0;
         foreach ((array) $hits as $hit) {
-            if ($n >= 8) {
+            if (!is_array($hit) || $n >= 8) {
                 break;
             }
             $title = $hit['title'] ?? $hit['name'] ?? '';
             $snip  = $hit['snippet'] ?? $hit['description'] ?? $hit['summary'] ?? '';
+            if (is_array($snip)) {
+                $snip = implode(' ', $snip);
+            }
             $link  = $hit['url'] ?? $hit['link'] ?? '';
             if (!$title && !$snip) {
                 continue;
@@ -633,10 +898,11 @@ class TezNevise_AI_API {
             $lines[] = ($n) . '. **' . $title . '** — ' . wp_strip_all_tags((string) $snip) . ($link ? ' (' . $link . ')' : '');
         }
         if ($n === 0 && !empty($body['answer'])) {
-            $lines[] = (string) $body['answer'];
+            $lines[] = wp_strip_all_tags((string) $body['answer']);
+            ++$n;
         }
-        if ($n === 0 && count($lines) === 1) {
-            $lines[] = wp_json_encode($body, JSON_UNESCAPED_UNICODE);
+        if ($n === 0) {
+            return new WP_Error('api_error', 'You.com نتیجه‌ای برنگرداند', ['status' => 502]);
         }
         return array('content' => implode("\n", $lines), 'thinking_process' => null);
     }
@@ -672,7 +938,11 @@ class TezNevise_AI_API {
 
         $ykey = self::key_for(array('provider' => 'you'), 'you');
         if ($ykey !== '') {
-            $result = self::you_search($ykey, $query, '');
+            $bundle = self::you_bundle($ykey, function_exists('mb_substr') ? mb_substr($query, 0, 380) : substr($query, 0, 380), 'brief');
+            if (!is_wp_error($bundle) && !empty($bundle['content'])) {
+                return $bundle;
+            }
+            $result = self::you_search_legacy($ykey, $query, 'https://api.ydc-index.io/v1/search');
             if (!is_wp_error($result) && !empty($result['content'])) {
                 $result['agent_name'] = 'You.com';
                 $result['model'] = 'you-search';
@@ -930,7 +1200,7 @@ class TezNevise_AI_API {
             'mistral'    => array('label' => 'Mistral', 'option' => 'teznevise_ai_mistral_key', 'host' => 'api.mistral.ai', 'endpoint' => 'https://api.mistral.ai/v1/chat/completions'),
             'together'   => array('label' => 'Together', 'option' => 'teznevise_ai_together_key', 'host' => 'api.together.xyz', 'endpoint' => 'https://api.together.xyz/v1/chat/completions'),
             'deepseek'   => array('label' => 'DeepSeek', 'option' => 'teznevise_ai_deepseek_key', 'host' => 'api.deepseek.com', 'endpoint' => 'https://api.deepseek.com/v1/chat/completions'),
-            'you'        => array('label' => 'You.com Research', 'option' => 'teznevise_ai_you_key', 'host' => 'api.ydc-index.io', 'endpoint' => 'https://api.ydc-index.io/v1/search'),
+            'you'        => array('label' => 'You.com Research', 'option' => 'teznevise_ai_you_key', 'host' => 'api.you.com', 'endpoint' => 'https://api.you.com/v1/search'),
             'tavily'     => array('label' => 'Tavily Research', 'option' => 'teznevise_ai_tavily_key', 'host' => 'api.tavily.com', 'endpoint' => 'https://api.tavily.com/search'),
             'genspark'   => array('label' => 'Genspark (backup)', 'option' => 'teznevise_ai_genspark_key', 'host' => 'api.genspark.ai', 'endpoint' => 'https://api.genspark.ai/v1/chat/completions'),
             'perplexity' => array('label' => 'Perplexity Sonar', 'option' => 'teznevise_ai_perplexity_key', 'host' => 'api.perplexity.ai', 'endpoint' => 'https://api.perplexity.ai/chat/completions'),

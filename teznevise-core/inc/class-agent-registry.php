@@ -115,8 +115,9 @@ class Teznevise_Agent_Registry {
 
 		$alias = trim( (string) ( $extra['alias'] ?? '' ) );
 		if ( '' === $alias ) {
-			$alias = (string) ( $canon['name'] ?? $row['name'] ?? $id );
+			$alias = (string) ( $canon['fa_name'] ?? $canon['name'] ?? $row['name'] ?? $id );
 		}
+		$row['fa_name']              = (string) ( $canon['fa_name'] ?? $alias );
 		$display = trim( (string) ( $extra['displayed_model_name'] ?? '' ) );
 		if ( '' === $display ) {
 			$display = (string) ( $canon['displayed_model_name'] ?? $alias );

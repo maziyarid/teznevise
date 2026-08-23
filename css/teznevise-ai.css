@@ -456,6 +456,85 @@ body.tz-livechat-open { overflow: hidden; }
 }
 .tz-ai-debate-run { margin: 12px 0; }
 
+.tz-gpt-model__list[hidden],
+.tz-gpt-model__scrim[hidden] { display: none !important; }
+.tz-gpt__top { position: relative; z-index: 40; }
+.tz-gpt-model { position: static; flex: 1 1 auto; min-width: 0; max-width: calc(100% - 96px); }
+.tz-ai-chat.tz-gpt { position: relative; }
+.tz-gpt-model__btn { max-width: 100%; }
+.tz-gpt-model__btn [data-agent-label] { max-width: 46vw; }
+.tz-gpt-model__scrim {
+  position: absolute;
+  inset: 56px 0 0;
+  border: 0;
+  background: rgba(16, 35, 29, .42);
+  z-index: 20;
+  cursor: pointer;
+}
+.tz-ai-chat.is-picking { position: relative; }
+.tz-gpt-model__list {
+  position: absolute;
+  inset-inline: 10px;
+  top: 58px;
+  width: auto;
+  max-width: none;
+  max-height: min(58%, 380px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 25;
+}
+.tz-gpt-model__list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px 10px;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1;
+  border-bottom: 1px solid rgba(20,93,74,.1);
+}
+.tz-gpt-model__list-head strong { font-size: 13px; color: #145d4a; }
+.tz-gpt-model__done {
+  width: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  background: #145d4a !important;
+  color: #fff !important;
+}
+.tz-gpt-agent { align-items: flex-start; }
+.tz-gpt-agent__copy { width: 100%; }
+.tz-gpt-agent__copy strong { white-space: normal; }
+.tz-gpt-agent__copy small {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tz-gpt-bar { flex-wrap: nowrap !important; }
+.tz-gpt-toggles { flex: 1; overflow-x: auto; scrollbar-width: none; }
+.tz-livechat__panel { overflow: hidden; }
+.tz-livechat__panel.is-picking,
+.tz-ai-chat.is-picking .tz-gpt-composer { pointer-events: none; }
+.tz-ai-chat.is-picking .tz-gpt__top,
+.tz-ai-chat.is-picking .tz-gpt-model__list,
+.tz-ai-chat.is-picking .tz-gpt-model__scrim { pointer-events: auto; }
+body.tz-livechat-open .tz-livechat__fab {
+  visibility: hidden;
+  pointer-events: none;
+}
+.tz-ai-thread .tz-ai-quote {
+  display: block;
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-inline-start: 3px solid #145d4a;
+  background: #f4faf7;
+  color: #145d4a;
+  font-weight: 600;
+}
+
 .tz-gpt-box .tz-gpt__iconbtn {
   background: #eef6f2;
   color: #145d4a;

@@ -67,6 +67,19 @@ export function LiveChat() {
     if (thoughtOpen) logRef.current?.scrollTo({ top: logRef.current.scrollHeight });
   }, [msgs, busy, thoughtOpen]);
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== "Escape") return;
+      if (menu) {
+        setMenu(false);
+        return;
+      }
+      if (open) setOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [menu, open]);
+
   const agent = agents.find((a) => a.id === agentId) ?? agents[0];
   const history = useMemo(
     () => msgs.map((m) => `${m.role === "user" ? "کاربر" : m.name || "تزنویسه"}: ${m.text}`).join("\n"),
@@ -143,7 +156,7 @@ export function LiveChat() {
   }
 
   return (
-    <div className="tz-livechat">
+    <div className={open ? "tz-livechat is-open" : "tz-livechat"}>
       <button
         type="button"
         className="tz-livechat__fab"
@@ -155,7 +168,7 @@ export function LiveChat() {
         <FaIcon icon="fa-headset" />
       </button>
       {open ? (
-        <section className="tz-ai-chat tz-gpt tz-livechat__panel" data-live-chat="1">
+        <section className={`tz-ai-chat tz-gpt tz-livechat__panel${menu ? " is-picking" : ""}`} data-live-chat="1">
           <header className="tz-gpt__top">
             <div className="tz-gpt-model">
               <button
@@ -171,6 +184,18 @@ export function LiveChat() {
               </button>
               {menu ? (
                 <div className="tz-gpt-model__list" role="listbox">
+                  <div className="tz-gpt-model__list-head">
+                    <strong>انتخاب عامل</strong>
+                    <button
+                      type="button"
+                      className="tz-gpt__iconbtn tz-gpt-model__done"
+                      aria-label="بازگشت به گفتگو"
+                      title="بازگشت به گفتگو"
+                      onClick={() => setMenu(false)}
+                    >
+                      <FaIcon icon="fa-xmark" />
+                    </button>
+                  </div>
                   {agents.map((a) => (
                     <button
                       key={a.id}
@@ -201,6 +226,7 @@ export function LiveChat() {
                 onClick={() => {
                   abortRef.current?.abort();
                   setBusy(false);
+                  setMenu(false);
                   setMsgs([
                     {
                       role: "assistant",
@@ -215,14 +241,22 @@ export function LiveChat() {
               <button
                 type="button"
                 className="tz-gpt__iconbtn"
-                aria-label="بستن گفتگو"
-                title="بستن"
-                onClick={() => setOpen(false)}
+                aria-label={menu ? "بازگشت به گفتگو" : "بستن گفتگو"}
+                title={menu ? "بازگشت به گفتگو" : "بستن"}
+                onClick={() => (menu ? setMenu(false) : setOpen(false))}
               >
                 <FaIcon icon="fa-xmark" />
               </button>
             </div>
           </header>
+          {menu ? (
+            <button
+              type="button"
+              className="tz-gpt-model__scrim"
+              aria-label="بازگشت به گفتگو"
+              onClick={() => setMenu(false)}
+            />
+          ) : null}
           <p className="tz-livechat__note">
             پاسخ‌ها آموزشی‌اند و دقت علمی را تضمین نمی‌کنند. برای بررسی تخصصی، تماس رزرو کنید.
           </p>
