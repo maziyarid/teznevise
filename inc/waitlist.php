@@ -47,15 +47,17 @@ function teznevise_waitlist_render_bar() {
 	}
 	$ok = isset( $_GET['waitlist'] ) ? sanitize_key( wp_unslash( $_GET['waitlist'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	?>
-	<aside class="tz-waitlist-bar" data-reveal>
-		<div class="container tz-waitlist-bar__inner">
-			<p class="tz-waitlist-bar__copy"><?php esc_html_e( 'ابزارهای تزنویسه بزودی راه‌اندازی می شوند، در صورت تمایل شماره همراه خود را وارد کنید تا به شما اطلاع رسانی شود.', 'teznevise' ); ?></p>
+	<aside class="tz-tools-notice" data-tz-notice>
+		<div class="container tz-tools-notice__inner">
+			<p class="tz-tools-notice__copy"><?php esc_html_e( 'ابزارهای تزنویسه بزودی راه‌اندازی می شوند، در صورت تمایل شماره همراه خود را وارد کنید تا به شما اطلاع رسانی شود.', 'teznevise' ); ?></p>
 			<?php if ( 'ok' === $ok ) : ?>
-				<p class="tz-waitlist-bar__ok" role="status"><?php esc_html_e( 'شماره شما ثبت شد. هنگام راه‌اندازی ابزارها خبر می‌دهیم.', 'teznevise' ); ?></p>
+				<p class="tz-tools-notice__ok" role="status"><?php esc_html_e( 'شماره شما ثبت شد. هنگام راه‌اندازی ابزارها خبر می‌دهیم.', 'teznevise' ); ?></p>
 			<?php elseif ( 'dup' === $ok ) : ?>
-				<p class="tz-waitlist-bar__ok" role="status"><?php esc_html_e( 'این شماره از قبل در فهرست اطلاع‌رسانی است.', 'teznevise' ); ?></p>
+				<p class="tz-tools-notice__ok" role="status"><?php esc_html_e( 'این شماره از قبل در فهرست اطلاع‌رسانی است.', 'teznevise' ); ?></p>
+			<?php elseif ( 'err' === $ok ) : ?>
+				<p class="tz-tools-notice__ok" role="status"><?php esc_html_e( 'نام و موبایل را بررسی کنید و دوباره بفرستید.', 'teznevise' ); ?></p>
 			<?php else : ?>
-				<form class="tz-waitlist-bar__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<form class="tz-tools-notice__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 					<input type="hidden" name="action" value="teznevise_waitlist" />
 					<?php wp_nonce_field( 'teznevise_waitlist', 'teznevise_waitlist_nonce' ); ?>
 					<label class="screen-reader-text" for="tz-wl-name"><?php esc_html_e( 'نام', 'teznevise' ); ?></label>
@@ -66,11 +68,24 @@ function teznevise_waitlist_render_bar() {
 					<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'خبرم کنید', 'teznevise' ); ?></button>
 				</form>
 			<?php endif; ?>
+			<button type="button" class="tz-tools-notice__close" data-tz-notice-close aria-label="<?php esc_attr_e( 'بستن', 'teznevise' ); ?>">&times;</button>
 		</div>
 	</aside>
+	<script>
+	(function () {
+		var el = document.querySelector('[data-tz-notice]');
+		if (!el) return;
+		try { if (window.localStorage.getItem('tz-tools-notice') === '1') { el.hidden = true; return; } } catch (e) {}
+		var btn = el.querySelector('[data-tz-notice-close]');
+		if (btn) btn.addEventListener('click', function () {
+			el.hidden = true;
+			try { window.localStorage.setItem('tz-tools-notice', '1'); } catch (e) {}
+		});
+	})();
+	</script>
 	<?php
 }
-add_action( 'teznevise_after_header', 'teznevise_waitlist_render_bar' );
+add_action( 'wp_footer', 'teznevise_waitlist_render_bar', 5 );
 
 function teznevise_waitlist_handle() {
 	$nonce = isset( $_POST['teznevise_waitlist_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['teznevise_waitlist_nonce'] ) ) : '';
@@ -100,8 +115,8 @@ function teznevise_waitlist_handle() {
 
 	teznevise_waitlist_install();
 	global $wpdb;
-	$hash = hash_hmac( 'sha256', $phone, wp_salt( 'auth' ) );
-	$enc  = class_exists( 'Teznevise_Key_Vault' ) ? Teznevise_Key_Vault::encrypt( $phone ) : $phone;
+	$hash   = hash_hmac( 'sha256', $phone, wp_salt( 'auth' ) );
+	$enc    = class_exists( 'Teznevise_Key_Vault' ) ? Teznevise_Key_Vault::encrypt( $phone ) : $phone;
 	$exists = $wpdb->get_var( $wpdb->prepare( 'SELECT id FROM ' . teznevise_waitlist_table() . ' WHERE phone_hash = %s', $hash ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( $exists ) {
 		wp_safe_redirect( add_query_arg( 'waitlist', 'dup', $redirect ) );
@@ -142,9 +157,26 @@ function teznevise_waitlist_admin_page() {
 	}
 	teznevise_waitlist_install();
 	global $wpdb;
-	$rows = $wpdb->get_results( 'SELECT * FROM ' . teznevise_waitlist_table() . ' ORDER BY id DESC LIMIT 500', ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$table = teznevise_waitlist_table();
+	if ( isset( $_GET['export'] ) && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'teznevise_waitlist_csv' ) ) {
+		$rows = $wpdb->get_results( 'SELECT * FROM ' . $table . ' ORDER BY id DESC', ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		header( 'Content-Type: text/csv; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename=teznevise-waitlist.csv' );
+		$out = fopen( 'php://output', 'w' );
+		fputcsv( $out, array( 'name', 'phone', 'created_at' ) );
+		foreach ( (array) $rows as $row ) {
+			$phone = class_exists( 'Teznevise_Key_Vault' ) ? Teznevise_Key_Vault::decrypt( $row['phone_enc'] ) : $row['phone_enc'];
+			fputcsv( $out, array( $row['name'], $phone, $row['created_at'] ) );
+		}
+		fclose( $out );
+		exit;
+	}
+	$rows  = $wpdb->get_results( 'SELECT * FROM ' . $table . ' ORDER BY id DESC LIMIT 500', ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$total = (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $table ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$csv   = wp_nonce_url( add_query_arg( array( 'page' => 'teznevise-waitlist', 'export' => '1' ), admin_url( 'tools.php' ) ), 'teznevise_waitlist_csv' );
 	echo '<div class="wrap"><h1>' . esc_html__( 'فهرست اطلاع‌رسانی ابزارها', 'teznevise' ) . '</h1>';
-	echo '<p>' . esc_html__( 'شماره‌ها رمزنگاری شده‌اند و در پایگاه جدا از محتوای عمومی نگه داشته می‌شوند.', 'teznevise' ) . '</p>';
+	echo '<p>' . esc_html( sprintf( __( '%s شماره ثبت شده. شماره‌ها رمزنگاری شده‌اند.', 'teznevise' ), number_format_i18n( $total ) ) ) . ' ';
+	echo '<a class="button" href="' . esc_url( $csv ) . '">' . esc_html__( 'خروجی CSV', 'teznevise' ) . '</a></p>';
 	echo '<table class="widefat striped"><thead><tr><th>نام</th><th>موبایل</th><th>زمان</th></tr></thead><tbody>';
 	if ( ! $rows ) {
 		echo '<tr><td colspan="3">' . esc_html__( 'هنوز کسی ثبت نشده.', 'teznevise' ) . '</td></tr>';

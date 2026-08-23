@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.11 — 2026-08-23 — Consulting site, Enamad, dashboard
+
+- Public copy is consulting + tools: runtime rewrite of ghostwriting claims on titles, content, builder sections, and page fields.
+- Footer: exact Enamad HTML plus free TrustedSite (`cdn.ywxi.net/js/1.js`). Placeholder ساماندهی/اتحادیه/ثبت ملی removed.
+- University crests use a dedicated card layout so the old 52px green badge no longer clips logos.
+- Tools waitlist is a dismissible bottom dock (exact notice copy) and no longer pushes the hero.
+- `/account/` is a customer portal (login/register, dashboard vs profile, password change, logout). Subscribers never land in wp-admin. New members get 30 تزکوین.
+- Waitlist admin exports CSV.
+
 ## 1.9.10 — 2026-08-22 — Enamad, consulting copy, waitlist, professional AI
 
 - Exact Enamad trust seal in the footer; SSL plus placeholder ساماندهی / اتحادیه / ثبت ملی in the same row.

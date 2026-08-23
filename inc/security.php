@@ -130,6 +130,36 @@ function teznevise_hide_admin_bar_for_customers( $show ) {
 }
 add_filter( 'show_admin_bar', 'teznevise_hide_admin_bar_for_customers' );
 
+/** Send customers to the front-end account, never stock wp-login, unless staff. */
+function teznevise_customer_login_url( $login_url, $redirect = '', $force_reauth = false ) {
+	unset( $force_reauth );
+	if ( is_string( $redirect ) && false !== strpos( $redirect, 'wp-admin' ) ) {
+		return $login_url;
+	}
+	return home_url( '/account/' );
+}
+add_filter( 'login_url', 'teznevise_customer_login_url', 10, 3 );
+
+function teznevise_block_stock_login_for_customers() {
+	if ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {
+		return;
+	}
+	$action = isset( $_REQUEST['action'] ) ? sanitize_key( wp_unslash( $_REQUEST['action'] ) ) : 'login'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( in_array( $action, array( 'logout', 'lostpassword', 'retrievepassword', 'resetpass', 'rp', 'confirmaction' ), true ) ) {
+		return;
+	}
+	if ( ! empty( $_GET['staff'] ) || ! empty( $_REQUEST['interim-login'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return;
+	}
+	$redirect_to = isset( $_REQUEST['redirect_to'] ) ? (string) wp_unslash( $_REQUEST['redirect_to'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( false !== strpos( $redirect_to, 'wp-admin' ) ) {
+		return;
+	}
+	wp_safe_redirect( home_url( '/account/' ) );
+	exit;
+}
+add_action( 'login_init', 'teznevise_block_stock_login_for_customers', 1 );
+
 /** Brand the login screen so it does not look like stock WordPress. */
 function teznevise_login_brand() {
 	$logo = function_exists( 'teznevise_logo_url' ) ? teznevise_logo_url() : '';

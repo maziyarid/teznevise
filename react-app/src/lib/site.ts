@@ -141,7 +141,7 @@ export const FOOTER_SERVICES = [
   { label: "شبیه‌سازی", to: "/simulation" },
   { label: "تحلیل کیفی", to: "/proposal/qualitative" },
   { label: "پروژه دانشجویی", to: "/project" },
-  { label: "انجام مقاله", to: "/article" },
+  { label: "مشاوره نگارش مقاله", to: "/article" },
   { label: "ابزارهای آنلاین", to: "/tools" },
 ] as const;
 

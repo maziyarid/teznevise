@@ -75,6 +75,7 @@ def check_requires() -> None:
         "assets/css/hotfix-198.css",
         "assets/css/hotfix-199.css",
         "assets/css/hotfix-200.css",
+        "assets/css/hotfix-201.css",
         "inc/legal-copy.php",
         "inc/waitlist.php",
         "teznevise-core/teznevise-core.php",
@@ -214,6 +215,31 @@ def check_source_contracts() -> None:
         error("Google Analytics G-ZTB0ERWJYN is not the default ga_id")
     if "xf2anzt0a3" not in tezcoin:
         error("Clarity xf2anzt0a3 is not the default clarity_id")
+    if "cdn.ywxi.net/js/1.js" not in footer:
+        error("TrustedSite free seal script is missing from footer.php")
+    if "ساماندهی" in footer or "ثبت ملی" in footer:
+        error("Placeholder Iranian seals must not remain in footer.php")
+    dash = (ROOT / "page-account.php").read_text(encoding="utf-8")
+    if "teznevise_auth_action" not in dash:
+        error("Front-end login/register is missing from page-account.php")
+    if "'overview'" not in dash and '"overview"' not in dash:
+        error("Customer dashboard overview tab is missing")
+    tezcoin = (ROOT / "inc" / "tezcoin.php").read_text(encoding="utf-8")
+    if "function teznevise_maybe_welcome_coins" not in tezcoin:
+        error("Welcome 30-coin grant is missing")
+    waitlist = (ROOT / "inc" / "waitlist.php").read_text(encoding="utf-8")
+    if "tz-tools-notice" not in waitlist:
+        error("Tools waitlist is not the bottom notice bar")
+    unis = (ROOT / "template-parts" / "universities.php").read_text(encoding="utf-8")
+    if "tz-uni-card" not in unis:
+        error("University row is still using the clipped uni-mark badge")
+    legal = (ROOT / "inc" / "legal-copy.php").read_text(encoding="utf-8")
+    if "برایتان می‌نویسیم" not in legal:
+        error("Legal copy does not rewrite ghostwriting phrases")
+    perf = (ROOT / "inc" / "perf.php").read_text(encoding="utf-8")
+    if "hotfix-201.css" not in perf:
+        error("hotfix-201.css is not in the runtime CSS concat")
+
     settings = (ROOT / "inc" / "ai" / "class-ai-settings.php").read_text(encoding="utf-8")
     if "displayed_model_name" not in settings:
         error("Agent form is missing the handwritten displayed_model_name field")

@@ -1,0 +1,308 @@
+/**
+ * 1.9.11 last-wins — logos, Enamad, notice, dashboard, spacing.
+ * Concatenated after hotfix-200.
+ * @package Teznevise
+ */
+
+/* University crests: kill the 52px green letter-badge box. */
+.uni-strip {
+  text-align: center;
+  padding-block: var(--tz-space-12, 3rem);
+  background: #f7fcfa;
+}
+.uni-strip h2 {
+  margin: 0 auto 1.5rem;
+  max-width: 28rem;
+}
+.tz-uni-grid,
+.uni-row {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)) !important;
+  gap: 1rem !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  align-items: stretch;
+  width: 100%;
+}
+.tz-uni-grid li,
+.uni-row li {
+  min-width: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.tz-uni-card,
+figure.uni-mark,
+.uni-mark {
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 14px 10px 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  background: #fff !important;
+  color: #145d4a !important;
+  border: 1px solid #dfe9e5 !important;
+  border-radius: 18px !important;
+  box-shadow: 0 8px 24px rgba(9, 40, 32, 0.05);
+}
+.tz-uni-card img,
+.uni-mark img,
+.uni-row img,
+.uni-row svg,
+.tz-uni-grid img {
+  width: 88px !important;
+  height: 88px !important;
+  max-width: 88px !important;
+  max-height: 88px !important;
+  object-fit: contain !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+  display: block !important;
+  filter: none !important;
+}
+.tz-uni-card figcaption,
+.uni-mark figcaption {
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #145d4a;
+  text-align: center;
+}
+
+/* Enamad + free TrustedSite — never clip or recolor the official img. */
+.footer-certs,
+.site-footer-new .footer-certs {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 16px !important;
+  margin-top: 22px !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 125px;
+}
+.footer-certs__enamad,
+.footer-certs__enamad a,
+.footer-certs__enamad img {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.footer-certs__enamad {
+  background: #fff !important;
+  border: 1px solid #dfe9e5;
+  border-radius: 14px;
+  padding: 8px;
+  min-width: 125px;
+  min-height: 125px;
+  line-height: 0;
+}
+.footer-certs__enamad img {
+  width: 125px !important;
+  height: 125px !important;
+  max-width: 125px !important;
+  max-height: 125px !important;
+  object-fit: contain !important;
+}
+.footer-certs__trusted {
+  min-width: 80px;
+  min-height: 80px;
+  display: inline-flex;
+  align-items: center;
+}
+.trust-seal.is-ssl {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px !important;
+  background: #fff !important;
+  color: #145d4a !important;
+  border: 1px solid #dfe9e5 !important;
+  border-radius: 14px;
+  min-height: 48px;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+/* Tools waitlist — bottom dock, does not push the hero. */
+.tz-tools-notice {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 70;
+  background: #10231d;
+  color: #f4faf7;
+  box-shadow: 0 -12px 40px rgba(9, 40, 32, 0.18);
+  padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px));
+}
+.tz-tools-notice[hidden] { display: none !important; }
+body:has(.tz-tools-notice:not([hidden])) {
+  padding-bottom: 92px;
+}
+.tz-tools-notice__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+}
+.tz-tools-notice__copy {
+  margin: 0;
+  flex: 1 1 16rem;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  font-weight: 600;
+}
+.tz-tools-notice__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.tz-tools-notice__form input {
+  min-height: 44px;
+  border: 0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  min-width: 9rem;
+  font: inherit;
+}
+.tz-tools-notice__form .btn-tz {
+  min-height: 44px;
+  background: #82d8b9;
+  color: #10231d;
+  border: 0;
+  border-radius: 12px;
+  font-weight: 800;
+  padding: 0 16px;
+  cursor: pointer;
+}
+.tz-tools-notice__ok { margin: 0; font-weight: 700; color: #82d8b9; }
+.tz-tools-notice__close {
+  margin-inline-start: auto;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+.tz-honeypot {
+  position: absolute !important;
+  left: -9999px !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Dashboard — customer portal, not wp-admin. */
+.tz-dash {
+  padding-block: var(--tz-space-10, 2.5rem) var(--tz-space-16, 4rem);
+}
+.tz-dash__grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 16rem) minmax(0, 1fr);
+  gap: var(--tz-space-8, 2rem);
+  align-items: start;
+}
+.tz-dash__nav {
+  background: #fff;
+  border: 1px solid #dfe9e5;
+  border-radius: 24px;
+  padding: 1.25rem;
+  box-shadow: 0 12px 32px rgba(9, 40, 32, 0.06);
+  position: sticky;
+  top: 1rem;
+}
+.tz-dash__avatar { text-align: center; margin-bottom: 1rem; }
+.tz-dash__avatar img { border-radius: 999px; }
+.tz-dash__coin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #e8f5f1;
+  color: #145d4a;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+.tz-dash .account-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tz-dash .account-tabs a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  color: #10231d;
+  background: #f4faf7;
+}
+.tz-dash .account-tabs a.is-on {
+  background: #145d4a;
+  color: #fff;
+}
+.tz-dash__logout {
+  margin-top: 12px;
+  display: block;
+  text-align: center;
+  color: #8a2f2f;
+  font-weight: 700;
+}
+.tz-dash__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 1.25rem;
+}
+.tz-dash__stat {
+  background: #fff;
+  border: 1px solid #dfe9e5;
+  border-radius: 16px;
+  padding: 16px;
+}
+.tz-dash__stat b { display: block; font-size: 1.4rem; color: #145d4a; }
+.tz-auth {
+  max-width: 28rem;
+  margin: 3rem auto 4rem;
+}
+.tz-auth .surface-card { padding: 1.5rem; }
+.tz-auth h1 { margin-top: 0; }
+.tz-auth-switch { margin-top: 1rem; font-size: 0.9rem; }
+
+/* Page rhythm */
+.page-hero-new,
+.service-hero,
+.hero-new {
+  padding-block: clamp(2rem, 5vw, 3.5rem);
+}
+.section { padding-block: clamp(2.25rem, 5vw, 4rem); }
+.section-head { margin-bottom: 1.5rem; }
+.longcopy { max-width: 46rem; }
+.tz-classic-more-wrap { margin-block: 2rem; }
+
+@media (max-width: 800px) {
+  .tz-dash__grid { grid-template-columns: 1fr; }
+  .tz-dash__nav { position: static; }
+  .tz-dash .account-tabs { flex-direction: row; flex-wrap: wrap; }
+  body:has(.tz-tools-notice:not([hidden])) { padding-bottom: 140px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tz-tools-notice, .tz-uni-card { transition: none !important; }
+}

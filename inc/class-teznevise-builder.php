@@ -375,6 +375,10 @@ function teznevise_builder_get_sections( $post_id = 0 ) {
 		$sections = teznevise_builder_refresh_homepage_catalog( $sections );
 	}
 
+	if ( function_exists( 'teznevise_consult_copy_deep' ) ) {
+		$sections = teznevise_consult_copy_deep( $sections );
+	}
+
 	return $sections;
 }
 

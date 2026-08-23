@@ -8,6 +8,74 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+function teznevise_handle_front_auth() {
+	if ( empty( $_POST['teznevise_auth_action'] ) ) {
+		return;
+	}
+	$nonce = isset( $_POST['_tz_auth'] ) ? sanitize_text_field( wp_unslash( $_POST['_tz_auth'] ) ) : '';
+	if ( ! wp_verify_nonce( $nonce, 'teznevise_auth' ) ) {
+		return;
+	}
+	$action   = sanitize_key( wp_unslash( $_POST['teznevise_auth_action'] ) );
+	$redirect = home_url( '/account/' );
+
+	if ( 'login' === $action ) {
+		$login = isset( $_POST['log'] ) ? sanitize_user( wp_unslash( $_POST['log'] ) ) : '';
+		$pass  = isset( $_POST['pwd'] ) ? (string) wp_unslash( $_POST['pwd'] ) : '';
+		$user  = wp_signon(
+			array(
+				'user_login'    => $login,
+				'user_password' => $pass,
+				'remember'      => ! empty( $_POST['rememberme'] ),
+			),
+			is_ssl()
+		);
+		if ( is_wp_error( $user ) ) {
+			wp_safe_redirect( add_query_arg( 'auth', 'fail', $redirect ) );
+			exit;
+		}
+		if ( function_exists( 'teznevise_maybe_welcome_coins' ) ) {
+			teznevise_maybe_welcome_coins( $user->ID );
+		}
+		wp_safe_redirect( $redirect );
+		exit;
+	}
+
+	if ( 'register' === $action ) {
+		$ip    = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+		$rate  = 'tz_reg_' . substr( hash_hmac( 'sha256', $ip, wp_salt( 'nonce' ) ), 0, 24 );
+		$count = (int) get_transient( $rate );
+		if ( $count >= 8 ) {
+			wp_safe_redirect( add_query_arg( 'auth', 'rate', $redirect ) );
+			exit;
+		}
+		set_transient( $rate, $count + 1, HOUR_IN_SECONDS );
+		$email = isset( $_POST['user_email'] ) ? sanitize_email( wp_unslash( $_POST['user_email'] ) ) : '';
+		$login = isset( $_POST['user_login'] ) ? sanitize_user( wp_unslash( $_POST['user_login'] ) ) : '';
+		$pass  = isset( $_POST['user_pass'] ) ? (string) wp_unslash( $_POST['user_pass'] ) : '';
+		$pass2 = isset( $_POST['user_pass2'] ) ? (string) wp_unslash( $_POST['user_pass2'] ) : '';
+		if ( ! is_email( $email ) || strlen( $login ) < 3 || strlen( $pass ) < 8 || ! hash_equals( $pass, $pass2 ) ) {
+			wp_safe_redirect( add_query_arg( 'auth', 'invalid', $redirect ) );
+			exit;
+		}
+		$user_id = wp_create_user( $login, $pass, $email );
+		if ( is_wp_error( $user_id ) ) {
+			wp_safe_redirect( add_query_arg( 'auth', 'exists', $redirect ) );
+			exit;
+		}
+		$user = new WP_User( $user_id );
+		$user->set_role( 'subscriber' );
+		if ( function_exists( 'teznevise_maybe_welcome_coins' ) ) {
+			teznevise_maybe_welcome_coins( $user_id );
+		}
+		wp_set_current_user( $user_id );
+		wp_set_auth_cookie( $user_id, true, is_ssl() );
+		wp_safe_redirect( add_query_arg( 'tab', 'profile', $redirect ) );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'teznevise_handle_front_auth', 8 );
+
 function teznevise_seed_v171_pages() {
 	if ( get_option( 'teznevise_seeded_1_7_1' ) ) {
 		return;
@@ -139,6 +207,21 @@ function teznevise_handle_account_post() {
 			update_user_meta( $user_id, 'teznevise_telegram', sanitize_text_field( wp_unslash( $_POST['teznevise_telegram'] ) ) );
 		}
 		wp_safe_redirect( add_query_arg( array( 'saved' => '1', 'tab' => 'settings' ), home_url( '/account/' ) ) );
+		exit;
+	}
+
+	if ( 'password' === $action ) {
+		$user = get_userdata( $user_id );
+		$cur  = isset( $_POST['current_pass'] ) ? (string) wp_unslash( $_POST['current_pass'] ) : '';
+		$new  = isset( $_POST['new_pass'] ) ? (string) wp_unslash( $_POST['new_pass'] ) : '';
+		$new2 = isset( $_POST['new_pass2'] ) ? (string) wp_unslash( $_POST['new_pass2'] ) : '';
+		if ( ! $user || ! wp_check_password( $cur, $user->user_pass, $user_id ) || strlen( $new ) < 8 || ! hash_equals( $new, $new2 ) ) {
+			wp_safe_redirect( add_query_arg( array( 'tab' => 'settings', 'pw' => 'fail' ), home_url( '/account/' ) ) );
+			exit;
+		}
+		wp_set_password( $new, $user_id );
+		wp_set_auth_cookie( $user_id, true, is_ssl() );
+		wp_safe_redirect( add_query_arg( array( 'tab' => 'settings', 'pw' => 'ok' ), home_url( '/account/' ) ) );
 		exit;
 	}
 

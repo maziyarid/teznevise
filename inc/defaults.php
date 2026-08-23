@@ -27,11 +27,11 @@ function teznevise_content_defaults() {
 		'hours'         => 'شنبه تا پنجشنبه، ۹ تا ۲۱',
 
 		'hero_eyebrow'   => 'همراهی علمی از ایده تا دفاع',
-		'hero_title_1'   => 'از موضوع تا تحویل نهایی،',
-		'hero_title_grad'=> 'پژوهش‌تان را حرفه‌ای‌تر',
-		'hero_title_2'   => 'پیش ببرید.',
-		'hero_text'      => 'تزنویسه برای پایان‌نامه، پروپوزال، پروژه دانشگاهی و تحلیل آماری یک مسیر منظم، خلاقانه و قابل اتکا می‌سازد؛ با پشتیبانی تخصصی، محرمانگی کامل و پاسخ‌گویی سریع.',
-		'hero_btn_primary' => 'ثبت سفارش و شروع مشاوره',
+		'hero_title_1'   => 'از موضوع تا دفاع،',
+		'hero_title_grad'=> 'با ابزار و مشاور',
+		'hero_title_2'   => 'پژوهش را پیش ببرید.',
+		'hero_text'      => 'تزنویسه برای دانشجویان همه رشته‌ها ابزارهای آنلاین، عامل‌های هوش مصنوعی و مشاوران متخصص فراهم می‌کند؛ مسیر پایان‌نامه، پروپوزال، تحلیل آماری و آمادگی دفاع را شفاف و قابل اتکا می‌سازد.',
+		'hero_btn_primary' => 'درخواست مشاوره رایگان',
 		'hero_btn_primary_url' => '/inquiry/',
 		'hero_btn_secondary' => 'مشاهده خدمات',
 		'hero_point_1'   => 'مشاوره اولیه رایگان',
@@ -43,7 +43,7 @@ function teznevise_content_defaults() {
 		'services_text'    => 'از انتخاب موضوع تا دفاع، هر خدمت به خدمت بعدی وصل است تا مسیر پژوهش‌تان یکپارچه بماند.',
 
 		'svc1_title' => 'مشاوره انجام پایان‌نامه',
-		'svc1_text'  => 'از انتخاب موضوع تا نگارش فصل‌ها، تحلیل آماری و آمادگی دفاع برای ارشد و دکتری.',
+		'svc1_text'  => 'مشاوره انتخاب موضوع، ساختار فصل‌ها، تحلیل آماری و آمادگی دفاع برای ارشد و دکتری — همراه ابزارهای پژوهشی.',
 		'svc1_url'   => '/thesis/',
 		'svc1_icon'  => 'fa-solid fa-graduation-cap',
 		'svc1_color' => 'icon-indigo',
@@ -84,14 +84,14 @@ function teznevise_content_defaults() {
 		'svc7_icon'  => 'fa-solid fa-comments',
 		'svc7_color' => 'icon-indigo',
 
-		'svc8_title' => 'انجام پروژه دانشجویی',
-		'svc8_text'  => 'پروژه‌های درسی، کارورزی و گزارش‌های دانشگاهی با ساختار علمی و تحویل مرحله‌ای.',
+		'svc8_title' => 'مشاوره پروژه دانشجویی',
+		'svc8_text'  => 'راهنمایی پروژه‌های درسی، کارورزی و گزارش‌های دانشگاهی با ساختار علمی و همراهی مرحله‌ای.',
 		'svc8_url'   => '/service-project/',
 		'svc8_icon'  => 'fa-solid fa-folder-open',
 		'svc8_color' => 'icon-teal',
 
-		'svc9_title' => 'انجام مقاله',
-		'svc9_text'  => 'نگارش، استخراج و آماده‌سازی مقاله علمی از پایان‌نامه برای مجلات داخلی و ISI.',
+		'svc9_title' => 'مشاوره نگارش مقاله',
+		'svc9_text'  => 'راهنمایی استخراج و آماده‌سازی مقاله علمی از پژوهش شما برای مجلات داخلی و بین‌المللی.',
 		'svc9_url'   => '/service-article/',
 		'svc9_icon'  => 'fa-solid fa-newspaper',
 		'svc9_color' => 'icon-cyan',
@@ -188,7 +188,10 @@ function teznevise_page_field( $key, $post_id = 0, $default = '' ) {
 	}
 	$value = get_post_meta( $post_id, '_teznevise_' . $key, true );
 	if ( $value === '' || $value === null || $value === false ) {
-		return $default;
+		$value = $default;
+	}
+	if ( function_exists( 'teznevise_consult_copy_deep' ) ) {
+		return teznevise_consult_copy_deep( $value );
 	}
 	return $value;
 }

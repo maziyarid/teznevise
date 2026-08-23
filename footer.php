@@ -62,21 +62,12 @@ if ( is_page() && function_exists( 'teznevise_the_page_leftover_content' ) ) {
 			<div class="footer-certs__enamad">
 <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP' alt='' style='cursor:pointer' code='HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'></a>
 			</div>
-			<span class="trust-seal" title="<?php esc_attr_e( 'ارتباط امن HTTPS', 'teznevise' ); ?>">
-				<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="20" width="24" height="16" rx="4" fill="#0f4a3b"/><path d="M18 20v-4a6 6 0 0112 0v4" fill="none" stroke="#82d8b9" stroke-width="3"/></svg>
+			<div class="footer-certs__trusted">
+<script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script>
+			</div>
+			<span class="trust-seal is-ssl" title="<?php esc_attr_e( 'ارتباط امن HTTPS', 'teznevise' ); ?>">
+				<svg viewBox="0 0 48 48" width="22" height="22" aria-hidden="true"><rect x="12" y="20" width="24" height="16" rx="4" fill="#0f4a3b"/><path d="M18 20v-4a6 6 0 0112 0v4" fill="none" stroke="#82d8b9" stroke-width="3"/></svg>
 				<span>SSL</span>
-			</span>
-			<span class="trust-seal is-soon" title="<?php esc_attr_e( 'ساماندهی — به‌زودی', 'teznevise' ); ?>">
-				<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="10" width="32" height="28" rx="6" fill="#e8f3ee"/><path d="M16 24h16M24 16v16" stroke="#145d4a" stroke-width="3" stroke-linecap="round"/></svg>
-				<span><?php esc_html_e( 'ساماندهی', 'teznevise' ); ?></span>
-			</span>
-			<span class="trust-seal is-soon" title="<?php esc_attr_e( 'اتحادیه کسب‌وکارهای مجازی — به‌زودی', 'teznevise' ); ?>">
-				<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="16" fill="#e8f3ee"/><path d="M16 26l8-10 8 10" fill="none" stroke="#145d4a" stroke-width="3" stroke-linecap="round"/></svg>
-				<span><?php esc_html_e( 'اتحادیه', 'teznevise' ); ?></span>
-			</span>
-			<span class="trust-seal is-soon" title="<?php esc_attr_e( 'نماد ملی ثبت — به‌زودی', 'teznevise' ); ?>">
-				<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="10" y="12" width="28" height="24" rx="4" fill="#e8f3ee"/><text x="24" y="29" text-anchor="middle" fill="#145d4a" font-size="11" font-family="Tahoma,sans-serif">ثبت</text></svg>
-				<span><?php esc_html_e( 'ثبت ملی', 'teznevise' ); ?></span>
 			</span>
 		</div>
 		<div class="footer-bottom">

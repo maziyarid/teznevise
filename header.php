@@ -38,8 +38,8 @@ if ( $logo_url ) {
 	$balance = ( $logged && function_exists( 'teznevise_tezcoin_balance' ) ) ? teznevise_tezcoin_balance() : null;
 	$tip     = $logged
 		? sprintf( __( 'موجودی: %s تزکوین', 'teznevise' ), number_format_i18n( (int) $balance ) )
-		: __( 'با ثبت‌نام و تکمیل پروفایل ۱۰۰۰ تزکوین هدیه بگیرید', 'teznevise' );
-	$account = $logged ? home_url( '/account/' ) : wp_login_url( home_url( '/account/' ) );
+		: __( 'با ثبت‌نام ۳۰ تزکوین هدیه می‌گیرید', 'teznevise' );
+	$account = home_url( '/account/' );
 	?>
 	<a class="nav-credits" href="<?php echo esc_url( $account ); ?>" title="<?php echo esc_attr( $tip ); ?>" aria-label="<?php echo esc_attr( $tip ); ?>">
 		<i class="fa-solid fa-coins" aria-hidden="true"></i>

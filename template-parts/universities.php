@@ -26,11 +26,11 @@ $base = trailingslashit( get_template_directory_uri() ) . 'assets/img/universiti
 	<div class="container">
 		<p class="uni-kicker"><?php esc_html_e( 'همکاران دانشگاهی', 'teznevise' ); ?></p>
 		<h2><?php esc_html_e( 'مسیر آشنا برای دانشجویان دانشگاه‌های کشور', 'teznevise' ); ?></h2>
-		<ul class="uni-row">
+		<ul class="tz-uni-grid uni-row">
 			<?php foreach ( $unis as $u ) : ?>
 				<li>
-					<figure class="uni-mark">
-						<img src="<?php echo esc_url( $base . $u[0] ); ?>" alt="<?php echo esc_attr( $u[1] ); ?>" width="96" height="96" loading="lazy" decoding="async" />
+					<figure class="tz-uni-card">
+						<img src="<?php echo esc_url( $base . $u[0] ); ?>" alt="<?php echo esc_attr( $u[1] ); ?>" width="88" height="88" loading="lazy" decoding="async" />
 						<figcaption><?php echo esc_html( $u[1] ); ?></figcaption>
 					</figure>
 				</li>

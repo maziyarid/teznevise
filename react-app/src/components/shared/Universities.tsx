@@ -14,18 +14,20 @@ export function Universities({ compact }: { compact?: boolean }) {
     <section className={`uni-strip ${compact ? "is-compact" : ""}`} aria-label="همکاری با دانشگاه‌ها">
       <div className="container-tz">
         <p className="uni-kicker">همراه دانشجویان دانشگاه‌های برتر ایران</p>
-        <ul className="uni-row">
+        <ul className="tz-uni-grid uni-row">
           {UNIVERSITIES.map((u) => (
-            <li key={u.name} className="uni-logo">
-              <img
-                src={`/assets/img/universities/${u.file}`}
-                alt={u.name}
-                width={compact ? 40 : 72}
-                height={compact ? 40 : 72}
-                loading="lazy"
-                decoding="async"
-              />
-              <span>{u.name}</span>
+            <li key={u.name}>
+              <figure className="tz-uni-card">
+                <img
+                  src={`/assets/img/universities/${u.file}`}
+                  alt={u.name}
+                  width={88}
+                  height={88}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>{u.name}</figcaption>
+              </figure>
             </li>
           ))}
         </ul>

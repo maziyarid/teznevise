@@ -94,7 +94,7 @@ function teznevise_recommended_pages() {
 			),
 		),
 		'service-article' => array(
-			'title'    => 'انجام مقاله',
+			'title'    => 'مشاوره نگارش مقاله',
 			'template' => 'page-service.php',
 			'meta'     => array(
 				'eyebrow'       => 'خدمات پژوهشی',

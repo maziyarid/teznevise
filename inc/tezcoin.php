@@ -74,6 +74,34 @@ function teznevise_tezcoin_credit( $user_id, $amount, $reason, $ref = '' ) {
 	return $balance;
 }
 
+/**
+ * Every subscriber gets 30 welcome coins once.
+ *
+ * @param int $user_id User ID.
+ */
+function teznevise_maybe_welcome_coins( $user_id ) {
+	$user_id = (int) $user_id;
+	if ( $user_id <= 0 ) {
+		return;
+	}
+	if ( get_user_meta( $user_id, 'teznevise_welcome_coins', true ) ) {
+		return;
+	}
+	teznevise_tezcoin_credit( $user_id, 30, 'هدیه خوش‌آمد عضویت', 'welcome' );
+	update_user_meta( $user_id, 'teznevise_welcome_coins', 1 );
+}
+add_action( 'user_register', 'teznevise_maybe_welcome_coins' );
+add_action(
+	'wp_login',
+	static function ( $login, $user ) {
+		if ( $user instanceof WP_User ) {
+			teznevise_maybe_welcome_coins( $user->ID );
+		}
+	},
+	20,
+	2
+);
+
 function teznevise_profile_is_complete( $user_id ) {
 	$user = get_userdata( $user_id );
 	if ( ! $user ) {

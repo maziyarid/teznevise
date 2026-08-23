@@ -2,16 +2,73 @@
 /**
  * Template Name: حساب کاربری
  *
+ * Customer portal — never wp-admin.
+ *
  * @package Teznevise
  */
-if ( ! is_user_logged_in() ) {
-	auth_redirect();
-}
 get_header();
+
+if ( ! is_user_logged_in() ) {
+	$view = isset( $_GET['view'] ) ? sanitize_key( wp_unslash( $_GET['view'] ) ) : 'login'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$auth = isset( $_GET['auth'] ) ? sanitize_key( wp_unslash( $_GET['auth'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$msg  = array(
+		'fail'    => __( 'ورود ناموفق بود. ایمیل یا گذرواژه را بررسی کنید.', 'teznevise' ),
+		'invalid' => __( 'اطلاعات ثبت‌نام ناقص است. گذرواژه حداقل ۸ نویسه.', 'teznevise' ),
+		'exists'  => __( 'این نام کاربری یا ایمیل از قبل ثبت شده است.', 'teznevise' ),
+		'rate'    => __( 'تعداد تلاش‌ها زیاد بود. کمی بعد دوباره بیایید.', 'teznevise' ),
+	);
+	?>
+<section class="section tz-auth">
+	<div class="container">
+		<div class="surface-card">
+			<span class="eyebrow"><?php esc_html_e( 'پنل کاربری تزنویسه', 'teznevise' ); ?></span>
+			<h1><?php echo 'register' === $view ? esc_html__( 'ساخت حساب', 'teznevise' ) : esc_html__( 'ورود به حساب', 'teznevise' ); ?></h1>
+			<p><?php esc_html_e( 'با عضویت ۳۰ تزکوین هدیه می‌گیرید. این صفحه حساب شماست — نه پیشخوان وردپرس.', 'teznevise' ); ?></p>
+			<?php if ( isset( $msg[ $auth ] ) ) : ?>
+				<p class="account-flash is-warn"><?php echo esc_html( $msg[ $auth ] ); ?></p>
+			<?php endif; ?>
+			<?php if ( 'register' === $view ) : ?>
+				<form class="account-form" method="post">
+					<?php wp_nonce_field( 'teznevise_auth', '_tz_auth' ); ?>
+					<input type="hidden" name="teznevise_auth_action" value="register" />
+					<label><?php esc_html_e( 'نام کاربری', 'teznevise' ); ?><input name="user_login" required minlength="3" autocomplete="username"></label>
+					<label><?php esc_html_e( 'ایمیل', 'teznevise' ); ?><input type="email" name="user_email" required autocomplete="email"></label>
+					<label><?php esc_html_e( 'گذرواژه', 'teznevise' ); ?><input type="password" name="user_pass" required minlength="8" autocomplete="new-password"></label>
+					<label><?php esc_html_e( 'تکرار گذرواژه', 'teznevise' ); ?><input type="password" name="user_pass2" required minlength="8" autocomplete="new-password"></label>
+					<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ساخت حساب و دریافت ۳۰ تزکوین', 'teznevise' ); ?></button>
+				</form>
+				<p class="tz-auth-switch"><a href="<?php echo esc_url( home_url( '/account/' ) ); ?>"><?php esc_html_e( 'حساب دارید؟ وارد شوید', 'teznevise' ); ?></a></p>
+			<?php else : ?>
+				<form class="account-form" method="post">
+					<?php wp_nonce_field( 'teznevise_auth', '_tz_auth' ); ?>
+					<input type="hidden" name="teznevise_auth_action" value="login" />
+					<label><?php esc_html_e( 'نام کاربری یا ایمیل', 'teznevise' ); ?><input name="log" required autocomplete="username"></label>
+					<label><?php esc_html_e( 'گذرواژه', 'teznevise' ); ?><input type="password" name="pwd" required autocomplete="current-password"></label>
+					<label><input type="checkbox" name="rememberme" value="1" /> <?php esc_html_e( 'مرا به خاطر بسپار', 'teznevise' ); ?></label>
+					<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ورود', 'teznevise' ); ?></button>
+				</form>
+				<p class="tz-auth-switch">
+					<a href="<?php echo esc_url( add_query_arg( 'view', 'register', home_url( '/account/' ) ) ); ?>"><?php esc_html_e( 'حساب ندارید؟ ثبت‌نام کنید', 'teznevise' ); ?></a>
+					·
+					<a href="<?php echo esc_url( wp_lostpassword_url( home_url( '/account/' ) ) ); ?>"><?php esc_html_e( 'بازیابی گذرواژه', 'teznevise' ); ?></a>
+				</p>
+			<?php endif; ?>
+		</div>
+	</div>
+</section>
+	<?php
+	get_footer();
+	return;
+}
+
 $user    = wp_get_current_user();
 $uid     = (int) $user->ID;
-$tab     = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'profile';
+if ( function_exists( 'teznevise_maybe_welcome_coins' ) ) {
+	teznevise_maybe_welcome_coins( $uid );
+}
+$tab     = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'overview';
 $tabs    = array(
+	'overview' => 'داشبورد',
 	'profile'  => 'پروفایل',
 	'wallet'   => 'کیف پول',
 	'tools'    => 'ابزارهای من',
@@ -20,12 +77,17 @@ $tabs    = array(
 	'projects' => 'پروژه‌ها',
 	'settings' => 'تنظیمات',
 );
+if ( ! isset( $tabs[ $tab ] ) ) {
+	$tab = 'overview';
+}
 $balance = function_exists( 'teznevise_tezcoin_balance' ) ? teznevise_tezcoin_balance( $uid ) : 0;
 $ledger  = get_user_meta( $uid, 'teznevise_tezcoin_ledger', true );
 $ledger  = is_array( $ledger ) ? array_reverse( $ledger ) : array();
 $code    = function_exists( 'teznevise_user_ref_code' ) ? teznevise_user_ref_code( $uid ) : '';
 $ref_url = add_query_arg( 'ref', $code, home_url( '/' ) );
 $pay     = isset( $_GET['pay'] ) ? sanitize_key( wp_unslash( $_GET['pay'] ) ) : '';
+$pw      = isset( $_GET['pw'] ) ? sanitize_key( wp_unslash( $_GET['pw'] ) ) : '';
+$complete = function_exists( 'teznevise_profile_is_complete' ) && teznevise_profile_is_complete( $uid );
 ?>
 <section class="section account-shell tz-dash">
 	<div class="container tz-dash__grid">
@@ -33,19 +95,19 @@ $pay     = isset( $_GET['pay'] ) ? sanitize_key( wp_unslash( $_GET['pay'] ) ) : 
 			<div class="tz-dash__avatar">
 				<?php echo get_avatar( $uid, 72, '', $user->display_name ); ?>
 				<strong><?php echo esc_html( $user->display_name ); ?></strong>
-				<span><?php echo esc_html( number_format_i18n( $balance ) ); ?> تزکوین</span>
+				<span class="tz-dash__coin"><i class="fa-solid fa-coins" aria-hidden="true"></i> <?php echo esc_html( number_format_i18n( $balance ) ); ?> تزکوین</span>
 			</div>
 			<nav class="account-tabs">
 				<?php foreach ( $tabs as $key => $label ) : ?>
 					<a class="<?php echo $tab === $key ? 'is-on' : ''; ?>" href="<?php echo esc_url( add_query_arg( 'tab', $key, home_url( '/account/' ) ) ); ?>"><?php echo esc_html( $label ); ?></a>
 				<?php endforeach; ?>
 			</nav>
+			<a class="tz-dash__logout" href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php esc_html_e( 'خروج از حساب', 'teznevise' ); ?></a>
 		</aside>
 		<div class="tz-dash__main">
 		<header class="account-head">
-			<span class="eyebrow"><?php esc_html_e( 'پنل کاربری', 'teznevise' ); ?></span>
-			<h1><?php echo esc_html( $user->display_name ); ?></h1>
-			<p class="account-balance"><i class="fa-solid fa-coins" aria-hidden="true"></i> <?php echo esc_html( number_format_i18n( $balance ) ); ?> تزکوین</p>
+			<span class="eyebrow"><?php esc_html_e( 'پنل کاربری تزنویسه', 'teznevise' ); ?></span>
+			<h1><?php echo 'overview' === $tab ? esc_html__( 'داشبورد', 'teznevise' ) : esc_html( $tabs[ $tab ] ); ?></h1>
 		</header>
 		<?php if ( 'ok' === $pay ) : ?>
 			<p class="account-flash"><?php esc_html_e( 'پرداخت تأیید شد و تزکوین به حساب نشست.', 'teznevise' ); ?></p>
@@ -53,11 +115,31 @@ $pay     = isset( $_GET['pay'] ) ? sanitize_key( wp_unslash( $_GET['pay'] ) ) : 
 			<p class="account-flash is-warn"><?php esc_html_e( 'پرداخت تأیید نشد.', 'teznevise' ); ?></p>
 		<?php elseif ( 'need-gateway' === $pay ) : ?>
 			<p class="account-flash is-warn"><?php esc_html_e( 'مرچنت زرین‌پال یا پین آقای پرداخت در تنظیمات تزکوین وارد نشده است.', 'teznevise' ); ?></p>
+		<?php elseif ( 'ok' === $pw ) : ?>
+			<p class="account-flash"><?php esc_html_e( 'گذرواژه به‌روز شد.', 'teznevise' ); ?></p>
+		<?php elseif ( 'fail' === $pw ) : ?>
+			<p class="account-flash is-warn"><?php esc_html_e( 'گذرواژه فعلی نادرست است یا گذرواژه تازه کوتاه است.', 'teznevise' ); ?></p>
 		<?php elseif ( ! empty( $_GET['saved'] ) ) : ?>
-			<p class="account-flash"><?php esc_html_e( 'پروفایل ذخیره شد. اگر کامل باشد ۱۰۰۰ تزکوین هدیه اعمال می‌شود.', 'teznevise' ); ?></p>
+			<p class="account-flash"><?php esc_html_e( 'پروفایل ذخیره شد. اگر کامل باشد هدیه تکمیل پروفایل اعمال می‌شود.', 'teznevise' ); ?></p>
 		<?php endif; ?>
 
 		<div class="tz-dash__panel">
+
+		<?php if ( 'overview' === $tab ) : ?>
+			<div class="tz-dash__stats">
+				<div class="tz-dash__stat"><b><?php echo esc_html( number_format_i18n( $balance ) ); ?></b><span><?php esc_html_e( 'تزکوین', 'teznevise' ); ?></span></div>
+				<div class="tz-dash__stat"><b><?php echo $complete ? '✓' : '—'; ?></b><span><?php esc_html_e( 'پروفایل', 'teznevise' ); ?></span></div>
+				<div class="tz-dash__stat"><b>۳۰</b><span><?php esc_html_e( 'هدیه عضویت', 'teznevise' ); ?></span></div>
+			</div>
+			<section class="surface-card">
+				<h2><?php esc_html_e( 'خوش آمدید', 'teznevise' ); ?></h2>
+				<p><?php esc_html_e( 'این داشبورد مخصوص شماست: ابزارها، گفتگوی هوش مصنوعی، تیکت مشاوره و کیف تزکوین. پیشخوان وردپرس برای مشتریان بسته است.', 'teznevise' ); ?></p>
+				<p>
+					<a class="btn-tz btn-primary-tz" href="<?php echo esc_url( home_url( '/online-calculation-tools/' ) ); ?>"><?php esc_html_e( 'ابزارهای آنلاین', 'teznevise' ); ?></a>
+					<a class="btn-tz btn-light-tz" href="<?php echo esc_url( add_query_arg( 'tab', 'profile', home_url( '/account/' ) ) ); ?>"><?php esc_html_e( 'تکمیل پروفایل', 'teznevise' ); ?></a>
+				</p>
+			</section>
+		<?php endif; ?>
 
 		<?php if ( 'wallet' === $tab ) : ?>
 			<div class="account-grid">
@@ -128,7 +210,7 @@ $pay     = isset( $_GET['pay'] ) ? sanitize_key( wp_unslash( $_GET['pay'] ) ) : 
 				<label><?php esc_html_e( 'شهر', 'teznevise' ); ?><input name="teznevise_city" value="<?php echo esc_attr( get_user_meta( $uid, 'teznevise_city', true ) ); ?>"></label>
 				<label><?php esc_html_e( 'ORCID', 'teznevise' ); ?><input name="teznevise_orcid" dir="ltr" value="<?php echo esc_attr( get_user_meta( $uid, 'teznevise_orcid', true ) ); ?>"></label>
 				<label><?php esc_html_e( 'تلگرام', 'teznevise' ); ?><input name="teznevise_telegram" dir="ltr" value="<?php echo esc_attr( get_user_meta( $uid, 'teznevise_telegram', true ) ); ?>"></label>
-				<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ذخیره و دریافت هدیه پروفایل', 'teznevise' ); ?></button>
+				<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ذخیره پروفایل', 'teznevise' ); ?></button>
 			</form>
 		<?php endif; ?>
 
@@ -190,7 +272,10 @@ $pay     = isset( $_GET['pay'] ) ? sanitize_key( wp_unslash( $_GET['pay'] ) ) : 
 				<label><?php esc_html_e( 'عنوان پروژه', 'teznevise' ); ?><input name="project_title" required minlength="4"></label>
 				<label><?php esc_html_e( 'خدمت', 'teznevise' ); ?>
 					<select name="project_service">
-						<option>پایان‌نامه</option><option>پروپوزال</option><option>تحلیل آماری</option><option>شبیه‌سازی</option>
+						<option><?php esc_html_e( 'مشاوره پایان‌نامه', 'teznevise' ); ?></option>
+						<option><?php esc_html_e( 'مشاوره پروپوزال', 'teznevise' ); ?></option>
+						<option><?php esc_html_e( 'تحلیل آماری', 'teznevise' ); ?></option>
+						<option><?php esc_html_e( 'شبیه‌سازی', 'teznevise' ); ?></option>
 					</select>
 				</label>
 				<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ثبت پروژه', 'teznevise' ); ?></button>
@@ -221,7 +306,7 @@ $pay     = isset( $_GET['pay'] ) ? sanitize_key( wp_unslash( $_GET['pay'] ) ) : 
 		<?php if ( 'tools' === $tab ) : ?>
 			<section class="surface-card">
 				<h2><?php esc_html_e( 'ابزارهای من', 'teznevise' ); ?></h2>
-				<p><?php esc_html_e( 'محاسبه‌گرهای آماری و گفتگوی پژوهشی در یک صفحه.', 'teznevise' ); ?></p>
+				<p><?php esc_html_e( 'محاسبه‌گرهای آماری و گفتگوی پژوهشی در یک صفحه. ابزارهای تازه به‌زودی به همین حساب وصل می‌شوند.', 'teznevise' ); ?></p>
 				<p><a class="btn-tz btn-primary-tz" href="<?php echo esc_url( home_url( '/online-calculation-tools/' ) ); ?>"><?php esc_html_e( 'رفتن به ابزارها', 'teznevise' ); ?></a></p>
 			</section>
 		<?php endif; ?>
@@ -235,7 +320,15 @@ $pay     = isset( $_GET['pay'] ) ? sanitize_key( wp_unslash( $_GET['pay'] ) ) : 
 				<label><?php esc_html_e( 'تلگرام', 'teznevise' ); ?><input name="teznevise_telegram" dir="ltr" value="<?php echo esc_attr( get_user_meta( $uid, 'teznevise_telegram', true ) ); ?>"></label>
 				<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ذخیره تنظیمات', 'teznevise' ); ?></button>
 			</form>
-			<p><a class="btn-tz btn-light-tz" href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php esc_html_e( 'تغییر گذرواژه', 'teznevise' ); ?></a></p>
+			<form class="surface-card account-form" method="post">
+				<?php wp_nonce_field( 'teznevise_account', '_tz_acc' ); ?>
+				<input type="hidden" name="teznevise_account_action" value="password">
+				<h2><?php esc_html_e( 'تغییر گذرواژه', 'teznevise' ); ?></h2>
+				<label><?php esc_html_e( 'گذرواژه فعلی', 'teznevise' ); ?><input type="password" name="current_pass" required autocomplete="current-password"></label>
+				<label><?php esc_html_e( 'گذرواژه تازه', 'teznevise' ); ?><input type="password" name="new_pass" required minlength="8" autocomplete="new-password"></label>
+				<label><?php esc_html_e( 'تکرار گذرواژه تازه', 'teznevise' ); ?><input type="password" name="new_pass2" required minlength="8" autocomplete="new-password"></label>
+				<button class="btn-tz btn-light-tz" type="submit"><?php esc_html_e( 'به‌روزرسانی گذرواژه', 'teznevise' ); ?></button>
+			</form>
 		<?php endif; ?>
 
 		<?php if ( 'ai' === $tab ) : ?>

@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.9
 Requires PHP: 8.3
-Stable tag: 1.9.10
+Stable tag: 1.9.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,8 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 
 == Changelog ==
 
+= 1.9.11 =
+* Consulting copy, Enamad + TrustedSite, university crest CSS, customer dashboard, 30 welcome coins.
 = 1.9.10 =
 * Exact Enamad seal, delayed GA G-ZTB0ERWJYN + Clarity xf2anzt0a3, consulting copy, tools waitlist, professional AI chat and API status, official university marks.
 

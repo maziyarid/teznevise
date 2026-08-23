@@ -86,15 +86,6 @@ export function SiteFooter() {
             <ShieldCheck className="size-10 text-brand" aria-hidden />
             <span>SSL امن</span>
           </div>
-          <div className="trust-badge is-soon">
-            <span>ساماندهی</span>
-          </div>
-          <div className="trust-badge is-soon">
-            <span>اتحادیه</span>
-          </div>
-          <div className="trust-badge is-soon">
-            <span>ثبت ملی</span>
-          </div>
         </div>
 
         <div className="footer-bottom">
