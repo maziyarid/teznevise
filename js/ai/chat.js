@@ -12,6 +12,13 @@
     return n;
   }
 
+  function icon(name) {
+    var i = document.createElement('i');
+    i.className = 'fa-solid ' + name;
+    i.setAttribute('aria-hidden', 'true');
+    return i;
+  }
+
   function agentMeta(idOrName) {
     var list = cfg().agents || [];
     for (var i = 0; i < list.length; i++) {
@@ -68,6 +75,17 @@
     window.requestAnimationFrame(tick);
   }
 
+  function thinkSummary(live) {
+    var sum = el('summary', 'tz-ai-think__sum');
+    sum.appendChild(icon(live ? 'fa-spinner fa-spin' : 'fa-lightbulb'));
+    var lab = el('span', 'tz-ai-think__label', live ? 'در حال استدلال' : 'استدلال');
+    sum.appendChild(lab);
+    var chev = el('span', 'tz-ai-think__chev');
+    chev.appendChild(icon('fa-chevron-down'));
+    sum.appendChild(chev);
+    return sum;
+  }
+
   function appendMsg(log, role, text, name, thinking, model, agentId, stream) {
     var parsed = splitThought(text);
     if (!thinking && parsed.thought) thinking = parsed.thought;
@@ -82,12 +100,12 @@
       meta.appendChild(el('strong', '', name));
       stack.appendChild(meta);
     }
-    if (thinking) {
-      var det = el('details', 'tz-ai-think');
-      var sum = el('summary', '', 'مشاهده استدلال درونی');
-      det.appendChild(sum);
-      var pre = el('pre');
-      pre.textContent = thinking;
+    var det = null;
+    if (thinking || stream) {
+      det = el('details', 'tz-ai-think' + (stream ? ' is-live' : ''));
+      det.appendChild(thinkSummary(!!stream && !thinking));
+      var pre = el('pre', 'tz-ai-think__stream');
+      pre.textContent = thinking || '';
       det.appendChild(pre);
       if (stream) det.open = true;
       stack.appendChild(det);
@@ -101,10 +119,22 @@
     }
     stack.appendChild(bubble);
     if (role !== 'user') {
-      var copy = el('button', 'tz-gpt__iconbtn', 'کپی');
+      var copy = el('button', 'tz-gpt__iconbtn');
       copy.type = 'button';
+      copy.setAttribute('aria-label', 'کپی');
+      copy.title = 'کپی';
+      copy.appendChild(icon('fa-copy'));
       copy.addEventListener('click', function () {
-        if (navigator.clipboard) navigator.clipboard.writeText(text);
+        if (!navigator.clipboard) return;
+        navigator.clipboard.writeText(text).then(function () {
+          var ic = copy.querySelector('i');
+          if (ic) ic.className = 'fa-solid fa-check';
+          copy.setAttribute('aria-label', 'کپی شد');
+          window.setTimeout(function () {
+            if (ic) ic.className = 'fa-solid fa-copy';
+            copy.setAttribute('aria-label', 'کپی');
+          }, 1400);
+        });
       });
       stack.appendChild(copy);
     }
@@ -115,6 +145,87 @@
     }
     log.scrollTop = log.scrollHeight;
     return art;
+  }
+
+  function startLiveThought(log, name, agentId) {
+    var art = el('article', 'tz-ai-msg is-assistant is-pending');
+    art.setAttribute('role', 'listitem');
+    art.appendChild(avatarNode('assistant', name, agentId));
+    var stack = el('div', 'tz-ai-msg__stack');
+    if (name) {
+      var meta = el('header', 'tz-ai-msg__meta');
+      meta.appendChild(el('strong', '', name));
+      stack.appendChild(meta);
+    }
+    var det = el('details', 'tz-ai-think is-live');
+    det.open = true;
+    var sum = thinkSummary(true);
+    det.appendChild(sum);
+    var pre = el('pre', 'tz-ai-think__stream');
+    var phases = ['در حال اتصال به مدل…', 'خواندن سؤال پژوهشی…', 'چیدن استدلال…', 'نوشتن پاسخ…'];
+    pre.textContent = phases[0];
+    det.appendChild(pre);
+    stack.appendChild(det);
+    var bubble = el('div', 'tz-ai-msg__bubble tz-ai-msg__bubble--wait');
+    bubble.innerHTML = '<span class="tz-ai-dots" aria-hidden="true"><i></i><i></i><i></i></span>';
+    stack.appendChild(bubble);
+    art.appendChild(stack);
+    log.appendChild(art);
+    log.scrollTop = log.scrollHeight;
+    var closedByUser = false;
+    det.addEventListener('toggle', function () {
+      if (!det.open) closedByUser = true;
+    });
+    var started = Date.now();
+    var step = 0;
+    function tickLabel() {
+      var sec = Math.max(1, Math.round((Date.now() - started) / 1000));
+      var lab = sum.querySelector('.tz-ai-think__label');
+      if (lab) lab.textContent = 'در حال استدلال · ' + sec + 'ث';
+    }
+    tickLabel();
+    var timer = window.setInterval(function () {
+      step = (step + 1) % phases.length;
+      if (!pre.dataset.locked) pre.textContent = phases[step];
+      tickLabel();
+      if (!closedByUser) log.scrollTop = log.scrollHeight;
+    }, 1200);
+    return {
+      art: art,
+      det: det,
+      pre: pre,
+      bubble: bubble,
+      stop: function (thought, answer, stream) {
+        window.clearInterval(timer);
+        pre.dataset.locked = '1';
+        var sec = Math.max(1, Math.round((Date.now() - started) / 1000));
+        var spin = sum.querySelector('.fa-spinner');
+        if (spin) {
+          spin.className = 'fa-solid fa-lightbulb';
+        }
+        var lab = sum.querySelector('.tz-ai-think__label');
+        if (lab) lab.textContent = thought ? ('استدلال · ' + sec + 'ث') : 'استدلال';
+        det.classList.remove('is-live');
+        if (thought) pre.textContent = thought;
+        else if (!pre.textContent) pre.textContent = 'استدلال کوتاه برای این پاسخ ثبت نشد.';
+        if (!closedByUser) det.open = !!thought;
+        bubble.classList.remove('tz-ai-msg__bubble--wait');
+        bubble.innerHTML = '';
+        if (stream) typewrite(bubble, answer || '');
+        else renderRich(bubble, answer || '');
+        art.classList.remove('is-pending');
+        if (!closedByUser) log.scrollTop = log.scrollHeight;
+      },
+      fail: function (msg) {
+        window.clearInterval(timer);
+        det.classList.remove('is-live');
+        pre.textContent = '';
+        det.hidden = true;
+        bubble.classList.remove('tz-ai-msg__bubble--wait');
+        bubble.textContent = msg || 'ارسال ناموفق بود';
+        art.classList.remove('is-pending');
+      }
+    };
   }
 
   var FORM_TOKEN = '[[SHOW_CONTACT_FORM]]';
@@ -202,6 +313,16 @@
     });
   }
 
+  function bindToggle(btn, box) {
+    if (!btn || !box) return;
+    btn.addEventListener('click', function () {
+      box.checked = !box.checked;
+      btn.setAttribute('aria-pressed', box.checked ? 'true' : 'false');
+      btn.classList.toggle('is-on', box.checked);
+    });
+    btn.classList.toggle('is-on', !!box.checked);
+  }
+
   function bind(root) {
     var form = root.querySelector('[data-ai-form]');
     var input = root.querySelector('[data-ai-input]');
@@ -215,12 +336,100 @@
     var newBtn = root.querySelector('[data-ai-new]');
     var chips = root.querySelectorAll('[data-agent-pick]');
     var skillBox = root.querySelector('[data-ai-skills]');
+    var menu = root.querySelector('[data-agent-menu]');
+    var menuBtn = root.querySelector('[data-agent-menu-toggle]');
+    var menuList = menu ? menu.querySelector('.tz-gpt-model__list') : null;
+    var labelEl = root.querySelector('[data-agent-label]');
     var activeSkill = '';
     if (!form || !input || !log) return;
     var sessionId = '';
     var greeting = log.innerHTML;
     var history = [];
     var storageKey = 'tz-ai-chat-' + (root.getAttribute('data-tool-id') || 'general');
+    var busy = false;
+    var abortCtl = null;
+    var stopBtn = root.querySelector('[data-ai-stop]');
+    var sendBtn = form.querySelector('.tz-gpt-send');
+
+    function setBusy(on) {
+      busy = !!on;
+      log.setAttribute('aria-busy', on ? 'true' : 'false');
+      if (sendBtn) sendBtn.hidden = !!on;
+      if (stopBtn) stopBtn.hidden = !on;
+      if (input) input.disabled = !!on;
+    }
+
+    bindToggle(root.querySelector('[data-ai-thinking-btn]'), thinkBox);
+    bindToggle(root.querySelector('[data-ai-collab-btn]'), root.querySelector('[data-ai-collab-toggle]'));
+    bindToggle(root.querySelector('[data-ai-research-btn]'), researchBox);
+
+    var handoffToggle = root.querySelector('[data-ai-handoff-toggle]');
+    var handoffForm = root.querySelector('[data-ai-handoff]');
+    if (handoffToggle && handoffForm) {
+      handoffToggle.addEventListener('click', function () {
+        var on = handoffForm.hidden;
+        handoffForm.hidden = !on;
+        handoffToggle.setAttribute('aria-expanded', on ? 'true' : 'false');
+        handoffToggle.classList.toggle('is-on', on);
+      });
+    }
+
+    function closeMenu() {
+      if (!menuList || !menuBtn) return;
+      menuList.hidden = true;
+      menuBtn.setAttribute('aria-expanded', 'false');
+    }
+    function openMenu() {
+      if (!menuList || !menuBtn) return;
+      menuList.hidden = false;
+      menuBtn.setAttribute('aria-expanded', 'true');
+    }
+    if (menuBtn && menuList) {
+      menuBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (menuList.hidden) openMenu(); else closeMenu();
+      });
+      document.addEventListener('click', function (e) {
+        if (menu && !menu.contains(e.target)) closeMenu();
+      });
+      menuBtn.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openMenu();
+          var first = menuList.querySelector('[data-agent-pick]');
+          if (first) first.focus();
+        } else if (e.key === 'Escape') {
+          closeMenu();
+        }
+      });
+      menuList.addEventListener('keydown', function (e) {
+        var opts = Array.prototype.slice.call(menuList.querySelectorAll('[data-agent-pick]'));
+        var i = opts.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          (opts[i + 1] || opts[0]).focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          (opts[i - 1] || opts[opts.length - 1]).focus();
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          if (opts[0]) opts[0].focus();
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          if (opts.length) opts[opts.length - 1].focus();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          closeMenu();
+          menuBtn.focus();
+        }
+      });
+    }
+
+    if (stopBtn) {
+      stopBtn.addEventListener('click', function () {
+        if (abortCtl) abortCtl.abort();
+      });
+    }
 
     function renderSkills(id) {
       activeSkill = '';
@@ -254,6 +463,12 @@
         btn.classList.toggle('is-on', on);
         btn.setAttribute('aria-selected', on ? 'true' : 'false');
       });
+      if (labelEl) {
+        var meta = agentMeta(id);
+        labelEl.textContent = (meta && (meta.name || meta.display)) || id;
+        var img = menuBtn && menuBtn.querySelector('img');
+        if (img && meta && meta.avatar) img.src = meta.avatar;
+      }
       renderSkills(id);
     }
 
@@ -263,6 +478,7 @@
         if (agentSel) agentSel.value = id;
         root.setAttribute('data-agent-id', id);
         syncChips(id);
+        closeMenu();
       });
     });
     if (agentSel) {
@@ -311,13 +527,16 @@
       fullBtn.addEventListener('click', function () {
         var on = root.classList.toggle('is-full');
         fullBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
-        fullBtn.textContent = on ? 'خروج از تمام‌صفحه' : 'تمام‌صفحه';
+        var ic = fullBtn.querySelector('i');
+        if (ic) ic.className = 'fa-solid ' + (on ? 'fa-compress' : 'fa-expand');
         document.body.classList.toggle('tz-ai-lock', on);
       });
     }
 
     if (newBtn) {
       newBtn.addEventListener('click', function () {
+        if (abortCtl) abortCtl.abort();
+        setBusy(false);
         sessionId = '';
         history = [];
         persist();
@@ -332,6 +551,7 @@
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (busy) return;
       var text = (input.value || '').trim();
       if (text.length < 4) return;
       appendMsg(log, 'user', text, cfg().isLoggedIn ? 'شما' : 'مهمان');
@@ -346,16 +566,12 @@
       if (collabToggle && collabToggle.checked) collab = 'collaborative';
       if (collabToggle && !collabToggle.checked && collab === 'collaborative') collab = 'single';
       if (researchBox && researchBox.checked) collab = 'research';
+      var agentLabel = (meta && meta.name) ? meta.name : 'تزنویسه';
+      var live = startLiveThought(log, agentLabel, agentId);
+      abortCtl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+      setBusy(true);
       if (status) {
-        status.hidden = false;
-        if (collab === 'research') {
-          status.textContent = 'در حال اتصال به رایانه…';
-        } else if (collab === 'collaborative' || collab === 'separate') {
-          status.innerHTML = '<span class="tz-ai-dots" aria-hidden="true"><i></i><i></i><i></i></span> عامل‌ها در حال هم‌فکری…';
-        } else {
-          status.innerHTML = '<span class="tz-ai-dots" aria-hidden="true"><i></i><i></i><i></i></span> ' +
-            ((meta && meta.name) ? (meta.name + ' در حال فکر کردن…') : 'در حال فکر کردن…');
-        }
+        status.hidden = true;
       }
       fetch((cfg().rest_url || '') + 'chat', {
         method: 'POST',
@@ -364,6 +580,7 @@
           'Content-Type': 'application/json',
           'X-WP-Nonce': cfg().nonce || '',
         },
+        signal: abortCtl ? abortCtl.signal : undefined,
         body: JSON.stringify({
           tool_id: root.getAttribute('data-tool-id') || 'general',
           message: text,
@@ -376,26 +593,39 @@
       })
         .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
         .then(function (res) {
-          if (status) status.hidden = true;
+          setBusy(false);
           if (!res.ok || !res.json || !res.json.success) {
             var err = (res.json && (res.json.message || res.json.code)) || 'ارسال ناموفق بود';
-            appendMsg(log, 'assistant', String(err), 'سیستم');
+            live.fail(String(err));
             return;
           }
           sessionId = res.json.session_id || sessionId;
           var replies = res.json.replies || [{ content: res.json.content, agent_name: res.json.agent_name, thinking_process: res.json.thinking_process, model: res.json.model }];
+          var first = replies[0] || {};
+          var parsed = splitThought(first.content || '');
+          var thought = thinkingOn ? (first.thinking_process || parsed.thought || '') : (parsed.thought || '');
+          var answer = parsed.public || first.content || '';
+          live.stop(thought, String(answer || '').replace(FORM_TOKEN, '').trim(), true);
+          remember('assistant', first.content || '', first.agent_name || agentLabel, thought, agentId);
           if (replies.length > 1) {
             var banner = el('p', 'tz-ai-collab-label', 'هم‌فکری عامل‌ها');
             log.appendChild(banner);
+            replies.slice(1).forEach(function (rep) {
+              appendMsg(log, 'assistant', rep.content || '', rep.agent_name || '', thinkingOn ? (rep.thinking_process || '') : '', '', agentId, true);
+              remember('assistant', rep.content || '', rep.agent_name || '', thinkingOn ? (rep.thinking_process || '') : '', agentId);
+            });
           }
-          replies.forEach(function (rep) {
-            appendMsg(log, 'assistant', rep.content || '', rep.agent_name || '', thinkingOn ? (rep.thinking_process || '') : '', '', agentId, true);
-            remember('assistant', rep.content || '', rep.agent_name || '', thinkingOn ? (rep.thinking_process || '') : '', agentId);
-          });
+          if (String(first.content || '').indexOf(FORM_TOKEN) !== -1) {
+            renderContactForm(log);
+          }
         })
-        .catch(function () {
-          if (status) status.hidden = true;
-          appendMsg(log, 'assistant', 'ارتباط برقرار نشد. دوباره تلاش کنید.', 'سیستم');
+        .catch(function (err) {
+          setBusy(false);
+          if (err && err.name === 'AbortError') {
+            live.fail('تولید متوقف شد.');
+            return;
+          }
+          live.fail('ارتباط برقرار نشد. دوباره تلاش کنید.');
         });
     });
 
@@ -452,6 +682,7 @@
       if (!panel || !toggle) return;
       panel.hidden = !on;
       toggle.setAttribute('aria-expanded', on ? 'true' : 'false');
+      document.body.classList.toggle('tz-livechat-open', on);
       if (on) {
         var ta = panel.querySelector('[data-ai-input]');
         if (ta) ta.focus();
@@ -465,6 +696,12 @@
     if (closeBtn) {
       closeBtn.addEventListener('click', function () { setOpen(false); });
     }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && panel && !panel.hidden) {
+        setOpen(false);
+        if (toggle) toggle.focus();
+      }
+    });
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);

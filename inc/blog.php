@@ -131,6 +131,10 @@ function teznevise_render_ai_overview( $post_id ) {
 	$reviewed = teznevise_overview_is_human_reviewed( $post_id );
 	$job      = (string) get_post_meta( $post_id, '_teznevise_ai_job', true );
 	$bullets  = get_post_meta( $post_id, '_teznevise_ai_summary_bullets', true );
+	if ( ! $text && ! in_array( $job, array( 'queued', 'running' ), true ) && class_exists( 'Teznevise_Debate_Orchestrator' ) ) {
+		Teznevise_Debate_Orchestrator::schedule( $post_id, 'failed' === $job );
+		$job = 'queued';
+	}
 	echo '<section class="tz-ai-overview' . ( $text ? ' is-ready' : ' is-pending' ) . ( $reviewed ? ' is-human-reviewed' : '' ) . '" data-ai-summary="' . esc_attr( (string) $post_id ) . '">';
 	echo '<header class="tz-ai-overview__head">';
 	echo '<h2>' . esc_html__( 'نمای کلی هوش مصنوعی', 'teznevise' ) . '</h2>';

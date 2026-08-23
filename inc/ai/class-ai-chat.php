@@ -113,6 +113,7 @@ class TezNevise_AI_Chat {
 				),
 				'agents'     => $agents,
 				'skills'     => $skills_map,
+				'wpjson'     => rest_url(),
 			)
 		);
 	}
@@ -149,43 +150,13 @@ class TezNevise_AI_Chat {
 		?>
 		<section class="tz-ai-chat tz-gpt" id="<?php echo esc_attr( $instance_id ); ?>" data-tool-id="<?php echo esc_attr( $tool_id ); ?>" data-agent-id="<?php echo esc_attr( $atts['agent_id'] ); ?>" data-collaboration-mode="<?php echo esc_attr( $collab ); ?>" data-thinking="<?php echo $thinking ? '1' : '0'; ?>">
 			<header class="tz-gpt__top">
-				<div class="tz-gpt__brand">
-					<span class="tz-gpt__dot" aria-hidden="true"></span>
-					<div>
-						<strong><?php echo esc_html( $tool_config['name'] ?? __( 'گفتگو', 'teznevise' ) ); ?></strong>
-						<small><?php echo esc_html( $agent_name ); ?></small>
-					</div>
-				</div>
+				<?php self::render_agent_dropdown( $atts['agent_id'], $agents ); ?>
 				<div class="tz-gpt__top-actions">
-					<button type="button" class="tz-gpt__iconbtn" data-ai-new><?php esc_html_e( 'گفتگوی تازه', 'teznevise' ); ?></button>
-					<button type="button" class="tz-gpt__iconbtn" data-ai-full aria-pressed="false"><?php esc_html_e( 'تمام‌صفحه', 'teznevise' ); ?></button>
+					<button type="button" class="tz-gpt__iconbtn" data-ai-new aria-label="<?php esc_attr_e( 'گفتگوی تازه', 'teznevise' ); ?>" title="<?php esc_attr_e( 'گفتگوی تازه', 'teznevise' ); ?>"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+					<button type="button" class="tz-gpt__iconbtn" data-ai-full aria-pressed="false" aria-label="<?php esc_attr_e( 'تمام‌صفحه', 'teznevise' ); ?>" title="<?php esc_attr_e( 'تمام‌صفحه', 'teznevise' ); ?>"><i class="fa-solid fa-expand" aria-hidden="true"></i></button>
 				</div>
 			</header>
-			<?php
-			$named_ids = function_exists( 'teznevise_core_named_ids' ) ? teznevise_core_named_ids() : array();
-			$picker    = array();
-			foreach ( $agents as $ag ) {
-				$ag = (array) $ag;
-				$id = $ag['agent_id'] ?? '';
-				if ( $id && in_array( $id, $named_ids, true ) ) {
-					$picker[] = $ag;
-				}
-			}
-			if ( $picker ) :
-				?>
-			<div class="tz-gpt-agents" role="listbox" aria-label="<?php esc_attr_e( 'انتخاب عامل', 'teznevise' ); ?>">
-				<?php foreach ( $picker as $ag ) : ?>
-					<button type="button" class="tz-gpt-agent<?php echo ( ( $atts['agent_id'] === ( $ag['agent_id'] ?? '' ) ) || ( 'general' === $atts['agent_id'] && 'teznevise' === ( $ag['agent_id'] ?? '' ) ) ) ? ' is-on' : ''; ?>" role="option" data-agent-pick="<?php echo esc_attr( $ag['agent_id'] ?? '' ); ?>" aria-selected="<?php echo ( $atts['agent_id'] === ( $ag['agent_id'] ?? '' ) ) ? 'true' : 'false'; ?>" title="<?php echo esc_attr( $ag['displayed_model_name'] ?? $ag['alias'] ?? '' ); ?>">
-						<?php
-						if ( ! empty( $ag['avatar'] ) ) {
-							echo '<img src="' . esc_url( $ag['avatar'] ) . '" width="28" height="28" alt="' . esc_attr( $ag['alt'] ?? $ag['alias'] ?? '' ) . '" title="' . esc_attr( $ag['logo_title'] ?? $ag['alias'] ?? '' ) . '" />';
-						}
-						?>
-						<span><?php echo esc_html( $ag['alias'] ?? $ag['name'] ?? '' ); ?></span>
-					</button>
-				<?php endforeach; ?>
-			</div>
-			<?php endif; ?>
+			<?php /* named-agent picker lives in render_agent_dropdown (data-agent-pick). */ ?>
 			<div class="tz-gpt-skills" data-ai-skills hidden></div>
 			<div class="tz-ai-chat__log tz-gpt__log" data-ai-log role="log" aria-live="polite">
 				<article class="tz-ai-msg is-assistant">
@@ -201,31 +172,19 @@ class TezNevise_AI_Chat {
 					<label class="screen-reader-text" for="<?php echo esc_attr( $instance_id ); ?>-q"><?php esc_html_e( 'پیام', 'teznevise' ); ?></label>
 					<textarea id="<?php echo esc_attr( $instance_id ); ?>-q" data-ai-input rows="1" required minlength="4" placeholder="<?php esc_attr_e( 'پیام به تزنویسه…', 'teznevise' ); ?>"></textarea>
 					<div class="tz-gpt-bar">
-						<details class="tz-gpt-tools">
-							<summary><?php esc_html_e( 'ابزارها', 'teznevise' ); ?></summary>
-							<div class="tz-gpt-tools__panel">
-								<label><?php esc_html_e( 'عامل', 'teznevise' ); ?>
-									<select data-ai-agent>
-										<?php foreach ( $agents as $ag ) : $ag = (array) $ag; ?>
-											<option value="<?php echo esc_attr( $ag['agent_id'] ?? '' ); ?>" <?php selected( $atts['agent_id'], $ag['agent_id'] ?? '' ); ?>><?php echo esc_html( $ag['alias'] ?? $ag['name'] ?? '' ); ?></option>
-										<?php endforeach; ?>
-									</select>
-								</label>
-								<label><?php esc_html_e( 'همکاری', 'teznevise' ); ?>
-									<select data-ai-collab>
-										<option value="single" <?php selected( $collab, 'single' ); ?>><?php esc_html_e( 'یک عامل', 'teznevise' ); ?></option>
-										<option value="collaborative" <?php selected( $collab, 'collaborative' ); ?>><?php esc_html_e( 'همکاری زنجیره‌ای', 'teznevise' ); ?></option>
-										<option value="separate" <?php selected( $collab, 'separate' ); ?>><?php esc_html_e( 'جدا + بازتاب', 'teznevise' ); ?></option>
-										<option value="research" <?php selected( $collab, 'research' ); ?>><?php esc_html_e( 'You.com — پژوهش اول', 'teznevise' ); ?></option>
-									</select>
-								</label>
-								<label class="tz-ai-chat__check"><input type="checkbox" data-ai-research <?php checked( $collab, 'research' ); ?>> <?php esc_html_e( 'پژوهش You.com اول', 'teznevise' ); ?></label>
-								<label class="tz-ai-chat__check"><input type="checkbox" data-ai-thinking <?php checked( $thinking ); ?>> <?php esc_html_e( 'حالت فکر', 'teznevise' ); ?></label>
-							</div>
-						</details>
-						<button class="tz-gpt-send" type="submit" aria-label="<?php esc_attr_e( 'ارسال', 'teznevise' ); ?>">
-							<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M3.4 20.6 21 12 3.4 3.4l.1 7.2L15 12 3.5 13.4z"/></svg>
-							<span><?php esc_html_e( 'ارسال', 'teznevise' ); ?></span>
+						<div class="tz-gpt-toggles" role="toolbar" aria-label="<?php esc_attr_e( 'ابزار گفتگو', 'teznevise' ); ?>">
+							<button type="button" class="tz-gpt__iconbtn is-toggle" data-ai-thinking-btn aria-pressed="<?php echo $thinking ? 'true' : 'false'; ?>" aria-label="<?php esc_attr_e( 'نمایش استدلال', 'teznevise' ); ?>" title="<?php esc_attr_e( 'استدلال', 'teznevise' ); ?>"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i></button>
+							<button type="button" class="tz-gpt__iconbtn is-toggle" data-ai-collab-btn aria-pressed="<?php echo 'collaborative' === $collab ? 'true' : 'false'; ?>" aria-label="<?php esc_attr_e( 'هم‌فکری عامل‌ها', 'teznevise' ); ?>" title="<?php esc_attr_e( 'هم‌فکری', 'teznevise' ); ?>"><i class="fa-solid fa-users" aria-hidden="true"></i></button>
+							<button type="button" class="tz-gpt__iconbtn is-toggle" data-ai-research-btn aria-pressed="<?php echo 'research' === $collab ? 'true' : 'false'; ?>" aria-label="<?php esc_attr_e( 'پژوهش وب', 'teznevise' ); ?>" title="<?php esc_attr_e( 'پژوهش', 'teznevise' ); ?>"><i class="fa-solid fa-globe" aria-hidden="true"></i></button>
+						</div>
+						<input type="checkbox" data-ai-thinking <?php checked( $thinking ); ?> hidden>
+						<input type="checkbox" data-ai-collab-toggle <?php checked( $collab, 'collaborative' ); ?> hidden>
+						<input type="checkbox" data-ai-research <?php checked( $collab, 'research' ); ?> hidden>
+						<button type="button" class="tz-gpt-stop" data-ai-stop hidden aria-label="<?php esc_attr_e( 'توقف', 'teznevise' ); ?>" title="<?php esc_attr_e( 'توقف', 'teznevise' ); ?>">
+							<i class="fa-solid fa-stop" aria-hidden="true"></i>
+						</button>
+						<button class="tz-gpt-send" type="submit" aria-label="<?php esc_attr_e( 'ارسال', 'teznevise' ); ?>" title="<?php esc_attr_e( 'ارسال', 'teznevise' ); ?>">
+							<i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
 						</button>
 					</div>
 				</div>
@@ -265,5 +224,78 @@ class TezNevise_AI_Chat {
 				),
 			)
 		);
+	}
+
+	/**
+	 * ChatGPT-style agent dropdown. Options keep data-agent-pick for CI.
+	 *
+	 * @param string           $current_id Current agent id.
+	 * @param array<int,array> $agents     Agent rows.
+	 */
+	public static function render_agent_dropdown( $current_id, $agents ) {
+		$named_ids = function_exists( 'teznevise_core_named_ids' ) ? teznevise_core_named_ids() : array();
+		$picker    = array();
+		foreach ( (array) $agents as $ag ) {
+			$ag = (array) $ag;
+			$id = $ag['agent_id'] ?? '';
+			if ( $id && ( ! $named_ids || in_array( $id, $named_ids, true ) ) ) {
+				$picker[] = $ag;
+			}
+		}
+		if ( ! $picker ) {
+			foreach ( (array) $agents as $ag ) {
+				$picker[] = (array) $ag;
+			}
+		}
+		$current = null;
+		foreach ( $picker as $ag ) {
+			if ( ( $ag['agent_id'] ?? '' ) === $current_id ) {
+				$current = $ag;
+				break;
+			}
+		}
+		if ( ! $current && $picker ) {
+			$current = $picker[0];
+		}
+		$label = $current['alias'] ?? $current['fa_name'] ?? $current['name'] ?? __( 'انتخاب عامل', 'teznevise' );
+		?>
+		<div class="tz-gpt-model" data-agent-menu>
+			<button type="button" class="tz-gpt-model__btn" data-agent-menu-toggle aria-haspopup="listbox" aria-expanded="false" aria-label="<?php esc_attr_e( 'انتخاب عامل', 'teznevise' ); ?>">
+				<?php if ( ! empty( $current['avatar'] ) ) : ?>
+					<img src="<?php echo esc_url( $current['avatar'] ); ?>" width="22" height="22" alt="" />
+				<?php else : ?>
+					<i class="fa-solid fa-brain" aria-hidden="true"></i>
+				<?php endif; ?>
+				<span data-agent-label><?php echo esc_html( $label ); ?></span>
+				<i class="fa-solid fa-chevron-down tz-gpt-model__caret" aria-hidden="true"></i>
+			</button>
+			<div class="tz-gpt-model__list" role="listbox" hidden aria-label="<?php esc_attr_e( 'عامل‌های پژوهشی', 'teznevise' ); ?>">
+				<?php foreach ( $picker as $ag ) : ?>
+					<?php
+					$id   = $ag['agent_id'] ?? '';
+					$on   = ( $id === $current_id ) || ( 'general' === $current_id && 'teznevise' === $id );
+					$name = $ag['alias'] ?? $ag['fa_name'] ?? $ag['name'] ?? $id;
+					$desc = $ag['description'] ?? ( $ag['displayed_model_name'] ?? '' );
+					?>
+					<button type="button" class="tz-gpt-agent<?php echo $on ? ' is-on' : ''; ?>" role="option" data-agent-pick="<?php echo esc_attr( $id ); ?>" aria-selected="<?php echo $on ? 'true' : 'false'; ?>" title="<?php echo esc_attr( $ag['displayed_model_name'] ?? $name ); ?>">
+						<?php if ( ! empty( $ag['avatar'] ) ) : ?>
+							<img src="<?php echo esc_url( $ag['avatar'] ); ?>" width="28" height="28" alt="<?php echo esc_attr( $ag['alt'] ?? $name ); ?>" />
+						<?php else : ?>
+							<span class="tz-gpt-agent__dot" style="background:<?php echo esc_attr( $ag['color'] ?? '#145d4a' ); ?>"></span>
+						<?php endif; ?>
+						<span class="tz-gpt-agent__copy">
+							<strong><?php echo esc_html( $name ); ?></strong>
+							<?php if ( $desc ) : ?><small><?php echo esc_html( wp_trim_words( wp_strip_all_tags( $desc ), 10 ) ); ?></small><?php endif; ?>
+						</span>
+					</button>
+				<?php endforeach; ?>
+			</div>
+			<select data-ai-agent class="tz-gpt-model__native" aria-hidden="true" tabindex="-1">
+				<?php foreach ( $picker as $ag ) : ?>
+					<option value="<?php echo esc_attr( $ag['agent_id'] ?? '' ); ?>" <?php selected( $current_id, $ag['agent_id'] ?? '' ); ?>><?php echo esc_html( $ag['alias'] ?? $ag['name'] ?? '' ); ?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+		<?php
 	}
 }

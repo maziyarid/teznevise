@@ -62,6 +62,12 @@ function teznevise_ai_comment_settings() {
 	$stored   = is_array( $stored ) ? $stored : array();
 	$defaults = teznevise_ai_comment_defaults();
 	$out      = array_merge( $defaults, $stored );
+	if ( ! array_key_exists( 'enabled', $stored ) ) {
+		$out['enabled'] = '1';
+	}
+	if ( ! array_key_exists( 'auto_on_publish', $stored ) ) {
+		$out['auto_on_publish'] = '1';
+	}
 	$slugs    = array();
 	foreach ( (array) ( $out['speakers'] ?? array() ) as $row ) {
 		$slugs[] = $row['slug'] ?? '';
@@ -219,7 +225,7 @@ function teznevise_render_ai_discussion_branch( $by_parent, $parent_id ) {
 		echo '</header>';
 		echo '<div class="comment-content">' . wp_kses_post( wpautop( (string) ( $item['content'] ?? '' ) ) ) . '</div>';
 		if ( ! empty( $item['thought'] ) ) {
-			echo '<details class="tz-ai-think"><summary>' . esc_html__( 'مشاهده استدلال درونی', 'teznevise' ) . '</summary><pre>' . esc_html( $item['thought'] ) . '</pre></details>';
+			echo '<details class="tz-ai-think"><summary class="tz-ai-think__sum"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i> ' . esc_html__( 'استدلال', 'teznevise' ) . '</summary><pre class="tz-ai-think__stream">' . esc_html( $item['thought'] ) . '</pre></details>';
 		}
 		if ( ! empty( $item['tags'] ) ) {
 			echo '<p class="tz-ai-tags">' . esc_html( $item['tags'] ) . '</p>';

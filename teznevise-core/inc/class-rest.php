@@ -50,26 +50,81 @@ class Teznevise_REST {
 				'permission_callback' => '__return_true',
 			)
 		);
+		register_rest_route(
+			'teznevise-core/v1',
+			'/debate-run',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( __CLASS__, 'debate_run' ),
+				'permission_callback' => '__return_true',
+			)
+		);
+		register_rest_route(
+			'teznevise-core/v1',
+			'/debate',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( __CLASS__, 'debate_status' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
 	public static function summarise( $request ) {
 		$post_id = (int) $request->get_param( 'post_id' );
-		$nonce   = (string) ( $request->get_header( 'X-WP-Nonce' ) ?: $request->get_param( 'nonce' ) );
-		if ( ! $nonce || ( ! wp_verify_nonce( $nonce, 'wp_rest' ) && ! wp_verify_nonce( $nonce, 'teznevise_core' ) ) ) {
-			return new WP_Error( 'bad_nonce', 'Invalid nonce', array( 'status' => 403 ) );
-		}
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 		if ( ! $post || 'publish' !== $post->post_status ) {
 			return new WP_Error( 'missing', 'Not found', array( 'status' => 404 ) );
 		}
-		$lines = Teznevise_Debate_Orchestrator::summarise( $post_id );
+		$overview = Teznevise_Debate_Orchestrator::ensure_overview( $post_id );
+		$lines    = Teznevise_Debate_Orchestrator::summarise( $post_id );
 		if ( is_wp_error( $lines ) ) {
 			return $lines;
 		}
+		if ( ! $lines ) {
+			return new WP_Error( 'llm_empty', 'مدل پاسخی برنگرداند. کلید OpenRouter را در تنظیمات هوش مصنوعی بررسی کنید.', array( 'status' => 502 ) );
+		}
+		$job = (string) get_post_meta( $post_id, '_teznevise_ai_job', true );
+		if ( ! in_array( $job, array( 'queued', 'running' ), true ) ) {
+			$thread = get_post_meta( $post_id, '_teznevise_ai_discussion', true );
+			$empty  = ! is_array( $thread ) || empty( $thread['items'] );
+			if ( $empty || 'failed' === $job ) {
+				Teznevise_Debate_Orchestrator::schedule( $post_id, true );
+			}
+		}
 		return array(
-			'success' => true,
-			'bullets' => array_map( 'esc_html', (array) $lines ),
+			'success'  => true,
+			'bullets'  => array_map( 'wp_strip_all_tags', (array) $lines ),
+			'overview' => $overview,
 		);
+	}
+
+	public static function debate_run( $request ) {
+		$post_id = (int) $request->get_param( 'post_id' );
+		$post    = get_post( $post_id );
+		if ( ! $post || 'publish' !== $post->post_status ) {
+			return new WP_Error( 'missing', 'Not found', array( 'status' => 404 ) );
+		}
+		$state = Teznevise_Debate_Orchestrator::seed_from_overview( $post_id );
+		$job   = (string) ( $state['job'] ?? '' );
+		if ( 'running' !== $job ) {
+			Teznevise_Debate_Orchestrator::schedule( $post_id, $state['count'] < 2 );
+		}
+		$state            = Teznevise_Debate_Orchestrator::thread_state( $post_id );
+		$state['success'] = true;
+		$state['queued']  = true;
+		return $state;
+	}
+
+	public static function debate_status( $request ) {
+		$post_id = (int) $request->get_param( 'post_id' );
+		$post    = get_post( $post_id );
+		if ( ! $post || 'publish' !== $post->post_status ) {
+			return new WP_Error( 'missing', 'Not found', array( 'status' => 404 ) );
+		}
+		$state            = Teznevise_Debate_Orchestrator::thread_state( $post_id );
+		$state['success'] = true;
+		return $state;
 	}
 
 	public static function regenerate( $request ) {

@@ -99,7 +99,12 @@ $human_count = get_comments(
 				echo '<div class="tz-ai-research__body">' . wp_kses_post( wpautop( $ai_thread['research'] ) ) . '</div></details>';
 			}
 			if ( function_exists( 'teznevise_render_ai_discussion_thread' ) ) {
+				echo '<div data-ai-debate-thread>';
 				teznevise_render_ai_discussion_thread( $post_id );
+				echo '</div>';
+			}
+			if ( empty( $ai_thread['items'] ) ) {
+				echo '<button type="button" class="btn-tz btn-primary-tz tz-ai-debate-run" data-ai-debate-run="' . esc_attr( (string) $post_id ) . '">' . esc_html__( 'تولید گفتگوی هوش مصنوعی', 'teznevise' ) . '</button>';
 			}
 			?>
 			<?php if ( current_user_can( 'moderate_comments' ) ) : ?>

@@ -38,6 +38,15 @@ export function AskAiPanel({
     { id: "greet", role: "assistant", agentName: "دستیار تزنویسه", content: GREETING },
   ]);
   const scroller = useRef<HTMLDivElement>(null);
+  const [elapsed, setElapsed] = useState(0);
+  const [thoughtOpen, setThoughtOpen] = useState(true);
+
+  useEffect(() => {
+    if (!busy) return;
+    const t0 = Date.now();
+    const id = window.setInterval(() => setElapsed(Math.max(1, Math.round((Date.now() - t0) / 1000))), 400);
+    return () => window.clearInterval(id);
+  }, [busy]);
 
   useEffect(() => {
     void listAgents().then(setAgents).catch(() => setAgents([]));
@@ -80,6 +89,8 @@ export function AskAiPanel({
     const q = question.trim();
     if (q.length < 2) return;
     setBusy(true);
+    setElapsed(1);
+    setThoughtOpen(true);
     setQuestion("");
     const userMsg: ChatMsg = { id: crypto.randomUUID(), role: "user", agentName: user?.displayName || "شما", content: q };
     setMessages((m) => [...m, userMsg]);
@@ -188,7 +199,13 @@ export function AskAiPanel({
         ))}
         {busy ? (
           <article className="ai-bubble is-bot">
-            <div className="ai-bubble-body">در حال فکر کردن…</div>
+            <details className="ai-think is-live" open={thoughtOpen} onToggle={(e) => setThoughtOpen((e.target as HTMLDetailsElement).open)}>
+              <summary>
+                <FaIcon icon="fa-spinner" className="fa-spin" /> در حال استدلال · {faNum(elapsed)}ث — باز/بسته کنید
+              </summary>
+              <pre>چیدن استدلال… لازم نیست منتظر بمانید تا این پنل باز بماند.</pre>
+            </details>
+            <div className="ai-bubble-body">در حال نوشتن پاسخ…</div>
             <footer>{selectedNames.join("، ") || "دستیار تزنویسه"}</footer>
           </article>
         ) : null}

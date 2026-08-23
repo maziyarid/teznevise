@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.19 — 2026-08-23 — Professional chat UI + working summary/debate
+
+- ChatGPT/Perplexity-style agent dropdown in the header; open/close/new/send/think/collab/research are icon-only with labels in `aria-label`/`title`.
+- Thinking pane opens immediately (collapsible, elapsed timer). Stop aborts the request so the user is never stuck waiting.
+- AI summary no longer requires a cached nonce (live was 403 `bad_nonce`). Errors surface in the box.
+- Public `POST /debate-run` + `GET /debate`. Clicking «تولید گفتگو» seeds the first turn from the overview and polls until the panel fills.
+- Keyboard: Arrow keys in the agent menu, Escape closes menu then the live panel.
+
 ## 1.9.18 — 2026-08-23 — Core Web Vitals + key resolution
 
 - PageSpeed: runtime/Font Awesome/legacy CSS were emitted twice (async copy + a blocking copy). HTML minifiers unwrapped the `<noscript>` fallback. Async styles now use a single `media=print` link and never concatenate a second tag.

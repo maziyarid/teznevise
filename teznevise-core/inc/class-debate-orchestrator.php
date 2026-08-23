@@ -189,6 +189,10 @@ class Teznevise_Debate_Orchestrator {
 			update_post_meta( $post_id, '_teznevise_ai_discussion', wp_slash( wp_json_encode( $thread, JSON_UNESCAPED_UNICODE ) ) );
 		}
 		update_post_meta( $post_id, '_teznevise_ai_pipeline', $pipeline );
+		if ( $created < 1 ) {
+			update_post_meta( $post_id, '_teznevise_ai_job', 'failed' );
+			return 0;
+		}
 		update_post_meta( $post_id, '_teznevise_ai_job', 'done' );
 		update_post_meta( $post_id, '_teznevise_ai_content_hash', $hash );
 		if ( get_option( 'teznevise_core_backfill_queue', array() ) ) {
@@ -197,6 +201,105 @@ class Teznevise_Debate_Orchestrator {
 			}
 		}
 		return $created;
+	}
+
+	/**
+	 * Public snapshot of the AI discussion for REST.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return array<string,mixed>
+	 */
+	public static function thread_state( $post_id ) {
+		$post_id = (int) $post_id;
+		$thread  = function_exists( 'teznevise_ai_discussion_get' ) ? teznevise_ai_discussion_get( $post_id ) : array( 'items' => array() );
+		$items   = array();
+		foreach ( (array) ( $thread['items'] ?? array() ) as $item ) {
+			$item    = (array) $item;
+			$items[] = array(
+				'id'      => (string) ( $item['id'] ?? '' ),
+				'parent'  => (string) ( $item['parent'] ?? '0' ),
+				'name'    => (string) ( $item['name'] ?? '' ),
+				'slug'    => (string) ( $item['slug'] ?? '' ),
+				'role'    => (string) ( $item['role'] ?? '' ),
+				'color'   => (string) ( $item['color'] ?? '' ),
+				'content' => wp_strip_all_tags( (string) ( $item['content'] ?? '' ) ),
+				'thought' => (string) ( $item['thought'] ?? '' ),
+				'avatar'  => (string) ( $item['avatar'] ?? '' ),
+				'job'     => (string) ( $item['job'] ?? '' ),
+			);
+		}
+		return array(
+			'job'      => (string) get_post_meta( $post_id, '_teznevise_ai_job', true ),
+			'overview' => (string) get_post_meta( $post_id, '_teznevise_ai_overview', true ),
+			'count'    => count( $items ),
+			'items'    => $items,
+		);
+	}
+
+	/**
+	 * Seed the debate tab immediately from the overview so the UI is not empty
+	 * while WP-Cron finishes the rest of the panel.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return array<string,mixed>
+	 */
+	public static function seed_from_overview( $post_id ) {
+		$post_id  = (int) $post_id;
+		$overview = self::ensure_overview( $post_id );
+		$state    = self::thread_state( $post_id );
+		if ( $state['count'] > 0 ) {
+			return $state;
+		}
+		if ( '' === $overview ) {
+			self::schedule( $post_id, true );
+			return self::thread_state( $post_id );
+		}
+		$agent = class_exists( 'Teznevise_Agent_Registry' ) ? ( Teznevise_Agent_Registry::get( 'teznevise' ) ?: array() ) : array();
+		$name  = (string) ( $agent['alias'] ?? $agent['fa_name'] ?? 'تزنویسه' ) . ' — نمای کلی';
+		$color = sanitize_hex_color( $agent['color'] ?? '' ) ?: '#145d4a';
+		$cid   = wp_insert_comment(
+			array(
+				'comment_post_ID'      => $post_id,
+				'comment_author'       => $name,
+				'comment_author_email' => 'teznevise@ai.teznevise.ir',
+				'comment_author_url'   => home_url( '/' ),
+				'comment_content'      => wp_kses_post( $overview ),
+				'comment_type'         => 'tz_ai',
+				'comment_parent'       => 0,
+				'comment_approved'     => 1,
+				'user_id'              => 0,
+			)
+		);
+		$item  = array(
+			'id'      => (string) $cid,
+			'parent'  => '0',
+			'name'    => $name,
+			'slug'    => 'teznevise',
+			'role'    => 'synthesizer',
+			'color'   => $color,
+			'tags'    => 'overview',
+			'content' => $overview,
+			'thought' => '',
+			'alias'   => $agent['alias'] ?? 'تزنویسه',
+			'avatar'  => $agent['avatar'] ?? '',
+			'job'     => 'overview',
+		);
+		$thread = array(
+			'version'   => 3,
+			'research'  => (string) get_post_meta( $post_id, '_teznevise_ai_research_text', true ),
+			'generated' => time(),
+			'overview'  => $overview,
+			'items'     => array( $item ),
+		);
+		if ( function_exists( 'teznevise_ai_discussion_save' ) ) {
+			teznevise_ai_discussion_save( $post_id, $thread );
+		} else {
+			update_post_meta( $post_id, '_teznevise_ai_discussion', wp_slash( wp_json_encode( $thread, JSON_UNESCAPED_UNICODE ) ) );
+		}
+		if ( 'running' !== (string) get_post_meta( $post_id, '_teznevise_ai_job', true ) ) {
+			update_post_meta( $post_id, '_teznevise_ai_job', 'queued' );
+		}
+		return self::thread_state( $post_id );
 	}
 
 	/**
@@ -221,11 +324,51 @@ class Teznevise_Debate_Orchestrator {
 		}
 		update_post_meta( $post_id, '_teznevise_ai_overview', $text );
 		if ( $force ) {
+			delete_post_meta( $post_id, '_teznevise_ai_overview_force' );
 			delete_post_meta( $post_id, '_teznevise_ai_overview_reviewed' );
 			delete_post_meta( $post_id, '_teznevise_ai_overview_reviewed_at' );
 			delete_post_meta( $post_id, '_teznevise_ai_overview_reviewed_by' );
-			delete_post_meta( $post_id, '_teznevise_ai_overview_force' );
 		}
+	}
+
+	/**
+	 * Generate the SERP/blog overview now (one LLM call) if missing.
+	 *
+	 * @param int  $post_id Post ID.
+	 * @param bool $force   Overwrite.
+	 * @return string
+	 */
+	public static function ensure_overview( $post_id, $force = false ) {
+		$post_id  = (int) $post_id;
+		$existing = (string) get_post_meta( $post_id, '_teznevise_ai_overview', true );
+		if ( $existing && ! $force ) {
+			return $existing;
+		}
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return '';
+		}
+		$article = wp_trim_words( wp_strip_all_tags( $post->post_content ), 900, '' );
+		$agent   = class_exists( 'Teznevise_Agent_Registry' ) ? ( Teznevise_Agent_Registry::get( 'teznevise' ) ?: Teznevise_Agent_Registry::get( 'general' ) ) : array();
+		if ( ! $agent ) {
+			$agent = array(
+				'provider'             => 'openrouter',
+				'model'                => '',
+				'alias'                => 'تزنویسه',
+				'displayed_model_name' => 'تزنویسه',
+				'agent_id'             => 'teznevise',
+			);
+		}
+		$skill  = class_exists( 'Teznevise_Agent_Registry' ) ? Teznevise_Agent_Registry::skill_md( 'teznevise', $post_id ) : '';
+		$prompt = class_exists( 'Teznevise_Agent_Registry' ) ? Teznevise_Agent_Registry::identity_lock( $agent, $skill ) : 'You are Teznevise.';
+		$prompt .= "\nWrite the SERP/blog AI overview of this article. 80–120 Persian words. Consulting only. No ghostwriting.";
+		$body    = self::complete_cascade( $post->post_title . "\n\n" . $article, $prompt, $agent, $article, $post_id );
+		$parsed  = self::split_thought( $body );
+		$text    = trim( wp_strip_all_tags( $parsed['public'] ) );
+		if ( $text ) {
+			self::store_overview( $post_id, $text, $force );
+		}
+		return $text;
 	}
 
 	/**
