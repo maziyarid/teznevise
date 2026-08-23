@@ -3,7 +3,6 @@ import { Lock } from "lucide-react";
 import { toolPageCopy, TOOL_GROUPS, TOOLS, type ToolDef } from "@/lib/content";
 import { usePageOverlay } from "@/lib/page-overlay";
 import { CALC_MAP } from "./Calculators";
-import { AskAiPanel } from "./AskAiPanel";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { CheckGrid } from "@/components/shared/CheckGrid";
 import { FaqGrid } from "@/components/shared/FaqGrid";
@@ -110,15 +109,6 @@ export function ToolsWorkspace({ tool }: { tool: ToolDef }) {
                 سفارش تحلیل آماری
               </Link>
             </div>
-            <AskAiPanel
-              tool={title}
-              context={context}
-              placeholder={
-                tool.kind === "ai"
-                  ? "موضوع، رشته و سؤال روش را بنویسید…"
-                  : "اگر می‌خواهید همین محاسبه را هوش مصنوعی برایتان تفسیر یا تکرار کند، اینجا بنویسید."
-              }
-            />
           </>
         )}
       </div>

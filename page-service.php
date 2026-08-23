@@ -96,7 +96,7 @@ while ( have_posts() ) :
 		</div>
 		<div class="reason-list" data-reveal-stagger style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
 			<?php
-			$lines = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $features ) ) );
+			$lines = function_exists( 'teznevise_lines' ) ? teznevise_lines( $features ) : array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', is_string( $features ) ? $features : '' ) ) );
 			foreach ( $lines as $line ) :
 				?>
 				<div class="reason-item">

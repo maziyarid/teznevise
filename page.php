@@ -111,7 +111,7 @@ while ( have_posts() ) :
 		<?php if ( $features ) : ?>
 			<ul class="reason-list page-features" data-reveal-stagger style="margin:24px 0;list-style:none;padding:0;display:grid;gap:12px;">
 				<?php
-				$lines   = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $features ) ) );
+				$lines   = function_exists( 'teznevise_lines' ) ? teznevise_lines( $features ) : array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', is_string( $features ) ? $features : '' ) ) );
 				$line_i  = 0;
 				foreach ( $lines as $line ) :
 					++$line_i;

@@ -76,11 +76,11 @@ while ( have_posts() ) :
 						if ( function_exists( 'teznevise_render_ai_overview' ) ) {
 							teznevise_render_ai_overview( $post_id );
 						}
-						?>
-						if ( $takeaways ) :
-							$lines = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $takeaways ) ) );
-							if ( $lines ) :
-								?>
+						$lines = function_exists( 'teznevise_lines' )
+							? teznevise_lines( $takeaways )
+							: array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', is_string( $takeaways ) ? $takeaways : '' ) ) );
+						if ( $lines ) :
+							?>
 							<section class="tz-takeaways">
 								<h2><?php esc_html_e( 'نکات کلیدی', 'teznevise' ); ?></h2>
 								<ol>
@@ -89,8 +89,7 @@ while ( have_posts() ) :
 									<?php endforeach; ?>
 								</ol>
 							</section>
-								<?php
-							endif;
+							<?php
 						endif;
 						echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						?>

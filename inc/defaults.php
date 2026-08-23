@@ -150,10 +150,13 @@ function teznevise_mod( $key, $default = null ) {
 		$default = isset( $defaults[ $key ] ) ? $defaults[ $key ] : '';
 	}
 	$val = get_theme_mod( 'teznevise_' . $key, $default );
+	if ( is_array( $val ) ) {
+		$val = function_exists( 'teznevise_plain' ) ? teznevise_plain( $val, is_string( $default ) ? $default : '' ) : '';
+	}
 	if ( function_exists( 'teznevise_consult_copy' ) && is_string( $val ) ) {
 		return teznevise_consult_copy( $val );
 	}
-	return $val;
+	return is_scalar( $val ) || null === $val ? (string) $val : ( is_string( $default ) ? $default : '' );
 }
 
 /**

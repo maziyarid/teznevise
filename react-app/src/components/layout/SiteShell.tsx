@@ -3,6 +3,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { Fab } from "./Fab";
+import { LiveChat } from "./LiveChat";
 import { BottomNav } from "./BottomNav";
 import { Tracker } from "@/components/analytics/Tracker";
 
@@ -23,6 +24,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
       </main>
       <SiteFooter />
       <Fab />
+      <LiveChat />
       <BottomNav />
     </div>
   );

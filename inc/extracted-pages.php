@@ -418,12 +418,12 @@ function teznevise_classic_html_from_extracted_page( $post_id ) {
 function teznevise_classic_html_from_page_fields( $post_id ) {
 	$parts    = array();
 	$excerpt  = trim( wp_strip_all_tags( (string) get_post_field( 'post_excerpt', $post_id ) ) );
-	$subtitle = trim( wp_strip_all_tags( (string) get_post_meta( $post_id, '_teznevise_subtitle', true ) ) );
-	$features = trim( wp_strip_all_tags( (string) get_post_meta( $post_id, '_teznevise_features', true ) ) );
+	$subtitle = function_exists( 'teznevise_plain' ) ? teznevise_plain( get_post_meta( $post_id, '_teznevise_subtitle', true ) ) : trim( wp_strip_all_tags( (string) get_post_meta( $post_id, '_teznevise_subtitle', true ) ) );
+	$features = function_exists( 'teznevise_plain' ) ? teznevise_plain( get_post_meta( $post_id, '_teznevise_features', true ) ) : '';
 	foreach ( array_unique( array_filter( array( $excerpt, $subtitle ) ) ) as $paragraph ) {
 		$parts[] = '<p>' . esc_html( $paragraph ) . '</p>';
 	}
-	$items = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $features ) ) );
+	$items = function_exists( 'teznevise_lines' ) ? teznevise_lines( $features ) : array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', is_string( $features ) ? $features : '' ) ) );
 	if ( $items ) {
 		$parts[] = '<ul><li>' . implode( '</li><li>', array_map( 'esc_html', $items ) ) . '</li></ul>';
 	}
@@ -594,8 +594,12 @@ function teznevise_page_content_disclosure_markup( $content, $post_id = 0 ) {
 	$target_id = 'tz-classic-content-' . $post_id;
 	$blocks    = preg_split( '/(?=(?:<p\b|<h[1-6]\b|<ul\b|<ol\b|<blockquote\b|<table\b))/i', $content, -1, PREG_SPLIT_NO_EMPTY );
 	$blocks    = array_values( array_filter( array_map( 'trim', (array) $blocks ) ) );
-	$preview   = array_slice( $blocks, 0, 3 );
-	$rest      = array_slice( $blocks, 3 );
+	$preview   = array_slice( $blocks, 0, 2 );
+	$rest      = array_slice( $blocks, 2 );
+	if ( ! $rest && count( $preview ) > 1 ) {
+		$rest    = array_slice( $preview, 1 );
+		$preview = array_slice( $preview, 0, 1 );
+	}
 	ob_start();
 	?>
 	<div class="seo-panel seo-disclosure tz-classic-disclosure is-collapsed" data-reveal>
@@ -607,8 +611,8 @@ function teznevise_page_content_disclosure_markup( $content, $post_id = 0 ) {
 				<div class="tz-classic-disclosure__rest">
 					<?php echo implode( "\n", $rest ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</div>
-				<button aria-controls="<?php echo esc_attr( $target_id ); ?>" aria-expanded="false" class="seo-more-btn" data-seo-toggle type="button"><span class="seo-more-text"><?php esc_html_e( 'ادامه مطلب', 'teznevise' ); ?></span></button>
 			<?php endif; ?>
+			<button aria-controls="<?php echo esc_attr( $target_id ); ?>" aria-expanded="false" class="seo-more-btn" data-seo-toggle type="button"><span class="seo-more-text"><?php esc_html_e( 'مشاهده بیشتر', 'teznevise' ); ?></span></button>
 		</div>
 	</div>
 	<?php

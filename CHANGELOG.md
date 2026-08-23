@@ -1,6 +1,21 @@
 # Changelog
 
+## 1.9.14 — 2026-08-23 — Visual repair, live chat, Genspark + Perplexity fallback
+
+- Header تزکوین chip is hidden for guests; it remains on the account dashboard for signed-in users.
+- Homepage hero no longer shows the compact inquiry form; the orbit visual is restored and sits lower.
+- Hover motion on cards/steps is slower. Process steps and numbered service cards are icon-led, centered, and narrower.
+- FAQ numbers sit beside the title and card height is compact.
+- Empty leftover wrap is gone; the «مشاهده بیشتر» disclosure returns when classic copy exists.
+- Footer is four columns (brand, services, recent posts, contact). SSL badge removed. Visual sitemap link added. Enamad seal is sized 125×125.
+- Page heroes fill the empty desktop column with the orbit visual; proposal challenges inject «خدشه‌دار شدن اعتبار».
+- Our-story gains a visual timeline/stats band; contact cards are stacked and centered.
+- Tools-page AI composer is removed. Live chat is a bottom-right widget; messenger FAB moves to the left.
+- Chat shows inner thoughts, collaboration replies, and «در حال اتصال به رایانه…» while research runs. Users can schedule a call and email the transcript to addresses set in TezNevise AI settings.
+- Provider cascade retries OpenRouter → xAI → OpenAI → Groq → Genspark → Perplexity. Research uses Perplexity Sonar, then You.com, then Tavily. PHP parse error in `single.php` and array-to-string warnings are fixed.
+
 ## 1.9.13 — 2026-08-23 — Auto overview, human review, agent skills
+
 
 - Named agents now ship with relevant skills (overview, chapter outline, test choice, ethics, etc.) in SKILL.md, the skills table, chat chips, and the تزنویسه hub.
 - AI overview is generated automatically for every published post (new + existing backfill queue) together with the named-agent debate. One post at a time so the API quota is not burned.

@@ -78,6 +78,7 @@ def check_requires() -> None:
         "assets/css/hotfix-201.css",
         "assets/css/hotfix-202.css",
         "assets/css/hotfix-203.css",
+        "assets/css/hotfix-204.css",
         "inc/legal-copy.php",
         "inc/waitlist.php",
         "teznevise-core/teznevise-core.php",
@@ -178,8 +179,8 @@ def check_source_contracts() -> None:
     if "function complexity" not in router:
         error("Model router complexity metric is missing")
     extracted = (ROOT / "inc" / "extracted-pages.php").read_text(encoding="utf-8")
-    if "ادامه مطلب" not in extracted:
-        error("Classic disclosure button is not labelled ادامه مطلب")
+    if "مشاهده بیشتر" not in extracted:
+        error("Classic disclosure button is not labelled مشاهده بیشتر")
     if "جزئیات و توضیحات بیشتر" in extracted:
         error("Visible F1 title still remains in extracted-pages.php")
     nav = (ROOT / "inc" / "nav-walker.php").read_text(encoding="utf-8")
@@ -245,6 +246,8 @@ def check_source_contracts() -> None:
         error("hotfix-202.css is not in the runtime CSS concat")
     if "hotfix-203.css" not in perf:
         error("hotfix-203.css is not in the runtime CSS concat")
+    if "hotfix-204.css" not in perf:
+        error("hotfix-204.css is not in the runtime CSS concat")
 
     skills_cfg = (ROOT / "teznevise-core" / "config" / "skills.php").read_text(encoding="utf-8")
     for skill_agent in ("teznevise", "christina", "ada", "professor", "parantez", "elara", "cyrus", "mira"):

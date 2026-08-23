@@ -57,12 +57,22 @@ class TezNevise_AI_API {
                 return is_user_logged_in();
             },
         ]);
+		register_rest_route('teznevise-ai/v1', '/chat/handoff', [
+            'methods' => 'POST',
+            'callback' => [__CLASS__, 'handle_handoff'],
+            'permission_callback' => '__return_true',
+        ]);
     }
     
     public static function check_chat_permission($request) {
         $tool_id = $request->get_param('tool_id');
         $tool = TezNevise_AI_Core::get_tool($tool_id);
-        if (!$tool) return new WP_Error('invalid_tool', 'Invalid tool ID', ['status' => 400]);
+        if (!$tool) {
+            $tool = TezNevise_AI_Core::get_tool('general');
+        }
+        if (!$tool) {
+            return true;
+        }
         
         $user_id = get_current_user_id();
         $is_logged_in = $user_id > 0;
@@ -133,9 +143,6 @@ class TezNevise_AI_API {
 		$allowed_models = (array) apply_filters('teznevise_ai_allowed_models', [$model], $tool, $agent);
 		if ($requested_model && in_array($requested_model, $allowed_models, true)) {
 			$model = $requested_model;
-		}
-		if (!$is_logged_in) {
-			$collaboration_mode = 'single';
 		}
 		$burst_key = 'tez_ai_' . substr(hash('sha256', self::usage_subject() . '|' . $tool_id), 0, 32);
 		$burst = self::increment_burst($burst_key, 5);
@@ -223,25 +230,27 @@ class TezNevise_AI_API {
         $agents  = array($primary);
 
         if ($mode === 'research') {
-            $researcher = TezNevise_AI_Database::get_agent('you');
-            if (!$researcher) {
-                foreach ((array) TezNevise_AI_Database::get_all_agents() as $row) {
-                    if (($row['role'] ?? '') === 'researcher' || ($row['agent_id'] ?? '') === 'you') {
-                        $researcher = $row;
-                        break;
+            $research = self::research_web($message);
+            if (is_wp_error($research)) {
+                $researcher = TezNevise_AI_Database::get_agent('you');
+                if (!$researcher) {
+                    foreach ((array) TezNevise_AI_Database::get_all_agents() as $row) {
+                        if (($row['role'] ?? '') === 'researcher' || ($row['agent_id'] ?? '') === 'you') {
+                            $researcher = $row;
+                            break;
+                        }
                     }
                 }
-            }
-            if ($researcher) {
-                $rprompt = trim((string) ($researcher['system_prompt'] ?? '')) ?: 'You are You.com, a research agent. Search and summarize the topic with sources, claims, and counterpoints. Prefer Persian academic sources when the user writes in Persian. Return markdown with a Findings section and a Sources section.';
-                $research = self::call_ai_api($message, $rprompt, $researcher, $researcher['model'] ?? $model, $thinking_enabled);
-                if (is_wp_error($research)) {
-                    return $research;
+                if ($researcher) {
+                    $rprompt = trim((string) ($researcher['system_prompt'] ?? '')) ?: 'You are You.com, a research agent. Search and summarize the topic with sources, claims, and counterpoints. Prefer Persian academic sources when the user writes in Persian. Return markdown with a Findings section and a Sources section.';
+                    $research = self::call_ai_api($message, $rprompt, $researcher, $researcher['model'] ?? $model, $thinking_enabled);
                 }
+            }
+            if (!is_wp_error($research) && is_array($research)) {
                 $replies[] = array(
                     'content' => $research['content'],
-                    'agent_name' => $researcher['name'] ?? 'You',
-                    'model' => $researcher['model'] ?? $model,
+                    'agent_name' => $research['agent_name'] ?? 'پژوهش',
+                    'model' => $research['model'] ?? 'research',
                     'thinking_process' => $research['thinking_process'] ?? null,
                 );
                 $prior = $research['content'];
@@ -308,6 +317,55 @@ class TezNevise_AI_API {
         return array('success' => true, 'messages' => $rows);
     }
 
+    /**
+     * Email chat history and request a human call.
+     *
+     * @param WP_REST_Request $request Request.
+     * @return array|WP_Error
+     */
+    public static function handle_handoff($request) {
+        $name  = sanitize_text_field((string) $request->get_param('name'));
+        $phone = sanitize_text_field((string) $request->get_param('phone'));
+        $email = sanitize_email((string) $request->get_param('email'));
+        $history = $request->get_param('history');
+        if ($name === '' || $phone === '') {
+            return new WP_Error('invalid', 'نام و موبایل لازم است', ['status' => 400]);
+        }
+        $burst = self::increment_burst('handoff_' . substr(hash('sha256', self::usage_subject()), 0, 24), 3);
+        if (is_wp_error($burst)) {
+            return $burst;
+        }
+        $lines = array();
+        if (is_array($history)) {
+            foreach (array_slice($history, -40) as $row) {
+                if (!is_array($row)) {
+                    continue;
+                }
+                $role = sanitize_text_field((string) ($row['role'] ?? $row['name'] ?? ''));
+                $text = sanitize_textarea_field((string) ($row['text'] ?? $row['content'] ?? ''));
+                if ($text !== '') {
+                    $lines[] = strtoupper($role !== '' ? $role : 'msg') . ': ' . $text;
+                }
+            }
+        }
+        $raw_to = (string) get_option('teznevise_ai_notify_emails', '');
+        $to     = array_values(array_filter(array_map('sanitize_email', array_map('trim', preg_split('/[,;\n]+/', $raw_to)))));
+        if (!$to) {
+            $fallback = function_exists('teznevise_get_contact') ? teznevise_get_contact('email') : '';
+            $to = array(sanitize_email($fallback ?: (string) get_option('admin_email')));
+        }
+        $to = array_values(array_filter($to));
+        if (!$to) {
+            return new WP_Error('no_inbox', 'ایمیل دریافت‌کننده تنظیم نشده است', ['status' => 500]);
+        }
+        $body = "نام: {$name}\nموبایل: {$phone}\nایمیل: {$email}\nصفحه: " . home_url('/') . "\n\nتاریخچه گفتگو:\n" . implode("\n\n", $lines);
+        $sent = wp_mail($to, 'درخواست تماس از گفتگوی هوش مصنوعی تزنویسه', $body);
+        if (!$sent) {
+            return new WP_Error('mail_failed', 'ارسال ایمیل ناموفق بود', ['status' => 502]);
+        }
+        return array('success' => true);
+    }
+
     private static function build_system_prompt($tool, $agent, $skill_id, $collaboration_mode) {
         $prompt_parts = [];
         $lock = apply_filters( 'teznevise_ai_system_prompt_prefix', '', $agent );
@@ -339,6 +397,7 @@ class TezNevise_AI_API {
             $prompt_parts[] = "Respond in language code: {$lang}.";
         }
 		$prompt_parts[] = "Give a concise, evidence-based answer. First enclose ALL internal reasoning in <thought>...</thought>, then the public reply outside those tags.";
+		$prompt_parts[] = "You explain research methods and next steps. You never guarantee grades, acceptance, or scientific accuracy. If the question is high-stakes, invite the user to schedule a human consult and mention that chat history can be emailed.";
         return implode("\n\n", $prompt_parts);
     }
 
@@ -405,6 +464,10 @@ class TezNevise_AI_API {
     }
 
     public static function research($query, $agent = null) {
+        $web = self::research_web($query);
+        if (!is_wp_error($web)) {
+            return $web;
+        }
         if (!$agent && class_exists('TezNevise_AI_Database')) {
             $agent = TezNevise_AI_Database::get_agent('you');
         }
@@ -470,8 +533,174 @@ class TezNevise_AI_API {
         return array('content' => implode("\n", $lines), 'thinking_process' => null);
     }
 
+    /**
+     * Live web research: Perplexity Sonar, then You.com, then Tavily.
+     *
+     * @param string $query User query.
+     * @return array|WP_Error {content, thinking_process, agent_name, model}
+     */
+    private static function research_web($query) {
+        $query = wp_strip_all_tags((string) $query);
+        $prompt = 'You are a research assistant for Persian graduate students. Search the live web. Return a Findings section and a Sources section. Prefer academic sources. If the user writes in Persian, answer in Persian. Never guarantee grades or scientific accuracy.';
+
+        $pkey = self::key_for(array('provider' => 'perplexity'), 'perplexity');
+        if ($pkey !== '') {
+            $model = (string) get_option('teznevise_ai_perplexity_model', 'sonar');
+            if ($model === '') {
+                $model = 'sonar';
+            }
+            $agent = array(
+                'provider'    => 'perplexity',
+                'temperature' => 0.2,
+                'max_tokens'  => 1800,
+            );
+            $result = self::call_provider_once($query, $prompt, $agent, $model, false, 'perplexity', $pkey);
+            if (!is_wp_error($result) && !empty($result['content'])) {
+                $result['agent_name'] = 'Perplexity';
+                $result['model'] = $model;
+                return $result;
+            }
+        }
+
+        $ykey = self::key_for(array('provider' => 'you'), 'you');
+        if ($ykey !== '') {
+            $result = self::you_search($ykey, $query, '');
+            if (!is_wp_error($result) && !empty($result['content'])) {
+                $result['agent_name'] = 'You.com';
+                $result['model'] = 'you-search';
+                return $result;
+            }
+        }
+
+        $tkey = self::key_for(array('provider' => 'tavily'), 'tavily');
+        if ($tkey !== '') {
+            $result = self::tavily_search($tkey, $query);
+            if (!is_wp_error($result) && !empty($result['content'])) {
+                $result['agent_name'] = 'Tavily';
+                $result['model'] = 'tavily-search';
+                return $result;
+            }
+        }
+
+        return new WP_Error('no_research', 'هیچ موتور پژوهشی پیکربندی نشده است', array('status' => 400));
+    }
+
+    /**
+     * Tavily search fallback.
+     *
+     * @param string $api_key API key.
+     * @param string $query   Query.
+     * @return array|WP_Error
+     */
+    private static function tavily_search($api_key, $query) {
+        $response = wp_remote_post(
+            'https://api.tavily.com/search',
+            array(
+                'headers'     => array(
+                    'Content-Type'  => 'application/json',
+                    'Authorization' => 'Bearer ' . $api_key,
+                ),
+                'body'        => wp_json_encode(
+                    array(
+                        'query'          => wp_strip_all_tags((string) $query),
+                        'search_depth'   => 'basic',
+                        'include_answer' => true,
+                        'max_results'    => 8,
+                    )
+                ),
+                'timeout'     => 45,
+                'redirection' => 0,
+            )
+        );
+        if (is_wp_error($response)) {
+            return $response;
+        }
+        $status = (int) wp_remote_retrieve_response_code($response);
+        if ($status < 200 || $status >= 300) {
+            return new WP_Error('api_http_error', 'Tavily returned an unsuccessful response', array('status' => 502));
+        }
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        if (!is_array($body)) {
+            return new WP_Error('api_error', 'پاسخ Tavily نامعتبر بود', array('status' => 502));
+        }
+        $lines = array('## یافته‌های پژوهش');
+        if (!empty($body['answer'])) {
+            $lines[] = (string) $body['answer'];
+        }
+        $n = 0;
+        foreach ((array) ($body['results'] ?? array()) as $hit) {
+            if ($n >= 8) {
+                break;
+            }
+            $title = $hit['title'] ?? '';
+            $snip  = $hit['content'] ?? $hit['snippet'] ?? '';
+            $link  = $hit['url'] ?? '';
+            if (!$title && !$snip) {
+                continue;
+            }
+            ++$n;
+            $lines[] = $n . '. **' . $title . '** — ' . wp_strip_all_tags((string) $snip) . ($link ? ' (' . $link . ')' : '');
+        }
+        if (count($lines) === 1) {
+            return new WP_Error('api_error', 'نتیجه‌ای از Tavily نیامد', array('status' => 502));
+        }
+        return array('content' => implode("\n", $lines), 'thinking_process' => null);
+    }
+
     private static function call_ai_api($message, $system_prompt, $agent, $model, $thinking_enabled) {
-        $provider = self::detect_provider($agent);
+        $last_error = new WP_Error('no_api_key', 'کلید API این عامل تنظیم نشده است', ['status' => 400]);
+        foreach (self::provider_chain($agent, $model) as $try) {
+            $result = self::call_provider_once($message, $system_prompt, $try['agent'], $try['model'], $thinking_enabled, $try['provider'], $try['key']);
+            if (!is_wp_error($result)) {
+                return $result;
+            }
+            $last_error = $result;
+        }
+        return $last_error;
+    }
+
+    private static function provider_chain($agent, $model) {
+        $chain = array();
+        $seen  = array();
+        $push  = static function ($provider, $ag, $mdl) use (&$chain, &$seen) {
+            $key = self::key_for($ag, $provider);
+            $token = $provider . '|' . substr(hash('sha256', (string) $key), 0, 12);
+            if ($key === '' || isset($seen[$token])) {
+                return;
+            }
+            $seen[$token] = true;
+            $chain[] = array(
+                'provider' => $provider,
+                'agent'    => $ag,
+                'model'    => $mdl,
+                'key'      => $key,
+            );
+        };
+        $primary = self::detect_provider($agent);
+        $push($primary, $agent, $model);
+        foreach (array('openrouter', 'xai', 'openai', 'groq', 'genspark', 'perplexity', 'deepseek', 'mistral') as $p) {
+            $ag = is_array($agent) ? $agent : array();
+            $ag['provider'] = $p;
+            $ag['api_endpoint'] = ($p === 'genspark') ? (string) get_option('teznevise_ai_genspark_endpoint', '') : '';
+            $mdl = $model;
+            if ($p === 'openrouter' && (false === strpos((string) $mdl, '/') && false === strpos((string) $mdl, ':'))) {
+                $mdl = 'openai/gpt-oss-20b:free';
+            }
+            if ($p === 'genspark') {
+                $mdl = (string) get_option('teznevise_ai_genspark_model', $model ?: 'default');
+            }
+            if ($p === 'perplexity') {
+                $mdl = (string) get_option('teznevise_ai_perplexity_model', 'sonar');
+                if ($mdl === '') {
+                    $mdl = 'sonar';
+                }
+            }
+            $push($p, $ag, $mdl);
+        }
+        return $chain;
+    }
+
+    private static function call_provider_once($message, $system_prompt, $agent, $model, $thinking_enabled, $provider, $api_key) {
         $api_endpoint = self::endpoint_for($agent, $provider, $model);
 		$parsed = is_string($api_endpoint) ? wp_parse_url($api_endpoint) : false;
 		if (!is_array($parsed)) {
@@ -486,7 +715,6 @@ class TezNevise_AI_API {
 		if (!in_array($api_host, array_map('strtolower', $allowed_hosts), true)) {
 			return new WP_Error('invalid_api_host', 'AI provider host is not allow-listed', ['status' => 400]);
 		}
-		$api_key = self::key_for($agent, $provider);
         if (empty($api_key)) return new WP_Error('no_api_key', 'کلید API این عامل تنظیم نشده است', ['status' => 400]);
 
         if ($thinking_enabled) {
@@ -495,6 +723,9 @@ class TezNevise_AI_API {
 
         if ($provider === 'you') {
             return self::you_search($api_key, $message, $api_endpoint);
+        }
+        if ($provider === 'tavily') {
+            return self::tavily_search($api_key, $message);
         }
 
         $built = self::build_provider_request($provider, $api_endpoint, $api_key, $model, $system_prompt, $message, $agent);
@@ -529,7 +760,7 @@ class TezNevise_AI_API {
     }
 
     public static function allowed_hosts() {
-        return array(
+        $hosts = array(
             'api.openai.com',
             'generativelanguage.googleapis.com',
             'openrouter.ai',
@@ -542,7 +773,16 @@ class TezNevise_AI_API {
             'api.ydc-index.io',
             'api.you.com',
             'api.tavily.com',
+            'api.genspark.ai',
+            'www.genspark.ai',
+            'genspark.ai',
+            'api.perplexity.ai',
         );
+        $custom = strtolower((string) (wp_parse_url((string) get_option('teznevise_ai_genspark_endpoint', ''), PHP_URL_HOST) ?: ''));
+        if ($custom !== '') {
+            $hosts[] = $custom;
+        }
+        return $hosts;
     }
 
     public static function providers() {
@@ -558,6 +798,8 @@ class TezNevise_AI_API {
             'deepseek'   => array('label' => 'DeepSeek', 'option' => 'teznevise_ai_deepseek_key', 'host' => 'api.deepseek.com', 'endpoint' => 'https://api.deepseek.com/v1/chat/completions'),
             'you'        => array('label' => 'You.com Research', 'option' => 'teznevise_ai_you_key', 'host' => 'api.ydc-index.io', 'endpoint' => 'https://api.ydc-index.io/v1/search'),
             'tavily'     => array('label' => 'Tavily Research', 'option' => 'teznevise_ai_tavily_key', 'host' => 'api.tavily.com', 'endpoint' => 'https://api.tavily.com/search'),
+            'genspark'   => array('label' => 'Genspark (backup)', 'option' => 'teznevise_ai_genspark_key', 'host' => 'api.genspark.ai', 'endpoint' => 'https://api.genspark.ai/v1/chat/completions'),
+            'perplexity' => array('label' => 'Perplexity Sonar', 'option' => 'teznevise_ai_perplexity_key', 'host' => 'api.perplexity.ai', 'endpoint' => 'https://api.perplexity.ai/chat/completions'),
         );
     }
 
@@ -583,6 +825,15 @@ class TezNevise_AI_API {
         $custom = esc_url_raw($agent['api_endpoint'] ?? '');
         if ($custom) {
             return $custom;
+        }
+        if ($provider === 'genspark') {
+            $override = esc_url_raw((string) get_option('teznevise_ai_genspark_endpoint', ''));
+            if ($override) {
+                return $override;
+            }
+        }
+        if ($provider === 'perplexity') {
+            return 'https://api.perplexity.ai/chat/completions';
         }
         $catalog = self::providers();
         $url = $catalog[$provider]['endpoint'] ?? $catalog['openai']['endpoint'];
@@ -678,7 +929,38 @@ class TezNevise_AI_API {
             }
             return $text;
         }
-        return (string) ($body['choices'][0]['message']['content'] ?? '');
+        $text = (string) ($body['choices'][0]['message']['content'] ?? '');
+        return self::append_citations($provider, $text, $body);
+    }
+
+    /**
+     * Append Perplexity (or similar) citation URLs to the public answer.
+     *
+     * @param string $provider Provider id.
+     * @param string $text     Model text.
+     * @param array  $body     Decoded JSON body.
+     * @return string
+     */
+    private static function append_citations($provider, $text, $body) {
+        if ($provider !== 'perplexity' || empty($body['citations']) || !is_array($body['citations'])) {
+            return $text;
+        }
+        $cites = array();
+        $n = 0;
+        foreach ($body['citations'] as $url) {
+            if (!is_string($url) || $url === '') {
+                continue;
+            }
+            ++$n;
+            $cites[] = $n . '. ' . esc_url_raw($url);
+            if ($n >= 8) {
+                break;
+            }
+        }
+        if (!$cites) {
+            return $text;
+        }
+        return rtrim($text) . "\n\nمنابع:\n" . implode("\n", $cites);
     }
     
     private static function get_client_ip() {

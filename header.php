@@ -40,11 +40,15 @@ if ( $logo_url ) {
 		? sprintf( __( 'موجودی: %s تزکوین', 'teznevise' ), number_format_i18n( (int) $balance ) )
 		: __( 'با ثبت‌نام ۳۰ تزکوین هدیه می‌گیرید', 'teznevise' );
 	$account = home_url( '/account/' );
-	?>
+	if ( $logged ) :
+		?>
 	<a class="nav-credits" href="<?php echo esc_url( $account ); ?>" title="<?php echo esc_attr( $tip ); ?>" aria-label="<?php echo esc_attr( $tip ); ?>">
 		<i class="fa-solid fa-coins" aria-hidden="true"></i>
-		<span><?php echo $logged ? esc_html( number_format_i18n( (int) $balance ) ) : '—'; ?></span>
+		<span><?php echo esc_html( number_format_i18n( (int) $balance ) ); ?></span>
 	</a>
+		<?php
+	endif;
+	?>
 	<a class="nav-account" href="<?php echo esc_url( $account ); ?>" aria-label="<?php echo $logged ? esc_attr__( 'پروفایل', 'teznevise' ) : esc_attr__( 'ورود', 'teznevise' ); ?>" title="<?php echo $logged ? esc_attr__( 'پروفایل', 'teznevise' ) : esc_attr__( 'ورود', 'teznevise' ); ?>">
 		<i class="<?php echo $logged ? 'fa-solid fa-user' : 'fa-regular fa-user'; ?>" aria-hidden="true"></i>
 	</a>

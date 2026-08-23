@@ -24,12 +24,7 @@ get_header();
 					<span class="hero-point"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> <?php echo esc_html( teznevise_mod( 'hero_point_3' ) ); ?></span>
 				</div>
 			</div>
-			<div class="hero-aside tz-hero-split__form">
-				<?php
-				if ( function_exists( 'teznevise_render_hero_inquiry' ) ) {
-					echo teznevise_render_hero_inquiry( 'home' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				}
-				?>
+			<div class="hero-aside">
 			<div class="hero-visual" aria-label="<?php esc_attr_e( 'نمایی خلاقانه از خدمات تزنویسه', 'teznevise' ); ?>">
 				<div class="ink-blot blot-one"></div><div class="ink-blot blot-two"></div><div class="ink-blot blot-three"></div>
 				<div class="hero-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
@@ -51,7 +46,7 @@ $has_builder_cta = function_exists( 'teznevise_builder_has_type' ) && teznevise_
 if ( $use_builder ) {
 	// Customizer secondary CTA still targets #services after the coded section is skipped.
 	echo '<div id="services">';
-	teznevise_builder_render_sections( 0, array( 'except' => array( 'cta_band' ) ) );
+	teznevise_builder_render_sections( 0, array( 'except' => array( 'cta_band', 'hero' ) ) );
 	echo '</div>';
 } else {
 	?>

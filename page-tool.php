@@ -74,7 +74,7 @@ while ( have_posts() ) :
 		<div class="steps" data-reveal-stagger style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
 			<?php
 			$i = 1;
-			foreach ( array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $features ) ) ) as $line ) :
+			foreach ( function_exists( 'teznevise_lines' ) ? teznevise_lines( $features ) : array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', is_string( $features ) ? $features : '' ) ) ) as $line ) :
 				?>
 				<div class="step">
 					<div class="step-icon icon-box icon-teal"><i class="fa-solid fa-<?php echo esc_attr( $i ); ?>" aria-hidden="true"></i></div>

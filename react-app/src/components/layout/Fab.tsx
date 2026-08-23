@@ -5,7 +5,7 @@ import { SITE } from "@/lib/site";
 export function Fab() {
   const [open, setOpen] = useState(false);
   return (
-    <div className={`tz-fab-wrap ${open ? "is-open" : ""}`}>
+    <div className={`tz-fab-wrap tz-fab-wrap--start ${open ? "is-open" : ""}`}>
       {open ? (
         <div className="tz-fab-menu" role="menu">
           <a className="tz-fab-item" href={SITE.telegram} target="_blank" rel="noopener noreferrer" role="menuitem">

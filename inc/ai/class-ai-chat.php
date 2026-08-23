@@ -17,9 +17,10 @@ class TezNevise_AI_Chat {
 	}
 
 	public static function maybe_enqueue() {
-		if ( is_page_template( 'page-tool.php' ) || is_page_template( 'page-tools.php' ) ) {
-			self::enqueue_assets();
+		if ( is_admin() ) {
+			return;
 		}
+		self::enqueue_assets();
 	}
 
 	public static function enqueue_assets() {

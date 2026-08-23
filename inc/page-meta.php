@@ -222,10 +222,13 @@ function teznevise_register_page_meta() {
 					if ( 'boolean' === $type ) {
 						return (bool) $value;
 					}
+					if ( is_array( $value ) ) {
+						return function_exists( 'teznevise_plain' ) ? teznevise_plain( $value ) : '';
+					}
 					if ( is_string( $value ) && strlen( $value ) > 500 ) {
 						return sanitize_textarea_field( $value );
 					}
-					return sanitize_text_field( $value );
+					return sanitize_text_field( is_string( $value ) ? $value : '' );
 				},
 			)
 		);

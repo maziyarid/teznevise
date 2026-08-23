@@ -5,9 +5,12 @@
  * @package Teznevise
  */
 if ( is_page() && function_exists( 'teznevise_the_page_leftover_content' ) ) {
-	echo '<div class="container tz-classic-more-wrap">';
+	ob_start();
 	teznevise_the_page_leftover_content();
-	echo '</div>';
+	$leftover = trim( (string) ob_get_clean() );
+	if ( '' !== $leftover ) {
+		echo '<div class="container tz-classic-more-wrap">' . $leftover . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
 }
 ?></main>
 <footer class="site-footer site-footer-new footer-new">
@@ -42,6 +45,31 @@ if ( is_page() && function_exists( 'teznevise_the_page_leftover_content' ) ) {
 				<a href="<?php echo esc_url( home_url( '/online-calculation-tools/' ) ); ?>"><?php esc_html_e( 'ابزارهای آنلاین', 'teznevise' ); ?></a>
 			</div>
 			<div class="footer-col">
+				<p class="footer-heading"><?php esc_html_e( 'آخرین مطالب', 'teznevise' ); ?></p>
+				<?php
+				$footer_posts = get_posts(
+					array(
+						'numberposts'      => 4,
+						'post_status'      => 'publish',
+						'post_type'        => 'post',
+						'no_found_rows'    => true,
+						'suppress_filters' => false,
+					)
+				);
+				if ( $footer_posts ) {
+					foreach ( $footer_posts as $footer_post ) {
+						printf(
+							'<a href="%s">%s</a>',
+							esc_url( get_permalink( $footer_post ) ),
+							esc_html( get_the_title( $footer_post ) )
+						);
+					}
+				} else {
+					echo '<p>' . esc_html__( 'به‌زودی مقاله‌های تازه اینجا می‌آیند.', 'teznevise' ) . '</p>';
+				}
+				?>
+			</div>
+			<div class="footer-col">
 				<p class="footer-heading"><?php esc_html_e( 'ارتباط با ما', 'teznevise' ); ?></p>
 				<a href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( teznevise_get_contact( 'phone_intl' ) ) : 'tel:+989302822091' ); ?>"><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></a>
 				<a href="mailto:<?php echo esc_attr( teznevise_get_contact( 'email' ) ); ?>"><?php echo esc_html( teznevise_get_contact( 'email' ) ); ?></a>
@@ -56,19 +84,16 @@ if ( is_page() && function_exists( 'teznevise_the_page_leftover_content' ) ) {
 				<a href="<?php echo esc_url( home_url( '/cookies/' ) ); ?>"><?php esc_html_e( 'کوکی‌ها', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/refund/' ) ); ?>"><?php esc_html_e( 'بازپرداخت', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/research-rules/' ) ); ?>"><?php esc_html_e( 'ضوابط پژوهش', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/sitemap/' ) ); ?>"><?php esc_html_e( 'نقشه سایت', 'teznevise' ); ?></a>
 			</div>
 		</nav>
 		<div class="footer-certs" aria-label="<?php esc_attr_e( 'نمادهای اعتماد', 'teznevise' ); ?>">
 			<div class="footer-certs__enamad">
-<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP' alt='' style='cursor:pointer' code='HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'></a>
+<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP' alt='' width="125" height="125" style='cursor:pointer;width:125px;height:125px' code='HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'></a>
 			</div>
 			<div class="footer-certs__trusted">
 <script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script>
 			</div>
-			<span class="trust-seal is-ssl" title="<?php esc_attr_e( 'ارتباط امن HTTPS', 'teznevise' ); ?>">
-				<svg viewBox="0 0 48 48" width="22" height="22" aria-hidden="true"><rect x="12" y="20" width="24" height="16" rx="4" fill="#0f4a3b"/><path d="M18 20v-4a6 6 0 0112 0v4" fill="none" stroke="#82d8b9" stroke-width="3"/></svg>
-				<span>SSL</span>
-			</span>
 		</div>
 		<div class="footer-bottom">
 			<span>© <?php echo esc_html( date_i18n( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?> — <?php esc_html_e( 'تمامی حقوق محفوظ است.', 'teznevise' ); ?></span>
@@ -76,6 +101,7 @@ if ( is_page() && function_exists( 'teznevise_the_page_leftover_content' ) ) {
 	</div>
 </footer>
 <?php get_template_part( 'template-parts/fab' ); ?>
+<?php get_template_part( 'template-parts/live-chat' ); ?>
 <?php get_template_part( 'template-parts/bottom-nav' ); ?>
 </div>
 <?php wp_footer(); ?>

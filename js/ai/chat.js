@@ -271,14 +271,23 @@
       autosize(input);
       var agentId = agentSel ? agentSel.value : root.getAttribute('data-agent-id');
       var meta = agentMeta(agentId);
+      var thinkingOn = !!(thinkBox && thinkBox.checked);
+      var collabToggle = root.querySelector('[data-ai-collab-toggle]');
+      var collab = collabSel ? collabSel.value : (root.getAttribute('data-collaboration-mode') || 'single');
+      if (collabToggle && collabToggle.checked) collab = 'collaborative';
+      if (collabToggle && !collabToggle.checked && collab === 'collaborative') collab = 'single';
+      if (researchBox && researchBox.checked) collab = 'research';
       if (status) {
         status.hidden = false;
-        status.innerHTML = '<span class="tz-ai-dots" aria-hidden="true"><i></i><i></i><i></i></span> ' +
-          ((meta && meta.name) ? (meta.name + ' در حال فکر کردن…') : 'در حال فکر کردن…');
+        if (collab === 'research') {
+          status.textContent = 'در حال اتصال به رایانه…';
+        } else if (collab === 'collaborative' || collab === 'separate') {
+          status.innerHTML = '<span class="tz-ai-dots" aria-hidden="true"><i></i><i></i><i></i></span> عامل‌ها در حال هم‌فکری…';
+        } else {
+          status.innerHTML = '<span class="tz-ai-dots" aria-hidden="true"><i></i><i></i><i></i></span> ' +
+            ((meta && meta.name) ? (meta.name + ' در حال فکر کردن…') : 'در حال فکر کردن…');
+        }
       }
-      var thinkingOn = !!(thinkBox && thinkBox.checked);
-      var collab = collabSel ? collabSel.value : 'single';
-      if (researchBox && researchBox.checked) collab = 'research';
       fetch((cfg().rest_url || '') + 'chat', {
         method: 'POST',
         credentials: 'same-origin',
@@ -306,6 +315,10 @@
           }
           sessionId = res.json.session_id || sessionId;
           var replies = res.json.replies || [{ content: res.json.content, agent_name: res.json.agent_name, thinking_process: res.json.thinking_process, model: res.json.model }];
+          if (replies.length > 1) {
+            var banner = el('p', 'tz-ai-collab-label', 'هم‌فکری عامل‌ها');
+            log.appendChild(banner);
+          }
           replies.forEach(function (rep) {
             appendMsg(log, 'assistant', rep.content || '', rep.agent_name || '', thinkingOn ? (rep.thinking_process || '') : '', '', agentId, true);
             remember('assistant', rep.content || '', rep.agent_name || '', thinkingOn ? (rep.thinking_process || '') : '', agentId);
@@ -323,10 +336,66 @@
         form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', { cancelable: true }));
       }
     });
+
+    var handoff = root.querySelector('[data-ai-handoff]');
+    if (handoff) {
+      handoff.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var st = handoff.querySelector('[data-handoff-status]');
+        var fd = new FormData(handoff);
+        var payload = {
+          name: fd.get('name') || '',
+          phone: fd.get('phone') || '',
+          email: fd.get('email') || '',
+          history: history,
+          session_id: sessionId,
+        };
+        if (st) { st.hidden = false; st.textContent = 'در حال ارسال…'; }
+        fetch((cfg().rest_url || '') + 'chat/handoff', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': cfg().nonce || '',
+          },
+          body: JSON.stringify(payload),
+        })
+          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
+          .then(function (res) {
+            if (st) st.textContent = (res.ok && res.json && res.json.success)
+              ? 'درخواست تماس ثبت شد. تاریخچه گفتگو ایمیل شد.'
+              : ((res.json && res.json.message) || 'ارسال ناموفق بود');
+          })
+          .catch(function () {
+            if (st) st.textContent = 'ارسال ناموفق بود';
+          });
+      });
+    }
   }
 
   function boot() {
     document.querySelectorAll('.tz-ai-chat').forEach(bind);
+    var wrap = document.getElementById('tzLiveChat');
+    var toggle = document.getElementById('tzLiveChatToggle');
+    var panel = document.getElementById('tzLiveChatPanel');
+    var closeBtn = document.getElementById('tzLiveChatClose');
+    function setOpen(on) {
+      if (!panel || !toggle) return;
+      panel.hidden = !on;
+      toggle.setAttribute('aria-expanded', on ? 'true' : 'false');
+      if (on) {
+        var ta = panel.querySelector('[data-ai-input]');
+        if (ta) ta.focus();
+      }
+    }
+    if (toggle && panel) {
+      toggle.addEventListener('click', function () {
+        setOpen(!!panel.hidden);
+      });
+    }
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function () { setOpen(false); });
+    }
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);

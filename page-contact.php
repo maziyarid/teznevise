@@ -88,23 +88,23 @@ while ( have_posts() ) :
 			<?php endif; ?>
 		</div>
 
-		<div class="reason-list contact-cards" data-reveal-stagger style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:32px;">
-			<div class="reason-item">
+		<div class="reason-list contact-cards tz-contact-cards" data-reveal-stagger>
+			<a class="reason-item tz-contact-card" href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( teznevise_get_contact( 'phone_intl' ) ) : 'tel:+989302822091' ); ?>">
 				<div class="icon-box icon-teal"><i class="fa-solid fa-phone" aria-hidden="true"></i></div>
 				<b><?php esc_html_e( 'تلفن', 'teznevise' ); ?></b>
-				<p><a href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( teznevise_get_contact( 'phone_intl' ) ) : 'tel:+989302822091' ); ?>"><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></a></p>
-			</div>
-			<div class="reason-item">
+				<p><?php echo esc_html( teznevise_get_contact( 'phone_display' ) ); ?></p>
+			</a>
+			<a class="reason-item tz-contact-card" href="<?php echo esc_url( teznevise_get_contact( 'whatsapp' ) ); ?>" target="_blank" rel="noopener">
 				<div class="icon-box icon-indigo"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
 				<b><?php esc_html_e( 'واتساپ', 'teznevise' ); ?></b>
-				<p><a href="<?php echo esc_url( teznevise_get_contact( 'whatsapp' ) ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'شروع گفتگو', 'teznevise' ); ?></a></p>
-			</div>
-			<div class="reason-item">
+				<p><?php esc_html_e( 'شروع گفتگو', 'teznevise' ); ?></p>
+			</a>
+			<a class="reason-item tz-contact-card" href="mailto:<?php echo esc_attr( teznevise_get_contact( 'email' ) ); ?>">
 				<div class="icon-box icon-cyan"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
 				<b><?php esc_html_e( 'ایمیل', 'teznevise' ); ?></b>
-				<p><a href="mailto:<?php echo esc_attr( teznevise_get_contact( 'email' ) ); ?>"><?php echo esc_html( teznevise_get_contact( 'email' ) ); ?></a></p>
-			</div>
-			<div class="reason-item">
+				<p><?php echo esc_html( teznevise_get_contact( 'email' ) ); ?></p>
+			</a>
+			<div class="reason-item tz-contact-card">
 				<div class="icon-box icon-amber"><i class="fa-regular fa-clock" aria-hidden="true"></i></div>
 				<b><?php esc_html_e( 'ساعات پاسخ‌گویی', 'teznevise' ); ?></b>
 				<p><?php echo esc_html( teznevise_get_contact( 'hours' ) ); ?></p>

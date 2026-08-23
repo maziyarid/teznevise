@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Mail, MapPin, Phone, Send, ShieldCheck } from "lucide-react";
+import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { FOOTER_NAV, FOOTER_QUICK, FOOTER_SERVICES, SITE } from "@/lib/site";
+import { ARTICLES } from "@/lib/content";
 import { AppLink } from "@/components/AppLink";
 
 export function SiteFooter() {
@@ -44,6 +45,15 @@ export function SiteFooter() {
           </div>
 
           <div className="footer-col">
+            <h4>آخرین مطالب</h4>
+            {ARTICLES.slice(0, 4).map((a) => (
+              <Link key={a.slug} to="/blog/$slug" params={{ slug: a.slug }}>
+                {a.title}
+              </Link>
+            ))}
+          </div>
+
+          <div className="footer-col">
             <h4>ارتباط با ما</h4>
             <a href={`tel:${SITE.phoneIntl}`}>
               <Phone className="ml-1 inline size-3.5" /> {SITE.phoneDisplay}
@@ -71,6 +81,7 @@ export function SiteFooter() {
             <Link to="/refund">بازگشت وجه</Link>
             <Link to="/cookies">سیاست کوکی</Link>
             <Link to="/rules">آیین‌نامه پژوهشی</Link>
+            <Link to="/sitemap">نقشه سایت</Link>
           </div>
         </nav>
 
@@ -79,13 +90,9 @@ export function SiteFooter() {
             className="footer-certs__enamad"
             dangerouslySetInnerHTML={{
               __html:
-                "<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP' alt='' style='cursor:pointer' code='HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'></a>",
+                "<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP' alt='' width='125' height='125' style='cursor:pointer;width:125px;height:125px' code='HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'></a>",
             }}
           />
-          <div className="trust-badge">
-            <ShieldCheck className="size-10 text-brand" aria-hidden />
-            <span>SSL امن</span>
-          </div>
         </div>
 
         <div className="footer-bottom">

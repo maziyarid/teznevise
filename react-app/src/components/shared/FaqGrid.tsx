@@ -20,10 +20,12 @@ export function FaqGrid({
       <div className="faq-grid">
         {items.map((f, i) => (
           <article key={`${f.q}-${i}`} className={`faq-card tone-${(i % 9) + 1}`}>
-            <span className="faq-num" aria-hidden>
-              {faNum(i + 1)}
-            </span>
-            <h3>{stripEmoji(f.q)}</h3>
+            <div className="faq-card__head">
+              <span className="faq-num" aria-hidden>
+                {faNum(i + 1)}
+              </span>
+              <h3>{stripEmoji(f.q)}</h3>
+            </div>
             <p>{stripEmoji(f.a)}</p>
           </article>
         ))}

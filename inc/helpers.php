@@ -94,6 +94,80 @@ function teznevise_get_contact( $key ) {
 }
 
 /**
+ * Flatten mixed meta (string or array) to a single string for escaping.
+ *
+ * @param mixed  $value    Raw value.
+ * @param string $fallback Fallback.
+ * @return string
+ */
+function teznevise_plain( $value, $fallback = '' ) {
+	if ( is_array( $value ) ) {
+		$flat = array();
+		array_walk_recursive(
+			$value,
+			static function ( $item ) use ( &$flat ) {
+				if ( is_scalar( $item ) ) {
+					$item = trim( (string) $item );
+					if ( '' !== $item ) {
+						$flat[] = $item;
+					}
+				}
+			}
+		);
+		return $flat ? implode( "\n", $flat ) : (string) $fallback;
+	}
+	if ( null === $value || is_bool( $value ) ) {
+		return (string) $fallback;
+	}
+	return (string) $value;
+}
+
+/**
+ * Split a page field into non-empty lines. Accepts strings or arrays.
+ *
+ * @param mixed $value Raw meta.
+ * @return string[]
+ */
+function teznevise_lines( $value ) {
+	if ( is_array( $value ) ) {
+		$out = array();
+		foreach ( $value as $item ) {
+			if ( is_array( $item ) ) {
+				$out = array_merge( $out, teznevise_lines( $item ) );
+			} else {
+				$line = trim( (string) $item );
+				if ( '' !== $line ) {
+					$out[] = $line;
+				}
+			}
+		}
+		return $out;
+	}
+	$parts = preg_split( '/\r\n|\r|\n/', (string) $value );
+	return array_values( array_filter( array_map( 'trim', is_array( $parts ) ? $parts : array() ) ) );
+}
+
+/**
+ * Parse "a | b | c" rows (one per line) into arrays of columns.
+ *
+ * @param mixed $value Raw field.
+ * @param int   $cols  Expected columns.
+ * @return array<int,string[]>
+ */
+function teznevise_parse_pipe_list( $value, $cols = 2 ) {
+	$rows = array();
+	$cols = max( 1, (int) $cols );
+	foreach ( teznevise_lines( $value ) as $line ) {
+		$parts = array_map( 'trim', explode( '|', $line ) );
+		if ( count( $parts ) < $cols ) {
+			$parts = array_pad( $parts, $cols, '' );
+		}
+		$rows[] = array_slice( $parts, 0, $cols );
+	}
+	return $rows;
+}
+
+/**
  * Absolute tel: href that esc_url() will not turn into /tel:...
  *
  * @param string $raw Phone number or existing tel: value.

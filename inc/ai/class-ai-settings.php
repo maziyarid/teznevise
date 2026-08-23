@@ -30,7 +30,7 @@ class TezNevise_AI_Settings {
 	}
 
 	public static function register_settings() {
-		$keys = array( 'openai_key', 'gemini_key', 'openrouter_key', 'groq_key', 'xai_key', 'anthropic_key', 'mistral_key', 'together_key', 'deepseek_key', 'you_key', 'tavily_key', 'default_agent', 'free_tier_limit', 'signed_in_limit', 'cost_per_message' );
+		$keys = array( 'openai_key', 'gemini_key', 'openrouter_key', 'groq_key', 'xai_key', 'anthropic_key', 'mistral_key', 'together_key', 'deepseek_key', 'you_key', 'tavily_key', 'genspark_key', 'genspark_endpoint', 'genspark_model', 'perplexity_key', 'perplexity_model', 'notify_emails', 'default_agent', 'free_tier_limit', 'signed_in_limit', 'cost_per_message' );
 		foreach ( $keys as $key ) {
 			register_setting( 'teznevise_ai_settings', self::OPTION_PREFIX . $key );
 		}
@@ -127,7 +127,7 @@ class TezNevise_AI_Settings {
 				.tz-identity-lock th{color:#145d4a}
 				.tz-identity-lock td{background:#f4faf7;border-radius:8px;padding:12px}
 			</style>
-			<p><?php echo esc_html( sprintf( __( '%1$d از %2$d ارائه‌دهنده کلید ذخیره دارند. اگر یکی شکست بخورد بقیه در آبشار استفاده می‌شوند. پژوهش: You.com سپس Tavily.', 'teznevise' ), $ok, count( $providers ) ) ); ?></p>
+			<p><?php echo esc_html( sprintf( __( '%1$d از %2$d ارائه‌دهنده کلید ذخیره دارند. اگر یکی شکست بخورد بقیه در آبشار استفاده می‌شوند. پژوهش: Perplexity سپس You.com سپس Tavily.', 'teznevise' ), $ok, count( $providers ) ) ); ?></p>
 			<div class="tz-ai-ops">
 				<?php foreach ( $providers as $id => $row ) : ?>
 					<?php $has = '' !== (string) get_option( $row['option'], '' ); ?>
@@ -175,6 +175,27 @@ class TezNevise_AI_Settings {
 					<tr>
 						<th scope="row"><?php esc_html_e( 'هزینه هر پیام (تزکوین)', 'teznevise' ); ?></th>
 						<td><input type="number" step="0.01" name="teznevise_ai_cost_per_message" value="<?php echo esc_attr( get_option( 'teznevise_ai_cost_per_message', 0 ) ); ?>" /></td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="teznevise_ai_genspark_endpoint"><?php esc_html_e( 'آدرس Genspark (پشتیبان)', 'teznevise' ); ?></label></th>
+						<td>
+							<input class="regular-text" type="url" id="teznevise_ai_genspark_endpoint" name="teznevise_ai_genspark_endpoint" value="<?php echo esc_attr( get_option( 'teznevise_ai_genspark_endpoint', 'https://api.genspark.ai/v1/chat/completions' ) ); ?>" placeholder="https://api.genspark.ai/v1/chat/completions" />
+							<p class="description"><?php esc_html_e( 'اگر کلید Genspark را ذخیره کنید، پس از شکست بقیه ارائه‌دهنده‌ها از این آدرس OpenAI-سازگار استفاده می‌شود.', 'teznevise' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="teznevise_ai_perplexity_model"><?php esc_html_e( 'مدل Perplexity (پژوهش / پشتیبان)', 'teznevise' ); ?></label></th>
+						<td>
+							<input class="regular-text" type="text" id="teznevise_ai_perplexity_model" name="teznevise_ai_perplexity_model" value="<?php echo esc_attr( get_option( 'teznevise_ai_perplexity_model', 'sonar' ) ); ?>" placeholder="sonar" />
+							<p class="description"><?php esc_html_e( 'مدل Sonar برای پژوهش زنده (sonar، sonar-pro، sonar-reasoning-pro). کلید را در ردیف Perplexity بالا بگذارید.', 'teznevise' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="teznevise_ai_notify_emails"><?php esc_html_e( 'ایمیل تاریخچه گفتگو / رزرو تماس', 'teznevise' ); ?></label></th>
+						<td>
+							<input class="regular-text" type="text" id="teznevise_ai_notify_emails" name="teznevise_ai_notify_emails" value="<?php echo esc_attr( get_option( 'teznevise_ai_notify_emails', '' ) ); ?>" placeholder="teznevisan@gmail.com" />
+							<p class="description"><?php esc_html_e( 'چند آدرس را با ویرگول جدا کنید. تاریخچه گفتگوی زنده به این صندوق‌ها ارسال می‌شود.', 'teznevise' ); ?></p>
+						</td>
 					</tr>
 				</table>
 				<?php submit_button( __( 'ذخیره کلیدها و سقف‌ها', 'teznevise' ) ); ?>

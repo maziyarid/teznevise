@@ -416,7 +416,7 @@ function teznevise_render_native_lead_form( $context = 'contact' ) {
  * @return string
  */
 function teznevise_render_hero_inquiry( $context = 'hero' ) {
-	if ( is_page( array( 'account', 'contact-us', 'contact', 'inquiry' ) ) || is_page_template( 'page-account.php' ) || is_page_template( 'page-contact.php' ) ) {
+	if ( is_front_page() || is_home() || is_page( array( 'account', 'contact-us', 'contact', 'inquiry' ) ) || is_page_template( 'page-account.php' ) || is_page_template( 'page-contact.php' ) ) {
 		return '';
 	}
 	$title = get_the_title();
@@ -461,6 +461,39 @@ function teznevise_render_hero_inquiry( $context = 'hero' ) {
 	<?php
 	echo '</div>';
 	return ob_get_clean();
+}
+
+/**
+ * Orbit visual used in homepage and page heroes (fills the empty desktop column).
+ *
+ * @param string $cta_url Optional CTA path.
+ * @return string
+ */
+function teznevise_render_hero_orbit( $cta_url = '' ) {
+	$url = $cta_url ? teznevise_url( $cta_url ) : ( function_exists( 'teznevise_url' ) ? teznevise_url( teznevise_mod( 'hero_btn_primary_url' ) ) : home_url( '/inquiry/' ) );
+	ob_start();
+	?>
+	<div class="hero-visual tz-hero-orbit" aria-hidden="true">
+		<div class="ink-blot blot-one"></div>
+		<div class="ink-blot blot-two"></div>
+		<div class="ink-blot blot-three"></div>
+		<div class="hero-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+		<div class="hero-network">
+			<div class="network-ring ring-one"></div>
+			<div class="network-ring ring-two"></div>
+			<div class="network-ring ring-three"></div>
+			<a class="hero-order-button" href="<?php echo esc_url( $url ); ?>" aria-label="<?php esc_attr_e( 'ثبت سفارش', 'teznevise' ); ?>">
+				<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+				<span><?php esc_html_e( 'ثبت سفارش', 'teznevise' ); ?></span>
+			</a>
+			<span class="orbit-tag tag-1">SPSS</span>
+			<span class="orbit-tag tag-2">Matlab</span>
+			<span class="orbit-tag tag-3"><?php esc_html_e( 'پایان‌نامه', 'teznevise' ); ?></span>
+			<span class="orbit-tag tag-4"><?php esc_html_e( 'پروژه دانشگاهی', 'teznevise' ); ?></span>
+		</div>
+	</div>
+	<?php
+	return (string) ob_get_clean();
 }
 
 /**

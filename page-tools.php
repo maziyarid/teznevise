@@ -109,5 +109,4 @@ while ( have_posts() ) :
 
 endwhile;
 
-get_template_part( 'template-parts/tools-ai' );
 get_footer();

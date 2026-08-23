@@ -66,32 +66,9 @@ export function HomePage() {
             </div>
             <div className="hero-visual" aria-label="نمایی از خدمات تزنویسه">
               <div className="hero-orb" />
-              <div className="hero-card">
-                <div className="mb-4 flex items-center justify-between border-b border-line pb-3">
-                  <div className="grid size-12 place-items-center rounded-2xl bg-brand/10 text-lg font-black text-brand">
-                    ت
-                  </div>
-                  <span className="text-xs font-bold text-muted">وضعیت پروژه</span>
-                </div>
-                <small className="text-muted">مسیر فعلی</small>
-                <strong className="mt-1 block text-xl">تحلیل و نگارش فصل ۴</strong>
-                <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-soft">
-                  <span
-                    className="block h-full w-3/4 rounded-full"
-                    style={{ background: "linear-gradient(90deg, #145d4a, #82d8b9)" }}
-                  />
-                </div>
-                <div className="mt-4 grid grid-cols-2 gap-2.5">
-                  <div className="rounded-2xl border border-line bg-soft p-3.5">
-                    <b className="block text-lg text-brand">۷۶٪</b>
-                    <span className="text-xs text-muted">پیشرفت</span>
-                  </div>
-                  <div className="rounded-2xl border border-line bg-soft p-3.5">
-                    <b className="block text-lg text-brand">۴ روز</b>
-                    <span className="text-xs text-muted">تا نسخه بعد</span>
-                  </div>
-                </div>
-              </div>
+              <a className="hero-order" href="/inquiry">
+                ثبت سفارش
+              </a>
               <span className="orbit-tag t1">SPSS</span>
               <span className="orbit-tag t2">Matlab</span>
               <span className="orbit-tag t3">پایان‌نامه</span>
@@ -178,7 +155,6 @@ export function HomePage() {
           <div className="steps steps-6">
             {STEPS.map((s, i) => (
               <div key={s.title} className={`step tone-${(i % 6) + 1}`}>
-                <div className="n">{faNum(i + 1)}</div>
                 <h3>{s.title}</h3>
                 <p>{s.text}</p>
               </div>

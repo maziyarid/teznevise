@@ -31,9 +31,77 @@ async function rateLimit(userId: string, kind: string, max = 20) {
   await sql`insert into ai_runs (id, user_id, kind) values (${crypto.randomUUID()}, ${userId}, ${kind})`;
 }
 
+async function gensparkChat(system: string, user: string) {
+  const key = await getSetting("genspark_key");
+  const endpoint =
+    (await getSetting("genspark_endpoint")) || "https://api.genspark.ai/v1/chat/completions";
+  if (!key) return { ok: false as const, error: "Genspark is not configured" };
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${key}`,
+    },
+    body: JSON.stringify({
+      model: (await getSetting("genspark_model")) || "default",
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: user },
+      ],
+    }),
+  });
+  if (!res.ok) return { ok: false as const, error: "Genspark failed" };
+  const body = (await res.json()) as { choices?: { message?: { content?: string } }[] };
+  const text = body.choices?.[0]?.message?.content?.trim() ?? "";
+  if (!text) return { ok: false as const, error: "پاسخ خالی بود" };
+  return { ok: true as const, text };
+}
+
+async function perplexityChat(system: string, user: string) {
+  const key = await getSetting("perplexity_key");
+  if (!key) return { ok: false as const, error: "Perplexity is not configured" };
+  const model = (await getSetting("perplexity_model")) || "sonar";
+  const res = await fetch("https://api.perplexity.ai/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${key}`,
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: user },
+      ],
+    }),
+  });
+  if (!res.ok) return { ok: false as const, error: "Perplexity failed" };
+  const body = (await res.json()) as {
+    choices?: { message?: { content?: string } }[];
+    citations?: string[];
+  };
+  let text = body.choices?.[0]?.message?.content?.trim() ?? "";
+  const cites = (body.citations ?? []).filter(Boolean).slice(0, 8);
+  if (cites.length) {
+    text += "\n\nمنابع:\n" + cites.map((u, i) => `${i + 1}. ${u}`).join("\n");
+  }
+  if (!text) return { ok: false as const, error: "پاسخ خالی بود" };
+  return { ok: true as const, text };
+}
+
+async function backupChat(system: string, user: string) {
+  const px = await perplexityChat(system, user);
+  if (px.ok) return px;
+  const gs = await gensparkChat(system, user);
+  if (gs.ok) return gs;
+  return grokChat({ system, user, maxTokens: 700 });
+}
+
 async function openRouterChat(system: string, user: string, model: string) {
   const key = await getSetting("openrouter_key");
-  if (!key) return grokChat({ system, user, maxTokens: 700 });
+  if (!key) {
+    return backupChat(system, user);
+  }
   const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -49,7 +117,9 @@ async function openRouterChat(system: string, user: string, model: string) {
       ],
     }),
   });
-  if (!res.ok) return grokChat({ system, user, maxTokens: 700 });
+  if (!res.ok) {
+    return backupChat(system, user);
+  }
   const body = (await res.json()) as { choices?: { message?: { content?: string } }[] };
   const text = body.choices?.[0]?.message?.content?.trim() ?? "";
   if (!text) return { ok: false as const, error: "پاسخ خالی بود" };

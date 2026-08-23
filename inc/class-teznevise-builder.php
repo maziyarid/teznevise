@@ -733,8 +733,15 @@ function teznevise_builder_render_hero( $section ) {
 	}
 	echo '</div>';
 	echo '<div class="tz-hero-split__form">';
-	if ( function_exists( 'teznevise_render_hero_inquiry' ) ) {
-		echo teznevise_render_hero_inquiry( 'builder-hero' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	$inquiry = '';
+	if ( function_exists( 'teznevise_render_hero_inquiry' ) && ! is_front_page() ) {
+		$inquiry = teznevise_render_hero_inquiry( 'builder-hero' );
+	}
+	if ( $inquiry ) {
+		echo $inquiry; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+	if ( function_exists( 'teznevise_render_hero_orbit' ) ) {
+		echo teznevise_render_hero_orbit(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	echo '</div></div>';
 
@@ -747,6 +754,10 @@ function teznevise_builder_render_hero( $section ) {
  * @param array $section Section data.
  */
 function teznevise_builder_render_card_grid( $section ) {
+	if ( empty( $section['items'] ) ) {
+		$section['items'] = array();
+	}
+	$section['items'] = teznevise_builder_ensure_proposal_challenges( $section );
 	if ( empty( $section['items'] ) ) {
 		return;
 	}
@@ -789,6 +800,33 @@ function teznevise_builder_render_card_grid( $section ) {
 }
 
 /**
+ * Guarantee the third weak-proposal consequence card exists at render time.
+ *
+ * @param array $section Section data.
+ * @return array
+ */
+function teznevise_builder_ensure_proposal_challenges( $section ) {
+	$items = isset( $section['items'] ) && is_array( $section['items'] ) ? $section['items'] : array();
+	$hay   = (string) ( $section['title'] ?? '' ) . ' ' . (string) ( $section['text'] ?? '' ) . ' ' . (string) ( $section['type'] ?? '' );
+	$is_weak = ( false !== strpos( $hay, 'عواقب' ) ) || ( false !== strpos( $hay, 'ضعیف' ) ) || ( 'challenges' === ( $section['type'] ?? '' ) && false !== strpos( $hay, 'پروپوزال' ) );
+	if ( ! $is_weak ) {
+		return $items;
+	}
+	foreach ( $items as $item ) {
+		$title = (string) ( $item['title'] ?? '' );
+		if ( false !== strpos( $title, 'اعتبار' ) ) {
+			return $items;
+		}
+	}
+	$items[] = array(
+		'title' => 'خدشه‌دار شدن اعتبار',
+		'text'  => 'پروپوزال ضعیف فقط وقت و بودجه را هدر نمی‌دهد؛ اعتبار علمی شما را هم نزد استاد راهنما و کمیته آسیب می‌زند. اصلاح دیرهنگام معمولاً سخت‌تر از یک طرح منسجم از ابتدا است.',
+		'icon'  => 'fa-solid fa-scale-unbalanced',
+	);
+	return $items;
+}
+
+/**
  * Feature list renderer.
  *
  * @param array $section Section data.
@@ -816,18 +854,27 @@ function teznevise_builder_render_feature_list( $section ) {
 		$item_class = $is_faq ? ( 'faq-card faq-item' . $tone ) : ( 'reason-item tez-builder-feature' . $tone );
 		echo '<li class="' . esc_attr( $item_class ) . '">';
 		if ( $is_faq ) {
+			echo '<div class="faq-card__head">';
 			echo '<span class="faq-num" aria-hidden="true">' . esc_html( number_format_i18n( $index ) ) . '</span>';
+			if ( ! empty( $item['title'] ) ) {
+				echo '<h3>' . esc_html( teznevise_builder_plain_title( $item['title'] ) ) . '</h3>';
+			}
+			echo '</div>';
+			if ( ! empty( $item['text'] ) ) {
+				echo '<p>' . esc_html( $item['text'] ) . '</p>';
+			}
 		} else {
 			echo teznevise_builder_icon_markup( $item, teznevise_builder_varied_icon( $index ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.
+			echo '<div>';
+			if ( ! empty( $item['title'] ) ) {
+				echo '<h3>' . esc_html( teznevise_builder_plain_title( $item['title'] ) ) . '</h3>';
+			}
+			if ( ! empty( $item['text'] ) ) {
+				echo '<p>' . esc_html( $item['text'] ) . '</p>';
+			}
+			echo '</div>';
 		}
-		echo '<div>';
-		if ( ! empty( $item['title'] ) ) {
-			echo '<h3>' . esc_html( teznevise_builder_plain_title( $item['title'] ) ) . '</h3>';
-		}
-		if ( ! empty( $item['text'] ) ) {
-			echo '<p>' . esc_html( $item['text'] ) . '</p>';
-		}
-		echo '</div></li>';
+		echo '</li>';
 	}
 
 	echo '</ul>';
@@ -854,10 +901,7 @@ function teznevise_builder_render_process_steps( $section ) {
 		$tone = ' tone-' . ( ( ( $index - 1 ) % 9 ) + 1 );
 		echo '<li class="tez-builder-step' . esc_attr( $tone ) . '">';
 		echo '<div class="tez-builder-step-body">';
-		echo '<span class="tez-builder-step-number" aria-hidden="true">' . esc_html( number_format_i18n( $index ) ) . '</span>';
-		if ( teznevise_builder_item_has_custom_icon( $item ) ) {
-			echo teznevise_builder_icon_markup( $item, 'fa-solid fa-arrow-down' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.
-		}
+		echo teznevise_builder_icon_markup( $item, teznevise_builder_varied_icon( $index ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.
 		if ( ! empty( $item['title'] ) ) {
 			echo '<h3>' . esc_html( teznevise_builder_plain_title( $item['title'] ) ) . '</h3>';
 		}

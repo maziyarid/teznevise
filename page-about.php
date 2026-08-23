@@ -19,6 +19,7 @@ while ( have_posts() ) :
 
 	if ( $use_builder ) {
 		teznevise_builder_render_sections();
+		get_template_part( 'template-parts/about-visual' );
 		if ( function_exists( 'teznevise_page_should_print_content' ) ? teznevise_page_should_print_content() : get_the_content() ) :
 			?>
 <section class="section">
@@ -74,7 +75,7 @@ while ( have_posts() ) :
 			<h2><?php esc_html_e( 'مأموریت و چشم‌انداز', 'teznevise' ); ?></h2>
 		</div>
 		<div class="reason-list" data-reveal-stagger style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
-			<?php foreach ( array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $features ) ) ) as $line ) : ?>
+			<?php foreach ( function_exists( 'teznevise_lines' ) ? teznevise_lines( $features ) : array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', is_string( $features ) ? $features : '' ) ) ) as $line ) : ?>
 				<div class="reason-item">
 					<div class="icon-box icon-teal"><i class="fa-solid fa-check" aria-hidden="true"></i></div>
 					<p><?php echo esc_html( $line ); ?></p>
@@ -118,7 +119,7 @@ while ( have_posts() ) :
 			<h2><?php esc_html_e( 'سیاست کاری ما', 'teznevise' ); ?></h2>
 		</div>
 		<ul class="reason-list" data-reveal-stagger style="list-style:none;padding:0;display:grid;gap:12px;">
-			<?php foreach ( array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $policy ) ) ) as $line ) : ?>
+			<?php foreach ( function_exists( 'teznevise_lines' ) ? teznevise_lines( $policy ) : array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', is_string( $policy ) ? $policy : '' ) ) ) as $line ) : ?>
 				<li class="reason-item" style="display:flex;gap:12px;align-items:flex-start;">
 					<span class="icon-box icon-indigo" style="width:36px;height:36px;flex-shrink:0;"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span>
 					<span><?php echo esc_html( $line ); ?></span>

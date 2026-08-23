@@ -75,6 +75,8 @@ class Teznevise_Key_Vault {
 			'deepseek'   => 'teznevise_ai_deepseek_key',
 			'you'        => 'teznevise_ai_you_key',
 			'tavily'     => 'teznevise_ai_tavily_key',
+			'genspark'   => 'teznevise_ai_genspark_key',
+			'perplexity' => 'teznevise_ai_perplexity_key',
 		);
 		$option = $map[ $provider ] ?? '';
 		$global = $option ? self::get_option_key( $option ) : '';
@@ -102,7 +104,7 @@ class Teznevise_Key_Vault {
 	}
 
 	public static function hook_option_encryption() {
-		$keys = array( 'openai_key', 'gemini_key', 'openrouter_key', 'groq_key', 'xai_key', 'anthropic_key', 'mistral_key', 'together_key', 'deepseek_key', 'you_key', 'tavily_key' );
+		$keys = array( 'openai_key', 'gemini_key', 'openrouter_key', 'groq_key', 'xai_key', 'anthropic_key', 'mistral_key', 'together_key', 'deepseek_key', 'you_key', 'tavily_key', 'genspark_key', 'perplexity_key' );
 		foreach ( $keys as $suffix ) {
 			$option = 'teznevise_ai_' . $suffix;
 			add_filter(

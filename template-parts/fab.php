@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="tz-fab-wrap" id="tzFab">
+<div class="tz-fab-wrap tz-fab-wrap--start" id="tzFab">
 	<div class="tz-fab-menu" id="tzFabMenu" hidden>
 		<a class="tz-fab-item" href="<?php echo esc_url( teznevise_get_contact( 'telegram' ) ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'تلگرام', 'teznevise' ); ?>">
 			<i class="fa-brands fa-telegram" aria-hidden="true"></i><span><?php esc_html_e( 'تلگرام', 'teznevise' ); ?></span>

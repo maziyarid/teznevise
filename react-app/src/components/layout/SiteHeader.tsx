@@ -278,6 +278,8 @@ function CreditsSlot() {
       .catch(() => setBalance(null));
   }, [user]);
 
+  if (!user) return null;
+
   const tip = user
     ? balance
       ? `${faNum(balance)} تزکوین در کیف پول شما`

@@ -44,7 +44,7 @@ export function MoreContent({
               onClick={() => setOpen((v) => !v)}
             >
               <FaIcon icon={open ? "fa-chevron-up" : "fa-chevron-left"} />
-              {open ? "بستن" : "ادامه مطلب"}
+              {open ? "نمایش کمتر" : "مشاهده بیشتر"}
             </button>
           ) : null}
         </div>

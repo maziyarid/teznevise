@@ -74,7 +74,13 @@ add_action( 'save_post_post', 'teznevise_save_blog_fields' );
 
 function teznevise_blog_field( $key, $post_id = 0, $fallback = '' ) {
 	$value = get_post_meta( $post_id ? $post_id : get_the_ID(), '_teznevise_' . $key, true );
-	return '' !== $value ? $value : $fallback;
+	if ( '' === $value || null === $value || false === $value ) {
+		return $fallback;
+	}
+	if ( is_array( $value ) && is_string( $fallback ) ) {
+		return function_exists( 'teznevise_plain' ) ? teznevise_plain( $value, $fallback ) : $fallback;
+	}
+	return $value;
 }
 
 /**
