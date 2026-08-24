@@ -39,10 +39,10 @@ get_header();
 		<div class="services-grid" data-reveal-stagger style="margin-bottom:24px;">
 			<?php
 			$quick = array(
-				array( 'url' => '/service-thesis/', 'icon' => 'fa-solid fa-graduation-cap', 'color' => 'icon-indigo', 'title' => __( 'مشاوره انجام پایان‌نامه', 'teznevise' ) ),
-				array( 'url' => '/service-proposal/', 'icon' => 'fa-solid fa-file-circle-check', 'color' => 'icon-teal', 'title' => __( 'مشاوره انجام پروپوزال', 'teznevise' ) ),
+				array( 'url' => '/thesis/', 'icon' => 'fa-solid fa-graduation-cap', 'color' => 'icon-indigo', 'title' => __( 'مشاوره انجام پایان‌نامه', 'teznevise' ) ),
+				array( 'url' => '/proposal/', 'icon' => 'fa-solid fa-file-circle-check', 'color' => 'icon-teal', 'title' => __( 'مشاوره انجام پروپوزال', 'teznevise' ) ),
 				array( 'url' => '/service-statistics/', 'icon' => 'fa-solid fa-chart-line', 'color' => 'icon-cyan', 'title' => __( 'تحلیل آماری', 'teznevise' ) ),
-				array( 'url' => '/tools/', 'icon' => 'fa-solid fa-calculator', 'color' => 'icon-amber', 'title' => __( 'ابزارهای آنلاین', 'teznevise' ) ),
+				array( 'url' => '/online-calculation-tools/', 'icon' => 'fa-solid fa-calculator', 'color' => 'icon-amber', 'title' => __( 'ابزارهای آنلاین', 'teznevise' ) ),
 				array( 'url' => '/blog/', 'icon' => 'fa-regular fa-lightbulb', 'color' => 'icon-danger-soft', 'title' => __( 'مرکز دانش', 'teznevise' ) ),
 				array( 'url' => '/contact/', 'icon' => 'fa-solid fa-phone', 'color' => 'icon-purple-soft', 'title' => __( 'تماس با ما', 'teznevise' ) ),
 			);

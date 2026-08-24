@@ -821,7 +821,7 @@ function teznevise_price_box_shortcode($atts) {
       </div>
       
       <div class="tzpc-box-actions">
-        <a href="/order/?service=<?php echo $id; ?>" class="tzpc-btn-primary">ثبت سفارش این خدمت</a>
+        <a href="/inquiry/?service=<?php echo $id; ?>" class="tzpc-btn-primary">ثبت سفارش این خدمت</a>
         <a href="/contact/" class="tzpc-btn-outline">مشاوره رایگان</a>
       </div>
     </div>
@@ -850,7 +850,7 @@ function teznevise_price_cta_shortcode($atts) {
         <span class="tzpc-cta-title"><?php echo esc_html($title); ?></span>
         <span class="tzpc-cta-price">از <strong><?php echo tz_format_price($min); ?></strong> <?php echo esc_html($unit); ?></span>
       </div>
-      <a href="/order/?service=<?php echo $id; ?>" class="tzpc-cta-btn">ثبت سفارش ←</a>
+      <a href="/inquiry/?service=<?php echo $id; ?>" class="tzpc-cta-btn">ثبت سفارش ←</a>
     </div>
     <?php
     return ob_get_clean();
@@ -971,7 +971,7 @@ function teznevise_full_calculator($atts) {
               </div>
               
               <div class="tzpc-result-actions">
-                <a href="/order/" class="tzpc-result-btn-primary" id="tzpc-order-btn">ثبت سفارش</a>
+                <a href="/inquiry/" class="tzpc-result-btn-primary" id="tzpc-order-btn">ثبت سفارش</a>
                 <a href="/contact/" class="tzpc-result-btn-outline">مشاوره رایگان</a>
               </div>
               
@@ -1047,7 +1047,7 @@ function teznevise_full_calculator($atts) {
             durationWrap.style.display = 'none';
           }
           
-          orderBtn.href = '/order/?service=' + selected.value;
+          orderBtn.href = '/inquiry/?service=' + selected.value;
         }
         
         function loadFactors() {
@@ -1164,7 +1164,7 @@ function teznevise_sample_size_calculator($atts) {
                 <div class="tzss-result-detail"><span>حاشیه خطا:</span><span id="tzss-rd-margin">۵٪</span></div>
                 <div class="tzss-result-detail"><span>حجم جامعه:</span><span id="tzss-rd-pop">۱۰،۰۰۰</span></div>
                 <div class="tzss-result-formula">n = (z²·p·q/e²) / [1+(z²·p·q/e²-1)/N]</div>
-                <a href="/statistical-analysis/" class="tzss-result-cta">سفارش تحلیل آماری</a>
+                <a href="/service-statistics/" class="tzss-result-cta">سفارش تحلیل آماری</a>
               </div>
             </div>
           </div>
@@ -1274,7 +1274,7 @@ function teznevise_sample_size_calculator($atts) {
         <div class="tzss-cta">
           <h2>به کمک تخصصی در تحلیل آماری نیاز دارید؟</h2>
           <p>از تعیین حجم نمونه و طراحی پرسش‌نامه تا تحلیل کامل داده‌ها و گزارش‌نویسی — تیم متخصصان تزنویسه در تمام مراحل پژوهش در کنار شماست. مشاوره اولیه کاملاً رایگان است.</p>
-          <a href="/statistical-analysis/" class="tzss-cta-btn">سفارش تحلیل آماری</a>
+          <a href="/service-statistics/" class="tzss-cta-btn">سفارش تحلیل آماری</a>
         </div>
 
       </div>

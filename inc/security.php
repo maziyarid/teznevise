@@ -145,7 +145,26 @@ function teznevise_block_stock_login_for_customers() {
 		return;
 	}
 	$action = isset( $_REQUEST['action'] ) ? sanitize_key( wp_unslash( $_REQUEST['action'] ) ) : 'login'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	if ( in_array( $action, array( 'logout', 'lostpassword', 'retrievepassword', 'resetpass', 'rp', 'confirmaction' ), true ) ) {
+	if ( in_array( $action, array( 'lostpassword', 'retrievepassword' ), true ) ) {
+		wp_safe_redirect( home_url( '/account/?view=lost' ) );
+		exit;
+	}
+	if ( in_array( $action, array( 'resetpass', 'rp' ), true ) ) {
+		$key   = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
+		$login = isset( $_GET['login'] ) ? sanitize_user( wp_unslash( $_GET['login'] ) ) : '';
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'view'  => 'reset',
+					'key'   => $key,
+					'login' => $login,
+				),
+				home_url( '/account/' )
+			)
+		);
+		exit;
+	}
+	if ( in_array( $action, array( 'logout', 'confirmaction' ), true ) ) {
 		return;
 	}
 	if ( ! empty( $_GET['staff'] ) || ! empty( $_REQUEST['interim-login'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended

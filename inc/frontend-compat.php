@@ -451,12 +451,67 @@ function teznevise_render_native_lead_form( $context = 'contact' ) {
 }
 
 /**
+ * Whether a compact inquiry form belongs on this singular view.
+ *
+ * @return bool
+ */
+function teznevise_hero_inquiry_allowed() {
+	if ( is_front_page() || is_home() ) {
+		return false;
+	}
+	$skip_slugs = array(
+		'account',
+		'contact-us',
+		'contact',
+		'inquiry',
+		'order',
+		'privacy',
+		'privacy-policy',
+		'terms',
+		'cookies',
+		'refund',
+		'research-rules',
+		'about',
+		'about-us',
+		'our-story',
+		'team',
+		'researchers',
+		'tools',
+		'online-calculation-tools',
+		'downloads',
+		'sitemap',
+	);
+	if ( is_page( $skip_slugs ) ) {
+		return false;
+	}
+	$skip_tpl = array(
+		'page-account.php',
+		'page-contact.php',
+		'page-privacy.php',
+		'page-about.php',
+		'page-team.php',
+		'page-tools.php',
+		'page-downloads.php',
+		'page-sitemap.php',
+	);
+	foreach ( $skip_tpl as $tpl ) {
+		if ( is_page_template( $tpl ) ) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/**
  * Compact inquiry form for page heroes. Posts to the same first-party lead handler.
  *
  * @param string $context Form context slug.
  * @return string
  */
 function teznevise_render_hero_inquiry( $context = 'hero' ) {
+	if ( function_exists( 'teznevise_hero_inquiry_allowed' ) && ! teznevise_hero_inquiry_allowed() ) {
+		return '';
+	}
 	if ( is_front_page() || is_home() || is_page( array( 'account', 'contact-us', 'contact', 'inquiry' ) ) || is_page_template( 'page-account.php' ) || is_page_template( 'page-contact.php' ) ) {
 		return '';
 	}
@@ -514,18 +569,18 @@ function teznevise_render_hero_orbit( $cta_url = '' ) {
 	$url = $cta_url ? teznevise_url( $cta_url ) : ( function_exists( 'teznevise_url' ) ? teznevise_url( teznevise_mod( 'hero_btn_primary_url' ) ) : home_url( '/inquiry/' ) );
 	ob_start();
 	?>
-	<div class="hero-visual tz-hero-orbit" aria-hidden="true">
-		<div class="ink-blot blot-one"></div>
-		<div class="ink-blot blot-two"></div>
-		<div class="ink-blot blot-three"></div>
+	<div class="hero-visual tz-hero-orbit" aria-label="<?php esc_attr_e( 'نمایی از مسیر مشاوره تزنویسه', 'teznevise' ); ?>">
+		<div class="ink-blot blot-one" aria-hidden="true"></div>
+		<div class="ink-blot blot-two" aria-hidden="true"></div>
+		<div class="ink-blot blot-three" aria-hidden="true"></div>
 		<div class="hero-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
 		<div class="hero-network">
-			<div class="network-ring ring-one"></div>
-			<div class="network-ring ring-two"></div>
-			<div class="network-ring ring-three"></div>
-			<a class="hero-order-button" href="<?php echo esc_url( $url ); ?>" aria-label="<?php esc_attr_e( 'ثبت سفارش', 'teznevise' ); ?>">
+			<div class="network-ring ring-one" aria-hidden="true"></div>
+			<div class="network-ring ring-two" aria-hidden="true"></div>
+			<div class="network-ring ring-three" aria-hidden="true"></div>
+			<a class="hero-order-button" href="<?php echo esc_url( $url ); ?>" aria-label="<?php esc_attr_e( 'ثبت درخواست مشاوره', 'teznevise' ); ?>">
 				<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
-				<span><?php esc_html_e( 'ثبت سفارش', 'teznevise' ); ?></span>
+				<span><?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></span>
 			</a>
 			<span class="orbit-tag tag-1">SPSS</span>
 			<span class="orbit-tag tag-2">Matlab</span>

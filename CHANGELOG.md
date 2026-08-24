@@ -1,7 +1,14 @@
 # Changelog
 
-## 1.9.20 — 2026-08-23 — Closable agent menu, You.com modes, real debate
+## 1.9.21 — 2026-08-24 — Auto overview+debate for all posts, skills, page-bug pass
 
+- Debate pipeline: force meta is actually read; empty API runs are `failed` (retry twice) instead of `done`; backfill paginates 100×40 and re-queues after the 1.9.17 OpenRouter 404 era (`teznevise_ai_auto_all_v` = 1.9.21).
+- Human-review badge «بازبینی انسانی» stamps on any editor path (`updated_post_meta` / REST), comparing against the AI snapshot so cron writes never look human.
+- Named-agent SKILL.md files now include the three catalog skills each; prompts ride into the identity lock.
+- Comments template loads when AI debate is on even if WP comments are closed. Login CTA goes to `/account/`. Builder sections no longer dump under blog posts.
+- Page bugs: calculator CTAs `/order/` and `/statistical-analysis/` → `/inquiry/` and `/service-statistics/`; tool H1 demotion; homepage `#services` wraps only the service grid; inquiry form skipped on privacy/about/team/tools/legal; FAQ accordion restored (hotfix-207); duplicate builder types skipped; 404/sitemap slugs match footer; search lists ordinary pages; team invented metrics removed; account lost-password stays on `/account/`; «ثبت سفارش» → «ثبت درخواست»; university kicker no longer claims «همکاران».
+
+## 1.9.20 — 2026-08-23 — Closable agent menu, You.com modes, real debate
 - Agent picker: dimmed scrim + ✕ «بازگشت به گفتگو». `hidden` now wins over `display:grid` so the list actually closes. Escape/header ✕ dismiss the menu first, then the chat. FAB no longer sits on the composer.
 - You.com uses Answer + Search (`language=FA`, `country=IR`, academic `boost_domains`) and Research lite when the globe is on. Legacy `api.ydc-index.io` stays as fallback. Raw JSON dumps are gone.
 - Debate is affirm → dissent → cross → verdict. Each turn must quote a different passage of the article with « », name the previous speaker, and prove or refute. Instruction leakage is stripped from «استدلال».

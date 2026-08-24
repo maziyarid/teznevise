@@ -33,6 +33,19 @@ $content_query = new WP_Query(
 		'posts_per_page' => 8,
 	)
 );
+$exclude_ids = array_merge(
+	wp_list_pluck( $tool_query->posts, 'ID' ),
+	wp_list_pluck( $content_query->posts, 'ID' )
+);
+$page_query = new WP_Query(
+	array(
+		's'              => $q,
+		'post_type'      => 'page',
+		'post_status'    => 'publish',
+		'posts_per_page' => 8,
+		'post__not_in'   => array_filter( array_map( 'intval', $exclude_ids ) ),
+	)
+);
 $image_query = new WP_Query(
 	array(
 		's'              => $q,
@@ -76,6 +89,12 @@ $image_query = new WP_Query(
 				'label' => __( 'ابزارها', 'teznevise' ),
 				'query' => $tool_query,
 				'all'   => home_url( '/online-calculation-tools/' ),
+			),
+			array(
+				'id'    => 'pages',
+				'label' => __( 'صفحات', 'teznevise' ),
+				'query' => $page_query,
+				'all'   => home_url( '/sitemap/' ),
 			),
 			array(
 				'id'    => 'posts',

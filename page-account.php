@@ -12,20 +12,32 @@ if ( ! is_user_logged_in() ) {
 	$view = isset( $_GET['view'] ) ? sanitize_key( wp_unslash( $_GET['view'] ) ) : 'login'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$auth = isset( $_GET['auth'] ) ? sanitize_key( wp_unslash( $_GET['auth'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$msg  = array(
-		'fail'    => __( 'ورود ناموفق بود. ایمیل یا گذرواژه را بررسی کنید.', 'teznevise' ),
-		'invalid' => __( 'اطلاعات ثبت‌نام ناقص است. گذرواژه حداقل ۸ نویسه.', 'teznevise' ),
-		'exists'  => __( 'این نام کاربری یا ایمیل از قبل ثبت شده است.', 'teznevise' ),
-		'rate'    => __( 'تعداد تلاش‌ها زیاد بود. کمی بعد دوباره بیایید.', 'teznevise' ),
+		'fail'     => __( 'ورود ناموفق بود. ایمیل یا گذرواژه را بررسی کنید.', 'teznevise' ),
+		'invalid'  => __( 'اطلاعات ثبت‌نام ناقص است. گذرواژه حداقل ۸ نویسه.', 'teznevise' ),
+		'exists'   => __( 'این نام کاربری یا ایمیل از قبل ثبت شده است.', 'teznevise' ),
+		'rate'     => __( 'تعداد تلاش‌ها زیاد بود. کمی بعد دوباره بیایید.', 'teznevise' ),
+		'lostsent' => __( 'اگر حسابی با این ایمیل باشد، پیوند بازیابی فرستاده شد.', 'teznevise' ),
+		'lostfail' => __( 'بازیابی ناموفق بود. ایمیل یا نام کاربری را بررسی کنید.', 'teznevise' ),
+		'resetok'  => __( 'گذرواژه تازه ذخیره شد. وارد شوید.', 'teznevise' ),
+		'resetfail'=> __( 'پیوند بازیابی نامعتبر یا منقضی است.', 'teznevise' ),
 	);
 	?>
 <section class="section tz-auth">
 	<div class="container">
 		<div class="surface-card">
 			<span class="eyebrow"><?php esc_html_e( 'پنل کاربری تزنویسه', 'teznevise' ); ?></span>
-			<h1><?php echo 'register' === $view ? esc_html__( 'ساخت حساب', 'teznevise' ) : esc_html__( 'ورود به حساب', 'teznevise' ); ?></h1>
+			<h1><?php
+			if ( 'register' === $view ) {
+				esc_html_e( 'ساخت حساب', 'teznevise' );
+			} elseif ( 'lost' === $view || 'reset' === $view ) {
+				esc_html_e( 'بازیابی گذرواژه', 'teznevise' );
+			} else {
+				esc_html_e( 'ورود به حساب', 'teznevise' );
+			}
+			?></h1>
 			<p><?php esc_html_e( 'با عضویت ۳۰ تزکوین هدیه می‌گیرید. این صفحه حساب شماست — نه پیشخوان وردپرس.', 'teznevise' ); ?></p>
 			<?php if ( isset( $msg[ $auth ] ) ) : ?>
-				<p class="account-flash is-warn"><?php echo esc_html( $msg[ $auth ] ); ?></p>
+				<p class="account-flash<?php echo in_array( $auth, array( 'lostsent', 'resetok' ), true ) ? '' : ' is-warn'; ?>"><?php echo esc_html( $msg[ $auth ] ); ?></p>
 			<?php endif; ?>
 			<?php if ( 'register' === $view ) : ?>
 				<form class="account-form" method="post">
@@ -38,6 +50,24 @@ if ( ! is_user_logged_in() ) {
 					<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ساخت حساب و دریافت ۳۰ تزکوین', 'teznevise' ); ?></button>
 				</form>
 				<p class="tz-auth-switch"><a href="<?php echo esc_url( home_url( '/account/' ) ); ?>"><?php esc_html_e( 'حساب دارید؟ وارد شوید', 'teznevise' ); ?></a></p>
+			<?php elseif ( 'lost' === $view ) : ?>
+				<form class="account-form" method="post">
+					<?php wp_nonce_field( 'teznevise_auth', '_tz_auth' ); ?>
+					<input type="hidden" name="teznevise_auth_action" value="lostpassword" />
+					<label><?php esc_html_e( 'نام کاربری یا ایمیل', 'teznevise' ); ?><input name="user_login" required autocomplete="username"></label>
+					<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ارسال پیوند بازیابی', 'teznevise' ); ?></button>
+				</form>
+				<p class="tz-auth-switch"><a href="<?php echo esc_url( home_url( '/account/' ) ); ?>"><?php esc_html_e( 'بازگشت به ورود', 'teznevise' ); ?></a></p>
+			<?php elseif ( 'reset' === $view ) : ?>
+				<form class="account-form" method="post">
+					<?php wp_nonce_field( 'teznevise_auth', '_tz_auth' ); ?>
+					<input type="hidden" name="teznevise_auth_action" value="resetpass" />
+					<input type="hidden" name="rp_key" value="<?php echo esc_attr( isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '' ); ?>" />
+					<input type="hidden" name="rp_login" value="<?php echo esc_attr( isset( $_GET['login'] ) ? sanitize_user( wp_unslash( $_GET['login'] ) ) : '' ); ?>" />
+					<label><?php esc_html_e( 'گذرواژه تازه', 'teznevise' ); ?><input type="password" name="pass1" required minlength="8" autocomplete="new-password"></label>
+					<label><?php esc_html_e( 'تکرار گذرواژه تازه', 'teznevise' ); ?><input type="password" name="pass2" required minlength="8" autocomplete="new-password"></label>
+					<button class="btn-tz btn-primary-tz" type="submit"><?php esc_html_e( 'ذخیره گذرواژه تازه', 'teznevise' ); ?></button>
+				</form>
 			<?php else : ?>
 				<form class="account-form" method="post">
 					<?php wp_nonce_field( 'teznevise_auth', '_tz_auth' ); ?>
@@ -50,7 +80,7 @@ if ( ! is_user_logged_in() ) {
 				<p class="tz-auth-switch">
 					<a href="<?php echo esc_url( add_query_arg( 'view', 'register', home_url( '/account/' ) ) ); ?>"><?php esc_html_e( 'حساب ندارید؟ ثبت‌نام کنید', 'teznevise' ); ?></a>
 					·
-					<a href="<?php echo esc_url( wp_lostpassword_url( home_url( '/account/' ) ) ); ?>"><?php esc_html_e( 'بازیابی گذرواژه', 'teznevise' ); ?></a>
+					<a href="<?php echo esc_url( add_query_arg( 'view', 'lost', home_url( '/account/' ) ) ); ?>"><?php esc_html_e( 'بازیابی گذرواژه', 'teznevise' ); ?></a>
 				</p>
 			<?php endif; ?>
 		</div>

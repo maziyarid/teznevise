@@ -41,12 +41,12 @@ while ( have_posts() ) :
 		$tools = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( teznevise_page_field( 'tools_list' ), 4 ) : array();
 		if ( ! $tools ) {
 			$tools = array(
-				array( 'آمار توصیفی', '/tool-descriptive-statistics/', 'میانگین، میانه، واریانس و شاخص‌های توصیفی.', 'fa-solid fa-chart-simple' ),
-				array( 'همبستگی پیرسون', '/tools/', 'ضریب همبستگی خطی پیرسون.', 'fa-solid fa-chart-line' ),
-				array( 'همبستگی اسپیرمن', '/tools/', 'همبستگی رتبه‌ای اسپیرمن.', 'fa-solid fa-chart-area' ),
-				array( 'آزمون T-test', '/tools/', 'مقایسه میانگین‌ها.', 'fa-solid fa-not-equal' ),
-				array( 'تحلیل واریانس (ANOVA)', '/tools/', 'مقایسه چند گروه.', 'fa-solid fa-table' ),
-				array( 'آلفای کرونباخ', '/tools/', 'پایایی مقیاس.', 'fa-solid fa-list-check' ),
+				array( 'آمار توصیفی', '/online-calculation-tools/', 'میانگین، میانه، واریانس و شاخص‌های توصیفی.', 'fa-solid fa-chart-simple' ),
+				array( 'همبستگی پیرسون', '/online-calculation-tools/', 'ضریب همبستگی خطی پیرسون.', 'fa-solid fa-chart-line' ),
+				array( 'همبستگی اسپیرمن', '/online-calculation-tools/', 'همبستگی رتبه‌ای اسپیرمن.', 'fa-solid fa-chart-area' ),
+				array( 'آزمون T-test', '/online-calculation-tools/', 'مقایسه میانگین‌ها.', 'fa-solid fa-not-equal' ),
+				array( 'تحلیل واریانس (ANOVA)', '/online-calculation-tools/', 'مقایسه چند گروه.', 'fa-solid fa-table' ),
+				array( 'آلفای کرونباخ', '/online-calculation-tools/', 'پایایی مقیاس.', 'fa-solid fa-list-check' ),
 			);
 		}
 		?>
@@ -72,7 +72,7 @@ while ( have_posts() ) :
 	<div class="container">
 		<div class="services-grid" data-reveal-stagger style="display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
 			<?php foreach ( $tools as $tool ) : ?>
-				<a class="service-card" href="<?php echo esc_url( teznevise_url( $tool[1] ? $tool[1] : '/tools/' ) ); ?>" style="text-decoration:none;color:inherit;">
+				<a class="service-card" href="<?php echo esc_url( teznevise_url( $tool[1] ? $tool[1] : '/online-calculation-tools/' ) ); ?>" style="text-decoration:none;color:inherit;">
 					<div class="icon-box icon-amber"><i class="<?php echo esc_attr( $tool[3] ? $tool[3] : 'fa-solid fa-calculator' ); ?>" aria-hidden="true"></i></div>
 					<h3><?php echo esc_html( $tool[0] ); ?></h3>
 					<?php if ( ! empty( $tool[2] ) ) : ?>

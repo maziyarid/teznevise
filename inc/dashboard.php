@@ -73,8 +73,62 @@ function teznevise_handle_front_auth() {
 		wp_safe_redirect( add_query_arg( 'tab', 'profile', $redirect ) );
 		exit;
 	}
+
+	if ( 'lostpassword' === $action ) {
+		$login = isset( $_POST['user_login'] ) ? sanitize_text_field( wp_unslash( $_POST['user_login'] ) ) : '';
+		if ( '' === $login || ! function_exists( 'retrieve_password' ) ) {
+			wp_safe_redirect( add_query_arg( array( 'view' => 'lost', 'auth' => 'lostfail' ), $redirect ) );
+			exit;
+		}
+		$result = retrieve_password( $login );
+		if ( is_wp_error( $result ) ) {
+			wp_safe_redirect( add_query_arg( array( 'view' => 'lost', 'auth' => 'lostfail' ), $redirect ) );
+			exit;
+		}
+		wp_safe_redirect( add_query_arg( array( 'view' => 'lost', 'auth' => 'lostsent' ), $redirect ) );
+		exit;
+	}
+
+	if ( 'resetpass' === $action ) {
+		$key   = isset( $_POST['rp_key'] ) ? sanitize_text_field( wp_unslash( $_POST['rp_key'] ) ) : '';
+		$login = isset( $_POST['rp_login'] ) ? sanitize_user( wp_unslash( $_POST['rp_login'] ) ) : '';
+		$pass1 = isset( $_POST['pass1'] ) ? (string) wp_unslash( $_POST['pass1'] ) : '';
+		$pass2 = isset( $_POST['pass2'] ) ? (string) wp_unslash( $_POST['pass2'] ) : '';
+		$user  = check_password_reset_key( $key, $login );
+		if ( is_wp_error( $user ) || strlen( $pass1 ) < 8 || ! hash_equals( $pass1, $pass2 ) ) {
+			wp_safe_redirect( add_query_arg( array( 'view' => 'reset', 'auth' => 'resetfail', 'key' => $key, 'login' => rawurlencode( $login ) ), $redirect ) );
+			exit;
+		}
+		reset_password( $user, $pass1 );
+		wp_safe_redirect( add_query_arg( 'auth', 'resetok', $redirect ) );
+		exit;
+	}
 }
 add_action( 'template_redirect', 'teznevise_handle_front_auth', 8 );
+
+function teznevise_lostpassword_url( $url, $redirect = '' ) {
+	unset( $url, $redirect );
+	return home_url( '/account/?view=lost' );
+}
+add_filter( 'lostpassword_url', 'teznevise_lostpassword_url', 10, 2 );
+
+function teznevise_retrieve_password_message( $message, $key, $user_login, $user_data ) {
+	unset( $message, $user_data );
+	$url = add_query_arg(
+		array(
+			'view'  => 'reset',
+			'key'   => $key,
+			'login' => $user_login,
+		),
+		home_url( '/account/' )
+	);
+	return sprintf(
+		/* translators: %s: reset URL */
+		__( "برای تنظیم گذرواژه تازه به این نشانی بروید:\n%s\n", 'teznevise' ),
+		$url
+	);
+}
+add_filter( 'retrieve_password_message', 'teznevise_retrieve_password_message', 10, 4 );
 
 function teznevise_seed_v171_pages() {
 	if ( get_option( 'teznevise_seeded_1_7_1' ) ) {

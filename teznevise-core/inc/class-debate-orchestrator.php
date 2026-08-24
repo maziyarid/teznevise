@@ -19,17 +19,21 @@ class Teznevise_Debate_Orchestrator {
 		}
 		if ( $force ) {
 			delete_post_meta( $post_id, '_teznevise_ai_content_hash' );
+			update_post_meta( $post_id, '_teznevise_ai_overview_force', '1' );
 		}
 		update_post_meta( $post_id, '_teznevise_ai_job', 'queued' );
 		if ( ! wp_next_scheduled( 'teznevise_core_run_debate', array( $post_id ) ) ) {
 			wp_schedule_single_event( time() + 5, 'teznevise_core_run_debate', array( $post_id ) );
 		}
-		spawn_cron();
+		if ( function_exists( 'spawn_cron' ) ) {
+			spawn_cron();
+		}
 		return true;
 	}
 
-	public static function run( $post_id ) {
+	public static function run( $post_id, $force = false ) {
 		$post_id = (int) $post_id;
+		$force   = (bool) $force || '1' === (string) get_post_meta( $post_id, '_teznevise_ai_overview_force', true );
 		$post    = get_post( $post_id );
 		if ( ! $post || ! in_array( $post->post_type, array( 'post', 'page' ), true ) ) {
 			return 0;
@@ -40,7 +44,7 @@ class Teznevise_Debate_Orchestrator {
 		$query   = $post->post_title . "\n\n" . $article;
 		$hash    = Teznevise_Research_Oracle::hash( $query, '' );
 		$prev    = (string) get_post_meta( $post_id, '_teznevise_ai_content_hash', true );
-		if ( $prev === $hash && get_post_meta( $post_id, '_teznevise_ai_discussion', true ) ) {
+		if ( ! $force && $prev === $hash && self::discussion_has_items( $post_id ) && (string) get_post_meta( $post_id, '_teznevise_ai_overview', true ) ) {
 			update_post_meta( $post_id, '_teznevise_ai_job', 'done' );
 			return 0;
 		}
@@ -200,15 +204,18 @@ class Teznevise_Debate_Orchestrator {
 		update_post_meta( $post_id, '_teznevise_ai_pipeline', $pipeline );
 		if ( $created < 1 ) {
 			update_post_meta( $post_id, '_teznevise_ai_job', 'failed' );
+			$retries = (int) get_post_meta( $post_id, '_teznevise_ai_retries', true );
+			if ( $retries < 2 ) {
+				update_post_meta( $post_id, '_teznevise_ai_retries', $retries + 1 );
+				wp_schedule_single_event( time() + 420, 'teznevise_core_run_debate', array( $post_id ) );
+			}
+			self::maybe_tick_more();
 			return 0;
 		}
 		update_post_meta( $post_id, '_teznevise_ai_job', 'done' );
 		update_post_meta( $post_id, '_teznevise_ai_content_hash', $hash );
-		if ( get_option( 'teznevise_core_backfill_queue', array() ) ) {
-			if ( ! wp_next_scheduled( 'teznevise_core_backfill_tick' ) ) {
-				wp_schedule_single_event( time() + 90, 'teznevise_core_backfill_tick' );
-			}
-		}
+		delete_post_meta( $post_id, '_teznevise_ai_retries' );
+		self::maybe_tick_more();
 		return $created;
 	}
 
@@ -312,6 +319,30 @@ class Teznevise_Debate_Orchestrator {
 	}
 
 	/**
+	 * Whether stored discussion actually has panel items.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return bool
+	 */
+	public static function discussion_has_items( $post_id ) {
+		$raw = get_post_meta( (int) $post_id, '_teznevise_ai_discussion', true );
+		if ( is_array( $raw ) ) {
+			return ! empty( $raw['items'] );
+		}
+		if ( ! is_string( $raw ) || '' === $raw ) {
+			return false;
+		}
+		$decoded = json_decode( $raw, true );
+		return is_array( $decoded ) && ! empty( $decoded['items'] );
+	}
+
+	private static function maybe_tick_more() {
+		if ( get_option( 'teznevise_core_backfill_queue', array() ) && ! wp_next_scheduled( 'teznevise_core_backfill_tick' ) ) {
+			wp_schedule_single_event( time() + 90, 'teznevise_core_backfill_tick' );
+		}
+	}
+
+	/**
 	 * Persist AI overview unless a human already reviewed it.
 	 *
 	 * @param int    $post_id Post ID.
@@ -387,36 +418,36 @@ class Teznevise_Debate_Orchestrator {
 	 * @return int Queued count.
 	 */
 	public static function enqueue_published( $force = false ) {
-		$query = new WP_Query(
-			array(
-				'post_type'              => 'post',
-				'post_status'            => 'publish',
-				'posts_per_page'         => 200,
-				'fields'                 => 'ids',
-				'no_found_rows'          => true,
-				'update_post_meta_cache' => false,
-				'update_post_term_cache' => false,
-			)
-		);
-		$ids = array();
-		foreach ( (array) $query->posts as $id ) {
-			$id = (int) $id;
-			if ( $id <= 0 ) {
-				continue;
-			}
-			if ( ! $force ) {
-				$job      = (string) get_post_meta( $id, '_teznevise_ai_job', true );
-				$overview = (string) get_post_meta( $id, '_teznevise_ai_overview', true );
-				$disc     = get_post_meta( $id, '_teznevise_ai_discussion', true );
-				if ( in_array( $job, array( 'queued', 'running' ), true ) ) {
+		$ids   = array();
+		$paged = 1;
+		do {
+			$query = new WP_Query(
+				array(
+					'post_type'              => 'post',
+					'post_status'            => 'publish',
+					'posts_per_page'         => 100,
+					'paged'                  => $paged,
+					'fields'                 => 'ids',
+					'no_found_rows'          => false,
+					'update_post_meta_cache' => true,
+					'update_post_term_cache' => false,
+				)
+			);
+			foreach ( (array) $query->posts as $id ) {
+				$id = (int) $id;
+				if ( $id <= 0 ) {
 					continue;
 				}
-				if ( '' !== $overview && $disc && 'done' === $job ) {
+				if ( ! $force && ! self::post_needs_pipeline( $id ) ) {
 					continue;
 				}
+				$ids[] = $id;
 			}
-			$ids[] = $id;
-		}
+			$max   = (int) $query->max_num_pages;
+			++$paged;
+			wp_reset_postdata();
+		} while ( $paged <= $max && $paged <= 40 );
+
 		$existing = get_option( 'teznevise_core_backfill_queue', array() );
 		$existing = is_array( $existing ) ? array_map( 'intval', $existing ) : array();
 		$merged   = array_values( array_unique( array_merge( $existing, $ids ) ) );
@@ -439,6 +470,29 @@ class Teznevise_Debate_Orchestrator {
 	}
 
 	/**
+	 * True when overview or debate is missing / failed.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return bool
+	 */
+	public static function post_needs_pipeline( $post_id ) {
+		$post_id  = (int) $post_id;
+		$job      = (string) get_post_meta( $post_id, '_teznevise_ai_job', true );
+		$overview = (string) get_post_meta( $post_id, '_teznevise_ai_overview', true );
+		$has_disc = self::discussion_has_items( $post_id );
+		if ( in_array( $job, array( 'queued', 'running' ), true ) ) {
+			return false;
+		}
+		if ( 'failed' === $job ) {
+			return true;
+		}
+		if ( '' !== $overview && $has_disc && 'done' === $job ) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Process one queued post, then reschedule.
 	 */
 	public static function tick_queue() {
@@ -457,23 +511,24 @@ class Teznevise_Debate_Orchestrator {
 	}
 
 	/**
-	 * One-shot after deploy: enable auto-on-publish and queue existing posts.
+	 * After deploy: enable auto-on-publish and queue posts still missing output.
 	 */
 	public static function maybe_start_backfill() {
-		if ( '1.9.13' === (string) get_option( 'teznevise_ai_auto_all_v' ) ) {
+		if ( '1.9.21' === (string) get_option( 'teznevise_ai_auto_all_v' ) ) {
 			return;
 		}
 		if ( class_exists( 'Teznevise_Agent_Registry' ) ) {
 			Teznevise_Agent_Registry::seed_named_roster();
 		}
 		$stored = get_option( 'teznevise_ai_comments', array() );
-		if ( is_array( $stored ) ) {
-			$stored['auto_on_publish'] = '1';
-			$stored['enabled']         = '1';
-			update_option( 'teznevise_ai_comments', $stored, false );
+		if ( ! is_array( $stored ) ) {
+			$stored = array();
 		}
+		$stored['auto_on_publish'] = '1';
+		$stored['enabled']         = '1';
+		update_option( 'teznevise_ai_comments', $stored, false );
 		self::enqueue_published( false );
-		update_option( 'teznevise_ai_auto_all_v', '1.9.13', false );
+		update_option( 'teznevise_ai_auto_all_v', '1.9.21', false );
 	}
 
 	/**

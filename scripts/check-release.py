@@ -81,6 +81,7 @@ def check_requires() -> None:
         "assets/css/hotfix-204.css",
         "assets/css/hotfix-205.css",
         "assets/css/hotfix-206.css",
+        "assets/css/hotfix-207.css",
         "inc/legal-copy.php",
         "inc/waitlist.php",
         "teznevise-core/teznevise-core.php",
@@ -256,6 +257,8 @@ def check_source_contracts() -> None:
         error("hotfix-205.css is not in the runtime CSS concat")
     if "hotfix-206.css" not in perf:
         error("hotfix-206.css is not in the runtime CSS concat")
+    if "hotfix-207.css" not in perf:
+        error("hotfix-207.css is not in the runtime CSS concat")
 
     skills_cfg = (ROOT / "teznevise-core" / "config" / "skills.php").read_text(encoding="utf-8")
     for skill_agent in ("teznevise", "christina", "ada", "professor", "parantez", "elara", "cyrus", "mira"):
@@ -268,14 +271,28 @@ def check_source_contracts() -> None:
         error("Human-review label is missing from overview helper")
     if "teznevise_mark_overview_human_review" not in blog:
         error("Human-review marker on overview edit is missing")
+    if "teznevise_overview_meta_updated" not in blog:
+        error("Overview meta-update hook for human review is missing")
     debate = (ROOT / "teznevise-core" / "inc" / "class-debate-orchestrator.php").read_text(encoding="utf-8")
     if "function enqueue_published" not in debate:
         error("Existing-post overview/debate backfill is missing")
     if "store_overview" not in debate:
         error("Overview store does not preserve human review")
+    if "discussion_has_items" not in debate:
+        error("Debate orchestrator does not detect empty discussions")
+    if "1.9.21" not in debate:
+        error("Backfill version bump 1.9.21 is missing")
     single = (ROOT / "single.php").read_text(encoding="utf-8")
     if "teznevise_render_ai_overview" not in single:
         error("Single post does not auto-render the AI overview")
+    if "teznevise_builder_render_sections" in single:
+        error("single.php must not dump page-builder sections under posts")
+    comments_php = (ROOT / "comments.php").read_text(encoding="utf-8")
+    if "/account/" not in comments_php:
+        error("Comment login CTA is not the front-end /account/ page")
+    dash = (ROOT / "page-account.php").read_text(encoding="utf-8")
+    if "view=lost" not in dash and "'lost'" not in dash:
+        error("Account lost-password view is missing")
     core = (ROOT / "teznevise-core" / "teznevise-core.php").read_text(encoding="utf-8")
     if "config/skills.php" not in core:
         error("skills.php is not loaded from teznevise-core")
@@ -330,9 +347,15 @@ def check_source_contracts() -> None:
         error("Per-post SKILL.md media button is missing")
     if "teznevise_api_key_agent" not in meta:
         error("Per-agent post API key fields are missing")
-    unis = (ROOT / "template-parts" / "universities.php").read_text(encoding="utf-8")
-    if "assets/img/universities/" not in unis:
-        error("University partner row does not load official marks")
+    faq207 = (ROOT / "assets" / "css" / "hotfix-207.css").read_text(encoding="utf-8")
+    if "faq-item.open" not in faq207:
+        error("hotfix-207 does not restore FAQ accordion collapse")
+    builder = (ROOT / "inc" / "class-teznevise-builder.php").read_text(encoding="utf-8")
+    if "'unique'" not in builder and '"unique"' not in builder:
+        error("Builder renderer does not skip duplicate section types")
+    compat = (ROOT / "inc" / "frontend-compat.php").read_text(encoding="utf-8")
+    if "function teznevise_hero_inquiry_allowed" not in compat:
+        error("Hero inquiry allow-list helper is missing")
     for mark in (
         "assets/img/universities/tehran.svg",
         "assets/img/universities/amirkabir.svg",

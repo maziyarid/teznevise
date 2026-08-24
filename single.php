@@ -135,7 +135,10 @@ while ( have_posts() ) :
 					</div>
 				</nav>
 			<?php endif; ?>
-			<?php if ( comments_open() || get_comments_number() ) : ?>
+			<?php
+			$ai_on = function_exists( 'teznevise_ai_comment_settings' ) && ! empty( teznevise_ai_comment_settings()['enabled'] );
+			if ( comments_open() || get_comments_number() || $ai_on ) :
+				?>
 				<div data-reveal><?php comments_template(); ?></div>
 			<?php endif; ?>
 			<?php $related = teznevise_related_posts( $post_id ); ?>
@@ -154,7 +157,6 @@ while ( have_posts() ) :
 			<?php endif; wp_reset_postdata(); ?>
 		</div>
 	</section>
-<?php teznevise_builder_render_sections(); ?>
 <?php
 endwhile;
 get_footer();

@@ -19,7 +19,6 @@ while ( have_posts() ) :
 
 	if ( $use_builder ) {
 		teznevise_builder_render_sections();
-		get_template_part( 'template-parts/about-visual' );
 		if ( function_exists( 'teznevise_page_should_print_content' ) ? teznevise_page_should_print_content() : get_the_content() ) :
 			?>
 <section class="section">
@@ -137,6 +136,8 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
+
+		<?php get_template_part( 'template-parts/about-visual' ); ?>
 
 <section class="section">
 	<div class="container">

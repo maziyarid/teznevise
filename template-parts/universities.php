@@ -22,9 +22,9 @@ $unis = array(
 );
 $base = trailingslashit( get_template_directory_uri() ) . 'assets/img/universities/';
 ?>
-<section class="uni-strip" aria-label="<?php esc_attr_e( 'همکاری دانشگاهی', 'teznevise' ); ?>">
+<section class="uni-strip" aria-label="<?php esc_attr_e( 'دانشگاه‌های کشور', 'teznevise' ); ?>">
 	<div class="container">
-		<p class="uni-kicker"><?php esc_html_e( 'همکاران دانشگاهی', 'teznevise' ); ?></p>
+		<p class="uni-kicker"><?php esc_html_e( 'دانشجویان دانشگاه‌های کشور', 'teznevise' ); ?></p>
 		<h2><?php esc_html_e( 'مسیر آشنا برای دانشجویان دانشگاه‌های کشور', 'teznevise' ); ?></h2>
 		<ul class="tz-uni-grid uni-row">
 			<?php foreach ( $unis as $u ) : ?>

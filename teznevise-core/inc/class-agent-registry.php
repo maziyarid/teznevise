@@ -172,7 +172,10 @@ class Teznevise_Agent_Registry {
 			if ( $skills ) {
 				$lines = array( 'Skills (pick the matching one; stay token-frugal):' );
 				foreach ( $skills as $skill ) {
-					$lines[] = '- ' . ( $skill['name'] ?? '' ) . ': ' . ( $skill['description'] ?? '' );
+					$lines[] = '- ' . ( $skill['name'] ?? '' ) . ' (' . ( $skill['skill_id'] ?? '' ) . '): ' . ( $skill['description'] ?? '' );
+					if ( ! empty( $skill['prompt'] ) ) {
+						$lines[] = '  prompt: ' . $skill['prompt'];
+					}
 				}
 				$chunks[] = implode( "\n", $lines );
 			}

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Teznevise Core
  * Description: Key vault, free-first model router, research oracle, async debate engine, named 8-agent roster.
- * Version: 1.9.13
+ * Version: 1.9.21
  * Author: MAZ//ID (Maziyar)
  * Text Domain: teznevise
  *
@@ -21,7 +21,7 @@ if ( defined( 'TEZNEVISE_CORE_LOADED' ) ) {
 }
 define( 'TEZNEVISE_CORE_LOADED', true );
 define( 'TEZNEVISE_CORE_DIR', __DIR__ );
-define( 'TEZNEVISE_CORE_VERSION', '1.9.13' );
+define( 'TEZNEVISE_CORE_VERSION', '1.9.21' );
 
 require_once TEZNEVISE_CORE_DIR . '/config/free-models.php';
 require_once TEZNEVISE_CORE_DIR . '/config/agents.php';

@@ -67,7 +67,7 @@ $human_count = get_comments(
 			?>
 			<p class="no-comments" data-reveal>
 				<?php esc_html_e( 'فقط اعضای واردشده می‌توانند نظر بگذارند. با تکمیل پروفایل ۱۰۰۰ تزکوین هدیه می‌گیرید.', 'teznevise' ); ?>
-				<a class="btn-tz btn-primary-tz" href="<?php echo esc_url( wp_login_url( get_permalink() ) ); ?>"><?php esc_html_e( 'ورود / ثبت‌نام', 'teznevise' ); ?></a>
+				<a class="btn-tz btn-primary-tz" href="<?php echo esc_url( home_url( '/account/' ) ); ?>"><?php esc_html_e( 'ورود / ثبت‌نام', 'teznevise' ); ?></a>
 			</p>
 			<?php
 		else :

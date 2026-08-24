@@ -74,6 +74,27 @@ function teznevise_save_blog_fields( $post_id ) {
 }
 add_action( 'save_post_post', 'teznevise_save_blog_fields' );
 
+/**
+ * Catch overview edits from any editor path (Quick Edit, REST, custom fields).
+ */
+function teznevise_overview_meta_updated( $meta_id, $post_id, $meta_key, $meta_value ) {
+	if ( '_teznevise_ai_overview' !== $meta_key || wp_is_post_revision( $post_id ) ) {
+		return;
+	}
+	if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+		return;
+	}
+	if ( ! is_admin() && ! ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+		return;
+	}
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+	teznevise_mark_overview_human_review( $post_id, is_scalar( $meta_value ) ? (string) $meta_value : '' );
+}
+add_action( 'updated_post_meta', 'teznevise_overview_meta_updated', 10, 4 );
+add_action( 'added_post_meta', 'teznevise_overview_meta_updated', 10, 4 );
+
 function teznevise_blog_field( $key, $post_id = 0, $fallback = '' ) {
 	$value = get_post_meta( $post_id ? $post_id : get_the_ID(), '_teznevise_' . $key, true );
 	if ( '' === $value || null === $value || false === $value ) {
@@ -95,10 +116,9 @@ function teznevise_blog_field( $key, $post_id = 0, $fallback = '' ) {
  * @param string $value   Submitted overview text.
  */
 function teznevise_mark_overview_human_review( $post_id, $value ) {
-	$post_id  = (int) $post_id;
-	$value    = trim( (string) $value );
-	$previous = trim( (string) get_post_meta( $post_id, '_teznevise_ai_overview', true ) );
-	$ai_copy  = trim( (string) get_post_meta( $post_id, '_teznevise_ai_overview_ai', true ) );
+	$post_id = (int) $post_id;
+	$value   = trim( (string) $value );
+	$ai_copy = trim( (string) get_post_meta( $post_id, '_teznevise_ai_overview_ai', true ) );
 	if ( '' === $value ) {
 		return;
 	}
@@ -108,11 +128,9 @@ function teznevise_mark_overview_human_review( $post_id, $value ) {
 		delete_post_meta( $post_id, '_teznevise_ai_overview_reviewed_by' );
 		return;
 	}
-	if ( $value !== $previous ) {
-		update_post_meta( $post_id, '_teznevise_ai_overview_reviewed', '1' );
-		update_post_meta( $post_id, '_teznevise_ai_overview_reviewed_at', time() );
-		update_post_meta( $post_id, '_teznevise_ai_overview_reviewed_by', get_current_user_id() );
-	}
+	update_post_meta( $post_id, '_teznevise_ai_overview_reviewed', '1' );
+	update_post_meta( $post_id, '_teznevise_ai_overview_reviewed_at', time() );
+	update_post_meta( $post_id, '_teznevise_ai_overview_reviewed_by', get_current_user_id() );
 }
 
 function teznevise_overview_is_human_reviewed( $post_id = 0 ) {

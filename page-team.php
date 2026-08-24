@@ -38,14 +38,6 @@ while ( have_posts() ) :
 		$cta_text = teznevise_page_field( 'cta_text', 0, __( 'پیوستن به تیم', 'teznevise' ) );
 		$cta_url  = teznevise_page_field( 'cta_url', 0, '/contact/' );
 		$stats    = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( teznevise_page_field( 'team_stats' ), 2 ) : array();
-		if ( ! $stats ) {
-			$stats = array(
-				array( '۲۷+', __( 'پژوهشگر متخصص', 'teznevise' ) ),
-				array( '۴+', __( 'کشور حضور', 'teznevise' ) ),
-				array( '۱۹۷۲+', __( 'پروژه انجام‌شده', 'teznevise' ) ),
-				array( '۹۸٪', __( 'رضایت مراجعان', 'teznevise' ) ),
-			);
-		}
 		$members = function_exists( 'teznevise_parse_pipe_list' ) ? teznevise_parse_pipe_list( teznevise_page_field( 'team_members' ), 4 ) : array();
 		?>
 
@@ -61,6 +53,7 @@ while ( have_posts() ) :
 	</div>
 </section>
 
+		<?php if ( $stats ) : ?>
 <section class="section bg-soft">
 	<div class="container">
 		<div class="stats-grid" data-reveal-stagger style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
@@ -73,6 +66,7 @@ while ( have_posts() ) :
 		</div>
 	</div>
 </section>
+		<?php endif; ?>
 
 		<?php if ( $members ) : ?>
 <section class="section">

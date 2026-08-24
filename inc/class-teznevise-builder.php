@@ -734,8 +734,8 @@ function teznevise_builder_render_hero( $section ) {
 	echo '</div>';
 	echo '<div class="tz-hero-split__form">';
 	$inquiry = '';
-	if ( function_exists( 'teznevise_render_hero_inquiry' ) && ! is_front_page() ) {
-		$inquiry = teznevise_render_hero_inquiry( 'builder-hero' );
+	if ( function_exists( 'teznevise_hero_inquiry_allowed' ) ? teznevise_hero_inquiry_allowed() : ( function_exists( 'teznevise_render_hero_inquiry' ) && ! is_front_page() ) ) {
+		$inquiry = function_exists( 'teznevise_render_hero_inquiry' ) ? teznevise_render_hero_inquiry( 'builder-hero' ) : '';
 	}
 	if ( $inquiry ) {
 		echo $inquiry; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -969,17 +969,21 @@ function teznevise_builder_render_sections( $post_id = 0, $args = array() ) {
 		array(
 			'only'   => null,
 			'except' => array(),
+			'unique' => true,
 		)
 	);
 	$only   = null === $args['only'] ? null : array_map( 'sanitize_key', (array) $args['only'] );
 	$except = array_map( 'sanitize_key', (array) $args['except'] );
+	$unique = (bool) $args['unique'];
 
 	$sections = teznevise_builder_get_sections( $post_id );
 	if ( ! $sections ) {
 		return;
 	}
 
-	$types = teznevise_builder_section_types();
+	$types        = teznevise_builder_section_types();
+	$seen         = array();
+	$unique_types = array( 'hero', 'faq', 'cta_band', 'process_steps', 'service_cards', 'feature_list' );
 	foreach ( $sections as $section ) {
 		if ( empty( $section['enabled'] ) ) {
 			continue;
@@ -991,10 +995,14 @@ function teznevise_builder_render_sections( $post_id = 0, $args = array() ) {
 		if ( $except && in_array( $type, $except, true ) ) {
 			continue;
 		}
+		if ( $unique && in_array( $type, $unique_types, true ) && isset( $seen[ $type ] ) ) {
+			continue;
+		}
 		$definition = isset( $types[ $type ] ) ? $types[ $type ] : null;
 		if ( ! $definition || empty( $definition['render'] ) || ! is_callable( $definition['render'] ) ) {
 			continue;
 		}
+		$seen[ $type ] = true;
 		call_user_func( $definition['render'], $section );
 	}
 }

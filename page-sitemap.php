@@ -35,11 +35,11 @@ while ( have_posts() ) :
 				<ul class="sitemap-list" style="list-style:none;padding:0;margin:0;display:grid;gap:8px;">
 					<?php
 					$services = array(
-						'/service-thesis/'     => __( 'مشاوره انجام پایان‌نامه', 'teznevise' ),
-						'/service-proposal/'   => __( 'مشاوره انجام پروپوزال', 'teznevise' ),
-						'/service-statistics/' => __( 'تحلیل آماری', 'teznevise' ),
-						'/service-simulation/' => __( 'شبیه‌سازی', 'teznevise' ),
-						'/tools/'              => __( 'ابزارهای آنلاین', 'teznevise' ),
+						'/thesis/'                 => __( 'مشاوره انجام پایان‌نامه', 'teznevise' ),
+						'/proposal/'               => __( 'مشاوره انجام پروپوزال', 'teznevise' ),
+						'/service-statistics/'     => __( 'تحلیل آماری', 'teznevise' ),
+						'/service-simulation/'     => __( 'شبیه‌سازی', 'teznevise' ),
+						'/online-calculation-tools/' => __( 'ابزارهای آنلاین', 'teznevise' ),
 					);
 					foreach ( $services as $path => $label ) :
 						?>

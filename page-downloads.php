@@ -79,7 +79,7 @@ while ( have_posts() ) :
 							<i class="fa-solid fa-download" aria-hidden="true"></i> <?php esc_html_e( 'دانلود', 'teznevise' ); ?>
 						</a>
 					<?php else : ?>
-						<span class="text-muted" style="font-size:13px;"><?php esc_html_e( 'به‌زودی — لینک را در فیلدهای صفحه تنظیم کنید', 'teznevise' ); ?></span>
+						<span class="text-muted" style="font-size:13px;"><?php esc_html_e( 'به‌زودی در دسترس خواهد بود', 'teznevise' ); ?></span>
 					<?php endif; ?>
 				</div>
 			<?php endforeach; ?>

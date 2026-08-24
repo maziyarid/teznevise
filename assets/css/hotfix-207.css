@@ -1,0 +1,42 @@
+/* 1.9.21 — FAQ accordion, card alignment, inquiry/orbit polish */
+.faq-a,
+.faq-answer,
+.tzss-faq-a,
+.tzca-faq-a,
+.tzt-faq-a,
+.tzhub-faq-a {
+  display: none !important;
+}
+.faq-item.open > .faq-a,
+.faq-item.open > .faq-answer,
+.faq-item.is-open > .faq-a,
+.faq-item.is-open > .faq-answer,
+.faq-item.open .faq-a,
+.faq-item.open .faq-answer,
+.faq-item.is-open .faq-a,
+.faq-item.is-open .faq-answer,
+.faq-q[aria-expanded="true"] + .faq-a,
+.faq-q[aria-expanded="true"] + .faq-answer {
+  display: block !important;
+}
+
+.article-card,
+.faq-card,
+.quote-card,
+.check-card,
+.longcopy,
+.article-content {
+  text-align: start;
+}
+
+.hero-visual.tz-hero-orbit .hero-order-button {
+  z-index: 2;
+}
+
+.uni-kicker {
+  letter-spacing: 0;
+}
+
+.tz-serp-group--pages .article-grid {
+  margin-top: 8px;
+}

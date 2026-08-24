@@ -12,6 +12,7 @@ while ( have_posts() ) :
 	the_post();
 
 	$has_builder_hero = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'hero' );
+	$has_builder_faq  = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'faq' );
 	$eyebrow          = teznevise_page_field( 'eyebrow', 0, __( 'ارتباط با ما', 'teznevise' ) );
 	$subtitle        = teznevise_page_field( 'subtitle', 0, __( 'مشاوره اولیه رایگان — پاسخ‌گویی سریع', 'teznevise' ) );
 
@@ -61,6 +62,7 @@ while ( have_posts() ) :
 			</div>
 			<?php elseif ( $is_shortcode_only || '' === $plain ) : ?>
 				<?php echo function_exists( 'teznevise_render_native_lead_form' ) ? teznevise_render_native_lead_form( 'contact' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php if ( ! $has_builder_faq ) : ?>
 				<div class="faq-wrap" style="margin-top:28px;">
 					<div class="faq-item">
 						<button type="button" class="faq-q" aria-expanded="false"><?php esc_html_e( 'چقدر طول می‌کشد تا پاسخ بگیرم؟', 'teznevise' ); ?></button>
@@ -75,6 +77,7 @@ while ( have_posts() ) :
 						<div class="faq-a"><?php esc_html_e( 'موضوع، مقطع و فایل‌های موجود را بفرستید تا مسیر کار مشخص شود.', 'teznevise' ); ?></div>
 					</div>
 				</div>
+				<?php endif; ?>
 			<?php elseif ( function_exists( 'teznevise_page_should_print_content' ) && teznevise_page_should_print_content() ) : ?>
 				<?php
 				if ( function_exists( 'teznevise_the_page_interactive_content' ) ) {

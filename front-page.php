@@ -31,7 +31,7 @@ get_header();
 				<div class="hero-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
 				<div class="hero-network">
 					<div class="network-ring ring-one"></div><div class="network-ring ring-two"></div><div class="network-ring ring-three"></div>
-					<a class="hero-order-button" href="<?php echo esc_url( teznevise_url( teznevise_mod( 'hero_btn_primary_url' ) ) ); ?>" aria-label="<?php echo esc_attr( teznevise_mod( 'hero_btn_primary' ) ); ?>"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i><span><?php esc_html_e( 'ثبت سفارش', 'teznevise' ); ?></span></a>
+					<a class="hero-order-button" href="<?php echo esc_url( teznevise_url( teznevise_mod( 'hero_btn_primary_url' ) ) ); ?>" aria-label="<?php echo esc_attr( teznevise_mod( 'hero_btn_primary' ) ); ?>"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i><span><?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></span></a>
 					<span class="orbit-tag tag-1">SPSS</span><span class="orbit-tag tag-2">Matlab</span><span class="orbit-tag tag-3"><?php esc_html_e( 'پایان‌نامه', 'teznevise' ); ?></span><span class="orbit-tag tag-4"><?php esc_html_e( 'پروژه دانشگاهی', 'teznevise' ); ?></span>
 				</div>
 			</div>
@@ -45,10 +45,10 @@ $use_builder     = function_exists( 'teznevise_builder_has_sections' ) && teznev
 $has_builder_cta = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'cta_band' );
 
 if ( $use_builder ) {
-	// Customizer secondary CTA still targets #services after the coded section is skipped.
 	echo '<div id="services">';
-	teznevise_builder_render_sections( 0, array( 'except' => array( 'cta_band', 'hero' ) ) );
+	teznevise_builder_render_sections( 0, array( 'only' => array( 'service_cards' ) ) );
 	echo '</div>';
+	teznevise_builder_render_sections( 0, array( 'except' => array( 'cta_band', 'hero', 'service_cards' ) ) );
 } else {
 	?>
 

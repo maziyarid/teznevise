@@ -58,7 +58,16 @@ while ( have_posts() ) :
 <section class="section">
 	<div class="container">
 		<div class="longcopy article-content tool-body" data-reveal>
-			<?php the_content(); ?>
+			<?php
+			if ( function_exists( 'teznevise_page_should_print_content' ) && teznevise_page_should_print_content() && function_exists( 'teznevise_the_page_interactive_content' ) ) {
+				teznevise_the_page_interactive_content();
+			} else {
+				ob_start();
+				the_content();
+				$html = (string) ob_get_clean();
+				echo function_exists( 'teznevise_prepare_interactive_html' ) ? teznevise_prepare_interactive_html( $html ) : $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+			?>
 		</div>
 	</div>
 </section>
