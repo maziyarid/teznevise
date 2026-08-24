@@ -738,9 +738,24 @@ function tzRestBase() {
   return rest;
 }
 function tzRestNonce() {
-  return (window.tezneviseProduct && window.tezneviseProduct.restNonce)
-    || (window.tezneviseAiConfig && window.tezneviseAiConfig.nonce)
-    || '';
+	return (window.tezneviseProduct && window.tezneviseProduct.restNonce)
+		|| (window.tezneviseAiConfig && window.tezneviseAiConfig.nonce)
+		|| '';
+}
+
+function tzJsonResponse(response) {
+  return response.text().then(function (raw) {
+    var json = null;
+    try { json = raw ? JSON.parse(raw) : null; } catch (err) {}
+    if (!response.ok) {
+      var message = json && (json.message || json.code)
+        ? String(json.message || json.code)
+        : 'خطای سرور (' + response.status + ')';
+      throw new Error(message);
+    }
+    if (!json) throw new Error('پاسخ سرور معتبر نبود.');
+    return json;
+  });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -766,6 +781,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var btn = box.querySelector('[data-ai-summary-btn]');
     var out = box.querySelector('[data-ai-summary-out]');
     if (!btn || !out) return;
+    out.setAttribute('role', 'status');
+    out.setAttribute('aria-live', 'polite');
+    var idleLabel = btn.textContent;
     btn.addEventListener('click', function () {
       var postId = box.getAttribute('data-ai-summary');
       btn.disabled = true;
@@ -782,10 +800,10 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         body: JSON.stringify({ post_id: parseInt(postId, 10) || 0 })
       })
-        .then(function (r) { return r.json(); })
+        .then(tzJsonResponse)
         .then(function (j) {
           btn.disabled = false;
-          btn.textContent = 'خلاصه‌کردن نکات کلیدی';
+          btn.textContent = idleLabel;
           if (!j || !j.success || !j.bullets || !j.bullets.length) {
             out.classList.add('is-error');
             out.textContent = (j && (j.message || j.code)) ? String(j.message || j.code) : 'خلاصه‌ای در دسترس نیست.';
@@ -812,11 +830,11 @@ document.addEventListener('DOMContentLoaded', function () {
             box.classList.remove('is-pending');
           }
         })
-        .catch(function () {
+        .catch(function (err) {
           btn.disabled = false;
-          btn.textContent = 'خلاصه‌کردن نکات کلیدی';
+          btn.textContent = idleLabel;
           out.classList.add('is-error');
-          out.textContent = 'ارتباط برقرار نشد.';
+          out.textContent = (err && err.message) ? err.message : 'ارتباط برقرار نشد. دوباره تلاش کنید.';
         });
     });
   });
@@ -826,7 +844,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var body = box.querySelector('[data-overview-body]');
     if (!q || !body) return;
     fetch(tzRestBase() + 'teznevise-core/v1/search-overview?q=' + encodeURIComponent(q), { credentials: 'same-origin' })
-      .then(function (r) { return r.json(); })
+      .then(tzJsonResponse)
       .then(function (j) {
         body.textContent = (j && j.overview) ? j.overview : 'جمع‌بندی در دسترس نیست.';
       })
@@ -864,19 +882,6 @@ document.addEventListener('DOMContentLoaded', function () {
       body.className = 'comment-content';
       body.textContent = item.content || '';
       art.appendChild(body);
-      if (item.thought) {
-        var det = document.createElement('details');
-        det.className = 'tz-ai-think';
-        var sum = document.createElement('summary');
-        sum.className = 'tz-ai-think__sum';
-        sum.innerHTML = '<i class="fa-solid fa-lightbulb" aria-hidden="true"></i> استدلال';
-        var pre = document.createElement('pre');
-        pre.className = 'tz-ai-think__stream';
-        pre.textContent = item.thought;
-        det.appendChild(sum);
-        det.appendChild(pre);
-        art.appendChild(det);
-      }
       li.appendChild(art);
       ol.appendChild(li);
     });
@@ -884,16 +889,20 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function pollDebate(postId, host, btn, tries) {
+    var status = btn && btn.parentNode ? btn.parentNode.querySelector('[data-ai-debate-status]') : null;
     if (tries > 24) {
-      if (btn) { btn.disabled = false; btn.textContent = 'تولید گفتگوی هوش مصنوعی'; }
+      if (btn) { btn.disabled = false; btn.textContent = 'تلاش دوباره'; }
+      if (status) status.textContent = 'ادامه گفتگو در صف پردازش ماند. دوباره تلاش کنید یا زمان‌بندی WP-Cron را بررسی کنید.';
       return;
     }
     fetch(tzRestBase() + 'teznevise-core/v1/debate?post_id=' + encodeURIComponent(postId), { credentials: 'same-origin' })
-      .then(function (r) { return r.json(); })
+      .then(tzJsonResponse)
       .then(function (j) {
         if (j && j.items && j.items.length) paintDebate(host, j.items);
+        if (status) status.textContent = 'گفتگو در حال تکمیل است — ' + String((j && j.count) || 0) + ' پاسخ آماده شده.';
         if (j && (j.job === 'done' || (j.count && j.count > 3))) {
           if (btn) { btn.hidden = true; }
+          if (status) status.textContent = 'گفتگوی عامل‌ها کامل شد.';
           return;
         }
         window.setTimeout(function () { pollDebate(postId, host, btn, tries + 1); }, 4000);
@@ -907,19 +916,22 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.addEventListener('click', function () {
       var postId = btn.getAttribute('data-ai-debate-run');
       var host = document.querySelector('[data-ai-debate-thread]') || btn.parentNode;
+      var status = btn.parentNode ? btn.parentNode.querySelector('[data-ai-debate-status]') : null;
       btn.disabled = true;
       btn.textContent = 'در حال تولید…';
+      if (status) status.textContent = 'عامل اول در حال بررسی مقاله است…';
       fetch(tzRestBase() + 'teznevise-core/v1/debate-run', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': tzRestNonce() },
         body: JSON.stringify({ post_id: parseInt(postId, 10) || 0 })
       })
-        .then(function (r) { return r.json(); })
+        .then(tzJsonResponse)
         .then(function (j) {
           if (j && j.items && j.items.length) {
             paintDebate(host, j.items);
             btn.textContent = 'ادامه گفتگو در صف است…';
+            if (status) status.textContent = 'پاسخ اول آماده شد؛ عامل‌های بعدی در صف هستند.';
             pollDebate(postId, host, btn, 0);
             return;
           }
@@ -929,9 +941,10 @@ document.addEventListener('DOMContentLoaded', function () {
           if (j && j.success) pollDebate(postId, host, btn, 0);
           else btn.disabled = false;
         })
-        .catch(function () {
+        .catch(function (err) {
           btn.disabled = false;
-          btn.textContent = 'تولید گفتگوی هوش مصنوعی';
+          btn.textContent = 'تلاش دوباره';
+          if (status) status.textContent = (err && err.message) ? err.message : 'ارتباط برقرار نشد.';
         });
     });
   });

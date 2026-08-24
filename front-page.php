@@ -7,10 +7,10 @@
 get_header();
 ?>
 
-<section class="hero-new">
+<section class="hero-new page-hero-new tz-hero-split tz-home-hero">
 	<div class="container">
-		<div class="hero-grid">
-			<div class="hero-copy">
+		<div class="hero-grid tz-hero-split__grid">
+			<div class="hero-copy tz-hero-split__copy">
 				<span class="eyebrow"><?php echo esc_html( teznevise_mod( 'hero_eyebrow' ) ); ?></span>
 				<h1><?php echo esc_html( teznevise_mod( 'hero_title_1' ) ); ?> <span class="grad"><?php echo esc_html( teznevise_mod( 'hero_title_grad' ) ); ?></span> <?php echo esc_html( teznevise_mod( 'hero_title_2' ) ); ?></h1>
 				<p><?php echo esc_html( teznevise_mod( 'hero_text' ) ); ?></p>
@@ -24,17 +24,12 @@ get_header();
 					<span class="hero-point"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> <?php echo esc_html( teznevise_mod( 'hero_point_3' ) ); ?></span>
 				</div>
 			</div>
-			<div class="hero-aside">
-			<div class="hero-visual tz-hero-orbit" aria-label="<?php esc_attr_e( 'نمایی خلاقانه از خدمات تزنویسه', 'teznevise' ); ?>">
-				<div class="hero-orb" aria-hidden="true"></div>
-				<div class="ink-blot blot-one"></div><div class="ink-blot blot-two"></div><div class="ink-blot blot-three"></div>
-				<div class="hero-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-				<div class="hero-network">
-					<div class="network-ring ring-one"></div><div class="network-ring ring-two"></div><div class="network-ring ring-three"></div>
-					<a class="hero-order-button" href="<?php echo esc_url( teznevise_url( teznevise_mod( 'hero_btn_primary_url' ) ) ); ?>" aria-label="<?php echo esc_attr( teznevise_mod( 'hero_btn_primary' ) ); ?>"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i><span><?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></span></a>
-					<span class="orbit-tag tag-1">SPSS</span><span class="orbit-tag tag-2">Matlab</span><span class="orbit-tag tag-3"><?php esc_html_e( 'پایان‌نامه', 'teznevise' ); ?></span><span class="orbit-tag tag-4"><?php esc_html_e( 'پروژه دانشگاهی', 'teznevise' ); ?></span>
-				</div>
-			</div>
+			<div class="hero-aside tz-hero-split__form">
+				<?php
+				if ( function_exists( 'teznevise_render_hero_orbit' ) ) {
+					echo teznevise_render_hero_orbit( teznevise_mod( 'hero_btn_primary_url' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				}
+				?>
 			</div>
 		</div>
 	</div>

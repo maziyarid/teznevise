@@ -222,12 +222,12 @@ def check_source_contracts() -> None:
     if "teznevise_tool_waitlist" not in waitlist:
         error("Waitlist table installer is missing")
     tezcoin = (ROOT / "inc" / "tezcoin.php").read_text(encoding="utf-8")
-    if "G-ZTB0ERWJYN" not in tezcoin:
-        error("Google Analytics G-ZTB0ERWJYN is not the default ga_id")
-    if "xf2anzt0a3" not in tezcoin:
-        error("Clarity xf2anzt0a3 is not the default clarity_id")
-    if "cdn.ywxi.net/js/1.js" not in footer:
-        error("TrustedSite free seal script is missing from footer.php")
+    if "TEZNEVISE_ENABLE_THIRD_PARTY_ANALYTICS" not in tezcoin:
+        error("Third-party analytics is not protected by the explicit opt-in constant")
+    if "'ga_id'           => ''" not in tezcoin or "'clarity_id'      => ''" not in tezcoin:
+        error("GA/Clarity must default to disabled until explicitly configured")
+    if "cdn.ywxi.net/js/1.js" in footer:
+        error("Unreliable TrustedSite script must not be injected in footer.php")
     if "ساماندهی" in footer or "ثبت ملی" in footer:
         error("Placeholder Iranian seals must not remain in footer.php")
     dash = (ROOT / "page-account.php").read_text(encoding="utf-8")
@@ -352,14 +352,16 @@ def check_source_contracts() -> None:
     if "ساماندهی" in tezcoin or "samandehi_url" in tezcoin:
         error("Samandehi leftover must not remain in tezcoin admin")
     footer = (ROOT / "footer.php").read_text(encoding="utf-8")
-    if "cdn.ywxi.net/js/1.js" not in footer:
-        error("TrustedSite script missing from footer during 1.9.12 check")
+    if "cdn.ywxi.net/js/1.js" in footer:
+        error("TrustedSite DNS-dependent script still exists in footer")
     chat = (ROOT / "js" / "ai" / "chat.js").read_text(encoding="utf-8")
     if "typewrite" not in chat:
         error("Chat composer is missing typewriter streaming")
     chat_php = (ROOT / "inc" / "ai" / "class-ai-chat.php").read_text(encoding="utf-8")
     if "data-agent-pick" not in chat_php:
         error("Chat composer is missing the named-agent picker")
+    if "data-ai-model" not in chat_php:
+        error("Chat composer is missing the compact LLM selector")
     comments = (ROOT / "inc" / "ai-comments.php").read_text(encoding="utf-8")
     if "ava-method" in comments and "teznevise_core_agent_roster" not in comments:
         error("AI comment defaults still use آوا/پارسا/نیکا without roster mapping")
@@ -407,13 +409,13 @@ def check_source_contracts() -> None:
     if "prompt_pack" not in api:
         error("Chat system prompt does not inject site knowledge")
     chat_js = (ROOT / "js" / "ai" / "chat.js").read_text(encoding="utf-8")
-    if "det.open = false" not in chat_js:
-        error("Live thinking must stay closed by default")
+    if "det.open = true" not in chat_js or "فرآیند پاسخ" not in chat_js:
+        error("Live response process must open immediately with a visible status label")
     if "chat/rate" not in chat_js:
         error("Chat client does not post ratings")
     live = (ROOT / "template-parts" / "live-chat.php").read_text(encoding="utf-8")
     if 'data-thinking="0"' not in live:
-        error("Live chat thinking display is not off by default")
+        error("Live chat process preference is not off by default")
     if 'data-collaboration-mode="single"' not in live:
         error("Live chat default is not single-agent")
     hub = (ROOT / "teznevise-core" / "inc" / "class-admin-hub.php").read_text(encoding="utf-8")

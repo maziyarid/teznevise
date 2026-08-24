@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { FaIcon } from "@/components/ui/FaIcon";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { getAiQuota, listAgents, listMyThreads, sendToolChat } from "@/lib/server/ai-hub";
+import { getAiQuota, listAgents, listMyThreads, sendToolChat, PUBLIC_CHAT_MODELS } from "@/lib/server/ai-hub";
 import { toast } from "sonner";
 import { faNum } from "@/lib/format";
 
@@ -32,6 +32,7 @@ export function AskAiPanel({
   const [agents, setAgents] = useState<{ id: string; name: string; provider: string }[]>([]);
   const [mode, setMode] = useState<"single" | "collab" | "reflect">("single");
   const [showThinking, setShowThinking] = useState(false);
+	const [model, setModel] = useState("");
   const [threadId, setThreadId] = useState<string | null>(null);
   const [quota, setQuota] = useState<{ remaining: number; limit: number; cost: number; credits: number } | null>(null);
   const [messages, setMessages] = useState<ChatMsg[]>([
@@ -90,7 +91,7 @@ export function AskAiPanel({
     if (q.length < 2) return;
     setBusy(true);
     setElapsed(1);
-    setThoughtOpen(false);
+	setThoughtOpen(true);
     setQuestion("");
     const userMsg: ChatMsg = { id: crypto.randomUUID(), role: "user", agentName: user?.displayName || "شما", content: q };
     setMessages((m) => [...m, userMsg]);
@@ -102,7 +103,8 @@ export function AskAiPanel({
           question: q,
           agentIds,
           mode,
-          thinking: true,
+		  thinking: showThinking,
+		  model: model || undefined,
           threadId: threadId ?? undefined,
         },
       });
@@ -118,7 +120,7 @@ export function AskAiPanel({
           id: crypto.randomUUID(),
           role: "assistant" as const,
           agentName: r.agentName,
-          thinking: r.thinking,
+		  thinking: undefined,
           content: r.content,
         })),
       ]);
@@ -126,6 +128,7 @@ export function AskAiPanel({
       toast.error(err instanceof Error ? err.message : "ارسال ممکن نشد");
     } finally {
       setBusy(false);
+	  setThoughtOpen(showThinking);
     }
   }
 
@@ -178,35 +181,32 @@ export function AskAiPanel({
         </label>
         <label>
           <input type="checkbox" checked={showThinking} onChange={(e) => setShowThinking(e.target.checked)} />
-          نمایش تفکر
+		  باز ماندن فرآیند پاسخ
         </label>
+		<label>
+		  مدل
+		  <select value={model} onChange={(e) => setModel(e.target.value)} aria-label="انتخاب مدل زبانی">
+			<option value="">خودکار</option>
+			{PUBLIC_CHAT_MODELS.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
+		  </select>
+		</label>
       </div>
 
       <div className="ai-thread" ref={scroller} role="log" aria-live="polite">
         {messages.map((m) => (
           <article key={m.id} className={m.role === "user" ? "ai-bubble is-user" : "ai-bubble is-bot"}>
-            {m.thinking ? (
-              <details className="ai-think">
-                <summary>
-                  <FaIcon icon="fa-brain" /> روند فکر
-                </summary>
-                <pre>{m.thinking}</pre>
-              </details>
-            ) : null}
             <div className="ai-bubble-body">{m.content}</div>
             <footer>{m.agentName}</footer>
           </article>
         ))}
         {busy ? (
           <article className="ai-bubble is-bot">
-            {showThinking ? (
             <details className="ai-think is-live" open={thoughtOpen} onToggle={(e) => setThoughtOpen((e.target as HTMLDetailsElement).open)}>
               <summary>
-                <FaIcon icon="fa-spinner" className="fa-spin" /> در حال استدلال · {faNum(elapsed)}ث — برای دیدن لمس کنید
+				<FaIcon icon="fa-spinner" className="fa-spin" /> فرآیند پاسخ · {faNum(elapsed)}ث
               </summary>
-              <pre>چیدن استدلال…</pre>
+			  <pre>{elapsed < 2 ? "اتصال امن به مدل…" : elapsed < 4 ? "بررسی سؤال و زمینه ابزار…" : elapsed < 7 ? "انتخاب روش پاسخ…" : "آماده‌سازی پاسخ نهایی…"}</pre>
             </details>
-            ) : null}
             <div className="ai-bubble-body">در حال نوشتن پاسخ…</div>
             <footer>{selectedNames.join("، ") || "دستیار تزنویسه"}</footer>
           </article>

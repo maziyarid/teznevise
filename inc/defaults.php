@@ -170,7 +170,9 @@ function teznevise_url( $url ) {
 	if ( $url === '' ) {
 		return home_url( '/' );
 	}
-	if ( preg_match( '#^https?://#i', $url ) ) {
+	// Preserve safe non-HTTP actions. Passing `tel:` through home_url() creates
+	// broken links such as https://teznevise.ir/tel:0930… on service pages.
+	if ( preg_match( '#^(?:https?://|tel:|mailto:|sms:|#)#i', $url ) ) {
 		return $url;
 	}
 	return home_url( $url );

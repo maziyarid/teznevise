@@ -131,6 +131,12 @@ function teznevise_ai_discussion_get( $post_id ) {
 		$decoded = array();
 	}
 	$items = isset( $decoded['items'] ) && is_array( $decoded['items'] ) ? $decoded['items'] : ( isset( $decoded[0] ) ? $decoded : array() );
+	foreach ( $items as &$public_item ) {
+		if ( is_array( $public_item ) ) {
+			$public_item['thought'] = '';
+		}
+	}
+	unset( $public_item );
 	if ( ! $items ) {
 		$comments = get_comments(
 			array(
@@ -152,7 +158,7 @@ function teznevise_ai_discussion_get( $post_id ) {
 				'tags'    => (string) get_comment_meta( $c->comment_ID, 'tz_ai_tags', true ),
 				'color'   => teznevise_commenter_color_for_comment( $c ),
 				'content' => $c->comment_content,
-				'thought' => (string) get_comment_meta( $c->comment_ID, 'tz_ai_thought', true ),
+				'thought' => '',
 				'human'   => (bool) get_comment_meta( $c->comment_ID, 'tz_human_moderator', true ),
 				'avatar'  => (string) get_comment_meta( $c->comment_ID, 'tz_ai_avatar', true ),
 			);
@@ -224,9 +230,6 @@ function teznevise_render_ai_discussion_branch( $by_parent, $parent_id ) {
 		}
 		echo '</header>';
 		echo '<div class="comment-content">' . wp_kses_post( wpautop( (string) ( $item['content'] ?? '' ) ) ) . '</div>';
-		if ( ! empty( $item['thought'] ) ) {
-			echo '<details class="tz-ai-think"><summary class="tz-ai-think__sum"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i> ' . esc_html__( 'استدلال', 'teznevise' ) . '</summary><pre class="tz-ai-think__stream">' . esc_html( $item['thought'] ) . '</pre></details>';
-		}
 		if ( ! empty( $item['tags'] ) ) {
 			echo '<p class="tz-ai-tags">' . esc_html( $item['tags'] ) . '</p>';
 		}
@@ -459,9 +462,7 @@ function teznevise_ai_comments_generate( $post_id ) {
 			update_comment_meta( $comment_id, 'tz_ai_name', sanitize_text_field( $speaker['name'] ) );
 			update_comment_meta( $comment_id, 'tz_ai_color', sanitize_hex_color( $color ) ?: '#145d4a' );
 			update_comment_meta( $comment_id, '_is_ai_agent', '1' );
-			if ( ! empty( $parsed['thought'] ) ) {
-				update_comment_meta( $comment_id, 'tz_ai_thought', $parsed['thought'] );
-			}
+			update_comment_meta( $comment_id, 'tz_ai_thought', '' );
 			$items[] = array(
 				'id'      => (string) $comment_id,
 				'parent'  => (string) $comment_parent,
@@ -471,7 +472,7 @@ function teznevise_ai_comments_generate( $post_id ) {
 				'tags'    => $speaker['tags'] ?? '',
 				'color'   => sanitize_hex_color( $color ) ?: '#145d4a',
 				'content' => $body,
-				'thought' => $parsed['thought'] ?? '',
+				'thought' => '',
 				'human'   => false,
 			);
 			$parent = (int) $comment_id;

@@ -13,4 +13,4 @@ Rules:
 - Never invent p-values, n, or coefficients.
 - State assumptions before the test.
 - Cite the brief as [n] only.
-- Public reply outside `<thought>` ≤140 words.
+- Public reply only (never private chain-of-thought) ≤140 words.

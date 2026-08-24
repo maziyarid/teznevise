@@ -28,8 +28,8 @@ function teznevise_tezcoin_defaults() {
 		'youcom_key'      => '',
 		'tavily_key'      => '',
 		'ai_cost'         => 5,
-		'ga_id'           => 'G-ZTB0ERWJYN',
-		'clarity_id'      => 'xf2anzt0a3',
+		'ga_id'           => '',
+		'clarity_id'      => '',
 	);
 }
 
@@ -318,14 +318,17 @@ function teznevise_default_image_alt( $attachment_id ) {
 add_action( 'add_attachment', 'teznevise_default_image_alt' );
 
 function teznevise_tracking_head() {
+	// Third-party tracking is opt-in. This avoids console/DNS failures on
+	// networks that block Google or Clarity and prevents accidental tracking
+	// before consent. Enable deliberately in wp-config.php and set IDs in admin.
+	$enabled = defined( 'TEZNEVISE_ENABLE_THIRD_PARTY_ANALYTICS' )
+		? (bool) TEZNEVISE_ENABLE_THIRD_PARTY_ANALYTICS
+		: false;
+	if ( ! apply_filters( 'teznevise_enable_third_party_analytics', $enabled ) ) {
+		return;
+	}
 	$ga      = (string) teznevise_tezcoin_get( 'ga_id' );
 	$clarity = (string) teznevise_tezcoin_get( 'clarity_id' );
-	if ( '' === $ga ) {
-		$ga = 'G-ZTB0ERWJYN';
-	}
-	if ( '' === $clarity ) {
-		$clarity = 'xf2anzt0a3';
-	}
 	if ( $ga && preg_match( '/^G-[A-Z0-9]+$/i', $ga ) ) {
 		echo '<script type="text/plain" data-tz-delay="1" data-src="https://www.googletagmanager.com/gtag/js?id=' . esc_attr( $ga ) . '"></script>';
 		echo '<script type="text/plain" data-tz-delay-inline="gtag">window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","' . esc_js( $ga ) . '");</script>' . "\n";

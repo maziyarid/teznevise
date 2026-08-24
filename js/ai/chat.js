@@ -77,8 +77,8 @@
 
   function thinkSummary(live) {
     var sum = el('summary', 'tz-ai-think__sum');
-    sum.appendChild(icon(live ? 'fa-spinner fa-spin' : 'fa-lightbulb'));
-    var lab = el('span', 'tz-ai-think__label', live ? 'در حال استدلال' : 'استدلال');
+    sum.appendChild(icon(live ? 'fa-spinner fa-spin' : 'fa-list-check'));
+    var lab = el('span', 'tz-ai-think__label', live ? 'در حال آماده‌سازی پاسخ' : 'فرآیند پاسخ');
     sum.appendChild(lab);
     var chev = el('span', 'tz-ai-think__chev');
     chev.appendChild(icon('fa-chevron-down'));
@@ -194,12 +194,12 @@
       stack.appendChild(meta);
     }
     var det = el('details', 'tz-ai-think is-live');
-    det.open = false;
-    det.hidden = true;
+    det.open = true;
+    det.hidden = false;
     var sum = thinkSummary(true);
     det.appendChild(sum);
     var pre = el('pre', 'tz-ai-think__stream');
-    var phases = ['در حال اتصال به مدل…', 'خواندن سؤال پژوهشی…', 'چیدن استدلال…', 'نوشتن پاسخ…'];
+    var phases = ['اتصال امن به مدل…', 'بررسی سؤال و زمینه صفحه…', 'انتخاب منابع و روش پاسخ…', 'آماده‌سازی پاسخ نهایی…'];
     pre.textContent = phases[0];
     det.appendChild(pre);
     stack.appendChild(det);
@@ -211,16 +211,12 @@
     art.appendChild(stack);
     log.appendChild(art);
     log.scrollTop = log.scrollHeight;
-    var closedByUser = true;
-    det.addEventListener('toggle', function () {
-      closedByUser = !det.open;
-    });
     var started = Date.now();
     var step = 0;
     function tickLabel() {
       var sec = Math.max(1, Math.round((Date.now() - started) / 1000));
       var lab = sum.querySelector('.tz-ai-think__label');
-      if (lab) lab.textContent = 'استدلال · ' + sec + 'ث';
+      if (lab) lab.textContent = 'فرآیند پاسخ · ' + sec + 'ث';
     }
     tickLabel();
     var timer = window.setInterval(function () {
@@ -234,24 +230,20 @@
       pre: pre,
       bubble: bubble,
       rates: rates,
-      stop: function (thought, answer, stream, trainId, expand) {
+      stop: function (answer, stream, trainId, expand, modelLabel) {
         window.clearInterval(timer);
         pre.dataset.locked = '1';
         var sec = Math.max(1, Math.round((Date.now() - started) / 1000));
         var spin = sum.querySelector('.fa-spinner');
         if (spin) {
-          spin.className = 'fa-solid fa-lightbulb';
+          spin.className = 'fa-solid fa-list-check';
         }
         var lab = sum.querySelector('.tz-ai-think__label');
-        if (lab) lab.textContent = thought ? ('استدلال · ' + sec + 'ث — برای دیدن لمس کنید') : 'استدلال';
+        if (lab) lab.textContent = 'پاسخ آماده شد · ' + sec + 'ث';
         det.classList.remove('is-live');
-        if (thought) {
-          pre.textContent = thought;
-          det.hidden = false;
-        } else {
-          det.hidden = true;
-        }
-        det.open = !!expand && !!thought;
+        pre.textContent = (modelLabel ? 'مدل «' + modelLabel + '» انتخاب شد. ' : '') + 'سؤال بررسی و پاسخ نهایی آماده شد.';
+        det.hidden = false;
+        det.open = !!expand;
         bubble.classList.remove('tz-ai-msg__bubble--wait');
         bubble.innerHTML = '';
         if (stream) typewrite(bubble, answer || '');
@@ -263,8 +255,9 @@
       fail: function (msg) {
         window.clearInterval(timer);
         det.classList.remove('is-live');
-        pre.textContent = '';
-        det.hidden = true;
+        pre.textContent = msg || 'ارسال ناموفق بود';
+        det.open = true;
+        det.hidden = false;
         bubble.classList.remove('tz-ai-msg__bubble--wait');
         bubble.textContent = msg || 'ارسال ناموفق بود';
         art.classList.remove('is-pending');
@@ -375,6 +368,7 @@
     var log = root.querySelector('[data-ai-log]');
     var status = root.querySelector('[data-ai-status]');
     var agentSel = root.querySelector('[data-ai-agent]');
+    var modelSel = root.querySelector('[data-ai-model]');
     var collabSel = root.querySelector('[data-ai-collab]');
     var thinkBox = root.querySelector('[data-ai-thinking]');
     var researchBox = root.querySelector('[data-ai-research]');
@@ -402,7 +396,8 @@
       log.setAttribute('aria-busy', on ? 'true' : 'false');
       if (sendBtn) sendBtn.hidden = !!on;
       if (stopBtn) stopBtn.hidden = !on;
-      if (input) input.disabled = !!on;
+      // Keep the composer editable while a response is generated; the stop
+      // button remains the explicit control for cancelling the active request.
     }
 
     bindToggle(root.querySelector('[data-ai-thinking-btn]'), thinkBox);
@@ -583,7 +578,7 @@
         sessionId = data.sessionId || '';
         log.innerHTML = '';
         data.messages.forEach(function (m) {
-          appendMsg(log, m.role, m.text, m.name, m.thinking || '', '', m.agentId || '');
+          appendMsg(log, m.role, m.text, m.name, '', '', m.agentId || '');
           history.push(m);
         });
         var hintsRestore = root.querySelector('[data-ai-hints]');
@@ -592,7 +587,7 @@
     }
 
     function remember(role, text, name, thinking, agentId) {
-      history.push({ role: role, text: String(text || '').replace('[[SHOW_CONTACT_FORM]]', '').trim(), name: name || '', thinking: thinking || '', agentId: agentId || '' });
+      history.push({ role: role, text: String(text || '').replace('[[SHOW_CONTACT_FORM]]', '').trim(), name: name || '', agentId: agentId || '' });
       window.__tzChatHistory = history;
       if (history.length > 40) history = history.slice(-40);
       persist();
@@ -662,6 +657,10 @@
       if (collabToggle && !collabToggle.checked && collab === 'collaborative') collab = 'single';
       if (researchBox && researchBox.checked) collab = 'research';
       var agentLabel = (meta && meta.name) ? meta.name : 'تزنویسه';
+      var modelId = modelSel ? modelSel.value : '';
+      var modelLabel = modelSel && modelSel.selectedOptions && modelSel.selectedOptions[0]
+        ? modelSel.selectedOptions[0].textContent.trim()
+        : 'خودکار';
       var live = startLiveThought(log, agentLabel, agentId);
       abortCtl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
       setBusy(true);
@@ -681,14 +680,21 @@
           message: text,
           session_id: sessionId,
           agent_id: agentId,
+          model: modelId,
           skill_id: activeSkill || '',
           collaboration_mode: collab,
-          thinking_enabled: true,
+          thinking_enabled: thinkingOn,
           page_url: page.url || (typeof location !== 'undefined' ? location.href : ''),
           page_title: page.title || (typeof document !== 'undefined' ? document.title : ''),
         }),
       })
-        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
+        .then(function (r) {
+          return r.text().then(function (raw) {
+            var json = null;
+            try { json = raw ? JSON.parse(raw) : null; } catch (err) {}
+            return { ok: r.ok, status: r.status, json: json };
+          });
+        })
         .then(function (res) {
           setBusy(false);
           if (!res.ok || !res.json || !res.json.success) {
@@ -700,16 +706,15 @@
           var replies = res.json.replies || [{ content: res.json.content, agent_name: res.json.agent_name, thinking_process: res.json.thinking_process, model: res.json.model }];
           var first = replies[0] || {};
           var parsed = splitThought(first.content || '');
-          var thought = first.thinking_process || parsed.thought || '';
           var answer = parsed.public || first.content || '';
-          live.stop(thought, String(answer || '').replace(FORM_TOKEN, '').trim(), true, res.json.training_id, thinkingOn);
-          remember('assistant', first.content || '', first.agent_name || agentLabel, thought, agentId);
+          live.stop(String(answer || '').replace(FORM_TOKEN, '').trim(), true, res.json.training_id, thinkingOn, modelLabel);
+          remember('assistant', first.content || '', first.agent_name || agentLabel, '', agentId);
           if (replies.length > 1) {
             var banner = el('p', 'tz-ai-collab-label', 'هم‌فکری عامل‌ها');
             log.appendChild(banner);
             replies.slice(1).forEach(function (rep) {
-              appendMsg(log, 'assistant', rep.content || '', rep.agent_name || '', rep.thinking_process || '', '', agentId, true);
-              remember('assistant', rep.content || '', rep.agent_name || '', rep.thinking_process || '', agentId);
+              appendMsg(log, 'assistant', rep.content || '', rep.agent_name || '', '', '', agentId, true);
+              remember('assistant', rep.content || '', rep.agent_name || '', '', agentId);
             });
           }
           if (String(first.content || '').indexOf(FORM_TOKEN) !== -1) {
@@ -794,6 +799,8 @@
       if (on) {
         var ta = panel.querySelector('[data-ai-input]');
         if (ta) ta.focus();
+      } else if (toggle) {
+        toggle.focus();
       }
     }
     if (toggle && panel) {

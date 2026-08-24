@@ -7,6 +7,15 @@ import { optionalAuthMiddleware } from "./optional-auth";
 import { creditWallet } from "./wallet";
 import { ensureProfile, getSetting, requireAdmin } from "./profile";
 
+export const PUBLIC_CHAT_MODELS = [
+  { id: "google/gemma-4-31b-it:free", label: "سریع" },
+  { id: "z-ai/glm-5.2:free", label: "متعادل" },
+  { id: "nvidia/nemotron-3-super-120b-a12b:free", label: "دقیق" },
+  { id: "nvidia/nemotron-3.5-lightning:free", label: "متن بلند" },
+  { id: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free", label: "استدلالی" },
+] as const;
+const PUBLIC_CHAT_MODEL_IDS = new Set<string>(PUBLIC_CHAT_MODELS.map((model) => model.id));
+
 export type AgentRow = {
   id: string;
   name: string;
@@ -312,10 +321,9 @@ async function loadAgentsByIds(ids: string[]) {
   return picked.length ? picked : all.slice(0, 1);
 }
 
-async function runAgent(agent: AgentRow, system: string, user: string, thinking: boolean) {
-  const sys = thinking
-    ? `${system}\n\nIf you reason, wrap the private reasoning in <think>...</think> then give the Persian answer.`
-    : system;
+async function runAgent(agent: AgentRow, system: string, user: string, _thinking: boolean, modelOverride?: string) {
+  const sys = `${system}\n\nReturn only the public answer. Never reveal private chain-of-thought or emit <thought>/<think> tags.`;
+  const model = modelOverride && PUBLIC_CHAT_MODEL_IDS.has(modelOverride) ? modelOverride : agent.model;
   const keyName = agent.api_key_setting || (agent.provider === "openrouter" ? "openrouter_key" : "xai_api_key");
   const apiKey = (await getSetting(keyName, "")) || process.env.XAI_API_KEY || "";
   const apiBase =
@@ -327,22 +335,22 @@ async function runAgent(agent: AgentRow, system: string, user: string, thinking:
   if (agent.provider === "you") extra = await youSearch(user);
   const prompt = extra ? `${user}\n\nنتایج جستجو:\n${extra}` : user;
   if (agent.provider === "openrouter" && !agent.api_base) {
-    const res = await openRouterChat(sys, prompt, agent.model);
+    const res = await openRouterChat(sys, prompt, model);
     if (!res.ok) return { agentName: agent.name, thinking: "", content: res.error };
     const parts = splitThinking(res.text);
-    return { agentName: agent.name, ...parts };
+    return { agentName: agent.name, thinking: "", content: parts.content };
   }
   const res = await grokChat({
     system: sys,
     user: prompt,
     maxTokens: 800,
-    model: agent.model || undefined,
+    model: model || undefined,
     apiKey: apiKey || undefined,
     apiBase: apiBase || undefined,
   });
   if (!res.ok) return { agentName: agent.name, thinking: "", content: res.error };
   const parts = splitThinking(res.text);
-  return { agentName: agent.name, ...parts };
+  return { agentName: agent.name, thinking: "", content: parts.content };
 }
 
 export const getAiQuota = createServerFn({ method: "GET" })
@@ -397,7 +405,7 @@ export const listMyThreads = createServerFn({ method: "POST" })
           id: m.id,
           role: m.role,
           agentName: m.agent_name,
-          thinking: m.thinking,
+		  thinking: "",
           content: m.content,
         })),
       });
@@ -416,6 +424,7 @@ export const sendToolChat = createServerFn({ method: "POST" })
         agentIds: z.array(z.string().max(40)).max(4).optional(),
         mode: z.enum(["single", "collab", "reflect"]).optional(),
         thinking: z.boolean().optional(),
+		model: z.string().max(120).optional(),
         threadId: z.string().max(60).optional(),
       })
       .parse(d),
@@ -447,6 +456,7 @@ export const sendToolChat = createServerFn({ method: "POST" })
     const agents = await loadAgentsByIds(data.agentIds ?? []);
     const mode = data.mode ?? (agents.length > 1 ? "collab" : "single");
     const thinking = Boolean(data.thinking);
+	const requestedModel = data.model && PUBLIC_CHAT_MODEL_IDS.has(data.model) ? data.model : undefined;
     const skills = await sql<{ title: string; body_md: string }>`
       select title, body_md from tool_skills
       where tool_slug = ${data.tool} or tool_slug = '*'
@@ -457,10 +467,10 @@ export const sendToolChat = createServerFn({ method: "POST" })
 
     const replies: { agentName: string; thinking: string; content: string }[] = [];
     if (mode === "single" || agents.length === 1) {
-      replies.push(await runAgent(agents[0], agents[0].system_prompt || "پاسخ را فارسی، دقیق و بدون ارجاع جعلی بده.", userPrompt, thinking));
+	  replies.push(await runAgent(agents[0], agents[0].system_prompt || "پاسخ را فارسی، دقیق و بدون ارجاع جعلی بده.", userPrompt, thinking, requestedModel));
     } else {
-      for (const agent of agents) {
-        replies.push(await runAgent(agent, agent.system_prompt || "پاسخ را فارسی بده.", userPrompt, thinking));
+	  for (const [index, agent] of agents.entries()) {
+		replies.push(await runAgent(agent, agent.system_prompt || "پاسخ را فارسی بده.", userPrompt, thinking, index === 0 ? requestedModel : undefined));
       }
       if (mode === "reflect" || mode === "collab") {
         const synthesis = replies.map((r) => `## ${r.agentName}\n${r.content}`).join("\n\n");
@@ -502,7 +512,7 @@ export const sendToolChat = createServerFn({ method: "POST" })
         for (const r of replies) {
           await sql`
             insert into ai_thread_messages (id, thread_id, role, agent_name, thinking, content)
-            values (${crypto.randomUUID()}, ${threadId}, ${"assistant"}, ${r.agentName}, ${r.thinking}, ${r.content})
+			values (${crypto.randomUUID()}, ${threadId}, ${"assistant"}, ${r.agentName}, ${""}, ${r.content})
           `;
         }
       }
@@ -520,4 +530,3 @@ export const sendToolChat = createServerFn({ method: "POST" })
       quota: { remaining: Math.max(0, limit - used - 1), limit, cost, credits: bal },
     };
   });
-

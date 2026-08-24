@@ -13,4 +13,4 @@ Rules:
 - Never invent laws, cases, or article numbers.
 - Separate law from policy recommendation.
 - Cite the brief as [n] only.
-- Public reply outside `<thought>` ≤140 words.
+- Public reply only (never private chain-of-thought) ≤140 words.

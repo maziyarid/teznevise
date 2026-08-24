@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FaIcon } from "@/components/ui/FaIcon";
-import { sendToolChat, listAgents } from "@/lib/server/ai-hub";
+import { sendToolChat, listAgents, PUBLIC_CHAT_MODELS } from "@/lib/server/ai-hub";
+import { submitInquiry } from "@/lib/inquiries";
 
 type Msg = {
   role: "user" | "assistant";
@@ -32,6 +33,7 @@ export function LiveChat() {
   const [research, setResearch] = useState(false);
   const [handoffOpen, setHandoffOpen] = useState(false);
   const [agentId, setAgentId] = useState("teznevise");
+	const [model, setModel] = useState("");
   const [agents, setAgents] = useState(ROSTER);
   const [thoughtOpen, setThoughtOpen] = useState(false);
   const [elapsed, setElapsed] = useState(0);
@@ -40,12 +42,13 @@ export function LiveChat() {
     {
       role: "assistant",
       name: "تزنویسه",
-      text: "سلام. سؤال پژوهشی‌تان را بپرسید؛ مسیر مشاوره و ابزار مناسب را دقیق می‌گویم. استدلال پشت پاسخ پنهان است مگر روی «استدلال» بزنید.",
+	  text: "سلام. سؤال پژوهشی‌تان را بپرسید؛ مراحل آماده‌سازی پاسخ به‌صورت زنده نمایش داده می‌شود.",
     },
   ]);
   const [handoff, setHandoff] = useState({ name: "", phone: "", email: "", note: "" });
   const logRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+	const requestRef = useRef(0);
 
   useEffect(() => {
     void listAgents()
@@ -99,9 +102,10 @@ export function LiveChat() {
     setMsgs((m) => [...m, { role: "user", text: q, name: "شما" }]);
     setBusy(true);
     setElapsed(1);
-    setThoughtOpen(false);
+	setThoughtOpen(true);
     setHintsOn(false);
     const ctl = new AbortController();
+	const requestId = ++requestRef.current;
     abortRef.current = ctl;
     try {
       const res = await sendToolChat({
@@ -109,7 +113,8 @@ export function LiveChat() {
           tool: "live-chat",
           context: research ? "research" : "live-chat",
           question: q,
-          thinking: true,
+		  thinking: thinkingOn,
+		  model: model || undefined,
           mode: research || collab ? "collab" : "single",
           agentIds: [agent.id],
         },
@@ -130,7 +135,7 @@ export function LiveChat() {
         ...replies.map((r) => ({
           role: "assistant" as const,
           text: r.content,
-          thought: r.thinking,
+		  thought: undefined,
           name: r.agentName || agent.name,
         })),
       ]);
@@ -148,18 +153,29 @@ export function LiveChat() {
         },
       ]);
     } finally {
-      setBusy(false);
-      abortRef.current = null;
+	  if (requestRef.current === requestId) {
+		setBusy(false);
+		setThoughtOpen(thinkingOn);
+		abortRef.current = null;
+	  }
     }
   }
 
-  function mailHandoff(e: React.FormEvent) {
+  async function mailHandoff(e: React.FormEvent) {
     e.preventDefault();
-    const body = encodeURIComponent(
-      `نام: ${handoff.name}\nموبایل: ${handoff.phone}\nایمیل: ${handoff.email}\n\nتاریخچه گفتگو:\n${history}`,
-    );
-    window.location.href = `mailto:teznevisan@gmail.com?subject=${encodeURIComponent("درخواست تماس از گفتگوی زنده")}&body=${body}`;
-    setHandoff((h) => ({ ...h, note: "درخواست تماس آماده شد." }));
+	setHandoff((h) => ({ ...h, note: "در حال ثبت…" }));
+	try {
+	  await submitInquiry({ data: {
+		name: handoff.name,
+		phone: handoff.phone,
+		email: handoff.email,
+		service: "chat-handoff",
+		message: `تاریخچه گفتگو:\n${history}`.slice(0, 2000),
+	  } });
+	  setHandoff((h) => ({ ...h, note: "درخواست تماس و تاریخچه گفتگو ثبت شد." }));
+	} catch {
+	  setHandoff((h) => ({ ...h, note: "ثبت درخواست ناموفق بود؛ دوباره تلاش کنید." }));
+	}
   }
 
   return (
@@ -176,22 +192,39 @@ export function LiveChat() {
         <span className="tz-livechat__fab-label">گفتگو</span>
       </button>
       {open ? (
-        <section className={`tz-ai-chat tz-gpt tz-livechat__panel${menu ? " is-picking" : ""}`} data-live-chat="1">
+		<section className={`tz-ai-chat tz-gpt tz-livechat__panel${menu ? " is-picking" : ""}`} data-live-chat="1" role="dialog" aria-modal="false" aria-label="گفتگوی پژوهشی تزنویسه">
           <header className="tz-gpt__top">
-            <div className="tz-gpt-model">
+			<div className="tz-gpt-selectors">
+			<div className="tz-gpt-model">
               <button
                 type="button"
                 className="tz-gpt-model__btn"
                 aria-haspopup="listbox"
                 aria-expanded={menu}
+				aria-label="انتخاب عامل پژوهشی"
                 onClick={() => setMenu((v) => !v)}
+				onKeyDown={(e) => {
+				  if (e.key === "ArrowDown") {
+					e.preventDefault();
+					setMenu(true);
+					window.setTimeout(() => document.querySelector<HTMLButtonElement>('.tz-gpt-model__list [role="option"]')?.focus(), 0);
+				  }
+				}}
               >
                 <FaIcon icon="fa-brain" />
                 <span>{agent?.name}</span>
                 <FaIcon icon="fa-chevron-down" />
               </button>
               {menu ? (
-                <div className="tz-gpt-model__list" role="listbox">
+				<div className="tz-gpt-model__list" role="listbox" aria-label="عامل‌های پژوهشی" onKeyDown={(e) => {
+				  const options = Array.from(e.currentTarget.querySelectorAll<HTMLButtonElement>('[role="option"]'));
+				  const index = options.indexOf(document.activeElement as HTMLButtonElement);
+				  if (e.key === "Escape") { e.preventDefault(); setMenu(false); }
+				  if (e.key === "ArrowDown") { e.preventDefault(); (options[index + 1] || options[0])?.focus(); }
+				  if (e.key === "ArrowUp") { e.preventDefault(); (options[index - 1] || options.at(-1))?.focus(); }
+				  if (e.key === "Home") { e.preventDefault(); options[0]?.focus(); }
+				  if (e.key === "End") { e.preventDefault(); options.at(-1)?.focus(); }
+				}}>
                   <div className="tz-gpt-model__list-head">
                     <strong>انتخاب عامل</strong>
                     <button
@@ -225,6 +258,15 @@ export function LiveChat() {
                 </div>
               ) : null}
             </div>
+			<label className="tz-gpt-llm" title="انتخاب مدل زبانی">
+			  <FaIcon icon="fa-microchip" />
+			  <span className="sr-only">مدل زبانی</span>
+			  <select value={model} onChange={(e) => setModel(e.target.value)} aria-label="انتخاب مدل زبانی">
+				<option value="">خودکار</option>
+				{PUBLIC_CHAT_MODELS.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
+			  </select>
+			</label>
+			</div>
             <div className="tz-gpt__top-actions">
               <button
                 type="button"
@@ -233,13 +275,14 @@ export function LiveChat() {
                 title="گفتگوی تازه"
                 onClick={() => {
                   abortRef.current?.abort();
+				  requestRef.current += 1;
                   setBusy(false);
                   setMenu(false);
                   setMsgs([
                     {
                       role: "assistant",
                       name: agent?.name,
-                      text: "سلام. سؤال پژوهشی‌تان را بپرسید؛ مسیر مشاوره و ابزار مناسب را دقیق می‌گویم. استدلال پشت پاسخ پنهان است مگر روی «استدلال» بزنید.",
+					  text: "سلام. سؤال پژوهشی‌تان را بپرسید؛ مراحل آماده‌سازی پاسخ به‌صورت زنده نمایش داده می‌شود.",
                     },
                   ]);
                   setHintsOn(true);
@@ -269,30 +312,20 @@ export function LiveChat() {
           <p className="tz-livechat__note">
             پاسخ‌ها بر اساس محتوای تزنویسه‌اند و مشاوره آموزشی‌اند، نه نوشتن پایان‌نامه.
           </p>
-          <div className="tz-gpt__log" role="log" aria-live="polite" ref={logRef} aria-busy={busy}>
+		  <div className="tz-gpt__log" role="log" aria-live="polite" aria-relevant="additions text" tabIndex={0} ref={logRef} aria-busy={busy}>
             {msgs.map((m, i) => (
               <article key={i} className={`tz-ai-msg is-${m.role}`}>
-                {m.thought ? (
-                  <details className="tz-ai-think">
-                    <summary className="tz-ai-think__sum">
-                      <FaIcon icon="fa-lightbulb" /> استدلال
-                    </summary>
-                    <pre className="tz-ai-think__stream">{m.thought}</pre>
-                  </details>
-                ) : null}
                 <div className="tz-ai-msg__bubble">{m.text}</div>
               </article>
             ))}
             {busy ? (
               <article className="tz-ai-msg is-assistant is-pending">
-                {thinkingOn ? (
-                  <details className="tz-ai-think is-live" open={thoughtOpen} onToggle={(e) => setThoughtOpen((e.target as HTMLDetailsElement).open)}>
+				<details className="tz-ai-think is-live" open={thoughtOpen} onToggle={(e) => setThoughtOpen((e.target as HTMLDetailsElement).open)}>
                     <summary className="tz-ai-think__sum">
-                      <FaIcon icon="fa-spinner" className="fa-spin" /> در حال استدلال · {elapsed}ث
+					  <FaIcon icon="fa-spinner" className="fa-spin" /> فرآیند پاسخ · {elapsed}ث
                     </summary>
-                    <pre className="tz-ai-think__stream">چیدن استدلال… لمس کنید تا باز شود.</pre>
+					<pre className="tz-ai-think__stream">{elapsed < 2 ? "اتصال امن به مدل…" : elapsed < 4 ? "بررسی سؤال و زمینه صفحه…" : elapsed < 7 ? "انتخاب منابع و روش پاسخ…" : "آماده‌سازی پاسخ نهایی…"}</pre>
                   </details>
-                ) : null}
                 <div className="tz-ai-msg__bubble tz-ai-msg__bubble--wait">
                   <span className="tz-ai-dots" aria-hidden>
                     <i /><i /><i />
@@ -341,7 +374,6 @@ export function LiveChat() {
                 placeholder="سؤال خود را بنویسید…"
                 required
                 minLength={4}
-                disabled={busy}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
@@ -356,11 +388,11 @@ export function LiveChat() {
                     type="button"
                     className={`tz-gpt__iconbtn is-toggle${thinkingOn ? " is-on" : ""}`}
                     aria-pressed={thinkingOn}
-                    aria-label="نمایش استدلال"
-                    title="استدلال"
+					aria-label="باز نگه داشتن فرآیند پاسخ"
+					title="فرآیند پاسخ"
                     onClick={() => setThinkingOn((v) => !v)}
                   >
-                    <FaIcon icon="fa-lightbulb" />
+					<FaIcon icon="fa-list-check" />
                   </button>
                   <button
                     type="button"
@@ -399,7 +431,13 @@ export function LiveChat() {
                     className="tz-gpt-stop"
                     aria-label="توقف"
                     title="توقف"
-                    onClick={() => abortRef.current?.abort()}
+					onClick={() => {
+					  abortRef.current?.abort();
+					  requestRef.current += 1;
+					  setBusy(false);
+					  setThoughtOpen(false);
+					  setMsgs((items) => [...items, { role: "assistant", text: "تولید متوقف شد.", name: agent.name }]);
+					}}
                   >
                     <FaIcon icon="fa-stop" />
                   </button>
@@ -413,7 +451,7 @@ export function LiveChat() {
           </form>
           {handoffOpen ? (
             <form className="tz-livechat__handoff" onSubmit={mailHandoff}>
-              <p>رزرو تماس و ارسال تاریخچه گفتگو</p>
+			  <p>رزرو تماس و ثبت تاریخچه گفتگو</p>
               <div className="tz-livechat__handoff-grid">
                 <label>
                   نام
@@ -428,8 +466,8 @@ export function LiveChat() {
                   <input type="email" value={handoff.email} onChange={(e) => setHandoff({ ...handoff, email: e.target.value })} required />
                 </label>
               </div>
-              <button type="submit" className="btn-tz btn-light-tz">
-                زمان‌بندی تماس
+			  <button type="submit" className="btn-tz btn-light-tz">
+				ثبت درخواست تماس
               </button>
               {handoff.note ? <p>{handoff.note}</p> : null}
             </form>

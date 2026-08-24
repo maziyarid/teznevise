@@ -73,6 +73,50 @@ function teznevise_core_free_models() {
 }
 
 /**
+ * Public, server-authorised model choices for the compact chat selector.
+ * Labels describe the use case so the UI remains understandable when a model
+ * ID is changed in the admin model map.
+ *
+ * @return array<int,array{id:string,label:string,description:string}>
+ */
+function teznevise_core_public_model_options() {
+	$models = teznevise_core_free_models();
+	$labels = array(
+		'simple'       => array( 'سریع', 'پاسخ‌های کوتاه و کارهای ساده' ),
+		'medium'       => array( 'متعادل', 'انتخاب پیشنهادی برای بیشتر پرسش‌ها' ),
+		'complex'      => array( 'دقیق', 'تحلیل‌های چندمرحله‌ای و تخصصی' ),
+		'long_context' => array( 'متن بلند', 'بررسی مقاله و محتوای طولانی' ),
+		'reasoning'    => array( 'استدلالی', 'مسائل تحلیلی و روش تحقیق' ),
+	);
+	$options = array();
+	$seen    = array();
+	foreach ( $labels as $key => $copy ) {
+		$id = isset( $models[ $key ] ) ? trim( (string) $models[ $key ] ) : '';
+		if ( '' === $id || isset( $seen[ $id ] ) || in_array( $id, teznevise_core_retired_free_models(), true ) ) {
+			continue;
+		}
+		$seen[ $id ] = true;
+		$options[]    = array(
+			'id'          => $id,
+			'label'       => $copy[0],
+			'description' => $copy[1],
+		);
+	}
+	return apply_filters( 'teznevise_core_public_model_options', $options );
+}
+
+/** Only permit models published by the server-side catalog. */
+function teznevise_core_allow_public_chat_models( $allowed ) {
+	foreach ( teznevise_core_public_model_options() as $option ) {
+		if ( ! empty( $option['id'] ) ) {
+			$allowed[] = $option['id'];
+		}
+	}
+	return array_values( array_unique( array_filter( array_map( 'strval', (array) $allowed ) ) ) );
+}
+add_filter( 'teznevise_ai_allowed_models', 'teznevise_core_allow_public_chat_models' );
+
+/**
  * Drop retired IDs from the stored option so admin UI matches live models.
  */
 function teznevise_core_migrate_free_models() {

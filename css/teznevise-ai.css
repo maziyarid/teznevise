@@ -370,6 +370,9 @@
 }
 
 /* 1.9.18 — ChatGPT-style model menu, icon chrome, live thinking */
+.tz-gpt-selectors {
+  display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1 1 auto;
+}
 .tz-gpt-model { position: relative; min-width: 0; flex: 1; }
 .tz-gpt-model__btn {
   display: inline-flex; align-items: center; gap: 8px; max-width: 100%;
@@ -391,6 +394,18 @@
   padding: 6px; z-index: 30; display: grid; gap: 2px;
 }
 .tz-gpt-model__native { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.tz-gpt-llm {
+  display: inline-flex; align-items: center; gap: 5px; flex: 0 0 auto;
+  min-height: 40px; padding-inline: 10px 6px; border-radius: 999px;
+  color: #fff; background: rgba(255,255,255,.12);
+}
+.tz-gpt-llm select {
+  min-width: 72px; max-width: 92px; min-height: 36px; padding: 0 2px;
+  border: 0; outline: 0; background: transparent; color: inherit;
+  font: inherit; font-size: 12px; font-weight: 800; cursor: pointer;
+}
+.tz-gpt-llm select option { color: #10231d; background: #fff; }
+.tz-gpt-llm:focus-within { outline: 3px solid #82d8b9; outline-offset: 2px; }
 .tz-gpt-agent {
   display: flex; align-items: center; gap: 10px; width: 100%; text-align: right;
   border: 0; background: transparent; border-radius: 12px; padding: 8px 10px;
@@ -427,10 +442,12 @@
 .tz-ai-msg__bubble--wait { background: transparent; border: 0; box-shadow: none; padding: 4px 0; }
 .tz-livechat { position: fixed; right: 22px; bottom: 22px; z-index: 1200; }
 .tz-livechat__fab {
-  display: inline-flex; align-items: center; gap: 8px; border: 0;
+  width: 52px; min-width: 52px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0; border: 0;
   background: #145d4a; color: #fff; border-radius: 999px; min-height: 48px;
-  padding: 0 16px; font-weight: 800; box-shadow: 0 12px 28px rgba(20,93,74,.28); cursor: pointer;
+  font-weight: 800; box-shadow: 0 12px 28px rgba(20,93,74,.28); cursor: pointer;
 }
+.tz-livechat__fab-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .tz-livechat__panel {
   position: absolute; right: 0; bottom: 60px;
   width: min(420px, calc(100vw - 24px)); height: min(78vh, 680px);
@@ -459,7 +476,9 @@ body.tz-livechat-open { overflow: hidden; }
 .tz-gpt-model__list[hidden],
 .tz-gpt-model__scrim[hidden] { display: none !important; }
 .tz-gpt__top { position: relative; z-index: 40; }
-.tz-gpt-model { position: static; flex: 1 1 auto; min-width: 0; max-width: calc(100% - 96px); }
+/* The picker sheet must be sized against the whole chat, not the 70px header. */
+.tz-ai-chat.tz-gpt > .tz-gpt__top { position: static; }
+.tz-gpt-model { position: static; flex: 1 1 auto; min-width: 0; max-width: none; }
 .tz-ai-chat.tz-gpt { position: relative; }
 .tz-gpt-model__btn { max-width: 100%; }
 .tz-gpt-model__btn [data-agent-label] { max-width: 46vw; }
@@ -476,9 +495,10 @@ body.tz-livechat-open { overflow: hidden; }
   position: absolute;
   inset-inline: 10px;
   top: 58px;
+  bottom: 12px;
   width: auto;
   max-width: none;
-  max-height: min(58%, 380px);
+  max-height: none;
   overflow-x: hidden;
   overflow-y: auto;
   z-index: 25;
@@ -524,6 +544,17 @@ body.tz-livechat-open { overflow: hidden; }
 body.tz-livechat-open .tz-livechat__fab {
   visibility: hidden;
   pointer-events: none;
+}
+
+@media (max-width: 520px) {
+  .tz-gpt__top { padding-inline: 10px; gap: 6px; }
+  .tz-gpt-selectors { gap: 5px; }
+  .tz-gpt-model__btn { padding-inline: 8px 5px; gap: 5px; }
+  .tz-gpt-model__btn [data-agent-label] { max-width: 30vw; }
+  .tz-gpt-llm { padding-inline: 7px 3px; }
+  .tz-gpt-llm select { min-width: 62px; max-width: 72px; }
+  .tz-gpt__top-actions { gap: 2px; }
+  .tz-gpt__top .tz-gpt__iconbtn { width: 38px; min-width: 38px; min-height: 38px; }
 }
 .tz-ai-thread .tz-ai-quote {
   display: block;
@@ -749,5 +780,3 @@ body.tz-livechat-open [id^="chaty-"] {
   .tz-livechat-open .tz-livechat__panel,
   .tz-ai-msg { animation: none !important; }
 }
-
-

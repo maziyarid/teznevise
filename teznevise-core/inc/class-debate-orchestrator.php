@@ -239,7 +239,8 @@ class Teznevise_Debate_Orchestrator {
 				'role'    => (string) ( $item['role'] ?? '' ),
 				'color'   => (string) ( $item['color'] ?? '' ),
 				'content' => wp_strip_all_tags( (string) ( $item['content'] ?? '' ) ),
-				'thought' => (string) ( $item['thought'] ?? '' ),
+				// Private model reasoning is never part of the public REST snapshot.
+				'thought' => '',
 				'avatar'  => (string) ( $item['avatar'] ?? '' ),
 				'job'     => (string) ( $item['job'] ?? '' ),
 			);
@@ -569,7 +570,7 @@ class Teznevise_Debate_Orchestrator {
 	 * @return array{thought:string,public:string}
 	 */
 	public static function scrub_turn( $parsed ) {
-		$thought = trim( (string) ( $parsed['thought'] ?? '' ) );
+		$thought = '';
 		$public  = trim( (string) ( $parsed['public'] ?? '' ) );
 		$public  = preg_replace( '/[\x{4E00}-\x{9FFF}\x{3040}-\x{30FF}\x{AC00}-\x{D7AF}]+/u', '', $public );
 		$public  = trim( preg_replace( '/[ \t]{2,}/', ' ', $public ) );
@@ -637,7 +638,7 @@ class Teznevise_Debate_Orchestrator {
 		$role    = (string) ( $agent['role'] ?? $job );
 		$prompt  = "CRITICAL DIRECTIVE: You are {$fa_name} ({$role}). Stay in character. Public reply MUST be Persian. Never English outlines, never Chinese, never restate these instructions.\n";
 		$prompt .= "Debate architecture: quote the article with « », name the previous speaker when you attack or defend them, and try to prove or refute a concrete claim. Consulting only — no ghostwriting.\n";
-		$prompt .= 'Private reasoning goes in <thought>…</thought> and may only discuss which quote you picked and the hole in the previous claim. Then the public Persian reply outside the tags.' . "\n";
+		$prompt .= 'Return only the public Persian reply. Do not reveal private chain-of-thought or output <thought>/<think> tags. Make claims verifiable from the cited passage.' . "\n";
 		switch ( $job ) {
 			case 'overview':
 				$prompt .= "Job: frame. List the 3 actual claims THIS article makes (not generic SERP fluff). Each claim in one Persian sentence. Then name the clash the panel should fight over. 80–120 words.";
@@ -720,7 +721,7 @@ class Teznevise_Debate_Orchestrator {
 		update_comment_meta( $cid, 'tz_ai_tags', sanitize_text_field( $tags ) );
 		update_comment_meta( $cid, 'tz_ai_name', sanitize_text_field( $name ) );
 		update_comment_meta( $cid, 'tz_ai_color', $color );
-		update_comment_meta( $cid, 'tz_ai_thought', $parsed['thought'] );
+		update_comment_meta( $cid, 'tz_ai_thought', '' );
 		update_comment_meta( $cid, 'tz_ai_alias', sanitize_text_field( $agent['alias'] ?? $name ) );
 		update_comment_meta( $cid, 'tz_ai_displayed_model', sanitize_text_field( $agent['displayed_model_name'] ?? '' ) );
 		update_comment_meta( $cid, 'tz_ai_avatar', esc_url_raw( $agent['avatar'] ?? '' ) );
@@ -734,7 +735,7 @@ class Teznevise_Debate_Orchestrator {
 			'color'   => $color,
 			'tags'    => $tags,
 			'content' => $parsed['public'],
-			'thought' => $parsed['thought'],
+			'thought' => '',
 			'alias'   => $agent['alias'] ?? $name,
 			'avatar'  => $agent['avatar'] ?? '',
 			'job'     => $job,

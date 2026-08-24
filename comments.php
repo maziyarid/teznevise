@@ -105,6 +105,7 @@ $human_count = get_comments(
 			}
 			if ( empty( $ai_thread['items'] ) ) {
 				echo '<button type="button" class="btn-tz btn-primary-tz tz-ai-debate-run" data-ai-debate-run="' . esc_attr( (string) $post_id ) . '">' . esc_html__( 'تولید گفتگوی هوش مصنوعی', 'teznevise' ) . '</button>';
+				echo '<p class="tz-ai-debate-status" data-ai-debate-status role="status" aria-live="polite"></p>';
 			}
 			?>
 			<?php if ( current_user_can( 'moderate_comments' ) ) : ?>

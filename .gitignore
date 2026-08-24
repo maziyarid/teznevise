@@ -3,5 +3,6 @@ docs/sep_posts.sql
 docs/sep_posts.csv
 docs/wpcode-snippets-export-*.json
 *.sql
+!react-app/migrations/0007_inquiries_user.sql
 .env
 .env.*

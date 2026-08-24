@@ -156,7 +156,7 @@ class Teznevise_Admin_Hub {
 				</article>
 				<article>
 					<strong><?php esc_html_e( 'مهر اعتماد', 'teznevise' ); ?></strong>
-					<p><?php esc_html_e( 'اینماد + TrustedSite', 'teznevise' ); ?></p>
+					<p><?php esc_html_e( 'اینماد', 'teznevise' ); ?></p>
 				</article>
 			</div>
 

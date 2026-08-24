@@ -49,25 +49,28 @@ if ( is_singular( 'post' ) ) {
 		<i class="fa-solid fa-comment-dots" aria-hidden="true"></i>
 		<span class="tz-livechat__fab-label"><?php esc_html_e( 'گفتگو', 'teznevise' ); ?></span>
 	</button>
-	<section class="tz-ai-chat tz-gpt tz-livechat__panel" id="tzLiveChatPanel" hidden data-tool-id="general" data-agent-id="teznevise" data-collaboration-mode="single" data-thinking="0" data-live-chat="1" data-page-url="<?php echo esc_url( is_singular() ? get_permalink() : home_url( '/' ) ); ?>" data-page-title="<?php echo esc_attr( $page_title ); ?>">
+	<section class="tz-ai-chat tz-gpt tz-livechat__panel" id="tzLiveChatPanel" hidden role="dialog" aria-modal="false" aria-label="<?php esc_attr_e( 'گفتگوی پژوهشی تزنویسه', 'teznevise' ); ?>" data-tool-id="general" data-agent-id="teznevise" data-collaboration-mode="single" data-thinking="0" data-live-chat="1" data-page-url="<?php echo esc_url( is_singular() ? get_permalink() : home_url( '/' ) ); ?>" data-page-title="<?php echo esc_attr( $page_title ); ?>">
 		<header class="tz-gpt__top">
-			<?php
-			if ( class_exists( 'TezNevise_AI_Chat' ) ) {
-				TezNevise_AI_Chat::render_agent_dropdown( 'teznevise', $agents );
-			}
-			?>
+			<div class="tz-gpt-selectors">
+				<?php
+				if ( class_exists( 'TezNevise_AI_Chat' ) ) {
+					TezNevise_AI_Chat::render_agent_dropdown( 'teznevise', $agents );
+					TezNevise_AI_Chat::render_model_dropdown();
+				}
+				?>
+			</div>
 			<div class="tz-gpt__top-actions">
 				<button type="button" class="tz-gpt__iconbtn" data-ai-new aria-label="<?php esc_attr_e( 'گفتگوی تازه', 'teznevise' ); ?>" title="<?php esc_attr_e( 'گفتگوی تازه', 'teznevise' ); ?>"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
 				<button type="button" class="tz-gpt__iconbtn" id="tzLiveChatClose" aria-label="<?php esc_attr_e( 'بستن گفتگو', 'teznevise' ); ?>" title="<?php esc_attr_e( 'بستن', 'teznevise' ); ?>"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
 			</div>
 		</header>
 		<p class="tz-livechat__note"><?php esc_html_e( 'پاسخ‌ها بر اساس محتوای تزنویسه‌اند و مشاوره آموزشی‌اند، نه نوشتن پایان‌نامه.', 'teznevise' ); ?></p>
-		<div class="tz-ai-chat__log tz-gpt__log" data-ai-log role="log" aria-live="polite">
+		<div class="tz-ai-chat__log tz-gpt__log" data-ai-log role="log" aria-live="polite" aria-relevant="additions text" tabindex="0">
 			<article class="tz-ai-msg is-assistant">
 				<span class="tz-ai-msg__avatar" aria-hidden="true">ت</span>
 				<div class="tz-ai-msg__stack">
 					<header class="tz-ai-msg__meta"><strong><?php echo esc_html( $agent_name ); ?></strong></header>
-					<div class="tz-ai-msg__bubble"><?php esc_html_e( 'سلام. سؤال پژوهشی‌تان را بپرسید؛ مسیر مشاوره و ابزار مناسب را دقیق می‌گویم. استدلال پشت پاسخ پنهان است مگر روی «استدلال» بزنید.', 'teznevise' ); ?></div>
+					<div class="tz-ai-msg__bubble"><?php esc_html_e( 'سلام. سؤال پژوهشی‌تان را بپرسید؛ مسیر مشاوره و ابزار مناسب را دقیق می‌گویم. مراحل آماده‌سازی پاسخ به‌صورت زنده نمایش داده می‌شود.', 'teznevise' ); ?></div>
 				</div>
 			</article>
 		</div>
@@ -83,7 +86,7 @@ if ( is_singular( 'post' ) ) {
 				<textarea id="tz-livechat-q" data-ai-input rows="1" required minlength="4" placeholder="<?php esc_attr_e( 'سؤال پژوهشی خود را بنویسید…', 'teznevise' ); ?>"></textarea>
 				<div class="tz-gpt-bar">
 					<div class="tz-gpt-toggles" role="toolbar" aria-label="<?php esc_attr_e( 'ابزار گفتگو', 'teznevise' ); ?>">
-						<button type="button" class="tz-gpt__iconbtn is-toggle" data-ai-thinking-btn aria-pressed="false" aria-label="<?php esc_attr_e( 'نمایش استدلال', 'teznevise' ); ?>" title="<?php esc_attr_e( 'نمایش استدلال', 'teznevise' ); ?>"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i></button>
+						<button type="button" class="tz-gpt__iconbtn is-toggle" data-ai-thinking-btn aria-pressed="false" aria-label="<?php esc_attr_e( 'باز نگه داشتن فرآیند پاسخ', 'teznevise' ); ?>" title="<?php esc_attr_e( 'فرآیند پاسخ', 'teznevise' ); ?>"><i class="fa-solid fa-list-check" aria-hidden="true"></i></button>
 						<button type="button" class="tz-gpt__iconbtn is-toggle" data-ai-collab-btn aria-pressed="false" aria-label="<?php esc_attr_e( 'هم‌فکری عامل‌ها', 'teznevise' ); ?>" title="<?php esc_attr_e( 'هم‌فکری', 'teznevise' ); ?>"><i class="fa-solid fa-users" aria-hidden="true"></i></button>
 						<button type="button" class="tz-gpt__iconbtn is-toggle" data-ai-research-btn aria-pressed="false" aria-label="<?php esc_attr_e( 'پژوهش وب', 'teznevise' ); ?>" title="<?php esc_attr_e( 'پژوهش', 'teznevise' ); ?>"><i class="fa-solid fa-globe" aria-hidden="true"></i></button>
 						<button type="button" class="tz-gpt__iconbtn" data-ai-handoff-toggle aria-expanded="false" aria-controls="tzLiveHandoff" aria-label="<?php esc_attr_e( 'رزرو تماس', 'teznevise' ); ?>" title="<?php esc_attr_e( 'رزرو تماس', 'teznevise' ); ?>"><i class="fa-solid fa-phone" aria-hidden="true"></i></button>

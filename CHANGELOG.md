@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.9.25 — 2026-08-24 — Fatal recovery + chat/UI completion
+
+- Reverted the broken 1.9.25 architecture rewrite that placed invalid quotes in `functions.php` and `inc/ai-agents.php`. Removed its duplicate CSS/API/homepage files and restored the tested runtime bundle architecture. This fixes HTTP 500 on REST and uncached routes.
+- Chat header now has compact, keyboard-accessible server-allowlisted LLM and named-agent selectors. The agent sheet uses the full panel height instead of a percentage of the 70px header, so all options are visible.
+- Response preparation opens immediately with elapsed, human-readable phases and a working stop button. The composer remains editable while generation runs; the panel restores focus when closed and exposes dialog/log semantics. Icon actions keep Persian accessible labels and tooltips.
+- Private chain-of-thought is no longer requested, returned, rendered, or persisted. The visible process is an honest activity/status log—not hidden model reasoning.
+- AI summary and debate parse HTTP failures safely, show exact recoverable status, seed the first debate item immediately, report polling progress, and offer retry instead of silently resetting.
+- Homepage reuses the balanced About/service split-hero grammar. Fixed the broken `https://teznevise.ir/tel:...` conversion, removed the duplicate thesis FAQ seed, and disabled the obsolete sitewide tools waitlist that covered the chat composer.
+- GA/Clarity are explicit opt-in (`TEZNEVISE_ENABLE_THIRD_PARTY_ANALYTICS`); default IDs and the DNS-dependent TrustedSite script were removed. The exact Enamad trust seal remains.
+
 ## 1.9.24 — 2026-08-24 — Download H1 demotion
 
 - Download singles and `download_category` archives had two H1s: the theme hero plus leftover WPCode (`tzdl-single-title` / category intro). Those extras are now H2 so all 122 sitemap URLs have exactly one H1.

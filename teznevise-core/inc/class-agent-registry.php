@@ -248,7 +248,7 @@ class Teznevise_Agent_Registry {
 		if ( $refs ) {
 			$block .= "Use ONLY these references for facts; cite them as [1],[2]...:\n" . implode( "\n", $refs ) . "\n";
 		}
-		$block .= "OUTPUT FORMAT (MANDATORY): First, enclose ALL internal reasoning inside <thought>...</thought>. Then give the public reply OUTSIDE the tags. Keep the public reply concise, structured, reference-tagged, and token-frugal.\n";
+		$block .= "OUTPUT FORMAT (MANDATORY): Return only the concise public answer. Do not reveal private chain-of-thought or emit <thought>/<think> tags. Keep claims structured, reference-tagged, and token-frugal.\n";
 		$sys = trim( (string) ( $agent['system_prompt'] ?? '' ) );
 		if ( '' !== $sys ) {
 			$block .= "\n" . $sys;

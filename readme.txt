@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.9
 Requires PHP: 8.3
-Stable tag: 1.9.24
+Stable tag: 1.9.25
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,13 +36,20 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 
 == Changelog ==
 
+= 1.9.25 =
+* Emergency recovery from fatal PHP syntax regressions; uncached pages and REST work again.
+* Compact LLM + named-agent selectors, visible live response phases, stop/retry controls, and accessible dialog semantics.
+* Fixed clipped agent menu, malformed tel links, obsolete waitlist collision, duplicate thesis FAQ, and homepage hero parity.
+* Summary/debate surface real REST errors and progress; private chain-of-thought is no longer returned or stored.
+* GA, Clarity, and the unreliable TrustedSite script are disabled by default; Enamad remains.
+
 = 1.9.22 =
 * Chat redesign: thinking closed until click, site-knowledge corpus/training tables, page UX last-wins.
 
 = 1.9.11 =
-* Consulting copy, Enamad + TrustedSite, university crest CSS, customer dashboard, 30 welcome coins.
+* Consulting copy, trust-seal CSS, customer dashboard, 30 welcome coins.
 = 1.9.10 =
-* Exact Enamad seal, delayed GA G-ZTB0ERWJYN + Clarity xf2anzt0a3, consulting copy, tools waitlist, professional AI chat and API status, official university marks.
+* Exact Enamad seal, consulting copy, tools waitlist, professional AI chat and API status, official university marks.
 
 = 1.9.9 =
 * Companion teznevise-core engine: encrypted keys, free-first router, You→Tavily research, async debate.

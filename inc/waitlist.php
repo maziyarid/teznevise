@@ -42,7 +42,9 @@ add_action(
 );
 
 function teznevise_waitlist_render_bar() {
-	if ( is_admin() ) {
+	// The tools are live. Keep the opt-in database/admin screen available, but
+	// do not obscure every page and the chat composer with an obsolete banner.
+	if ( is_admin() || ! apply_filters( 'teznevise_show_waitlist_bar', false ) ) {
 		return;
 	}
 	$ok = isset( $_GET['waitlist'] ) ? sanitize_key( wp_unslash( $_GET['waitlist'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended

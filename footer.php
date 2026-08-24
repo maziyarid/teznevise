@@ -91,9 +91,6 @@ if ( is_page() && function_exists( 'teznevise_the_page_leftover_content' ) ) {
 			<div class="footer-certs__enamad">
 <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP' alt='' width="125" height="125" loading="lazy" decoding="async" style='cursor:pointer;width:125px;height:125px' code='HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'></a>
 			</div>
-			<div class="footer-certs__trusted">
-<script type="text/plain" data-tz-delay="1" data-src="https://cdn.ywxi.net/js/1.js"></script>
-			</div>
 		</div>
 		<div class="footer-bottom">
 			<span>© <?php echo esc_html( date_i18n( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?> — <?php esc_html_e( 'تمامی حقوق محفوظ است.', 'teznevise' ); ?></span>

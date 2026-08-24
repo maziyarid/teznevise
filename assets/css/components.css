@@ -646,6 +646,37 @@ a,button,.btn,.btn-tz,.link-arrow,.nav-link,.nav-links a,.icon-btn,.service-card
   transform:translate(-50%,-50%)!important;
   display:block!important;
 }
+
+/* 1.9.25 — homepage now shares the calm, balanced About-page hero grammar. */
+.tz-home-hero {
+  padding-block: clamp(48px, 7vw, 82px) !important;
+  background: radial-gradient(circle at 10% 10%,rgba(130,216,185,.24),transparent 30%),linear-gradient(180deg,#f9fdfb,#f2faf7) !important;
+  border-bottom: 1px solid rgba(20,93,74,.08);
+}
+.tz-home-hero .tz-hero-split__grid {
+  align-items: center !important;
+  gap: clamp(28px, 5vw, 64px) !important;
+}
+.tz-home-hero .hero-copy h1 {
+  font-size: clamp(38px, 4.6vw, 58px) !important;
+  letter-spacing: -.8px !important;
+}
+.tz-home-hero .hero-copy > p { max-width: 620px; }
+.tz-home-hero .hero-visual {
+  min-height: 420px !important;
+  margin: 0 !important;
+}
+@media (max-width: 900px) {
+  .tz-home-hero .hero-copy { text-align: center; }
+  .tz-home-hero .hero-actions,
+  .tz-home-hero .hero-points { justify-content: center; }
+  .tz-home-hero .hero-visual { min-height: 340px !important; }
+}
+@media (max-width: 520px) {
+  .tz-home-hero { padding-block: 38px 46px !important; }
+  .tz-home-hero .hero-copy h1 { font-size: clamp(32px, 9vw, 40px) !important; }
+  .tz-home-hero .hero-visual { min-height: 300px !important; }
+}
 .network-ring{
   position:absolute!important;left:50%!important;top:50%!important;
   transform:translate(-50%,-50%)!important;border-radius:50%!important;

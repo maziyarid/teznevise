@@ -191,7 +191,7 @@ class TezNevise_AI_API {
             'session_id' => $session_token,
             'agent_id' => $agent_id,
             'model' => $model,
-            'collaboration_mode' => in_array($collaboration_mode, ['single','collaborative','separate'], true) ? $collaboration_mode : 'collaborative',
+			'collaboration_mode' => in_array($collaboration_mode, ['single','collaborative','separate','research'], true) ? $collaboration_mode : 'single',
 			'ip_address' => null,
             'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? substr(sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])), 0, 255) : '',
         ];
@@ -222,7 +222,9 @@ class TezNevise_AI_API {
                 'content' => $rep['content'],
                 'agent_name' => $rep['agent_name'],
                 'model' => $rep['model'] ?? $model,
-                'thinking_process' => $rep['thinking_process'] ?? null,
+				// Never persist private chain-of-thought. The client displays
+				// transparent task phases (connect, inspect, compose) instead.
+				'thinking_process' => null,
                 'token_count' => self::count_tokens($rep['content']),
             ]);
         }
@@ -237,7 +239,7 @@ class TezNevise_AI_API {
                     'message_id'         => 0,
                     'user_message'       => $message,
                     'assistant_message'  => wp_strip_all_tags( (string) ( $last_rep['content'] ?? '' ) ),
-                    'thought'            => (string) ( $last_rep['thinking_process'] ?? '' ),
+					'thought'            => '',
                     'page_url'           => $page_url,
                 )
             );
@@ -250,7 +252,7 @@ class TezNevise_AI_API {
             'content' => $last['content'],
             'agent_name' => $last['agent_name'],
             'model' => $model,
-            'thinking_process' => $last['thinking_process'] ?? null,
+			'thinking_process' => null,
             'training_id' => $training_id,
             'replies' => $replies,
             'usage' => ['today' => $usage['message_count']],
@@ -319,15 +321,18 @@ class TezNevise_AI_API {
             if ($mode === 'separate' && $is_last && $prior !== '') {
                 $prompt .= "\n\nYou are the reflecting agent. Summarize and reconcile these independent answers:\n" . $prior;
             }
-            $response = self::call_ai_api($message, $prompt, $ag, $ag['model'] ?? $model, $thinking_enabled);
+			// The visitor-selected model applies to the primary agent. Named
+			// collaborators retain their specialist model assignments.
+			$agent_model = ( 0 === $i ) ? $model : ( $ag['model'] ?? $model );
+			$response = self::call_ai_api($message, $prompt, $ag, $agent_model, $thinking_enabled);
             if (is_wp_error($response)) {
                 return $response;
             }
             $replies[] = array(
                 'content' => $response['content'],
                 'agent_name' => $ag['alias'] ?? $ag['name'] ?? 'Assistants',
-                'model' => $ag['displayed_model_name'] ?? $ag['model'] ?? $model,
-				'thinking_process' => $response['thinking_process'] ?? null,
+				'model' => ( 0 === $i && $model ) ? $model : ( $ag['displayed_model_name'] ?? $ag['model'] ?? $model ),
+				'thinking_process' => null,
             );
             $prior .= "\n- " . ($ag['alias'] ?? $ag['name'] ?? 'agent') . ': ' . $response['content'];
             if ($mode === 'single') {
@@ -551,7 +556,7 @@ class TezNevise_AI_API {
         } else {
             $prompt_parts[] = "Respond in language code: {$lang}.";
         }
-		$prompt_parts[] = "Give a concise, evidence-based answer. First enclose ALL internal reasoning in <thought>...</thought>, then the public reply outside those tags. Never leave thought tags in the public reply.";
+		$prompt_parts[] = "Give a concise, evidence-based public answer. Do not reveal or print private chain-of-thought, hidden reasoning, or <thought>/<think> tags. When useful, provide a short verifiable checklist of steps or sources instead.";
 		$prompt_parts[] = "You explain research methods and next steps. You never guarantee grades, acceptance, or scientific accuracy. If the question is high-stakes, invite the user to schedule a human consult and mention that chat history can be emailed.";
 		if ( class_exists( 'TezNevise_AI_Knowledge' ) ) {
 			$pack = TezNevise_AI_Knowledge::prompt_pack( (string) ( self::$chat_context['query'] ?? '' ), self::$chat_context );
@@ -1164,10 +1169,6 @@ class TezNevise_AI_API {
 		}
         if (empty($api_key)) return new WP_Error('no_api_key', 'کلید API این عامل تنظیم نشده است', ['status' => 400]);
 
-        if ($thinking_enabled) {
-            $system_prompt .= "\n\nWhen useful, wrap a short working outline in <think>...</think> before the final answer. Keep the visible answer concise and in the user's language.";
-        }
-
         if ($provider === 'you') {
             return self::you_search($api_key, $message, $api_endpoint);
         }
@@ -1212,7 +1213,9 @@ class TezNevise_AI_API {
 
         $content = self::extract_content($provider, $response_body);
         $split = self::split_thought_block($content);
-        return ['content' => $split['content'], 'thinking_process' => $split['thinking'] !== '' ? $split['thinking'] : null];
+		// Keep stripping legacy thought tags defensively, but never return their
+		// contents to the browser or persist them.
+		return ['content' => $split['content'], 'thinking_process' => null];
     }
 
     /**
