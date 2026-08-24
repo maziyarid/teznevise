@@ -1,143 +1,75 @@
-/**
- * Design tokens + local fonts. First public stylesheet after style.css.
- * Project: Teznevise WordPress Theme
- * Author: MAZ//ID (Maziyar)
- * Brand: MΛZ — https://github.com/maziyarid/M-Z
- * @package Teznevise
- * Design: Editorial Signal compatibility additions follow the Design System v2 contract below.
- */
-
-@layer tez-tokens, tez-base, tez-components, tez-pages, tez-chrome, tez-fixes;
-
-@font-face {
-  font-family: "Vazirmatn";
-  src: url("../fonts/Vazirmatn-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Vazirmatn";
-  src: url("../fonts/Vazirmatn-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Vazirmatn";
-  src: url("../fonts/Vazirmatn-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Vazirmatn";
-  src: url("../fonts/Vazirmatn-ExtraBold.woff2") format("woff2");
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
-  /* Teznevise Design System v2: five foundational colors. */
-  --tz-color-brand: #145d4a;
-  --tz-color-ink: #10231d;
-  --tz-color-accent: #82d8b9;
-  --tz-color-paper: #ffffff;
-  --tz-color-mist: #f3f7f5;
-
-  /* Semantic color roles derived from the foundation. */
-  --tz-color-brand-strong: color-mix(in srgb, var(--tz-color-brand) 76%, var(--tz-color-ink));
-  --tz-color-brand-soft: color-mix(in srgb, var(--tz-color-brand) 9%, var(--tz-color-paper));
-  --tz-color-text: color-mix(in srgb, var(--tz-color-ink) 86%, var(--tz-color-paper));
-  --tz-color-muted: color-mix(in srgb, var(--tz-color-ink) 62%, var(--tz-color-paper));
-  --tz-color-border: color-mix(in srgb, var(--tz-color-brand) 16%, var(--tz-color-paper));
-  --tz-color-focus: color-mix(in srgb, var(--tz-color-brand) 28%, transparent);
-
-  --tz-font-sans: "Vazirmatn", Tahoma, sans-serif;
-  --tz-text-xs: 0.75rem;
-  --tz-text-sm: 0.875rem;
-  --tz-text-md: 1rem;
-  --tz-text-lg: 1.125rem;
-  --tz-text-xl: clamp(1.5rem, 2vw, 2rem);
-  --tz-text-display: clamp(2.25rem, 5vw, 4.75rem);
-  --tz-leading-tight: 1.45;
-  --tz-leading-body: 1.9;
-
-  --tz-space-1: 0.25rem;   /* 4px  — micro gaps */
-  --tz-space-2: 0.5rem;    /* 8px */
-  --tz-space-3: 0.75rem;   /* 12px */
-  --tz-space-4: 1rem;      /* 16px — control padding */
-  --tz-space-6: 1.5rem;    /* 24px */
-  --tz-space-8: 2rem;      /* 32px — block gap */
-  --tz-space-10: 2.5rem;   /* 40px — small section */
-  --tz-space-12: 3rem;     /* 48px */
-  --tz-space-16: 4rem;     /* 64px — default section padding */
-  --tz-space-20: 5rem;     /* 80px */
-  --tz-space-24: 6rem;     /* 96px — hero */
-
-  --tz-block-gap: var(--tz-space-8);
-  --tz-section-pad: var(--tz-space-16);
-
-  --tz-radius-control: 0.75rem;
-  --tz-radius-card: 1.25rem;
-  --tz-radius-panel: 1.75rem;
-  --tz-radius-pill: 999px;
-  --tz-shadow-card: 0 10px 30px color-mix(in srgb, var(--tz-color-ink) 8%, transparent);
-  --tz-shadow-float: 0 18px 55px color-mix(in srgb, var(--tz-color-ink) 10%, transparent);
-  --tz-duration-fast: 120ms;
-  --tz-duration-control: 200ms;
-  --tz-duration-layout: 320ms;
-  --tz-ease-standard: cubic-bezier(.2, .8, .2, 1);
-  --tz-content-wide: 1180px;
-  --tz-content-reading: 72ch;
-  --tz-content-focus: 66ch;
-  --tz-bottom-nav-height: 72px;
-
-  /* Compatibility aliases; migrate existing components incrementally. */
-  --tz-brand: var(--tz-color-brand);
-  --tz-brand-dark: var(--tz-color-brand-strong);
-  --tz-brand-deep: var(--tz-color-ink);
-  --tz-brand-light: color-mix(in srgb, var(--tz-color-brand) 82%, var(--tz-color-accent));
-  --tz-primary: var(--tz-color-brand);
-  --tz-primary-700: var(--tz-color-brand-strong);
-  --tz-primary-800: var(--tz-color-brand-strong);
-  --tz-primary-900: var(--tz-color-ink);
-  --tz-primary-soft: var(--tz-color-brand-soft);
-  --tz-primary-soft-2: var(--tz-color-mist);
-  --tz-accent: var(--tz-color-accent);
-  --tz-accent-2: color-mix(in srgb, var(--tz-color-accent) 52%, var(--tz-color-paper));
-  --tz-ink: var(--tz-color-ink);
-  --tz-text: var(--tz-color-text);
-  --tz-muted: var(--tz-color-muted);
-  --tz-line: var(--tz-color-border);
-  --tz-surface: var(--tz-color-paper);
-  --tz-surface-2: var(--tz-color-mist);
-  --tz-soft: var(--tz-color-mist);
-  --tz-warm: var(--tz-color-mist);
-  --tz-content: var(--tz-content-wide);
-  --tz-font: var(--tz-font-sans);
-  --tz-radius: var(--tz-radius-panel);
-  --tz-radius-sm: var(--tz-radius-control);
-  --tz-shadow: var(--tz-shadow-float);
-  --tz-shadow-sm: var(--tz-shadow-card);
+  --color-primary: #3498db;
+  --color-primary-dark: #2980b9;
+  --color-secondary: #e74c3c;
+  --color-success: #27ae60;
+  --color-warning: #f39c12;
+  --color-danger: #e74c3c;
+  --color-info: #3498db;
+  
+  --color-text: #2c3e50;
+  --color-text-light: #7f8c8d;
+  --color-text-lighter: #95a5a6;
+  --color-bg: #ffffff;
+  --color-bg-light: #ecf0f1;
+  --color-border: #bdc3c7;
+  
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+  --font-size-4xl: 36px;
+  
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  --z-dropdown: 1000;
+  --z-sticky: 100;
+  --z-fixed: 1000;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
 }
 
-html {
-  scroll-behavior: smooth;
-  overflow-x: clip;
-}
-body {
-  margin: 0;
-  background: var(--tz-surface);
-  color: var(--tz-ink);
-  font-family: var(--tz-font);
-  line-height: 1.9;
-  font-size: 16px;
+html[dir="rtl"] {
   direction: rtl;
   text-align: right;
 }
-button:not(:disabled),
-[role="button"]:not(:disabled) {
-  cursor: pointer;
+
+html[dir="rtl"] body {
+  direction: rtl;
 }
