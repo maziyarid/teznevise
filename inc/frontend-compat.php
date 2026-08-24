@@ -401,7 +401,13 @@ function teznevise_render_native_lead_form( $context = 'contact' ) {
 	?>
 	<form class="tz-form lead-card" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-test="<?php echo esc_attr( $uid ); ?>-form" data-tz-lead>
 		<input type="hidden" name="action" value="teznevise_lead" />
-		<?php wp_nonce_field( 'teznevise_lead', 'teznevise_lead_nonce' ); ?>
+		<?php
+		if ( function_exists( 'teznevise_lead_nonce_field' ) ) {
+			teznevise_lead_nonce_field( $uid );
+		} else {
+			wp_nonce_field( 'teznevise_lead', 'teznevise_lead_nonce' );
+		}
+		?>
 		<input type="hidden" name="context" value="<?php echo esc_attr( $context ); ?>" />
 		<input type="hidden" name="_tz_redirect" value="<?php echo esc_url( get_permalink() ? get_permalink() : home_url( '/inquiry/' ) ); ?>" />
 		<label class="tz-honeypot" aria-hidden="true" tabindex="-1">Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
@@ -533,7 +539,13 @@ function teznevise_render_hero_inquiry( $context = 'hero' ) {
 	<p class="tz-hero-inquiry__label"><?php esc_html_e( 'مشاوره رایگان — همین حالا درخواست بدهید', 'teznevise' ); ?></p>
 	<form class="tz-form tz-hero-inquiry__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-tz-lead data-test="hero-<?php echo esc_attr( $uid ); ?>">
 		<input type="hidden" name="action" value="teznevise_lead" />
-		<?php wp_nonce_field( 'teznevise_lead', 'teznevise_lead_nonce' ); ?>
+		<?php
+		if ( function_exists( 'teznevise_lead_nonce_field' ) ) {
+			teznevise_lead_nonce_field( $uid );
+		} else {
+			wp_nonce_field( 'teznevise_lead', 'teznevise_lead_nonce' );
+		}
+		?>
 		<input type="hidden" name="context" value="<?php echo esc_attr( 'hero-' . sanitize_key( $context ) ); ?>" />
 		<input type="hidden" name="service" value="<?php echo esc_attr( $title ); ?>" />
 		<input type="hidden" name="_tz_redirect" value="<?php echo esc_url( get_permalink() ? get_permalink() : home_url( '/inquiry/' ) ); ?>" />

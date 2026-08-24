@@ -1,0 +1,43 @@
+/* 1.9.23 — FAQ accordion questions stay visible; answers collapse */
+.faq-q {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: start;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+/* hotfix-196 hid `.faq-q span:last-child` (old chevron). Question text must win. */
+.faq-q .faq-q__text,
+.faq-q span.faq-q__text,
+.faq-q span.faq-q__text:last-child {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  font-weight: 800;
+  line-height: 1.55;
+  flex: 1;
+  min-width: 0;
+}
+.faq-q .faq-q__mark {
+  display: none !important;
+}
+.tz-faq-band .faq-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tz-faq-band .faq-card {
+  margin: 0;
+  padding: 16px 18px;
+}

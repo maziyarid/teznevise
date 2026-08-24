@@ -83,6 +83,7 @@ def check_requires() -> None:
         "assets/css/hotfix-206.css",
         "assets/css/hotfix-207.css",
         "assets/css/hotfix-208.css",
+        "assets/css/hotfix-209.css",
         "inc/ai/class-ai-knowledge.php",
         "inc/legal-copy.php",
         "inc/waitlist.php",
@@ -263,6 +264,21 @@ def check_source_contracts() -> None:
         error("hotfix-207.css is not in the runtime CSS concat")
     if "hotfix-208.css" not in perf:
         error("hotfix-208.css is not in the runtime CSS concat")
+    if "hotfix-209.css" not in perf:
+        error("hotfix-209.css is not in the runtime CSS concat")
+
+    seo = (ROOT / "inc" / "seo.php").read_text(encoding="utf-8")
+    if "function teznevise_split_faq_blocks" not in seo:
+        error("FAQ leftover splitter is missing")
+    if "FAQPage" not in seo:
+        error("FAQPage JSON-LD is missing")
+    if "'/about'" not in seo and '"/about"' not in seo:
+        error("/about/ is not redirected to about-us")
+    if "function teznevise_lead_nonce_field" not in seo:
+        error("Unique lead nonce helper is missing")
+    hotfix209 = (ROOT / "assets" / "css" / "hotfix-209.css").read_text(encoding="utf-8")
+    if "faq-q__text" not in hotfix209 or "display: block !important" not in hotfix209:
+        error("hotfix-209 does not unhide FAQ question text against hotfix-196 last-child rule")
 
     skills_cfg = (ROOT / "teznevise-core" / "config" / "skills.php").read_text(encoding="utf-8")
     for skill_agent in ("teznevise", "christina", "ada", "professor", "parantez", "elara", "cyrus", "mira"):

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.23 — 2026-08-24 — Live SEO/UX verification pass
+
+- FAQ lists buried in collapsed «ادامه مطلب» (`<li><strong>Q ▾</strong> — A`) are lifted into a visible accordion (`button.faq-q` + `.faq-a`) with FAQPage JSON-LD. Homepage now has five consulting FAQs. Builder FAQ sections use the same accordion. hotfix-209 unhides `.faq-q__text` (hotfix-196 had `span:last-child{display:none}` for the old chevron, which hid the question).
+- Generic titles: homepage is no longer «خانه - تزنویسه»; blog is no longer «بلاگ - تزنویسه». Homepage `meta name=description` is filled when Yoast left it empty.
+- `/about/` 301s to `/about-us/`. Service JSON-LD on thesis/proposal/statistics. Review schema is not added (testimonials stay initials + role).
+- Empty `alt` on post images and the chat agent picker is filled. Duplicate `teznevise_lead_nonce` ids get a per-form suffix.
+- Chat: `<thought>` / `</thoth>` stripped server-side from the public reply; Persian questions must get a Persian public reply.
+
 ## 1.9.22 — 2026-08-24 — Chat redesign, closed thinking, site-knowledge tables
 
 - Live chat is a labeled «گفتگو» panel: single-agent default, page-aware hint chips, thumbs on replies. Thinking stays closed (`<details>` without `open`) unless the lightbulb is on or the user opens «استدلال». The API still requests hidden reasoning for quality.

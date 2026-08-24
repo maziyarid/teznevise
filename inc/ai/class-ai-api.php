@@ -547,11 +547,11 @@ class TezNevise_AI_API {
         $prompt_parts[] = "Collaboration Mode: {$collaboration_mode}";
         $lang = !empty($agent['language']) ? $agent['language'] : 'fa';
         if ($lang === 'fa') {
-            $prompt_parts[] = "If the user writes in Persian, always respond in Persian. Otherwise, respond in English.";
+            $prompt_parts[] = "If the user writes in Persian, the PUBLIC reply MUST be Persian. Never answer a Persian question in English.";
         } else {
             $prompt_parts[] = "Respond in language code: {$lang}.";
         }
-		$prompt_parts[] = "Give a concise, evidence-based answer. First enclose ALL internal reasoning in <thought>...</thought>, then the public reply outside those tags.";
+		$prompt_parts[] = "Give a concise, evidence-based answer. First enclose ALL internal reasoning in <thought>...</thought>, then the public reply outside those tags. Never leave thought tags in the public reply.";
 		$prompt_parts[] = "You explain research methods and next steps. You never guarantee grades, acceptance, or scientific accuracy. If the question is high-stakes, invite the user to schedule a human consult and mention that chat history can be emailed.";
 		if ( class_exists( 'TezNevise_AI_Knowledge' ) ) {
 			$pack = TezNevise_AI_Knowledge::prompt_pack( (string) ( self::$chat_context['query'] ?? '' ), self::$chat_context );
@@ -1211,12 +1211,34 @@ class TezNevise_AI_API {
         }
 
         $content = self::extract_content($provider, $response_body);
+        $split = self::split_thought_block($content);
+        return ['content' => $split['content'], 'thinking_process' => $split['thinking'] !== '' ? $split['thinking'] : null];
+    }
+
+    /**
+     * Pull <thought>/<think> (and common misspellings) out of the public reply.
+     *
+     * @param string $content Raw model text.
+     * @return array{content:string,thinking:string}
+     */
+    private static function split_thought_block($content) {
+        $content = (string) $content;
         $thinking = '';
-        if ($thinking_enabled && preg_match('/<think>(.*?)<\/think>/is', $content, $m)) {
-            $thinking = trim($m[1]);
-            $content = trim(preg_replace('/<think>.*?<\/think>/is', '', $content));
+        if (preg_match_all('/<(thought|think|thoth)>(.*?)<\/(?:thought|think|thoth)>/is', $content, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $m) {
+                $thinking .= trim($m[2]) . "\n";
+            }
         }
-		return ['content' => $content, 'thinking_process' => $thinking !== '' ? $thinking : null];
+        $content = preg_replace('/<(thought|think|thoth)>.*?<\/(?:thought|think|thoth)>/is', '', $content);
+        if (preg_match('/<(thought|think|thoth)>([\s\S]*)$/i', $content, $open)) {
+            $thinking .= trim($open[2]) . "\n";
+            $content = preg_replace('/<(thought|think|thoth)>[\s\S]*$/i', '', $content);
+        }
+        $content = preg_replace('/<\/?(?:thought|think|thoth)>/i', '', (string) $content);
+        return array(
+            'content'  => trim( is_string( $content ) ? $content : '' ),
+            'thinking' => trim( $thinking ),
+        );
     }
 
     public static function allowed_hosts() {

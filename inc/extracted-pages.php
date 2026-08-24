@@ -743,9 +743,16 @@ function teznevise_the_page_leftover_content( $post_id = 0 ) {
 		return;
 	}
 	$html = teznevise_render_classic_page_content( $classic_raw );
+	$faq_html = '';
+	if ( function_exists( 'teznevise_split_faq_blocks' ) ) {
+		list( $html, $faq_html ) = teznevise_split_faq_blocks( $html );
+	}
 	$box  = teznevise_page_content_disclosure_markup( $html, $post_id );
 	if ( '' !== $box ) {
 		echo $box; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+	if ( $faq_html ) {
+		echo $faq_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 

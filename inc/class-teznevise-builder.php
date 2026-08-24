@@ -854,14 +854,20 @@ function teznevise_builder_render_feature_list( $section ) {
 		$item_class = $is_faq ? ( 'faq-card faq-item' . $tone ) : ( 'reason-item tez-builder-feature' . $tone );
 		echo '<li class="' . esc_attr( $item_class ) . '">';
 		if ( $is_faq ) {
-			echo '<div class="faq-card__head">';
+			$q = ! empty( $item['title'] ) ? teznevise_builder_plain_title( $item['title'] ) : '';
+			$a = ! empty( $item['text'] ) ? (string) $item['text'] : '';
+			echo '<button type="button" class="faq-q" aria-expanded="false">';
 			echo '<span class="faq-num" aria-hidden="true">' . esc_html( number_format_i18n( $index ) ) . '</span>';
-			if ( ! empty( $item['title'] ) ) {
-				echo '<h3>' . esc_html( teznevise_builder_plain_title( $item['title'] ) ) . '</h3>';
+			if ( '' !== $q ) {
+				echo '<span class="faq-q__text">' . esc_html( $q ) . '</span>';
 			}
-			echo '</div>';
-			if ( ! empty( $item['text'] ) ) {
-				echo '<p>' . esc_html( $item['text'] ) . '</p>';
+			echo '<span class="faq-q__mark" aria-hidden="true"></span>';
+			echo '</button>';
+			if ( '' !== $a ) {
+				echo '<div class="faq-a"><p>' . esc_html( $a ) . '</p></div>';
+			}
+			if ( function_exists( 'teznevise_faq_collect' ) && '' !== $q && '' !== $a ) {
+				teznevise_faq_collect( $q, $a );
 			}
 		} else {
 			echo teznevise_builder_icon_markup( $item, teznevise_builder_varied_icon( $index ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper.

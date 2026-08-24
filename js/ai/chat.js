@@ -337,9 +337,11 @@
 
   function splitThought(text) {
     text = String(text || '');
-    var m = text.match(/<thought>([\s\S]*?)<\/thought>/i) || text.match(/<think>([\s\S]*?)<\/think>/i);
-    if (!m) return { thought: '', public: text };
-    return { thought: m[1].trim(), public: text.replace(m[0], '').trim() };
+    var m = text.match(/<(thought|think|thoth)>([\s\S]*?)<\/(?:thought|think|thoth)>/i)
+      || text.match(/<(thought|think|thoth)>([\s\S]*)$/i);
+    if (!m) return { thought: '', public: text.replace(/<\/?(?:thought|think|thoth)>/gi, '').trim() };
+    var publicText = text.replace(m[0], '').replace(/<\/?(?:thought|think|thoth)>/gi, '').trim();
+    return { thought: String(m[2] || '').trim(), public: publicText };
   }
 
   function renderRich(node, text) {

@@ -137,6 +137,7 @@ function teznevise_alias_redirects() {
 	$path = untrailingslashit( $path );
 	$map  = array(
 		'/contact'            => array( 'contact-us' ),
+		'/about'              => array( 'about-us' ),
 		'/team'               => array( 'our-team' ),
 		'/privacy-policy'     => array( 'privacy' ),
 		'/service-thesis'     => array( 'thesis' ),
@@ -247,3 +248,309 @@ function teznevise_language_attributes( $output ) {
 	return $output;
 }
 add_filter( 'language_attributes', 'teznevise_language_attributes' );
+
+/**
+ * Replace one-word titles Yoast inherited from the page title.
+ *
+ * @param string $title Title.
+ * @return string
+ */
+function teznevise_filter_document_title( $title ) {
+	if ( ! is_string( $title ) || '' === $title ) {
+		return $title;
+	}
+	$site  = get_bloginfo( 'name' );
+	$core  = trim( (string) preg_replace( '/\s*[-|–]\s*' . preg_quote( $site, '/' ) . '\s*$/u', '', $title ) );
+	$short = ( function_exists( 'mb_strlen' ) ? mb_strlen( $core ) : strlen( $core ) ) < 10;
+	if ( is_front_page() && ( $short || 'خانه' === $core ) ) {
+		return 'مشاوره پایان‌نامه، پروپوزال و تحلیل آماری | ' . $site;
+	}
+	if ( is_home() && ( $short || 'بلاگ' === $core ) ) {
+		return 'راهنماها و آموزش‌های پژوهشی | بلاگ ' . $site;
+	}
+	return $title;
+}
+add_filter( 'wpseo_title', 'teznevise_filter_document_title', 20 );
+add_filter( 'pre_get_document_title', 'teznevise_filter_document_title', 20 );
+
+/**
+ * Guarantee a meta description on the homepage even when Yoast left name=description empty.
+ *
+ * @param string $desc Description.
+ * @return string
+ */
+function teznevise_filter_metadesc( $desc ) {
+	$desc = is_string( $desc ) ? trim( $desc ) : '';
+	if ( '' !== $desc ) {
+		return $desc;
+	}
+	if ( is_front_page() ) {
+		return 'تزنویسه همراه پژوهشی دانشجویان است: مشاوره پایان‌نامه و پروپوزال، تحلیل آماری و ابزارهای آنلاین رایگان.';
+	}
+	return $desc;
+}
+add_filter( 'wpseo_metadesc', 'teznevise_filter_metadesc', 20 );
+
+/**
+ * Collected FAQ pairs for JSON-LD (printed in wp_footer so shortcodes can contribute).
+ *
+ * @param string $q Question.
+ * @param string $a Answer.
+ */
+function teznevise_faq_collect( $q, $a ) {
+	$q = trim( wp_strip_all_tags( (string) $q ) );
+	$a = trim( wp_strip_all_tags( (string) $a ) );
+	if ( '' === $q || '' === $a ) {
+		return;
+	}
+	$GLOBALS['teznevise_faq_pairs']   = isset( $GLOBALS['teznevise_faq_pairs'] ) && is_array( $GLOBALS['teznevise_faq_pairs'] ) ? $GLOBALS['teznevise_faq_pairs'] : array();
+	$GLOBALS['teznevise_faq_pairs'][] = array( 'q' => $q, 'a' => $a );
+}
+
+/**
+ * Whether a string looks like a question (not a service blurb).
+ *
+ * @param string $title Title.
+ * @return bool
+ */
+function teznevise_text_is_question( $title ) {
+	$title = trim( wp_strip_all_tags( (string) $title ) );
+	if ( '' === $title ) {
+		return false;
+	}
+	if ( false !== strpos( $title, '؟' ) || false !== strpos( $title, '?' ) ) {
+		return true;
+	}
+	return (bool) preg_match( '/^(آیا|چگونه|چطور|چرا|چقدر|کدام|چه )/u', $title );
+}
+
+/**
+ * Accordion markup for a list of q/a pairs. Visible question is a button, never CSS-hidden.
+ *
+ * @param array $items Items with q/a.
+ * @return string
+ */
+function teznevise_faq_items_markup( $items ) {
+	if ( ! $items ) {
+		return '';
+	}
+	ob_start();
+	echo '<ul class="faq-grid tz-faq-grid">';
+	$i = 0;
+	foreach ( $items as $item ) {
+		$q = isset( $item['q'] ) ? (string) $item['q'] : '';
+		$a = isset( $item['a'] ) ? (string) $item['a'] : '';
+		if ( '' === $q || '' === $a ) {
+			continue;
+		}
+		++$i;
+		teznevise_faq_collect( $q, $a );
+		$tone = ' tone-' . ( ( ( $i - 1 ) % 9 ) + 1 );
+		echo '<li class="faq-card faq-item' . esc_attr( $tone ) . '">';
+		echo '<button type="button" class="faq-q" aria-expanded="false">';
+		echo '<span class="faq-num" aria-hidden="true">' . esc_html( number_format_i18n( $i ) ) . '</span>';
+		echo '<span class="faq-q__text">' . esc_html( $q ) . '</span>';
+		echo '<span class="faq-q__mark" aria-hidden="true"></span>';
+		echo '</button>';
+		echo '<div class="faq-a"><p>' . esc_html( $a ) . '</p></div>';
+		echo '</li>';
+	}
+	echo '</ul>';
+	return (string) ob_get_clean();
+}
+
+/**
+ * Parse a UL of <li><strong>Q</strong> — A</li> into q/a pairs. Returns empty if not questions.
+ *
+ * @param string $ul Ul HTML.
+ * @return array<int,array{q:string,a:string}>
+ */
+function teznevise_parse_faq_ul( $ul ) {
+	$out = array();
+	if ( ! preg_match_all( '/<li\b[^>]*>(.*?)<\/li>/is', (string) $ul, $lis ) ) {
+		return $out;
+	}
+	foreach ( $lis[1] as $li ) {
+		$q = '';
+		$a = '';
+		if ( preg_match( '/<strong\b[^>]*>(.*?)<\/strong>/is', $li, $sm ) ) {
+			$q = trim( wp_strip_all_tags( $sm[1] ) );
+			$a = trim( wp_strip_all_tags( str_replace( $sm[0], '', $li ) ) );
+			$a = ltrim( $a, " \t\n\r\0\x0B—–-▾▼" );
+		} else {
+			$plain = trim( wp_strip_all_tags( $li ) );
+			if ( preg_match( '/^(.+?[؟?])\s*[—–\-]\s*(.+)$/u', $plain, $pm ) ) {
+				$q = trim( $pm[1] );
+				$a = trim( $pm[2] );
+			}
+		}
+		$q = is_string( $q ) ? preg_replace( '/[\s\x{00A0}]*[▼▽▾▴▸▹◁◀▶＋+]+$/u', '', $q ) : '';
+		$q = is_string( $q ) ? trim( $q ) : '';
+		if ( '' === $q || '' === $a || ! teznevise_text_is_question( $q ) ) {
+			continue;
+		}
+		$out[] = array( 'q' => $q, 'a' => $a );
+	}
+	return $out;
+}
+
+/**
+ * Cut FAQ heading+list out of HTML and return a visible accordion section.
+ *
+ * @param string $html HTML.
+ * @return array{0:string,1:string} Remaining HTML, FAQ section HTML.
+ */
+function teznevise_split_faq_blocks( $html ) {
+	$html     = (string) $html;
+	$sections = '';
+	$html     = preg_replace_callback(
+		'#(<h2\b[^>]*>[^<]*(?:سوالات|پرسش)[^<]*</h2>)(\s*<p\b[^>]*>[\s\S]*?</p>)?\s*(<ul\b[^>]*>[\s\S]*?</ul>)#iu',
+		static function ( $m ) use ( &$sections ) {
+			$items = teznevise_parse_faq_ul( $m[3] );
+			if ( count( $items ) < 2 ) {
+				return $m[0];
+			}
+			$head      = $m[1];
+			$lead      = isset( $m[2] ) ? $m[2] : '';
+			$sections .= '<section class="section tz-faq-band" aria-label="' . esc_attr__( 'سوالات متداول', 'teznevise' ) . '"><div class="container">';
+			$sections .= $head;
+			$sections .= $lead;
+			$sections .= teznevise_faq_items_markup( $items );
+			$sections .= '</div></section>';
+			return '';
+		},
+		$html
+	);
+	return array( is_string( $html ) ? $html : '', $sections );
+}
+
+/**
+ * FAQPage JSON-LD from collected pairs. Always emitted (Yoast does not add this).
+ */
+function teznevise_output_faq_schema() {
+	$pairs = isset( $GLOBALS['teznevise_faq_pairs'] ) && is_array( $GLOBALS['teznevise_faq_pairs'] ) ? $GLOBALS['teznevise_faq_pairs'] : array();
+	if ( count( $pairs ) < 2 ) {
+		return;
+	}
+	$seen = array();
+	$ent  = array();
+	foreach ( $pairs as $row ) {
+		$key = md5( $row['q'] );
+		if ( isset( $seen[ $key ] ) ) {
+			continue;
+		}
+		$seen[ $key ] = true;
+		$ent[]        = array(
+			'@type'          => 'Question',
+			'name'           => $row['q'],
+			'acceptedAnswer' => array(
+				'@type' => 'Answer',
+				'text'  => $row['a'],
+			),
+		);
+	}
+	if ( count( $ent ) < 2 ) {
+		return;
+	}
+	$payload = array(
+		'@context'   => 'https://schema.org',
+		'@type'      => 'FAQPage',
+		'mainEntity' => $ent,
+	);
+	echo '<script type="application/ld+json">' . wp_json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+add_action( 'wp_footer', 'teznevise_output_faq_schema', 22 );
+
+/**
+ * Service JSON-LD on consulting landings. Review schema is omitted (testimonials use initials).
+ */
+function teznevise_output_service_schema() {
+	if ( ! is_page() ) {
+		return;
+	}
+	$slug = get_post_field( 'post_name', get_queried_object_id() );
+	$map  = array(
+		'thesis'              => array( 'name' => 'مشاوره انجام پایان‌نامه', 'url' => home_url( '/thesis/' ) ),
+		'proposal'            => array( 'name' => 'مشاوره انجام پروپوزال', 'url' => home_url( '/proposal/' ) ),
+		'service-statistics'  => array( 'name' => 'تحلیل آماری', 'url' => home_url( '/service-statistics/' ) ),
+		'service-simulation'  => array( 'name' => 'شبیه‌سازی', 'url' => home_url( '/service-simulation/' ) ),
+		'service-qualitative' => array( 'name' => 'تحلیل کیفی', 'url' => home_url( '/service-qualitative/' ) ),
+	);
+	if ( ! isset( $map[ $slug ] ) ) {
+		return;
+	}
+	$row     = $map[ $slug ];
+	$payload = array(
+		'@context'    => 'https://schema.org',
+		'@type'       => 'Service',
+		'name'        => $row['name'],
+		'url'         => $row['url'],
+		'provider'    => array(
+			'@type' => 'Organization',
+			'name'  => get_bloginfo( 'name' ),
+			'url'   => home_url( '/' ),
+		),
+		'areaServed'  => 'IR',
+		'serviceType' => $row['name'],
+	);
+	echo '<script type="application/ld+json">' . wp_json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+add_action( 'wp_footer', 'teznevise_output_service_schema', 23 );
+
+/**
+ * Fill empty img alt from title, filename, or post title.
+ *
+ * @param string $html HTML.
+ * @return string
+ */
+function teznevise_fill_empty_img_alt( $html ) {
+	if ( ! is_string( $html ) || false === stripos( $html, '<img' ) ) {
+		return $html;
+	}
+	return preg_replace_callback(
+		'/<img\b[^>]*>/i',
+		static function ( $m ) {
+			$tag = $m[0];
+			if ( preg_match( '/\balt=("|\')(.*?)\1/i', $tag, $am ) && '' !== trim( $am[2] ) ) {
+				return $tag;
+			}
+			$alt = '';
+			if ( preg_match( '/\btitle=("|\')(.*?)\1/i', $tag, $tm ) ) {
+				$alt = trim( wp_strip_all_tags( $tm[2] ) );
+			}
+			if ( '' === $alt && preg_match( '/\bsrc=("|\')(.*?)\1/i', $tag, $sm ) ) {
+				$base = (string) pathinfo( (string) wp_parse_url( $sm[2], PHP_URL_PATH ), PATHINFO_FILENAME );
+				$base = preg_replace( '/[-_]+/', ' ', rawurldecode( $base ) );
+				$base = preg_replace( '/\d{5,}/', '', (string) $base );
+				$alt  = trim( (string) $base );
+			}
+			if ( '' === $alt && is_singular() ) {
+				$alt = wp_strip_all_tags( get_the_title() );
+			}
+			if ( '' === $alt ) {
+				$alt = get_bloginfo( 'name' );
+			}
+			if ( preg_match( '/\balt=/i', $tag ) ) {
+				return preg_replace( '/\balt=("|\')(.*?)\1/i', 'alt="' . esc_attr( $alt ) . '"', $tag, 1 );
+			}
+			return preg_replace( '/<img\b/i', '<img alt="' . esc_attr( $alt ) . '"', $tag, 1 );
+		},
+		$html
+	);
+}
+add_filter( 'the_content', 'teznevise_fill_empty_img_alt', 20 );
+add_filter( 'post_thumbnail_html', 'teznevise_fill_empty_img_alt', 20 );
+
+/**
+ * Lead nonce field with a unique id so two forms on one page do not duplicate DOM ids.
+ *
+ * @param string $uid Suffix.
+ */
+function teznevise_lead_nonce_field( $uid = '' ) {
+	$html = wp_nonce_field( 'teznevise_lead', 'teznevise_lead_nonce', true, false );
+	$uid  = sanitize_html_class( (string) $uid );
+	if ( '' !== $uid ) {
+		$html = str_replace( 'id="teznevise_lead_nonce"', 'id="teznevise_lead_nonce-' . $uid . '"', $html );
+	}
+	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}

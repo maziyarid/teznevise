@@ -266,7 +266,7 @@ class TezNevise_AI_Chat {
 		<div class="tz-gpt-model" data-agent-menu>
 			<button type="button" class="tz-gpt-model__btn" data-agent-menu-toggle aria-haspopup="listbox" aria-expanded="false" aria-label="<?php esc_attr_e( 'انتخاب عامل', 'teznevise' ); ?>">
 				<?php if ( ! empty( $current['avatar'] ) ) : ?>
-					<img src="<?php echo esc_url( $current['avatar'] ); ?>" width="22" height="22" alt="" />
+					<img src="<?php echo esc_url( $current['avatar'] ); ?>" width="22" height="22" alt="<?php echo esc_attr( $label ); ?>" />
 				<?php else : ?>
 					<i class="fa-solid fa-brain" aria-hidden="true"></i>
 				<?php endif; ?>

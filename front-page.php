@@ -80,6 +80,41 @@ if ( $use_builder ) {
 	<div class="article-grid" data-reveal-stagger><?php $recent = new WP_Query( array( 'posts_per_page' => 3, 'post_status' => 'publish', 'ignore_sticky_posts' => true, 'no_found_rows' => true ) ); if ( $recent->have_posts() ) : while ( $recent->have_posts() ) : $recent->the_post(); get_template_part( 'template-parts/post-card' ); endwhile; wp_reset_postdata(); else : ?><p class="blog-archive__empty"><?php esc_html_e( 'هنوز مطلبی منتشر نشده است.', 'teznevise' ); ?></p><?php endif; ?></div>
 </div></section>
 
+<section class="section tz-faq-band" aria-label="<?php esc_attr_e( 'سوالات متداول', 'teznevise' ); ?>">
+	<div class="container">
+		<div class="section-head center" data-reveal>
+			<span class="eyebrow"><?php esc_html_e( 'سوالات متداول', 'teznevise' ); ?></span>
+			<h2><?php esc_html_e( 'پرسش‌های پرتکرار دانشجویان', 'teznevise' ); ?></h2>
+			<p><?php esc_html_e( 'پاسخ‌ها مشاوره آموزشی‌اند؛ تزنویسه پایان‌نامه را به‌جای دانشجو نمی‌نویسد.', 'teznevise' ); ?></p>
+		</div>
+		<?php
+		$home_faqs = array(
+			array(
+				'q' => __( 'آیا مشاوره اولیه رایگان است؟', 'teznevise' ),
+				'a' => __( 'بله. بررسی اولیه موضوع، مسیر و برآورد زمان در ساعات کاری بدون هزینه است.', 'teznevise' ),
+			),
+			array(
+				'q' => __( 'آیا تزنویسه پایان‌نامه را به‌جای دانشجو می‌نویسد؟', 'teznevise' ),
+				'a' => __( 'خیر. تزنویسه مشاوره، ساختار، روش و ابزار می‌دهد؛ نگارش نهایی با دانشجو است.', 'teznevise' ),
+			),
+			array(
+				'q' => __( 'چطور درخواست مشاوره ثبت کنم؟', 'teznevise' ),
+				'a' => __( 'از «ثبت درخواست» یا گفتگوی زنده، نام و موبایل را بفرستید تا در ساعات کاری تماس بگیریم.', 'teznevise' ),
+			),
+			array(
+				'q' => __( 'آیا ابزارهای آنلاین هزینه‌ای دارند؟', 'teznevise' ),
+				'a' => __( 'ماشین‌حساب‌های آماری تزنویسه برای استفاده رایگان‌اند و نیازی به خرید تزکوین ندارند.', 'teznevise' ),
+			),
+			array(
+				'q' => __( 'پاسخ اولیه چقدر طول می‌کشد؟', 'teznevise' ),
+				'a' => __( 'در ساعات کاری (شنبه تا پنجشنبه، ۹ تا ۲۱) معمولاً در کمتر از چند ساعت پاسخ اولیه داده می‌شود.', 'teznevise' ),
+			),
+		);
+		echo function_exists( 'teznevise_faq_items_markup' ) ? teznevise_faq_items_markup( $home_faqs ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		?>
+	</div>
+</section>
+
 <?php if ( $has_builder_cta ) : ?>
 	<?php teznevise_builder_render_sections( 0, array( 'only' => array( 'cta_band' ) ) ); ?>
 <?php else : ?>
