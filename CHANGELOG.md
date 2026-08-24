@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.24 — 2026-08-24 — Download H1 demotion
+
+- Download singles and `download_category` archives had two H1s: the theme hero plus leftover WPCode (`tzdl-single-title` / category intro). Those extras are now H2 so all 122 sitemap URLs have exactly one H1.
+
 ## 1.9.23 — 2026-08-24 — Live SEO/UX verification pass
 
 - FAQ lists buried in collapsed «ادامه مطلب» (`<li><strong>Q ▾</strong> — A`) are lifted into a visible accordion (`button.faq-q` + `.faq-a`) with FAQPage JSON-LD. Homepage now has five consulting FAQs. Builder FAQ sections use the same accordion. hotfix-209 unhides `.faq-q__text` (hotfix-196 had `span:last-child{display:none}` for the old chevron, which hid the question).

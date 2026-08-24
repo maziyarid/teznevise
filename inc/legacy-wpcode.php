@@ -111,7 +111,7 @@ function teznevise_single_download_content( $content ) {
                     </div>
                 <?php endif; ?>
 
-                <h1 class="tzdl-single-title"><?php the_title(); ?></h1>
+                <h2 class="tzdl-single-title"><?php the_title(); ?></h2>
 
                 <div class="tzdl-quick-info">
                     <?php if ( $version ) : ?>
@@ -733,7 +733,7 @@ function teznevise_render_category_page( $term ) {
                     <span><?php echo esc_html( $term->name ); ?></span>
                 </div>
 
-                <h1><?php echo esc_html( $term->name ); ?></h1>
+                <h2><?php echo esc_html( $term->name ); ?></h2>
 
                 <?php if ( $term->description ) : ?>
                     <p><?php echo esc_html( $term->description ); ?></p>

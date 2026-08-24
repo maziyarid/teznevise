@@ -279,6 +279,11 @@ def check_source_contracts() -> None:
     hotfix209 = (ROOT / "assets" / "css" / "hotfix-209.css").read_text(encoding="utf-8")
     if "faq-q__text" not in hotfix209 or "display: block !important" not in hotfix209:
         error("hotfix-209 does not unhide FAQ question text against hotfix-196 last-child rule")
+    legacy = (ROOT / "inc" / "legacy-wpcode.php").read_text(encoding="utf-8")
+    if '<h1 class="tzdl-single-title"' in legacy or "<h1 class='tzdl-single-title'" in legacy:
+        error("Download single leftover still emits a second H1")
+    if re.search(r"<h1>\s*<\?php echo esc_html\(\s*\$term->name", legacy):
+        error("Download category leftover still emits a second H1")
 
     skills_cfg = (ROOT / "teznevise-core" / "config" / "skills.php").read_text(encoding="utf-8")
     for skill_agent in ("teznevise", "christina", "ada", "professor", "parantez", "elara", "cyrus", "mira"):
