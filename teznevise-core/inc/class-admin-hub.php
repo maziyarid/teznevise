@@ -47,6 +47,9 @@ class Teznevise_Admin_Hub {
 		if ( ! empty( $_POST['backfill_all'] ) && class_exists( 'Teznevise_Debate_Orchestrator' ) ) {
 			Teznevise_Debate_Orchestrator::enqueue_published( ! empty( $_POST['backfill_force'] ) );
 		}
+		if ( ! empty( $_POST['reindex_corpus'] ) && class_exists( 'TezNevise_AI_Knowledge' ) ) {
+			TezNevise_AI_Knowledge::reset_and_queue();
+		}
 		$models = isset( $_POST['hub_agent_models'] ) && is_array( $_POST['hub_agent_models'] ) ? wp_unslash( $_POST['hub_agent_models'] ) : array();
 		$clean  = array();
 		foreach ( (array) $models as $id => $row ) {
@@ -111,6 +114,7 @@ class Teznevise_Admin_Hub {
 		);
 		$queue   = get_option( 'teznevise_core_backfill_queue', array() );
 		$queue_n = is_array( $queue ) ? count( $queue ) : 0;
+		$know    = class_exists( 'TezNevise_AI_Knowledge' ) ? TezNevise_AI_Knowledge::counts() : array( 'corpus' => 0, 'training' => 0, 'up' => 0 );
 		$log     = class_exists( 'Teznevise_Logger' ) ? Teznevise_Logger::all() : array();
 		?>
 		<div class="wrap tz-hub">
@@ -145,6 +149,10 @@ class Teznevise_Admin_Hub {
 				<article>
 					<strong><?php esc_html_e( 'صف نمای کلی / مناظره', 'teznevise' ); ?></strong>
 					<p><?php echo esc_html( number_format_i18n( $queue_n ) ); ?></p>
+				</article>
+				<article>
+					<strong><?php esc_html_e( 'دانش سایت', 'teznevise' ); ?></strong>
+					<p><?php echo esc_html( sprintf( __( '%1$s قطعه · %2$s آموزش · %3$s مفید', 'teznevise' ), number_format_i18n( (int) $know['corpus'] ), number_format_i18n( (int) $know['training'] ), number_format_i18n( (int) $know['up'] ) ) ); ?></p>
 				</article>
 				<article>
 					<strong><?php esc_html_e( 'مهر اعتماد', 'teznevise' ); ?></strong>
@@ -220,6 +228,9 @@ class Teznevise_Admin_Hub {
 				</p>
 				<p>
 					<label><input type="checkbox" name="backfill_force" value="1" /> <?php esc_html_e( 'بازنویسی همه (نمای کلی بازبینی‌شده انسانی حفظ می‌شود مگر همین را هم بخواهید از ویرایش مطلب)', 'teznevise' ); ?></label>
+				</p>
+				<p>
+					<label><input type="checkbox" name="reindex_corpus" value="1" /> <?php esc_html_e( 'بازاندیس دانش سایت (صفحات منتشرشده + حقایق مشاوره)', 'teznevise' ); ?></label>
 				</p>
 				<?php submit_button( __( 'ذخیره مدل‌ها و عامل‌ها', 'teznevise' ) ); ?>
 			</form>

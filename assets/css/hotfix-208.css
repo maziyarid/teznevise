@@ -1,0 +1,149 @@
+/* 1.9.22 — last-wins page chrome + chat collision. Visual CSS only. */
+html { scroll-padding-top: 96px; }
+:target { scroll-margin-top: 104px; }
+
+.section-head h1,
+.page-hero-new h1,
+.service-hero h1,
+.hero-new h1,
+.page-hero h1,
+.article-hero h1,
+.search-hero h1,
+.entry-title,
+.page-title {
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.article-content img,
+.entry-content img,
+.article-body img,
+.post-body img,
+.longcopy img,
+.comment-body img {
+  max-width: 100%;
+  height: auto;
+}
+
+.article-content table,
+.entry-content table,
+.longcopy table,
+.tz-account table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.inquiry-form input,
+.inquiry-form select,
+.inquiry-form textarea,
+.tz-auth input,
+.tz-auth select,
+.comment-form input,
+.comment-form textarea,
+.search-field,
+.search-overlay input[type="search"],
+.tz-livechat__handoff input {
+  min-height: 44px;
+}
+
+.article-card,
+.tool-card,
+.service-card,
+.check-card,
+.faq-card,
+.quote-card {
+  min-width: 0;
+}
+
+.article-grid,
+.tools-grid,
+.service-grid,
+.team-grid {
+  align-items: stretch;
+}
+
+#main-content,
+.site-main,
+.page-wrap {
+  padding-bottom: 24px;
+}
+@media (max-width: 720px) {
+  body {
+    padding-bottom: 72px;
+  }
+  .site-footer {
+    padding-bottom: 96px;
+  }
+}
+
+.tz-bottom-nav {
+  z-index: 80;
+}
+
+#tzLiveChat,
+.tz-livechat {
+  z-index: 1200;
+  right: 18px !important;
+  left: auto !important;
+  bottom: 22px !important;
+}
+@media (max-width: 720px) {
+  #tzLiveChat,
+  .tz-livechat {
+    right: 12px !important;
+    bottom: 86px !important;
+  }
+}
+
+body.tz-livechat-open .tz-fab-wrap,
+body.tz-livechat-open .tz-bottom-nav {
+  pointer-events: none;
+}
+body.tz-livechat-open .tz-fab-wrap { opacity: .35; }
+
+.page-404 .section-head p,
+.search-empty,
+.tz-empty {
+  max-width: 40rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.tz-comment-tabs,
+.comments-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.account-card,
+.tz-dash-card {
+  min-width: 0;
+}
+
+.hero-new .hero-copy,
+.service-hero .hero-copy,
+.page-hero-new .hero-copy {
+  max-width: 42rem;
+}
+
+.announce-pill strong {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tz-livechat-open .tz-livechat__panel,
+  .hero-orb {
+    animation: none !important;
+  }
+}
+
+@media print {
+  .tz-livechat,
+  .tz-fab-wrap,
+  .tz-bottom-nav,
+  .site-header .announcement {
+    display: none !important;
+  }
+}

@@ -82,6 +82,8 @@ def check_requires() -> None:
         "assets/css/hotfix-205.css",
         "assets/css/hotfix-206.css",
         "assets/css/hotfix-207.css",
+        "assets/css/hotfix-208.css",
+        "inc/ai/class-ai-knowledge.php",
         "inc/legal-copy.php",
         "inc/waitlist.php",
         "teznevise-core/teznevise-core.php",
@@ -259,6 +261,8 @@ def check_source_contracts() -> None:
         error("hotfix-206.css is not in the runtime CSS concat")
     if "hotfix-207.css" not in perf:
         error("hotfix-207.css is not in the runtime CSS concat")
+    if "hotfix-208.css" not in perf:
+        error("hotfix-208.css is not in the runtime CSS concat")
 
     skills_cfg = (ROOT / "teznevise-core" / "config" / "skills.php").read_text(encoding="utf-8")
     for skill_agent in ("teznevise", "christina", "ada", "professor", "parantez", "elara", "cyrus", "mira"):
@@ -368,6 +372,40 @@ def check_source_contracts() -> None:
     ):
         if not (ROOT / mark).is_file():
             error(f"University mark missing: {mark}")
+
+    knowledge = (ROOT / "inc" / "ai" / "class-ai-knowledge.php").read_text(encoding="utf-8")
+    if "CREATE TABLE" not in knowledge or "ft_chunk" not in knowledge:
+        error("Knowledge corpus CREATE TABLE / FULLTEXT is missing")
+    if "teznevise_ai_corpus_v" not in knowledge or "1.9.22" not in knowledge:
+        error("Corpus backfill version 1.9.22 is missing")
+    if "prompt_pack" not in knowledge:
+        error("Knowledge prompt_pack() is missing")
+    api = (ROOT / "inc" / "ai" / "class-ai-api.php").read_text(encoding="utf-8")
+    if "/chat/rate" not in api:
+        error("REST /chat/rate is missing")
+    if "prompt_pack" not in api:
+        error("Chat system prompt does not inject site knowledge")
+    chat_js = (ROOT / "js" / "ai" / "chat.js").read_text(encoding="utf-8")
+    if "det.open = false" not in chat_js:
+        error("Live thinking must stay closed by default")
+    if "chat/rate" not in chat_js:
+        error("Chat client does not post ratings")
+    live = (ROOT / "template-parts" / "live-chat.php").read_text(encoding="utf-8")
+    if 'data-thinking="0"' not in live:
+        error("Live chat thinking display is not off by default")
+    if 'data-collaboration-mode="single"' not in live:
+        error("Live chat default is not single-agent")
+    hub = (ROOT / "teznevise-core" / "inc" / "class-admin-hub.php").read_text(encoding="utf-8")
+    if "reindex_corpus" not in hub:
+        error("Admin hub is missing corpus reindex")
+    hotfix208 = (ROOT / "assets" / "css" / "hotfix-208.css").read_text(encoding="utf-8")
+    if "tz-livechat" not in hotfix208:
+        error("hotfix-208 does not cover live chat chrome")
+    css_ai = (ROOT / "css" / "teznevise-ai.css").read_text(encoding="utf-8")
+    if ".tz-ai-chat.tz-gpt" not in css_ai:
+        error("teznevise-ai.css lost the ChatGPT composer chrome")
+    if ".tz-gpt-hints" not in css_ai:
+        error("teznevise-ai.css is missing hint-chip styles")
 
 
 def check_whitespace() -> None:

@@ -107,7 +107,7 @@
       var pre = el('pre', 'tz-ai-think__stream');
       pre.textContent = thinking || '';
       det.appendChild(pre);
-      if (stream) det.open = true;
+      det.open = false;
       stack.appendChild(det);
     }
     var bubble = el('div', 'tz-ai-msg__bubble');
@@ -138,6 +138,9 @@
       });
       stack.appendChild(copy);
     }
+    if (role !== 'user') {
+      stack.appendChild(rateRow(''));
+    }
     art.appendChild(stack);
     log.appendChild(art);
     if (role !== 'user' && showForm) {
@@ -145,6 +148,39 @@
     }
     log.scrollTop = log.scrollHeight;
     return art;
+  }
+
+  function rateRow(trainId) {
+    var row = el('div', 'tz-ai-rate');
+    if (trainId) row.setAttribute('data-train-id', String(trainId));
+    var up = el('button', 'tz-gpt__iconbtn');
+    up.type = 'button';
+    up.setAttribute('aria-label', 'پاسخ مفید بود');
+    up.title = 'مفید بود';
+    up.appendChild(icon('fa-thumbs-up'));
+    var down = el('button', 'tz-gpt__iconbtn');
+    down.type = 'button';
+    down.setAttribute('aria-label', 'پاسخ مفید نبود');
+    down.title = 'مفید نبود';
+    down.appendChild(icon('fa-thumbs-down'));
+    function send(n) {
+      var id = parseInt(row.getAttribute('data-train-id') || '0', 10);
+      if (!id) return;
+      row.classList.add('is-sent');
+      up.disabled = true;
+      down.disabled = true;
+      fetch((cfg().rest_url || '') + 'chat/rate', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': cfg().nonce || '' },
+        body: JSON.stringify({ training_id: id, rating: n })
+      }).catch(function () {});
+    }
+    up.addEventListener('click', function () { send(1); up.classList.add('is-on'); });
+    down.addEventListener('click', function () { send(-1); down.classList.add('is-on'); });
+    row.appendChild(up);
+    row.appendChild(down);
+    return row;
   }
 
   function startLiveThought(log, name, agentId) {
@@ -158,7 +194,8 @@
       stack.appendChild(meta);
     }
     var det = el('details', 'tz-ai-think is-live');
-    det.open = true;
+    det.open = false;
+    det.hidden = true;
     var sum = thinkSummary(true);
     det.appendChild(sum);
     var pre = el('pre', 'tz-ai-think__stream');
@@ -167,35 +204,37 @@
     det.appendChild(pre);
     stack.appendChild(det);
     var bubble = el('div', 'tz-ai-msg__bubble tz-ai-msg__bubble--wait');
-    bubble.innerHTML = '<span class="tz-ai-dots" aria-hidden="true"><i></i><i></i><i></i></span>';
+    bubble.innerHTML = '<span class="tz-ai-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="tz-ai-wait-label">در حال پاسخ…</span>';
     stack.appendChild(bubble);
+    var rates = rateRow('');
+    stack.appendChild(rates);
     art.appendChild(stack);
     log.appendChild(art);
     log.scrollTop = log.scrollHeight;
-    var closedByUser = false;
+    var closedByUser = true;
     det.addEventListener('toggle', function () {
-      if (!det.open) closedByUser = true;
+      closedByUser = !det.open;
     });
     var started = Date.now();
     var step = 0;
     function tickLabel() {
       var sec = Math.max(1, Math.round((Date.now() - started) / 1000));
       var lab = sum.querySelector('.tz-ai-think__label');
-      if (lab) lab.textContent = 'در حال استدلال · ' + sec + 'ث';
+      if (lab) lab.textContent = 'استدلال · ' + sec + 'ث';
     }
     tickLabel();
     var timer = window.setInterval(function () {
       step = (step + 1) % phases.length;
       if (!pre.dataset.locked) pre.textContent = phases[step];
       tickLabel();
-      if (!closedByUser) log.scrollTop = log.scrollHeight;
-    }, 1200);
+    }, 1400);
     return {
       art: art,
       det: det,
       pre: pre,
       bubble: bubble,
-      stop: function (thought, answer, stream) {
+      rates: rates,
+      stop: function (thought, answer, stream, trainId, expand) {
         window.clearInterval(timer);
         pre.dataset.locked = '1';
         var sec = Math.max(1, Math.round((Date.now() - started) / 1000));
@@ -204,17 +243,22 @@
           spin.className = 'fa-solid fa-lightbulb';
         }
         var lab = sum.querySelector('.tz-ai-think__label');
-        if (lab) lab.textContent = thought ? ('استدلال · ' + sec + 'ث') : 'استدلال';
+        if (lab) lab.textContent = thought ? ('استدلال · ' + sec + 'ث — برای دیدن لمس کنید') : 'استدلال';
         det.classList.remove('is-live');
-        if (thought) pre.textContent = thought;
-        else if (!pre.textContent) pre.textContent = 'استدلال کوتاه برای این پاسخ ثبت نشد.';
-        if (!closedByUser) det.open = !!thought;
+        if (thought) {
+          pre.textContent = thought;
+          det.hidden = false;
+        } else {
+          det.hidden = true;
+        }
+        det.open = !!expand && !!thought;
         bubble.classList.remove('tz-ai-msg__bubble--wait');
         bubble.innerHTML = '';
         if (stream) typewrite(bubble, answer || '');
         else renderRich(bubble, answer || '');
         art.classList.remove('is-pending');
-        if (!closedByUser) log.scrollTop = log.scrollHeight;
+        if (trainId && rates) rates.setAttribute('data-train-id', String(trainId));
+        log.scrollTop = log.scrollHeight;
       },
       fail: function (msg) {
         window.clearInterval(timer);
@@ -540,6 +584,8 @@
           appendMsg(log, m.role, m.text, m.name, m.thinking || '', '', m.agentId || '');
           history.push(m);
         });
+        var hintsRestore = root.querySelector('[data-ai-hints]');
+        if (hintsRestore) hintsRestore.hidden = true;
       } catch (err) {}
     }
 
@@ -573,6 +619,8 @@
         history = [];
         persist();
         log.innerHTML = greeting;
+        var hintsReset = root.querySelector('[data-ai-hints]');
+        if (hintsReset) hintsReset.hidden = false;
         input.value = '';
         autosize(input);
         input.focus();
@@ -581,6 +629,16 @@
 
     restore();
 
+    root.querySelectorAll('[data-hint]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (!input) return;
+        input.value = btn.getAttribute('data-hint') || '';
+        autosize(input);
+        if (form.requestSubmit) form.requestSubmit();
+        else form.dispatchEvent(new Event('submit', { cancelable: true }));
+      });
+    });
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (busy) return;
@@ -588,11 +646,14 @@
       if (text.length < 4) return;
       appendMsg(log, 'user', text, cfg().isLoggedIn ? 'شما' : 'مهمان');
       remember('user', text, cfg().isLoggedIn ? 'شما' : 'مهمان', '');
+      var hints = root.querySelector('[data-ai-hints]');
+      if (hints) hints.hidden = true;
       input.value = '';
       autosize(input);
       var agentId = agentSel ? agentSel.value : root.getAttribute('data-agent-id');
       var meta = agentMeta(agentId);
       var thinkingOn = !!(thinkBox && thinkBox.checked);
+      var page = cfg().page || {};
       var collabToggle = root.querySelector('[data-ai-collab-toggle]');
       var collab = collabSel ? collabSel.value : (root.getAttribute('data-collaboration-mode') || 'single');
       if (collabToggle && collabToggle.checked) collab = 'collaborative';
@@ -620,7 +681,9 @@
           agent_id: agentId,
           skill_id: activeSkill || '',
           collaboration_mode: collab,
-          thinking_enabled: thinkingOn,
+          thinking_enabled: true,
+          page_url: page.url || (typeof location !== 'undefined' ? location.href : ''),
+          page_title: page.title || (typeof document !== 'undefined' ? document.title : ''),
         }),
       })
         .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
@@ -635,16 +698,16 @@
           var replies = res.json.replies || [{ content: res.json.content, agent_name: res.json.agent_name, thinking_process: res.json.thinking_process, model: res.json.model }];
           var first = replies[0] || {};
           var parsed = splitThought(first.content || '');
-          var thought = thinkingOn ? (first.thinking_process || parsed.thought || '') : (parsed.thought || '');
+          var thought = first.thinking_process || parsed.thought || '';
           var answer = parsed.public || first.content || '';
-          live.stop(thought, String(answer || '').replace(FORM_TOKEN, '').trim(), true);
+          live.stop(thought, String(answer || '').replace(FORM_TOKEN, '').trim(), true, res.json.training_id, thinkingOn);
           remember('assistant', first.content || '', first.agent_name || agentLabel, thought, agentId);
           if (replies.length > 1) {
             var banner = el('p', 'tz-ai-collab-label', 'هم‌فکری عامل‌ها');
             log.appendChild(banner);
             replies.slice(1).forEach(function (rep) {
-              appendMsg(log, 'assistant', rep.content || '', rep.agent_name || '', thinkingOn ? (rep.thinking_process || '') : '', '', agentId, true);
-              remember('assistant', rep.content || '', rep.agent_name || '', thinkingOn ? (rep.thinking_process || '') : '', agentId);
+              appendMsg(log, 'assistant', rep.content || '', rep.agent_name || '', rep.thinking_process || '', '', agentId, true);
+              remember('assistant', rep.content || '', rep.agent_name || '', rep.thinking_process || '', agentId);
             });
           }
           if (String(first.content || '').indexOf(FORM_TOKEN) !== -1) {

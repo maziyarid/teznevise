@@ -6,7 +6,7 @@
 if (!defined('ABSPATH')) exit;
 
 class TezNevise_AI_Database {
-    const VERSION = '2.4.0';
+    const VERSION = '2.5.0';
     const PREFIX = 'teznevise_ai_';
     
     public static function init() {
@@ -160,6 +160,9 @@ class TezNevise_AI_Database {
         dbDelta($sql_agents);
         dbDelta($sql_tool_settings);
         dbDelta($sql_skills);
+        if ( class_exists( 'TezNevise_AI_Knowledge' ) ) {
+            TezNevise_AI_Knowledge::create_tables();
+        }
         $sessions_table = $wpdb->prefix . $prefix . 'chat_sessions';
         // Widen ENUM so research collaboration can persist. Ignore if already VARCHAR.
         $suppress = $wpdb->hide_errors();

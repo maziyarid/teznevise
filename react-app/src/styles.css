@@ -2840,6 +2840,30 @@ i.fa-brands {
   }
 }
 
+.tz-gpt-hints { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 12px 12px; }
+.tz-gpt-hint {
+  border: 1px solid rgba(20, 93, 74, .16);
+  background: #fff;
+  color: #145d4a;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  min-height: 40px;
+  cursor: pointer;
+}
+.tz-ai-think:not([open]) .tz-ai-think__stream { display: none; }
+.tz-livechat__fab { display: inline-flex; align-items: center; gap: 8px; }
+.tz-livechat__fab-label { font-weight: 800; }
+.tz-ai-wait-label { margin-inline-start: 8px; font-size: 13px; color: #4d655c; }
+body.tz-livechat-open .tz-fab-wrap { opacity: .35; pointer-events: none; }
+@media (max-width: 720px) {
+  .tz-livechat__fab-label { display: none; }
+  .tz-livechat__panel { position: fixed; inset: 8px 8px 88px; width: auto; max-height: none; }
+}
+
+
 
 
 

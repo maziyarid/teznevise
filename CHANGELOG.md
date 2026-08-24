@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.22 — 2026-08-24 — Chat redesign, closed thinking, site-knowledge tables
+
+- Live chat is a labeled «گفتگو» panel: single-agent default, page-aware hint chips, thumbs on replies. Thinking stays closed (`<details>` without `open`) unless the lightbulb is on or the user opens «استدلال». The API still requests hidden reasoning for quality.
+- Two new tables (`wp_teznevise_ai_corpus`, `wp_teznevise_ai_training`): indexed site pages + consulting facts ground every reply; thumbs-up rows become few-shot. Admin hub shows counts and can reindex. REST `POST /teznevise-ai/v1/chat/rate`.
+- hotfix-208 last-wins: title wrap, media/tables, 44px form targets, hash offset, mobile bottom-nav vs chat, hide extra FABs when chat is open.
+- React LiveChat / AskAiPanel match: thinking closed, collaborative off, always request thinking from the model.
+
 ## 1.9.21 — 2026-08-24 — Auto overview+debate for all posts, skills, page-bug pass
 
 - Debate pipeline: force meta is actually read; empty API runs are `failed` (retry twice) instead of `done`; backfill paginates 100×40 and re-queues after the 1.9.17 OpenRouter 404 era (`teznevise_ai_auto_all_v` = 1.9.21).

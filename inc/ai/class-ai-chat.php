@@ -104,7 +104,11 @@ class TezNevise_AI_Chat {
 				'rest_url'   => rest_url( 'teznevise-ai/v1/' ),
 				'nonce'      => wp_create_nonce( 'wp_rest' ),
 				'isLoggedIn' => is_user_logged_in(),
-				'loginUrl'   => wp_login_url( get_permalink() ),
+				'loginUrl'   => home_url( '/account/' ),
+				'page'       => array(
+					'url'   => ( is_singular() ? get_permalink() : home_url( '/' ) ),
+					'title' => wp_get_document_title(),
+				),
 				'settings'   => array(
 					'persian_initial_message' => 'اگه نتونستی با ابزار کار کنی میتونی از من کمک بگیری',
 					'free_tier_limit'         => (int) get_option( 'teznevise_ai_free_tier_limit', 9999 ),
@@ -148,7 +152,7 @@ class TezNevise_AI_Chat {
 		}
 		ob_start();
 		?>
-		<section class="tz-ai-chat tz-gpt" id="<?php echo esc_attr( $instance_id ); ?>" data-tool-id="<?php echo esc_attr( $tool_id ); ?>" data-agent-id="<?php echo esc_attr( $atts['agent_id'] ); ?>" data-collaboration-mode="<?php echo esc_attr( $collab ); ?>" data-thinking="<?php echo $thinking ? '1' : '0'; ?>">
+		<section class="tz-ai-chat tz-gpt" id="<?php echo esc_attr( $instance_id ); ?>" data-tool-id="<?php echo esc_attr( $tool_id ); ?>" data-agent-id="<?php echo esc_attr( $atts['agent_id'] ); ?>" data-collaboration-mode="<?php echo esc_attr( $collab ); ?>" data-thinking="0">
 			<header class="tz-gpt__top">
 				<?php self::render_agent_dropdown( $atts['agent_id'], $agents ); ?>
 				<div class="tz-gpt__top-actions">
@@ -173,11 +177,11 @@ class TezNevise_AI_Chat {
 					<textarea id="<?php echo esc_attr( $instance_id ); ?>-q" data-ai-input rows="1" required minlength="4" placeholder="<?php esc_attr_e( 'پیام به تزنویسه…', 'teznevise' ); ?>"></textarea>
 					<div class="tz-gpt-bar">
 						<div class="tz-gpt-toggles" role="toolbar" aria-label="<?php esc_attr_e( 'ابزار گفتگو', 'teznevise' ); ?>">
-							<button type="button" class="tz-gpt__iconbtn is-toggle" data-ai-thinking-btn aria-pressed="<?php echo $thinking ? 'true' : 'false'; ?>" aria-label="<?php esc_attr_e( 'نمایش استدلال', 'teznevise' ); ?>" title="<?php esc_attr_e( 'استدلال', 'teznevise' ); ?>"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i></button>
+							<button type="button" class="tz-gpt__iconbtn is-toggle" data-ai-thinking-btn aria-pressed="false" aria-label="<?php esc_attr_e( 'نمایش استدلال', 'teznevise' ); ?>" title="<?php esc_attr_e( 'استدلال', 'teznevise' ); ?>"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i></button>
 							<button type="button" class="tz-gpt__iconbtn is-toggle" data-ai-collab-btn aria-pressed="<?php echo 'collaborative' === $collab ? 'true' : 'false'; ?>" aria-label="<?php esc_attr_e( 'هم‌فکری عامل‌ها', 'teznevise' ); ?>" title="<?php esc_attr_e( 'هم‌فکری', 'teznevise' ); ?>"><i class="fa-solid fa-users" aria-hidden="true"></i></button>
 							<button type="button" class="tz-gpt__iconbtn is-toggle" data-ai-research-btn aria-pressed="<?php echo 'research' === $collab ? 'true' : 'false'; ?>" aria-label="<?php esc_attr_e( 'پژوهش وب', 'teznevise' ); ?>" title="<?php esc_attr_e( 'پژوهش', 'teznevise' ); ?>"><i class="fa-solid fa-globe" aria-hidden="true"></i></button>
 						</div>
-						<input type="checkbox" data-ai-thinking <?php checked( $thinking ); ?> hidden>
+						<input type="checkbox" data-ai-thinking hidden>
 						<input type="checkbox" data-ai-collab-toggle <?php checked( $collab, 'collaborative' ); ?> hidden>
 						<input type="checkbox" data-ai-research <?php checked( $collab, 'research' ); ?> hidden>
 						<button type="button" class="tz-gpt-stop" data-ai-stop hidden aria-label="<?php esc_attr_e( 'توقف', 'teznevise' ); ?>" title="<?php esc_attr_e( 'توقف', 'teznevise' ); ?>">

@@ -6,6 +6,8 @@
 if (!defined('ABSPATH')) exit;
 
 class TezNevise_AI_API {
+
+    private static $chat_context = array();
     
     public static function init() {
         add_action('rest_api_init', [__CLASS__, 'register_routes']);
@@ -67,6 +69,11 @@ class TezNevise_AI_API {
             'callback' => [__CLASS__, 'handle_contact_lead'],
             'permission_callback' => '__return_true',
         ]);
+        register_rest_route('teznevise-ai/v1', '/chat/rate', [
+            'methods' => 'POST',
+            'callback' => [__CLASS__, 'handle_rate'],
+            'permission_callback' => '__return_true',
+        ]);
     }
     
     public static function check_chat_permission($request) {
@@ -111,6 +118,13 @@ class TezNevise_AI_API {
         $collaboration_mode = $params['collaboration_mode'] ?? 'single';
         $thinking_enabled = $params['thinking_enabled'] ?? true;
         $skill_id = isset($params['skill_id']) ? sanitize_key($params['skill_id']) : '';
+        $page_url = isset($params['page_url']) ? esc_url_raw((string) $params['page_url']) : '';
+        $page_title = isset($params['page_title']) ? sanitize_text_field((string) $params['page_title']) : '';
+        self::$chat_context = array(
+            'query'      => $message,
+            'page_url'   => $page_url,
+            'page_title' => $page_title,
+        );
         
         $tool = TezNevise_AI_Core::get_tool($tool_id);
         if (!$tool) {
@@ -213,6 +227,22 @@ class TezNevise_AI_API {
             ]);
         }
         
+        $training_id = 0;
+        if ( class_exists( 'TezNevise_AI_Knowledge' ) && $replies ) {
+            $last_rep = $replies[ count( $replies ) - 1 ];
+            $training_id = TezNevise_AI_Knowledge::record(
+                array(
+                    'agent_id'           => $agent_id,
+                    'session_id'         => $session_token,
+                    'message_id'         => 0,
+                    'user_message'       => $message,
+                    'assistant_message'  => wp_strip_all_tags( (string) ( $last_rep['content'] ?? '' ) ),
+                    'thought'            => (string) ( $last_rep['thinking_process'] ?? '' ),
+                    'page_url'           => $page_url,
+                )
+            );
+        }
+
         $last = $replies[count($replies) - 1];
         return [
             'success' => true,
@@ -221,6 +251,7 @@ class TezNevise_AI_API {
             'agent_name' => $last['agent_name'],
             'model' => $model,
             'thinking_process' => $last['thinking_process'] ?? null,
+            'training_id' => $training_id,
             'replies' => $replies,
             'usage' => ['today' => $usage['message_count']],
         ];
@@ -325,6 +356,25 @@ class TezNevise_AI_API {
             $uid
         ), ARRAY_A);
         return array('success' => true, 'messages' => $rows);
+    }
+
+    /**
+     * Store a thumbs-up / thumbs-down on a training row.
+     *
+     * @param WP_REST_Request $request Request.
+     * @return array|WP_Error
+     */
+    public static function handle_rate( $request ) {
+        $nonce = (string) $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new WP_Error( 'bad_nonce', 'نشست نامعتبر', array( 'status' => 403 ) );
+        }
+        $id     = (int) $request->get_param( 'training_id' );
+        $rating = (int) $request->get_param( 'rating' );
+        if ( ! class_exists( 'TezNevise_AI_Knowledge' ) || ! TezNevise_AI_Knowledge::rate( $id, $rating ) ) {
+            return new WP_Error( 'bad_rate', 'امتیاز ثبت نشد', array( 'status' => 400 ) );
+        }
+        return array( 'success' => true, 'rating' => $rating );
     }
 
     /**
@@ -503,6 +553,12 @@ class TezNevise_AI_API {
         }
 		$prompt_parts[] = "Give a concise, evidence-based answer. First enclose ALL internal reasoning in <thought>...</thought>, then the public reply outside those tags.";
 		$prompt_parts[] = "You explain research methods and next steps. You never guarantee grades, acceptance, or scientific accuracy. If the question is high-stakes, invite the user to schedule a human consult and mention that chat history can be emailed.";
+		if ( class_exists( 'TezNevise_AI_Knowledge' ) ) {
+			$pack = TezNevise_AI_Knowledge::prompt_pack( (string) ( self::$chat_context['query'] ?? '' ), self::$chat_context );
+			if ( $pack ) {
+				$prompt_parts[] = $pack;
+			}
+		}
 		$prompt_parts[] = self::contact_instruction();
         return implode("\n\n", $prompt_parts);
     }

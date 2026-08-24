@@ -15,6 +15,7 @@ if (!defined('TEZNEVISE_AI_URL')) {
 
 require_once TEZNEVISE_AI_DIR . 'class-ai-core.php';
 require_once TEZNEVISE_AI_DIR . 'class-ai-database.php';
+require_once TEZNEVISE_AI_DIR . 'class-ai-knowledge.php';
 require_once TEZNEVISE_AI_DIR . 'class-ai-api.php';
 require_once TEZNEVISE_AI_DIR . 'class-ai-chat.php';
 require_once TEZNEVISE_AI_DIR . 'class-ai-settings.php';
@@ -24,6 +25,9 @@ add_action('after_setup_theme', 'teznevise_ai_init', 20);
 function teznevise_ai_init() {
     TezNevise_AI_Core::init();
     TezNevise_AI_Database::init();
+    if ( class_exists( 'TezNevise_AI_Knowledge' ) ) {
+        TezNevise_AI_Knowledge::init();
+    }
     TezNevise_AI_API::init();
     TezNevise_AI_Chat::init();
     TezNevise_AI_Settings::init();

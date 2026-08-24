@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.9
 Requires PHP: 8.3
-Stable tag: 1.9.21
+Stable tag: 1.9.22
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,9 @@ Author signature: MAZ//ID (Maziyar) — brand system: https://github.com/maziyar
 6. Assign menus: Primary, Mobile, Bottom
 
 == Changelog ==
+
+= 1.9.22 =
+* Chat redesign: thinking closed until click, site-knowledge corpus/training tables, page UX last-wins.
 
 = 1.9.11 =
 * Consulting copy, Enamad + TrustedSite, university crest CSS, customer dashboard, 30 welcome coins.

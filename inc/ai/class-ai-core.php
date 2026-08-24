@@ -18,8 +18,9 @@ class TezNevise_AI_Core {
         
         // Initialize database
         TezNevise_AI_Database::init();
-        
-        // Initialize API
+        if ( class_exists( 'TezNevise_AI_Knowledge' ) ) {
+            TezNevise_AI_Knowledge::init();
+        }
         TezNevise_AI_API::init();
         
         // Initialize chat

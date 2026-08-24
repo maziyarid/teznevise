@@ -27,19 +27,20 @@ export function LiveChat() {
   const [menu, setMenu] = useState(false);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
-  const [thinkingOn, setThinkingOn] = useState(true);
-  const [collab, setCollab] = useState(true);
+  const [thinkingOn, setThinkingOn] = useState(false);
+  const [collab, setCollab] = useState(false);
   const [research, setResearch] = useState(false);
   const [handoffOpen, setHandoffOpen] = useState(false);
   const [agentId, setAgentId] = useState("teznevise");
   const [agents, setAgents] = useState(ROSTER);
-  const [thoughtOpen, setThoughtOpen] = useState(true);
+  const [thoughtOpen, setThoughtOpen] = useState(false);
   const [elapsed, setElapsed] = useState(0);
+  const [hintsOn, setHintsOn] = useState(true);
   const [msgs, setMsgs] = useState<Msg[]>([
     {
       role: "assistant",
       name: "تزنویسه",
-      text: "سلام. سؤال پژوهشی‌تان را بپرسید تا مسیر را برایتان توضیح بدهم. دقت علمی تضمین نمی‌شود؛ برای بررسی انسانی تماس رزرو کنید.",
+      text: "سلام. سؤال پژوهشی‌تان را بپرسید؛ مسیر مشاوره و ابزار مناسب را دقیق می‌گویم. استدلال پشت پاسخ پنهان است مگر روی «استدلال» بزنید.",
     },
   ]);
   const [handoff, setHandoff] = useState({ name: "", phone: "", email: "", note: "" });
@@ -80,20 +81,26 @@ export function LiveChat() {
     return () => document.removeEventListener("keydown", onKey);
   }, [menu, open]);
 
+  useEffect(() => {
+    document.body.classList.toggle("tz-livechat-open", open);
+    return () => document.body.classList.remove("tz-livechat-open");
+  }, [open]);
+
   const agent = agents.find((a) => a.id === agentId) ?? agents[0];
   const history = useMemo(
     () => msgs.map((m) => `${m.role === "user" ? "کاربر" : m.name || "تزنویسه"}: ${m.text}`).join("\n"),
     [msgs],
   );
 
-  async function send() {
-    const q = text.trim();
+  async function send(raw?: string) {
+    const q = (raw ?? text).trim();
     if (q.length < 4 || busy) return;
     setText("");
     setMsgs((m) => [...m, { role: "user", text: q, name: "شما" }]);
     setBusy(true);
     setElapsed(1);
-    setThoughtOpen(true);
+    setThoughtOpen(false);
+    setHintsOn(false);
     const ctl = new AbortController();
     abortRef.current = ctl;
     try {
@@ -102,7 +109,7 @@ export function LiveChat() {
           tool: "live-chat",
           context: research ? "research" : "live-chat",
           question: q,
-          thinking: thinkingOn,
+          thinking: true,
           mode: research || collab ? "collab" : "single",
           agentIds: [agent.id],
         },
@@ -165,7 +172,8 @@ export function LiveChat() {
         aria-label="باز کردن گفتگوی زنده پژوهشی"
         title="گفتگوی زنده"
       >
-        <FaIcon icon="fa-headset" />
+        <FaIcon icon="fa-comment-dots" />
+        <span className="tz-livechat__fab-label">گفتگو</span>
       </button>
       {open ? (
         <section className={`tz-ai-chat tz-gpt tz-livechat__panel${menu ? " is-picking" : ""}`} data-live-chat="1">
@@ -231,9 +239,10 @@ export function LiveChat() {
                     {
                       role: "assistant",
                       name: agent?.name,
-                      text: "سلام. سؤال پژوهشی‌تان را بپرسید تا مسیر را برایتان توضیح بدهم.",
+                      text: "سلام. سؤال پژوهشی‌تان را بپرسید؛ مسیر مشاوره و ابزار مناسب را دقیق می‌گویم. استدلال پشت پاسخ پنهان است مگر روی «استدلال» بزنید.",
                     },
                   ]);
+                  setHintsOn(true);
                 }}
               >
                 <FaIcon icon="fa-plus" />
@@ -258,7 +267,7 @@ export function LiveChat() {
             />
           ) : null}
           <p className="tz-livechat__note">
-            پاسخ‌ها آموزشی‌اند و دقت علمی را تضمین نمی‌کنند. برای بررسی تخصصی، تماس رزرو کنید.
+            پاسخ‌ها بر اساس محتوای تزنویسه‌اند و مشاوره آموزشی‌اند، نه نوشتن پایان‌نامه.
           </p>
           <div className="tz-gpt__log" role="log" aria-live="polite" ref={logRef} aria-busy={busy}>
             {msgs.map((m, i) => (
@@ -276,20 +285,43 @@ export function LiveChat() {
             ))}
             {busy ? (
               <article className="tz-ai-msg is-assistant is-pending">
-                <details className="tz-ai-think is-live" open={thoughtOpen} onToggle={(e) => setThoughtOpen((e.target as HTMLDetailsElement).open)}>
-                  <summary className="tz-ai-think__sum">
-                    <FaIcon icon="fa-spinner" className="fa-spin" /> در حال استدلال · {elapsed}ث
-                  </summary>
-                  <pre className="tz-ai-think__stream">چیدن استدلال… می‌توانید این پنل را ببندید و منتظر پاسخ بمانید.</pre>
-                </details>
+                {thinkingOn ? (
+                  <details className="tz-ai-think is-live" open={thoughtOpen} onToggle={(e) => setThoughtOpen((e.target as HTMLDetailsElement).open)}>
+                    <summary className="tz-ai-think__sum">
+                      <FaIcon icon="fa-spinner" className="fa-spin" /> در حال استدلال · {elapsed}ث
+                    </summary>
+                    <pre className="tz-ai-think__stream">چیدن استدلال… لمس کنید تا باز شود.</pre>
+                  </details>
+                ) : null}
                 <div className="tz-ai-msg__bubble tz-ai-msg__bubble--wait">
                   <span className="tz-ai-dots" aria-hidden>
                     <i /><i /><i />
                   </span>
+                  <span className="tz-ai-wait-label">در حال پاسخ…</span>
                 </div>
               </article>
             ) : null}
           </div>
+          {hintsOn && !busy ? (
+            <div className="tz-gpt-hints">
+              {[
+                "از کجا مشاوره پایان‌نامه را شروع کنم؟",
+                "کدام آزمون آماری برای داده من مناسب است؟",
+                "ابزارهای آنلاین تزنویسه چه کمکی می‌کنند؟",
+              ].map((hint) => (
+                <button
+                  key={hint}
+                  type="button"
+                  className="tz-gpt-hint"
+                  onClick={() => {
+                    void send(hint);
+                  }}
+                >
+                  {hint}
+                </button>
+              ))}
+            </div>
+          ) : null}
           <form
             className="tz-gpt-composer"
             onSubmit={(e) => {
