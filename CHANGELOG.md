@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.30 — 2026-08-25 — Purge Yoast /posts/ redirect
+
+- Live `/posts/` still 301s to `/thesis-journey/` with `X-Redirect-By: Yoast SEO Premium` even after theme bootstrap — Yoast runs on `plugins_loaded`. On `init` the theme now deletes a `/posts` rule from Yoast Premium redirect options so the next request can 301 to `/blog/`.
+
 ## 1.9.29 — 2026-08-25 — Earlier /posts/ alias
 
 - Alias also runs during theme bootstrap (when `seo.php` loads) so Yoast cannot 301 `/posts/` first.

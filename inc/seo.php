@@ -169,6 +169,40 @@ if ( ! is_admin() && function_exists( 'wp_safe_redirect' ) ) {
 	teznevise_alias_redirects();
 }
 
+/**
+ * Yoast SEO Premium 301s /posts/ → /thesis-journey/ on plugins_loaded,
+ * before the theme runs. Remove that stored rule so later requests hit /blog/.
+ */
+function teznevise_purge_yoast_posts_redirect() {
+	if ( '1.9.30' === get_option( 'teznevise_purged_yoast_posts' ) ) {
+		return;
+	}
+	$opts = array(
+		'wpseo-premium-redirects-base',
+		'wpseo-premium-redirects-export-plain',
+		'wpseo-premium-redirects-export-regex',
+	);
+	foreach ( $opts as $opt ) {
+		$val = get_option( $opt );
+		if ( ! is_array( $val ) || ! $val ) {
+			continue;
+		}
+		$changed = false;
+		foreach ( $val as $origin => $row ) {
+			$norm = untrailingslashit( '/' . ltrim( (string) $origin, '/' ) );
+			if ( '/posts' === $norm ) {
+				unset( $val[ $origin ] );
+				$changed = true;
+			}
+		}
+		if ( $changed ) {
+			update_option( $opt, $val, false );
+		}
+	}
+	update_option( 'teznevise_purged_yoast_posts', '1.9.30', false );
+}
+add_action( 'init', 'teznevise_purge_yoast_posts_redirect', -1000 );
+
 function teznevise_schema_data() {
 	if ( teznevise_seo_plugin_active() ) {
 		return array();
