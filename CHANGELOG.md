@@ -2,7 +2,7 @@
 
 ## 1.9.29 — 2026-08-25 — Earlier /posts/ alias
 
-- Alias redirects also run on `after_setup_theme` and `init` at -999 so Yoast Premium cannot 301 `/posts/` to `/thesis-journey/` first.
+- Alias also runs during theme bootstrap (when `seo.php` loads) so Yoast cannot 301 `/posts/` first.
 
 ## 1.9.28 — 2026-08-25 — Beat Yoast /posts/ redirect
 

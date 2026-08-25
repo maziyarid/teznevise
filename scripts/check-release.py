@@ -285,8 +285,8 @@ def check_source_contracts() -> None:
         error("/posts/ is not forced to /blog/")
     if "add_action( 'init', 'teznevise_alias_redirects', -999 )" not in seo:
         error("Alias redirects must run on init -999 to beat Yoast Premium")
-    if "after_setup_theme" not in seo:
-        error("Alias redirects must run on after_setup_theme")
+    if "teznevise_alias_redirects();" not in seo:
+        error("Alias redirects must also run at theme bootstrap for /posts/")
     if "ثبت سفارش" not in seo:
         error("Inquiry title still uses ثبت سفارش")
     aiapi = (ROOT / "inc" / "ai" / "class-ai-api.php").read_text(encoding="utf-8")

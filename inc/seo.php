@@ -165,6 +165,9 @@ function teznevise_alias_redirects() {
 add_action( 'after_setup_theme', 'teznevise_alias_redirects', 0 );
 add_action( 'init', 'teznevise_alias_redirects', -999 );
 add_action( 'template_redirect', 'teznevise_alias_redirects', 0 );
+if ( ! is_admin() && function_exists( 'wp_safe_redirect' ) ) {
+	teznevise_alias_redirects();
+}
 
 function teznevise_schema_data() {
 	if ( teznevise_seo_plugin_active() ) {
