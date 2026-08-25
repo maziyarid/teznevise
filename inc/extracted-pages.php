@@ -737,6 +737,9 @@ function teznevise_the_page_leftover_content( $post_id = 0 ) {
 	if ( $post_id <= 0 || isset( $printed[ $post_id ] ) ) {
 		return;
 	}
+	if ( is_front_page() ) {
+		return;
+	}
 	$printed[ $post_id ] = true;
 	$classic_raw         = teznevise_page_classic_source( $post_id );
 	if ( '' === teznevise_page_classic_copy( $classic_raw ) ) {
@@ -747,6 +750,9 @@ function teznevise_the_page_leftover_content( $post_id = 0 ) {
 	if ( function_exists( 'teznevise_split_faq_blocks' ) ) {
 		list( $html, $faq_html ) = teznevise_split_faq_blocks( $html );
 	}
+	if ( function_exists( 'teznevise_strip_unverified_stat_chips' ) ) {
+		$html = teznevise_strip_unverified_stat_chips( $html );
+	}
 	$box  = teznevise_page_content_disclosure_markup( $html, $post_id );
 	if ( '' !== $box ) {
 		echo $box; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -754,6 +760,19 @@ function teznevise_the_page_leftover_content( $post_id = 0 ) {
 	if ( $faq_html ) {
 		echo $faq_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
+}
+
+/**
+ * Drop leftover mini-stat chips with unverifiable counts (theme must not invent numbers).
+ *
+ * @param string $html HTML.
+ * @return string
+ */
+function teznevise_strip_unverified_stat_chips( $html ) {
+	$html = (string) $html;
+	$html = preg_replace( '#<(p|div|span|li)[^>]*tz-mini-stat[^>]*>.*?</\1>#is', '', $html );
+	$html = preg_replace( '/\+?\s*[۱۲۳۴۵۶۷۸۹۰\d][۱۲۳۴۵۶۷۸۹۰\d,\.]*\s*[٪%]?\s*[—–-]\s*(پروژه موفق|رضایت دانشجویان|رضایت متقاضیان)/u', '', $html );
+	return is_string( $html ) ? $html : '';
 }
 
 /**

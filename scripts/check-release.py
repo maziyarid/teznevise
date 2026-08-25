@@ -84,6 +84,7 @@ def check_requires() -> None:
         "assets/css/hotfix-207.css",
         "assets/css/hotfix-208.css",
         "assets/css/hotfix-209.css",
+        "assets/css/hotfix-210.css",
         "inc/ai/class-ai-knowledge.php",
         "inc/legal-copy.php",
         "inc/waitlist.php",
@@ -266,6 +267,8 @@ def check_source_contracts() -> None:
         error("hotfix-208.css is not in the runtime CSS concat")
     if "hotfix-209.css" not in perf:
         error("hotfix-209.css is not in the runtime CSS concat")
+    if "hotfix-210.css" not in perf:
+        error("hotfix-210.css is not in the runtime CSS concat")
 
     seo = (ROOT / "inc" / "seo.php").read_text(encoding="utf-8")
     if "function teznevise_split_faq_blocks" not in seo:
@@ -276,6 +279,21 @@ def check_source_contracts() -> None:
         error("/about/ is not redirected to about-us")
     if "function teznevise_lead_nonce_field" not in seo:
         error("Unique lead nonce helper is missing")
+    if "'/order'" not in seo and '"/order"' not in seo:
+        error("/order/ is not redirected to inquiry")
+    if "ثبت سفارش" not in seo:
+        error("Inquiry title still uses ثبت سفارش")
+    aiapi = (ROOT / "inc" / "ai" / "class-ai-api.php").read_text(encoding="utf-8")
+    if "function sanitize_public_reply" not in aiapi:
+        error("Chat public-reply sanitizer is missing")
+    extracted = (ROOT / "inc" / "extracted-pages.php").read_text(encoding="utf-8")
+    if "is_front_page" not in extracted:
+        error("Homepage leftover disclosure is still printed")
+    if "function teznevise_strip_unverified_stat_chips" not in extracted:
+        error("Unverified leftover stat-chip stripper is missing")
+    about_visual = (ROOT / "template-parts" / "about-visual.php").read_text(encoding="utf-8")
+    if "۹۸٪" in about_visual or "+۸۵۰۰" in about_visual:
+        error("About visual still hardcodes invented counts")
     hotfix209 = (ROOT / "assets" / "css" / "hotfix-209.css").read_text(encoding="utf-8")
     if "faq-q__text" not in hotfix209 or "display: block !important" not in hotfix209:
         error("hotfix-209 does not unhide FAQ question text against hotfix-196 last-child rule")

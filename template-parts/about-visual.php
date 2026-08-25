@@ -15,10 +15,10 @@ if ( ! in_array( $slug, array( 'our-story', 'about', 'about-us' ), true ) ) {
 <section class="section tz-story-visual" aria-label="<?php esc_attr_e( 'مسیر تزنویسه', 'teznevise' ); ?>">
 	<div class="container">
 		<div class="tz-story-stats" data-reveal-stagger>
-			<article><strong>+۸۵۰۰</strong><span><?php esc_html_e( 'دانشجو همراهی‌شده', 'teznevise' ); ?></span></article>
-			<article><strong>+۱۲۰</strong><span><?php esc_html_e( 'رشته دانشگاهی', 'teznevise' ); ?></span></article>
-			<article><strong>+۲۰</strong><span><?php esc_html_e( 'مشاور متخصص', 'teznevise' ); ?></span></article>
-			<article><strong>۹۸٪</strong><span><?php esc_html_e( 'رضایت مسیر مشاوره', 'teznevise' ); ?></span></article>
+			<article><strong><?php esc_html_e( 'مشاوره', 'teznevise' ); ?></strong><span><?php esc_html_e( 'همراهی دانشجو تا دفاع', 'teznevise' ); ?></span></article>
+			<article><strong><?php esc_html_e( 'رشته‌ها', 'teznevise' ); ?></strong><span><?php esc_html_e( 'علوم انسانی تا مهندسی', 'teznevise' ); ?></span></article>
+			<article><strong><?php esc_html_e( 'روش', 'teznevise' ); ?></strong><span><?php esc_html_e( 'آمار، کیفی و شبیه‌سازی', 'teznevise' ); ?></span></article>
+			<article><strong><?php esc_html_e( 'شفافیت', 'teznevise' ); ?></strong><span><?php esc_html_e( 'بدون تضمین نمره یا پذیرش', 'teznevise' ); ?></span></article>
 		</div>
 		<div class="section-head center" data-reveal>
 			<span class="eyebrow"><?php esc_html_e( 'داستان ما', 'teznevise' ); ?></span>

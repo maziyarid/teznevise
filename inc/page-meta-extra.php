@@ -39,7 +39,7 @@ function teznevise_page_meta_schema_extra() {
 		'team_stats' => array(
 			'label'       => __( 'آمار تیم (عدد|برچسب)', 'teznevise' ),
 			'type'        => 'string',
-			'default'     => "۲۷+|پژوهشگر متخصص\n۴+|کشور حضور\n۱۹۷۲+|پروژه انجام‌شده\n۹۸٪|رضایت مراجعان",
+			'default'     => '',
 			'description' => __( 'هر خط: ۲۷+|پژوهشگر متخصص', 'teznevise' ),
 			'ui'          => 'textarea',
 			'group'       => 'team',

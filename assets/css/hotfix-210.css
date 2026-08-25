@@ -1,0 +1,5 @@
+/* 1.9.26 — leftover unverifiable stat chips stay out of the public UI */
+.tz-mini-stat,
+.tz-classic-disclosure .tz-mini-stat {
+  display: none !important;
+}

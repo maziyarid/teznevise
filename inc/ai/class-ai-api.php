@@ -1213,9 +1213,8 @@ class TezNevise_AI_API {
 
         $content = self::extract_content($provider, $response_body);
         $split = self::split_thought_block($content);
-		// Keep stripping legacy thought tags defensively, but never return their
-		// contents to the browser or persist them.
-		return ['content' => $split['content'], 'thinking_process' => null];
+		$public = self::sanitize_public_reply($split['content'], $message);
+		return ['content' => $public, 'thinking_process' => null];
     }
 
     /**
@@ -1242,6 +1241,42 @@ class TezNevise_AI_API {
             'content'  => trim( is_string( $content ) ? $content : '' ),
             'thinking' => trim( $thinking ),
         );
+    }
+
+    /**
+     * Drop English planner dumps so a Persian question never gets an English
+     * chain-of-thought as the public reply.
+     *
+     * @param string $content      Model text after thought-tag strip.
+     * @param string $user_message User message.
+     * @return string
+     */
+    private static function sanitize_public_reply($content, $user_message) {
+        $public = trim((string) $content);
+        $form   = '';
+        if (false !== strpos($public, '[[SHOW_CONTACT_FORM]]')) {
+            $form   = "\n[[SHOW_CONTACT_FORM]]";
+            $public = str_replace('[[SHOW_CONTACT_FORM]]', '', $public);
+        }
+        $leak = '/CRITICAL DIRECTIVE|token-frugal|OUTPUT FORMAT|We need to respond|The user asks|According to (the )?(instructions|site knowledge)|I must avoid|Public reply|never break character|SKILL\.md|chain-of-thought|hidden reasoning|concise public answer/i';
+        if (preg_match($leak, $public)) {
+            $keep = array();
+            foreach (preg_split('/\n{2,}/', $public) as $part) {
+                $part = trim($part);
+                if ('' === $part) {
+                    continue;
+                }
+                if (preg_match('/[آ-ی]/u', $part) && ! preg_match($leak, $part)) {
+                    $keep[] = $part;
+                }
+            }
+            $public = implode("\n\n", $keep);
+        }
+        $user_fa = (bool) preg_match('/[آ-ی]/u', (string) $user_message);
+        if ($user_fa && ! preg_match('/[آ-ی]/u', $public)) {
+            $public = 'برای شروع مشاوره، از «ثبت درخواست» نام، موبایل و موضوع را بفرستید تا در ساعات کاری مسیر اولیه بررسی شود. تزنویسه پایان‌نامه را به‌جای دانشجو نمی‌نویسد.';
+        }
+        return trim($public) . $form;
     }
 
     public static function allowed_hosts() {

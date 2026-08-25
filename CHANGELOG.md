@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.26 — 2026-08-25 — Remaining live holes
+
+- Chat: English planner dumps (`We need to respond…`) are stripped; a Persian question always gets a Persian public reply. Thought tags stay stripped and are not persisted.
+- Homepage leftover «ادامه مطلب» (duplicate service prose) is no longer printed on the front page.
+- Theme-injected invented counts (`+۸۵۰۰`, `۹۸٪`) removed from the about visual; team_stats default is empty. Leftover `.tz-mini-stat` chips are hidden (hotfix-210).
+- Short titles: `ثبت سفارش`, `آزمون t`, `رگرسیون`, `تحلیل کیفی`/`آماری` get descriptive document titles. Empty Yoast meta descriptions fill from excerpt/content.
+- `/order/` 301s to `/inquiry/`. `/posts/` 301s to the posts page. Service JSON-LD covers project and article. Duplicate leftover FAQ questions are collapsed.
+
 ## 1.9.25 — 2026-08-24 — Fatal recovery + chat/UI completion
 
 - Reverted the broken 1.9.25 architecture rewrite that placed invalid quotes in `functions.php` and `inc/ai-agents.php`. Removed its duplicate CSS/API/homepage files and restored the tested runtime bundle architecture. This fixes HTTP 500 on REST and uncached routes.

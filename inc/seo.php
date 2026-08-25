@@ -145,7 +145,18 @@ function teznevise_alias_redirects() {
 		'/statistics'         => array( 'service-statistics' ),
 		'/posts'              => array( 'blog' ),
 		'/tools'              => array( 'online-calculation-tools' ),
+		'/order'              => array( 'inquiry' ),
 	);
+	if ( '/posts' === $path ) {
+		$blog_id = (int) get_option( 'page_for_posts' );
+		if ( $blog_id > 0 ) {
+			$permalink = get_permalink( $blog_id );
+			if ( $permalink ) {
+				wp_safe_redirect( $permalink, 301 );
+				exit;
+			}
+		}
+	}
 	if ( ! isset( $map[ $path ] ) ) {
 		return;
 	}
@@ -268,6 +279,19 @@ function teznevise_filter_document_title( $title ) {
 	if ( is_home() && ( $short || 'بلاگ' === $core ) ) {
 		return 'راهنماها و آموزش‌های پژوهشی | بلاگ ' . $site;
 	}
+	$map = array(
+		'ثبت سفارش'     => 'ثبت درخواست مشاوره پژوهشی',
+		'آزمون t'       => 'محاسبه‌گر آزمون t آنلاین',
+		'رگرسیون'       => 'محاسبه‌گر تحلیل رگرسیون آنلاین',
+		'تحلیل کیفی'    => 'مشاوره تحلیل کیفی پژوهش',
+		'تحلیل آماری'   => 'تحلیل آماری تخصصی پژوهش',
+		'شبیه‌سازی'     => 'شبیه‌سازی تخصصی مهندسی و پژوهش',
+		'دانلودها'      => 'دانلود قالب و فایل‌های پژوهشی',
+		'درباره ما'     => 'درباره تزنویسه، همراه پژوهشی دانشجویان',
+	);
+	if ( isset( $map[ $core ] ) ) {
+		return $map[ $core ] . ' | ' . $site;
+	}
 	return $title;
 }
 add_filter( 'wpseo_title', 'teznevise_filter_document_title', 20 );
@@ -286,6 +310,23 @@ function teznevise_filter_metadesc( $desc ) {
 	}
 	if ( is_front_page() ) {
 		return 'تزنویسه همراه پژوهشی دانشجویان است: مشاوره پایان‌نامه و پروپوزال، تحلیل آماری و ابزارهای آنلاین رایگان.';
+	}
+	if ( is_home() ) {
+		return 'راهنماها و آموزش‌های پژوهشی تزنویسه: موضوع، پروپوزال، فصل‌های پایان‌نامه و روش تحقیق.';
+	}
+	if ( is_singular() ) {
+		$id      = get_queried_object_id();
+		$excerpt = trim( wp_strip_all_tags( (string) get_post_field( 'post_excerpt', $id ) ) );
+		if ( '' === $excerpt ) {
+			$excerpt = trim( wp_strip_all_tags( (string) get_post_field( 'post_content', $id ) ) );
+		}
+		if ( function_exists( 'teznevise_consult_copy' ) ) {
+			$excerpt = teznevise_consult_copy( $excerpt );
+		}
+		$excerpt = preg_replace( '/\s+/u', ' ', $excerpt );
+		if ( is_string( $excerpt ) && ( function_exists( 'mb_strlen' ) ? mb_strlen( $excerpt ) : strlen( $excerpt ) ) >= 40 ) {
+			return wp_trim_words( $excerpt, 32, '' );
+		}
 	}
 	return $desc;
 }
@@ -336,13 +377,19 @@ function teznevise_faq_items_markup( $items ) {
 	}
 	ob_start();
 	echo '<ul class="faq-grid tz-faq-grid">';
-	$i = 0;
+	$i    = 0;
+	$seen = array();
 	foreach ( $items as $item ) {
 		$q = isset( $item['q'] ) ? (string) $item['q'] : '';
 		$a = isset( $item['a'] ) ? (string) $item['a'] : '';
 		if ( '' === $q || '' === $a ) {
 			continue;
 		}
+		$key = md5( $q );
+		if ( isset( $seen[ $key ] ) ) {
+			continue;
+		}
+		$seen[ $key ] = true;
 		++$i;
 		teznevise_faq_collect( $q, $a );
 		$tone = ' tone-' . ( ( ( $i - 1 ) % 9 ) + 1 );
@@ -366,7 +413,8 @@ function teznevise_faq_items_markup( $items ) {
  * @return array<int,array{q:string,a:string}>
  */
 function teznevise_parse_faq_ul( $ul ) {
-	$out = array();
+	$out  = array();
+	$seen = array();
 	if ( ! preg_match_all( '/<li\b[^>]*>(.*?)<\/li>/is', (string) $ul, $lis ) ) {
 		return $out;
 	}
@@ -389,6 +437,11 @@ function teznevise_parse_faq_ul( $ul ) {
 		if ( '' === $q || '' === $a || ! teznevise_text_is_question( $q ) ) {
 			continue;
 		}
+		$key = md5( $q );
+		if ( isset( $seen[ $key ] ) ) {
+			continue;
+		}
+		$seen[ $key ] = true;
 		$out[] = array( 'q' => $q, 'a' => $a );
 	}
 	return $out;
@@ -475,6 +528,8 @@ function teznevise_output_service_schema() {
 		'service-statistics'  => array( 'name' => 'تحلیل آماری', 'url' => home_url( '/service-statistics/' ) ),
 		'service-simulation'  => array( 'name' => 'شبیه‌سازی', 'url' => home_url( '/service-simulation/' ) ),
 		'service-qualitative' => array( 'name' => 'تحلیل کیفی', 'url' => home_url( '/service-qualitative/' ) ),
+		'service-project'     => array( 'name' => 'مشاوره پروژه دانشجویی', 'url' => home_url( '/service-project/' ) ),
+		'service-article'     => array( 'name' => 'مشاوره نگارش مقاله', 'url' => home_url( '/service-article/' ) ),
 	);
 	if ( ! isset( $map[ $slug ] ) ) {
 		return;
