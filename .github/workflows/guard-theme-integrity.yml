@@ -151,7 +151,8 @@ jobs:
           wp config create --path="$WP" --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check
           wp core install --path="$WP" --url=https://teznevise.ir --title=Teznevise --admin_user=admin --admin_password=admin --admin_email=admin@example.com --skip-email
           wp theme activate teznevise --path="$WP"
-          wp eval --path="$WP" 'if (!defined("TEZNEVISE_VERSION") || TEZNEVISE_VERSION !== "1.9.29") { fwrite(STDERR, "version mismatch\n"); exit(1); } echo TEZNEVISE_VERSION, "\n";'
+          EXPECTED=$(grep -oP "define\(\s*'TEZNEVISE_VERSION',\s*'\K[^']+" theme-src/functions.php)
+          wp eval --path="$WP" "if (!defined('TEZNEVISE_VERSION') || TEZNEVISE_VERSION !== '$EXPECTED') { fwrite(STDERR, 'version mismatch: got ' . (defined('TEZNEVISE_VERSION') ? TEZNEVISE_VERSION : 'undefined') . ", expected $EXPECTED\n"); exit(1); } echo TEZNEVISE_VERSION, \"\\n\";"
           wp eval --path="$WP" '
             $page = wp_insert_post(array("post_type"=>"page","post_status"=>"publish","post_title"=>"Owned","post_content"=>"Hi","post_name"=>"owned-short"), true);
             if (is_wp_error($page)) { fwrite(STDERR, $page->get_error_message()); exit(1); }
