@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.27 — 2026-08-25 — Service titles + meta fallback
+
+- Tab titles `انجام پروژه دانشجویی` and `انجام مقاله` rewrite to مشاوره. Pages whose excerpt is empty (shortcode tools) get a meta description from the consulting-safe title.
+
 ## 1.9.26 — 2026-08-25 — Remaining live holes
 
 - Chat: English planner dumps (`We need to respond…`) are stripped; a Persian question always gets a Persian public reply. Thought tags stay stripped and are not persisted.

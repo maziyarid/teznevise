@@ -288,6 +288,8 @@ function teznevise_filter_document_title( $title ) {
 		'شبیه‌سازی'     => 'شبیه‌سازی تخصصی مهندسی و پژوهش',
 		'دانلودها'      => 'دانلود قالب و فایل‌های پژوهشی',
 		'درباره ما'     => 'درباره تزنویسه، همراه پژوهشی دانشجویان',
+		'انجام پروژه دانشجویی' => 'مشاوره پروژه دانشجویی',
+		'انجام مقاله'   => 'مشاوره نگارش مقاله',
 	);
 	if ( isset( $map[ $core ] ) ) {
 		return $map[ $core ] . ' | ' . $site;
@@ -326,6 +328,13 @@ function teznevise_filter_metadesc( $desc ) {
 		$excerpt = preg_replace( '/\s+/u', ' ', $excerpt );
 		if ( is_string( $excerpt ) && ( function_exists( 'mb_strlen' ) ? mb_strlen( $excerpt ) : strlen( $excerpt ) ) >= 40 ) {
 			return wp_trim_words( $excerpt, 32, '' );
+		}
+		$fallback = trim( wp_strip_all_tags( (string) get_the_title( $id ) ) );
+		if ( function_exists( 'teznevise_consult_copy' ) ) {
+			$fallback = teznevise_consult_copy( $fallback );
+		}
+		if ( '' !== $fallback ) {
+			return $fallback . ' | ' . get_bloginfo( 'name' );
 		}
 	}
 	return $desc;
