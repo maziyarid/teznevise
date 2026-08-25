@@ -162,7 +162,8 @@ function teznevise_alias_redirects() {
 		}
 	}
 }
-add_action( 'init', 'teznevise_alias_redirects', 0 );
+add_action( 'after_setup_theme', 'teznevise_alias_redirects', 0 );
+add_action( 'init', 'teznevise_alias_redirects', -999 );
 add_action( 'template_redirect', 'teznevise_alias_redirects', 0 );
 
 function teznevise_schema_data() {
