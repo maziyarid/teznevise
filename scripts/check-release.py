@@ -281,6 +281,10 @@ def check_source_contracts() -> None:
         error("Unique lead nonce helper is missing")
     if "'/order'" not in seo and '"/order"' not in seo:
         error("/order/ is not redirected to inquiry")
+    if "home_url( '/blog/' )" not in seo and 'home_url( "/blog/" )' not in seo:
+        error("/posts/ is not forced to /blog/")
+    if "add_action( 'init', 'teznevise_alias_redirects', 0 )" not in seo:
+        error("Alias redirects must run on init priority 0 to beat Yoast Premium")
     if "ثبت سفارش" not in seo:
         error("Inquiry title still uses ثبت سفارش")
     aiapi = (ROOT / "inc" / "ai" / "class-ai-api.php").read_text(encoding="utf-8")

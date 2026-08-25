@@ -148,14 +148,8 @@ function teznevise_alias_redirects() {
 		'/order'              => array( 'inquiry' ),
 	);
 	if ( '/posts' === $path ) {
-		$blog_id = (int) get_option( 'page_for_posts' );
-		if ( $blog_id > 0 ) {
-			$permalink = get_permalink( $blog_id );
-			if ( $permalink ) {
-				wp_safe_redirect( $permalink, 301 );
-				exit;
-			}
-		}
+		wp_safe_redirect( home_url( '/blog/' ), 301 );
+		exit;
 	}
 	if ( ! isset( $map[ $path ] ) ) {
 		return;
@@ -168,7 +162,8 @@ function teznevise_alias_redirects() {
 		}
 	}
 }
-add_action( 'template_redirect', 'teznevise_alias_redirects', 1 );
+add_action( 'init', 'teznevise_alias_redirects', 0 );
+add_action( 'template_redirect', 'teznevise_alias_redirects', 0 );
 
 function teznevise_schema_data() {
 	if ( teznevise_seo_plugin_active() ) {
@@ -335,6 +330,17 @@ function teznevise_filter_metadesc( $desc ) {
 		}
 		if ( '' !== $fallback ) {
 			return $fallback . ' | ' . get_bloginfo( 'name' );
+		}
+	}
+	if ( is_category() || is_tag() || is_tax() ) {
+		$term = get_queried_object();
+		$desc = ( $term && ! empty( $term->description ) ) ? trim( wp_strip_all_tags( (string) $term->description ) ) : '';
+		if ( '' !== $desc ) {
+			return wp_trim_words( $desc, 32, '' );
+		}
+		$name = trim( wp_strip_all_tags( (string) single_term_title( '', false ) ) );
+		if ( '' !== $name ) {
+			return $name . ' | ' . get_bloginfo( 'name' );
 		}
 	}
 	return $desc;

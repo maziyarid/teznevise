@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.9.28 — 2026-08-25 — Beat Yoast /posts/ redirect
+
+- `/posts/` was 301ing to `/thesis-journey/` via Yoast SEO Premium (`X-Redirect-By`) because the theme alias ran at the same `template_redirect` priority as the plugin. Alias now runs on `init` and `template_redirect` at priority 0 and sends `/posts/` to `/blog/`.
+- Category/tag archives get a meta description from the term description or title.
+
 ## 1.9.27 — 2026-08-25 — Service titles + meta fallback
 
 - Tab titles `انجام پروژه دانشجویی` and `انجام مقاله` rewrite to مشاوره. Pages whose excerpt is empty (shortcode tools) get a meta description from the consulting-safe title.
