@@ -14,13 +14,15 @@ while ( have_posts() ) :
 	$has_builder_hero = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'hero' );
 	$has_builder_faq  = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'faq' );
 	$eyebrow          = teznevise_page_field( 'eyebrow', 0, __( 'ارتباط با ما', 'teznevise' ) );
-	$subtitle        = teznevise_page_field( 'subtitle', 0, __( 'مشاوره اولیه رایگان — پاسخ‌گویی سریع', 'teznevise' ) );
+	$subtitle         = teznevise_page_field( 'subtitle', 0, __( 'مشاوره اولیه رایگان — پاسخ‌گویی سریع', 'teznevise' ) );
+	$slug             = get_post_field( 'post_name', get_the_ID() );
+	$is_inquiry       = ( 'inquiry' === $slug || 'order' === $slug );
 
-	if ( $has_builder_hero ) {
+	if ( ! $is_inquiry && $has_builder_hero ) {
 		teznevise_builder_render_sections( 0, array( 'only' => array( 'hero' ) ) );
 	} else {
 		?>
-<section class="section">
+<section class="section tz-inquiry-top">
 	<div class="container">
 		<div class="section-head" data-reveal>
 			<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
@@ -35,19 +37,17 @@ while ( have_posts() ) :
 	}
 	?>
 
-<section class="section">
+<section class="section tz-inquiry-form-band">
 	<div class="container">
 		<div class="longcopy article-content" id="inquiry-form" data-reveal>
 			<?php
-			$slug        = get_post_field( 'post_name', get_the_ID() );
-			$is_inquiry  = ( 'inquiry' === $slug || 'order' === $slug );
-			$raw_content = get_post_field( 'post_content', get_the_ID() );
-			$plain       = trim( wp_strip_all_tags( (string) $raw_content ) );
+			$raw_content       = get_post_field( 'post_content', get_the_ID() );
+			$plain             = trim( wp_strip_all_tags( (string) $raw_content ) );
 			$is_shortcode_only = (bool) preg_match( '/^\[[a-zA-Z][^\]]{0,120}\]$/u', html_entity_decode( $plain, ENT_QUOTES, 'UTF-8' ) );
 
 			if ( $is_inquiry ) :
 				?>
-			<div class="inquiry-grid">
+			<div class="inquiry-grid tz-inquiry-grid">
 				<div>
 					<?php echo function_exists( 'teznevise_render_native_lead_form' ) ? teznevise_render_native_lead_form( 'inquiry' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</div>

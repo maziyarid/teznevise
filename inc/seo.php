@@ -124,6 +124,57 @@ function teznevise_seo_canonical_filter( $canonical ) {
 add_filter( 'get_canonical_url', 'teznevise_seo_canonical_filter' );
 
 /**
+ * Canonical path for a competing slug (TZ-004). Short/alias → long published URL.
+ *
+ * @return array<string,string> Untrailingslashed request path => canonical path with trailing slash.
+ */
+function teznevise_request_alias_map() {
+	return array(
+		'/about'                       => '/about-us/',
+		'/team'                        => '/our-team/',
+		'/contact'                     => '/contact-us/',
+		'/privacy'                     => '/privacy-policy/',
+		'/terms'                       => '/terms-and-conditions/',
+		'/cookies'                     => '/cookie-policy/',
+		'/refund'                      => '/refund-policy/',
+		'/tools'                       => '/online-calculation-tools/',
+		'/service-thesis'              => '/thesis/',
+		'/service-proposal'            => '/proposal/',
+		'/statistics'                  => '/service-statistics/',
+		'/order'                       => '/inquiry/',
+		'/posts'                       => '/blog/',
+		'/download'                    => '/downloads/',
+		'/tool-pearson-correlation'    => '/online-calculation-tools/pearson-correlation-calculator/',
+		'/tool-spearman'               => '/online-calculation-tools/spearman-correlation-calculator/',
+		'/tool-ttest'                  => '/online-calculation-tools/t-test-calculator/',
+		'/tool-anova'                  => '/online-calculation-tools/anova-calculator/',
+		'/tool-chi-square'             => '/online-calculation-tools/chi-square-calculator/',
+		'/tool-regression'             => '/online-calculation-tools/regression-calculator/',
+		'/tool-cronbach-alpha'         => '/online-calculation-tools/cronbachs-alpha-calculator/',
+		'/tool-sample-size'            => '/online-calculation-tools/sample-size-calculator/',
+		'/tool-power-analysis'         => '/online-calculation-tools/power-analysis-calculator/',
+		'/tool-content-validity'       => '/online-calculation-tools/content-validity-calculator/',
+		'/tool-mann-whitney'           => '/online-calculation-tools/mann-whitney-calculator/',
+		'/tool-wilcoxon'               => '/online-calculation-tools/wilcoxon-calculator/',
+		'/tool-kruskal-wallis'         => '/online-calculation-tools/kruskal-wallis-calculator/',
+		'/tool-descriptive-statistics' => '/online-calculation-tools/descriptive-statistics-calculator/',
+	);
+}
+
+/**
+ * Page slugs that must 301 onto a different canonical path.
+ *
+ * @return array<string,string>
+ */
+function teznevise_alias_page_slugs() {
+	$map = array();
+	foreach ( teznevise_request_alias_map() as $from => $to ) {
+		$map[ trim( $from, '/' ) ] = $to;
+	}
+	return $map;
+}
+
+/**
  * 301 competing URLs onto one canonical slug (TZ-004).
  */
 function teznevise_alias_redirects() {
@@ -135,29 +186,34 @@ function teznevise_alias_redirects() {
 	}
 	$path = (string) wp_parse_url( wp_unslash( $_SERVER['REQUEST_URI'] ), PHP_URL_PATH );
 	$path = untrailingslashit( $path );
-	$map  = array(
-		'/contact'            => array( 'contact-us' ),
-		'/about'              => array( 'about-us' ),
-		'/team'               => array( 'our-team' ),
-		'/privacy-policy'     => array( 'privacy' ),
-		'/service-thesis'     => array( 'thesis' ),
-		'/service-proposal'   => array( 'proposal' ),
-		'/statistics'         => array( 'service-statistics' ),
-		'/posts'              => array( 'blog' ),
-		'/tools'              => array( 'online-calculation-tools' ),
-		'/order'              => array( 'inquiry' ),
-	);
-	if ( '/posts' === $path ) {
-		wp_safe_redirect( home_url( '/blog/' ), 301 );
-		exit;
-	}
-	if ( ! isset( $map[ $path ] ) ) {
+	if ( '' === $path || '/' === $path ) {
 		return;
 	}
-	foreach ( $map[ $path ] as $slug ) {
-		$page = get_page_by_path( $slug );
-		if ( $page && 'publish' === $page->post_status && $page->post_name !== trim( $path, '/' ) ) {
-			wp_safe_redirect( get_permalink( $page ), 301 );
+
+	$target = '';
+
+	if ( '/posts' === $path ) {
+		$posts_page = (int) get_option( 'page_for_posts' );
+		$target     = $posts_page ? get_permalink( $posts_page ) : home_url( '/blog/' );
+	}
+
+	$map = teznevise_request_alias_map();
+	if ( ! $target && isset( $map[ $path ] ) ) {
+		$canon  = $map[ $path ];
+		$page   = get_page_by_path( trim( $canon, '/' ) );
+		$target = ( $page && 'publish' === $page->post_status ) ? get_permalink( $page ) : home_url( $canon );
+	}
+
+	if ( ! $target && preg_match( '#^/([a-z0-9-]+-calculator)$#', $path, $m ) && 'price-calculator' !== $m[1] ) {
+		$nested = 'online-calculation-tools/' . $m[1];
+		$page   = get_page_by_path( $nested );
+		$target = ( $page && 'publish' === $page->post_status ) ? get_permalink( $page ) : home_url( '/' . $nested . '/' );
+	}
+
+	if ( $target ) {
+		$dest_path = untrailingslashit( (string) wp_parse_url( $target, PHP_URL_PATH ) );
+		if ( $dest_path && $dest_path !== $path ) {
+			wp_safe_redirect( $target, 301 );
 			exit;
 		}
 	}
@@ -170,14 +226,47 @@ if ( ! is_admin() && function_exists( 'wp_safe_redirect' ) ) {
 }
 
 /**
- * Yoast SEO Premium 301s /posts/ → /thesis-journey/ on plugins_loaded,
- * before the theme runs. Remove that stored rule so later requests hit /blog/.
+ * Attachment URLs and alias pages that survived the REQUEST_URI pass.
  */
-function teznevise_purge_yoast_posts_redirect() {
-	if ( '1.9.30' === get_option( 'teznevise_purged_yoast_posts' ) ) {
+function teznevise_template_seo_redirects() {
+	if ( is_admin() || wp_doing_ajax() ) {
 		return;
 	}
-	$opts = array(
+	if ( is_attachment() ) {
+		$parent = (int) get_post_field( 'post_parent', get_queried_object_id() );
+		$dest   = $parent ? get_permalink( $parent ) : home_url( '/' );
+		if ( $dest ) {
+			wp_safe_redirect( $dest, 301 );
+			exit;
+		}
+	}
+	if ( ! is_page() ) {
+		return;
+	}
+	$slug = get_post_field( 'post_name', get_queried_object_id() );
+	$map  = teznevise_alias_page_slugs();
+	if ( isset( $map[ $slug ] ) ) {
+		$page = get_page_by_path( trim( $map[ $slug ], '/' ) );
+		$dest = ( $page && (int) $page->ID !== (int) get_queried_object_id() ) ? get_permalink( $page ) : home_url( $map[ $slug ] );
+		if ( $dest ) {
+			wp_safe_redirect( $dest, 301 );
+			exit;
+		}
+	}
+}
+add_action( 'template_redirect', 'teznevise_template_seo_redirects', 1 );
+
+/**
+ * Yoast SEO Premium 301s /posts/ → /thesis-journey/ on plugins_loaded,
+ * before the theme runs. Remove stored rules that fight the canonical map.
+ */
+function teznevise_purge_yoast_posts_redirect() {
+	if ( '1.9.31' === get_option( 'teznevise_purged_yoast_posts' ) ) {
+		return;
+	}
+	$origins = array_keys( teznevise_request_alias_map() );
+	$origins[] = '/posts';
+	$opts      = array(
 		'wpseo-premium-redirects-base',
 		'wpseo-premium-redirects-export-plain',
 		'wpseo-premium-redirects-export-regex',
@@ -190,7 +279,7 @@ function teznevise_purge_yoast_posts_redirect() {
 		$changed = false;
 		foreach ( $val as $origin => $row ) {
 			$norm = untrailingslashit( '/' . ltrim( (string) $origin, '/' ) );
-			if ( '/posts' === $norm ) {
+			if ( in_array( $norm, $origins, true ) ) {
 				unset( $val[ $origin ] );
 				$changed = true;
 			}
@@ -199,7 +288,7 @@ function teznevise_purge_yoast_posts_redirect() {
 			update_option( $opt, $val, false );
 		}
 	}
-	update_option( 'teznevise_purged_yoast_posts', '1.9.30', false );
+	update_option( 'teznevise_purged_yoast_posts', '1.9.31', false );
 }
 add_action( 'init', 'teznevise_purge_yoast_posts_redirect', -1000 );
 
@@ -217,7 +306,7 @@ function teznevise_schema_data() {
 		),
 	);
 	if ( is_singular( 'post' ) ) {
-		$post_id = get_queried_object_id();
+		$post_id   = get_queried_object_id();
 		$author_id = (int) get_post_field( 'post_author', $post_id );
 		$publisher = array( '@type' => 'Organization', 'name' => get_bloginfo( 'name' ), 'url' => home_url( '/' ) );
 		if ( function_exists( 'teznevise_logo_url' ) && teznevise_logo_url() ) {
@@ -264,17 +353,88 @@ function teznevise_output_schema() {
 }
 add_action( 'wp_head', 'teznevise_output_schema', 20 );
 
+/**
+ * Word count that is not Latin-only (Persian pages otherwise look empty).
+ *
+ * @param int $post_id Post ID.
+ * @return int
+ */
+function teznevise_plain_word_count( $post_id ) {
+	$html  = (string) get_post_field( 'post_content', $post_id );
+	$plain = trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( strip_shortcodes( $html ) ) ) );
+	if ( '' === $plain ) {
+		return 0;
+	}
+	$parts = preg_split( '/\s+/u', $plain );
+	return is_array( $parts ) ? count( $parts ) : 0;
+}
+
+/**
+ * Thin or competing URLs that must not be indexed.
+ *
+ * @return bool
+ */
+function teznevise_should_noindex() {
+	if ( is_search() || is_404() || is_attachment() ) {
+		return true;
+	}
+	if ( ! is_singular() ) {
+		return false;
+	}
+	$post_id = get_queried_object_id();
+	$slug    = get_post_field( 'post_name', $post_id );
+	if ( isset( teznevise_alias_page_slugs()[ $slug ] ) ) {
+		return true;
+	}
+	$noindex_slugs = array(
+		'corporate-social-responsibility',
+		'account',
+		'join-us',
+		'careers',
+		'fair-use-policy',
+		'revision-policy',
+		'originality-guarantee',
+		'service-commitments',
+		'achievements',
+	);
+	if ( in_array( $slug, $noindex_slugs, true ) ) {
+		return true;
+	}
+	$path = (string) wp_parse_url( (string) get_permalink( $post_id ), PHP_URL_PATH );
+	if ( false !== strpos( $path, '/project/assignments/' ) && teznevise_plain_word_count( $post_id ) < 400 ) {
+		return true;
+	}
+	return false;
+}
+
 function teznevise_robots( $robots ) {
-	if ( is_search() || is_404() ) {
+	if ( teznevise_should_noindex() ) {
 		$robots['noindex'] = true;
 		$robots['follow']  = true;
 	}
 	return $robots;
 }
 add_filter( 'wp_robots', 'teznevise_robots' );
+add_filter( 'wpseo_robots', 'teznevise_wpseo_robots_string', 20 );
+
+/**
+ * Yoast robots string: force noindex,follow on thin/alias URLs.
+ *
+ * @param string $robots Robots content.
+ * @return string
+ */
+function teznevise_wpseo_robots_string( $robots ) {
+	if ( ! teznevise_should_noindex() ) {
+		return $robots;
+	}
+	return 'noindex, follow';
+}
 
 function teznevise_robots_txt( $output, $public ) {
 	if ( ! $public ) {
+		return $output;
+	}
+	if ( defined( 'WPSEO_VERSION' ) || false !== strpos( (string) $output, 'sitemap_index.xml' ) ) {
 		return $output;
 	}
 	$sitemap = home_url( '/wp-sitemap.xml' );
@@ -284,6 +444,93 @@ function teznevise_robots_txt( $output, $public ) {
 	return $output;
 }
 add_filter( 'robots_txt', 'teznevise_robots_txt', 10, 2 );
+
+/**
+ * Drop image locs, attachment URLs, and alias pages from Yoast sitemaps.
+ *
+ * @param array|false $url    Sitemap entry.
+ * @param string      $type   Object type.
+ * @param object      $object Post/term object.
+ * @return array|false
+ */
+function teznevise_wpseo_sitemap_entry( $url, $type, $object ) {
+	if ( false === $url || ! is_array( $url ) ) {
+		return $url;
+	}
+	$loc = isset( $url['loc'] ) ? (string) $url['loc'] : '';
+	if ( false !== strpos( $loc, '/wp-content/uploads/' ) ) {
+		return false;
+	}
+	if ( $object instanceof WP_Post ) {
+		if ( 'attachment' === $object->post_type ) {
+			return false;
+		}
+		$slug = $object->post_name;
+		if ( isset( teznevise_alias_page_slugs()[ $slug ] ) ) {
+			return false;
+		}
+		$noindex_slugs = array(
+			'corporate-social-responsibility',
+			'account',
+			'join-us',
+			'careers',
+		);
+		if ( in_array( $slug, $noindex_slugs, true ) ) {
+			return false;
+		}
+		$path = (string) wp_parse_url( $loc, PHP_URL_PATH );
+		if ( false !== strpos( $path, '/project/assignments/' ) && teznevise_plain_word_count( $object->ID ) < 400 ) {
+			return false;
+		}
+		if ( preg_match( '#^/(tool-[a-z0-9-]+|[a-z0-9-]+-calculator)/?$#', (string) untrailingslashit( $path ) ) && false === strpos( $path, '/online-calculation-tools/' ) && false === strpos( $path, 'price-calculator' ) ) {
+			return false;
+		}
+	}
+	if ( isset( $url['images'] ) ) {
+		unset( $url['images'] );
+	}
+	return $url;
+}
+add_filter( 'wpseo_sitemap_entry', 'teznevise_wpseo_sitemap_entry', 20, 3 );
+add_filter( 'wpseo_xml_sitemap_img', '__return_false' );
+
+/**
+ * Never list attachments as a sitemap post type.
+ *
+ * @param bool   $exclude Whether to exclude.
+ * @param string $type    Post type.
+ * @return bool
+ */
+function teznevise_wpseo_exclude_attachment_sitemap( $exclude, $type ) {
+	if ( 'attachment' === $type ) {
+		return true;
+	}
+	return $exclude;
+}
+add_filter( 'wpseo_sitemap_exclude_post_type', 'teznevise_wpseo_exclude_attachment_sitemap', 10, 2 );
+
+/**
+ * Point Yoast canonical at the mapped URL when an alias still renders.
+ *
+ * @param string $canonical Canonical URL.
+ * @return string
+ */
+function teznevise_wpseo_canonical( $canonical ) {
+	if ( ! is_page() ) {
+		return $canonical;
+	}
+	$slug = get_post_field( 'post_name', get_queried_object_id() );
+	$map  = teznevise_alias_page_slugs();
+	if ( ! isset( $map[ $slug ] ) ) {
+		return $canonical;
+	}
+	$page = get_page_by_path( trim( $map[ $slug ], '/' ) );
+	if ( $page && 'publish' === $page->post_status ) {
+		return get_permalink( $page );
+	}
+	return home_url( $map[ $slug ] );
+}
+add_filter( 'wpseo_canonical', 'teznevise_wpseo_canonical', 20 );
 
 function teznevise_language_attributes( $output ) {
 	if ( stripos( $output, 'lang=' ) === false ) {

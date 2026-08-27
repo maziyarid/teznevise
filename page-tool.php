@@ -11,7 +11,6 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	$has_builder_hero   = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'hero' );
 	$has_builder_steps  = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'process_steps' );
 	$has_builder_cta    = function_exists( 'teznevise_builder_has_type' ) && teznevise_builder_has_type( 'cta_band' );
 	$eyebrow            = teznevise_page_field( 'eyebrow', 0, __( 'ابزار آنلاین', 'teznevise' ) );
@@ -25,11 +24,8 @@ while ( have_posts() ) :
 	$cta_url    = teznevise_page_field( 'cta_url', 0, '/service-statistics/' );
 	$features   = teznevise_page_field( 'features' );
 
-	if ( $has_builder_hero ) {
-		teznevise_builder_render_sections( 0, array( 'only' => array( 'hero' ) ) );
-	} else {
-		?>
-<section class="service-hero section">
+	?>
+<section class="service-hero section tz-tool-task">
 	<div class="container">
 		<div class="section-head" data-reveal>
 			<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
@@ -43,21 +39,8 @@ while ( have_posts() ) :
 			<p style="font-size:13px;margin-top:8px;">
 				<a href="<?php echo esc_url( home_url( '/online-calculation-tools/' ) ); ?>"><?php esc_html_e( '← بازگشت به همه ابزارها', 'teznevise' ); ?></a>
 			</p>
-			<?php
-			if ( function_exists( 'teznevise_render_hero_inquiry' ) ) {
-				echo teznevise_render_hero_inquiry( 'tool' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			}
-			?>
 		</div>
-	</div>
-</section>
-		<?php
-	}
-
-	?>
-<section class="section">
-	<div class="container">
-		<div class="longcopy article-content tool-body" data-reveal>
+		<div class="longcopy article-content tool-body tz-tool-calc" data-reveal>
 			<?php
 			if ( function_exists( 'teznevise_page_should_print_content' ) && teznevise_page_should_print_content() && function_exists( 'teznevise_the_page_interactive_content' ) ) {
 				teznevise_the_page_interactive_content();
@@ -72,28 +55,31 @@ while ( have_posts() ) :
 	</div>
 </section>
 	<?php
+
 	if ( ! $has_builder_steps && $features ) :
 		?>
-<section class="section bg-soft">
+<section class="section bg-soft tz-tool-guide">
 	<div class="container">
-		<div class="section-head" data-reveal>
-			<span class="eyebrow"><?php esc_html_e( 'راهنمای استفاده', 'teznevise' ); ?></span>
-			<h2><?php esc_html_e( 'چطور از این ابزار استفاده کنیم؟', 'teznevise' ); ?></h2>
-		</div>
-		<div class="steps" data-reveal-stagger style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
-			<?php
-			$i = 1;
-			foreach ( function_exists( 'teznevise_lines' ) ? teznevise_lines( $features ) : array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', is_string( $features ) ? $features : '' ) ) ) as $line ) :
-				?>
-				<div class="step">
-					<div class="step-icon icon-box icon-teal"><i class="fa-solid fa-<?php echo esc_attr( $i ); ?>" aria-hidden="true"></i></div>
-					<p><?php echo esc_html( $line ); ?></p>
-				</div>
+		<details>
+			<summary class="section-head" data-reveal>
+				<span class="eyebrow"><?php esc_html_e( 'راهنمای استفاده', 'teznevise' ); ?></span>
+				<strong class="tz-tool-guide-title"><?php esc_html_e( 'چطور از این ابزار استفاده کنیم؟', 'teznevise' ); ?></strong>
+			</summary>
+			<div class="steps" data-reveal-stagger style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
 				<?php
-				++$i;
-			endforeach;
-			?>
-		</div>
+				$i = 1;
+				foreach ( function_exists( 'teznevise_lines' ) ? teznevise_lines( $features ) : array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', is_string( $features ) ? $features : '' ) ) ) as $line ) :
+					?>
+					<div class="step">
+						<div class="step-icon icon-box icon-teal"><i class="fa-solid fa-<?php echo esc_attr( $i ); ?>" aria-hidden="true"></i></div>
+						<p><?php echo esc_html( $line ); ?></p>
+					</div>
+					<?php
+					++$i;
+				endforeach;
+				?>
+			</div>
+		</details>
 	</div>
 </section>
 		<?php

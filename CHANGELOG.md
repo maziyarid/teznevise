@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.9.31 — 2026-08-27 — Technical SEO + UI last-wins
+
+- Canonical 301s: short legal/about slugs → long published URLs (`/privacy/` → `/privacy-policy/`, `/terms/` → `/terms-and-conditions/`, `/cookies/` → `/cookie-policy/`, `/refund/` → `/refund-policy/`, `/about/` → `/about-us/`, `/team/` → `/our-team/`, `/contact/` → `/contact-us/`). Footer and fallback nav now emit the long URLs.
+- Tool aliases: `/tool-*` and root `/{slug}-calculator/` 301 to `/online-calculation-tools/{slug}-calculator/`. Those aliases are dropped from the Yoast sitemap.
+- Yoast: image locs (`/wp-content/uploads/`) stripped from post/page sitemaps; attachment post type excluded; alias, CSR, account, join-us, thin `/project/assignments/` pages noindex + omitted from sitemap.
+- `robots.txt` no longer appends core `wp-sitemap.xml` when Yoast already prints `sitemap_index.xml`.
+- Attachment requests 301 to the parent post.
+- DiscussionForumPosting JSON-LD now includes `datePublished`, `dateModified`, and `author` so GSC enhancements stop flagging the graph.
+- Inquiry: compact H1 + form first (TZ-006). Tool pages: calculator immediately after H1; instructions in a disclosure (TZ-009).
+- Header stays opaque white. Comment labels stay visible. Footer padding clears the FAB/chat. Enamad image has an alt.
+- Yoast Premium stored redirects that fight this map are purged (option key bumped to 1.9.31).
+
 ## 1.9.30 — 2026-08-25 — Purge Yoast /posts/ redirect
 
 - Live `/posts/` still 301s to `/thesis-journey/` with `X-Redirect-By: Yoast SEO Premium` even after theme bootstrap — Yoast runs on `plugins_loaded`. On `init` the theme now deletes a `/posts` rule from Yoast Premium redirect options so the next request can 301 to `/blog/`.

@@ -35,10 +35,10 @@ if ( ! empty( $locations['bottom'] ) ) {
 if ( ! $items ) {
 	$items = array(
 		array( 'label' => __( 'خانه', 'teznevise' ), 'url' => home_url( '/' ) ),
-			array( 'label' => __( 'خدمات', 'teznevise' ), 'url' => teznevise_page_url_from_candidates( array( 'thesis', 'service-thesis', 'proposal', 'service-proposal' ), '/service-thesis/' ) ),
-		array( 'label' => __( 'ابزارها', 'teznevise' ), 'url' => teznevise_page_url_from_candidates( array( 'online-calculation-tools', 'tools' ), '/tools/' ) ),
+			array( 'label' => __( 'خدمات', 'teznevise' ), 'url' => teznevise_page_url_from_candidates( array( 'thesis', 'service-thesis', 'proposal', 'service-proposal' ), '/thesis/' ) ),
+		array( 'label' => __( 'ابزارها', 'teznevise' ), 'url' => teznevise_page_url_from_candidates( array( 'online-calculation-tools', 'tools' ), '/online-calculation-tools/' ) ),
 		array( 'label' => __( 'بلاگ', 'teznevise' ), 'url' => teznevise_posts_url() ),
-		array( 'label' => __( 'تماس', 'teznevise' ), 'url' => teznevise_page_url_from_candidates( array( 'contact-us', 'contact', 'inquiry' ), '/contact/' ) ),
+		array( 'label' => __( 'تماس', 'teznevise' ), 'url' => teznevise_page_url_from_candidates( array( 'contact-us', 'contact', 'inquiry' ), '/contact-us/' ) ),
 	);
 }
 $items = array_slice( $items, 0, 5 );

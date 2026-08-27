@@ -64,12 +64,12 @@ function teznevise_fallback_menu( $args = array() ) {
 	$urls = array(
 		'home'     => home_url( '/' ),
 		'blog'     => teznevise_posts_url(),
-		'services' => teznevise_page_url_from_candidates( array( 'thesis', 'service-thesis', 'proposal', 'service-proposal' ), '/service-thesis/' ),
-		'about'    => teznevise_page_url_from_candidates( array( 'about-us', 'about', 'our-story' ), '/about/' ),
-		'contact'  => teznevise_page_url_from_candidates( array( 'contact-us', 'contact', 'inquiry' ), '/contact/' ),
-		'tools'    => teznevise_page_url_from_candidates( array( 'online-calculation-tools', 'tools' ), '/tools/' ),
-		'team'     => teznevise_page_url_from_candidates( array( 'our-team', 'team' ), '/team/' ),
-		'privacy'  => teznevise_page_url_from_candidates( array( 'privacy-policy', 'privacy' ), '/privacy/' ),
+		'services' => teznevise_page_url_from_candidates( array( 'thesis', 'service-thesis', 'proposal', 'service-proposal' ), '/thesis/' ),
+		'about'    => teznevise_page_url_from_candidates( array( 'about-us', 'about', 'our-story' ), '/about-us/' ),
+		'contact'  => teznevise_page_url_from_candidates( array( 'contact-us', 'contact', 'inquiry' ), '/contact-us/' ),
+		'tools'    => teznevise_page_url_from_candidates( array( 'online-calculation-tools', 'tools' ), '/online-calculation-tools/' ),
+		'team'     => teznevise_page_url_from_candidates( array( 'our-team', 'team' ), '/our-team/' ),
+		'privacy'  => teznevise_page_url_from_candidates( array( 'privacy-policy', 'privacy' ), '/privacy-policy/' ),
 		'sitemap'  => teznevise_page_url_from_candidates( array( 'sitemap' ), '/sitemap/' ),
 	);
 	$html = '<ul class="' . esc_attr( $args['menu_class'] ) . '">';

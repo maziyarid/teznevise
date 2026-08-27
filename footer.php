@@ -79,17 +79,17 @@ if ( is_page() && function_exists( 'teznevise_the_page_leftover_content' ) ) {
 		<nav class="footer-utility" aria-label="<?php esc_attr_e( 'پیوندهای تکمیلی', 'teznevise' ); ?>">
 			<?php echo wp_nav_menu( array( 'theme_location' => 'footer', 'container' => false, 'menu_class' => 'footer-menu-list', 'fallback_cb' => 'teznevise_fallback_menu', 'echo' => false, 'depth' => 1 ) ); ?>
 			<div class="footer-legal" aria-label="<?php esc_attr_e( 'صفحات حقوقی', 'teznevise' ); ?>">
-				<a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>"><?php esc_html_e( 'حریم خصوصی', 'teznevise' ); ?></a>
-				<a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>"><?php esc_html_e( 'قوانین استفاده', 'teznevise' ); ?></a>
-				<a href="<?php echo esc_url( home_url( '/cookies/' ) ); ?>"><?php esc_html_e( 'کوکی‌ها', 'teznevise' ); ?></a>
-				<a href="<?php echo esc_url( home_url( '/refund/' ) ); ?>"><?php esc_html_e( 'بازپرداخت', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>"><?php esc_html_e( 'حریم خصوصی', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/terms-and-conditions/' ) ); ?>"><?php esc_html_e( 'قوانین استفاده', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/cookie-policy/' ) ); ?>"><?php esc_html_e( 'کوکی‌ها', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/refund-policy/' ) ); ?>"><?php esc_html_e( 'بازپرداخت', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/research-rules/' ) ); ?>"><?php esc_html_e( 'ضوابط پژوهش', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/sitemap/' ) ); ?>"><?php esc_html_e( 'نقشه سایت', 'teznevise' ); ?></a>
 			</div>
 		</nav>
 		<div class="footer-certs" aria-label="<?php esc_attr_e( 'نمادهای اعتماد', 'teznevise' ); ?>">
 			<div class="footer-certs__enamad">
-<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP' alt='' width="125" height="125" loading="lazy" decoding="async" style='cursor:pointer;width:125px;height:125px' code='HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'></a>
+<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP' alt='نماد اعتماد الکترونیکی' width="125" height="125" loading="lazy" decoding="async" style='cursor:pointer;width:125px;height:125px' code='HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP'></a>
 			</div>
 		</div>
 		<div class="footer-bottom">

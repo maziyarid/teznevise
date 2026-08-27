@@ -613,25 +613,52 @@ function teznevise_ai_comments_schema( $post_id ) {
 	}
 	$graph = array();
 	foreach ( $items as $item ) {
+		$text = trim( wp_strip_all_tags( (string) ( $item['content'] ?? '' ) ) );
+		if ( '' === $text ) {
+			continue;
+		}
+		$author = trim( (string) ( $item['name'] ?? '' ) );
+		if ( '' === $author ) {
+			$author = get_bloginfo( 'name' );
+		}
+		$cdate = get_the_date( DATE_W3C, $post_id );
+		if ( ! empty( $item['id'] ) && is_numeric( $item['id'] ) ) {
+			$comment = get_comment( (int) $item['id'] );
+			if ( $comment && ! empty( $comment->comment_date_gmt ) ) {
+				$cdate = mysql2date( DATE_W3C, $comment->comment_date_gmt, false );
+			}
+		}
 		$graph[] = array(
 			'@type'         => 'Comment',
 			'@id'           => get_permalink( $post_id ) . '#ai-comment-' . ( $item['id'] ?? '' ),
-			'text'          => wp_strip_all_tags( (string) ( $item['content'] ?? '' ) ),
+			'text'          => $text,
+			'datePublished' => $cdate,
 			'author'        => array(
 				'@type'    => 'Person',
-				'name'     => $item['name'] ?? '',
+				'name'     => $author,
 				'jobTitle' => $item['role'] ?? '',
 			),
-			'keywords'      => $item['tags'] ?? '',
 		);
 	}
+	if ( ! $graph ) {
+		return '';
+	}
+	$org = array(
+		'@type' => 'Organization',
+		'name'  => get_bloginfo( 'name' ),
+		'url'   => home_url( '/' ),
+	);
 	$data = array(
-		'@context'     => 'https://schema.org',
-		'@type'        => 'DiscussionForumPosting',
-		'headline'     => get_the_title( $post_id ),
-		'url'          => get_permalink( $post_id ),
-		'commentCount' => count( $graph ),
-		'comment'      => $graph,
+		'@context'      => 'https://schema.org',
+		'@type'         => 'DiscussionForumPosting',
+		'headline'      => wp_strip_all_tags( get_the_title( $post_id ) ),
+		'url'           => get_permalink( $post_id ),
+		'datePublished' => get_the_date( DATE_W3C, $post_id ),
+		'dateModified'  => get_the_modified_date( DATE_W3C, $post_id ),
+		'author'        => $org,
+		'publisher'     => $org,
+		'commentCount'  => count( $graph ),
+		'comment'       => $graph,
 	);
 	return '<script type="application/ld+json">' . wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>';
 }
