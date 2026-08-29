@@ -9,6 +9,10 @@
 
 define( 'ABSPATH', __DIR__ . '/' );
 
+$GLOBALS['tz_test_post_id']       = 0;
+$GLOBALS['tz_the_content_calls']  = 0;
+$GLOBALS['tz_the_content_flag']   = false;
+
 function add_filter( $hook, $callback, $priority = 10, $accepted_args = 1 ) {}
 function add_action( $hook, $callback, $priority = 10, $accepted_args = 1 ) {}
 function is_admin() { return false; }
@@ -17,8 +21,15 @@ function in_the_loop() { return false; }
 function is_main_query() { return false; }
 function is_front_page() { return false; }
 function is_page_template( $template = '' ) { return false; }
-function the_content() {}
-function get_the_ID() { return 0; }
+function the_content() {
+	global $teznevise_rendering_classic_page_content;
+	$GLOBALS['tz_the_content_calls'] = (int) $GLOBALS['tz_the_content_calls'] + 1;
+	$GLOBALS['tz_the_content_flag']  = ! empty( $teznevise_rendering_classic_page_content );
+	echo 'CLASSIC-BODY';
+}
+function get_the_ID() {
+	return (int) $GLOBALS['tz_test_post_id'];
+}
 function get_post_field( $field, $post_id ) { return ''; }
 function get_post_meta( $post_id, $key, $single = false ) { return $single ? '' : array(); }
 function get_post_type( $post_id ) { return 'page'; }
@@ -74,6 +85,19 @@ tz_assert( true === teznevise_page_has_owned_editor_content( 'سلام [tz_home]
 tz_assert( '' === teznevise_page_classic_copy( '' ), 'empty classic source has no leftover copy' );
 tz_assert( '' === teznevise_page_classic_copy( '[tz_home]' ), 'layout-only shortcodes leave no leftover copy' );
 tz_assert( function_exists( 'teznevise_the_classic_page_content' ), 'in-place classic helper is available' );
+
+$GLOBALS['tz_test_post_id']      = 42;
+$GLOBALS['tz_the_content_calls'] = 0;
+$GLOBALS['tz_the_content_flag']  = false;
+ob_start();
+teznevise_the_classic_page_content();
+$classic_out = (string) ob_get_clean();
+global $teznevise_classic_rendered_in_place, $teznevise_rendering_classic_page_content;
+tz_assert( false !== strpos( $classic_out, 'CLASSIC-BODY' ), 'in-place helper prints the_content output' );
+tz_assert( 1 === (int) $GLOBALS['tz_the_content_calls'], 'in-place helper invokes the_content once' );
+tz_assert( true === $GLOBALS['tz_the_content_flag'], 'disclosure bypass flag is set while the_content runs' );
+tz_assert( ! empty( $teznevise_classic_rendered_in_place[42] ), 'page is marked rendered in place' );
+tz_assert( empty( $teznevise_rendering_classic_page_content ), 'disclosure bypass flag is restored after render' );
 
 tz_assert( false === teznevise_page_has_editorial_copy( 'x' ), 'display threshold rejects 1-character copy' );
 tz_assert( false === teznevise_page_has_editorial_copy( str_repeat( 'a', 39 ) ), 'display threshold rejects 39-character copy' );
