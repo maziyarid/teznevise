@@ -25,7 +25,13 @@ while ( have_posts() ) :
 		</div>
 
 		<?php if ( get_the_content() ) : ?>
-			<div class="longcopy" data-reveal style="margin-bottom:32px;"><?php the_content(); ?></div>
+			<div class="longcopy" data-reveal style="margin-bottom:32px;"><?php
+			if ( function_exists( 'teznevise_the_classic_page_content' ) ) {
+				teznevise_the_classic_page_content();
+			} else {
+				the_content();
+			}
+			?></div>
 		<?php endif; ?>
 
 		<div class="sitemap-grid" style="display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">

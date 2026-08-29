@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.32 — 2026-08-29 — Classic leftover on unmatched pages
+
+- Builder-backed `the_content` still reduces to interactive shortcodes; leftover disclosure prints classic prose.
+- Legal/about/contact/service templates that own the editor body keep that prose in-place via `teznevise_the_classic_page_content()` so the filter cannot empty unmatched pages (terms, cookies, refund, research-rules).
+- Footer leftover skips pages already rendered in-place, the account template, and empty sources. The “no complementary copy” placeholder is no longer invented.
+- Unmatched calculator routes keep functional shortcodes; leftover only appears when real classic copy exists.
+
 ## 1.9.31 — 2026-08-27 — Technical SEO + UI last-wins
 
 - Canonical 301s: short legal/about slugs → long published URLs (`/privacy/` → `/privacy-policy/`, `/terms/` → `/terms-and-conditions/`, `/cookies/` → `/cookie-policy/`, `/refund/` → `/refund-policy/`, `/about/` → `/about-us/`, `/team/` → `/our-team/`, `/contact/` → `/contact-us/`). Footer and fallback nav now emit the long URLs.

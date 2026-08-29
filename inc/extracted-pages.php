@@ -515,11 +515,13 @@ function teznevise_page_classic_source( $post_id ) {
 			return $classic;
 		}
 	}
-	$classic = teznevise_classic_html_from_page_fields( $post_id );
-	if ( teznevise_page_has_editorial_copy( $classic ) ) {
-		return $classic;
+	if ( function_exists( 'teznevise_classic_html_from_page_fields' ) ) {
+		$classic = teznevise_classic_html_from_page_fields( $post_id );
+		if ( teznevise_page_has_editorial_copy( $classic ) ) {
+			return $classic;
+		}
 	}
-	return '<p>' . esc_html__( 'برای این صفحه هنوز محتوای تکمیلی در ویرایشگر کلاسیک ثبت نشده است.', 'teznevise' ) . '</p>';
+	return '';
 }
 
 /**
@@ -634,6 +636,10 @@ function teznevise_filter_page_content_disclosure( $content ) {
 		return $content;
 	}
 	$interactive = teznevise_interactive_shortcodes_for_page( get_the_ID() );
+	$use_builder = function_exists( 'teznevise_builder_has_sections' ) && teznevise_builder_has_sections();
+	if ( ! $use_builder ) {
+		return $content;
+	}
 	return '' !== $interactive ? '<div class="tz-interactive-page-content">' . teznevise_prepare_interactive_html( do_shortcode( $interactive ) ) . '</div>' : '';
 }
 add_filter( 'the_content', 'teznevise_filter_page_content_disclosure', 50 );
@@ -726,12 +732,35 @@ function teznevise_the_page_interactive_content( $post_id = 0 ) {
 }
 
 /**
+ * Print Classic Editor body in-place and mark it so the footer leftover
+ * does not duplicate the same prose.
+ *
+ * Legal/about/contact templates own their `the_content()` slot. Builder
+ * templates keep using leftover disclosure instead.
+ */
+function teznevise_the_classic_page_content() {
+	global $teznevise_rendering_classic_page_content, $teznevise_classic_rendered_in_place;
+	$post_id = (int) get_the_ID();
+	$prev    = $teznevise_rendering_classic_page_content;
+	$teznevise_rendering_classic_page_content = true;
+	if ( $post_id > 0 ) {
+		if ( ! is_array( $teznevise_classic_rendered_in_place ) ) {
+			$teznevise_classic_rendered_in_place = array();
+		}
+		$teznevise_classic_rendered_in_place[ $post_id ] = true;
+	}
+	the_content();
+	$teznevise_rendering_classic_page_content = $prev;
+}
+
+/**
  * Print leftover page content. When builder sections exist, only execute
  * interactive shortcodes so migrated copy is not duplicated.
  *
  * @param int $post_id Optional post ID.
  */
 function teznevise_the_page_leftover_content( $post_id = 0 ) {
+	global $teznevise_classic_rendered_in_place;
 	static $printed = array();
 	$post_id = $post_id ? (int) $post_id : (int) get_the_ID();
 	if ( $post_id <= 0 || isset( $printed[ $post_id ] ) ) {
@@ -740,9 +769,18 @@ function teznevise_the_page_leftover_content( $post_id = 0 ) {
 	if ( is_front_page() ) {
 		return;
 	}
+	if ( ! empty( $teznevise_classic_rendered_in_place[ $post_id ] ) ) {
+		return;
+	}
+	if ( function_exists( 'is_page_template' ) && is_page_template( 'page-account.php' ) ) {
+		return;
+	}
 	$printed[ $post_id ] = true;
 	$classic_raw         = teznevise_page_classic_source( $post_id );
-	if ( '' === teznevise_page_classic_copy( $classic_raw ) ) {
+	if ( '' === $classic_raw || '' === teznevise_page_classic_copy( $classic_raw ) ) {
+		return;
+	}
+	if ( ! teznevise_page_has_owned_editor_content( $classic_raw ) && ! teznevise_page_has_editorial_copy( $classic_raw ) ) {
 		return;
 	}
 	$html = teznevise_render_classic_page_content( $classic_raw );

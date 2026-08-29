@@ -15,6 +15,9 @@ function is_admin() { return false; }
 function is_singular( $type = '' ) { return false; }
 function in_the_loop() { return false; }
 function is_main_query() { return false; }
+function is_front_page() { return false; }
+function is_page_template( $template = '' ) { return false; }
+function the_content() {}
 function get_the_ID() { return 0; }
 function get_post_field( $field, $post_id ) { return ''; }
 function get_post_meta( $post_id, $key, $single = false ) { return $single ? '' : array(); }
@@ -68,6 +71,9 @@ tz_assert( true === teznevise_page_has_owned_editor_content( str_repeat( 'a', 20
 tz_assert( true === teznevise_page_has_owned_editor_content( str_repeat( 'a', 39 ) ), '39-character editor copy is owned' );
 tz_assert( true === teznevise_page_has_owned_editor_content( str_repeat( 'a', 40 ) ), '40-character editor copy is owned' );
 tz_assert( true === teznevise_page_has_owned_editor_content( 'سلام [tz_home]' ), 'mixed shortcode/prose is owned' );
+tz_assert( '' === teznevise_page_classic_copy( '' ), 'empty classic source has no leftover copy' );
+tz_assert( '' === teznevise_page_classic_copy( '[tz_home]' ), 'layout-only shortcodes leave no leftover copy' );
+tz_assert( function_exists( 'teznevise_the_classic_page_content' ), 'in-place classic helper is available' );
 
 tz_assert( false === teznevise_page_has_editorial_copy( 'x' ), 'display threshold rejects 1-character copy' );
 tz_assert( false === teznevise_page_has_editorial_copy( str_repeat( 'a', 39 ) ), 'display threshold rejects 39-character copy' );
