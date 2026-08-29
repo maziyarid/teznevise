@@ -86,7 +86,7 @@ while ( have_posts() ) :
 					the_content();
 				}
 				?>
-			<?php elseif ( ! function_exists( 'teznevise_page_should_print_content' ) ) : ?>
+			<?php else : ?>
 				<?php
 				if ( function_exists( 'teznevise_the_classic_page_content' ) ) {
 					teznevise_the_classic_page_content();

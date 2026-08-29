@@ -25,11 +25,15 @@ function the_content() {
 	global $teznevise_rendering_classic_page_content;
 	$GLOBALS['tz_the_content_calls'] = (int) $GLOBALS['tz_the_content_calls'] + 1;
 	$GLOBALS['tz_the_content_flag']  = ! empty( $teznevise_rendering_classic_page_content );
+	if ( ! empty( $GLOBALS['tz_the_content_silent'] ) ) {
+		return;
+	}
 	echo 'CLASSIC-BODY';
 }
 function get_the_ID() {
 	return (int) $GLOBALS['tz_test_post_id'];
 }
+function get_post( $post_id ) { return null; }
 function get_post_field( $field, $post_id ) { return ''; }
 function get_post_meta( $post_id, $key, $single = false ) { return $single ? '' : array(); }
 function get_post_type( $post_id ) { return 'page'; }
@@ -98,6 +102,16 @@ tz_assert( 1 === (int) $GLOBALS['tz_the_content_calls'], 'in-place helper invoke
 tz_assert( true === $GLOBALS['tz_the_content_flag'], 'disclosure bypass flag is set while the_content runs' );
 tz_assert( ! empty( $teznevise_classic_rendered_in_place[42] ), 'page is marked rendered in place' );
 tz_assert( empty( $teznevise_rendering_classic_page_content ), 'disclosure bypass flag is restored after render' );
+
+$GLOBALS['tz_the_content_silent'] = true;
+$GLOBALS['tz_the_content_calls']  = 0;
+unset( $teznevise_classic_rendered_in_place[42] );
+ob_start();
+teznevise_the_classic_page_content();
+$empty_out = (string) ob_get_clean();
+tz_assert( '' === teznevise_page_classic_copy( $empty_out ), 'empty the_content emit has no leftover copy' );
+tz_assert( empty( $teznevise_classic_rendered_in_place[42] ), 'empty emit does not mark the page in place' );
+$GLOBALS['tz_the_content_silent'] = false;
 
 tz_assert( false === teznevise_page_has_editorial_copy( 'x' ), 'display threshold rejects 1-character copy' );
 tz_assert( false === teznevise_page_has_editorial_copy( str_repeat( 'a', 39 ) ), 'display threshold rejects 39-character copy' );
