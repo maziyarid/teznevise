@@ -1,1 +1,2 @@
-PLACEHOLDER
+<?php
+/** placeholder restore */
