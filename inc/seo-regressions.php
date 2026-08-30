@@ -105,13 +105,15 @@ function teznevise_seo_regression_canonical( $canonical ) {
 add_filter( 'wpseo_canonical', 'teznevise_seo_regression_canonical', 40 );
 
 /**
- * Noindex slugs declared by teznevise_should_noindex(). The legacy Yoast
- * sitemap filter historically covered only a subset, which allowed noindex
- * pages to remain in page-sitemap.xml and sent mixed indexation signals.
+ * Noindex slugs: delegate to the single source of truth in inc/seo.php when
+ * available; provide a WP-free fallback for the contract test harness.
  *
  * @return string[]
  */
 function teznevise_seo_regression_noindex_slugs() {
+	if ( function_exists( 'teznevise_explicit_noindex_slugs' ) ) {
+		return teznevise_explicit_noindex_slugs();
+	}
 	return array(
 		'corporate-social-responsibility',
 		'account',
