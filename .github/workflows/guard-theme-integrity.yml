@@ -96,6 +96,9 @@ jobs:
       - name: Classic Editor contract tests
         run: php tests/classic-content-contract.php
 
+      - name: SEO regression contract tests
+        run: php tests/seo-regression-contract.php
+
       - name: Rebuild frontend bundles and fail on drift
         run: |
           python3 scripts/build-frontend-bundles.py
