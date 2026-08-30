@@ -81,6 +81,11 @@ foreach ( $expected_routes as $legacy => $canonical ) {
 	$assert_same( $canonical, isset( $map[ $legacy ] ) ? $map[ $legacy ] : null, 'redirect contract ' . $legacy );
 }
 
+$self_canonical_slugs = teznevise_seo_regression_self_canonical_slugs();
+if ( ! in_array( 'gams', $self_canonical_slugs, true ) ) {
+	$failures[] = 'stale canonical recovery missing current GAMS slug';
+}
+
 $noindex = teznevise_seo_regression_noindex_slugs();
 foreach ( array( 'join-us', 'corporate-social-responsibility', 'fair-use-policy', 'revision-policy', 'originality-guarantee', 'service-commitments', 'achievements' ) as $slug ) {
 	if ( ! in_array( $slug, $noindex, true ) ) {
