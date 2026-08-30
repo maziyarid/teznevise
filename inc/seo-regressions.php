@@ -21,17 +21,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function teznevise_seo_regression_redirect_map() {
 	return array(
-		'/article'                                           => '/service-article/',
-		'/article/isi'                                       => '/service-article/',
-		'/article/academic'                                  => '/service-article/',
-		'/project/assignments'                               => '/service-project/',
-		'/project/assignments/mechanical-civil'              => '/service-project/',
+		'/article'                                             => '/service-article/',
+		'/article/isi'                                         => '/service-article/',
+		'/article/academic'                                    => '/service-article/',
+		'/project/assignments'                                 => '/service-project/',
+		'/project/assignments/mechanical-civil'                => '/service-project/',
 		'/project/assignments/mechanical-civil/thermodynamics' => '/service-project/',
-		'/project/engineering/electrical/gams'               => '/gams/',
-		'/thesis/engineering/electrical'                     => '/thesis/engineering/',
-		'/thesis/other-fields'                               => '/thesis/',
-		'/thesis/other-fields/space-science'                 => '/thesis/pure-science/',
-		'/how-to-write-research-proposal'                    => '/proposal/',
+		'/project/engineering/electrical/gams'                 => '/gams/',
+		'/thesis/engineering/electrical'                       => '/thesis/engineering/',
+		'/thesis/other-fields'                                 => '/thesis/',
+		'/thesis/other-fields/space-science'                   => '/thesis/pure-science/',
+		'/how-to-write-research-proposal'                      => '/proposal/',
 	);
 }
 
@@ -72,6 +72,37 @@ function teznevise_seo_regression_redirects() {
 	exit;
 }
 add_action( 'template_redirect', 'teznevise_seo_regression_redirects', -50 );
+
+/**
+ * Current pages whose stored Yoast canonical still points at a removed route.
+ *
+ * @return string[]
+ */
+function teznevise_seo_regression_self_canonical_slugs() {
+	return array( 'gams' );
+}
+
+/**
+ * Reverse stale canonicals after a route migration. The old route is 301ed to
+ * the new page, so the new page must self-canonicalise rather than point back
+ * to the removed URL.
+ *
+ * @param string $canonical Yoast canonical URL.
+ * @return string
+ */
+function teznevise_seo_regression_canonical( $canonical ) {
+	if ( ! is_page() ) {
+		return $canonical;
+	}
+	$post_id = get_queried_object_id();
+	$slug    = (string) get_post_field( 'post_name', $post_id );
+	if ( ! in_array( $slug, teznevise_seo_regression_self_canonical_slugs(), true ) ) {
+		return $canonical;
+	}
+	$self = get_permalink( $post_id );
+	return $self ? $self : $canonical;
+}
+add_filter( 'wpseo_canonical', 'teznevise_seo_regression_canonical', 40 );
 
 /**
  * Noindex slugs declared by teznevise_should_noindex(). The legacy Yoast
