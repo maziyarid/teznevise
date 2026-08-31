@@ -186,7 +186,7 @@ $assert_true( false !== strpos( $functions_source, "/inc/seo-regressions.php'" )
 $assert_true( false !== strpos( $seo_source, 'function teznevise_explicit_noindex_slugs()' ), 'inc/seo.php must own explicit noindex slugs' );
 $assert_true( substr_count( $seo_source, 'teznevise_explicit_noindex_slugs()' ) >= 3, 'robots and sitemap must share explicit noindex source' );
 $assert_true( false === strpos( $regression_source, "'corporate-social-responsibility'" ), 'seo-regressions.php must not duplicate the noindex slug list' );
-$assert_true( false !== strpos( $regression_source, "wp_safe_redirect( $target, 301" ), 'runtime recovery must issue HTTP 301' );
+$assert_true( false !== strpos( $regression_source, 'wp_safe_redirect( $target, 301' ), 'runtime recovery must issue HTTP 301' );
 
 if ( $failures ) {
 	fwrite( STDERR, "SEO regression contract failed:\n- " . implode( "\n- ", $failures ) . "\n" );
