@@ -1,0 +1,65 @@
+name: One-shot sync live mobile CSS
+
+on:
+  push:
+    branches: [ feature/teznevise-2.0-rebuild ]
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/teznevise-2.0-rebuild
+          fetch-depth: 0
+
+      - name: Fetch the exact verified live adapter
+        run: |
+          curl --fail --silent --show-error --location \
+            'https://teznevise.ir/wp-content/themes/teznevise-2-preview/assets/css/v2-compat.css?github_sync=1' \
+            --output assets/css/v2-compat.css
+          echo '3d3770f36793a97c66e3f46ffb0caf47df069ebf5c88d9b9e9b4a9e0e0a99970  assets/css/v2-compat.css' | sha256sum --check --strict
+
+      - name: Extend runtime contract with mobile regressions
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/check-v2-runtime.py')
+          s = p.read_text(encoding='utf-8')
+          marker = '''    if ".faq-item.open .faq-a" not in adapter:\n        fail("FAQ open-state contract is missing from the v2 adapter")\n'''
+          addition = '''    if ".faq-item.open .faq-a" not in adapter:\n        fail("FAQ open-state contract is missing from the v2 adapter")\n    if ".mobile-nav-links .nav-dropdown-toggle" not in adapter:\n        fail("Mobile drawer disclosure buttons are not styled")\n    if ".menu-item.has-dropdown.is-open > .sub-menu" not in adapter:\n        fail("Mobile drawer submenus do not have a collapsed/open contract")\n    if '.bottom-nav[data-nav-count="5"]' not in adapter:\n        fail("Five-item bottom navigation grid contract is missing")\n    if ".tz-fab-wrap {" not in adapter:\n        fail("Messenger FAB selector does not match the PHP template")\n'''
+          if 'Five-item bottom navigation grid contract is missing' not in s:
+              if marker not in s:
+                  raise SystemExit('expected runtime-test marker not found')
+              s = s.replace(marker, addition, 1)
+              p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Validate mobile/runtime contracts
+        run: |
+          python3 scripts/check-v2-runtime.py
+          python3 scripts/check-release.py
+          php tests/seo-regression-contract.php
+          php tests/classic-content-contract.php
+          python3 - <<'PY'
+          from pathlib import Path
+          s = Path('assets/css/v2-compat.css').read_text(encoding='utf-8')
+          assert s.count('{') == s.count('}')
+          assert '!important' not in s
+          PY
+          git diff --check
+
+      - name: Commit exact live mobile repair and remove this one-shot workflow
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/sync-live-mobile-css.yml
+          git add assets/css/v2-compat.css scripts/check-v2-runtime.py
+          git commit -m 'TEZ: repair mobile drawer, bottom nav and floating controls'
+          git push origin HEAD:feature/teznevise-2.0-rebuild
