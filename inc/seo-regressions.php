@@ -36,6 +36,59 @@ function teznevise_seo_regression_redirect_map() {
 }
 
 /**
+ * Add the original request query to a recovery target.
+ *
+ * @param string $target       Target URL.
+ * @param string $query_string Raw query string.
+ * @return string
+ */
+function teznevise_seo_regression_append_query( $target, $query_string ) {
+	$query_string = str_replace( array( "\r", "\n" ), '', ltrim( (string) $query_string, '?' ) );
+	if ( '' === $query_string ) {
+		return $target;
+	}
+	return $target . ( false === strpos( $target, '?' ) ? '?' : '&' ) . $query_string;
+}
+
+/**
+ * Resolve a legacy route to its current same-site destination.
+ *
+ * @param string $request_uri  Request URI.
+ * @param string $query_string Raw query string.
+ * @return string|false
+ */
+function teznevise_seo_regression_resolve_target( $request_uri, $query_string = '' ) {
+	$path = (string) wp_parse_url( wp_unslash( (string) $request_uri ), PHP_URL_PATH );
+	$path = untrailingslashit( $path );
+	$map  = teznevise_seo_regression_redirect_map();
+	if ( ! isset( $map[ $path ] ) ) {
+		return false;
+	}
+
+	// These aliases exist only to recover removed routes. A later published
+	// page at the old path must win instead of being redirected away.
+	$legacy_page = get_page_by_path( trim( $path, '/' ) );
+	if ( $legacy_page instanceof WP_Post && 'publish' === $legacy_page->post_status ) {
+		return false;
+	}
+
+	$target_path = $map[ $path ];
+	$page        = get_page_by_path( trim( $target_path, '/' ) );
+	$target      = ( $page instanceof WP_Post && 'publish' === $page->post_status )
+		? get_permalink( $page )
+		: home_url( $target_path );
+	if ( ! $target ) {
+		return false;
+	}
+
+	$target_path_resolved = untrailingslashit( (string) wp_parse_url( $target, PHP_URL_PATH ) );
+	if ( $target_path_resolved === $path ) {
+		return false;
+	}
+	return teznevise_seo_regression_append_query( $target, $query_string );
+}
+
+/**
  * Preserve accumulated search signals by 301ing broken legacy routes to the
  * closest current published equivalent.
  */
@@ -47,40 +100,20 @@ function teznevise_seo_regression_redirects() {
 		return;
 	}
 
-	$path = (string) wp_parse_url( wp_unslash( $_SERVER['REQUEST_URI'] ), PHP_URL_PATH );
-	$path = untrailingslashit( $path );
-	$map  = teznevise_seo_regression_redirect_map();
-	if ( ! isset( $map[ $path ] ) ) {
-		return;
-	}
-
-	$target_path = $map[ $path ];
-	$page        = get_page_by_path( trim( $target_path, '/' ) );
-	$target      = ( $page instanceof WP_Post && 'publish' === $page->post_status )
-		? get_permalink( $page )
-		: home_url( $target_path );
-
+	$target = teznevise_seo_regression_resolve_target(
+		wp_unslash( $_SERVER['REQUEST_URI'] ),
+		isset( $_SERVER['QUERY_STRING'] ) ? wp_unslash( $_SERVER['QUERY_STRING'] ) : ''
+	);
 	if ( ! $target ) {
-		return;
-	}
-	$target_path_resolved = untrailingslashit( (string) wp_parse_url( $target, PHP_URL_PATH ) );
-	if ( $target_path_resolved === $path ) {
 		return;
 	}
 
 	wp_safe_redirect( $target, 301, 'Teznevise SEO recovery' );
 	exit;
 }
+add_action( 'after_setup_theme', 'teznevise_seo_regression_redirects', 1 );
+add_action( 'init', 'teznevise_seo_regression_redirects', -998 );
 add_action( 'template_redirect', 'teznevise_seo_regression_redirects', -50 );
-
-/**
- * Current pages whose stored Yoast canonical still points at a removed route.
- *
- * @return string[]
- */
-function teznevise_seo_regression_self_canonical_slugs() {
-	return array( 'gams' );
-}
 
 /**
  * Reverse stale canonicals after a route migration. The old route is 301ed to
@@ -91,68 +124,29 @@ function teznevise_seo_regression_self_canonical_slugs() {
  * @return string
  */
 function teznevise_seo_regression_canonical( $canonical ) {
-	if ( ! is_page() ) {
+	if ( ! is_page() || ! $canonical ) {
 		return $canonical;
 	}
 	$post_id = get_queried_object_id();
-	$slug    = (string) get_post_field( 'post_name', $post_id );
-	if ( ! in_array( $slug, teznevise_seo_regression_self_canonical_slugs(), true ) ) {
+	$self    = get_permalink( $post_id );
+	if ( ! $self ) {
 		return $canonical;
 	}
-	$self = get_permalink( $post_id );
-	return $self ? $self : $canonical;
+	$old_path  = untrailingslashit( (string) wp_parse_url( $canonical, PHP_URL_PATH ) );
+	$self_path = untrailingslashit( (string) wp_parse_url( $self, PHP_URL_PATH ) );
+	$map       = teznevise_seo_regression_redirect_map();
+	if ( ! isset( $map[ $old_path ] ) ) {
+		return $canonical;
+	}
+	$mapped_path = untrailingslashit( (string) wp_parse_url( home_url( $map[ $old_path ] ), PHP_URL_PATH ) );
+	return $mapped_path === $self_path ? $self : $canonical;
 }
 add_filter( 'wpseo_canonical', 'teznevise_seo_regression_canonical', 40 );
 
 /**
- * Noindex slugs: delegate to the single source of truth in inc/seo.php when
- * available; provide a WP-free fallback for the contract test harness.
- *
- * @return string[]
- */
-function teznevise_seo_regression_noindex_slugs() {
-	if ( function_exists( 'teznevise_explicit_noindex_slugs' ) ) {
-		return teznevise_explicit_noindex_slugs();
-	}
-	return array(
-		'corporate-social-responsibility',
-		'account',
-		'join-us',
-		'careers',
-		'fair-use-policy',
-		'revision-policy',
-		'originality-guarantee',
-		'service-commitments',
-		'achievements',
-	);
-}
-
-/**
- * Keep Yoast sitemap membership aligned with the theme's explicit noindex
- * policy. This runs after the canonical inc/seo.php sitemap filter.
- *
- * @param array|false $url    Sitemap entry.
- * @param string      $type   Object type.
- * @param object      $object Post/term object.
- * @return array|false
- */
-function teznevise_seo_regression_sitemap_entry( $url, $type, $object ) {
-	unset( $type );
-	if ( false === $url || ! is_array( $url ) ) {
-		return $url;
-	}
-	if ( $object instanceof WP_Post && in_array( $object->post_name, teznevise_seo_regression_noindex_slugs(), true ) ) {
-		return false;
-	}
-	return $url;
-}
-add_filter( 'wpseo_sitemap_entry', 'teznevise_seo_regression_sitemap_entry', 30, 3 );
-
-/**
  * Repair legacy malformed URL values before WordPress turns them into local
- * paths (for example https:/teznevise.ir/... or tel:... passed to home_url()).
- * Current teznevise_url() already preserves safe schemes; this is a defensive
- * compatibility layer for stale builder/database values and older callers.
+ * paths. Action schemes are restored directly. A malformed single-slash HTTP
+ * URL is repaired only when it points back to this WordPress site's host.
  *
  * @param string $url         URL generated by WordPress.
  * @param string $path        Original path passed to home_url().
@@ -163,11 +157,16 @@ add_filter( 'wpseo_sitemap_entry', 'teznevise_seo_regression_sitemap_entry', 30,
 function teznevise_seo_recover_malformed_home_url( $url, $path, $orig_scheme, $blog_id ) {
 	unset( $orig_scheme, $blog_id );
 	$path = trim( (string) $path );
-	if ( preg_match( '#^(?:tel|mailto|sms):#i', $path ) ) {
+	if ( preg_match( '~^(?:tel|mailto|sms):~i', $path ) ) {
 		return $path;
 	}
-	if ( preg_match( '#^(https?):/([^/].*)$#i', $path, $matches ) ) {
-		return strtolower( $matches[1] ) . '://' . $matches[2];
+	if ( preg_match( '~^(https?):/([^/].*)$~i', $path, $matches ) ) {
+		$candidate      = strtolower( $matches[1] ) . '://' . $matches[2];
+		$candidate_host = strtolower( (string) wp_parse_url( $candidate, PHP_URL_HOST ) );
+		$home_host      = strtolower( (string) wp_parse_url( (string) get_option( 'home' ), PHP_URL_HOST ) );
+		if ( $candidate_host && $home_host && $candidate_host === $home_host ) {
+			return $candidate;
+		}
 	}
 	return $url;
 }
