@@ -27,6 +27,7 @@ function teznevise_runtime_css_files() {
 		'assets/css/page-extras.css',
 		'assets/css/wp-compat.css',
 		'assets/css/v2-compat.css',
+		'assets/css/v2-responsive.css',
 	);
 	return array_values(
 		array_filter(
