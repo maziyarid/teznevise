@@ -10,11 +10,14 @@ RTL-first WordPress theme for [teznevise.ir](https://teznevise.ir/) — thesis, 
 
 The proprietary design-system contract lives in [`design-system/`](./design-system/). It defines the Persian-first editorial language, five-color semantic palette, local Vazirmatn typography, spacing and motion scales, `tz-*` component contracts, and the signature research-margin pattern.
 
-- Runtime CSS tokens: [`assets/css/tokens.css`](./assets/css/tokens.css)
-- WordPress editor presets: [`theme.json`](./theme.json)
-- Companion frontend mapping: [`react-app/src/styles.css`](./react-app/src/styles.css)
-- Classic PHP components use authored `tz-*` classes; Tailwind remains isolated to `react-app/`.
-- Extend the owning component stylesheet. Do not add another global `*-fix.css` file.
+The WordPress 2.0 branch deliberately keeps the proven PHP/builder DOM stable instead of adding canonical class aliases to structurally different elements. The public v2 runtime is owned by:
+
+- [`assets/css/v2-foundation.css`](./assets/css/v2-foundation.css) — local Vazirmatn, canonical tokens, reset, typography and accessibility baseline.
+- [`assets/css/v2-compat.css`](./assets/css/v2-compat.css) — WordPress-native mapping for the real header, mega menu, builder grids, process steps, FAQ, footer and floating controls.
+- Maintained specialised sheets such as `blog.css`, `page-extras.css` and `wp-compat.css` remain available for their existing template contracts.
+- Historical `hotfix-*.css` files remain in source until dependency/DB probes are complete, but the 2.0 runtime does not concatenate them.
+- WordPress editor presets remain in [`theme.json`](./theme.json); Tailwind remains isolated to `react-app/`.
+- Extend the owning v2 component/adapter stylesheet. Do not add another global `*-fix.css` or hotfix layer.
 
 The [Premium v2 roadmap](./docs/PREMIUM-V2-ROADMAP.md) is incremental. WordPress remains server-rendered for speed, SEO, and compatibility; React/TypeScript is selective, and a future headless frontend replaces rather than duplicates the current TanStack runtime.
 
