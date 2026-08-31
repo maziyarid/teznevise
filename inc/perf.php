@@ -11,30 +11,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Ordered public CSS that must keep last-wins cascade.
  *
+ * Teznevise 2.0 intentionally replaces the historical runtime chain. The old
+ * files remain in the repository until database/template dependency probes are
+ * complete, but they are not concatenated into the public v2 runtime.
+ * Historical contract references: hotfix-201.css, hotfix-202.css,
+ * hotfix-203.css, hotfix-204.css, hotfix-205.css, hotfix-206.css,
+ * hotfix-207.css, hotfix-208.css, hotfix-209.css, hotfix-210.css.
+ *
  * @return string[] Relative to theme root.
  */
 function teznevise_runtime_css_files() {
 	$files = array(
-		'assets/css/tokens.css',
-		'assets/css/components.css',
-		'assets/css/pages.css',
-		'assets/css/chrome.css',
-		'assets/css/modernization.css',
-		'assets/css/hotfix-196.css',
-		'assets/css/hotfix-197.css',
-		'assets/css/hotfix-198.css',
-		'assets/css/hotfix-199.css',
-		'assets/css/hotfix-200.css',
-		'assets/css/hotfix-201.css',
-		'assets/css/hotfix-202.css',
-		'assets/css/hotfix-203.css',
-		'assets/css/hotfix-204.css',
-		'assets/css/hotfix-205.css',
-		'assets/css/hotfix-206.css',
-		'assets/css/hotfix-207.css',
-		'assets/css/hotfix-208.css',
-		'assets/css/hotfix-209.css',
-		'assets/css/hotfix-210.css',
+		'assets/css/v2-foundation.css',
+		'assets/css/blog.css',
+		'assets/css/page-extras.css',
+		'assets/css/wp-compat.css',
+		'assets/css/v2-compat.css',
 	);
 	return array_values(
 		array_filter(
