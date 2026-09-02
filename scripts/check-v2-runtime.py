@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PERF = ROOT / "inc" / "perf.php"
 FOUNDATION = ROOT / "assets" / "css" / "v2-foundation.css"
+EXTRAS = ROOT / "assets" / "css" / "page-extras.css"
 ADAPTER = ROOT / "assets" / "css" / "v2-compat.css"
 RESPONSIVE = ROOT / "assets" / "css" / "v2-responsive.css"
 
@@ -25,7 +26,17 @@ def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
 
 
-for path in (PERF, FOUNDATION, ADAPTER, RESPONSIVE):
+def css_rule_has(css: str, selector: str, property_name: str) -> bool:
+    """Return True when an exact selector rule contains the property."""
+    match = re.search(
+        rf"(?m)^\s*{re.escape(selector)}\s*\{{(?P<body>.*?)\}}",
+        css,
+        re.S,
+    )
+    return bool(match and re.search(rf"\b{re.escape(property_name)}\s*:", match.group("body")))
+
+
+for path in (PERF, FOUNDATION, EXTRAS, ADAPTER, RESPONSIVE):
     if not path.is_file():
         fail(f"Required v2 runtime file missing: {path.relative_to(ROOT)}")
 
@@ -67,6 +78,7 @@ if not errors:
                 fail(f"Historical {name} must not be in the v2 runtime manifest")
 
     foundation = FOUNDATION.read_text(encoding="utf-8")
+    extras = EXTRAS.read_text(encoding="utf-8")
     adapter = ADAPTER.read_text(encoding="utf-8")
     responsive = RESPONSIVE.read_text(encoding="utf-8")
 
@@ -98,6 +110,34 @@ if not errors:
     if ".faq-item.open .faq-a" not in adapter:
         fail("FAQ open-state contract is missing from the v2 adapter")
 
+    extras_contracts = (
+        ".section.tz-inquiry-top",
+        ".section.tz-inquiry-form-band",
+        ".tz-inquiry-grid",
+        ".section.tz-tool-task",
+        ".tz-tool-calc",
+        ".tz-tool-guide details",
+    )
+    for selector in extras_contracts:
+        if selector not in extras:
+            fail(f"Page extras are missing active template contract {selector}")
+
+    if not css_rule_has(extras, ".section.tz-inquiry-top", "padding-block"):
+        fail("Inquiry top compound selector must own padding-block")
+    if not css_rule_has(extras, ".section.tz-inquiry-form-band", "padding-top"):
+        fail("Inquiry form-band compound selector must own padding-top")
+    if not css_rule_has(extras, ".section.tz-tool-task", "padding-block"):
+        fail("Tool task compound selector must own padding-block")
+
+    weak_section_openers = (
+        ".tz-inquiry-top",
+        ".tz-inquiry-form-band",
+        ".tz-tool-task",
+    )
+    for selector in weak_section_openers:
+        if re.search(rf"(?m)^\s*{re.escape(selector)}\s*\{{", extras):
+            fail(f"Weak standalone section selector returned: {selector}")
+
     responsive_contracts = (
         ".mobile-nav-links .nav-dropdown-toggle",
         ".mobile-nav-links .menu-item.has-dropdown.is-open > .sub-menu",
@@ -117,6 +157,8 @@ if not errors:
 
     if "left: 50%" not in responsive or "translateX(-50%)" not in responsive:
         fail("Responsive header does not preserve true logo centring")
+    if "right: 0" not in responsive or "left: auto" not in responsive:
+        fail("RTL mobile drawer is not physically anchored to the right edge")
     if "scroll-snap-type: x mandatory" not in responsive:
         fail("Phone card rails are missing scroll-snap containment")
     if "grid-column: 1 / -1" not in responsive:
