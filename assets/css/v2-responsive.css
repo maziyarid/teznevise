@@ -1,0 +1,245 @@
+/**
+ * Teznevise 2.0 — responsive WordPress layer
+ *
+ * Owns mobile/tablet adaptations for the real server-rendered WordPress DOM.
+ * Loaded after v2-compat.css; no release-era hotfix overrides belong here.
+ */
+
+/* Mobile navigation uses JS-owned .is-open / aria-expanded state. */
+.mobile-nav-links .menu-item { position: relative; }
+.mobile-nav-links .menu-item.has-dropdown > .nav-link {
+  padding-inline-end: 3.15rem;
+}
+.mobile-nav-links .nav-dropdown-toggle {
+  position: absolute;
+  inset-block-start: .42rem;
+  inset-inline-end: .35rem;
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 10px;
+  background: var(--tz-color-brand-softer);
+  color: var(--tz-color-brand);
+}
+.mobile-nav-links .nav-dropdown-toggle .nav-chevron {
+  transition: transform var(--tz-duration-fast) var(--tz-ease-standard);
+}
+.mobile-nav-links .menu-item.has-dropdown.is-open > .nav-dropdown-toggle .nav-chevron {
+  transform: rotate(180deg);
+}
+.mobile-nav-links .menu-item.has-dropdown > .sub-menu {
+  position: static;
+  display: none;
+  min-width: 0;
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+  padding: .25rem var(--tz-space-3) .5rem 0;
+  margin: 0;
+  border: 0;
+  border-inline-start: 2px solid var(--tz-color-brand-soft);
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  pointer-events: auto;
+}
+.mobile-nav-links .menu-item.has-dropdown.is-open > .sub-menu { display: block; }
+.mobile-nav-links .sub-menu .sub-menu { padding-block-start: .15rem; }
+.mobile-nav-links .sub-menu .nav-link {
+  padding-block: .58rem;
+  font-size: 12.5px;
+  color: var(--tz-color-muted);
+}
+
+/* The PHP messenger template emits .tz-fab-wrap, not .tz-fab-wrap.tz-fab. */
+.tz-fab-wrap {
+  position: fixed;
+  right: auto;
+  left: 20px;
+  bottom: 20px;
+  z-index: var(--tz-z-fab);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--tz-space-3);
+}
+
+@media (max-width: 1024px) {
+  .main-nav {
+    justify-content: space-between;
+    gap: .65rem;
+  }
+  .brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 0;
+    margin-inline-end: 0;
+  }
+  .nav-actions {
+    margin-inline-start: 0;
+    gap: .45rem;
+  }
+  /* Physical right anchoring is intentional. Logical inline-end resolves to
+     the left in RTL and previously opened the Persian drawer on the wrong side. */
+  .mobile-nav-panel {
+    inset-inline-start: auto;
+    inset-inline-end: auto;
+    right: 0;
+    left: auto;
+    max-width: 100%;
+    overscroll-behavior: contain;
+    padding-block-start: max(var(--tz-space-5), env(safe-area-inset-top));
+    padding-block-end: max(var(--tz-space-5), env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 900px) {
+  .bottom-nav,
+  .tz-bottom-nav { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .bottom-nav[data-nav-count="1"] { grid-template-columns: 1fr; }
+  .bottom-nav[data-nav-count="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bottom-nav[data-nav-count="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .bottom-nav[data-nav-count="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .bottom-nav[data-nav-count="5"] { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .tz-fab-wrap,
+  .tz-livechat {
+    bottom: calc(var(--tz-bottom-nav-height) + 14px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 680px) {
+  .main-nav {
+    height: 68px;
+    gap: .4rem;
+  }
+  .nav-actions { gap: .3rem; }
+  .nav-credits { display: none; }
+  .section,
+  .tez-builder-section,
+  .uni-strip { padding-block: 3rem; }
+
+  .service-card,
+  .tez-builder-card,
+  .step,
+  .tez-builder-step,
+  .reason-item,
+  .tez-builder-feature { padding: var(--tz-space-5); }
+  .step,
+  .tez-builder-step { min-height: 0; }
+
+  .faq-q,
+  .faq-question,
+  .tz-faq-question {
+    min-height: 0;
+    align-items: flex-start;
+    padding: .85rem;
+    line-height: 1.65;
+  }
+  .faq-item .faq-a,
+  .faq-answer,
+  .tz-faq-answer { padding-inline: .85rem; }
+
+  /* Keep all content accessible while avoiding a multi-thousand-pixel card wall. */
+  .tez-builder-section-service_cards .tez-builder-grid,
+  .tez-builder-section-process_steps .tez-builder-steps,
+  .article-grid {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: .8rem;
+    padding-block-end: .65rem;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tez-builder-section-service_cards .tez-builder-grid::-webkit-scrollbar,
+  .tez-builder-section-process_steps .tez-builder-steps::-webkit-scrollbar,
+  .article-grid::-webkit-scrollbar { display: none; }
+  .tez-builder-section-service_cards .tez-builder-card {
+    flex: 0 0 min(82vw, 310px);
+    min-height: 205px;
+    scroll-snap-align: start;
+  }
+  .tez-builder-section-process_steps .tez-builder-step {
+    flex: 0 0 min(80vw, 300px);
+    min-height: 185px;
+    scroll-snap-align: start;
+  }
+  .article-grid .post-card {
+    flex: 0 0 min(84vw, 320px);
+    scroll-snap-align: start;
+  }
+
+  .footer-grid,
+  .tz-footer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1rem;
+    row-gap: 1.75rem;
+  }
+  .footer-brand,
+  .tz-footer__brand {
+    grid-column: 1 / -1;
+    text-align: center;
+    align-items: center;
+  }
+  .footer-grid > .footer-col:last-child,
+  .tz-footer__grid > .tz-footer__col:last-child {
+    grid-column: 1 / -1;
+    align-items: center;
+    text-align: center;
+  }
+  .footer-col,
+  .tz-footer__col {
+    align-items: flex-start;
+    text-align: start;
+  }
+  .footer-grid > .footer-col:last-child,
+  .tz-footer__grid > .tz-footer__col:last-child {
+    align-items: center;
+    text-align: center;
+  }
+  .footer-menu-list,
+  .footer-legal { justify-content: center; }
+  .footer-certs { text-align: center; }
+}
+
+@media (max-width: 420px) {
+  .hero-actions,
+  .tez-builder-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-actions .btn-tz,
+  .tez-builder-actions .btn-tz {
+    min-width: 0;
+    padding-inline: .55rem;
+    font-size: 12px;
+  }
+  .hero-aside,
+  .tz-hero-split__form { min-height: 270px; }
+  .tz-hero-orbit { width: min(270px, 78vw); }
+  .tz-hero-orbit .hero-order-button {
+    width: 104px;
+    height: 104px;
+    font-size: 11px;
+  }
+  .tz-hero-orbit .orbit-tag {
+    max-width: 118px;
+    min-height: 30px;
+    padding: .3rem .5rem;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.35;
+    font-size: 10px;
+  }
+  .mobile-nav-panel {
+    width: min(360px, 94vw);
+    padding-inline: 1rem;
+  }
+  .tz-fab-wrap { left: 12px; }
+}

@@ -77,7 +77,6 @@ function teznevise_content_defaults() {
 		'svc6_url'   => '/service-simulation/',
 		'svc6_icon'  => 'fa-solid fa-microchip',
 		'svc6_color' => 'icon-purple-soft',
-
 		'svc7_title' => 'تحلیل کیفی',
 		'svc7_text'  => 'تحلیل مضمون، گراندد تئوری و پدیدارشناسی با کدگذاری منظم و قابل دفاع.',
 		'svc7_url'   => '/service-qualitative/',
@@ -172,7 +171,7 @@ function teznevise_url( $url ) {
 	}
 	// Preserve safe non-HTTP actions. Passing `tel:` through home_url() creates
 	// broken links such as https://teznevise.ir/tel:0930… on service pages.
-	if ( preg_match( '#^(?:https?://|tel:|mailto:|sms:|#)#i', $url ) ) {
+	if ( preg_match( '~^(?:https?://|tel:|mailto:|sms:|#)~i', $url ) ) {
 		return $url;
 	}
 	return home_url( $url );

@@ -370,6 +370,26 @@ function teznevise_plain_word_count( $post_id ) {
 }
 
 /**
+ * Explicit policy slugs that must be noindex (robots + sitemap).
+ * Single source of truth for the nine support/policy pages.
+ *
+ * @return string[]
+ */
+function teznevise_explicit_noindex_slugs() {
+	return array(
+		'corporate-social-responsibility',
+		'account',
+		'join-us',
+		'careers',
+		'fair-use-policy',
+		'revision-policy',
+		'originality-guarantee',
+		'service-commitments',
+		'achievements',
+	);
+}
+
+/**
  * Thin or competing URLs that must not be indexed.
  *
  * @return bool
@@ -386,18 +406,7 @@ function teznevise_should_noindex() {
 	if ( isset( teznevise_alias_page_slugs()[ $slug ] ) ) {
 		return true;
 	}
-	$noindex_slugs = array(
-		'corporate-social-responsibility',
-		'account',
-		'join-us',
-		'careers',
-		'fair-use-policy',
-		'revision-policy',
-		'originality-guarantee',
-		'service-commitments',
-		'achievements',
-	);
-	if ( in_array( $slug, $noindex_slugs, true ) ) {
+	if ( in_array( $slug, teznevise_explicit_noindex_slugs(), true ) ) {
 		return true;
 	}
 	$path = (string) wp_parse_url( (string) get_permalink( $post_id ), PHP_URL_PATH );
@@ -469,13 +478,7 @@ function teznevise_wpseo_sitemap_entry( $url, $type, $object ) {
 		if ( isset( teznevise_alias_page_slugs()[ $slug ] ) ) {
 			return false;
 		}
-		$noindex_slugs = array(
-			'corporate-social-responsibility',
-			'account',
-			'join-us',
-			'careers',
-		);
-		if ( in_array( $slug, $noindex_slugs, true ) ) {
+		if ( in_array( $slug, teznevise_explicit_noindex_slugs(), true ) ) {
 			return false;
 		}
 		$path = (string) wp_parse_url( $loc, PHP_URL_PATH );
@@ -487,7 +490,7 @@ function teznevise_wpseo_sitemap_entry( $url, $type, $object ) {
 		}
 	}
 	if ( isset( $url['images'] ) ) {
-		unset( $url['images'] );
+			unset( $url['images'] );
 	}
 	return $url;
 }
