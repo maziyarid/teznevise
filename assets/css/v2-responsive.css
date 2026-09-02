@@ -86,7 +86,13 @@
     margin-inline-start: 0;
     gap: .45rem;
   }
+  /* Physical right anchoring is intentional. Logical inline-end resolves to
+     the left in RTL and previously opened the Persian drawer on the wrong side. */
   .mobile-nav-panel {
+    inset-inline-start: auto;
+    inset-inline-end: auto;
+    right: 0;
+    left: auto;
     max-width: 100%;
     overscroll-behavior: contain;
     padding-block-start: max(var(--tz-space-5), env(safe-area-inset-top));
