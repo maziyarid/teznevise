@@ -2,10 +2,10 @@
 /**
  * Analytics runtime compatibility.
  *
- * Keep Google Analytics / Google Tag Manager executable and use the direct
- * GA4 measurement ID for collection. Site Kit remains connected for reports,
- * while its Analytics snippet placement is disabled in WordPress settings to
- * avoid duplicate hits.
+ * Keep Google Analytics / Google Tag Manager executable through first-party
+ * Google Tag Gateway paths on teznevise.ir. Site Kit remains connected for
+ * reports, while its Analytics and Tag Manager snippet placement is disabled
+ * in WordPress settings to avoid duplicate third-party loaders.
  *
  * @package Teznevise
  */
@@ -39,17 +39,15 @@ function teznevise_delay_nonessential_tracker_scripts( $tag, $handle, $src ) {
 add_filter( 'script_loader_tag', 'teznevise_delay_nonessential_tracker_scripts', 20, 3 );
 
 /**
- * Emit the canonical GA4 tag directly instead of relying on a GT-prefixed
- * Google-tag destination indirection. This is intentionally minimal so it
- * matches the snippet validated by Google Analytics/Tag Assistant.
+ * Emit GA4 through Teznevise's first-party Google Tag Gateway path.
  */
 function teznevise_output_ga4_tag() {
 	if ( is_admin() ) {
 		return;
 	}
 	?>
-<!-- Google tag (gtag.js) - Teznevise direct GA4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTB0ERWJYN"></script>
+<!-- Google tag (gtag.js) - Teznevise first-party gateway -->
+<script async src="/_tzga4/"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
@@ -59,3 +57,31 @@ gtag('config', 'G-ZTB0ERWJYN');
 	<?php
 }
 add_action( 'wp_head', 'teznevise_output_ga4_tag', 1 );
+
+/**
+ * Emit Google Tag Manager through Teznevise's first-party gateway path.
+ * The standard noscript iframe is intentionally omitted because Google Tag
+ * Gateway does not support first-party noscript transport.
+ */
+function teznevise_output_gtm_tag() {
+	if ( is_admin() ) {
+		return;
+	}
+	?>
+<!-- Google Tag Manager - Teznevise first-party gateway -->
+<script>
+(function(w,d,s,l){
+	w[l]=w[l]||[];
+	w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+	var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),
+		dl=l!='dataLayer'?'&l='+l:'';
+	j.async=true;
+	j.src='/_tzgtm/?id=GTM-T32XKX5Z'+dl;
+	f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer');
+</script>
+<!-- End Google Tag Manager -->
+	<?php
+}
+add_action( 'wp_head', 'teznevise_output_gtm_tag', 2 );
