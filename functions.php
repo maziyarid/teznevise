@@ -50,6 +50,7 @@ require_once TEZNEVISE_DIR . '/inc/waitlist.php';
 require_once TEZNEVISE_DIR . '/inc/ai-agents.php';
 require_once TEZNEVISE_DIR . '/inc/ai-comments.php';
 require_once TEZNEVISE_DIR . '/inc/perf.php';
+require_once TEZNEVISE_DIR . '/inc/analytics-runtime.php';
 if ( is_readable( TEZNEVISE_DIR . '/teznevise-core/teznevise-core.php' ) ) {
 	require_once TEZNEVISE_DIR . '/teznevise-core/teznevise-core.php';
 }
