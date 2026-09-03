@@ -2,10 +2,10 @@
 /**
  * Analytics runtime compatibility.
  *
- * Google Analytics / Google Tag Manager must remain executable. Site Kit adds
- * attributes to its gtag loader and the generic third-party delay filter can
- * otherwise leave that loader as an inert text/plain script. Keep only truly
- * non-essential trackers on the delayed path.
+ * Keep Google Analytics / Google Tag Manager executable and use the direct
+ * GA4 measurement ID for collection. Site Kit remains connected for reports,
+ * while its Analytics snippet placement is disabled in WordPress settings to
+ * avoid duplicate hits.
  *
  * @package Teznevise
  */
@@ -37,3 +37,25 @@ function teznevise_delay_nonessential_tracker_scripts( $tag, $handle, $src ) {
 	return '<script type="text/plain" data-tz-delay="1" data-src="' . $src . '"></script>';
 }
 add_filter( 'script_loader_tag', 'teznevise_delay_nonessential_tracker_scripts', 20, 3 );
+
+/**
+ * Emit the canonical GA4 tag directly instead of relying on a GT-prefixed
+ * Google-tag destination indirection. This is intentionally minimal so it
+ * matches the snippet validated by Google Analytics/Tag Assistant.
+ */
+function teznevise_output_ga4_tag() {
+	if ( is_admin() ) {
+		return;
+	}
+	?>
+<!-- Google tag (gtag.js) - Teznevise direct GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTB0ERWJYN"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZTB0ERWJYN');
+</script>
+	<?php
+}
+add_action( 'wp_head', 'teznevise_output_ga4_tag', 1 );
