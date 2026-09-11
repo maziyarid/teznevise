@@ -29,6 +29,7 @@ require_once TEZNEVISE_DIR . '/inc/cpts.php';
 require_once TEZNEVISE_DIR . '/inc/builder-download-catalog.php';
 require_once TEZNEVISE_DIR . '/inc/blog.php';
 require_once TEZNEVISE_DIR . '/inc/seo.php';
+require_once TEZNEVISE_DIR . '/inc/seo-regressions.php';
 require_once TEZNEVISE_DIR . '/inc/security.php';
 require_once TEZNEVISE_DIR . '/inc/setup-pages.php';
 require_once TEZNEVISE_DIR . '/inc/promote-assets.php';

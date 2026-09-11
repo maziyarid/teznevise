@@ -32,16 +32,73 @@
 	display: none !important;
 }
 
-.inquiry-grid {
+/* --------------------------------------------------------------------------
+ * Inquiry/contact template contracts.
+ * These selectors are emitted directly by page-contact.php and therefore
+ * must remain owned by the v2 runtime after the historical hotfix chain is
+ * removed. Compound selectors intentionally outrank the later generic
+ * .section rhythm without relying on !important or runtime file order.
+ * -------------------------------------------------------------------------- */
+.section.tz-inquiry-top {
+	padding-block: clamp(2rem, 4vw, 3rem) var(--tz-space-2, .5rem);
+}
+.section.tz-inquiry-form-band {
+	padding-top: var(--tz-space-2, .5rem);
+}
+.inquiry-grid,
+.tz-inquiry-grid {
 	display: grid;
-	grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+	grid-template-columns: minmax(0, 1.4fr) minmax(220px, .7fr);
 	gap: 24px;
 	align-items: start;
 }
 @media (max-width: 900px) {
-	.inquiry-grid {
+	.inquiry-grid,
+	.tz-inquiry-grid {
 		grid-template-columns: 1fr;
 	}
+}
+
+/* --------------------------------------------------------------------------
+ * Single-tool template contracts.
+ * page-tool.php renders these hooks around the task, calculator and guide.
+ * Keep them here instead of restoring hotfix-210.css. The compound section
+ * selector must beat the later generic .section rhythm on desktop and phone.
+ * -------------------------------------------------------------------------- */
+.section.tz-tool-task {
+	padding-block: clamp(2rem, 4vw, 3.5rem) var(--tz-space-3, .75rem);
+}
+.tz-tool-calc {
+	margin-top: var(--tz-space-3, .75rem);
+}
+.tz-tool-guide details {
+	border: 1px solid var(--tz-color-border, rgba(20, 93, 74, .12));
+	border-radius: var(--tz-radius-card, 1.25rem);
+	padding: .75rem 1rem 1.125rem;
+	background: var(--tz-color-paper, #fff);
+	box-shadow: var(--tz-shadow-card, 0 10px 30px rgba(16, 35, 29, .06));
+}
+.tz-tool-guide summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: .75rem;
+	cursor: pointer;
+	list-style: none;
+}
+.tz-tool-guide summary::-webkit-details-marker {
+	display: none;
+}
+.tz-tool-guide summary:focus-visible {
+	outline: 2px solid var(--tz-color-brand, #145d4a);
+	outline-offset: 4px;
+	border-radius: .5rem;
+}
+.tz-tool-guide-title {
+	display: block;
+	font-size: 1.15rem;
+	line-height: 1.6;
+	color: var(--tz-color-ink, #17342c);
 }
 
 .results-empty {

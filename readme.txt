@@ -4,7 +4,7 @@ Tags: rtl-language-support, custom-logo, custom-menu, featured-images, education
 Requires at least: 6.4
 Tested up to: 6.9
 Requires PHP: 8.3
-Stable tag: 1.9.30
+Stable tag: 1.9.31
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 

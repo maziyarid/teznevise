@@ -90,11 +90,17 @@ jobs:
             exit 1
           fi
 
-      - name: Verify every TEZNEVISE_DIR require_once target exists
+      - name: Verify release source contracts
         run: python3 scripts/check-release.py
+
+      - name: Verify Teznevise 2.0 frontend runtime contract
+        run: python3 scripts/check-v2-runtime.py
 
       - name: Classic Editor contract tests
         run: php tests/classic-content-contract.php
+
+      - name: SEO regression contract tests
+        run: php tests/seo-regression-contract.php
 
       - name: Rebuild frontend bundles and fail on drift
         run: |
