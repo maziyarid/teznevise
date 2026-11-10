@@ -1,0 +1,35 @@
+line,directive,pattern,matched_blocked_urls,review
+4,Allow,/,0,Retain: public access exception
+5,Allow,/robots.txt,0,Retain: public access exception
+6,Allow,/sitemap_index.xml,0,Retain: public access exception
+7,Allow,/*-sitemap.xml,0,Retain: public access exception
+10,Disallow,/wp-admin/,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+11,Allow,/wp-admin/admin-ajax.php,0,Retain: public access exception
+14,Disallow,/wp-register.php,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+15,Disallow,/xmlrpc.php,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+18,Disallow,/wp-json/,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+19,Disallow,/*?rest_route=,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+20,Disallow,/*&rest_route=,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+25,Disallow,/*?replytocom=,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+26,Disallow,/*&replytocom=,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+27,Disallow,/*?share=,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+28,Disallow,/*&share=,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+29,Disallow,/*?print=,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+30,Disallow,/*&print=,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+31,Disallow,/*?doing_wp_cron,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+32,Disallow,/*?preview=,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+33,Disallow,/*&preview=,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+34,Disallow,/*?utm_,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+35,Disallow,/*&utm_,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+38,Disallow,/order/,1,Useful legacy enquiry alias: allow its redirect
+41,Disallow,/date/,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+44,Disallow,/*/trackback/,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+47,Disallow,/cart/,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+48,Disallow,/checkout/,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+49,Disallow,/my-account/,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+50,Disallow,/shop/?orderby=,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+51,Disallow,/shop/?filter_,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+54,Disallow,/staging/,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+55,Disallow,/test/,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+56,Disallow,/.git/,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"
+57,Disallow,/cgi-bin/,0,"Retain: administration, API, private transactions, staging or duplicate URL noise; no useful standalone content discovered blocked by this rule"

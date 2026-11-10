@@ -1,0 +1,104 @@
+{
+  "checked_at": "2026-11-10T18:14:01.652458+00:00",
+  "production_changes": false,
+  "project_scope": {
+    "performance_urls": 135,
+    "initial_404": 84,
+    "native_301": 51,
+    "source_backed_restorations": 0,
+    "reviewed_direct_redirects": 84,
+    "unresolved": 0,
+    "snapshot_checks": {
+      "result": "PASS",
+      "dead_urls": 84,
+      "pass": 84,
+      "fail": 0,
+      "restored": 0,
+      "redirected": 84,
+      "unresolved": 0
+    },
+    "pre_apply_acceptance": {
+      "pass": 0,
+      "fail": 84,
+      "reason": "All 84 redirects are staged; production is unchanged."
+    }
+  },
+  "combined_scope": {
+    "supplied_rows": 415,
+    "decision_rows": 415,
+    "unique_exact_urls": 415,
+    "duplicate_rows": 0,
+    "pass": 214,
+    "fail": 201,
+    "unresolved_rows": 6,
+    "snapshot_drift_rows": 5
+  },
+  "failure_classification": {
+    "pending_owner_apply": 195,
+    "non_project_owner_content_or_identity_required": 6,
+    "unexpected_fetch_failures": 0
+  },
+  "sitemaps": {
+    "result": "PASS",
+    "sitemap_files": 8,
+    "page_urls": 404,
+    "pass": 404,
+    "fail": 0,
+    "xml_errors": 0,
+    "missing_money_pages": [],
+    "money_pages_required": false
+  },
+  "transient_sitemap_retry": [
+    {
+      "initial": {
+        "url": "https://teznevise.ir/rahnamay-tadvin-propozal-arshad-doktori/",
+        "result": "FAIL",
+        "initial_status": 503,
+        "final_url": "https://teznevise.ir/rahnamay-tadvin-propozal-arshad-doktori/",
+        "canonical": "",
+        "robots_allowed": true,
+        "robots_rule": "allow: /",
+        "issues": "Sitemap page must return direct 200 without a redirect | Page loc must be an HTML document | Expected exactly one self canonical"
+      },
+      "retry_fetched_utc": "2026-11-10T18:13:59.989881+00:00",
+      "retry": {
+        "url": "https://teznevise.ir/rahnamay-tadvin-propozal-arshad-doktori/",
+        "result": "PASS",
+        "initial_status": 200,
+        "final_url": "https://teznevise.ir/rahnamay-tadvin-propozal-arshad-doktori/",
+        "canonical": "https://teznevise.ir/rahnamay-tadvin-propozal-arshad-doktori/",
+        "robots_allowed": true,
+        "robots_rule": "allow: /",
+        "issues": ""
+      }
+    },
+    {
+      "initial": {
+        "url": "https://teznevise.ir/refund-policy/",
+        "result": "FAIL",
+        "initial_status": 503,
+        "final_url": "https://teznevise.ir/refund-policy/",
+        "canonical": "",
+        "robots_allowed": true,
+        "robots_rule": "allow: /",
+        "issues": "Sitemap page must return direct 200 without a redirect | Page loc must be an HTML document | Expected exactly one self canonical"
+      },
+      "retry_fetched_utc": "2026-11-10T18:14:01.127503+00:00",
+      "retry": {
+        "url": "https://teznevise.ir/refund-policy/",
+        "result": "PASS",
+        "initial_status": 200,
+        "final_url": "https://teznevise.ir/refund-policy/",
+        "canonical": "https://teznevise.ir/refund-policy/",
+        "robots_allowed": true,
+        "robots_rule": "allow: /",
+        "issues": ""
+      }
+    }
+  ],
+  "limits": [
+    "Post-apply acceptance has not been performed against a changed production site; no deployment or WordPress apply was authorized.",
+    "Six non-project original-content/identity gaps remain separately documented.",
+    "The full current sitemap passed after one ordinary retry for each of two transient 503 responses; original failures are retained."
+  ]
+}

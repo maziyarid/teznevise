@@ -1,0 +1,1266 @@
+{
+  "siteUrl": "sc-domain:teznevise.ir",
+  "startDate": "2026-08-09",
+  "endDate": "2026-11-08",
+  "searchType": "web",
+  "dimensions": [
+    "page"
+  ],
+  "dataSource": "api",
+  "coverage": {
+    "rowsReturned": 135,
+    "rowsTotal": 135,
+    "clicksCovered": null,
+    "impressionsCovered": null,
+    "hiddenClicksShare": null,
+    "hiddenImpressionsShare": null,
+    "totalsFrom": "get_site_summary",
+    "siteTotals": {
+      "clicks": 549,
+      "impressions": 16661,
+      "ctrPercent": 3.3,
+      "avgPositionWeighted": 16.84
+    },
+    "scope": "filtered",
+    "sharesOf": "filteredTotals",
+    "filteredTotals": null,
+    "note": "filteredTotals were not ready in time, so the shares are null."
+  },
+  "pagination": {
+    "limit": 1000,
+    "offset": 0,
+    "returned": 135,
+    "hasMore": false,
+    "note": "Showing all 135 rows."
+  },
+  "dataMaturity": {
+    "firstIncompleteDate": null,
+    "settledThrough": null,
+    "dateBasis": "America/Los_Angeles",
+    "source": "unavailable",
+    "probe": {
+      "searchType": "web",
+      "startDate": "2026-11-01",
+      "endDate": "2026-11-10",
+      "dataState": "all"
+    },
+    "note": "Search Console did not return metadata.firstIncompleteDate for the probe, so no settled-through boundary could be established. Do not infer one from the last returned row: zero-activity days are omitted from row data. (probe exceeded its 2500ms deadline)"
+  },
+  "rows": [
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/"
+      ],
+      "clicks": 1,
+      "impressions": 7,
+      "ctr": 14.285714285714285,
+      "position": 12.857142857142858
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/mechanical-civil/thermodynamics/"
+      ],
+      "clicks": 1,
+      "impressions": 37,
+      "ctr": 2.7027027027027026,
+      "position": 15.621621621621621
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/qualitative/mixed-methods/atlas-ti/"
+      ],
+      "clicks": 1,
+      "impressions": 5,
+      "ctr": 20,
+      "position": 9.4
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/qualitative/open-caqdas/qualcoder/"
+      ],
+      "clicks": 1,
+      "impressions": 4,
+      "ctr": 25,
+      "position": 8.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/qualitative/open-caqdas/taguette/"
+      ],
+      "clicks": 1,
+      "impressions": 8,
+      "ctr": 12.5,
+      "position": 6.25
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/chemical-process/coco-simulator/"
+      ],
+      "clicks": 1,
+      "impressions": 1,
+      "ctr": 100,
+      "position": 10
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/chemical-process/dwsim/"
+      ],
+      "clicks": 1,
+      "impressions": 5,
+      "ctr": 20,
+      "position": 16.2
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/hydrology/goldsim/"
+      ],
+      "clicks": 1,
+      "impressions": 2,
+      "ctr": 50,
+      "position": 5.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/biostatistics/epi-info/"
+      ],
+      "clicks": 1,
+      "impressions": 3,
+      "ctr": 33.33333333333333,
+      "position": 6.666666666666667
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/general-statistics/jasp/"
+      ],
+      "clicks": 1,
+      "impressions": 10,
+      "ctr": 10,
+      "position": 10.3
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/"
+      ],
+      "clicks": 0,
+      "impressions": 44,
+      "ctr": 0,
+      "position": 8.863636363636363
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/business-management/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 7
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/business-management/business-administration/human-resources/"
+      ],
+      "clicks": 0,
+      "impressions": 13,
+      "ctr": 0,
+      "position": 59.15384615384615
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/business-management/business-administration/strategic-management/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 6.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/business-management/business-administration/supply-chain-optimization-models/"
+      ],
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 46.25
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/business-management/business-administration/swot-analysis/"
+      ],
+      "clicks": 0,
+      "impressions": 34,
+      "ctr": 0,
+      "position": 39.1764705882353
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/business-management/finance-accounting/"
+      ],
+      "clicks": 0,
+      "impressions": 6,
+      "ctr": 0,
+      "position": 93
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/computer-science/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/computer-science/algorithm-complexity-analysis-reports/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 99
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/computer-science/artificial-intelligence/"
+      ],
+      "clicks": 0,
+      "impressions": 16,
+      "ctr": 0,
+      "position": 84.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/computer-science/data-structures/"
+      ],
+      "clicks": 0,
+      "impressions": 28,
+      "ctr": 0,
+      "position": 78.71428571428571
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/computer-science/database-management/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 3
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/computer-science/operating-systems/"
+      ],
+      "clicks": 0,
+      "impressions": 20,
+      "ctr": 0,
+      "position": 38.4
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/computer-science/sql-database-schema-designs/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 9
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/computer-science/uml-diagrams/"
+      ],
+      "clicks": 0,
+      "impressions": 41,
+      "ctr": 0,
+      "position": 78.02439024390245
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/electrical-electronics/circuit-simulation-files-spice/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 6
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/electrical-electronics/pcb-layout-designs/"
+      ],
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 6.333333333333333
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/electrical-electronics/signal-processing/"
+      ],
+      "clicks": 0,
+      "impressions": 37,
+      "ctr": 0,
+      "position": 78.4054054054054
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/mechanical-civil/cad-modelling-autocad/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/mechanical-civil/finite-element-analysis-fea-reports/"
+      ],
+      "clicks": 0,
+      "impressions": 26,
+      "ctr": 0,
+      "position": 51.26923076923077
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/mechanical-civil/fluid-mechanics/"
+      ],
+      "clicks": 0,
+      "impressions": 32,
+      "ctr": 0,
+      "position": 62.75
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/mechanical-civil/geotechnical-engineering/"
+      ],
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 54.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/mechanical-civil/structural-load-calculations/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/web-software/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 17
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/web-software/api-integration-scripts/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 31
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/web-software/cms-frameworks/"
+      ],
+      "clicks": 0,
+      "impressions": 41,
+      "ctr": 0,
+      "position": 32.02439024390244
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/assignments/web-software/ux-ui-design/"
+      ],
+      "clicks": 0,
+      "impressions": 39,
+      "ctr": 0,
+      "position": 30.846153846153847
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 23
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/chemical-industrial/"
+      ],
+      "clicks": 0,
+      "impressions": 82,
+      "ctr": 0,
+      "position": 31.158536585365855
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/chemical-industrial/chemical-engineering-project/"
+      ],
+      "clicks": 0,
+      "impressions": 87,
+      "ctr": 0,
+      "position": 39.206896551724135
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/chemical-industrial/chemistry-project/"
+      ],
+      "clicks": 0,
+      "impressions": 18,
+      "ctr": 0,
+      "position": 91.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/chemical-industrial/econometrics-project/"
+      ],
+      "clicks": 0,
+      "impressions": 48,
+      "ctr": 0,
+      "position": 14.333333333333334
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/chemical-industrial/industrial-engineering-project/"
+      ],
+      "clicks": 0,
+      "impressions": 32,
+      "ctr": 0,
+      "position": 88.71875
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/chemical-industrial/storyline/"
+      ],
+      "clicks": 0,
+      "impressions": 17,
+      "ctr": 0,
+      "position": 35.1764705882353
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/electrical/"
+      ],
+      "clicks": 0,
+      "impressions": 57,
+      "ctr": 0,
+      "position": 40.75438596491228
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/electrical/ees/"
+      ],
+      "clicks": 0,
+      "impressions": 52,
+      "ctr": 0,
+      "position": 18.71153846153846
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/electrical/gams/"
+      ],
+      "clicks": 0,
+      "impressions": 32,
+      "ctr": 0,
+      "position": 52.8125
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/electrical/vensim/"
+      ],
+      "clicks": 0,
+      "impressions": 31,
+      "ctr": 0,
+      "position": 25
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/mechanical-civil/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 20.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/mechanical-civil/aerospace-project/"
+      ],
+      "clicks": 0,
+      "impressions": 44,
+      "ctr": 0,
+      "position": 14.795454545454545
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/mechanical-civil/designbuilder/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 40.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/mechanical-civil/fluent/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/mechanical-civil/ls-dyna/"
+      ],
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 8.8
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/mechanical-civil/opensees/"
+      ],
+      "clicks": 0,
+      "impressions": 48,
+      "ctr": 0,
+      "position": 16.4375
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/engineering/mechanical-civil/plaxis/"
+      ],
+      "clicks": 0,
+      "impressions": 48,
+      "ctr": 0,
+      "position": 72.1875
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 3
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/ai-data/"
+      ],
+      "clicks": 0,
+      "impressions": 35,
+      "ctr": 0,
+      "position": 64.77142857142857
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/ai-data/deep-learning/"
+      ],
+      "clicks": 0,
+      "impressions": 12,
+      "ctr": 0,
+      "position": 28.166666666666668
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/ai-data/image-processing/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 9
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/ai-data/neural-network/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 4
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/ai-data/signal-processing-matlab/"
+      ],
+      "clicks": 0,
+      "impressions": 39,
+      "ctr": 0,
+      "position": 27.923076923076923
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/hardware/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 4.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/hardware/fpga/"
+      ],
+      "clicks": 0,
+      "impressions": 19,
+      "ctr": 0,
+      "position": 41.63157894736842
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/hardware/hspice/"
+      ],
+      "clicks": 0,
+      "impressions": 50,
+      "ctr": 0,
+      "position": 18.56
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/hardware/proteus-student/"
+      ],
+      "clicks": 0,
+      "impressions": 24,
+      "ctr": 0,
+      "position": 52.125
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/hardware/silvaco/"
+      ],
+      "clicks": 0,
+      "impressions": 45,
+      "ctr": 0,
+      "position": 28.91111111111111
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/hardware/vhdl/"
+      ],
+      "clicks": 0,
+      "impressions": 46,
+      "ctr": 0,
+      "position": 23.17391304347826
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/languages/c-sharp/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 10
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/languages/excel/"
+      ],
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 35.666666666666664
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/languages/fortran/"
+      ],
+      "clicks": 0,
+      "impressions": 28,
+      "ctr": 0,
+      "position": 37.392857142857146
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/languages/latex/"
+      ],
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 12.4
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/languages/python-programming/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 7
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/programming/languages/r-programming/"
+      ],
+      "clicks": 0,
+      "impressions": 36,
+      "ctr": 0,
+      "position": 46.138888888888886
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/qualitative/mixed-methods/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/qualitative/mixed-methods/dedoose/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/qualitative/open-caqdas/qda-miner/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/qualitative/open-caqdas/quirkos/"
+      ],
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 84.28571428571429
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/qualitative/text-linguistics/antconc/"
+      ],
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 6.428571428571429
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/qualitative/text-linguistics/praat/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 3.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/research/"
+      ],
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 20.666666666666668
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/research/publishing/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 46
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/research/research-support/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 3
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/research/research-support/market-research/"
+      ],
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 2.142857142857143
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/research/research-support/research-tutorial/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 3
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/research/research-support/scientific-consultant/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 40
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 6
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/chemical-process/aspen-hysys/"
+      ],
+      "clicks": 0,
+      "impressions": 72,
+      "ctr": 0,
+      "position": 32
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/chemical-process/aspen-plus/"
+      ],
+      "clicks": 0,
+      "impressions": 30,
+      "ctr": 0,
+      "position": 80.2
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/chemical-process/aveva-pro-ii/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 24
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/chemical-process/chemcad/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 4
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/civil-mechanical/etabs/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 32
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/civil-mechanical/msc-adams/"
+      ],
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 10
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/civil-mechanical/openfoam/"
+      ],
+      "clicks": 0,
+      "impressions": 19,
+      "ctr": 0,
+      "position": 44.05263157894737
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/civil-mechanical/sap2000/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 10
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/civil-mechanical/solidworks-simulation/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 93
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/civil-mechanical/staad-pro/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 6
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/electrical/matlab-simulink/"
+      ],
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 10.666666666666666
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/electrical/multisim/"
+      ],
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 10.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/electrical/proteus/"
+      ],
+      "clicks": 0,
+      "impressions": 34,
+      "ctr": 0,
+      "position": 30.529411764705884
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/hydrology/hec-ras/"
+      ],
+      "clicks": 0,
+      "impressions": 48,
+      "ctr": 0,
+      "position": 17.75
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/hydrology/modflow/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/industrial/anylogic/"
+      ],
+      "clicks": 0,
+      "impressions": 14,
+      "ctr": 0,
+      "position": 35.07142857142857
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/industrial/flexsim/"
+      ],
+      "clicks": 0,
+      "impressions": 6,
+      "ctr": 0,
+      "position": 5.333333333333333
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/industrial/simul8/"
+      ],
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 9
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/multiphysics/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 5.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/multiphysics/labview/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 10
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/network/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 4
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/network/boson-netsim/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/network/cisco-packet-tracer/"
+      ],
+      "clicks": 0,
+      "impressions": 81,
+      "ctr": 0,
+      "position": 27.59259259259259
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/network/eve-ng/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 3.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/network/gns3/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/network/ns2/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 7.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/network/ns3/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 7
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/simulation/network/opnet/"
+      ],
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 7.5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 21
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/biostatistics/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 7
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/biostatistics/graphpad-prism/"
+      ],
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 9.333333333333334
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/biostatistics/ncss/"
+      ],
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/biostatistics/pass/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 9
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/econometrics/"
+      ],
+      "clicks": 0,
+      "impressions": 6,
+      "ctr": 0,
+      "position": 9
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/general-statistics/ibm-spss-statistics/"
+      ],
+      "clicks": 0,
+      "impressions": 38,
+      "ctr": 0,
+      "position": 68.6842105263158
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/general-statistics/jamovi/"
+      ],
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 13
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/general-statistics/pspp/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 42
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/general-statistics/sas/"
+      ],
+      "clicks": 0,
+      "impressions": 38,
+      "ctr": 0,
+      "position": 67.92105263157895
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/general-statistics/statsmodels/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/sem/eqs/"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/sem/lavaan/"
+      ],
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 4.714285714285714
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/statistics/sem/mplus/"
+      ],
+      "clicks": 0,
+      "impressions": 11,
+      "ctr": 0,
+      "position": 8.272727272727273
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/student-research/"
+      ],
+      "clicks": 0,
+      "impressions": 19,
+      "ctr": 0,
+      "position": 89.47368421052632
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/student-research/academic-research/"
+      ],
+      "clicks": 0,
+      "impressions": 23,
+      "ctr": 0,
+      "position": 78.17391304347827
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/student-research/academic-research/research-project/"
+      ],
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 62.6
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/student-research/university-projects/"
+      ],
+      "clicks": 0,
+      "impressions": 13,
+      "ctr": 0,
+      "position": 91.61538461538461
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/student-research/university-projects/bachelor-project/"
+      ],
+      "clicks": 0,
+      "impressions": 32,
+      "ctr": 0,
+      "position": 81.3125
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/student-research/university-projects/master-project/"
+      ],
+      "clicks": 0,
+      "impressions": 32,
+      "ctr": 0,
+      "position": 62.75
+    },
+    {
+      "keys": [
+        "https://teznevise.ir/project/student-research/university-projects/urgent-student-project/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 29
+    }
+  ]
+}

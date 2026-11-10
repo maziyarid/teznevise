@@ -6,3 +6,7 @@ docs/wpcode-snippets-export-*.json
 !react-app/migrations/0007_inquiries_user.sql
 .env
 .env.*
+
+# Local SEO crawl bodies, package test runtimes and private scratch artifacts.
+/work/
+/scripts/seo-20261110/__pycache__/

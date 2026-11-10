@@ -1,0 +1,7 @@
+requested_url,hop,old_url,status,new_url,terminal_url,terminal_status
+https://teznevise.ir/account/,1,https://teznevise.ir/account/,302,https://teznevise.ir/inquiry/,https://teznevise.ir/inquiry/,200
+https://teznevise.ir/order/,1,https://teznevise.ir/order/,301,https://teznevise.ir/inquiry/,https://teznevise.ir/inquiry/,200
+https://teznevise.ir/service-proposal/,1,https://teznevise.ir/service-proposal/,301,https://teznevise.ir/proposal/,https://teznevise.ir/proposal/,200
+https://teznevise.ir/service-thesis/,1,https://teznevise.ir/service-thesis/,301,https://teznevise.ir/thesis/,https://teznevise.ir/thesis/,200
+https://teznevise.ir/thesis/master/,1,https://teznevise.ir/thesis/master/,301,https://teznevise.ir/download/masters-research-methods-guide/,https://teznevise.ir/download/masters-research-methods-guide/,200
+https://teznevise.ir/wp-sitemap.xml,1,https://teznevise.ir/wp-sitemap.xml,301,https://teznevise.ir/sitemap_index.xml,https://teznevise.ir/sitemap_index.xml,200

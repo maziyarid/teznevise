@@ -1,0 +1,2 @@
+old_url,inbound_links,inbound_resources,inbound_sources,in_sitemap,decision,new_url,reason
+https://teznevise.ir/student-projects/,1,0,https://teznevise.ir/student-projects/,False,create canonical page,https://teznevise.ir/student-projects/,Explicit requested new-page probe; not an existing linked 404. New content answers this URL directly.

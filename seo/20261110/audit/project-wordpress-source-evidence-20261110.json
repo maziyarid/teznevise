@@ -1,0 +1,47 @@
+{
+  "site": "https://teznevise.ir",
+  "checked_at": "2026-11-10",
+  "access": "authenticated read-only",
+  "method": "SELECT public-content metadata by all GSC project slug candidates or legacy /project/ GUID; no writes, no config or option reads",
+  "searched_post_types": [
+    "page",
+    "post",
+    "revision",
+    "wpcode",
+    "tz_resource"
+  ],
+  "matched_records": [
+    {
+      "ID": "1015",
+      "post_type": "page",
+      "post_status": "publish",
+      "post_name": "project",
+      "post_parent": "625",
+      "post_title": "انجام پروپوزال کلاسی درس روش تحقیق",
+      "guid": "https://teznevise.ir/?page_id=1015",
+      "content_characters": "3726"
+    },
+    {
+      "ID": "1102",
+      "post_type": "page",
+      "post_status": "publish",
+      "post_name": "engineering",
+      "post_parent": "947",
+      "post_title": "انجام پایان نامه فنی و مهندسی",
+      "guid": "https://teznevise.ir/?page_id=1102",
+      "content_characters": "9488"
+    },
+    {
+      "ID": "1678",
+      "post_type": "page",
+      "post_status": "publish",
+      "post_name": "gams",
+      "post_parent": "0",
+      "post_title": "انجام پروژه GAMS",
+      "guid": "https://teznevise.ir/project/engineering/electrical/gams/",
+      "content_characters": "2933"
+    }
+  ],
+  "interpretation": "Only the class-proposal page, generic engineering thesis page and GAMS page matched. None is a missing original page from the 84 current 404 project URLs. Existing GAMS is already live at /gams/ and its legacy project URI is a 301. Published/draft/private/trashed pages were enumerated separately (257 non-trash pages, 4 trash pages); no missing project original was present.",
+  "production_changes": false
+}
