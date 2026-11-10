@@ -1,0 +1,2 @@
+url,rule,rule_line,initial_status,final_url,usefulness,recommendation
+https://teznevise.ir/order/,/order/,38,301,https://teznevise.ir/inquiry/,Useful legacy enquiry alias; redirect needs crawling,Allow /order/ so crawlers can follow its 301

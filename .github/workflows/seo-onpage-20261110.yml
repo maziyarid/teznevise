@@ -1,0 +1,31 @@
+name: Verify staged on-page SEO package
+on:
+  pull_request:
+    paths:
+      - 'seo/20261110/**'
+      - 'scripts/seo-20261110/**'
+      - 'inc/seo-onpage-20261110*.php'
+      - '.github/workflows/seo-onpage-20261110.yml'
+permissions:
+  contents: read
+jobs:
+  offline-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+      - name: Content, schema, keyword, redirect and anchor contracts
+        run: python3 scripts/seo-20261110/verify.py
+      - name: WP-CLI dry-run, idempotence and rollback contracts
+        run: php scripts/seo-20261110/test-wordpress.php
+      - name: Runtime file installation and restoration contracts
+        run: python3 scripts/seo-20261110/test-runtime-files.py
+      - name: Runtime and migration syntax
+        run: |
+          php -l inc/seo-onpage-20261110.php
+          php -l inc/seo-onpage-20261110-template.php
+          php -l scripts/seo-20261110/wordpress.php
+          bash -n scripts/seo-20261110/apply.sh scripts/seo-20261110/rollback.sh

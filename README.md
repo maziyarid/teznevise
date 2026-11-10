@@ -1,6 +1,6 @@
 # Teznevise WordPress Theme
 
-**Version:** 1.9.30
+**Version:** 1.9.31
 
 **Author:** MAZ//ID (Maziyar) · **Brand:** [MΛZ / maziyarid/M-Z](https://github.com/maziyarid/M-Z)
 
@@ -57,3 +57,7 @@ The deployed SHA must match the intended `main` release SHA. Review cPanel Versi
 ## React app
 
 The TanStack/React companion app (wallet, dashboard, tools) lives in [`react-app/`](./react-app/).
+
+## Staged on-page SEO package
+
+See [the 2026-11-10 SEO runbook](seo/20261110/README.md) for the reviewed content, crawl evidence, dry-run apply and rollback. The package is dormant until the owner applies it; this branch is not a deployment.

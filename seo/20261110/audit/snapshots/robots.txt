@@ -1,0 +1,59 @@
+User-agent: *
+
+# Public crawler access
+Allow: /
+Allow: /robots.txt
+Allow: /sitemap_index.xml
+Allow: /*-sitemap.xml
+
+# WordPress administration
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+
+# Sensitive or non-public endpoints
+Disallow: /wp-register.php
+Disallow: /xmlrpc.php
+
+# REST/API crawler noise
+Disallow: /wp-json/
+Disallow: /*?rest_route=
+Disallow: /*&rest_route=
+
+# Internal search
+
+# Low-value duplicate URL variants
+Disallow: /*?replytocom=
+Disallow: /*&replytocom=
+Disallow: /*?share=
+Disallow: /*&share=
+Disallow: /*?print=
+Disallow: /*&print=
+Disallow: /*?doing_wp_cron
+Disallow: /*?preview=
+Disallow: /*&preview=
+Disallow: /*?utm_
+Disallow: /*&utm_
+
+# Specialty and order URLs
+Disallow: /order/
+
+# Archives
+Disallow: /date/
+
+# Feeds and trackbacks
+Disallow: /*/trackback/
+
+# WooCommerce transactional pages
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /my-account/
+Disallow: /shop/?orderby=
+Disallow: /shop/?filter_
+
+# Staging and utility paths
+Disallow: /staging/
+Disallow: /test/
+Disallow: /.git/
+Disallow: /cgi-bin/
+
+Sitemap: https://teznevise.ir/sitemap_index.xml
