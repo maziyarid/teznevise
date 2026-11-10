@@ -6,7 +6,7 @@ function tzil_fail( $message ) { throw new RuntimeException( $message ); }
 function tzil_json( $value ) { return json_encode( $value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR ); }
 function tzil_hash( $value ) { return hash( 'sha256', tzil_json( $value ) ); }
 function tzil_local_url($url){$origin=function_exists('home_url')?rtrim(home_url('/'),'/'):'https://teznevise.ir';return preg_replace('#^https://teznevise\\.ir(?=/|$)#',$origin,$url);}
-function tzil_local_manifest($manifest){foreach($manifest['sources'] as &$source){$source['url']=tzil_local_url($source['url']);foreach($source['links'] as &$link){$link['target']=tzil_local_url($link['target']);}unset($link);}unset($source);foreach($manifest['blue_links']??array() as $index=>$row){$manifest['blue_links'][$index]['source_url']=tzil_local_url($row['source_url']);}return $manifest;}
+function tzil_local_manifest($manifest){foreach($manifest['sources'] as &$source){$source['url']=tzil_local_url($source['url']);foreach($source['links'] as &$link){$link['target']=tzil_local_url($link['target']);}unset($link);}unset($source);foreach($manifest['anchor_policy']??array() as $index=>$policy){$manifest['anchor_policy'][$index]['target']=tzil_local_url($policy['target']);}foreach($manifest['blue_links']??array() as $index=>$row){$manifest['blue_links'][$index]['source_url']=tzil_local_url($row['source_url']);}return $manifest;}
 function tzil_post_snapshot( $id ) {
 	$p = get_post( $id ); if ( ! $p ) { return null; }
 	$out = get_object_vars($p);unset($out['filter']);ksort($out);
@@ -41,6 +41,16 @@ function tzil_direct_target( $url ) {
 }
 function tzil_validate_package( $manifest, $root ) {
 	if ( empty( $manifest['sources'] ) || empty( $manifest['master'] ) ) { tzil_fail( 'Incomplete manifest.' ); }
+	$policies=array();$designated_sources=array();$assigned_designations=array();
+	foreach($manifest['anchor_policy']??array() as $policy){
+		$key=tzil_url_key($policy['target']);$lsi=$policy['lsi_phrases']??array();
+		if(!$key||isset($policies[$key])||count($lsi)<5||count($lsi)>10||count(array_unique($lsi))!==count($lsi)){tzil_fail('Invalid money-target LSI policy.');}
+		foreach($lsi as $phrase){if(!is_string($phrase)||trim($phrase)===''||$phrase===$policy['keyword']||str_contains($phrase,"\u{200C}")||$phrase==='اینجا'||(str_starts_with($key,'/thesis/')&&str_contains($phrase,'مشاوره'))){tzil_fail('Invalid LSI phrase.');}}
+		foreach($policy['designated_exact_source_ids']??array() as $id){if((int)$id<1||isset($designated_sources[(int)$id])){tzil_fail('An exact source may own only one money anchor.');}$designated_sources[(int)$id]=$key;}
+		if((isset($policy['secondary_lsi_phrases'])&&!$policy['secondary_lsi_phrases'])||array_diff($policy['secondary_lsi_phrases']??array(),$lsi)){tzil_fail('Unapproved generic secondary phrase.');}
+		$policies[$key]=$policy;
+	}
+	if(count($policies)!==6){tzil_fail('Exactly six money-target policies required.');}
 	$known = array();
 	foreach ( $manifest['sources'] as $source ) {
 		if ( isset( $known[$source['id']] ) || ! tzil_url_key( $source['url'] ) ) { tzil_fail( 'Duplicate or invalid source.' ); } $known[$source['id']] = true;
@@ -48,9 +58,16 @@ function tzil_validate_package( $manifest, $root ) {
 		foreach ( $source['links'] as $link ) {
 			$key = tzil_url_key( $link['target'] );
 			if ( ! $key || isset( $targets[$key] ) || substr_count( $link['context'], '{anchor}' ) !== 1 || str_contains( tzil_json( $link ), "\u{200C}" ) ) { tzil_fail( 'Invalid link contract.' ); }
+			if(isset($policies[$key])){
+				$policy=$policies[$key];$designated=in_array((int)$source['id'],array_map('intval',$policy['designated_exact_source_ids']),true);
+				$role=$designated?'exact-primary':'lsi';
+				if($designated){$assigned_designations[(int)$source['id']]=$key;}
+				if(($link['exact_keyword']??null)!==$policy['keyword']||($link['anchor_role']??null)!==$role||($designated?$link['anchor']!==$policy['keyword']:!in_array($link['anchor'],$policy['lsi_phrases'],true))||empty($link['lsi_phrases'])||array_diff($link['lsi_phrases'],$policy['lsi_phrases'])){tzil_fail('Primary/LSI designation differs from reviewed policy.');}
+			}
 			$targets[$key] = true;
 		}
 	}
+	if($designated_sources!=$assigned_designations){tzil_fail('Every designated exact source must have its selected contextual primary.');}
 	$file = $manifest['master']['content_file'];
 	if ( basename( $file ) !== $file || ! is_file( $root . '/' . $file ) ) { tzil_fail( 'Missing draft content file.' ); }
 	$content = file_get_contents( $root . '/' . $file );
@@ -82,19 +99,30 @@ function tzil_dispatch( $mode, $arguments ) {
 		if ( ! $journal || ! $state || $journal['after_option_hash'] !== tzil_hash( $state ) || $state['package_hash'] !== $package_hash ) { tzil_fail( 'Installed state does not match this package and backup.' ); }
 		if ( ! $master || (int) $master->ID !== (int) $state['master_id'] || ( ! $state['master_verified'] && $master->post_status !== 'draft' ) ) { tzil_fail( 'Master draft state differs from reviewed plan.' ); }
 		if ( ! class_exists( 'DOMDocument' ) ) { tzil_fail( 'PHP DOM extension required.' ); }
-		$checked = 0;
-		$blue_seen=0;$blue_expected=count($state['blue_links']);$targets=array();
-		foreach ( $state['sources'] as $source ) {
-			$r = wp_remote_get( $source['url'], array( 'redirection'=>0,'timeout'=>25 ) );
-			if ( is_wp_error($r) || wp_remote_retrieve_response_code($r) !== 200 ) { tzil_fail( 'Source not direct 200: '.$source['url'] ); }
-			$d = new DOMDocument(); $old = libxml_use_internal_errors(true); $d->loadHTML(wp_remote_retrieve_body($r),LIBXML_NONET); libxml_clear_errors();libxml_use_internal_errors($old);$x=new DOMXPath($d);
-			$nodes=$x->query('//main//a');
-			foreach($source['links'] as $link){$expected=($link['activation']??'immediate')!=='master-published'||!empty($state['master_verified']);if(!$expected){continue;}$targets[$link['target']]=true;$count=0;foreach($nodes as $a){if(tzil_url_key($a->getAttribute('href'))===tzil_url_key($link['target'])){if(trim($a->textContent)!==$link['anchor']){tzil_fail('Wrong anchor: '.$source['url']);}++$count;}}if($count!==1){tzil_fail('Expected one editorial target: '.$source['url'].' -> '.$link['target']);}++$checked;}
-			foreach($x->query('//main//a') as $a){foreach($state['blue_links'] as $blue){if((int)$blue['source_id']===(int)$source['id']&&$a->getAttribute('href')===$blue['target']&&trim($a->textContent)===$blue['anchor']){++$blue_seen;break;}}}
+		$checked=0;$blue_seen=0;$blue_expected=count($state['blue_links']);$targets=array();$profiles=array();$policies=array();
+		foreach($state['anchor_policy'] as $policy){$key=tzil_url_key($policy['target']);$policies[$key]=$policy;$profiles[$key]=array('keyword'=>$policy['keyword'],'target'=>$policy['target'],'exact'=>0,'lsi'=>0,'total'=>0);}
+		foreach($state['sources'] as $source){
+			$r=wp_remote_get($source['url'],array('redirection'=>0,'timeout'=>25));if(is_wp_error($r)||wp_remote_retrieve_response_code($r)!==200){tzil_fail('Source not direct 200: '.$source['url']);}
+			$d=new DOMDocument();$old=libxml_use_internal_errors(true);$d->loadHTML('<?xml encoding="UTF-8">'.wp_remote_retrieve_body($r),LIBXML_NONET);libxml_clear_errors();libxml_use_internal_errors($old);$x=new DOMXPath($d);$nodes=$x->query('//main//a');
+			$selected=array();foreach($source['links'] as $link){$selected[tzil_url_key($link['target'])]=$link;}
+			$source_exact_count=0;
+			foreach($policies as $key=>$policy){
+				$active=($policy['activation']??'immediate')!=='master-published'||!empty($state['master_verified']);$exact=0;$lsi=0;$primary=0;$total=0;
+				foreach($nodes as $a){if(tzil_anchor_key($a->getAttribute('href'))!==$key){continue;}++$total;if(!$active){tzil_fail('Draft master has a public link: '.$source['url']);}if($a->getAttribute('href')!==$policy['target']){tzil_fail('Noncanonical money-target href: '.$source['url']);}$label=trim($a->textContent);if($label===$policy['keyword']){++$exact;}elseif(in_array($label,$policy['lsi_phrases'],true)){++$lsi;}else{tzil_fail('Unapproved money anchor: '.$source['url'].' -> '.$label);}if($a->getAttribute('data-tzil-primary')===$key){++$primary;if(!isset($selected[$key])||$label!==$selected[$key]['anchor']){tzil_fail('Primary anchor differs from reviewed plan: '.$source['url']);}}}
+				$designated=$active&&in_array((int)$source['id'],array_map('intval',$policy['designated_exact_source_ids']),true);
+				if($exact!==($designated?1:0)){tzil_fail('Expected at most one exact anchor, only on a designated primary source: '.$source['url']);}
+				if($active&&isset($selected[$key])){if($primary!==1){tzil_fail('Expected one designated contextual primary: '.$source['url']);}++$checked;$targets[$policy['target']]=true;}
+				$source_exact_count+=$exact;
+				if($total){$targets[$policy['target']]=true;}$profiles[$key]['exact']+=$exact;$profiles[$key]['lsi']+=$lsi;$profiles[$key]['total']+=$total;
+			}
+			if($source_exact_count>1){tzil_fail('More than one exact money anchor on a source page: '.$source['url']);}
+			foreach($source['links'] as $link){$key=tzil_url_key($link['target']);if(isset($policies[$key])){continue;}$count=0;foreach($nodes as $a){if(tzil_url_key($a->getAttribute('href'))===$key){if(trim($a->textContent)!==$link['anchor']||$a->getAttribute('href')!==$link['target']){tzil_fail('Wrong verified-map anchor: '.$source['url']);}++$count;}}if($count!==1){tzil_fail('Expected one verified-map target: '.$source['url']);}++$checked;$targets[$link['target']]=true;}
+			foreach($nodes as $a){foreach($state['blue_links'] as $blue){if((int)$blue['source_id']===(int)$source['id']&&$a->getAttribute('href')===$blue['target']&&trim($a->textContent)===$blue['anchor']){++$blue_seen;break;}}}
 		}
 		if($blue_seen!==(!empty($state['remove_bluethesis'])?0:$blue_expected)){tzil_fail('BlueThesis count differs from captured audit/flag: '.$blue_seen);}
 		foreach(array_keys($targets) as $target){tzil_direct_target($target);}
-		return array('verified'=>true,'editorial_links_checked'=>$checked,'blue_links'=>$blue_seen,'master_status'=>$master->post_status,'remove_bluethesis'=>$state['remove_bluethesis']);
+		foreach($profiles as &$profile){$ratio=$profile['exact']?$profile['lsi']/$profile['exact']:null;$profile['lsi_per_exact']=$ratio;$profile['within_target_range']=$ratio!==null&&$ratio>=3&&$ratio<=4;$profile['ratio_note']=$ratio===null?'No active exact primary in this stage.':($profile['within_target_range']?'Within approximate 1:3-4 target.':'Review observed ratio; no extra links are manufactured.');}unset($profile);
+		return array('verified'=>true,'contextual_primaries_checked'=>$checked,'anchor_profiles'=>array_values($profiles),'blue_links'=>$blue_seen,'master_status'=>$master->post_status,'remove_bluethesis'=>$state['remove_bluethesis']);
 	}
 	if ( $mode === 'rollback' ) {
 		if ( ! $journal ) { tzil_fail( 'No backup journal.' ); }
@@ -137,7 +165,7 @@ function tzil_dispatch( $mode, $arguments ) {
 			if(is_wp_error($id)){tzil_fail($id->get_error_message());}
 			$journal['created_master_id']=(int)$id;$journal['after_post_hash']=tzil_hash(tzil_post_snapshot($id));$journal['phase']='draft-created';tzil_write_journal($journal_file,$journal);$master=get_post($id);
 		}
-		$next=array('active'=>true,'package_hash'=>$package_hash,'sources'=>$local_manifest['sources'],'blue_links'=>$local_manifest['blue_links']??array(),'remove_bluethesis'=>$remove,'master_id'=>(int)$master->ID,'master_verified'=>$master_links||!empty($state['master_verified']));
+		$next=array('active'=>true,'package_hash'=>$package_hash,'sources'=>$local_manifest['sources'],'anchor_policy'=>$local_manifest['anchor_policy'],'blue_links'=>$local_manifest['blue_links']??array(),'remove_bluethesis'=>$remove,'master_id'=>(int)$master->ID,'master_verified'=>$master_links||!empty($state['master_verified']));
 		if($state && tzil_hash($next)===tzil_hash($state)){tzil_write_journal($journal_file,$journal);return array('unchanged'=>true,'master_status'=>$master->post_status);}
 		$journal['planned_option']=$next;$journal['phase']='activating';tzil_write_journal($journal_file,$journal);
 		update_option(TZIL_OPTION,$next,false);

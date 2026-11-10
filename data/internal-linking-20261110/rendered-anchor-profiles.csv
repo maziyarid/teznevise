@@ -1,0 +1,7 @@
+keyword,target,sample_source_count,before_total,before_exact,before_lsi,before_other,draft_total,draft_exact,draft_lsi,after_master_total,after_master_exact,after_master_lsi,draft_lsi_per_exact,after_master_lsi_per_exact,after_master_within_3_to_4
+"انجام پایان نامه",https://teznevise.ir/thesis/,26,21,9,4,8,25,4,21,25,4,21,5.25,5.25,no
+"انجام پایان نامه کارشناسی ارشد",https://teznevise.ir/thesis/master/,26,0,0,0,0,0,0,0,4,2,2,,1,no
+"انجام پایان نامه دکتری",https://teznevise.ir/thesis/phd/,26,4,3,1,0,5,0,5,5,0,5,,,no
+"انجام پروپوزال",https://teznevise.ir/proposal/,26,12,5,0,7,13,2,11,13,2,11,5.5,5.5,no
+"انجام پروپوزال دکتری",https://teznevise.ir/proposal/phd/,26,0,0,0,0,2,1,1,2,1,1,1,1,no
+"انجام پروژه های دانشجویی",https://teznevise.ir/service-project/,26,0,0,0,0,2,0,2,2,0,2,,,no

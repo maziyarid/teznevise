@@ -111,6 +111,7 @@ try {
     check($GLOBALS['posts'][$id]->post_status === 'draft' && (int)$GLOBALS['posts'][$id]->post_parent === 947, 'Apply must create the hierarchical master page as a draft.');
     check(serialize($GLOBALS['posts'][947]) === $original, 'Existing page title, body, status and metadata remain untouched.');
     check(get_option(TZIL_OPTION)['remove_bluethesis'] === false, 'Cross-site removal is off by default.');
+    check(get_option(TZIL_OPTION)['anchor_policy'] === $seed_manifest['anchor_policy'], 'Apply freezes the reviewed per-target exact/LSI allocation.');
     check(is_file($backup . '/database.json'), 'Backup journal must exist after apply.');
     $before_repeat = count($GLOBALS['posts']);
     $repeat = tzil_dispatch('apply', [$backup, '--apply']);
@@ -125,6 +126,16 @@ try {
     check(count($GLOBALS['posts']) === $before_repeat && get_option(TZIL_OPTION)['master_id'] === $id, 'Interrupted draft creation must recover the marked draft without creating a duplicate.');
     $verification = tzil_dispatch('verify', [$backup, '--check']);
     check(!empty($verification['verified']), 'Read-only verify accepts the planned rendered links and draft.');
+    check(count($verification['anchor_profiles']) === 6, 'Verify returns a profile for each sole money target.');
+    $expected_exact = [];
+    foreach ($seed_manifest['sources'] as $source) foreach ($source['links'] as $link) {
+        if (($link['activation'] ?? 'immediate') === 'immediate' && ($link['anchor_role'] ?? '') === 'exact-primary') $expected_exact[$link['target']] = ($expected_exact[$link['target']] ?? 0) + 1;
+    }
+    foreach ($verification['anchor_profiles'] as $profile) {
+        check($profile['exact'] === ($expected_exact[$profile['target']] ?? 0), 'Verified exact anchors match only designated active primary sources.');
+        check($profile['total'] === $profile['exact'] + $profile['lsi'], 'Every verified money-target anchor is exact or approved LSI.');
+        check(array_key_exists('within_target_range', $profile) && array_key_exists('ratio_note', $profile), 'Ratio shortfalls are visible in the verification report.');
+    }
 
     $state = get_option(TZIL_OPTION);
     $GLOBALS['options'][TZIL_OPTION]['editor_note'] = 'newer work';
@@ -166,6 +177,7 @@ try {
         check(str_starts_with($source['url'], 'https://staging.example.org/'), 'Staging source URL must use the selected WordPress origin.');
         foreach ($source['links'] as $link) check(str_starts_with($link['target'], 'https://staging.example.org/'), 'Staging internal targets must use the selected WordPress origin.');
     }
+    foreach ($staging_state['anchor_policy'] as $policy) check(str_starts_with($policy['target'], 'https://staging.example.org/'), 'Staging anchor-policy targets must use the selected WordPress origin.');
     check(!empty(tzil_dispatch('verify', [$staging_backup, '--check'])['verified']), 'Staging verify must use local rendered links.');
     foreach ($GLOBALS['http_urls'] as $url) check(!str_starts_with($url, 'https://teznevise.ir/'), 'Staging apply and verify must never fetch production.');
     tzil_dispatch('rollback', [$staging_backup, '--apply']);
@@ -183,7 +195,7 @@ try {
     $GLOBALS['posts'][1234] = (object)['ID'=>1234,'post_type'=>'page','post_status'=>'draft','post_parent'=>0,'post_name'=>'other-master','post_title'=>'انجام پایان نامه کارشناسی ارشد','post_content'=>'','post_excerpt'=>''];
     refuses(static fn() => tzil_dispatch('apply', [$sandbox . '/other-backup', '--apply']), 'Another page owns');
     check(count($GLOBALS['writes']) === $before_conflict, 'Existing owner must block duplicate creation before writes.');
-    echo "PASS: default dry runs, draft ownership, idempotence, read-only verification, rollback guards and PR #456 conflict\n";
+    echo "PASS: default dry runs, frozen anchor allocation/profiles, draft ownership, idempotence, staging isolation and rollback guards\n";
 } finally {
     remove_tree($sandbox);
 }
