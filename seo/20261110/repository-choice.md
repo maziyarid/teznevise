@@ -15,3 +15,5 @@ Branch: `seo/teznevise-onpage-20261110`. Exactly one PR is intended. No merge, r
 2026-08-09 through 2026-11-08: 549 clicks, 16,661 impressions; traffic concentrates on calculator and download URLs. Money-page positions: `/thesis/` 21 with zero clicks, `/thesis/phd/` 77, `/proposal/` 7.7 on 20 impressions, `/proposal/phd/` 25, `/service-project/` 39.7. Plain `انجام پایان نامه` did not appear. Coverage totals supplied: 617 indexed, 182 not found, 47 robots blocked, 71 redirects, 22 noindex.
 
 These are owner-supplied facts, not independently downloaded Search Console exports. The public crawl is a current snapshot and cannot enumerate historical, orphaned or private Search Console URLs. Its findings and limits are reported separately in `audit/`.
+
+The existing GitHub/Vercel integration attempted an automatic preview for initial commit `88404af`; its check reported failure and no preview was deployed. `vercel.json` disables automatic deployment for this SEO branch only. No production deployment or WordPress mutation was run.

@@ -6,7 +6,7 @@
 
 ## Supervised follow-up
 
-The supplied URL-level Search Console lists are being processed in four controlled phases in this same PR: live inventory, per-URL decisions, staged backup-first apply batches plus link/sitemap corrections, then exhaustive verification. A checkpoint comment will record each completed phase. Production remains unchanged under the no-deploy instruction.
+The supplied URL-level Search Console lists are being processed in four controlled phases in this same PR: live inventory, per-URL decisions, staged backup-first apply batches plus link/sitemap corrections, then exhaustive verification. A checkpoint comment will record each completed phase. Production remains unchanged under the no-deploy instruction. The pre-existing Vercel integration attempted and failed an automatic preview for the initial PR commit; branch-specific `git.deploymentEnabled: false` suppresses further preview attempts.
 
 ## Source and search context
 
