@@ -35,12 +35,21 @@ function tzseo_begin() {
     }
     if ( false === $wpdb->query( 'START TRANSACTION' ) ) { throw new RuntimeException( 'Cannot start database transaction.' ); }
 }
+function tzseo_invalidate_cache( $ids, $option_names ) {
+    foreach ( array_unique( array_filter( array_map( 'intval', $ids ) ) ) as $id ) { clean_post_cache( $id ); wp_cache_delete( $id, 'post_meta' ); }
+    foreach ( $option_names as $name ) { wp_cache_delete( $name, 'options' ); }
+    wp_cache_delete( 'alloptions', 'options' ); wp_cache_delete( 'notoptions', 'options' );
+}
 function tzseo_hash( $value ) { return hash( 'sha256', serialize( $value ) ); }
 function tzseo_snapshot( $id ) {
     global $wpdb;
     $post = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->posts} WHERE ID = %d", $id ), ARRAY_A );
     if ( ! $post ) { return null; }
-    $meta = get_post_meta( $id );
+    // Read raw rows: persistent object-cache state can outlive a killed SQL transaction.
+    $meta = array();
+    $rows = $wpdb->get_results( $wpdb->prepare( "SELECT meta_key, meta_value FROM {$wpdb->postmeta} WHERE post_id = %d ORDER BY meta_id", $id ), ARRAY_A );
+    if ( null === $rows && $wpdb->last_error ) { throw new RuntimeException( 'Cannot back up post metadata.' ); }
+    foreach ( $rows as $row ) { $meta[ $row['meta_key'] ][] = $row['meta_value']; }
     ksort( $meta );
     return array( 'post' => $post, 'meta' => $meta );
 }
@@ -152,6 +161,7 @@ function tzseo_run( $args ) {
     [ $mode, $package, $backup ] = $args;
     if ( ! in_array( $mode, array( 'apply', 'apply-dry-run', 'rollback', 'rollback-dry-run' ), true ) ) { throw new RuntimeException( 'Invalid mode.' ); }
     $dry = str_ends_with( $mode, '-dry-run' ); $rollback = str_starts_with( $mode, 'rollback' );
+    if ( $rollback ) { $gsc = get_option( 'teznevise_gsc_20261110', array() ); if ( ! empty( $gsc['enabled'] ) && ! empty( $gsc['applied_batches'] ) ) { throw new RuntimeException( 'Roll back all GSC batches in reverse order before the base metadata/content package.' ); } }
     $backup = tzseo_backup_dir( $backup, $dry );
     $site = untrailingslashit( home_url( '/' ) );
     // Never read credentials or write configuration. Owner chooses WordPress root via WP-CLI.
@@ -266,7 +276,13 @@ function tzseo_run( $args ) {
         // Journal is durable before commit; a pre-commit crash leaves the untouched baseline.
         if ( false === $wpdb->query( 'COMMIT' ) ) { throw new RuntimeException( 'Database commit failed.' ); } $transaction = false;
         WP_CLI::success( 'SEO package applied. Original posts/meta and prior redirect option retained in private backup. No cache purge or deployment performed.' );
-    } finally { if ( $transaction ) { $wpdb->query( 'ROLLBACK' ); } $wpdb->get_var( $wpdb->prepare( 'SELECT RELEASE_LOCK(%s)', $db_lock_name ) ); flock( $lock, LOCK_UN ); fclose( $lock ); }
+    } finally { if ( $transaction ) {
+        $wpdb->query( 'ROLLBACK' );
+        $cache_ids = array( $id ?? 0 );
+        foreach ( $before['posts'] ?? array() as $entry ) { $cache_ids[] = $entry['id']; }
+        foreach ( $state['posts'] ?? array() as $entry ) { $cache_ids[] = $entry['id']; }
+        tzseo_invalidate_cache( $cache_ids, array( TZSEO_OPTION ) );
+    } $wpdb->get_var( $wpdb->prepare( 'SELECT RELEASE_LOCK(%s)', $db_lock_name ) ); flock( $lock, LOCK_UN ); fclose( $lock ); }
 }
 function tzseo_originals_unchanged( $before ) {
     if ( tzseo_option_snapshot( TZSEO_OPTION ) !== $before['option'] ) { return false; }

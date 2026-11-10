@@ -15,6 +15,7 @@ SCRIPT = Path(__file__).with_name('runtime-files.py')
 LOADER = 'teznevise-onpage-20261110.php'
 MODULE = 'teznevise-onpage-20261110/seo-onpage-20261110.php'
 TEMPLATE = 'teznevise-onpage-20261110/seo-onpage-20261110-template.php'
+GSC = 'teznevise-onpage-20261110/seo-gsc-20261110.php'
 
 
 def snapshot(root):
@@ -68,7 +69,7 @@ class RuntimeFilesContract(unittest.TestCase):
 
     def test_install_repeat_and_rollback_dry_run(self):
         self.run_installer('install')
-        for name in (LOADER, MODULE, TEMPLATE):
+        for name in (LOADER, MODULE, TEMPLATE, GSC):
             self.assertTrue((self.target / name).is_file())
         before = snapshot(self.base)
         self.run_installer('install')

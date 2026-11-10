@@ -25,6 +25,10 @@ class WP_CLI {
 class TestDB {
     public $comments = 'wp_comments'; public $posts = 'wp_posts'; public $postmeta = 'wp_postmeta'; public $options = 'wp_options'; public $last_error = ''; private $transaction;
     public function prepare( $query, ...$args ) { foreach ( $args as $arg ) { $query = preg_replace_callback( '/%[ds]/', static fn( $m ) => '%d' === $m[0] ? (string) (int) $arg : "'" . str_replace( "'", "''", (string) $arg ) . "'", $query, 1 ); } return $query; }
+    public function get_results( $sql, $format ) {
+        if ( ! preg_match( '/WHERE post_id = (\d+)/', $sql, $m ) ) { throw new RuntimeException( 'Unexpected metadata query.' ); }
+        $rows = array(); foreach ( $GLOBALS['db']['meta'][ (int) $m[1] ] ?? array() as $key => $values ) { foreach ( $values as $value ) { $rows[] = array( 'meta_key' => $key, 'meta_value' => $value ); } } return $rows;
+    }
     public function get_var( $sql ) { return str_contains( $sql, 'COUNT(*)' ) ? (string) ( $GLOBALS['extra_data'] ?? 0 ) : '1'; }
     public function get_row( $sql, $format ) {
         if ( str_starts_with( $sql, 'SHOW TABLE STATUS' ) ) { return array( 'Engine' => 'InnoDB' ); }
@@ -34,7 +38,7 @@ class TestDB {
     }
     public function query( $sql ) {
         if ( 'START TRANSACTION' === $sql ) { $this->transaction = unserialize( serialize( $GLOBALS['db'] ) ); return 1; }
-        if ( 'COMMIT' === $sql ) { $this->transaction = null; return 1; }
+        if ( 'COMMIT' === $sql ) { if ( ! empty( $GLOBALS['fail_commit'] ) ) { return false; } $this->transaction = null; return 1; }
         if ( 'ROLLBACK' === $sql ) { if ( null !== $this->transaction ) { $GLOBALS['db'] = $this->transaction; } $this->transaction = null; return 1; }
         throw new RuntimeException( 'Unexpected statement.' );
     }
@@ -48,7 +52,7 @@ class TestDB {
     public function delete( $table, $where ) { ++$GLOBALS['mutations']; unset( $GLOBALS['db']['meta'][ $where['post_id'] ] ); return 1; }
 }
 $wpdb = new TestDB();
-function home_url( $path = '/' ) { return 'https://teznevise.ir' . $path; }
+function home_url( $path = '/' ) { return ( $GLOBALS['mock_home_origin'] ?? 'https://teznevise.ir' ) . $path; }
 function untrailingslashit( $s ) { return rtrim( $s, '/' ); }
 function get_option( $name, $default = false ) { return isset( $GLOBALS['db']['options'][ $name ] ) ? unserialize( $GLOBALS['db']['options'][ $name ]['option_value'] ) : $default; }
 function update_option( $name, $value, $autoload = false ) { ++$GLOBALS['mutations']; $GLOBALS['db']['options'][ $name ] = array( 'option_value' => serialize( $value ), 'autoload' => $autoload ? 'yes' : 'no' ); return true; }
@@ -57,7 +61,7 @@ function get_post_meta( $id, $key = '', $single = false ) { $meta = $GLOBALS['db
 function update_post_meta( $id, $key, $value ) { ++$GLOBALS['mutations']; if ( $GLOBALS['fail_after_post'] ) { throw new RuntimeException( 'Injected metadata failure after post mutation.' ); } $GLOBALS['db']['meta'][ $id ][ $key ] = array( serialize( wp_unslash( $value ) ) ); }
 function add_post_meta( $id, $key, $value ) { ++$GLOBALS['mutations']; $GLOBALS['db']['meta'][ $id ][ $key ][] = serialize( wp_unslash( $value ) ); }
 function maybe_unserialize( $v ) { $x = @unserialize( $v ); return false !== $x || 'b:0;' === $v ? $x : $v; }
-function wp_cache_delete( ...$args ) {}
+function wp_cache_delete( ...$args ) { $GLOBALS['cache_deletions'][] = $args; }
 function clean_post_cache( $id ) {}
 function remove_action( ...$args ) { $GLOBALS['removed_actions'][] = $args; }
 function add_action( ...$args ) {}
@@ -100,6 +104,7 @@ function teznevise_the_page_leftover_content() {
 
 function check( $bool, $message ) { if ( ! $bool ) { throw new RuntimeException( 'FAIL: ' . $message ); } }
 function expect_error( $call, $contains ) { try { $call(); } catch ( Throwable $e ) { check( str_contains( $e->getMessage(), $contains ), $e->getMessage() ); return; } throw new RuntimeException( 'Expected refusal: ' . $contains ); }
+if ( defined( 'TZSEO_MOCKS_ONLY' ) ) { return; }
 require __DIR__ . '/wordpress.php';
 update_option( TZSEO_OPTION, array( 'enabled' => true ), false );
 require __DIR__ . '/../../inc/seo-onpage-20261110.php';
@@ -151,6 +156,7 @@ try {
     expect_error( static fn() => tzseo_run( array( 'apply', $package, $test_root . '/crash-backup' ) ), 'Injected' );
     $GLOBALS['fail_after_post'] = false;
     check( $baseline === $GLOBALS['db'], 'failure after post update rolls back database transaction' );
+    check( in_array( array( TZSEO_OPTION, 'options' ), $GLOBALS['cache_deletions'], true ) && in_array( array( $id, 'post_meta' ), $GLOBALS['cache_deletions'], true ), 'failed base transaction invalidates targeted option and metadata cache' );
     tzseo_run( array( 'rollback', $package, $test_root . '/crash-backup' ) );
     check( $baseline === $GLOBALS['db'], 'rollback safely closes incomplete transaction journal' );
     expect_error( static fn() => tzseo_run( array( 'apply', $package, ABSPATH . 'unsafe-backup' ) ), 'outside the web root' );

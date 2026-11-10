@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 FILES = {
     'teznevise-onpage-20261110/seo-onpage-20261110.php': ROOT / 'inc/seo-onpage-20261110.php',
     'teznevise-onpage-20261110/seo-onpage-20261110-template.php': ROOT / 'inc/seo-onpage-20261110-template.php',
+    'teznevise-onpage-20261110/seo-gsc-20261110.php': ROOT / 'inc/seo-gsc-20261110.php',
 }
 LOADER = b"<?php\n/** Project: Teznevise | Author: MAZ//ID (Maziyar) | @package Teznevise */\nrequire_once __DIR__ . '/teznevise-onpage-20261110/seo-onpage-20261110.php';\n"
 

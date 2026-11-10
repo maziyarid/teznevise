@@ -7,6 +7,7 @@
  * Dormant until the owner applies the reviewed WP-CLI package.
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
+if ( is_readable( __DIR__ . '/seo-gsc-20261110.php' ) ) { require_once __DIR__ . '/seo-gsc-20261110.php'; }
 if ( ! function_exists( 'tezseo20261110_config' ) ) {
 
 function tezseo20261110_config() { $value = get_option( 'teznevise_onpage_20261110', array() ); return is_array( $value ) && ! empty( $value['enabled'] ) ? $value : array(); }

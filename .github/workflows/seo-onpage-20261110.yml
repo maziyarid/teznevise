@@ -5,6 +5,8 @@ on:
       - 'seo/20261110/**'
       - 'scripts/seo-20261110/**'
       - 'inc/seo-onpage-20261110*.php'
+      - 'inc/seo-gsc-20261110.php'
+      - 'audit/gsc-indexing-20261110.csv'
       - '.github/workflows/seo-onpage-20261110.yml'
 permissions:
   contents: read
@@ -23,9 +25,24 @@ jobs:
         run: php scripts/seo-20261110/test-wordpress.php
       - name: Runtime file installation and restoration contracts
         run: python3 scripts/seo-20261110/test-runtime-files.py
+      - name: Reviewed GSC inventory and known owner-dependent exceptions
+        run: python3 scripts/seo-20261110/verify-gsc.py --check-inventory --allow-unresolved-count 6
+      - name: GSC verification contracts
+        run: python3 scripts/seo-20261110/test-verify-gsc.py
+      - name: GSC batch and early MU loading contracts
+        run: |
+          php scripts/seo-20261110/test-gsc.php
+          php scripts/seo-20261110/test-gsc-boot.php
+          php scripts/seo-20261110/test-gsc-package.php
+      - name: Reviewed href cleanup reproducibility
+        run: |
+          python3 scripts/seo-20261110/gsc-link-map.py
+          git diff --exit-code -- seo/20261110/audit/internal-redirect-links.csv
       - name: Runtime and migration syntax
         run: |
           php -l inc/seo-onpage-20261110.php
           php -l inc/seo-onpage-20261110-template.php
           php -l scripts/seo-20261110/wordpress.php
-          bash -n scripts/seo-20261110/apply.sh scripts/seo-20261110/rollback.sh
+          php -l scripts/seo-20261110/gsc.php
+          php -l inc/seo-gsc-20261110.php
+          bash -n scripts/seo-20261110/apply.sh scripts/seo-20261110/rollback.sh scripts/seo-20261110/gsc-apply.sh scripts/seo-20261110/gsc-rollback.sh

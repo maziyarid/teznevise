@@ -167,6 +167,7 @@ def offline():
     # Scan all package additions, not the unrelated legacy theme copy.
     paths = list(PACKAGE.rglob('*')) + list((ROOT / 'scripts/seo-20261110').rglob('*'))
     paths += list((ROOT / 'inc').glob('seo-onpage-20261110*.php'))
+    paths += [ROOT / 'inc/seo-gsc-20261110.php', ROOT / 'audit/gsc-indexing-20261110.csv']
     for path in paths:
         if path.is_file() and '__pycache__' not in str(path):
             content = gzip.open(path, 'rt', encoding='utf-8').read() if path.suffix == '.gz' else path.read_text()
