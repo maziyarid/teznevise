@@ -1,0 +1,36 @@
+{
+  "captured_on": "2026-11-10",
+  "source": "WPVibe authenticated read-only db SELECT and get_page_html",
+  "posts_inventory_count": 410,
+  "published_pages": 257,
+  "published_posts": 54,
+  "published_downloads": 99,
+  "draft_private_pending_content_objects": 0,
+  "rendered_main_samples": 26,
+  "blue_source_pages": 12,
+  "blue_link_occurrences": 13,
+  "complete_live_rendered_crawl": false,
+  "limitations": "Stored post_content counts are a separate diagnostic; builders and extracted theme copy can differ. Rendered before/after counts are a captured sample, not a full-site crawl. Apply and verify scripts require a future owner-run staging test.",
+  "existing_master_candidates": [
+    {
+      "id": "8187",
+      "url": "https://teznevise.ir/download/masters-research-methods-guide/",
+      "title": "کتابچه روش تحقیق برای پایان نامه کارشناسی ارشد"
+    },
+    {
+      "id": "8280",
+      "url": "https://teznevise.ir/download/amirkabir-materials-masters-proposal/",
+      "title": "دانشگاه صنعتی امیرکبیر — دانشکده مهندسی مواد و متالورژی"
+    },
+    {
+      "id": "8502",
+      "url": "https://teznevise.ir/tavavot-proposol-arshad-va-doctori/",
+      "title": "تفاوت های اصلی پروپوزال کارشناسی ارشد و دکتری: راهنمای کامل برای انتخاب موضوع و ساختار مناسب"
+    },
+    {
+      "id": "8532",
+      "url": "https://teznevise.ir/en/services/masters-thesis-guidance/",
+      "title": "Master’s Thesis Support"
+    }
+  ]
+}
