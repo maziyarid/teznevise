@@ -1,89 +1,48 @@
-# Teznevise on-page SEO package — 2026-11-10
+# Teznevise staged on-page SEO — 2026-11-10
 
-This is a staged change for owner review. It has not been applied, merged or deployed. `manifest.json` is the authoritative keyword, H1, title, description and content-file map. Six money-page HTML files hold the complete Persian copy and matching FAQ schemas; `content/home.html` holds the brand/resource introduction for the existing homepage.
+This package is delivered in draft PR #456 on `seo/teznevise-onpage-20261110`. It has not been merged or deployed. No production page, option, redirect, robots file, `wp-config.php` or `.env` was changed.
 
-## Scope and evidence
+## Content and keyword ownership
 
-The code source is `maziyarid/teznevise`; see `repository-choice.md` for the live theme evidence and observed production version drift. The public crawl checked 1,018 URLs and found no currently linked or sitemap 404. The requested new `/student-projects/` page is currently absent. The historical Search Console totals are owner-supplied aggregates, not an exported URL list; this PR does not claim to resolve 182 unenumerated historical URLs.
+`manifest.json` is authoritative for titles, descriptions, H1s, roles and content files. Six distinct money pages own the six requested broad keywords; a brand/resource homepage reduces competition for student projects. The existing `/service-project/` stays a separate 200 technical hub rather than redirecting to `/student-projects/`.
 
-- `audit/redirect-map.csv`: three reviewed 301 rules, including the two required aliases and project-intent consolidation.
-- `audit/url-status.csv`, `redirect-chains.csv`, `internal-404s.csv`: every observed status, redirect destination and 404 decision.
-- `audit/robots-rules.csv`, `robots-blocked-urls.csv`, `snapshots/`: exact robots/sitemap evidence and useful blocked alias `/order/`.
-- `audit/internal-links.csv`: 216 topic-matched continuation links, covering all 54 published posts, 61 tool/calculator/hub pages and 101 download/hub pages.
-- `audit/exact-anchor-rewrites.csv`: 329 rules cover 361 existing exact-match anchors. The captured existing-plus-added corpus projects to 0% exact matches after these changes; live verification checks the actual ratio against the 5% ceiling.
-- `audit/bluethesis-links.csv`: all 13 statistical-analysis anchors on 12 source pages, with nofollow actions. The replaced PhD page removes its old reference.
-- `audit/cannibalisation.md`: separate recommended title, H1, copy and canonical decisions for the other domains. This package never edits those sites.
-- `audit/before-after.csv`: measured content counts and before/proposed titles. New master landing has zero independent service words; its current redirect ends at a 512-word download guide. Homepage longcopy changes from a 235-word student-project introduction to 332 words of brand/resource guidance; its title, description and hero also change.
+| Path | Role | New visible words |
+| --- | --- | ---: |
+| `/thesis/` | انجام پایان نامه | 3,247 |
+| `/thesis/master/` | انجام پایان نامه کارشناسی ارشد | 3,257 |
+| `/thesis/phd/` | انجام پایان نامه دکتری | 3,414 |
+| `/proposal/` | انجام پروپوزال | 3,663 |
+| `/proposal/phd/` | انجام پروپوزال دکتری | 3,373 |
+| `/student-projects/` | انجام پروژه های دانشجویی | 3,787 |
+| `/service-project/` | Technical software/topic hub | 1,266 |
+| `/` | Brand/resource introduction | 332 |
 
-The copy uses natural Persian, Persian prose digits and ordinary spaces. Author, reviewer, credentials, actual prices, supported services and business policies are explicitly marked `[نیازمند تکمیل مالک: ...]` where not supplied. No credentials, prices, reviews or statistics were invented. The copy describes educational guidance with student authorship.
+Money and hub pages include process, pricing factors, author/reviewer details and six visible FAQs with exactly one matching FAQPage block. Unknown author qualifications, actual prices, supported capabilities/licenses and policies are marked `[نیازمند تکمیل مالک: ...]`; complete those facts before publication. No statistics, credentials, testimonials or prices were invented. Authored Persian uses ordinary spaces, Persian prose digits and no U+200C. The guide preserves student authorship and educational support.
 
-## What apply changes
+The content loader replaces stale builder output on managed pages, avoids duplicate footer content, owns the H1 and suppresses competing theme/Yoast/Rank Math FAQ nodes. Homepage hero/theme-mod filters and a body fallback support both the repository theme and observed live preview drift. Source tool/download/blog bodies are not rewritten: the runtime adds visible server-rendered contextual links.
 
-The migration creates or updates six money pages, including the hierarchical master page, and updates the existing static homepage, and backs up each original full post row and all original postmeta before any database mutation. It writes Yoast and Rank Math metadata and stores the page FAQ separately from sanitized HTML. The homepage keeps its slug, parent and template; its classic-editor introduction becomes general resource guidance. The runtime overrides stale builder rendering on the six money pages, supplies one H1 and one FAQPage, removes the theme's old FAQ emitter, and filters competing Yoast/Rank Math FAQ nodes.
+## Evidence and decisions
 
-One non-autoloaded option, `teznevise_onpage_20261110`, holds the activated runtime configuration, redirects, homepage metadata/hero, links and anchor rewrites. Its original raw value and autoload state, including absence, are backed up. The redirect overlay is restored through that same option; existing third-party redirect tables are never changed. Read-only snapshots of known plugin redirect options are diagnostic evidence, not a claim to back up their custom database tables. The original `/service-thesis/` and `/service-proposal/` theme aliases already return 301; the package enforces the same canonical destinations.
+- `repository-choice.md`: public and authenticated read-only evidence that `maziyarid/teznevise` is the Teznevise code source. The live preview is 1.9.35 while this checkout is 1.9.31, so install only the standalone runtime until the owner reconciles a full theme release.
+- `audit/crawl-report.md`: original 1,018-URL sitemap/internal-link/resource crawl with statuses, redirect targets, robots review and exact snapshots. It found no linked/sitemap 404; later supplied historical/orphan URLs are handled separately.
+- Root `audit/gsc-indexing-20261110.csv` and identical package copy: all 387 supplied indexing samples, preserving exact queries and literal wildcard requests.
+- Root `audit/project-legacy-inventory-20261110.csv`: all 135 real GSC performance URLs, freshly checked as 84 current 404s and 51 native single-hop 301s. Source JSON, metric ranking and WordPress/repo source checks are included.
+- Root `audit/project-dead-decisions-20261110.csv`: 84 exact source-backed decisions: zero restorations, 84 direct topical 301s, zero unresolved project URLs. No matched original content was recoverable in authenticated WordPress or repo/history; no replacement original was fabricated.
+- `audit/reviewed-redirect-map-20261110.csv`: all 191 reviewed rules, comprising 189 deduplicated GSC redirects plus the two required base aliases `/service-thesis/` and `/service-proposal/`.
+- `audit/internal-links.csv`: 224 contextual links across 222 sources, retaining all 54 blog posts plus tools/downloads and adding eight unique-source links to the live technical hub. Reviewed label changes cover 377 existing money exact matches and one generic exact homepage anchor; the projected money ratio is 0%.
+- `audit/bluethesis-links.csv`: all 13 statistical-analysis anchors across 12 source pages. Retained links gain nofollow; replaced content may remove an old reference. `cannibalisation.md` recommends separate owner changes to the other domains; no external site is edited.
+- `audit/before-after.csv`: before/proposed counts, titles, H1s and measurement notes for all eight pages.
 
-Source blog, calculator and download posts remain in their original database state. The runtime inserts one visible server-rendered continuation link before `</main>` (or `</body>` fallback), updates only reviewed exact anchor labels on scoped sources, and adds nofollow to matching external anchors. Thus their original bodies, download actions and builder metadata require no mutation or restore. The new student page retains engineering, digital-circuit and simulation guidance from the old service intent.
+The combined review covers 415 unique URLs: 189 redirect decisions, four exact 410s, two narrow robots Allows and 220 keeps. The original 387 and project 84 scopes overlap by 56; 28 new dead project URLs extend the original set. Six unresolved non-project content/identity gaps remain explicitly documented in `GSC_RUNBOOK.md` and are not part of the completed 84-URL subset.
 
-Apply and rollback require InnoDB posts/postmeta/options, an advisory site lock and a private mode-0700 backup directory outside the WordPress root. A transaction protects database changes; the immutable baseline and checksum precede writes, with a journal before commit. Repeating an unchanged apply is a no-op. Rollback restores original post/meta values and the option, removes only unchanged package-created pages, and refuses newer edits, comments, revisions, attachments or children. After a completed rollback, use a fresh private directory for a new apply. Keep backups private; they contain original content and metadata.
+## Apply, rollback and verification
 
-WP-CLI wrappers use `--skip-plugins --skip-themes` to avoid normal plugin/theme mutation hooks. MU plugins still load as WordPress requires. The scripts do not edit, copy or include credentials from `wp-config.php` or `.env` in backups, flush rewrites, purge caches, or deploy a theme.
+Use [PROJECT_RUNBOOK.md](PROJECT_RUNBOOK.md) for exact owner-run installation, project-only apply/rollback and the complete batch sequence. [GSC_RUNBOOK.md](GSC_RUNBOOK.md) describes scope, protected routes, exceptions and verification. Four runtime files are backed up/installed through `runtime-files.py`; normal behavior stays dormant until the reviewed options are applied. The owner should review completed factual placeholders and staging verification before any public installation.
 
-## Owner-approved installation and apply
+All changed post fields/meta, raw options/autoload or absence, and any changed physical robots bytes/mode are backed up first in immutable mode-0700 directories outside web roots. InnoDB transactions, site locks, checksummed journals, exact metadata restoration and newer-edit/reverse-order guards are tested. A project-only batch does not modify robots or posts for this zero-restoration plan. Scripts never edit or copy `wp-config.php` or `.env`; no full old-theme deployment is needed.
 
-Complete all factual placeholders in the six HTML files before public publication. Edit visible FAQ answers and their JSON-LD together. Confirm real author/reviewer names, verified relevant qualifications, date of review, service scope, price basis and policies; do not replace placeholders with unsupported claims. Re-run verification after any edit.
+No robots block is added for search queries, `/search/` or feeds. Only `/order/` and `/order/?service` gain narrow Allows so their existing 301 can be crawled. Sitemap filters and the standalone verifier enforce direct 200, self-canonical, crawlable/indexable page entries while preserving valid image extensions. Site-wide staging privacy is retained.
 
-The live theme reports 1.9.35 while this repository reports 1.9.31. Install only the standalone runtime through the supplied MU-plugin installer; do not replace the full production theme with an older checkout. The installer backs up the four exact runtime files before writing, preserves pre-existing bytes/modes on rollback, refuses newer file edits, and is idempotent. Its module is inert until apply activates the option. The theme require in this PR also works when the owner reconciles a future full theme update; a declaration guard prevents duplicate loading.
+Offline checks include actual eight-page word/schema/keyword/anchor contracts, all 54 real post IDs, 135/84 performance coverage, exact source evidence, redirect graph safety and full reviewed-package dry-run/apply/repeat/reverse rollback through isolated WordPress/SQL adapters. PHP lint, shell syntax, release guards and frontend bundle drift checks are run. These are not a production WordPress/plugin-stack apply; the read-only acceptance reports explicitly distinguish pending approved changes from actual live behavior.
 
-Use a staging clone first. Set the following absolute paths to the reviewed checkout, the intended WordPress root and a new private backup directory. The backup parent must already exist outside all public web roots. Keep editorial changes paused while apply or rollback runs.
-
-```bash
-export SEO_REPO=/absolute/path/to/reviewed/teznevise
-export WP_PATH=/absolute/path/to/wordpress
-export SEO_BACKUP=/absolute/private-parent/teznevise-seo-20261110-staging
-cd "$SEO_REPO"
-python3 scripts/seo-20261110/verify.py
-php scripts/seo-20261110/test-wordpress.php
-python3 scripts/seo-20261110/test-runtime-files.py
-python3 scripts/seo-20261110/runtime-files.py install "$WP_PATH" "$SEO_BACKUP" --dry-run
-bash scripts/seo-20261110/apply.sh "$WP_PATH" "$SEO_BACKUP" --dry-run
-# After the owner approves the dry-run plan:
-python3 scripts/seo-20261110/runtime-files.py install "$WP_PATH" "$SEO_BACKUP"
-bash scripts/seo-20261110/apply.sh "$WP_PATH" "$SEO_BACKUP"
-python3 scripts/seo-20261110/verify.py --live https://YOUR-STAGING-HOST
-```
-
-Use PHP 8.3 or later, Python 3.10 or later, WP-CLI, and MySQL/MariaDB with InnoDB. The offline verifier needs only Python's standard library; reproducing the crawl additionally needs `lxml`.
-
-The captured `/thesis/master/` redirect has `X-Redirect-By: WordPress` and is consistent with core's missing-page permalink guess. Creating the real hierarchical page should end that guess. The live verifier requires direct 200 at `/thesis/master/`; if a server/CDN or explicit plugin rule still redirects it, stop and inspect that rule on staging. This package does not silently edit unknown redirect stores or server rules. Back up any separately approved rule before removing it; never leave the new page redirecting to a download.
-
-The robots audit identifies `Disallow: /order/` blocking a useful legacy redirect. The follow-up GSC indexing batch now implements the reviewed narrow exceptions for `/order/` and `/order/?service`, backing up a physical robots file or filtering the virtual response. Administrative/private/parameter protections remain. The canonical six money pages are already allowed. See `GSC_RUNBOOK.md` for the exact batch order and reverse rollback.
-
-After staging verification and owner approval, repeat the same dry-run/install/apply commands with production `WP_PATH` and a fresh `SEO_BACKUP` such as `/absolute/private-parent/teznevise-seo-20261110-production`. Run `python3 scripts/seo-20261110/verify.py --live https://teznevise.ir`. If site/CDN caches exist, use the owner's configured cache purge, then rerun the live check; no cache credentials or purge assumptions are embedded here. Confirm the 301s are single-hop and the new master page is 200, each money page has one H1/description/self-canonical/FAQPage, FAQ answers match visible copy, all 216 source pages render the planned links, the combined exact-match ratio is at most 5%, and all retained BlueThesis references are nofollow. A private staging site may deliberately be noindex; its noindex check will fail until tested in an indexable preview, and the runtime preserves the global staging privacy setting.
-
-Only after these owner-run steps should updated canonical sitemaps be submitted in Search Console. Obtain the historical 404/blocked/noindex URL exports for a separate evidence-based review; never infer 182 redirect targets from aggregate totals.
-
-## Exact rollback
-
-Use the same WordPress root and private backup directory from that environment's apply. Keep the reviewed checkout available. Roll back data before removing the runtime:
-
-```bash
-cd "$SEO_REPO"
-bash scripts/seo-20261110/rollback.sh "$WP_PATH" "$SEO_BACKUP" --dry-run
-python3 scripts/seo-20261110/runtime-files.py rollback "$WP_PATH" "$SEO_BACKUP" --dry-run
-# After the owner reviews the restore plan:
-bash scripts/seo-20261110/rollback.sh "$WP_PATH" "$SEO_BACKUP"
-python3 scripts/seo-20261110/runtime-files.py rollback "$WP_PATH" "$SEO_BACKUP"
-```
-
-Restore/purge the owner's configured caches after rollback and inspect the original URLs and titles against `audit/before-money-pages.csv`. The pre-existing legacy alias redirects should remain. The newly created pages should return to their original absent/guessed state. The runtime-file installer removes files that did not exist before installation and restores pre-existing files exactly; an empty package directory may remain. No merge revert, configuration edit or full-theme deployment is required for this scoped rollback. Retain the immutable backup and journal. If a newer-edit guard fires, inspect the specific saved and current values; do not bypass it by deleting backups.
-
-## Verification performed for this PR
-
-Offline content/schema/keyword/redirect/anchor checks pass. The six pages contain 3,247, 3,257, 3,414, 3,663, 3,373 and 3,787 visible words, excluding JSON-LD. Every page has six matching visible FAQs and exactly one authored FAQPage block. All 54 actual post IDs are covered. The combined captured exact-match anchor projection is 0%, including existing labels, rather than an additions-only calculation.
-
-PHP tests use isolated WordPress/SQL adapters to verify backups, exact raw metadata restoration, dry runs, repeat apply/rollback, transactions, checksum rejection and newer-edit/data guards. They also verify rendered link/nofollow/rewrite idempotence, homepage hooks and FAQ graph preservation. Seven isolated filesystem tests verify runtime installation/restoration, modes, no-write dry runs and overwrite refusal. PHP and shell syntax checks pass. Existing repository release/classic-content checks are also run before PR creation. No production WordPress database, real SEO-plugin installation or deployment was used for testing; the supplied `--live` verification is the owner-run rendered acceptance check.
-
-## Supervised GSC follow-up
-
-See [GSC_RUNBOOK.md](GSC_RUNBOOK.md) for all 387 URL decisions, six explicit unresolved intents, staged batch apply/rollback, internal href cleanup, sitemap guards and full live verification. Its reverse GSC rollback must precede the base rollback above.
+The pre-existing Vercel integration attempted and failed an automatic preview for the first PR commit. `vercel.json` disables automatic deployment for this SEO branch; no preview or production deployment was performed.

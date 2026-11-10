@@ -4,7 +4,7 @@
 set -euo pipefail
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 if [[ $# -lt 3 || $# -gt 4 ]]; then
-  echo "Usage: $0 /absolute/wordpress/root /absolute/private/backup-dir --batch=redirects|gone|indexing|links [--dry-run]" >&2; exit 2
+  echo "Usage: $0 /absolute/wordpress/root /absolute/private/backup-dir --batch=restores|project|redirects|gone|indexing|links [--dry-run]" >&2; exit 2
 fi
 [[ "$1" = /* && "$2" = /* && "$3" = --batch=* ]] || { echo 'Use absolute paths and an explicit reviewed batch.' >&2; exit 2; }
 batch=${3#--batch=}

@@ -215,6 +215,7 @@ function tzseo_run( $args ) {
             }
             tzseo_restore_option( TZSEO_OPTION, $before['option'] );
             if ( false === $wpdb->query( 'COMMIT' ) ) { throw new RuntimeException( 'Rollback commit failed.' ); } $transaction = false;
+            tzseo_invalidate_cache( array_merge( array_column( $before['posts'], 'id' ), array_column( $state['posts'], 'id' ) ), array( TZSEO_OPTION ) );
             $state['rolled_back'] = true; tzseo_write( $state_file, $state );
             WP_CLI::success( 'Restored original posts/meta and package option. Kept private backups.' ); return;
         }
@@ -275,6 +276,7 @@ function tzseo_run( $args ) {
         $state['option_after'] = tzseo_option_snapshot( TZSEO_OPTION ); $state['complete'] = true; tzseo_write( $state_file, $state );
         // Journal is durable before commit; a pre-commit crash leaves the untouched baseline.
         if ( false === $wpdb->query( 'COMMIT' ) ) { throw new RuntimeException( 'Database commit failed.' ); } $transaction = false;
+        tzseo_invalidate_cache( array_merge( array_column( $before['posts'], 'id' ), array_column( $state['posts'], 'id' ) ), array( TZSEO_OPTION ) );
         WP_CLI::success( 'SEO package applied. Original posts/meta and prior redirect option retained in private backup. No cache purge or deployment performed.' );
     } finally { if ( $transaction ) {
         $wpdb->query( 'ROLLBACK' );
@@ -300,6 +302,7 @@ function tzseo_check_rollback( $before, $state, $site ) {
     foreach ( $state['posts'] as $path => $entry ) {
         if ( tzseo_hash( tzseo_snapshot( $entry['id'] ) ) !== $entry['hash'] ) { throw new RuntimeException( 'A managed page changed since apply. Refusing to overwrite newer edits; inspect the private backup.' ); }
         if ( null === $before['posts'][ $path ]['snapshot'] ) {
+            if ( in_array( (int) $entry['id'], array( (int) get_option( 'page_on_front' ), (int) get_option( 'page_for_posts' ) ), true ) ) { throw new RuntimeException( 'A package-created page is assigned to newer reading settings; refusing deletion.' ); }
             $children = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_parent = %d", $entry['id'] ) );
             $comments = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_post_ID = %d", $entry['id'] ) );
             if ( $children || $comments ) { throw new RuntimeException( 'A package-created page has newer comments, revisions, attachments or child posts. Refusing deletion.' ); }

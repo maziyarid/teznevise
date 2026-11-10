@@ -39,7 +39,7 @@ The official site's `/programing/` page was also checked: HTTP 200, self canonic
 
 ## teznevise.ir project ownership
 
-The live https://teznevise.ir/service-project/ page returned HTTP 200 with title `پروژه های تخصصی دانشجویی | مهندسی، VHDL و شبیه سازی - تزنویسه`. The new `/student-projects/` page is the broad student-project owner. Consolidate the useful engineering and simulation explanations into that page before enabling the reviewed `/service-project/` to `/student-projects/` 301. Preserve distinct useful specialist routes such as `/service-simulation/` where their narrower purpose remains clear. The redirect map and apply plan own the teznevise.ir change; this note does not edit the other domains.
+The live https://teznevise.ir/service-project/ page returned HTTP 200 with title `پروژه های تخصصی دانشجویی | مهندسی، VHDL و شبیه سازی - تزنویسه`. It remains a direct 200, self-canonical technical hub for engineering, software implementation, validation and documented delivery. The new `/student-projects/` page owns the broad student-project query and general coursework planning. Keep both purposes distinct in titles, introductions and contextual links; do not redirect `/service-project/` to `/student-projects/`. Eight reviewed in-content inbound links support the technical hub, as documented in `links-report.md`. Preserve useful specialist routes such as `/service-simulation/` where their narrower purpose remains clear. No new software micro-page is invented for this distinction, and this note does not edit the other domains.
 
 ## Statistical-analysis outbound links
 

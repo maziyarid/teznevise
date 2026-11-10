@@ -1,0 +1,103 @@
+{
+  "scope": "Isolated local contracts; no production apply or deployment",
+  "production_changes": false,
+  "initial_contract_checks": [
+    {
+      "check": "python3 scripts/seo-20261110/verify.py",
+      "exit": 0
+    },
+    {
+      "check": "python3 scripts/seo-20261110/verify-gsc.py --check-inventory --allow-unresolved-count 6",
+      "exit": 0
+    },
+    {
+      "check": "python3 scripts/seo-20261110/verify-projects.py --check-map",
+      "exit": 0
+    },
+    {
+      "check": "python3 scripts/seo-20261110/test-runtime-files.py",
+      "exit": 0
+    },
+    {
+      "check": "python3 scripts/seo-20261110/test-verify-gsc.py",
+      "exit": 0
+    },
+    {
+      "check": "python3 scripts/seo-20261110/test-verify-projects.py",
+      "exit": 0
+    },
+    {
+      "check": "python3 scripts/check-release.py",
+      "exit": 0
+    },
+    {
+      "check": "work/seo-20261110/php/root/usr/bin/php8.4 -n scripts/seo-20261110/test-wordpress.php",
+      "exit": 0
+    },
+    {
+      "check": "work/seo-20261110/php/root/usr/bin/php8.4 -n scripts/seo-20261110/test-gsc.php",
+      "exit": 0
+    },
+    {
+      "check": "work/seo-20261110/php/root/usr/bin/php8.4 -n scripts/seo-20261110/test-gsc-boot.php",
+      "exit": 0
+    },
+    {
+      "check": "work/seo-20261110/php/root/usr/bin/php8.4 -n scripts/seo-20261110/test-gsc-package.php",
+      "exit": 0
+    },
+    {
+      "check": "work/seo-20261110/php/root/usr/bin/php8.4 -n scripts/seo-20261110/test-restores.php",
+      "exit": 0
+    },
+    {
+      "check": "work/seo-20261110/php/root/usr/bin/php8.4 -n tests/classic-content-contract.php",
+      "exit": 0
+    },
+    {
+      "check": "bash -n scripts/seo-20261110/apply.sh scripts/seo-20261110/gsc-apply.sh scripts/seo-20261110/gsc-rollback.sh scripts/seo-20261110/project-apply.sh scripts/seo-20261110/project-rollback.sh scripts/seo-20261110/rollback.sh",
+      "exit": 0
+    }
+  ],
+  "final_changed_script_checks": {
+    "checks": [
+      {
+        "check": "content",
+        "exit": 0
+      },
+      {
+        "check": "project-map",
+        "exit": 0
+      },
+      {
+        "check": "project-verifier",
+        "exit": 0
+      },
+      {
+        "check": "test-gsc.php",
+        "exit": 0
+      },
+      {
+        "check": "test-gsc-boot.php",
+        "exit": 0
+      },
+      {
+        "check": "test-gsc-package.php",
+        "exit": 0
+      },
+      {
+        "check": "test-restores.php",
+        "exit": 0
+      }
+    ],
+    "php_lint_files": 119,
+    "lint_errors": []
+  },
+  "project_verifier_regression_tests": 12,
+  "runtime_file_regression_tests": 7,
+  "gsc_verifier_regression_tests": 16,
+  "limitations": [
+    "WordPress/database contracts use isolated adapters. Owner staging acceptance is still required.",
+    "Read-only live results are separately preserved in verification-summary-20261110.json."
+  ]
+}

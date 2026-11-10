@@ -17,7 +17,8 @@ function tezseo20261110_request_path() {
 }
 function tezseo20261110_page() {
     $config = tezseo20261110_config(); $path = tezseo20261110_request_path();
-    if ( empty( $config['pages'][ $path ] ) || is_404() || is_search() || is_feed() || is_paged() ) { return array(); }
+    if ( is_404() || is_search() || is_feed() || is_paged() ) { return array(); }
+    if ( empty( $config['pages'][ $path ] ) ) { return function_exists( 'tezgsc20261110_restored_page' ) ? tezgsc20261110_restored_page() : array(); }
     return $config['pages'][ $path ];
 }
 function tezseo20261110_redirect() {
@@ -111,7 +112,7 @@ function tezseo20261110_rewrite_anchor( $match ) {
     if ( ! preg_match( '#\bhref\s*=\s*([\'\"])(.*?)\1#si', $tag, $href ) ) { return $tag; }
     $url = wp_parse_url( html_entity_decode( $href[2], ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
     if ( ! is_array( $url ) || ( ! empty( $url['host'] ) && ! in_array( strtolower( $url['host'] ), array( 'teznevise.ir', 'www.teznevise.ir' ), true ) ) ) { return $tag; }
-    $path = '/' . trim( rawurldecode( $url['path'] ?? '/' ), '/' ) . '/';
+    $trimmed_path = trim( rawurldecode( $url['path'] ?? '/' ), '/' ); $path = '' === $trimmed_path ? '/' : '/' . $trimmed_path . '/';
     $config = tezseo20261110_config(); $text = tezseo20261110_normalize_anchor( $tag );
     foreach ( $config['anchor_rewrites'][ tezseo20261110_request_path() ] ?? array() as $row ) {
         if ( $path === $row['target'] && $text === tezseo20261110_normalize_anchor( $row['old_anchor'] ) ) {

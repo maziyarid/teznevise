@@ -32,6 +32,14 @@ try {
         gsc_test_row( 'r10', '/restored-guide/', 'restore', 'indexing', '', $draft ),
     );
     gsc_test_csv( $package . '/audit/gsc-decisions-20261110.csv', $rows );
+    $duplicate = $rows[0]; $duplicate['row_id'] = 'project-001'; $duplicate['reason'] = 'Independent source audit'; $duplicate['observed_initial_status'] = '301'; $duplicate['expected_robots'] = 'allow/index'; $duplicate['old_url'] = $duplicate['request_url']; $duplicate['source_evidence'] = 'No original content found'; $duplicate['impressions'] = '200';
+    $extra = $duplicate; $extra['row_id'] = 'project-002'; $extra['request_url'] = home_url( '/old-project/' ); $extra['old_url'] = $extra['request_url'];
+    $http_extra = $extra; $http_extra['row_id'] = 'project-003'; $http_extra['request_url'] = str_replace( 'https://', 'http://', $extra['request_url'] ); $http_extra['old_url'] = $http_extra['request_url'];
+    gsc_test_csv( $package . '/audit/project-dead-decisions-20261110.csv', array( $duplicate, $extra, $http_extra ) );
+    $merged = tzgsc_decision_rows( $package ); check( count( $rows ) + 2 === count( $merged ) && 'r1' === $merged[0]['row_id'] && 'project-001' === $merged[0]['project_row_id'] && 'No original content found' === $merged[0]['source_evidence'], 'decision merge deduplicates exact URLs, preserves original row ID and adds project evidence' );
+    $conflict = $duplicate; $conflict['target_url'] = home_url( '/different-intent/' ); gsc_test_csv( $package . '/audit/project-dead-decisions-20261110.csv', array( $conflict ) );
+    expect_error( static fn() => tzgsc_decision_rows( $package ), 'Conflicting reviewed decisions' ); unlink( $package . '/audit/project-dead-decisions-20261110.csv' );
+
     gsc_test_csv( $package . '/audit/internal-redirect-links.csv', array( array( 'source_url' => home_url( '/public-post/' ), 'old_url' => home_url( '/old-guide/' ), 'new_url' => home_url( '/valuable-guide/' ), 'reason' => 'Final HTML target.', 'batch' => 'links' ) ) );
     $robots = "User-agent: *\nDisallow: /wp-admin/\nDisallow: /order/\nUser-agent: Googlebot\nDisallow: /wp-admin/\nDisallow: /order/\n";
     file_put_contents( ABSPATH . 'robots.txt', $robots ); chmod( ABSPATH . 'robots.txt', 0640 ); $baseline = $GLOBALS['db'];
@@ -74,9 +82,12 @@ try {
     update_option( TZGSC_OPTION, $config ); $xml_after = tezgsc20261110_xml( $xml ); check( ! str_contains( $xml_after, '/old-guide/' ) && str_contains( $xml_after, '/valuable-guide/' ), 'custom XML final guard excludes only ineligible URL entries' );
     // Restore exact expected option before exercising the strict rollback chain.
     $latest = tzseo_json( $test_root . '/batch-links/state.json' ); tzseo_restore_option( TZGSC_OPTION, $latest['option_after'] );
+    expect_error( static fn() => tzgsc_run( array( 'rollback-dry-run', $package, $test_root . '/batch-links', 'project' ) ), 'does not match the backup' );
     expect_error( static fn() => tzgsc_run( array( 'rollback', $package, $test_root . '/batch-redirects', 'from-backup' ) ), 'reverse order' );
-    file_put_contents( ABSPATH . 'robots.txt', "# newer owner edit\n", FILE_APPEND );
-    expect_error( static fn() => tzgsc_run( array( 'rollback', $package, $test_root . '/batch-links', 'from-backup' ) ), 'newer owner edits' ); file_put_contents( ABSPATH . 'robots.txt', $changed_robots ); chmod( ABSPATH . 'robots.txt', 0640 );
+    file_put_contents( ABSPATH . 'robots.txt', "# newer owner edit\n", FILE_APPEND ); $owner_robots = file_get_contents( ABSPATH . 'robots.txt' );
+    tzgsc_run( array( 'rollback', $package, $test_root . '/batch-links', 'from-backup' ) );
+    check( $owner_robots === file_get_contents( ABSPATH . 'robots.txt' ), 'href-only rollback preserves unrelated owner robots edits' );
+    expect_error( static fn() => tzgsc_run( array( 'rollback', $package, $test_root . '/batch-indexing', 'from-backup' ) ), 'newer owner edits' ); file_put_contents( ABSPATH . 'robots.txt', $changed_robots ); chmod( ABSPATH . 'robots.txt', 0640 );
     foreach ( array( 'links', 'indexing', 'gone', 'redirects' ) as $batch ) { tzgsc_run( array( 'rollback', $package, $test_root . '/batch-' . $batch, 'from-backup' ) ); }
     check( $baseline === $GLOBALS['db'] && $robots === file_get_contents( ABSPATH . 'robots.txt' ), 'reverse batch rollback restores exact baseline posts/meta/options/robots bytes' );
     $GLOBALS['fail_commit'] = true; expect_error( static fn() => tzgsc_run( array( 'apply', $package, $test_root . '/failed-indexing', 'indexing' ) ), 'commit failed' ); $GLOBALS['fail_commit'] = false;
@@ -99,6 +110,22 @@ try {
     tzgsc_run( array( 'apply', $package, $test_root . '/custom-option', 'redirects' ) );
     tzgsc_run( array( 'rollback', $package, $test_root . '/custom-option', 'from-backup' ) );
     check( $custom_option_before === tzseo_option_snapshot( TZGSC_OPTION ), 'restores a preexisting GSC option and autoload exactly' );
+    $prior_active = array( 'enabled' => true, 'package' => '20261110', 'decisions' => array( '/order/?service' => array( 'actions' => array( 'unblock' ) ) ), 'applied_batches' => array( 'indexing' => 'earlier-owner-approved-batch' ) );
+    update_option( TZGSC_OPTION, $prior_active, false ); $prior_active_snapshot = tzseo_option_snapshot( TZGSC_OPTION );
+    $project_only = gsc_test_row( 'project-only', '/old-project-isolated/', '301', 'project', '/valuable-guide/' );
+    $project_new_money = $project_only; $project_new_money['target_url'] = home_url( '/student-projects/' );
+    gsc_test_csv( $package . '/audit/project-dead-decisions-20261110.csv', array( $project_new_money ) );
+    $project_base_before = tzseo_option_snapshot( TZSEO_OPTION ); delete_option( TZSEO_OPTION );
+    expect_error( static fn() => tzgsc_run( array( 'apply-dry-run', $package, $test_root . '/project-missing-owned-money', 'project' ) ), 'base metadata/content package first' );
+    tzseo_restore_option( TZSEO_OPTION, $project_base_before );
+    gsc_test_csv( $package . '/audit/project-dead-decisions-20261110.csv', array( $project_only ) );
+    file_put_contents( ABSPATH . 'robots.txt', $robots );
+    tzgsc_run( array( 'apply', $package, $test_root . '/project-only', 'project' ) );
+    check( $robots === file_get_contents( ABSPATH . 'robots.txt' ), 'project-only apply does not reapply unrelated earlier robots exceptions' );
+    file_put_contents( ABSPATH . 'robots.txt', "# project-unrelated owner edit\n", FILE_APPEND ); $project_owner_robots = file_get_contents( ABSPATH . 'robots.txt' );
+    tzgsc_run( array( 'rollback', $package, $test_root . '/project-only', 'project' ) );
+    check( $project_owner_robots === file_get_contents( ABSPATH . 'robots.txt' ) && $prior_active_snapshot === tzseo_option_snapshot( TZGSC_OPTION ), 'project-only rollback restores only its option changes and preserves unrelated robots edits' );
+    unlink( $package . '/audit/project-dead-decisions-20261110.csv' ); tzseo_restore_option( TZGSC_OPTION, $custom_option_before );
     unlink( ABSPATH . 'robots.txt' ); tzgsc_run( array( 'apply', $package, $test_root . '/virtual-robots', 'indexing' ) );
     check( ! file_exists( ABSPATH . 'robots.txt' ), 'virtual robots remains virtual' ); tzgsc_run( array( 'rollback', $package, $test_root . '/virtual-robots', 'from-backup' ) );
     $planned_rows = $rows; $planned_rows[0]['target_url'] = home_url( '/student-projects/' );

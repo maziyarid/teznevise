@@ -24,7 +24,7 @@ function tezgsc20261110_protected( $key ) {
     $path = tezgsc20261110_path( $key ) ?: '/';
     if ( preg_match( '#^/(?:wp-admin|wp-json|wp-content|wp-includes|cart|checkout|my-account|account|staging|test|cgi-bin|\.git|search)(?:/|$)#i', $path ) || preg_match( '#(?:^/wp-[^/]+\.php$|/xmlrpc\.php$|/feed/?$|/trackback/?$|\.(?:php|css|js|map|woff2?|ttf|eot|svg|png|jpe?g|gif|webp|ico|pdf|zip|rar|7z|docx?|xlsx?|pptx?|csv|xml|txt)$)#i', $path ) ) { return true; }
     parse_str( tezgsc20261110_query( $key ), $query );
-    return (bool) array_intersect( array_keys( $query ), array( 's', 'rest_route', 'preview', 'preview_id', '_wpnonce', 'nonce', 'customize_changeset_uuid', 'edd_action', 'download_file', 'attachment_id' ) );
+    return (bool) array_intersect( array_keys( $query ), array( 's', 'rest_route', 'preview', 'preview_id', '_wpnonce', 'nonce', 'customize_changeset_uuid', 'feed', 'embed', 'edd_action', 'download_file', 'attachment_id' ) );
 }
 function tezgsc20261110_login_exception( $key, $row ) {
     if ( empty( $row['exact_guest_login_redirect'] ) || '/wp-login.php' !== tezgsc20261110_path( $key ) || '/inquiry/' !== ( $row['target_key'] ?? '' ) ) { return false; }
@@ -34,9 +34,61 @@ function tezgsc20261110_login_exception( $key, $row ) {
     $redirect = tezgsc20261110_key( $query['redirect_to'] );
     return '' !== $redirect && ! str_starts_with( $redirect, '/wp-admin' ) && ! str_starts_with( $redirect, '/wp-login' );
 }
+function tezgsc20261110_owned_restore( $key ) {
+    $config = tezgsc20261110_config(); $path = tezgsc20261110_path( $key ); $page = $config['restored'][ $path ] ?? array();
+    if ( ! $page || tezgsc20261110_protected( $key ) || empty( $page['id'] ) ) { return array(); }
+    $post = get_post( (int) $page['id'] );
+    if ( ! $post || 'page' !== $post->post_type || 'publish' !== $post->post_status || ! empty( $post->post_password ) || get_post_meta( $page['id'], '_tez_gsc20261110_managed', true ) !== $page['ownership_token'] || get_post_meta( $page['id'], '_tez_gsc20261110_original_path', true ) !== $page['path'] ) { return array(); }
+    return $page;
+}
+function tezgsc20261110_restored_page() {
+    if ( ! in_array( $_SERVER['REQUEST_METHOD'] ?? 'GET', array( 'GET', 'HEAD' ), true ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || is_admin() || is_search() || is_feed() || is_404() ) { return array(); }
+    $key = tezgsc20261110_key( 'https://teznevise.ir' . wp_unslash( $_SERVER['REQUEST_URI'] ?? '/' ) ); $page = tezgsc20261110_owned_restore( $key );
+    return $page && (int) get_queried_object_id() === (int) $page['id'] ? $page : array();
+}
+function tezgsc20261110_request( $vars ) {
+    if ( ! in_array( $_SERVER['REQUEST_METHOD'] ?? 'GET', array( 'GET', 'HEAD' ), true ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || is_admin() ) { return $vars; }
+    $key = tezgsc20261110_key( 'https://teznevise.ir' . wp_unslash( $_SERVER['REQUEST_URI'] ?? '/' ) );
+    $page = tezgsc20261110_owned_restore( $key );
+    // Replace conflicting pagename/name/error/attachment/feed/date variables. The
+    // original request URI stays intact; no parent pages or rewrite flush needed.
+    return $page ? array( 'page_id' => (int) $page['id'], 'post_type' => 'page' ) : $vars;
+}
+function tezgsc20261110_page_link( $url, $id, $sample = false ) {
+    $config = tezgsc20261110_config();
+    foreach ( $config['restored'] ?? array() as $path => $page ) { if ( (int) $id === (int) $page['id'] && tezgsc20261110_owned_restore( $path ) ) { return home_url( $path ); } }
+    return $url;
+}
+function tezgsc20261110_url_to_postid( $url ) {
+    $page = tezgsc20261110_owned_restore( tezgsc20261110_key( $url ) );
+    return $page ? home_url( '/?page_id=' . (int) $page['id'] ) : $url;
+}
+function tezgsc20261110_restore_canonical_redirect( $redirect, $requested = '' ) { return tezgsc20261110_restored_page() ? false : $redirect; }
+function tezgsc20261110_prepare_restore() {
+    if ( ! tezgsc20261110_restored_page() ) { return; }
+    global $wp_filter;
+    foreach ( array( 'wp', 'template_redirect' ) as $hook ) {
+        foreach ( $wp_filter[ $hook ]->callbacks ?? array() as $priority => $callbacks ) {
+            foreach ( $callbacks as $entry ) {
+                $callback = $entry['function'];
+                if ( ! is_array( $callback ) || ! is_object( $callback[0] ) ) { continue; }
+                $class = get_class( $callback[0] ); $method = $callback[1];
+                $rank_math = 'RankMath\\Redirections\\Redirections' === $class && 'do_redirection' === $method;
+                $yoast = ( str_starts_with( $class, 'WPSEO_Redirect' ) || ( str_contains( $class, 'Yoast' ) && str_contains( $class, 'Redirect' ) ) ) && in_array( $method, array( 'do_redirect', 'do_redirection', 'redirect', 'process_redirects' ), true );
+                if ( $rank_math || $yoast ) { remove_action( $hook, $callback, $priority ); }
+            }
+        }
+    }
+}
 function tezgsc20261110_route_row( $key, $method, $logged_in ) {
     if ( ! in_array( $method, array( 'GET', 'HEAD' ), true ) ) { return array(); }
     $config = tezgsc20261110_config(); $row = $config['decisions'][ $key ] ?? array();
+    $alias = $config['internal_aliases'][ $key ] ?? '';
+    if ( ! $alias && '/' === tezgsc20261110_path( $key ) ) {
+        parse_str( tezgsc20261110_query( $key ), $query );
+        if ( 1 === count( $query ) && ! empty( $query['page_id'] ) ) { foreach ( $config['restored'] ?? array() as $path => $page ) { if ( (int) $page['id'] === (int) $query['page_id'] ) { $alias = $path; break; } } }
+    }
+    if ( $alias && tezgsc20261110_owned_restore( $alias ) ) { return array( 'actions' => array( '301' ), 'target_key' => $alias, 'generated_restore_alias' => true ); }
     $legacy = ! empty( $row['exact_legacy_sample'] ) && in_array( $key, array( '/wp-content/themes/flatsome/*', '/wp-content/plugins/gravityforms', '/wp-content/plugins/gravityforms/images' ), true );
     if ( ! $row || ( tezgsc20261110_protected( $key ) && ! tezgsc20261110_login_exception( $key, $row ) && ! $legacy && empty( $row['exact_obsolete_feed'] ) ) || ( ! empty( $row['exact_guest_login_redirect'] ) && $logged_in ) ) { return array(); }
     return $row;
@@ -47,7 +99,8 @@ function tezgsc20261110_route() {
     $row = tezgsc20261110_route_row( $key, $_SERVER['REQUEST_METHOD'] ?? 'GET', is_user_logged_in() );
     if ( ! $row ) { return; }
     $path = tezgsc20261110_path( $key );
-    if ( tezgsc20261110_route_path_exists( $key ) && empty( $row['exact_guest_login_redirect'] ) ) { return; }
+    $page_id_alias = ! empty( $row['generated_restore_alias'] ) && '/' === tezgsc20261110_path( $key ) && str_starts_with( tezgsc20261110_query( $key ), 'page_id=' );
+    if ( tezgsc20261110_route_path_exists( $key ) && empty( $row['exact_guest_login_redirect'] ) && ! $page_id_alias ) { return; }
     if ( in_array( '301', $row['actions'] ?? array(), true ) ) { wp_safe_redirect( home_url( $row['target_key'] ), 301, 'Teznevise reviewed GSC map 20261110' ); exit; }
     if ( in_array( '410', $row['actions'] ?? array(), true ) ) {
         status_header( 410 ); nocache_headers(); header( 'X-Robots-Tag: noindex, follow', true );
@@ -120,6 +173,7 @@ function tezgsc20261110_sitemap_eligible( $url, $post = null ) {
     if ( array_intersect( $row['actions'] ?? array(), array( '301', '410' ) ) ) { return false; }
     $rule = $config['sitemap_rules'][ $key ] ?? array();
     if ( ! $managed_base && $rule && ( 200 !== (int) $rule['status'] || '0' === $rule['indexable'] || ( ! empty( $rule['canonical'] ) && $full !== tezgsc20261110_full_url( tezgsc20261110_observed_canonical( $rule['canonical'] ) ) ) ) ) { return false; }
+    if ( ! $post && ! empty( $config['restored'][ $key ]['id'] ) ) { $post = get_post( (int) $config['restored'][ $key ]['id'] ); }
     if ( ! $post && function_exists( 'url_to_postid' ) && function_exists( 'get_post' ) ) { $id = url_to_postid( $url ); $post = $id ? get_post( $id ) : null; }
     $native_public = false;
     if ( $post && isset( $post->post_status ) ) {
@@ -169,6 +223,11 @@ function tezgsc20261110_buffer() {
     if ( ! empty( $config['href_rewrites'][ $key ] ) ) { ob_start( 'tezgsc20261110_html' ); }
 }
 if ( tezgsc20261110_config() ) {
+    add_filter( 'request', 'tezgsc20261110_request', 9999 );
+    add_filter( 'page_link', 'tezgsc20261110_page_link', 9999, 3 );
+    add_filter( 'url_to_postid', 'tezgsc20261110_url_to_postid', 9999 );
+    add_filter( 'redirect_canonical', 'tezgsc20261110_restore_canonical_redirect', 9999, 2 );
+    add_action( 'wp', 'tezgsc20261110_prepare_restore', -9999 );
     add_action( 'init', 'tezgsc20261110_route', -4000 );
     add_action( 'template_redirect', 'tezgsc20261110_buffer', -4000 );
     add_filter( 'robots_txt', 'tezgsc20261110_robots_txt', 1000, 2 );

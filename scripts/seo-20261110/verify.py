@@ -90,9 +90,9 @@ def check(condition, message):
 def offline():
     manifest = json.loads((PACKAGE / 'manifest.json').read_text())
     pages = manifest['pages']
-    money = {p['path']: p for p in pages if p['path'] != '/'}
+    money = {p['path']: p for p in pages if p['path'] in KEYWORDS}
     check(set(money) == set(KEYWORDS), 'Exactly six money page targets required')
-    check(len(pages) == 7 and sum(p['path'] == '/' for p in pages) == 1, 'Homepage metadata required')
+    check(len(pages) == 8 and sum(p['path'] == '/' for p in pages) == 1 and sum(p['path'] == '/service-project/' and p.get('role') == 'hub' for p in pages) == 1, 'Homepage and distinct live technical hub metadata required')
     counts = {}
     for page in pages:
         check(page['seo_title'] and page['description'] and page['title'], f"Missing metadata {page['path']}")
@@ -102,12 +102,13 @@ def offline():
             check(not re.search(r'[0-9]', home.visible), 'ASCII digit in homepage prose')
             counts['/'] = home.words
             continue
-        check(page['keyword'] == KEYWORDS[page['path']], f"Keyword target mismatch {page['path']}")
+        is_hub = page['path'] == '/service-project/' and page.get('role') == 'hub'
+        if not is_hub: check(page['keyword'] == KEYWORDS[page['path']], f"Keyword target mismatch {page['path']}")
         check(page['keyword'] in page['seo_title'], f"Primary term missing from title {page['path']}")
         content = (PACKAGE / page['content_file']).read_text()
         d = Document(content)
-        limit = 5000 if page['path'] in ('/student-projects/', '/thesis/master/') else 6000
-        check(3000 <= d.words <= limit, f"Word count {page['path']}: {d.words}")
+        limit = 2000 if is_hub else 5000 if page['path'] in ('/student-projects/', '/thesis/master/') else 6000
+        check((1000 if is_hub else 3000) <= d.words <= limit, f"Word count {page['path']}: {d.words}")
         check(d.h1 == 0, 'Template must own the sole H1')
         check(not re.search(r'[0-9]', d.visible), f"ASCII digit in prose {page['path']}")
         faq = [n for s in d.scripts for n in schema_nodes(s) if n.get('@type') == 'FAQPage']
@@ -124,7 +125,7 @@ def offline():
     check(len(pairs) == len(redirects), 'Duplicate redirect sources')
     check(pairs.get('/service-thesis') == '/thesis/', 'Required thesis redirect')
     check(pairs.get('/service-proposal') == '/proposal/', 'Required proposal redirect')
-    check(pairs.get('/service-project') == '/student-projects/', 'Consolidate project intent')
+    check('/service-project' not in pairs, 'The technical hub must remain a direct 200 page')
     for row in redirects:
         check(row['reason'].strip(), 'Redirect requires reviewed reason')
         for key in ('old_url', 'new_url'):
@@ -137,7 +138,7 @@ def offline():
     exact = 0
     seen = set()
     for row in links:
-        check(urlsplit(row['target_url']).path in KEYWORDS, 'Internal link target outside money map')
+        check(urlsplit(row['target_url']).path in set(KEYWORDS) | {'/service-project/'}, 'Internal link target outside money map')
         check(urlsplit(row['source_url']).hostname == 'teznevise.ir', 'Non-site link source')
         key = (row['source_url'], row['target_url'], row['anchor'])
         check(key not in seen and row['anchor'].strip(), 'Duplicate/empty link')
@@ -161,7 +162,8 @@ def offline():
             if anchor in KEYWORDS.values():
                 existing += 1
                 residual += (row['source_url'], row['target_url'], anchor) not in rewrite_set
-    check((residual + exact) / (total + len(links)) <= 0.05, 'Combined existing and proposed exact-match anchors exceed 5%')
+    added_money_links = sum(urlsplit(r['target_url']).path in KEYWORDS for r in links)
+    check((residual + exact) / (total + added_money_links) <= 0.05, 'Combined existing and proposed exact-match anchors exceed 5%')
     outbound = read_csv('bluethesis-links.csv')
     check(len({r['source_url'] for r in outbound}) == 12 and len(outbound) == 13, 'Expected all 13 outbound anchors on 12 pages')
     # Scan all package additions, not the unrelated legacy theme copy.
@@ -172,7 +174,7 @@ def offline():
         if path.is_file() and '__pycache__' not in str(path):
             content = gzip.open(path, 'rt', encoding='utf-8').read() if path.suffix == '.gz' else path.read_text()
             check('\u200c' not in content, f"Forbidden half space: {path.relative_to(ROOT)}")
-    print(json.dumps({'result': 'PASS', 'visible_words': counts, 'redirects': len(redirects), 'internal_links': len(links), 'exact_match_anchors': exact, 'exact_match_percent': round(exact / len(links) * 100, 2), 'blog_posts_covered': len(posts), 'existing_exact_anchors_rewritten': existing - residual, 'combined_projected_exact_match_percent': round((residual + exact) / (total + len(links)) * 100, 2)}, ensure_ascii=False, indent=2))
+    print(json.dumps({'result': 'PASS', 'visible_words': counts, 'redirects': len(redirects), 'internal_links': len(links), 'exact_match_anchors': exact, 'exact_match_percent': round(exact / len(links) * 100, 2), 'blog_posts_covered': len(posts), 'existing_exact_anchors_rewritten': existing - residual, 'combined_projected_exact_match_percent': round((residual + exact) / (total + added_money_links) * 100, 2)}, ensure_ascii=False, indent=2))
     return manifest
 
 def live(manifest, base):

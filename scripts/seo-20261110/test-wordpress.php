@@ -58,7 +58,7 @@ function get_option( $name, $default = false ) { return isset( $GLOBALS['db']['o
 function update_option( $name, $value, $autoload = false ) { ++$GLOBALS['mutations']; $GLOBALS['db']['options'][ $name ] = array( 'option_value' => serialize( $value ), 'autoload' => $autoload ? 'yes' : 'no' ); return true; }
 function delete_option( $name ) { ++$GLOBALS['mutations']; unset( $GLOBALS['db']['options'][ $name ] ); }
 function get_post_meta( $id, $key = '', $single = false ) { $meta = $GLOBALS['db']['meta'][ $id ] ?? array(); if ( '' === $key ) { return $meta; } $v = $meta[ $key ] ?? array(); return $single ? ( isset( $v[0] ) ? maybe_unserialize( $v[0] ) : '' ) : array_map( 'maybe_unserialize', $v ); }
-function update_post_meta( $id, $key, $value ) { ++$GLOBALS['mutations']; if ( $GLOBALS['fail_after_post'] ) { throw new RuntimeException( 'Injected metadata failure after post mutation.' ); } $GLOBALS['db']['meta'][ $id ][ $key ] = array( serialize( wp_unslash( $value ) ) ); }
+function update_post_meta( $id, $key, $value ) { ++$GLOBALS['mutations']; if ( ( $GLOBALS['fail_meta_key'] ?? null ) === $key ) { unset( $GLOBALS['fail_meta_key'] ); return false; } if ( $GLOBALS['fail_after_post'] ) { throw new RuntimeException( 'Injected metadata failure after post mutation.' ); } $GLOBALS['db']['meta'][ $id ][ $key ] = array( serialize( wp_unslash( $value ) ) ); }
 function add_post_meta( $id, $key, $value ) { ++$GLOBALS['mutations']; $GLOBALS['db']['meta'][ $id ][ $key ][] = serialize( wp_unslash( $value ) ); }
 function maybe_unserialize( $v ) { $x = @unserialize( $v ); return false !== $x || 'b:0;' === $v ? $x : $v; }
 function wp_cache_delete( ...$args ) { $GLOBALS['cache_deletions'][] = $args; }
@@ -120,7 +120,7 @@ file_put_contents( $package . '/manifest.json', json_encode( array( 'pages' => $
 file_put_contents( $package . '/audit/redirect-map.csv', "old_url,new_url,reason\n/service-thesis/,/thesis/,alias\n" );
 file_put_contents( $package . '/audit/internal-links.csv', "source_url,target_url,anchor,reason\n/blog/example/,/thesis/,راهنمای پژوهش,context\n" );
 file_put_contents( $package . '/audit/bluethesis-links.csv', "source_url,target_url,action\n/blog/example/,https://bluethesis.ir/statistical-analysis/,nofollow\n" );
-file_put_contents( $package . '/audit/exact-anchor-rewrites.csv', "source_url,target_url,old_anchor,new_anchor,reason\n/blog/example/,/thesis/,انجام پایان نامه,آموزش مسیر پژوهش,ratio\n" );
+file_put_contents( $package . '/audit/exact-anchor-rewrites.csv', "source_url,target_url,old_anchor,new_anchor,reason\n/blog/example/,/thesis/,انجام پایان نامه,آموزش مسیر پژوهش,ratio\n/blog/example/,/,انجام پروژه های دانشجویی,راهنمای عمومی پژوهش,home-scope\n" );
 try {
     foreach ( array( false, true ) as $existing_option ) {
         $GLOBALS['db'] = array( 'posts' => array(), 'meta' => array(), 'options' => array() );
@@ -161,10 +161,11 @@ try {
     check( $baseline === $GLOBALS['db'], 'rollback safely closes incomplete transaction journal' );
     expect_error( static fn() => tzseo_run( array( 'apply', $package, ABSPATH . 'unsafe-backup' ) ), 'outside the web root' );
     update_option( TZSEO_OPTION, tzseo_plan( $package ), false ); $_SERVER['REQUEST_URI'] = '/blog/example/';
-    $html = '<html><body><main><p><a href="/thesis/" class="x"><span>انجام پایان نامه</span></a> <a href="https://other.ir/thesis/">انجام پایان نامه</a> <a rel="noopener" href="https://bluethesis.ir/statistical-analysis/">تحلیل</a> <a href="https://bluethesis.ir/other/">دیگر</a></p></main></body></html>';
+    $html = '<html><body><main><p><a href="/">انجام پروژه های دانشجویی</a><a href="/thesis/" class="x"><span>انجام پایان نامه</span></a> <a href="https://other.ir/thesis/">انجام پایان نامه</a> <a rel="noopener" href="https://bluethesis.ir/statistical-analysis/">تحلیل</a> <a href="https://bluethesis.ir/other/">دیگر</a></p></main></body></html>';
     $after = tezseo20261110_transform_html( $html );
     check( 1 === substr_count( $after, 'id="tezseo-20261110-context"' ), 'one context paragraph' );
     check( str_contains( $after, 'class="x">آموزش مسیر پژوهش</a>' ), 'existing exact anchor rewritten, attributes retained' );
+    check( str_contains( $after, 'href="/">راهنمای عمومی پژوهش</a>' ), 'homepage anchor rewrite normalizes root as one slash' );
     check( str_contains( $after, 'https://other.ir/thesis/">انجام پایان نامه' ), 'external same-path link untouched' );
     check( str_contains( $after, 'rel="noopener nofollow"' ), 'nofollow appends without dropping existing rel' );
     check( ! str_contains( $after, 'rel="nofollow" href="https://bluethesis.ir/other/' ), 'unrelated external link untouched' );

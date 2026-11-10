@@ -77,7 +77,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--sitemap', default='https://teznevise.ir/sitemap_index.xml')
     parser.add_argument('--workers', type=int, default=6)
-    parser.add_argument('--require-money-pages', action='store_true', help='Owner post-apply check that all seven canonical money/home URLs appear')
+    parser.add_argument('--require-money-pages', action='store_true', help='Owner post-apply check that all eight canonical money/home/hub URLs appear')
     parser.add_argument('--output-prefix', type=Path, default=ROOT / 'work/seo-20261110/sitemap-verification')
     args = parser.parse_args()
     origin = urlsplit(args.sitemap)
@@ -96,7 +96,7 @@ def main():
         current = {comparable(url) for url in urls}
         missing = [page['path'] for page in manifest['pages'] if comparable(urljoin(args.sitemap, page['path'])) not in current]
     failed = sum(row['result'] == 'FAIL' for row in rows)
-    summary = {'result': 'FAIL' if failed or xml_errors or missing or not urls else 'PASS', 'sitemap_files': len(sitemaps), 'page_urls': len(urls), 'pass': len(rows) - failed, 'fail': failed, 'xml_errors': len(xml_errors), 'missing_money_pages': missing}
+    summary = {'result': 'FAIL' if failed or xml_errors or missing or not urls else 'PASS', 'sitemap_files': len(sitemaps), 'page_urls': len(urls), 'pass': len(rows) - failed, 'fail': failed, 'xml_errors': len(xml_errors), 'missing_money_pages': missing, 'money_pages_required': args.require_money_pages}
     report = {'fetched_utc': GSC.utc_now(), 'summary': summary, 'sitemaps': sitemaps, 'xml_errors': xml_errors, 'rows': rows}
     args.output_prefix.parent.mkdir(parents=True, exist_ok=True)
     args.output_prefix.with_suffix('.json').write_text(json.dumps(report, ensure_ascii=True, indent=2) + '\n')

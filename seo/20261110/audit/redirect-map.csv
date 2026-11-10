@@ -1,4 +1,3 @@
 old_url,new_url,reason
 https://teznevise.ir/service-thesis/,https://teznevise.ir/thesis/,Reviewed 2026-11-10: legacy service alias; live crawl already confirms a single 301 to the canonical thesis page. Keep and enforce idempotently.
 https://teznevise.ir/service-proposal/,https://teznevise.ir/proposal/,Reviewed 2026-11-10: legacy service alias; live crawl already confirms a single 301 to the canonical proposal page. Keep and enforce idempotently.
-https://teznevise.ir/service-project/,https://teznevise.ir/student-projects/,"Reviewed 2026-11-10: existing 200 page covers student engineering and university projects, the same intent as the new broader student-projects landing. Consolidate only after target is created and verified."
