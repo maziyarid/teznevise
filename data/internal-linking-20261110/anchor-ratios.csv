@@ -1,0 +1,7 @@
+keyword,target,stage,planned_primary_exact,planned_primary_lsi,lsi_per_exact,scope,within_target_range
+انجام پایان نامه,https://teznevise.ir/thesis/,immediate,20,78,3.90,Selected primary links only; retained secondary links are additional LSI and reported separately,yes
+انجام پایان نامه کارشناسی ارشد,https://teznevise.ir/thesis/master/,after_separate_master_publication,15,56,3.73,Selected primary links only; retained secondary links are additional LSI and reported separately,yes
+انجام پایان نامه دکتری,https://teznevise.ir/thesis/phd/,immediate,1,4,4.00,Selected primary links only; retained secondary links are additional LSI and reported separately,yes
+انجام پروپوزال,https://teznevise.ir/proposal/,immediate,13,52,4.00,Selected primary links only; retained secondary links are additional LSI and reported separately,yes
+انجام پروپوزال دکتری,https://teznevise.ir/proposal/phd/,immediate,1,3,3.00,Selected primary links only; retained secondary links are additional LSI and reported separately,yes
+انجام پروژه های دانشجویی,https://teznevise.ir/service-project/,immediate,3,9,3.00,Selected primary links only; retained secondary links are additional LSI and reported separately,yes

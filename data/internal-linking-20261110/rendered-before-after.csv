@@ -1,0 +1,36 @@
+source_url,keyword,primary_anchor,anchor_role,target,before_target_links,before_exact_links,before_lsi_links,after_draft_target_links,after_draft_exact_links,after_draft_lsi_links,after_master_target_links,after_master_exact_links,after_master_lsi_links,after_optional_blue_removal_target_links
+https://teznevise.ir/proposal/english/,,"بخش تخصصی تحلیل آماری در بلوتز",audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0
+https://teznevise.ir/proposal/medical/,,"مشاوره تخصصی تحلیل آماری در بلوتز",audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0
+https://teznevise.ir/thesis/phd/,"انجام پروپوزال دکتری","پروپوزال دکتری",lsi,https://teznevise.ir/proposal/phd/,0,0,0,1,0,1,1,0,1,1
+https://teznevise.ir/thesis/phd/,,"مسیر تخصصی تحلیل داده و آمار در بلوتز",audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0
+https://teznevise.ir/thesis/chapter-three/,,BlueThesis,audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0
+https://teznevise.ir/thesis/international/,,"مشاوره تخصصی تحلیل آماری در بلوتز",audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0
+https://teznevise.ir/thesis/agriculture-natural-resources/,,"مشاوره انجام تحلیل آماری",audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0
+https://teznevise.ir/thesis/animal-science-veterinary/,,"مشاوره تخصصی تحلیل آماری در بلوتز",audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0
+https://teznevise.ir/how-to-write-thesis-full-roadmap/,"انجام پایان نامه","انجام پایان نامه",exact-primary,https://teznevise.ir/thesis/,2,0,0,2,1,1,2,1,1,2
+https://teznevise.ir/how-to-write-thesis-full-roadmap/,"انجام پروژه های دانشجویی","انجام پروژه دانشجویی",lsi,https://teznevise.ir/service-project/,0,0,0,1,0,1,1,0,1,1
+https://teznevise.ir/how-to-write-first-chapter-thesis/,"انجام پایان نامه","انجام پایان نامه",exact-primary,https://teznevise.ir/thesis/,1,0,0,1,1,0,1,1,0,1
+https://teznevise.ir/service-qualitative/,,"مشاوره تخصصی تحلیل آماری در بلوتز",audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0
+https://teznevise.ir/service-article/,,"مشاوره تخصصی تحلیل آماری در بلوتز",audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0
+https://teznevise.ir/online-calculation-tools/sample-size-calculator/,"انجام پروپوزال","انجام پروپوزال",exact-primary,https://teznevise.ir/proposal/,0,0,0,1,1,0,1,1,0,1
+https://teznevise.ir/online-calculation-tools/cronbachs-alpha-calculator/,"انجام پایان نامه","تدوین پایان نامه",lsi,https://teznevise.ir/thesis/,0,0,0,1,0,1,1,0,1,1
+https://teznevise.ir/online-calculation-tools/cronbachs-alpha-calculator/,"انجام پایان نامه کارشناسی ارشد","نگارش پایان نامه کارشناسی ارشد",lsi,https://teznevise.ir/thesis/master/,0,0,0,0,0,0,1,0,1,1
+https://teznevise.ir/online-calculation-tools/cronbachs-alpha-calculator/,,"مشاوره انجام تحلیل آماری",audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0
+https://teznevise.ir/online-calculation-tools/ols-mediation-calculator/,"انجام پایان نامه دکتری","راهنمای رساله دکتری",lsi,https://teznevise.ir/thesis/phd/,0,0,0,1,0,1,1,0,1,1
+https://teznevise.ir/download/masters-research-methods-guide/,"انجام پایان نامه","تدوین پایان نامه",lsi,https://teznevise.ir/thesis/,0,0,0,1,0,1,1,0,1,1
+https://teznevise.ir/download/masters-research-methods-guide/,"انجام پایان نامه کارشناسی ارشد","انجام پایان نامه کارشناسی ارشد",exact-primary,https://teznevise.ir/thesis/master/,0,0,0,0,0,0,1,1,0,1
+https://teznevise.ir/abzar/weighted-grade-average/,"انجام پروژه های دانشجویی","پروژه تخصصی دانشجویی",lsi,https://teznevise.ir/service-project/,0,0,0,1,0,1,1,0,1,1
+https://teznevise.ir/thesis-consulting-institute/,"انجام پایان نامه","انجام پایان نامه",exact-primary,https://teznevise.ir/thesis/,1,1,0,1,1,0,1,1,0,1
+https://teznevise.ir/second-chapter-thesis-guide/,"انجام مقاله","انجام مقاله",verified-exact,https://teznevise.ir/service-article/,0,0,0,1,1,0,1,1,0,1
+https://teznevise.ir/efa-payan-namayeh-rahnegah-gambe-gam/,"انجام فصل چهارم پایان نامه","انجام فصل چهارم پایان نامه",verified-exact,https://teznevise.ir/thesis/chapter-four/,1,0,0,1,1,0,1,1,0,1
+https://teznevise.ir/rahnamay-tadvin-propozal-arshad-doktori/,"انجام پروپوزال","انجام پروپوزال",exact-primary,https://teznevise.ir/proposal/,1,1,0,1,1,0,1,1,0,1
+https://teznevise.ir/thesis-third-chapter-guide/,"انجام پایان نامه","انجام پایان نامه",exact-primary,https://teznevise.ir/thesis/,2,2,0,2,1,1,2,1,1,2
+https://teznevise.ir/thesis-third-chapter-guide/,"انجام شبیه سازی","انجام شبیه سازی",verified-exact,https://teznevise.ir/service-simulation/,0,0,0,1,1,0,1,1,0,1
+https://teznevise.ir/tavavot-proposol-arshad-va-doctori/,"انجام پروپوزال دکتری","انجام پروپوزال دکتری",exact-primary,https://teznevise.ir/proposal/phd/,0,0,0,1,1,0,1,1,0,1
+https://teznevise.ir/download/thesis-chapter-three-four-sample-guide/,"انجام پایان نامه","نوشتن پایان نامه",lsi,https://teznevise.ir/thesis/,0,0,0,1,0,1,1,0,1,1
+https://teznevise.ir/download/thesis-chapter-three-four-sample-guide/,,"مشاوره تحلیل آماری",audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0
+https://teznevise.ir/thesis/,"انجام پایان نامه کارشناسی ارشد","انجام پایان نامه کارشناسی ارشد",exact-primary,https://teznevise.ir/thesis/master/,0,0,0,0,0,0,1,1,0,1
+https://teznevise.ir/online-calculation-tools/%d9%85%d8%a7%d8%b4%db%8c%d9%86-%d8%ad%d8%b3%d8%a7%d8%a8-%d8%a8%d8%a7%d8%b2%d9%87-%d8%a7%d8%b7%d9%85%db%8c%d9%86%d8%a7%d9%86-%d9%85%db%8c%d8%a7%d9%86%da%af%db%8c%d9%86/,"انجام پایان نامه","راهنمای پایان نامه",lsi,https://teznevise.ir/thesis/,0,0,0,1,0,1,1,0,1,1
+https://teznevise.ir/online-calculation-tools/%d9%85%d8%a7%d8%b4%db%8c%d9%86-%d8%ad%d8%b3%d8%a7%d8%a8-%d8%a8%d8%a7%d8%b2%d9%87-%d8%a7%d8%b7%d9%85%db%8c%d9%86%d8%a7%d9%86-%d9%85%db%8c%d8%a7%d9%86%da%af%db%8c%d9%86/,"انجام پایان نامه کارشناسی ارشد","پایان نامه ارشد",lsi,https://teznevise.ir/thesis/master/,0,0,0,0,0,0,1,0,1,1
+https://teznevise.ir/thesis/chapter-four/,,"BlueThesis — تحلیل آماری",audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0
+https://teznevise.ir/thesis/chapter-four/,,BlueThesis,audit,https://bluethesis.ir/statistical-analysis/,1,0,0,1,0,0,1,0,0,0

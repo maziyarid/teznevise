@@ -1,0 +1,39 @@
+name: Verify internal linking package
+on:
+  pull_request:
+    paths:
+      - 'data/internal-linking-20261110/**'
+      - 'tools/internal-linking-20261110/**'
+      - '.github/workflows/internal-linking-20261110.yml'
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: dom
+          coverage: none
+      - name: Data and Persian copy contracts
+        run: |
+          python3 tools/internal-linking-20261110/validate.py
+          python3 tools/internal-linking-20261110/build-anchor-plan.py
+          git diff --exit-code -- data/internal-linking-20261110/manifest.json data/internal-linking-20261110/links.csv data/internal-linking-20261110/anchor-ratios.csv data/internal-linking-20261110/primary-exact-sources.csv
+      - name: Runtime and WP-CLI contracts with isolated adapters
+        run: |
+          php tools/internal-linking-20261110/test-runtime.php
+          php tools/internal-linking-20261110/test-wordpress.php
+          python3 tools/internal-linking-20261110/test-install.py
+      - name: Reproduce rendered sample counts
+        run: |
+          php tools/internal-linking-20261110/count-rendered.php > /tmp/rendered-before-after.csv
+          diff -u data/internal-linking-20261110/rendered-before-after.csv /tmp/rendered-before-after.csv
+          php tools/internal-linking-20261110/count-rendered.php --profiles > /tmp/rendered-anchor-profiles.csv
+          diff -u data/internal-linking-20261110/rendered-anchor-profiles.csv /tmp/rendered-anchor-profiles.csv
+      - name: Syntax
+        run: |
+          find tools/internal-linking-20261110 -name '*.php' -exec php -l {} \;
+          bash -n tools/internal-linking-20261110/apply.sh tools/internal-linking-20261110/rollback.sh tools/internal-linking-20261110/verify.sh tools/internal-linking-20261110/install.sh
