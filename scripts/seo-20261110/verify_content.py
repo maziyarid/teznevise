@@ -112,6 +112,7 @@ def body_errors(path, text, minimum):
     for block in blocks:
         try: visit(json.loads(block))
         except (ValueError, TypeError): fail('invalid JSON-LD')
+    if types.intersection({'Review', 'AggregateRating', 'Rating'}): fail('prohibited review/rating schema type')
     if not {'Service', 'FAQPage', 'BreadcrumbList'}.issubset(types): fail('missing required schema types')
     if '[درخواست بررسی پروژه](/inquiry/)' not in text: fail('missing request CTA')
     if '## منابع' not in text: fail('missing sources')
@@ -176,6 +177,15 @@ def main():
                 args.snapshot_dir.mkdir(parents=True, exist_ok=True)
                 (args.snapshot_dir / (hashlib.sha256(url.encode()).hexdigest()+'.html')).write_bytes(data)
             if args.rendered and status == 200:
+                metadata_baseline = CONTENT / 'live-metadata-baseline.json'
+                if metadata_baseline.exists() and urlsplit(args.base_url).netloc == urlsplit(ORIGIN).netloc:
+                    original = next((r for r in json.loads(metadata_baseline.read_text()) if r['url'] == url), None)
+                    if original:
+                        parsed = Rendered()
+                        parsed.feed(data.decode('utf-8', errors='replace'))
+                        actual = [{'element': e, 'text': t} for e, t, _ in parsed.elements if e in ('title', 'h1', 'meta description')]
+                        if actual != original['elements']:
+                            errors.append(f'{url}: live title/H1/meta differs from baseline; no live metadata changes authorized by this task')
                 rows = rendered_errors(url, data.decode('utf-8', errors='replace'))
                 offenders.extend(rows)
                 errors.extend(f"{r['url']} {r['element']}: {r['current_text']}" for r in rows)
