@@ -213,7 +213,6 @@ class TezNevise_AI_Knowledge {
 		$title = wp_strip_all_tags( get_the_title( $post ) );
 		$url   = get_permalink( $post );
 		$body  = wp_strip_all_tags( apply_filters( 'the_content', $post->post_content ) );
-		$body  = function_exists( 'teznevise_consult_copy' ) ? teznevise_consult_copy( $body ) : $body;
 		$body  = trim( preg_replace( '/\s+/u', ' ', $body ) );
 		if ( '' === $body ) {
 			$body = wp_strip_all_tags( (string) $post->post_excerpt );

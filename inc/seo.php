@@ -602,17 +602,13 @@ function teznevise_filter_metadesc( $desc ) {
 		if ( '' === $excerpt ) {
 			$excerpt = trim( wp_strip_all_tags( (string) get_post_field( 'post_content', $id ) ) );
 		}
-		if ( function_exists( 'teznevise_consult_copy' ) ) {
-			$excerpt = teznevise_consult_copy( $excerpt );
-		}
+
 		$excerpt = preg_replace( '/\s+/u', ' ', $excerpt );
 		if ( is_string( $excerpt ) && ( function_exists( 'mb_strlen' ) ? mb_strlen( $excerpt ) : strlen( $excerpt ) ) >= 40 ) {
 			return wp_trim_words( $excerpt, 32, '' );
 		}
 		$fallback = trim( wp_strip_all_tags( (string) get_the_title( $id ) ) );
-		if ( function_exists( 'teznevise_consult_copy' ) ) {
-			$fallback = teznevise_consult_copy( $fallback );
-		}
+
 		if ( '' !== $fallback ) {
 			return $fallback . ' | ' . get_bloginfo( 'name' );
 		}
