@@ -161,3 +161,17 @@ jobs:
             if (trim($fresh) !== "Hi") { fwrite(STDERR, "short owned content was overwritten\n"); exit(1); }
             echo "importer preserved short owned content\n";
           '
+
+  draft-content-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test rendered-copy scanner
+        run: python3 scripts/seo-20261110/test_verify_content.py
+      - name: Verify draft files and rendered pages (read only)
+        run: python3 scripts/seo-20261110/verify_content.py --rendered --output content-verification.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: content-verification
+          path: content-verification.json

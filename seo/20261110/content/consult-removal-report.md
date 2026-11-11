@@ -27,3 +27,55 @@ Rendered observations will be appended by the verification script. Rendered text
 ## PR #456 amendment
 
 FACT: Homepage description in its manifest includes «توضیح فرایند مشاوره». DROP that proposed homepage metadata before merge. Do not introduce /student-projects/ or its redirect: apply its draft content to /service-project/. Preserve /thesis/master/ publication and redirect decisions for Maziyar.
+
+## Rendered baseline offenders (FACT)
+
+| URL | Element | Current text | Proposed text |
+|---|---|---|---|
+| https://teznevise.ir/ | a | ثبت درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/ | a | درخواست مشاوره رایگان | ثبت درخواست |
+| https://teznevise.ir/ | div[aria-label] | نمایی از مسیر مشاوره تزنویسه | نیاز به تایید مازیار |
+| https://teznevise.ir/ | a[aria-label] | ثبت درخواست مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/ | a | درخواست مشاوره رایگان | ثبت درخواست |
+| https://teznevise.ir/ | button[aria-label] | بستن فرم مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/proposal/ | a | ثبت درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/proposal/ | div[aria-label] | نمایی از مسیر مشاوره تزنویسه | نیاز به تایید مازیار |
+| https://teznevise.ir/proposal/ | a[aria-label] | ثبت درخواست مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/proposal/ | button[aria-label] | بستن فرم مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/proposal/phd/ | a | ثبت درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/proposal/phd/ | div[aria-label] | نمایی از مسیر مشاوره تزنویسه | نیاز به تایید مازیار |
+| https://teznevise.ir/proposal/phd/ | a[aria-label] | ثبت درخواست مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/proposal/phd/ | a | فرم درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/proposal/phd/ | button[aria-label] | بستن فرم مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/service-project/ | a | ثبت درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/service-project/ | a | شروع مشاوره رایگان | ثبت درخواست |
+| https://teznevise.ir/service-project/ | a | ثبت درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/service-project/ | a | شروع مشاوره رایگان | ثبت درخواست |
+| https://teznevise.ir/service-project/ | button[aria-label] | بستن فرم مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/ | a | ثبت درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/thesis/ | a | ثبت درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/thesis/ | div[aria-label] | نمایی از مسیر مشاوره تزنویسه | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/ | a[aria-label] | ثبت درخواست مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/ | a | درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/thesis/ | a | فرم درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/thesis/ | a | درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/thesis/ | a | چک لیست اطلاعات موردنیاز پیش از درخواست مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/ | button[aria-label] | بستن فرم مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/humanities/management/ | a | ثبت درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/thesis/humanities/management/ | div[aria-label] | نمایی از مسیر مشاوره تزنویسه | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/humanities/management/ | a[aria-label] | ثبت درخواست مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/humanities/management/ | a | دریافت مشاوره رایگان اولیه | ثبت درخواست |
+| https://teznevise.ir/thesis/humanities/management/ | a | فرم درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/thesis/humanities/management/ | button[aria-label] | بستن فرم مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/humanities/psychology/ | a | ثبت درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/thesis/humanities/psychology/ | div[aria-label] | نمایی از مسیر مشاوره تزنویسه | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/humanities/psychology/ | a[aria-label] | ثبت درخواست مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/humanities/psychology/ | a | دریافت مشاوره رایگان اولیه | ثبت درخواست |
+| https://teznevise.ir/thesis/humanities/psychology/ | a | فرم درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/thesis/humanities/psychology/ | button[aria-label] | بستن فرم مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/phd/ | a | ثبت درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/thesis/phd/ | div[aria-label] | نمایی از مسیر مشاوره تزنویسه | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/phd/ | a[aria-label] | ثبت درخواست مشاوره | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/phd/ | a | مشاوره و طراحی پروپوزال | نیاز به تایید مازیار |
+| https://teznevise.ir/thesis/phd/ | a | فرم درخواست مشاوره | ثبت درخواست |
+| https://teznevise.ir/thesis/phd/ | button[aria-label] | بستن فرم مشاوره | نیاز به تایید مازیار |

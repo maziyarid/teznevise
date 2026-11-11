@@ -153,6 +153,8 @@ while ( have_posts() ) :
 		<?php
 	}
 
+	get_template_part( 'template-parts/enamad-trust' );
+
 endwhile;
 
 get_footer();

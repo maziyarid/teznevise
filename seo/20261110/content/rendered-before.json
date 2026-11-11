@@ -1,0 +1,435 @@
+{
+  "passed": false,
+  "errors": [
+    "https://teznevise.ir/ a: ثبت درخواست مشاوره",
+    "https://teznevise.ir/ a: درخواست مشاوره رایگان",
+    "https://teznevise.ir/ div[aria-label]: نمایی از مسیر مشاوره تزنویسه",
+    "https://teznevise.ir/ a[aria-label]: ثبت درخواست مشاوره",
+    "https://teznevise.ir/ a: درخواست مشاوره رایگان",
+    "https://teznevise.ir/ button[aria-label]: بستن فرم مشاوره",
+    "https://teznevise.ir/proposal/ a: ثبت درخواست مشاوره",
+    "https://teznevise.ir/proposal/ div[aria-label]: نمایی از مسیر مشاوره تزنویسه",
+    "https://teznevise.ir/proposal/ a[aria-label]: ثبت درخواست مشاوره",
+    "https://teznevise.ir/proposal/ button[aria-label]: بستن فرم مشاوره",
+    "https://teznevise.ir/proposal/phd/ a: ثبت درخواست مشاوره",
+    "https://teznevise.ir/proposal/phd/ div[aria-label]: نمایی از مسیر مشاوره تزنویسه",
+    "https://teznevise.ir/proposal/phd/ a[aria-label]: ثبت درخواست مشاوره",
+    "https://teznevise.ir/proposal/phd/ a: فرم درخواست مشاوره",
+    "https://teznevise.ir/proposal/phd/ button[aria-label]: بستن فرم مشاوره",
+    "https://teznevise.ir/service-project/ a: ثبت درخواست مشاوره",
+    "https://teznevise.ir/service-project/ a: شروع مشاوره رایگان",
+    "https://teznevise.ir/service-project/ a: ثبت درخواست مشاوره",
+    "https://teznevise.ir/service-project/ a: شروع مشاوره رایگان",
+    "https://teznevise.ir/service-project/ button[aria-label]: بستن فرم مشاوره",
+    "https://teznevise.ir/thesis/ a: ثبت درخواست مشاوره",
+    "https://teznevise.ir/thesis/ a: ثبت درخواست مشاوره",
+    "https://teznevise.ir/thesis/ div[aria-label]: نمایی از مسیر مشاوره تزنویسه",
+    "https://teznevise.ir/thesis/ a[aria-label]: ثبت درخواست مشاوره",
+    "https://teznevise.ir/thesis/ a: درخواست مشاوره",
+    "https://teznevise.ir/thesis/ a: فرم درخواست مشاوره",
+    "https://teznevise.ir/thesis/ a: درخواست مشاوره",
+    "https://teznevise.ir/thesis/ a: چک لیست اطلاعات موردنیاز پیش از درخواست مشاوره",
+    "https://teznevise.ir/thesis/ button[aria-label]: بستن فرم مشاوره",
+    "https://teznevise.ir/thesis/humanities/management/ a: ثبت درخواست مشاوره",
+    "https://teznevise.ir/thesis/humanities/management/ div[aria-label]: نمایی از مسیر مشاوره تزنویسه",
+    "https://teznevise.ir/thesis/humanities/management/ a[aria-label]: ثبت درخواست مشاوره",
+    "https://teznevise.ir/thesis/humanities/management/ a: دریافت مشاوره رایگان اولیه",
+    "https://teznevise.ir/thesis/humanities/management/ a: فرم درخواست مشاوره",
+    "https://teznevise.ir/thesis/humanities/management/ button[aria-label]: بستن فرم مشاوره",
+    "https://teznevise.ir/thesis/humanities/psychology/ a: ثبت درخواست مشاوره",
+    "https://teznevise.ir/thesis/humanities/psychology/ div[aria-label]: نمایی از مسیر مشاوره تزنویسه",
+    "https://teznevise.ir/thesis/humanities/psychology/ a[aria-label]: ثبت درخواست مشاوره",
+    "https://teznevise.ir/thesis/humanities/psychology/ a: دریافت مشاوره رایگان اولیه",
+    "https://teznevise.ir/thesis/humanities/psychology/ a: فرم درخواست مشاوره",
+    "https://teznevise.ir/thesis/humanities/psychology/ button[aria-label]: بستن فرم مشاوره",
+    "https://teznevise.ir/thesis/phd/ a: ثبت درخواست مشاوره",
+    "https://teznevise.ir/thesis/phd/ div[aria-label]: نمایی از مسیر مشاوره تزنویسه",
+    "https://teznevise.ir/thesis/phd/ a[aria-label]: ثبت درخواست مشاوره",
+    "https://teznevise.ir/thesis/phd/ a: مشاوره و طراحی پروپوزال",
+    "https://teznevise.ir/thesis/phd/ a: فرم درخواست مشاوره",
+    "https://teznevise.ir/thesis/phd/ button[aria-label]: بستن فرم مشاوره"
+  ],
+  "offenders": [
+    {
+      "url": "https://teznevise.ir/",
+      "element": "a",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/",
+      "element": "a",
+      "current_text": "درخواست مشاوره رایگان",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/",
+      "element": "div[aria-label]",
+      "current_text": "نمایی از مسیر مشاوره تزنویسه",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/",
+      "element": "a[aria-label]",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/",
+      "element": "a",
+      "current_text": "درخواست مشاوره رایگان",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/",
+      "element": "button[aria-label]",
+      "current_text": "بستن فرم مشاوره",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/proposal/",
+      "element": "a",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/proposal/",
+      "element": "div[aria-label]",
+      "current_text": "نمایی از مسیر مشاوره تزنویسه",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/proposal/",
+      "element": "a[aria-label]",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/proposal/",
+      "element": "button[aria-label]",
+      "current_text": "بستن فرم مشاوره",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/proposal/phd/",
+      "element": "a",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/proposal/phd/",
+      "element": "div[aria-label]",
+      "current_text": "نمایی از مسیر مشاوره تزنویسه",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/proposal/phd/",
+      "element": "a[aria-label]",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/proposal/phd/",
+      "element": "a",
+      "current_text": "فرم درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/proposal/phd/",
+      "element": "button[aria-label]",
+      "current_text": "بستن فرم مشاوره",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/service-project/",
+      "element": "a",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/service-project/",
+      "element": "a",
+      "current_text": "شروع مشاوره رایگان",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/service-project/",
+      "element": "a",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/service-project/",
+      "element": "a",
+      "current_text": "شروع مشاوره رایگان",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/service-project/",
+      "element": "button[aria-label]",
+      "current_text": "بستن فرم مشاوره",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/",
+      "element": "a",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/",
+      "element": "a",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/",
+      "element": "div[aria-label]",
+      "current_text": "نمایی از مسیر مشاوره تزنویسه",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/",
+      "element": "a[aria-label]",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/",
+      "element": "a",
+      "current_text": "درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/",
+      "element": "a",
+      "current_text": "فرم درخواست مشاوره",
+      "target": "/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/",
+      "element": "a",
+      "current_text": "درخواست مشاوره",
+      "target": "/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/",
+      "element": "a",
+      "current_text": "چک لیست اطلاعات موردنیاز پیش از درخواست مشاوره",
+      "target": "/thesis-order-preparation-checklist/",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/",
+      "element": "button[aria-label]",
+      "current_text": "بستن فرم مشاوره",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/management/",
+      "element": "a",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/management/",
+      "element": "div[aria-label]",
+      "current_text": "نمایی از مسیر مشاوره تزنویسه",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/management/",
+      "element": "a[aria-label]",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/management/",
+      "element": "a",
+      "current_text": "دریافت مشاوره رایگان اولیه",
+      "target": "#tzen-consult-form",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/management/",
+      "element": "a",
+      "current_text": "فرم درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/management/",
+      "element": "button[aria-label]",
+      "current_text": "بستن فرم مشاوره",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/psychology/",
+      "element": "a",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/psychology/",
+      "element": "div[aria-label]",
+      "current_text": "نمایی از مسیر مشاوره تزنویسه",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/psychology/",
+      "element": "a[aria-label]",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/psychology/",
+      "element": "a",
+      "current_text": "دریافت مشاوره رایگان اولیه",
+      "target": "#tzen-consult-form",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/psychology/",
+      "element": "a",
+      "current_text": "فرم درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/psychology/",
+      "element": "button[aria-label]",
+      "current_text": "بستن فرم مشاوره",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/phd/",
+      "element": "a",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/phd/",
+      "element": "div[aria-label]",
+      "current_text": "نمایی از مسیر مشاوره تزنویسه",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/phd/",
+      "element": "a[aria-label]",
+      "current_text": "ثبت درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/phd/",
+      "element": "a",
+      "current_text": "مشاوره و طراحی پروپوزال",
+      "target": "https://teznevise.ir/proposal/",
+      "proposed_text": "نیاز به تایید مازیار"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/phd/",
+      "element": "a",
+      "current_text": "فرم درخواست مشاوره",
+      "target": "https://teznevise.ir/inquiry/",
+      "proposed_text": "ثبت درخواست"
+    },
+    {
+      "url": "https://teznevise.ir/thesis/phd/",
+      "element": "button[aria-label]",
+      "current_text": "بستن فرم مشاوره",
+      "target": "",
+      "proposed_text": "نیاز به تایید مازیار"
+    }
+  ],
+  "snapshots": [
+    {
+      "url": "https://teznevise.ir/",
+      "http_status": 200,
+      "sha256": "64bcd5765982910883a86b2ef1d1287af2cd69aa4182a8df7789b02a4f78db7c",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/proposal/",
+      "http_status": 200,
+      "sha256": "a612e97473df59a4677cf78d8ba4b7e3b23ec3790374cff86f41295e4596a857",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/proposal/phd/",
+      "http_status": 200,
+      "sha256": "ccb9b587e72ec8555b343cbbd34d54b9f8504ec9d5c1565966e1049b439ec6de",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/service-project/",
+      "http_status": 200,
+      "sha256": "16a4f2883afa1634f6596e9daa0df701de6a866fef7abae4fd9bb14913cb527c",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/",
+      "http_status": 200,
+      "sha256": "efcd98e7b8e0b743ea2a66bc15ebd13ac58ce3285065422e70cf0fa3359608ef",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/management/",
+      "http_status": 200,
+      "sha256": "08a514e87e9f13972fc516314decef380809146b05aa9e2ab2a41c0ee2058f56",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/psychology/",
+      "http_status": 200,
+      "sha256": "56161349b272f59ff634a548e9d15a5a47e149f1a1bee0e4be1ad03651739e58",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/phd/",
+      "http_status": 200,
+      "sha256": "e3c2f9ebb0c09f5f1e9a86c769cde43c54a3cb7a4e1d7a854009657a6f20e31f",
+      "error": null
+    }
+  ],
+  "drafts_checked": 0,
+  "note": "HTTP snapshots prove only the observed response bytes, not absence of all database changes."
+}

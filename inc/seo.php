@@ -568,7 +568,6 @@ function teznevise_filter_document_title( $title ) {
 		'شبیه‌سازی'     => 'شبیه‌سازی تخصصی مهندسی و پژوهش',
 		'دانلودها'      => 'دانلود قالب و فایل‌های پژوهشی',
 		'درباره ما'     => 'درباره تزنویسه، همراه پژوهشی دانشجویان',
-		'انجام پروژه دانشجویی' => 'مشاوره پروژه دانشجویی',
 		'انجام مقاله'   => 'مشاوره نگارش مقاله',
 	);
 	if ( isset( $map[ $core ] ) ) {
@@ -806,7 +805,7 @@ function teznevise_output_faq_schema() {
 		'@type'      => 'FAQPage',
 		'mainEntity' => $ent,
 	);
-	echo '<script type="application/ld+json">' . wp_json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo '<script type="application/ld+json">' . wp_json_encode( teznevise_organization_trust_reference( $payload ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action( 'wp_footer', 'teznevise_output_faq_schema', 22 );
 
@@ -824,7 +823,7 @@ function teznevise_output_service_schema() {
 		'service-statistics'  => array( 'name' => 'تحلیل آماری', 'url' => home_url( '/service-statistics/' ) ),
 		'service-simulation'  => array( 'name' => 'شبیه‌سازی', 'url' => home_url( '/service-simulation/' ) ),
 		'service-qualitative' => array( 'name' => 'تحلیل کیفی', 'url' => home_url( '/service-qualitative/' ) ),
-		'service-project'     => array( 'name' => 'مشاوره پروژه دانشجویی', 'url' => home_url( '/service-project/' ) ),
+		'service-project'     => array( 'name' => 'پروژه های دانشجویی', 'url' => home_url( '/service-project/' ) ),
 		'service-article'     => array( 'name' => 'مشاوره نگارش مقاله', 'url' => home_url( '/service-article/' ) ),
 	);
 	if ( ! isset( $map[ $slug ] ) ) {
@@ -844,7 +843,7 @@ function teznevise_output_service_schema() {
 		'areaServed'  => 'IR',
 		'serviceType' => $row['name'],
 	);
-	echo '<script type="application/ld+json">' . wp_json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo '<script type="application/ld+json">' . wp_json_encode( teznevise_organization_trust_reference( $payload ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action( 'wp_footer', 'teznevise_output_service_schema', 23 );
 
@@ -905,3 +904,26 @@ function teznevise_lead_nonce_field( $uid = '' ) {
 	}
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
+
+/** Add the observed badge reference without inventing registration details. */
+function teznevise_organization_trust_reference( $data ) {
+	if ( ! is_array( $data ) ) {
+		return $data;
+	}
+	$types = isset( $data['@type'] ) ? (array) $data['@type'] : array();
+	if ( in_array( 'Organization', $types, true ) ) {
+		$same_as = isset( $data['sameAs'] ) ? (array) $data['sameAs'] : array();
+		$same_as[] = 'https://trustseal.enamad.ir/?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP';
+		$data['sameAs'] = array_values( array_unique( $same_as ) );
+		// TODO Maziyar: registered publisher identifier — نیاز به تایید مازیار.
+		// $data['identifier'] = array( '@type' => 'PropertyValue', 'value' => '' );
+	}
+	foreach ( $data as $key => $value ) {
+		if ( is_array( $value ) ) {
+			$data[ $key ] = teznevise_organization_trust_reference( $value );
+		}
+	}
+	return $data;
+}
+add_filter( 'wpseo_schema_organization', 'teznevise_organization_trust_reference' );
+add_filter( 'rank_math/json_ld', 'teznevise_organization_trust_reference' );
