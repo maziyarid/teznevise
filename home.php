@@ -55,7 +55,7 @@ get_header();
 			<div class="blog-widget side-card">
 				<h2><?php esc_html_e( 'شروع پروژه', 'teznevise' ); ?></h2>
 				<p><?php esc_html_e( 'موضوع را بفرستید تا مسیر و برآورد اولیه مشخص شود.', 'teznevise' ); ?></p>
-				<a class="btn-tz btn-primary-tz" href="<?php echo esc_url( home_url( '/inquiry/' ) ); ?>"><?php esc_html_e( 'درخواست مشاوره', 'teznevise' ); ?></a>
+				<a class="btn-tz btn-primary-tz" href="<?php echo esc_url( home_url( '/inquiry/' ) ); ?>"><?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></a>
 			</div>
 		</aside>
 	</div>

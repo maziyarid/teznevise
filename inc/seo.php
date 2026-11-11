@@ -560,7 +560,7 @@ function teznevise_filter_document_title( $title ) {
 		return 'راهنماها و آموزش‌های پژوهشی | بلاگ ' . $site;
 	}
 	$map = array(
-		'ثبت سفارش'     => 'ثبت درخواست مشاوره پژوهشی',
+		'ثبت سفارش'     => 'ثبت درخواست پژوهشی',
 		'آزمون t'       => 'محاسبه‌گر آزمون t آنلاین',
 		'رگرسیون'       => 'محاسبه‌گر تحلیل رگرسیون آنلاین',
 		'تحلیل کیفی'    => 'مشاوره تحلیل کیفی پژوهش',
@@ -819,8 +819,8 @@ function teznevise_output_service_schema() {
 	}
 	$slug = get_post_field( 'post_name', get_queried_object_id() );
 	$map  = array(
-		'thesis'              => array( 'name' => 'مشاوره انجام پایان‌نامه', 'url' => home_url( '/thesis/' ) ),
-		'proposal'            => array( 'name' => 'مشاوره انجام پروپوزال', 'url' => home_url( '/proposal/' ) ),
+		'thesis'              => array( 'name' => 'انجام پایان نامه', 'url' => home_url( '/thesis/' ) ),
+		'proposal'            => array( 'name' => 'انجام پروپوزال', 'url' => home_url( '/proposal/' ) ),
 		'service-statistics'  => array( 'name' => 'تحلیل آماری', 'url' => home_url( '/service-statistics/' ) ),
 		'service-simulation'  => array( 'name' => 'شبیه‌سازی', 'url' => home_url( '/service-simulation/' ) ),
 		'service-qualitative' => array( 'name' => 'تحلیل کیفی', 'url' => home_url( '/service-qualitative/' ) ),

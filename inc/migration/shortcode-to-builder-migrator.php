@@ -593,7 +593,7 @@ function teznevise_migration_default_home_sections() {
 			'eyebrow'    => __( 'تزنویسه', 'teznevise' ),
 			'title'      => __( 'به تزنویسه خوش آمدید', 'teznevise' ),
 			'text'       => __( 'سیستم جامع تحلیل آماری و خدمات پژوهشی', 'teznevise' ),
-			'cta_text'   => __( 'شروع مشاوره رایگان', 'teznevise' ),
+			'cta_text'   => __( 'ثبت درخواست', 'teznevise' ),
 			'cta_url'    => '/inquiry/',
 			'background' => 'default',
 			'items'      => array(
@@ -612,14 +612,14 @@ function teznevise_migration_default_home_sections() {
 			'background' => 'default',
 			'items'      => array(
 				array(
-					'title' => __( 'مشاوره انجام پایان‌نامه', 'teznevise' ),
+					'title' => __( 'انجام پایان نامه', 'teznevise' ),
 					'text'  => __( 'از انتخاب موضوع تا دفاع', 'teznevise' ),
 					'icon'  => 'fa-solid fa-graduation-cap',
 					'color' => 'icon-indigo',
 					'url'   => '/service-thesis/',
 				),
 				array(
-					'title' => __( 'مشاوره انجام پروپوزال', 'teznevise' ),
+					'title' => __( 'انجام پروپوزال', 'teznevise' ),
 					'text'  => __( 'بیان مسئله و روش‌شناسی', 'teznevise' ),
 					'icon'  => 'fa-solid fa-file-circle-check',
 					'color' => 'icon-teal',
