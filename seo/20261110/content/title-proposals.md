@@ -271,4 +271,3 @@ All options below are proposals for Maziyar. Existing live H1s were retained in 
 
 - proposal: انجام پایان نامه میان رشته ای | مسیر، روش و بازبینی
 - proposal: انجام پایان نامه میان رشته ای | راهنمای آماده سازی و ارائه
-
