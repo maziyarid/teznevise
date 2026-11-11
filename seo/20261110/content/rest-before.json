@@ -1,0 +1,74 @@
+[
+  {
+    "id": 7591,
+    "url": "https://teznevise.ir/service-project/",
+    "modified_gmt": "2026-10-18T11:44:14",
+    "content_raw_sha256": "4ac853448cca4014ada164d4c2c15cf44c362a9f8c6f1d661fd4c40714fdc114"
+  },
+  {
+    "id": 1678,
+    "url": "https://teznevise.ir/gams/",
+    "modified_gmt": "2026-10-17T21:11:16",
+    "content_raw_sha256": "07bbe451674c4a523a1751dfd9ff6682ea8acceadb8c26a09fa8d986355e0fbc"
+  },
+  {
+    "id": 1153,
+    "url": "https://teznevise.ir/thesis/humanities/psychology/",
+    "modified_gmt": "2026-11-02T16:08:11",
+    "content_raw_sha256": "2d502a4418960e6d0d33785f31d61c27af2e7ea5bee1d96b38fa8fd5999840a4"
+  },
+  {
+    "id": 1148,
+    "url": "https://teznevise.ir/thesis/humanities/management/",
+    "modified_gmt": "2026-11-02T16:08:11",
+    "content_raw_sha256": "fefd86edc6723966965486a4e5f2a8cc3ef6e3cbf613d9354c63362e715d723c"
+  },
+  {
+    "id": 1053,
+    "url": "https://teznevise.ir/thesis/phd/",
+    "modified_gmt": "2026-11-02T16:23:20",
+    "content_raw_sha256": "0614ca565d04d212e9984e22171b9fb140ae8065c877945c309521b3d1d4c346"
+  },
+  {
+    "id": 1006,
+    "url": "https://teznevise.ir/proposal/phd/",
+    "modified_gmt": "2026-11-02T16:08:13",
+    "content_raw_sha256": "606bb2117523b8a5f5619037c3f88ddbcb1541b51b7fdac2297c141dd8692f8e"
+  },
+  {
+    "id": 947,
+    "url": "https://teznevise.ir/thesis/",
+    "modified_gmt": "2026-11-02T16:23:19",
+    "content_raw_sha256": "f9d00a91a2eee4283bd394964986b1f2042bb45da459a63b6c25165ccc937d99"
+  },
+  {
+    "id": 625,
+    "url": "https://teznevise.ir/proposal/",
+    "modified_gmt": "2026-11-02T16:23:20",
+    "content_raw_sha256": "093eddac5ed7c8109039220deb643410fbbd841ffb4c32eb1d3f1e461c0a6ac4"
+  },
+  {
+    "id": 555,
+    "url": "https://teznevise.ir/inquiry/",
+    "modified_gmt": "2026-09-08T19:43:14",
+    "content_raw_sha256": "aadc20e05aeb6433ca72001d96a0862583c9e30153b11c9a31d12fd23ca47466"
+  },
+  {
+    "id": 545,
+    "url": "https://teznevise.ir/contact-us/",
+    "modified_gmt": "2026-06-09T14:40:12",
+    "content_raw_sha256": "955c9822514411832376d3716933b3abda2e2c12a01312c9b6fe0b517b0ac872"
+  },
+  {
+    "id": 426,
+    "url": "https://teznevise.ir/about-us/",
+    "modified_gmt": "2026-09-03T17:41:17",
+    "content_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "id": 275,
+    "url": "https://teznevise.ir/",
+    "modified_gmt": "2026-11-02T16:08:08",
+    "content_raw_sha256": "ac4b0ff1bd433d2e37030462d402de38603eafa92a9f218b9090138e54654883"
+  }
+]

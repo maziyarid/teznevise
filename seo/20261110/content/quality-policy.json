@@ -1,0 +1,64 @@
+{
+  "word_counts": "guides only; never a pass/fail condition",
+  "visible_faq": {
+    "minimum": 5,
+    "maximum": 8,
+    "real_questions": "required; owner sample review",
+    "FAQPage": "optional; exact visible text only"
+  },
+  "schema": "one owner per page; planned owner Rank Math; no hand-written duplicate",
+  "minimum_page_specific_elements": 3,
+  "specificity_review": "worked example, decision table, checklist or diagram description; evidence must be reviewed, not merely counted",
+  "sibling_overlap": {
+    "ngram": 5,
+    "normalization": "visible main-content words, whitespace collapsed, Latin lowercased; exclude code/schema/navigation",
+    "metric": "shared unique 5-grams / minimum(unique 5-grams of either page)",
+    "must_be_below": 0.12,
+    "status": "HYPOTHESIS: proposed editorial threshold for Maziyar; no measurement exists because no pages are written"
+  },
+  "claims": "every factual claim has an explicit sources.csv claim_id with URL/status/title/access date and supporting evidence, or its sentence says نیاز به تایید مازیار",
+  "sample_gate": "Maziyar approves the wave, then reviews one sample page before the remainder is written",
+  "required_sections": {
+    "money": [
+      "service scope and student responsibility",
+      "degree/path decisions",
+      "field directory",
+      "software and tools",
+      "verified university forms",
+      "cost factors without figures",
+      "preparation checklist",
+      "FAQ",
+      "official sources"
+    ],
+    "field": [
+      "field-specific tracks",
+      "method/data choices",
+      "tools with justification",
+      "worked validation example",
+      "common errors",
+      "degree differences",
+      "preparation checklist",
+      "FAQ",
+      "official sources"
+    ],
+    "project": [
+      "course-level scope",
+      "worked example",
+      "tool/version decision table",
+      "test or validation procedure",
+      "reproducibility checklist",
+      "student responsibility",
+      "FAQ",
+      "official sources"
+    ],
+    "proposal-child": [
+      "intent boundary",
+      "required university structure",
+      "question-method-data alignment",
+      "page-specific example",
+      "feasibility and ethics",
+      "FAQ",
+      "official sources"
+    ]
+  }
+}

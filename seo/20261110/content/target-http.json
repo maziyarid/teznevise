@@ -1,0 +1,338 @@
+{
+  "/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/about-us/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/contact-us/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/gams/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/inquiry/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/assignments/computer-science/uml-diagrams/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/engineering/chemical-industrial/chemical-engineering-project/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/engineering/chemical-industrial/econometrics-project/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/engineering/electrical/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/service-project/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/engineering/electrical/ees/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/engineering/mechanical-civil/aerospace-project/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/engineering/mechanical-civil/opensees/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/engineering/mechanical-civil/plaxis/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/programming/ai-data/signal-processing-matlab/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/programming/hardware/hspice/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/programming/hardware/silvaco/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/programming/hardware/vhdl/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/programming/languages/r-programming/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/simulation/chemical-process/aspen-hysys/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/service-simulation/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/simulation/electrical/matlab-simulink/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/service-simulation/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/simulation/electrical/proteus/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/service-simulation/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/simulation/hydrology/hec-ras/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/service-simulation/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/simulation/network/cisco-packet-tracer/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/service-simulation/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/statistics/general-statistics/ibm-spss-statistics/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/service-statistics/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/statistics/sem/amos/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/statistics/sem/smart-pls/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/project/student-research/university-projects/bachelor-project/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/proposal/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/proposal/applied-research/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/proposal/english/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/proposal/medical/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/proposal/phd/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/proposal/project/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/proposal/qualitative/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/proposal/quantitative/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/service-project/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/service-simulation/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/service-statistics/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/agriculture-natural-resources/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/animal-science-veterinary/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/art-architecture-media/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/engineering/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/engineering/chemical/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/engineering/civil/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/thesis/engineering/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/engineering/computer/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/thesis/engineering/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/engineering/electrical/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/thesis/engineering/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/engineering/industrial/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/engineering/mechanical/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/thesis/engineering/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/humanities/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/humanities/accounting/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/thesis/humanities/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/humanities/economics/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/humanities/education/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/humanities/history/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/humanities/law/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/humanities/management/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/humanities/philosophy/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/humanities/psychology/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/humanities/social-sciences/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/humanities/theology-islamic-studies/": {
+    "http_status": 404,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/interdisciplinary/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/international/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/master/": {
+    "http_status": 301,
+    "location": "https://teznevise.ir/download/masters-research-methods-guide/",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/medical-health/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/phd/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/thesis/pure-science/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:15:04.947405+00:00"
+  },
+  "/download/masters-research-methods-guide/": {
+    "http_status": 200,
+    "location": "",
+    "access_date": "2026-11-11T05:11:08.362002+00:00",
+    "evidence": "production sitemap direct GET"
+  }
+}

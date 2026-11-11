@@ -1,0 +1,7 @@
+{
+  "fixture_only": true,
+  "exit_status": 1,
+  "expected_refusal": true,
+  "copy_canary_unchanged": true,
+  "output": "DEPLOY REFUSED: Refusing theme (1, 9, 31): required floor (1, 9, 35), installed (1, 9, 35)\n"
+}

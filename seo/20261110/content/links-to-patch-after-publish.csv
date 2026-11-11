@@ -1,0 +1,8 @@
+source,target,anchor,anchor_type,source_exact_count,target_state,region,activation,primary_parent
+/project/programming/ai-data/signal-processing-matlab/,/project/engineering/electrical/,راهنمای حوزه مرتبط,lsi,1,planned,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/vhdl/,/project/engineering/electrical/,راهنمای حوزه مرتبط,lsi,1,planned,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/electrical/proteus/,/project/engineering/electrical/,راهنمای حوزه مرتبط,lsi,1,planned,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/gams/,/thesis/engineering/industrial/,پژوهش مهندسی صنایع,lsi,1,planned,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/assignments/computer-science/uml-diagrams/,/thesis/engineering/computer/,پژوهش مهندسی کامپیوتر,lsi,1,planned,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/thesis/,/thesis/master/,راهنمای مسیر پژوهش ارشد,lsi,0,deferred,main,proposal only; patch after both page approval and final direct HTTP 200,/
+/download/masters-research-methods-guide/,/thesis/master/,مسیر اجرای پژوهش ارشد,lsi,0,deferred,main,proposal only; patch after both page approval and final direct HTTP 200,/downloads/

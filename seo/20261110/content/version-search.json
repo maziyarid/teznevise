@@ -27,6 +27,10 @@
       "version": "1.9.3"
     },
     {
+      "ref": "origin/codex/seo-content-clusters-20261110",
+      "version": "1.9.31"
+    },
+    {
       "ref": "origin/docs/premium-stack-plan",
       "version": "1.8.4"
     },
@@ -330,5 +334,14 @@
       "ref": "origin/v0/teznevise-2429c1bc",
       "version": "1.8.8"
     }
-  ]
+  ],
+  "history_is_shallow": false,
+  "fetch_scope": "explicit +refs/heads/*:refs/remotes/origin/* and tags",
+  "live_stylesheet": {
+    "url": "https://teznevise.ir/wp-content/themes/teznevise-2-preview/style.css",
+    "http_status": 200,
+    "version": "1.9.35",
+    "sha256": "337da52586899ffcc64ac3aca7dd60aa584a5184ad596ce9cb0e08cf7bdf4eb7",
+    "read_only": true
+  }
 }

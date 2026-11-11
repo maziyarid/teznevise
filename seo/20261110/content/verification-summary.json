@@ -1,0 +1,66 @@
+{
+  "repo-static": {
+    "passed": false,
+    "error_count": 13573,
+    "blocking": true,
+    "coverage": 464,
+    "rules": {
+      "typography": 12244,
+      "lexicon": 1123,
+      "claim": 206
+    }
+  },
+  "local-rendered": {
+    "passed": false,
+    "error_count": 349,
+    "blocking": true,
+    "coverage": 22,
+    "rules": {
+      "typography": 291,
+      "lexicon": 44,
+      "claim": 1,
+      "http": 13
+    }
+  },
+  "production-rendered": {
+    "passed": false,
+    "error_count": 1942,
+    "blocking": false,
+    "coverage": 404,
+    "rules": {
+      "lexicon": 1273,
+      "typography": 405,
+      "claim": 47,
+      "mixed-schema-sources": 187,
+      "exact-anchor-budget": 16,
+      "faq-schema-mismatch": 14
+    }
+  },
+  "legal-gate": {
+    "passed": false,
+    "error_count": 65,
+    "blocking": true,
+    "coverage": 0,
+    "rules": {
+      "legal-review-not-done": 65
+    }
+  },
+  "browser": {
+    "local_urls": 12,
+    "production_status": "not run: certificate trust failed; TLS verification was not bypassed",
+    "production_server_html_check": "ran separately across sitemap"
+  },
+  "verification": {
+    "copy_tests": 21,
+    "deploy_version_tests": 6,
+    "php_contracts": [
+      "single schema owner",
+      "Organization sameAs preservation",
+      "pending legal review prevents imports"
+    ],
+    "new_page_bodies": 0,
+    "new_wordpress_drafts": 0,
+    "production_wordpress_writes": 0,
+    "monitored_raw_pages_unchanged": 12
+  }
+}

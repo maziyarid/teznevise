@@ -201,6 +201,7 @@ jobs:
         run: |
           python3 scripts/seo-20261110/test_verify_content.py
           python3 scripts/seo-20261110/test_deploy_version.py
+          python3 scripts/seo-20261110/validate_inputs.py
       - name: Blocking repository strings gate
         run: python3 scripts/seo-20261110/verify_content.py --tier repo --output repo-copy-report.json
       - uses: actions/upload-artifact@v4
