@@ -1,3 +1,8 @@
+# Unreleased — draft review only
+
+- Remove the public service-copy rewriting layer, hooks and runtime call sites at Maziyar's explicit request.
+- Use direct service labels and request CTAs; preserve Enamad badge and hold legal/business descriptions pending trust-page verification. No theme version bump or deployment.
+
 # Changelog
 
 ## 1.9.31 — 2026-08-27 — Technical SEO + UI last-wins

@@ -86,7 +86,6 @@ def check_requires() -> None:
         "assets/css/hotfix-209.css",
         "assets/css/hotfix-210.css",
         "inc/ai/class-ai-knowledge.php",
-        "inc/legal-copy.php",
         "inc/waitlist.php",
         "teznevise-core/teznevise-core.php",
         "footer.php",
@@ -214,11 +213,14 @@ def check_source_contracts() -> None:
     footer = (ROOT / "footer.php").read_text(encoding="utf-8")
     if "trustseal.enamad.ir/?id=7413817" not in footer:
         error("Exact Enamad trustseal HTML is missing from footer.php")
-    if "مشاوره انجام پایان" not in footer:
-        error("Footer services are missing مشاوره انجام phrasing")
-    legal = (ROOT / "inc" / "legal-copy.php").read_text(encoding="utf-8")
-    if "function teznevise_consult_copy" not in legal:
-        error("Legal consulting copy helper is missing")
+    for rel in (
+        "footer.php", "page-sitemap.php", "404.php", "inc/defaults.php",
+        "inc/frontend-compat.php", "inc/setup-pages.php", "inc/builder-defaults.json",
+    ):
+        text = (ROOT / rel).read_text(encoding="utf-8")
+        for forbidden in ("مشاوره انجام", "teznevise_" + "consult" + "_copy"):
+            if forbidden in text:
+                error(f"Forbidden public copy in {rel}: {forbidden}")
     waitlist = (ROOT / "inc" / "waitlist.php").read_text(encoding="utf-8")
     if "teznevise_tool_waitlist" not in waitlist:
         error("Waitlist table installer is missing")
@@ -245,9 +247,6 @@ def check_source_contracts() -> None:
     unis = (ROOT / "template-parts" / "universities.php").read_text(encoding="utf-8")
     if "tz-uni-card" not in unis:
         error("University row is still using the clipped uni-mark badge")
-    legal = (ROOT / "inc" / "legal-copy.php").read_text(encoding="utf-8")
-    if "برایتان می‌نویسیم" not in legal:
-        error("Legal copy does not rewrite ghostwriting phrases")
     perf = (ROOT / "inc" / "perf.php").read_text(encoding="utf-8")
     if "hotfix-201.css" not in perf:
         error("hotfix-201.css is not in the runtime CSS concat")
