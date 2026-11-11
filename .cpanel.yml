@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/maziyarid/public_html/teznevise.ir/wp-content/themes/teznevise
-    - /bin/rsync -avz --exclude '.git' ./ $DEPLOYPATH
+    - /bin/bash scripts/guarded-theme-sync.sh "$DEPLOYPATH"

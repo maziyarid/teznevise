@@ -1,0 +1,334 @@
+{
+  "result": "1.9.35 not found in fetched branch tips or style.css history",
+  "base": "origin/main",
+  "refs": [
+    {
+      "ref": "origin",
+      "version": "1.9.31"
+    },
+    {
+      "ref": "origin/agent/fix-css-lint-issues",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/agent/modernize-javascript-lint",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/chore/address-code-quality-issues",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/chore/modernization-review-1.9.0",
+      "version": "1.9.0"
+    },
+    {
+      "ref": "origin/chore/production-builder-route-analysis",
+      "version": "1.9.3"
+    },
+    {
+      "ref": "origin/docs/premium-stack-plan",
+      "version": "1.8.4"
+    },
+    {
+      "ref": "origin/feat/blog-custom-fields",
+      "version": "1.0.0"
+    },
+    {
+      "ref": "origin/feat/complete-blog-conversion",
+      "version": "1.3.0"
+    },
+    {
+      "ref": "origin/feat/release-readiness",
+      "version": "1.5.0"
+    },
+    {
+      "ref": "origin/feat/shortcode-pages-to-custom-fields",
+      "version": "1.6.4"
+    },
+    {
+      "ref": "origin/feat/technical-seo",
+      "version": "1.3.0"
+    },
+    {
+      "ref": "origin/feat/wordpress-content-template-coverage",
+      "version": "1.9.2"
+    },
+    {
+      "ref": "origin/feature/academic-ai-workspace-v1",
+      "version": "1.9.31"
+    },
+    {
+      "ref": "origin/feature/batch1-conversions",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/feature/batch2-conversions",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/feature/batch3-conversions",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/feature/documentation",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/feature/flexible-page-builder",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/feature/html-analysis",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/feature/html-to-builder",
+      "version": "1.6.1"
+    },
+    {
+      "ref": "origin/feature/phase4-click-to-edit",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/feature/testing-validation",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/feature/teznevise-2.0-rebuild",
+      "version": "1.9.31"
+    },
+    {
+      "ref": "origin/fix/1.8.5-css-collapse",
+      "version": "1.8.5"
+    },
+    {
+      "ref": "origin/fix/1.8.5-promote-no-styles",
+      "version": "1.8.5"
+    },
+    {
+      "ref": "origin/fix/1.8.6-unlayer-css",
+      "version": "1.8.6"
+    },
+    {
+      "ref": "origin/fix/accessibility-and-assets-p1",
+      "version": "1.5.0"
+    },
+    {
+      "ref": "origin/fix/analytics-loader",
+      "version": "1.9.31"
+    },
+    {
+      "ref": "origin/fix/blog-conversion-p1-issues",
+      "version": "1.5.0"
+    },
+    {
+      "ref": "origin/fix/chrome-mega-footer-search",
+      "version": "1.8.0"
+    },
+    {
+      "ref": "origin/fix/chrome-siteshell-182",
+      "version": "1.8.2"
+    },
+    {
+      "ref": "origin/fix/classic-leftover-unmatched-pages",
+      "version": "1.9.32"
+    },
+    {
+      "ref": "origin/fix/codeant-98-104",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/fix/desktop-header-skip",
+      "version": "1.7.9"
+    },
+    {
+      "ref": "origin/fix/empty-builder-manual-ownership",
+      "version": "1.6.5"
+    },
+    {
+      "ref": "origin/fix/empty-builder-manual-ownership-v2",
+      "version": "1.7.7"
+    },
+    {
+      "ref": "origin/fix/frontend-html-parity",
+      "version": "1.6.5"
+    },
+    {
+      "ref": "origin/fix/homepage-nine-six-faq-mega-184",
+      "version": "1.8.4"
+    },
+    {
+      "ref": "origin/fix/html-chrome-1.6.6",
+      "version": "1.7.5"
+    },
+    {
+      "ref": "origin/fix/issue-425-migrator-parse",
+      "version": "1.7.8"
+    },
+    {
+      "ref": "origin/fix/layout-mega-motion-183",
+      "version": "1.8.3"
+    },
+    {
+      "ref": "origin/fix/main-nav-dropdown-accessibility",
+      "version": "1.6.1"
+    },
+    {
+      "ref": "origin/fix/manual-provenance-shortcode-meta",
+      "version": "1.6.6"
+    },
+    {
+      "ref": "origin/fix/migrator-admin-only-react-shell",
+      "version": "1.8.1"
+    },
+    {
+      "ref": "origin/fix/mobile-responsiveness-audit",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/fix/nav-dropdown-v2",
+      "version": "1.7.5"
+    },
+    {
+      "ref": "origin/fix/post-layout-1.8.7",
+      "version": "1.8.7"
+    },
+    {
+      "ref": "origin/fix/pr400-finish-remaining-migrations",
+      "version": "1.7.6"
+    },
+    {
+      "ref": "origin/fix/release-readiness-1.6",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/fix/release-readiness-canonical",
+      "version": "1.5.0"
+    },
+    {
+      "ref": "origin/fix/remediation-235cd1fc-9973de",
+      "version": "1.6.2"
+    },
+    {
+      "ref": "origin/fix/remediation-29b9608e-efb781",
+      "version": "1.6.6"
+    },
+    {
+      "ref": "origin/fix/remediation-3be47790-aa1bae",
+      "version": "1.6.4"
+    },
+    {
+      "ref": "origin/fix/remediation-3ff9339c-398674",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/fix/remediation-42f87ed0-e3bfe5",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/fix/remediation-443b866a-7d1a2d",
+      "version": "1.9.0"
+    },
+    {
+      "ref": "origin/fix/remediation-448fdd41-81ce71",
+      "version": "1.9.5"
+    },
+    {
+      "ref": "origin/fix/remediation-50c76987-2d0b1f",
+      "version": "1.9.1"
+    },
+    {
+      "ref": "origin/fix/remediation-6d6bf295-e6d146",
+      "version": "1.9.1"
+    },
+    {
+      "ref": "origin/fix/remediation-7eb4f75e-c32d56",
+      "version": "1.6.2"
+    },
+    {
+      "ref": "origin/fix/remediation-8f01e276-28a67f",
+      "version": "1.9.32"
+    },
+    {
+      "ref": "origin/fix/remediation-9e9e9488-345c8a",
+      "version": "1.6.1"
+    },
+    {
+      "ref": "origin/fix/remediation-a3849c12-acaa58",
+      "version": "1.6.5"
+    },
+    {
+      "ref": "origin/fix/remediation-c74d68b1-19f085",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/fix/remediation-cc25fe11-20f3ee",
+      "version": "1.6.3"
+    },
+    {
+      "ref": "origin/fix/remediation-ebdfc03c-b2dc5c",
+      "version": "1.6.5"
+    },
+    {
+      "ref": "origin/fix/remediation-fa52fb65-a9b955",
+      "version": "1.6.6"
+    },
+    {
+      "ref": "origin/fix/remediation-fb8bd6ad-6f7a2c",
+      "version": "1.8.8"
+    },
+    {
+      "ref": "origin/fix/rtl-mega-leftover-ai-1.9.4",
+      "version": "1.9.4"
+    },
+    {
+      "ref": "origin/fix/seed-184-service-pages",
+      "version": "1.8.4"
+    },
+    {
+      "ref": "origin/gh-pages",
+      "version": null
+    },
+    {
+      "ref": "origin/honest-zenith-4607",
+      "version": "1.6.1"
+    },
+    {
+      "ref": "origin/main",
+      "version": "1.9.31"
+    },
+    {
+      "ref": "origin/modifications",
+      "version": "1.9.6"
+    },
+    {
+      "ref": "origin/pr456",
+      "version": "1.9.31"
+    },
+    {
+      "ref": "origin/pr457",
+      "version": "1.9.31"
+    },
+    {
+      "ref": "origin/refactor/blog-field-save",
+      "version": "1.6.0"
+    },
+    {
+      "ref": "origin/refactor/php-maintainability-batch",
+      "version": "1.6.2"
+    },
+    {
+      "ref": "origin/seo/internal-links-20261110",
+      "version": "1.9.31"
+    },
+    {
+      "ref": "origin/seo/teznevise-onpage-20261110",
+      "version": "1.9.31"
+    },
+    {
+      "ref": "origin/v0/teznevise-2429c1bc",
+      "version": "1.8.8"
+    }
+  ]
+}
