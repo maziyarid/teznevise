@@ -593,7 +593,7 @@ function teznevise_migration_default_home_sections() {
 			'eyebrow'    => __( 'تزنویسه', 'teznevise' ),
 			'title'      => __( 'به تزنویسه خوش آمدید', 'teznevise' ),
 			'text'       => __( 'سیستم جامع تحلیل آماری و خدمات پژوهشی', 'teznevise' ),
-			'cta_text'   => __( 'شروع مشاوره رایگان', 'teznevise' ),
+			'cta_text'   => __( 'ثبت درخواست', 'teznevise' ),
 			'cta_url'    => '/inquiry/',
 			'background' => 'default',
 			'items'      => array(
@@ -612,14 +612,14 @@ function teznevise_migration_default_home_sections() {
 			'background' => 'default',
 			'items'      => array(
 				array(
-					'title' => __( 'مشاوره انجام پایان‌نامه', 'teznevise' ),
+					'title' => __( 'انجام پایان نامه', 'teznevise' ),
 					'text'  => __( 'از انتخاب موضوع تا دفاع', 'teznevise' ),
 					'icon'  => 'fa-solid fa-graduation-cap',
 					'color' => 'icon-indigo',
 					'url'   => '/service-thesis/',
 				),
 				array(
-					'title' => __( 'مشاوره انجام پروپوزال', 'teznevise' ),
+					'title' => __( 'انجام پروپوزال', 'teznevise' ),
 					'text'  => __( 'بیان مسئله و روش‌شناسی', 'teznevise' ),
 					'icon'  => 'fa-solid fa-file-circle-check',
 					'color' => 'icon-teal',
@@ -704,6 +704,25 @@ function teznevise_migration_get_candidate_pages() {
  * @param bool $force_replace  Administrator opt-in to overwrite existing builder JSON.
  * @return array
  */
+/** Require an owner-recorded legal review before a bulk import can write. */
+function teznevise_migration_legal_review_ready() {
+	$file = TEZNEVISE_DIR . '/seo/20261110/content/manifest.json';
+	if ( ! is_readable( $file ) ) {
+		return false;
+	}
+	$manifest = json_decode( file_get_contents( $file ), true );
+	if ( ! is_array( $manifest ) || empty( $manifest['pages'] ) ) {
+		return false;
+	}
+	foreach ( $manifest['pages'] as $page ) {
+		$review = $page['legal_review'] ?? array();
+		if ( 'done' !== ( $review['status'] ?? '' ) || 'Maziyar' !== ( $review['reviewed_by'] ?? '' ) || empty( $review['reviewed_at'] ) || empty( $review['approval_reference'] ) ) {
+			return false;
+		}
+	}
+	return true;
+}
+
 function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = false, $seed_tools = false, $force_replace = false ) {
 	$stats = array(
 		'processed'   => 0,
@@ -714,6 +733,11 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 		'errors'      => array(),
 		'dry_run'     => (bool) $dry_run,
 	);
+
+	if ( ! $dry_run && ! teznevise_migration_legal_review_ready() ) {
+		$stats['errors'][] = 'Legal review is not done; no import writes are allowed.';
+		return $stats;
+	}
 
 	if ( ! function_exists( 'teznevise_builder_save_sections' ) ) {
 		$stats['errors'][] = 'Builder module not loaded.';
@@ -728,7 +752,7 @@ function teznevise_migration_run( $dry_run = true, $limit = 0, $strip_codes = fa
 		$offset = 0;
 		if ( $limit > 0 ) {
 			$offset = (int) get_option( TEZNEVISE_EXTRACTED_CURSOR_OPTION, 0 );
-		} else {
+		} elseif ( ! $dry_run ) {
 			delete_option( TEZNEVISE_EXTRACTED_CURSOR_OPTION );
 		}
 		$extracted = teznevise_apply_extracted_to_pages( (bool) $force_replace, (bool) $dry_run, $limit, $offset );

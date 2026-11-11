@@ -1,0 +1,66 @@
+build_order,wave,id,path,type,primary_parent,secondary_parent,input_notes,legal_review,publishable
+1,0,W0-HOME,/,wave0-control,/,,Wave 0 audit/value preparation only; no page body changes or WordPress writes.,not done,false
+2,0,W0-ABOUT-US,/about-us/,wave0-control,/,,Wave 0 audit/value preparation only; no page body changes or WordPress writes.,not done,false
+3,0,W0-MASTER-RESOURCE,/download/masters-research-methods-guide/,download-resource,/downloads/,/thesis/,Existing resource. Relationship/cross-links are proposals only; no content written or WordPress update.,not done,false
+4,0,W0-CONTACT-US,/contact-us/,wave0-control,/,,Wave 0 audit/value preparation only; no page body changes or WordPress writes.,not done,false
+5,0,W0-INQUIRY,/inquiry/,wave0-control,/,,Wave 0 audit/value preparation only; no page body changes or WordPress writes.,not done,false
+6,1,M-SERVICE-PROJECT,/service-project/,money,/,,Existing live page: repo replacement only. Master: new draft/redirect decision held.,not done,false
+7,1,M-PROPOSAL,/proposal/,money,/,,Existing live page: repo replacement only. Master: new draft/redirect decision held.,not done,false
+8,1,M-PROPOSAL-PHD,/proposal/phd/,money,/proposal/,,Existing live page: repo replacement only. Master: new draft/redirect decision held.,not done,false
+9,1,M-THESIS,/thesis/,money,/,,Existing live page: repo replacement only. Master: new draft/redirect decision held.,not done,false
+10,1,M-THESIS-MASTER,/thesis/master/,money,/thesis/,,Existing live page: repo replacement only. Master: new draft/redirect decision held.,not done,false
+11,1,M-THESIS-PHD,/thesis/phd/,money,/thesis/,,Existing live page: repo replacement only. Master: new draft/redirect decision held.,not done,false
+12,1,P-CHEMENG,/project/engineering/chemical-industrial/chemical-engineering-project/,project,/service-project/,/service-simulation/,No page body written. Sample and wave approvals required.,not done,false
+13,1,P-RPYTHON,/project/programming/languages/r-programming/,project,/service-project/,/service-statistics/,No page body written. Sample and wave approvals required.,not done,false
+14,1,P-CISCO,/project/simulation/network/cisco-packet-tracer/,project,/service-project/,/service-simulation/,No page body written. Sample and wave approvals required.,not done,false
+15,1,P-SIGNAL,/project/programming/ai-data/signal-processing-matlab/,project,/service-project/,/project/engineering/electrical/,No page body written. Sample and wave approvals required.,not done,false
+16,1,P-HYSYS,/project/simulation/chemical-process/aspen-hysys/,project,/service-project/,/service-simulation/,No page body written. Sample and wave approvals required.,not done,false
+17,1,P-VHDL,/project/programming/hardware/vhdl/,project,/service-project/,/project/engineering/electrical/,No page body written. Sample and wave approvals required.,not done,false
+18,1,P-BACHELOR,/project/student-research/university-projects/bachelor-project/,project,/service-project/,/proposal/,"INFERENCE: bachelor-only intent. Exclude master query evidence and targeting. Secondary parent is the research-plan guide, not the unpublished master guide.",not done,false
+19,1,P-PROTEUS,/project/simulation/electrical/proteus/,project,/service-project/,/project/engineering/electrical/,No page body written. Sample and wave approvals required.,not done,false
+20,1,P-ELEC,/project/engineering/electrical/,project,/service-project/,/service-simulation/,INFERENCE: electrical course hub; signal-query ownership belongs only to P-SIGNAL. Secondary parent is the simulation hub.,not done,false
+21,1,P-EES,/project/engineering/electrical/ees/,project,/service-project/,/service-simulation/,No page body written. Sample and wave approvals required.,not done,false
+22,1,P-ECONOMETRICS,/project/engineering/chemical-industrial/econometrics-project/,project,/service-project/,/service-statistics/,No page body written. Sample and wave approvals required.,not done,false
+23,1,P-HSPICE,/project/programming/hardware/hspice/,project,/service-project/,/service-simulation/,No page body written. Sample and wave approvals required.,not done,false
+24,1,T-ELEC,/thesis/engineering/electrical/,field,/thesis/,/thesis/engineering/,No page body written. Sample and wave approvals required.,not done,false
+25,2,P-AERO,/project/engineering/mechanical-civil/aerospace-project/,project,/service-project/,/service-simulation/,No page body written. Sample and wave approvals required.,not done,false
+26,2,P-OPENSEES,/project/engineering/mechanical-civil/opensees/,project,/service-project/,/service-simulation/,No page body written. Sample and wave approvals required.,not done,false
+27,2,P-PLAXIS,/project/engineering/mechanical-civil/plaxis/,project,/service-project/,/service-simulation/,No page body written. Sample and wave approvals required.,not done,false
+28,2,P-SILVACO,/project/programming/hardware/silvaco/,project,/service-project/,/service-simulation/,FACT: Aspen query evidence was incorrectly grouped with Silvaco. Removed from this page; HYPOTHESIS: Aspen-family intent. HYSYS vs Aspen Plus attribution remains نیاز به تایید مازیار.,not done,false
+29,2,P-HECRAS,/project/simulation/hydrology/hec-ras/,project,/service-project/,/service-simulation/,No page body written. Sample and wave approvals required.,not done,false
+30,2,P-SPSS,/project/statistics/general-statistics/ibm-spss-statistics/,project,/service-project/,/service-statistics/,No page body written. Sample and wave approvals required.,not done,false
+31,2,E-THESIS-AGRICULTURE-NATURAL-RESOURCES,/thesis/agriculture-natural-resources/,field,/thesis/,,Existing URL retained. No replacement body written.,not done,false
+32,2,E-THESIS-ANIMAL-SCIENCE-VETERINARY,/thesis/animal-science-veterinary/,field,/thesis/,,Existing URL retained. No replacement body written.,not done,false
+33,2,E-THESIS-ART-ARCHITECTURE-MEDIA,/thesis/art-architecture-media/,field,/thesis/,,Existing URL retained. No replacement body written.,not done,false
+34,2,E-THESIS-ENGINEERING,/thesis/engineering/,field,/thesis/,,Existing URL retained. No replacement body written.,not done,false
+35,2,T-CHEM,/thesis/engineering/chemical/,field,/thesis/,/thesis/engineering/,No page body written. Sample and wave approvals required.,not done,false
+36,2,T-CIVIL,/thesis/engineering/civil/,field,/thesis/,/thesis/engineering/,No page body written. Sample and wave approvals required.,not done,false
+37,2,T-CS,/thesis/engineering/computer/,field,/thesis/,/thesis/engineering/,No page body written. Sample and wave approvals required.,not done,false
+38,2,T-IND,/thesis/engineering/industrial/,field,/thesis/,/thesis/engineering/,No page body written. Sample and wave approvals required.,not done,false
+39,2,T-MECH,/thesis/engineering/mechanical/,field,/thesis/,/thesis/engineering/,No page body written. Sample and wave approvals required.,not done,false
+40,2,E-THESIS-HUMANITIES,/thesis/humanities/,field,/thesis/,,Existing URL retained. No replacement body written.,not done,false
+41,2,T-ECON,/thesis/humanities/economics/,field,/thesis/,/thesis/humanities/,No page body written. Sample and wave approvals required.,not done,false
+42,2,E-THESIS-HUMANITIES-HISTORY,/thesis/humanities/history/,field,/thesis/,/thesis/humanities/,Existing URL retained. No replacement body written.,not done,false
+43,2,E-THESIS-HUMANITIES-LAW,/thesis/humanities/law/,field,/thesis/,/thesis/humanities/,Existing URL retained. No replacement body written.,not done,false
+44,2,E-THESIS-HUMANITIES-MANAGEMENT,/thesis/humanities/management/,field,/thesis/,/thesis/humanities/,Existing URL retained. No replacement body written.,not done,false
+45,2,E-THESIS-HUMANITIES-PHILOSOPHY,/thesis/humanities/philosophy/,field,/thesis/,/thesis/humanities/,Existing URL retained. No replacement body written.,not done,false
+46,2,E-THESIS-HUMANITIES-PSYCHOLOGY,/thesis/humanities/psychology/,field,/thesis/,/thesis/humanities/,Existing URL retained. No replacement body written.,not done,false
+47,2,E-THESIS-HUMANITIES-SOCIAL-SCIENCES,/thesis/humanities/social-sciences/,field,/thesis/,/thesis/humanities/,Existing URL retained. No replacement body written.,not done,false
+48,2,E-THESIS-INTERDISCIPLINARY,/thesis/interdisciplinary/,field,/thesis/,,Existing URL retained. No replacement body written.,not done,false
+49,2,E-THESIS-INTERNATIONAL,/thesis/international/,field,/thesis/,,Existing URL retained. No replacement body written.,not done,false
+50,2,E-THESIS-MEDICAL-HEALTH,/thesis/medical-health/,field,/thesis/,,Existing URL retained. No replacement body written.,not done,false
+51,2,E-THESIS-PURE-SCIENCE,/thesis/pure-science/,field,/thesis/,,Existing URL retained. No replacement body written.,not done,false
+52,3,P-GAMS,/gams/,project,/service-project/,/thesis/engineering/industrial/,"INFERENCE: existing thin GAMS expansion is assigned ONLY to wave 3, resolving the earlier wave-1/wave-3 duplication. Secondary link is industrial optimization context.",not done,false
+53,3,P-UML,/project/assignments/computer-science/uml-diagrams/,project,/service-project/,/thesis/engineering/computer/,INFERENCE: secondary computer-science research guide; primary remains the student-project hub.,not done,false
+54,3,P-MATLAB,/project/simulation/electrical/matlab-simulink/,project,/service-project/,/service-simulation/,No page body written. Sample and wave approvals required.,not done,false
+55,3,P-AMOS,/project/statistics/sem/amos/,project,/service-project/,/service-statistics/,No page body written. Sample and wave approvals required.,not done,false
+56,3,P-SMARTPLS,/project/statistics/sem/smart-pls/,project,/service-project/,/service-statistics/,No page body written. Sample and wave approvals required.,not done,false
+57,3,E-PROPOSAL-APPLIED-RESEARCH,/proposal/applied-research/,proposal-child,/proposal/,,Existing child discovered through authenticated REST. No proposal-by-major page is created; assess missing sections and usefulness before deciding scope.,not done,false
+58,3,E-PROPOSAL-ENGLISH,/proposal/english/,proposal-child,/proposal/,,Existing child discovered through authenticated REST. No proposal-by-major page is created; assess missing sections and usefulness before deciding scope.,not done,false
+59,3,E-PROPOSAL-MEDICAL,/proposal/medical/,proposal-child,/proposal/,,Existing child discovered through authenticated REST. No proposal-by-major page is created; assess missing sections and usefulness before deciding scope.,not done,false
+60,3,E-PROPOSAL-PROJECT,/proposal/project/,proposal-child,/proposal/,,Existing child discovered through authenticated REST. No proposal-by-major page is created; assess missing sections and usefulness before deciding scope.,not done,false
+61,3,E-PROPOSAL-QUALITATIVE,/proposal/qualitative/,proposal-child,/proposal/,,Existing child discovered through authenticated REST. No proposal-by-major page is created; assess missing sections and usefulness before deciding scope.,not done,false
+62,3,E-PROPOSAL-QUANTITATIVE,/proposal/quantitative/,proposal-child,/proposal/,,Existing child discovered through authenticated REST. No proposal-by-major page is created; assess missing sections and usefulness before deciding scope.,not done,false
+63,3,T-ACCT,/thesis/humanities/accounting/,field,/thesis/,/thesis/humanities/,No page body written. Sample and wave approvals required.,not done,false
+64,3,T-EDU,/thesis/humanities/education/,field,/thesis/,/thesis/humanities/,No page body written. Sample and wave approvals required.,not done,false
+65,3,T-THEO,/thesis/humanities/theology-islamic-studies/,field,/thesis/,/thesis/humanities/,No page body written. Sample and wave approvals required.,not done,false

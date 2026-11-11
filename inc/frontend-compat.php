@@ -424,8 +424,8 @@ function teznevise_render_native_lead_form( $context = 'contact' ) {
 				<label for="tz-service-<?php echo esc_attr( $uid ); ?>"><?php esc_html_e( 'نوع خدمت', 'teznevise' ); ?></label>
 				<select id="tz-service-<?php echo esc_attr( $uid ); ?>" name="service">
 					<option value="<?php echo esc_attr( $title ); ?>"><?php echo esc_html( $title ); ?></option>
-					<option value="پایان‌نامه"><?php esc_html_e( 'مشاوره انجام پایان‌نامه', 'teznevise' ); ?></option>
-					<option value="پروپوزال"><?php esc_html_e( 'مشاوره انجام پروپوزال', 'teznevise' ); ?></option>
+					<option value="پایان‌نامه"><?php esc_html_e( 'انجام پایان نامه', 'teznevise' ); ?></option>
+					<option value="پروپوزال"><?php esc_html_e( 'انجام پروپوزال', 'teznevise' ); ?></option>
 					<option value="تحلیل آماری"><?php esc_html_e( 'تحلیل آماری', 'teznevise' ); ?></option>
 					<option value="شبیه‌سازی"><?php esc_html_e( 'شبیه‌سازی', 'teznevise' ); ?></option>
 				</select>
@@ -581,7 +581,7 @@ function teznevise_render_hero_orbit( $cta_url = '' ) {
 	$url = $cta_url ? teznevise_url( $cta_url ) : ( function_exists( 'teznevise_url' ) ? teznevise_url( teznevise_mod( 'hero_btn_primary_url' ) ) : home_url( '/inquiry/' ) );
 	ob_start();
 	?>
-	<div class="hero-visual tz-hero-orbit" aria-label="<?php esc_attr_e( 'نمایی از مسیر مشاوره تزنویسه', 'teznevise' ); ?>">
+	<div class="hero-visual tz-hero-orbit" aria-label="<?php esc_attr_e( 'نمایی از مسیر پژوهش تزنویسه', 'teznevise' ); ?>">
 		<div class="ink-blot blot-one" aria-hidden="true"></div>
 		<div class="ink-blot blot-two" aria-hidden="true"></div>
 		<div class="ink-blot blot-three" aria-hidden="true"></div>
@@ -590,7 +590,7 @@ function teznevise_render_hero_orbit( $cta_url = '' ) {
 			<div class="network-ring ring-one" aria-hidden="true"></div>
 			<div class="network-ring ring-two" aria-hidden="true"></div>
 			<div class="network-ring ring-three" aria-hidden="true"></div>
-			<a class="hero-order-button" href="<?php echo esc_url( $url ); ?>" aria-label="<?php esc_attr_e( 'ثبت درخواست مشاوره', 'teznevise' ); ?>">
+			<a class="hero-order-button" href="<?php echo esc_url( $url ); ?>" aria-label="<?php esc_attr_e( 'ثبت درخواست', 'teznevise' ); ?>">
 				<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
 				<span><?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></span>
 			</a>
@@ -782,6 +782,7 @@ function teznevise_render_service_fallback( $title, $tag = '' ) {
 					<p class="service-lead"><?php echo esc_html( $copy['lead'] ); ?></p>
 					<div class="hero-actions">
 						<a class="btn-tz btn-primary-tz btn-lg-tz" href="<?php echo esc_url( home_url( '/inquiry/' ) ); ?>"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> <?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></a>
+						<?php get_template_part( 'template-parts/enamad-trust' ); ?>
 						<a class="btn-tz btn-light-tz btn-lg-tz" href="<?php echo esc_attr( function_exists( 'teznevise_tel_href' ) ? teznevise_tel_href( $tel ? $tel : $phone ) : 'tel:+989302822091' ); ?>"><i class="fa-solid fa-phone" aria-hidden="true"></i> <?php echo esc_html( $phone ); ?></a>
 					</div>
 					<div class="service-bullets">
@@ -792,7 +793,7 @@ function teznevise_render_service_fallback( $title, $tag = '' ) {
 				</div>
 				<div class="lead-card" id="consult">
 					<div class="lead-card-head">
-						<h3><?php esc_html_e( 'درخواست مشاوره رایگان', 'teznevise' ); ?></h3>
+						<h3><?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></h3>
 						<p><?php esc_html_e( 'اطلاعات اولیه را وارد کنید تا موضوع و نیاز شما بررسی شود.', 'teznevise' ); ?></p>
 					</div>
 					<?php echo teznevise_render_native_lead_form( 'hub-' . sanitize_html_class( (string) $tag ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>

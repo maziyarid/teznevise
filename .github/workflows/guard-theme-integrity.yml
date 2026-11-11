@@ -21,6 +21,12 @@ jobs:
           php-version: '8.3'
           coverage: none
 
+      - name: Verify schema ownership and legal import refusal
+        run: |
+          php scripts/seo-20261110/test-schema-owner.php
+          php scripts/seo-20261110/test-trust-reference.php
+          php scripts/seo-20261110/test-migration-legal.php
+
       - name: Lint every PHP file for syntax errors
         run: |
           status=0
@@ -161,3 +167,61 @@ jobs:
             if (trim($fresh) !== "Hi") { fwrite(STDERR, "short owned content was overwritten\n"); exit(1); }
             echo "importer preserved short owned content\n";
           '
+
+      - name: Start existing isolated WordPress for the blocking render gate
+        run: |
+          PHP_CLI_SERVER_WORKERS=4 WP_TEST_ROOT=/tmp/wordpress php -S 127.0.0.1:8089 -t /tmp/wordpress theme-src/scripts/seo-20261110/local-router.php > /tmp/wp-render.log 2>&1 &
+          python3 - <<'PY'
+          import time, urllib.request
+          for attempt in range(20):
+              try:
+                  urllib.request.urlopen('http://127.0.0.1:8089/', timeout=5).read()
+                  break
+              except OSError:
+                  time.sleep(1)
+          else:
+              raise SystemExit('Local WordPress did not become ready')
+          PY
+      - name: Blocking local rendered gate including sitemap
+        working-directory: theme-src
+        run: python3 scripts/seo-20261110/verify_content.py --tier local --base-url http://127.0.0.1:8089 --crawl-sitemap --output local-copy-report.json > local-copy-output.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wave0-local-render
+          path: |
+            theme-src/local-copy-report.json
+            theme-src/local-copy-output.txt
+
+  wave0-repo-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test strict copy and downgrade gates
+        run: |
+          python3 scripts/seo-20261110/test_verify_content.py
+          python3 scripts/seo-20261110/test_deploy_version.py
+          python3 scripts/seo-20261110/validate_inputs.py
+      - name: Blocking repository strings gate
+        run: python3 scripts/seo-20261110/verify_content.py --tier repo --output repo-copy-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wave0-repo-gate
+          path: repo-copy-report.json
+
+  wave0-production-report:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Report production sitemap and required pages (never blocking)
+        continue-on-error: true
+        run: python3 scripts/seo-20261110/verify_content.py --tier production --base-url https://teznevise.ir --crawl-sitemap --output production-copy-report.json > production-copy-output.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wave0-production-report
+          path: |
+            production-copy-report.json
+            production-copy-output.txt

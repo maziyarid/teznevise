@@ -345,11 +345,14 @@ function teznevise_schema_data() {
 }
 
 function teznevise_output_schema() {
+	if ( defined( 'RANK_MATH_VERSION' ) || defined( 'WPSEO_VERSION' ) ) {
+		return; // One schema owner: the active SEO plugin.
+	}
 	$data = teznevise_schema_data();
 	if ( empty( $data ) ) {
 		return;
 	}
-	echo '<script type="application/ld+json">' . wp_json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+	echo '<script type="application/ld+json">' . wp_json_encode( teznevise_organization_trust_reference( $data ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
 }
 add_action( 'wp_head', 'teznevise_output_schema', 20 );
 
@@ -554,22 +557,19 @@ function teznevise_filter_document_title( $title ) {
 	$core  = trim( (string) preg_replace( '/\s*[-|–]\s*' . preg_quote( $site, '/' ) . '\s*$/u', '', $title ) );
 	$short = ( function_exists( 'mb_strlen' ) ? mb_strlen( $core ) : strlen( $core ) ) < 10;
 	if ( is_front_page() && ( $short || 'خانه' === $core ) ) {
-		return 'مشاوره پایان‌نامه، پروپوزال و تحلیل آماری | ' . $site;
+		return 'گروه پژوهشی تزنویسه | راهنما، ابزار آماری و فرم دانشگاه ها';
 	}
 	if ( is_home() && ( $short || 'بلاگ' === $core ) ) {
 		return 'راهنماها و آموزش‌های پژوهشی | بلاگ ' . $site;
 	}
 	$map = array(
-		'ثبت سفارش'     => 'ثبت درخواست مشاوره پژوهشی',
+		'ثبت سفارش'     => 'ثبت درخواست پژوهشی',
 		'آزمون t'       => 'محاسبه‌گر آزمون t آنلاین',
 		'رگرسیون'       => 'محاسبه‌گر تحلیل رگرسیون آنلاین',
-		'تحلیل کیفی'    => 'مشاوره تحلیل کیفی پژوهش',
 		'تحلیل آماری'   => 'تحلیل آماری تخصصی پژوهش',
 		'شبیه‌سازی'     => 'شبیه‌سازی تخصصی مهندسی و پژوهش',
 		'دانلودها'      => 'دانلود قالب و فایل‌های پژوهشی',
 		'درباره ما'     => 'درباره تزنویسه، همراه پژوهشی دانشجویان',
-		'انجام پروژه دانشجویی' => 'مشاوره پروژه دانشجویی',
-		'انجام مقاله'   => 'مشاوره نگارش مقاله',
 	);
 	if ( isset( $map[ $core ] ) ) {
 		return $map[ $core ] . ' | ' . $site;
@@ -591,7 +591,7 @@ function teznevise_filter_metadesc( $desc ) {
 		return $desc;
 	}
 	if ( is_front_page() ) {
-		return 'تزنویسه همراه پژوهشی دانشجویان است: مشاوره پایان‌نامه و پروپوزال، تحلیل آماری و ابزارهای آنلاین رایگان.';
+		return 'گروه پژوهشی تزنویسه؛ راهنمای مسیر پژوهش، ماشین حساب های آنلاین آمار، فرم و قالب دانشگاه ها و مقاله های آموزشی برای دانشجویان تحصیلات تکمیلی.';
 	}
 	if ( is_home() ) {
 		return 'راهنماها و آموزش‌های پژوهشی تزنویسه: موضوع، پروپوزال، فصل‌های پایان‌نامه و روش تحقیق.';
@@ -602,17 +602,13 @@ function teznevise_filter_metadesc( $desc ) {
 		if ( '' === $excerpt ) {
 			$excerpt = trim( wp_strip_all_tags( (string) get_post_field( 'post_content', $id ) ) );
 		}
-		if ( function_exists( 'teznevise_consult_copy' ) ) {
-			$excerpt = teznevise_consult_copy( $excerpt );
-		}
+
 		$excerpt = preg_replace( '/\s+/u', ' ', $excerpt );
 		if ( is_string( $excerpt ) && ( function_exists( 'mb_strlen' ) ? mb_strlen( $excerpt ) : strlen( $excerpt ) ) >= 40 ) {
 			return wp_trim_words( $excerpt, 32, '' );
 		}
 		$fallback = trim( wp_strip_all_tags( (string) get_the_title( $id ) ) );
-		if ( function_exists( 'teznevise_consult_copy' ) ) {
-			$fallback = teznevise_consult_copy( $fallback );
-		}
+
 		if ( '' !== $fallback ) {
 			return $fallback . ' | ' . get_bloginfo( 'name' );
 		}
@@ -778,9 +774,12 @@ function teznevise_split_faq_blocks( $html ) {
 }
 
 /**
- * FAQPage JSON-LD from collected pairs. Always emitted (Yoast does not add this).
+ * FAQPage JSON-LD from collected pairs. Optional; emitted only when the theme owns schema.
  */
 function teznevise_output_faq_schema() {
+	if ( defined( 'RANK_MATH_VERSION' ) || defined( 'WPSEO_VERSION' ) ) {
+		return; // One schema owner: the active SEO plugin.
+	}
 	$pairs = isset( $GLOBALS['teznevise_faq_pairs'] ) && is_array( $GLOBALS['teznevise_faq_pairs'] ) ? $GLOBALS['teznevise_faq_pairs'] : array();
 	if ( count( $pairs ) < 2 ) {
 		return;
@@ -810,7 +809,7 @@ function teznevise_output_faq_schema() {
 		'@type'      => 'FAQPage',
 		'mainEntity' => $ent,
 	);
-	echo '<script type="application/ld+json">' . wp_json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo '<script type="application/ld+json">' . wp_json_encode( teznevise_organization_trust_reference( $payload ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action( 'wp_footer', 'teznevise_output_faq_schema', 22 );
 
@@ -818,18 +817,21 @@ add_action( 'wp_footer', 'teznevise_output_faq_schema', 22 );
  * Service JSON-LD on consulting landings. Review schema is omitted (testimonials use initials).
  */
 function teznevise_output_service_schema() {
+	if ( defined( 'RANK_MATH_VERSION' ) || defined( 'WPSEO_VERSION' ) ) {
+		return; // One schema owner: the active SEO plugin.
+	}
 	if ( ! is_page() ) {
 		return;
 	}
 	$slug = get_post_field( 'post_name', get_queried_object_id() );
 	$map  = array(
-		'thesis'              => array( 'name' => 'مشاوره انجام پایان‌نامه', 'url' => home_url( '/thesis/' ) ),
-		'proposal'            => array( 'name' => 'مشاوره انجام پروپوزال', 'url' => home_url( '/proposal/' ) ),
+		'thesis'              => array( 'name' => 'انجام پایان نامه', 'url' => home_url( '/thesis/' ) ),
+		'proposal'            => array( 'name' => 'انجام پروپوزال', 'url' => home_url( '/proposal/' ) ),
 		'service-statistics'  => array( 'name' => 'تحلیل آماری', 'url' => home_url( '/service-statistics/' ) ),
 		'service-simulation'  => array( 'name' => 'شبیه‌سازی', 'url' => home_url( '/service-simulation/' ) ),
 		'service-qualitative' => array( 'name' => 'تحلیل کیفی', 'url' => home_url( '/service-qualitative/' ) ),
-		'service-project'     => array( 'name' => 'مشاوره پروژه دانشجویی', 'url' => home_url( '/service-project/' ) ),
-		'service-article'     => array( 'name' => 'مشاوره نگارش مقاله', 'url' => home_url( '/service-article/' ) ),
+		'service-project'     => array( 'name' => 'پروژه های دانشجویی', 'url' => home_url( '/service-project/' ) ),
+		'service-article'     => array( 'name' => 'بازبینی مقاله پژوهشی', 'url' => home_url( '/service-article/' ) ),
 	);
 	if ( ! isset( $map[ $slug ] ) ) {
 		return;
@@ -848,7 +850,7 @@ function teznevise_output_service_schema() {
 		'areaServed'  => 'IR',
 		'serviceType' => $row['name'],
 	);
-	echo '<script type="application/ld+json">' . wp_json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo '<script type="application/ld+json">' . wp_json_encode( teznevise_organization_trust_reference( $payload ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action( 'wp_footer', 'teznevise_output_service_schema', 23 );
 
@@ -909,3 +911,26 @@ function teznevise_lead_nonce_field( $uid = '' ) {
 	}
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
+
+/** Add the observed badge reference without inventing registration details. */
+function teznevise_organization_trust_reference( $data ) {
+	if ( ! is_array( $data ) ) {
+		return $data;
+	}
+	$types = isset( $data['@type'] ) ? (array) $data['@type'] : array();
+	if ( in_array( 'Organization', $types, true ) ) {
+		$same_as = isset( $data['sameAs'] ) ? (array) $data['sameAs'] : array();
+		$same_as[] = 'https://trustseal.enamad.ir/?id=7413817&Code=HcAFYmDgGupv1YV2E6OiOkBVVihO5OpP';
+		$data['sameAs'] = array_values( array_unique( $same_as ) );
+		// TODO Maziyar: registered publisher identifier — نیاز به تایید مازیار.
+		// $data['identifier'] = array( '@type' => 'PropertyValue', 'value' => '' );
+	}
+	foreach ( $data as $key => $value ) {
+		if ( is_array( $value ) ) {
+			$data[ $key ] = teznevise_organization_trust_reference( $value );
+		}
+	}
+	return $data;
+}
+add_filter( 'wpseo_schema_organization', 'teznevise_organization_trust_reference' );
+add_filter( 'rank_math/json_ld', 'teznevise_organization_trust_reference' );

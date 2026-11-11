@@ -1,0 +1,223 @@
+source,target,anchor,anchor_type,source_exact_count,target_state,region,activation,primary_parent
+/service-project/,/,گروه پژوهشی تزنویسه,lsi,0,live200,main,proposal only; patch after target has direct HTTP 200,/
+/service-project/,/inquiry/,درخواست بررسی پروژه,lsi,0,live200,main,proposal only; patch after target has direct HTTP 200,/
+/service-project/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,0,live200,main,proposal only; patch after target has direct HTTP 200,/
+/proposal/,/,گروه پژوهشی تزنویسه,lsi,0,live200,main,proposal only; patch after target has direct HTTP 200,/
+/proposal/,/inquiry/,درخواست بررسی پروژه,lsi,0,live200,main,proposal only; patch after target has direct HTTP 200,/
+/proposal/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,0,live200,main,proposal only; patch after target has direct HTTP 200,/
+/proposal/phd/,/proposal/,انجام پروپوزال,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/phd/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/phd/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/thesis/,/,گروه پژوهشی تزنویسه,lsi,0,live200,main,proposal only; patch after target has direct HTTP 200,/
+/thesis/,/inquiry/,درخواست بررسی پروژه,lsi,0,live200,main,proposal only; patch after target has direct HTTP 200,/
+/thesis/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,0,live200,main,proposal only; patch after target has direct HTTP 200,/
+/thesis/master/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/master/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/master/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/phd/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/phd/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/phd/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/project/engineering/chemical-industrial/chemical-engineering-project/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/chemical-industrial/chemical-engineering-project/,/service-simulation/,راهنمای مدل سازی و شبیه سازی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/chemical-industrial/chemical-engineering-project/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/chemical-industrial/chemical-engineering-project/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/languages/r-programming/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/languages/r-programming/,/service-statistics/,راهنمای تحلیل داده,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/languages/r-programming/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/languages/r-programming/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/network/cisco-packet-tracer/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/network/cisco-packet-tracer/,/service-simulation/,راهنمای مدل سازی و شبیه سازی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/network/cisco-packet-tracer/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/network/cisco-packet-tracer/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/ai-data/signal-processing-matlab/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/ai-data/signal-processing-matlab/,/project/engineering/electrical/,راهنمای حوزه مرتبط,lsi,1,planned,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/ai-data/signal-processing-matlab/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/ai-data/signal-processing-matlab/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/chemical-process/aspen-hysys/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/chemical-process/aspen-hysys/,/service-simulation/,راهنمای مدل سازی و شبیه سازی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/chemical-process/aspen-hysys/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/chemical-process/aspen-hysys/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/vhdl/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/vhdl/,/project/engineering/electrical/,راهنمای حوزه مرتبط,lsi,1,planned,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/vhdl/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/vhdl/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/student-research/university-projects/bachelor-project/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/student-research/university-projects/bachelor-project/,/proposal/,ساختار پیشنهاده پژوهشی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/student-research/university-projects/bachelor-project/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/student-research/university-projects/bachelor-project/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/electrical/proteus/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/electrical/proteus/,/project/engineering/electrical/,راهنمای حوزه مرتبط,lsi,1,planned,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/electrical/proteus/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/electrical/proteus/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/electrical/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/electrical/,/service-simulation/,راهنمای مدل سازی و شبیه سازی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/electrical/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/electrical/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/electrical/ees/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/electrical/ees/,/service-simulation/,راهنمای مدل سازی و شبیه سازی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/electrical/ees/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/electrical/ees/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/chemical-industrial/econometrics-project/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/chemical-industrial/econometrics-project/,/service-statistics/,راهنمای تحلیل داده,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/chemical-industrial/econometrics-project/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/chemical-industrial/econometrics-project/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/hspice/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/hspice/,/service-simulation/,راهنمای مدل سازی و شبیه سازی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/hspice/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/hspice/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/thesis/engineering/electrical/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/electrical/,/thesis/engineering/,پژوهش مهندسی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/electrical/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/electrical/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/project/engineering/mechanical-civil/aerospace-project/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/mechanical-civil/aerospace-project/,/service-simulation/,راهنمای مدل سازی و شبیه سازی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/mechanical-civil/aerospace-project/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/mechanical-civil/aerospace-project/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/mechanical-civil/opensees/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/mechanical-civil/opensees/,/service-simulation/,راهنمای مدل سازی و شبیه سازی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/mechanical-civil/opensees/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/mechanical-civil/opensees/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/mechanical-civil/plaxis/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/mechanical-civil/plaxis/,/service-simulation/,راهنمای مدل سازی و شبیه سازی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/mechanical-civil/plaxis/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/engineering/mechanical-civil/plaxis/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/silvaco/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/silvaco/,/service-simulation/,راهنمای مدل سازی و شبیه سازی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/silvaco/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/programming/hardware/silvaco/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/hydrology/hec-ras/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/hydrology/hec-ras/,/service-simulation/,راهنمای مدل سازی و شبیه سازی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/hydrology/hec-ras/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/hydrology/hec-ras/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/statistics/general-statistics/ibm-spss-statistics/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/statistics/general-statistics/ibm-spss-statistics/,/service-statistics/,راهنمای تحلیل داده,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/statistics/general-statistics/ibm-spss-statistics/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/statistics/general-statistics/ibm-spss-statistics/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/thesis/agriculture-natural-resources/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/agriculture-natural-resources/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/agriculture-natural-resources/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/animal-science-veterinary/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/animal-science-veterinary/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/animal-science-veterinary/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/art-architecture-media/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/art-architecture-media/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/art-architecture-media/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/chemical/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/chemical/,/thesis/engineering/,پژوهش مهندسی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/chemical/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/chemical/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/civil/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/civil/,/thesis/engineering/,پژوهش مهندسی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/civil/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/civil/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/computer/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/computer/,/thesis/engineering/,پژوهش مهندسی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/computer/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/computer/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/industrial/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/industrial/,/thesis/engineering/,پژوهش مهندسی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/industrial/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/industrial/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/mechanical/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/mechanical/,/thesis/engineering/,پژوهش مهندسی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/mechanical/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/engineering/mechanical/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/economics/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/economics/,/thesis/humanities/,پژوهش علوم انسانی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/economics/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/economics/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/history/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/history/,/thesis/humanities/,پژوهش علوم انسانی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/history/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/history/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/law/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/law/,/thesis/humanities/,پژوهش علوم انسانی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/law/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/law/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/management/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/management/,/thesis/humanities/,پژوهش علوم انسانی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/management/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/management/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/philosophy/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/philosophy/,/thesis/humanities/,پژوهش علوم انسانی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/philosophy/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/philosophy/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/psychology/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/psychology/,/thesis/humanities/,پژوهش علوم انسانی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/psychology/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/psychology/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/social-sciences/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/social-sciences/,/thesis/humanities/,پژوهش علوم انسانی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/social-sciences/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/social-sciences/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/interdisciplinary/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/interdisciplinary/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/interdisciplinary/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/international/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/international/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/international/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/medical-health/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/medical-health/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/medical-health/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/pure-science/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/pure-science/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/pure-science/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/gams/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/gams/,/thesis/engineering/industrial/,پژوهش مهندسی صنایع,lsi,1,planned,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/gams/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/gams/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/assignments/computer-science/uml-diagrams/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/assignments/computer-science/uml-diagrams/,/thesis/engineering/computer/,پژوهش مهندسی کامپیوتر,lsi,1,planned,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/assignments/computer-science/uml-diagrams/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/assignments/computer-science/uml-diagrams/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/electrical/matlab-simulink/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/electrical/matlab-simulink/,/service-simulation/,راهنمای مدل سازی و شبیه سازی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/electrical/matlab-simulink/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/simulation/electrical/matlab-simulink/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/statistics/sem/amos/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/statistics/sem/amos/,/service-statistics/,راهنمای تحلیل داده,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/statistics/sem/amos/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/statistics/sem/amos/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/statistics/sem/smart-pls/,/service-project/,انجام پروژه های دانشجویی,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/statistics/sem/smart-pls/,/service-statistics/,راهنمای تحلیل داده,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/statistics/sem/smart-pls/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/project/statistics/sem/smart-pls/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/service-project/
+/proposal/applied-research/,/proposal/,انجام پروپوزال,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/applied-research/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/applied-research/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/english/,/proposal/,انجام پروپوزال,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/english/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/english/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/medical/,/proposal/,انجام پروپوزال,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/medical/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/medical/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/project/,/proposal/,انجام پروپوزال,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/project/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/project/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/qualitative/,/proposal/,انجام پروپوزال,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/qualitative/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/qualitative/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/quantitative/,/proposal/,انجام پروپوزال,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/quantitative/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/proposal/quantitative/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/proposal/
+/thesis/humanities/accounting/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/accounting/,/thesis/humanities/,پژوهش علوم انسانی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/accounting/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/accounting/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/education/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/education/,/thesis/humanities/,پژوهش علوم انسانی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/education/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/education/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/theology-islamic-studies/,/thesis/,انجام پایان نامه,exact,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/theology-islamic-studies/,/thesis/humanities/,پژوهش علوم انسانی,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/theology-islamic-studies/,/inquiry/,درخواست بررسی پروژه,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/humanities/theology-islamic-studies/,/contact-us/,راه های ارتباط و ارسال توضیح,lsi,1,live200,main,proposal only; patch after target has direct HTTP 200,/thesis/
+/thesis/,/thesis/master/,راهنمای مسیر پژوهش ارشد,lsi,0,deferred,main,proposal only; patch after both page approval and final direct HTTP 200,/
+/download/masters-research-methods-guide/,/thesis/master/,مسیر اجرای پژوهش ارشد,lsi,0,deferred,main,proposal only; patch after both page approval and final direct HTTP 200,/downloads/
+/thesis/master/,/download/masters-research-methods-guide/,راهنمای روش تحقیق قابل دریافت,lsi,1,live200,main,proposal only; patch after both page approval and final direct HTTP 200,/thesis/

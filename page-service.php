@@ -35,7 +35,7 @@ while ( have_posts() ) :
 	} else {
 		$eyebrow     = teznevise_page_field( 'eyebrow', 0, __( 'خدمات پژوهشی', 'teznevise' ) );
 		$subtitle   = teznevise_page_field( 'subtitle' );
-		$cta_text   = teznevise_page_field( 'cta_text', 0, __( 'شروع مشاوره رایگان', 'teznevise' ) );
+		$cta_text   = teznevise_page_field( 'cta_text', 0, __( 'ثبت درخواست', 'teznevise' ) );
 		$cta_url    = teznevise_page_field( 'cta_url', 0, '/inquiry/' );
 		$hero_note  = teznevise_page_field( 'hero_note' );
 		$icon       = function_exists( 'teznevise_get_page_icon' ) ? teznevise_get_page_icon() : teznevise_page_field( 'service_icon', 0, 'fa-solid fa-graduation-cap' );
@@ -125,6 +125,7 @@ while ( have_posts() ) :
 				<p><?php esc_html_e( 'موضوع و وضعیت فعلی پروژه را بفرستید؛ مسیر و برآورد اولیه را با شما بررسی می‌کنیم.', 'teznevise' ); ?></p>
 			</div>
 			<a class="btn-tz btn-light-tz btn-lg-tz" href="<?php echo esc_url( teznevise_url( $cta_url ) ); ?>"><?php echo esc_html( $cta_text ); ?></a>
+			<?php get_template_part( 'template-parts/enamad-trust' ); ?>
 		</div>
 	</div>
 </section>

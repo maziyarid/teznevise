@@ -1,0 +1,4 @@
+query,supplied_impressions,removed_from,candidate_owner,status
+انجام پروژه اسپن,51,P-SILVACO,Aspen family; HYSYS vs Aspen Plus UNKNOWN,نیاز به تایید مازیار
+انجام پروژه پردازش سیگنال,56,P-ELEC,P-SIGNAL only,"FACT: deduplicated supplied group, not an independent fresh GSC observation"
+انجام پروژه کارشناسی ارشد,23,P-BACHELOR,degree-intent review; never bachelor targeting,نیاز به تایید مازیار

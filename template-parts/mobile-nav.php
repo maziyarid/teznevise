@@ -25,6 +25,6 @@ if ( empty( $menu_locations['mobile'] ) && ! empty( $menu_locations['primary'] )
 	<div class="mobile-nav-panel">
 		<div class="mobile-nav-header"><span class="mobile-nav-title"><?php esc_html_e( 'منو', 'teznevise' ); ?></span><button type="button" class="mobile-nav-close" aria-label="<?php esc_attr_e( 'بستن منو', 'teznevise' ); ?>" data-menu-close><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
 		<nav class="mobile-nav-links" aria-label="<?php esc_attr_e( 'منوی موبایل', 'teznevise' ); ?>"><?php echo wp_nav_menu( $menu_args ); ?></nav>
-		<div class="mobile-nav-cta"><a class="btn-tz btn-primary-tz" href="<?php echo esc_url( home_url( '/inquiry/' ) ); ?>"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> <?php esc_html_e( 'ثبت درخواست مشاوره', 'teznevise' ); ?></a><a class="btn-tz btn-outline-tz" href="<?php echo esc_url( teznevise_get_contact( 'whatsapp' ) ); ?>"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <?php esc_html_e( 'گفتگو در واتساپ', 'teznevise' ); ?></a></div>
+		<div class="mobile-nav-cta"><a class="btn-tz btn-primary-tz" href="<?php echo esc_url( home_url( '/inquiry/' ) ); ?>"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> <?php esc_html_e( 'ثبت درخواست', 'teznevise' ); ?></a><a class="btn-tz btn-outline-tz" href="<?php echo esc_url( teznevise_get_contact( 'whatsapp' ) ); ?>"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <?php esc_html_e( 'گفتگو در واتساپ', 'teznevise' ); ?></a></div>
 	</div>
 </div>

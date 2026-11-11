@@ -133,6 +133,10 @@ while ( have_posts() ) :
 		<?php
 	endif;
 
+	if ( is_page( 'about-us' ) ) {
+		get_template_part( 'template-parts/enamad-trust' );
+	}
+
 endwhile;
 
 get_footer();

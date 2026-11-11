@@ -46,7 +46,7 @@ const tezneviseSkills = {
         select_tests: {
             name: 'Select Tests',
             description: 'Helps select statistical tests',
-            prompt: 'You are a statistics consultant. Help users select the appropriate statistical test for their data and research question.',
+            prompt: 'You are a statistics teacher. Help users select the appropriate statistical test for their data and research question.',
             temperature: 0.5,
             max_tokens: 1500,
         },
@@ -54,7 +54,7 @@ const tezneviseSkills = {
     teznevise: {
         overview: { name: 'نمای کلی', description: 'نمای کلی مطلب', prompt: 'Write an 80–120 word Persian AI overview.', temperature: 0.4, max_tokens: 700 },
         synthesis: { name: 'جمع‌بندی مناظره', description: 'توافق و گام بعدی', prompt: 'Synthesize the panel in Persian.', temperature: 0.4, max_tokens: 800 },
-        consult_plan: { name: 'برنامه مشاوره', description: 'مسیر مشاوره و ابزار', prompt: 'Propose a consulting plan. Never write the thesis.', temperature: 0.45, max_tokens: 800 },
+        consult_plan: { name: 'برنامه پژوهش', description: 'مسیر پژوهش و ابزار', prompt: 'Propose a learning plan. Never write the thesis.', temperature: 0.45, max_tokens: 800 },
     },
     christina: {
         outline_chapter: { name: 'طرح فصل', description: 'ساختار فصل', prompt: 'Chapter outline only. Never ghostwrite.', temperature: 0.5, max_tokens: 900 },

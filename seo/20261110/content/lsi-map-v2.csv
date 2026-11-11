@@ -1,0 +1,201 @@
+target,anchor,anchor_type,primary_parent
+/service-project/,انجام پروژه های دانشجویی,exact,/
+/proposal/,انجام پروپوزال,exact,/
+/proposal/phd/,انجام پروپوزال دکتری,exact,/proposal/
+/thesis/,انجام پایان نامه,exact,/
+/thesis/master/,انجام پایان نامه کارشناسی ارشد,exact,/thesis/
+/thesis/phd/,انجام پایان نامه دکتری,exact,/thesis/
+/project/engineering/chemical-industrial/chemical-engineering-project/,پروژه درس طراحی فرایند,lsi,/service-project/
+/project/engineering/chemical-industrial/chemical-engineering-project/,پروژه شبیه سازی فرایند شیمیایی,lsi,/service-project/
+/project/engineering/chemical-industrial/chemical-engineering-project/,پروژه برج تقطیر,lsi,/service-project/
+/project/engineering/chemical-industrial/chemical-engineering-project/,پروژه کارشناسی مهندسی شیمی,lsi,/service-project/
+/project/engineering/chemical-industrial/chemical-engineering-project/,انجام پروژه مهندسی شیمی,exact,/service-project/
+/project/programming/languages/r-programming/,پروژه تحلیل داده با R,lsi,/service-project/
+/project/programming/languages/r-programming/,پروژه پایتون,lsi,/service-project/
+/project/programming/languages/r-programming/,پروژه SAS,lsi,/service-project/
+/project/programming/languages/r-programming/,آموزش R برای پایان نامه,lsi,/service-project/
+/project/programming/languages/r-programming/,انجام پروژه r,exact,/service-project/
+/project/simulation/network/cisco-packet-tracer/,پروژه شبکه با پکت تریسر,lsi,/service-project/
+/project/simulation/network/cisco-packet-tracer/,پروژه شبکه های کامپیوتری,lsi,/service-project/
+/project/simulation/network/cisco-packet-tracer/,پروژه OSPF,lsi,/service-project/
+/project/simulation/network/cisco-packet-tracer/,پروژه VLAN,lsi,/service-project/
+/project/simulation/network/cisco-packet-tracer/,انجام پروژه سیسکو,exact,/service-project/
+/project/programming/ai-data/signal-processing-matlab/,پروژه فیلتر دیجیتال,lsi,/service-project/
+/project/programming/ai-data/signal-processing-matlab/,پروژه تبدیل فوریه,lsi,/service-project/
+/project/programming/ai-data/signal-processing-matlab/,پروژه MATLAB پردازش سیگنال,lsi,/service-project/
+/project/programming/ai-data/signal-processing-matlab/,پروژه پردازش تصویر,lsi,/service-project/
+/project/programming/ai-data/signal-processing-matlab/,انجام پروژه پردازش سیگنال,exact,/service-project/
+/project/simulation/chemical-process/aspen-hysys/,پروژه شبیه سازی HYSYS,lsi,/service-project/
+/project/simulation/chemical-process/aspen-hysys/,آموزش HYSYS برای پروژه,lsi,/service-project/
+/project/simulation/chemical-process/aspen-hysys/,پروژه Aspen Plus,lsi,/service-project/
+/project/simulation/chemical-process/aspen-hysys/,پروژه تقطیر با هایسیس,lsi,/service-project/
+/project/simulation/chemical-process/aspen-hysys/,انجام پروژه هایسیس,exact,/service-project/
+/project/programming/hardware/vhdl/,پروژه FPGA,lsi,/service-project/
+/project/programming/hardware/vhdl/,پروژه تست بنچ,lsi,/service-project/
+/project/programming/hardware/vhdl/,پروژه ماشین حالت,lsi,/service-project/
+/project/programming/hardware/vhdl/,آموزش VHDL,lsi,/service-project/
+/project/programming/hardware/vhdl/,انجام پروژه vhdl,exact,/service-project/
+/project/student-research/university-projects/bachelor-project/,پروژه پایانی کارشناسی,lsi,/service-project/
+/project/student-research/university-projects/bachelor-project/,گزارش پروژه کارشناسی,lsi,/service-project/
+/project/student-research/university-projects/bachelor-project/,موضوع پروژه کارشناسی,lsi,/service-project/
+/project/student-research/university-projects/bachelor-project/,انجام پروژه کارشناسی,exact,/service-project/
+/project/simulation/electrical/proteus/,پروژه میکروکنترلر,lsi,/service-project/
+/project/simulation/electrical/proteus/,پروژه Multisim,lsi,/service-project/
+/project/simulation/electrical/proteus/,پروژه Arduino,lsi,/service-project/
+/project/simulation/electrical/proteus/,پروژه مدار دیجیتال,lsi,/service-project/
+/project/simulation/electrical/proteus/,انجام پروژه پروتئوس,exact,/service-project/
+/project/engineering/electrical/,پروژه درس مدار,lsi,/service-project/
+/project/engineering/electrical/,پروژه کنترل,lsi,/service-project/
+/project/engineering/electrical/,پروژه الکترونیک,lsi,/service-project/
+/project/engineering/electrical/,انجام پروژه مهندسی برق,exact,/service-project/
+/project/engineering/electrical/ees/,پروژه ترمودینامیک,lsi,/service-project/
+/project/engineering/electrical/ees/,پروژه چرخه رانکین,lsi,/service-project/
+/project/engineering/electrical/ees/,پروژه تحلیل اگزرژی,lsi,/service-project/
+/project/engineering/electrical/ees/,آموزش EES,lsi,/service-project/
+/project/engineering/electrical/ees/,انجام پروژه ees,exact,/service-project/
+/project/engineering/chemical-industrial/econometrics-project/,پروژه EViews,lsi,/service-project/
+/project/engineering/chemical-industrial/econometrics-project/,پروژه سری زمانی,lsi,/service-project/
+/project/engineering/chemical-industrial/econometrics-project/,پروژه ARDL,lsi,/service-project/
+/project/engineering/chemical-industrial/econometrics-project/,پروژه داده پانل,lsi,/service-project/
+/project/engineering/chemical-industrial/econometrics-project/,انجام پروژه اقتصاد سنجی,exact,/service-project/
+/project/programming/hardware/hspice/,پروژه شبیه سازی مدار,lsi,/service-project/
+/project/programming/hardware/hspice/,آموزش HSPICE,lsi,/service-project/
+/project/programming/hardware/hspice/,پروژه طراحی مدار آنالوگ,lsi,/service-project/
+/project/programming/hardware/hspice/,پروژه LTspice,lsi,/service-project/
+/project/programming/hardware/hspice/,انجام پروژه hspice,exact,/service-project/
+/thesis/engineering/electrical/,پایان نامه مهندسی برق,lsi,/thesis/
+/thesis/engineering/electrical/,پایان نامه ارشد برق,lsi,/thesis/
+/thesis/engineering/electrical/,انجام پایان نامه ارشد برق,lsi,/thesis/
+/thesis/engineering/electrical/,رساله دکتری برق,lsi,/thesis/
+/thesis/engineering/electrical/,پایان نامه برق قدرت,lsi,/thesis/
+/thesis/engineering/electrical/,پایان نامه الکترونیک,lsi,/thesis/
+/thesis/engineering/electrical/,انجام پایان نامه برق,exact,/thesis/
+/project/engineering/mechanical-civil/aerospace-project/,پروژه آیرودینامیک,lsi,/service-project/
+/project/engineering/mechanical-civil/aerospace-project/,پروژه کنترل پرواز,lsi,/service-project/
+/project/engineering/mechanical-civil/aerospace-project/,پروژه پیشرانش,lsi,/service-project/
+/project/engineering/mechanical-civil/aerospace-project/,پروژه مکانیک پرواز,lsi,/service-project/
+/project/engineering/mechanical-civil/aerospace-project/,انجام پروژه هوافضا,exact,/service-project/
+/project/engineering/mechanical-civil/opensees/,پروژه تحلیل غیرخطی سازه,lsi,/service-project/
+/project/engineering/mechanical-civil/opensees/,آموزش OpenSees,lsi,/service-project/
+/project/engineering/mechanical-civil/opensees/,پروژه پوش اور,lsi,/service-project/
+/project/engineering/mechanical-civil/opensees/,پروژه تاریخچه زمانی,lsi,/service-project/
+/project/engineering/mechanical-civil/opensees/,انجام پروژه اپنسیس,exact,/service-project/
+/project/engineering/mechanical-civil/plaxis/,پروژه ژئوتکنیک,lsi,/service-project/
+/project/engineering/mechanical-civil/plaxis/,پروژه پایداری شیب,lsi,/service-project/
+/project/engineering/mechanical-civil/plaxis/,آموزش PLAXIS,lsi,/service-project/
+/project/engineering/mechanical-civil/plaxis/,پروژه تحلیل گود,lsi,/service-project/
+/project/engineering/mechanical-civil/plaxis/,انجام پروژه plaxis,exact,/service-project/
+/project/programming/hardware/silvaco/,پروژه TCAD,lsi,/service-project/
+/project/programming/hardware/silvaco/,آموزش Silvaco,lsi,/service-project/
+/project/programming/hardware/silvaco/,پروژه ادوات نیمه هادی,lsi,/service-project/
+/project/programming/hardware/silvaco/,پروژه شبیه سازی ترانزیستور,lsi,/service-project/
+/project/programming/hardware/silvaco/,انجام پروژه سیلواکو,exact,/service-project/
+/project/simulation/hydrology/hec-ras/,پروژه سیلاب,lsi,/service-project/
+/project/simulation/hydrology/hec-ras/,پروژه هیدرولیک رودخانه,lsi,/service-project/
+/project/simulation/hydrology/hec-ras/,آموزش HEC-RAS,lsi,/service-project/
+/project/simulation/hydrology/hec-ras/,پروژه مهندسی رودخانه,lsi,/service-project/
+/project/simulation/hydrology/hec-ras/,انجام پروژه hec-ras,exact,/service-project/
+/project/statistics/general-statistics/ibm-spss-statistics/,پروژه تحلیل آماری,lsi,/service-project/
+/project/statistics/general-statistics/ibm-spss-statistics/,آموزش SPSS,lsi,/service-project/
+/project/statistics/general-statistics/ibm-spss-statistics/,تحلیل آماری با SPSS,lsi,/service-project/
+/project/statistics/general-statistics/ibm-spss-statistics/,انجام پروژه spss,exact,/service-project/
+/thesis/agriculture-natural-resources/,انجام پایان نامه کشاورزی و منابع طبیعی,exact,/thesis/
+/thesis/animal-science-veterinary/,انجام پایان نامه علوم دامی و دامپزشکی,exact,/thesis/
+/thesis/art-architecture-media/,انجام پایان نامه هنر و معماری و رسانه,exact,/thesis/
+/thesis/engineering/,انجام پایان نامه مهندسی,exact,/thesis/
+/thesis/engineering/chemical/,پایان نامه مهندسی شیمی,lsi,/thesis/
+/thesis/engineering/chemical/,پایان نامه ارشد مهندسی شیمی,lsi,/thesis/
+/thesis/engineering/chemical/,رساله دکتری مهندسی شیمی,lsi,/thesis/
+/thesis/engineering/chemical/,پایان نامه شبیه سازی فرایند,lsi,/thesis/
+/thesis/engineering/chemical/,پایان نامه پلیمر,lsi,/thesis/
+/thesis/engineering/chemical/,پایان نامه نانو,lsi,/thesis/
+/thesis/engineering/chemical/,انجام پایان نامه مهندسی شیمی,exact,/thesis/
+/thesis/engineering/civil/,پایان نامه مهندسی عمران,lsi,/thesis/
+/thesis/engineering/civil/,پایان نامه ارشد عمران,lsi,/thesis/
+/thesis/engineering/civil/,رساله دکتری عمران,lsi,/thesis/
+/thesis/engineering/civil/,پایان نامه سازه,lsi,/thesis/
+/thesis/engineering/civil/,پایان نامه زلزله,lsi,/thesis/
+/thesis/engineering/civil/,پایان نامه ژئوتکنیک,lsi,/thesis/
+/thesis/engineering/civil/,انجام پایان نامه عمران,exact,/thesis/
+/thesis/engineering/computer/,پایان نامه مهندسی کامپیوتر,lsi,/thesis/
+/thesis/engineering/computer/,پایان نامه ارشد کامپیوتر,lsi,/thesis/
+/thesis/engineering/computer/,رساله دکتری کامپیوتر,lsi,/thesis/
+/thesis/engineering/computer/,پایان نامه هوش مصنوعی,lsi,/thesis/
+/thesis/engineering/computer/,پایان نامه یادگیری ماشین,lsi,/thesis/
+/thesis/engineering/computer/,پایان نامه شبکه,lsi,/thesis/
+/thesis/engineering/computer/,انجام پایان نامه کامپیوتر,exact,/thesis/
+/thesis/engineering/industrial/,پایان نامه مهندسی صنایع,lsi,/thesis/
+/thesis/engineering/industrial/,پایان نامه ارشد صنایع,lsi,/thesis/
+/thesis/engineering/industrial/,رساله دکتری مهندسی صنایع,lsi,/thesis/
+/thesis/engineering/industrial/,پایان نامه تحقیق در عملیات,lsi,/thesis/
+/thesis/engineering/industrial/,پایان نامه زنجیره تامین,lsi,/thesis/
+/thesis/engineering/industrial/,پایان نامه مدیریت سیستم و بهره وری,lsi,/thesis/
+/thesis/engineering/industrial/,انجام پایان نامه مهندسی صنایع,exact,/thesis/
+/thesis/engineering/mechanical/,پایان نامه مهندسی مکانیک,lsi,/thesis/
+/thesis/engineering/mechanical/,پایان نامه ارشد مکانیک,lsi,/thesis/
+/thesis/engineering/mechanical/,رساله دکتری مکانیک,lsi,/thesis/
+/thesis/engineering/mechanical/,پایان نامه تبدیل انرژی,lsi,/thesis/
+/thesis/engineering/mechanical/,پایان نامه طراحی کاربردی,lsi,/thesis/
+/thesis/engineering/mechanical/,پایان نامه ساخت و تولید,lsi,/thesis/
+/thesis/engineering/mechanical/,انجام پایان نامه مکانیک,exact,/thesis/
+/thesis/humanities/,انجام پایان نامه علوم انسانی,exact,/thesis/
+/thesis/humanities/economics/,پایان نامه اقتصاد,lsi,/thesis/
+/thesis/humanities/economics/,پایان نامه ارشد اقتصاد,lsi,/thesis/
+/thesis/humanities/economics/,رساله دکتری اقتصاد,lsi,/thesis/
+/thesis/humanities/economics/,پایان نامه اقتصاد سنجی,lsi,/thesis/
+/thesis/humanities/economics/,پایان نامه اقتصاد انرژی,lsi,/thesis/
+/thesis/humanities/economics/,پایان نامه اقتصاد توسعه,lsi,/thesis/
+/thesis/humanities/economics/,انجام پایان نامه اقتصاد,exact,/thesis/
+/thesis/humanities/history/,انجام پایان نامه تاریخ,exact,/thesis/
+/thesis/humanities/law/,انجام پایان نامه حقوق,exact,/thesis/
+/thesis/humanities/management/,انجام پایان نامه مدیریت,exact,/thesis/
+/thesis/humanities/philosophy/,انجام پایان نامه فلسفه,exact,/thesis/
+/thesis/humanities/psychology/,انجام پایان نامه روان شناسی,exact,/thesis/
+/thesis/humanities/social-sciences/,انجام پایان نامه علوم اجتماعی,exact,/thesis/
+/thesis/interdisciplinary/,انجام پایان نامه میان رشته ای,exact,/thesis/
+/thesis/international/,انجام پایان نامه بین المللی,exact,/thesis/
+/thesis/medical-health/,انجام پایان نامه پزشکی و سلامت,exact,/thesis/
+/thesis/pure-science/,انجام پایان نامه علوم پایه,exact,/thesis/
+/gams/,پروژه بهینه سازی,lsi,/service-project/
+/gams/,پروژه برنامه ریزی ریاضی,lsi,/service-project/
+/gams/,پروژه پویایی سیستم,lsi,/service-project/
+/gams/,آموزش GAMS,lsi,/service-project/
+/gams/,انجام پروژه گمز,exact,/service-project/
+/project/assignments/computer-science/uml-diagrams/,پروژه تحلیل و طراحی سیستم,lsi,/service-project/
+/project/assignments/computer-science/uml-diagrams/,پروژه مهندسی نرم افزار,lsi,/service-project/
+/project/assignments/computer-science/uml-diagrams/,نمودار کلاس,lsi,/service-project/
+/project/assignments/computer-science/uml-diagrams/,پروژه نمودار مورد کاربرد,lsi,/service-project/
+/project/assignments/computer-science/uml-diagrams/,انجام پروژه uml,exact,/service-project/
+/project/simulation/electrical/matlab-simulink/,پروژه Simulink,lsi,/service-project/
+/project/simulation/electrical/matlab-simulink/,آموزش MATLAB,lsi,/service-project/
+/project/simulation/electrical/matlab-simulink/,پروژه شبیه سازی با متلب,lsi,/service-project/
+/project/simulation/electrical/matlab-simulink/,انجام پروژه متلب,exact,/service-project/
+/project/statistics/sem/amos/,پروژه معادلات ساختاری,lsi,/service-project/
+/project/statistics/sem/amos/,آموزش AMOS,lsi,/service-project/
+/project/statistics/sem/amos/,تحلیل عاملی تاییدی,lsi,/service-project/
+/project/statistics/sem/amos/,انجام پروژه amos,exact,/service-project/
+/project/statistics/sem/smart-pls/,پروژه PLS,lsi,/service-project/
+/project/statistics/sem/smart-pls/,آموزش اسمارت پی ال اس,lsi,/service-project/
+/project/statistics/sem/smart-pls/,مدل سازی معادلات ساختاری,lsi,/service-project/
+/project/statistics/sem/smart-pls/,انجام پروژه اسمارت پی ال اس,exact,/service-project/
+/thesis/humanities/accounting/,پایان نامه حسابداری,lsi,/thesis/
+/thesis/humanities/accounting/,پایان نامه ارشد حسابداری,lsi,/thesis/
+/thesis/humanities/accounting/,رساله دکتری حسابداری,lsi,/thesis/
+/thesis/humanities/accounting/,پایان نامه حسابرسی,lsi,/thesis/
+/thesis/humanities/accounting/,پایان نامه مدیریت مالی,lsi,/thesis/
+/thesis/humanities/accounting/,پایان نامه مهندسی مالی,lsi,/thesis/
+/thesis/humanities/accounting/,انجام پایان نامه حسابداری,exact,/thesis/
+/thesis/humanities/education/,پایان نامه علوم تربیتی,lsi,/thesis/
+/thesis/humanities/education/,پایان نامه برنامه ریزی درسی,lsi,/thesis/
+/thesis/humanities/education/,پایان نامه مدیریت آموزشی,lsi,/thesis/
+/thesis/humanities/education/,پایان نامه روانشناسی تربیتی,lsi,/thesis/
+/thesis/humanities/education/,پایان نامه تکنولوژی آموزشی,lsi,/thesis/
+/thesis/humanities/education/,پایان نامه ارشد علوم تربیتی,lsi,/thesis/
+/thesis/humanities/education/,انجام پایان نامه علوم تربیتی,exact,/thesis/
+/thesis/humanities/theology-islamic-studies/,پایان نامه الهیات,lsi,/thesis/
+/thesis/humanities/theology-islamic-studies/,پایان نامه معارف اسلامی,lsi,/thesis/
+/thesis/humanities/theology-islamic-studies/,پایان نامه علوم قرآن و حدیث,lsi,/thesis/
+/thesis/humanities/theology-islamic-studies/,پایان نامه فقه و مبانی حقوق اسلامی,lsi,/thesis/
+/thesis/humanities/theology-islamic-studies/,پایان نامه فلسفه و کلام,lsi,/thesis/
+/thesis/humanities/theology-islamic-studies/,پایان نامه ارشد الهیات,lsi,/thesis/
+/thesis/humanities/theology-islamic-studies/,انجام پایان نامه الهیات,exact,/thesis/

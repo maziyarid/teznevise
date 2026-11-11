@@ -49,7 +49,7 @@ check "placeholder corruption absent" bash -c '! grep -R -n -E "^PLACEHOLDER[0-9
 check "no committed plaintext secrets" bash -c '! grep -R -n -E "[\x27\x22]?(api[_-]?key|secret|password|private[_-]?key)[\x27\x22]?\s*[:=]\s*[\x27\x22][^\x27\x22[:space:]]{8,}[\x27\x22]" --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.vercel --exclude="*.md" .'
 check "no committed private keys" bash -c '! grep -R -n -E "BEGIN( [A-Z0-9]+)? PRIVATE KEY" --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.vercel --exclude="*.md" .'
 check "GitHub deployment workflow remains non-deploying" bash -c '! grep -n -E "appleboy/ssh-action|scp-action|FTP_|CPANEL.*TOKEN|ssh.*private" .github/workflows/deploy-cpanel.yml'
-check "cPanel excludes .git" grep -q -- "--exclude '.git'" .cpanel.yml
+check "cPanel excludes .git" grep -q -- "--exclude '.git'" scripts/guarded-theme-sync.sh
 check "cPanel target is production theme" grep -q -- "/home/maziyarid/public_html/teznevise.ir/wp-content/themes/teznevise" .cpanel.yml
 
 if [ "$fail" -ne 0 ]; then
