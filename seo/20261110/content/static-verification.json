@@ -1,0 +1,213 @@
+{
+  "passed": true,
+  "errors": [],
+  "offenders": [],
+  "snapshots": [
+    {
+      "url": "https://teznevise.ir/contact-us/",
+      "http_status": 200,
+      "sha256": "053aea0435e9af973bc3a10bede109b56b001626df571baabc045d939eeda47f",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/download/sharif-graduate-forms/",
+      "http_status": 200,
+      "sha256": "1be7713f772c9af9c5d04bca41edba7a121b65adfed6907c5bd11c27601b6f95",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/download/tabriz-campus-graduate-forms/",
+      "http_status": 200,
+      "sha256": "98ee6157409a87f17e29d8c47a753c2863725dd19387c4e82857b51c1a7a15cb",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/download/tehran-ece-graduate-forms/",
+      "http_status": 200,
+      "sha256": "594e29e3635b4d7d6ea43ef5a182dce36bb3ab9e44a645afd71a6dbd18cbc7c4",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/download/university-proposal-forms-iran/",
+      "http_status": 200,
+      "sha256": "77263056e30727661db3afa9503f80e882c5bcac319c05f90ef03440b0aea4d3",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/downloads/",
+      "http_status": 200,
+      "sha256": "5dc12a16bc91f66d646c3edb2f9c696d78eed63d54791f0581706a433781581f",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/gams/",
+      "http_status": 200,
+      "sha256": "876a0e491164a6c591b1b1a6bab9e7eb24c6f4d05464ecd56136478b260429a4",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/how-to-find-research-gap/",
+      "http_status": 200,
+      "sha256": "4ec2d2232e883caa294ddac06aab5d5e9630b79e99710a358a3933f4b9a33d91",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/inquiry/",
+      "http_status": 200,
+      "sha256": "89fe0116e9d186d262663058c47b08df9be03b8d935dc05b7f5bf00eea69024d",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/online-calculation-tools/",
+      "http_status": 200,
+      "sha256": "932d848e8e4a4ea53aa92dd3ddbbfabed45d9df475a4c5c5645933696e42991b",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/proposal/",
+      "http_status": 200,
+      "sha256": "a612e97473df59a4677cf78d8ba4b7e3b23ec3790374cff86f41295e4596a857",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/proposal/phd/",
+      "http_status": 200,
+      "sha256": "9e63e5a7e819c6b6d5797c2cdb3c93357c653ae9430f4afaedc83c789ab2ee6e",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/service-simulation/",
+      "http_status": 200,
+      "sha256": "22a6d205fc32f879b838f1a32d44f9e06edea92e57303e54744894614f20006a",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/service-statistics/",
+      "http_status": 200,
+      "sha256": "88a93f5da2a9625a699381f8785ad687cd8773e5d5680f0f22958ebd00836714",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/",
+      "http_status": 200,
+      "sha256": "efcd98e7b8e0b743ea2a66bc15ebd13ac58ce3285065422e70cf0fa3359608ef",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/agriculture-natural-resources/",
+      "http_status": 200,
+      "sha256": "bf6848bbbce40b78ceb7b4c8ccb9868fd7688c19c9695b5ae84159d4b47bfafa",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/animal-science-veterinary/",
+      "http_status": 200,
+      "sha256": "42d7ef96b08629e3c99d1520738e6abe7bdec552fdb499abcf22c184651548a7",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/art-architecture-media/",
+      "http_status": 200,
+      "sha256": "0d002abc236142e64fc96cf005a6b77aa01a9dd442e0a09f0629795c0f4ef7c7",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/chapter-five/",
+      "http_status": 200,
+      "sha256": "b8289331daa58794c72d5ca40d902806e06081c9f700ce3ac1d9fdc1dad89f27",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/chapter-four/",
+      "http_status": 200,
+      "sha256": "01354636994ee09809a076c27095969dfab92ae870e686687ec1111c037fcb53",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/chapter-three/",
+      "http_status": 200,
+      "sha256": "689b3a8e68f1acd4cf348a3ea9e3ca7df6e70e741625930d8b388f60a3023511",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/engineering/",
+      "http_status": 200,
+      "sha256": "2a5e30b731cdd004b4dc0e395faae1a417857e92441432211b927fdd7db9e6cf",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/",
+      "http_status": 200,
+      "sha256": "39629303ba6b6bbed67d0de0f4d4532d21e92a5cb99357e4ac9d085f5be5dae4",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/history/",
+      "http_status": 200,
+      "sha256": "6c5030f59cb590954ddc2c1295506e6f686a7c3c4538f4312d108204e02a08a0",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/law/",
+      "http_status": 200,
+      "sha256": "78d3513ccda379face32ee7276ea6eba3483d8df52134c864edc201c83769e9f",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/management/",
+      "http_status": 200,
+      "sha256": "c6f87cbe390c4f4d2edee95cc70721aafc906754a2c1d1d680c2af438eed435b",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/philosophy/",
+      "http_status": 200,
+      "sha256": "9aed68d998aa4f8ad5826ef6263f166e75e481ea00aff1b312a227db718e3389",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/psychology/",
+      "http_status": 200,
+      "sha256": "71d8edd7d219dda351639959760a987271fd2f99db0791012f5bd08075a9ed19",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/humanities/social-sciences/",
+      "http_status": 200,
+      "sha256": "fd9a4618e75ca4785795461db8b2719a068cf84ec116b5814cd405b4504258b7",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/interdisciplinary/",
+      "http_status": 200,
+      "sha256": "5624f03af7e23af18102ec74a63e096b072c917ea6faa20eab5699254eadb2e0",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/international/",
+      "http_status": 200,
+      "sha256": "7afa28dc39c8a35094d7d3b48d0d4aa3abd16836364ba5259936df4b1e3b649a",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/medical-health/",
+      "http_status": 200,
+      "sha256": "52e313ba84c29735ec1d6a4b364dfd8322d1aca3251d6c28a595f404bdf66202",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/phd/",
+      "http_status": 200,
+      "sha256": "04a7696cb14eef73c478c454dfad409e682290170301821a741ba56cbd38bbfb",
+      "error": null
+    },
+    {
+      "url": "https://teznevise.ir/thesis/pure-science/",
+      "http_status": 200,
+      "sha256": "2e9c10d294d2d2f1e7691d74c310593295a963104d507c2fa98894df7e407b99",
+      "error": null
+    }
+  ],
+  "drafts_checked": 6,
+  "note": "HTTP snapshots prove only the observed response bytes, not absence of all database changes."
+}

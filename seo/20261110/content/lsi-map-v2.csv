@@ -1,0 +1,241 @@
+target,anchor,anchor_type,activation
+/thesis/,انجام پایان نامه,exact,after final direct HTTP 200 and owner approval
+/thesis/master/,انجام پایان نامه کارشناسی ارشد,exact,after final direct HTTP 200 and owner approval
+/thesis/phd/,انجام پایان نامه دکتری,exact,after final direct HTTP 200 and owner approval
+/proposal/,انجام پروپوزال,exact,after final direct HTTP 200 and owner approval
+/proposal/phd/,انجام پروپوزال دکتری,exact,after final direct HTTP 200 and owner approval
+/service-project/,انجام پروژه های دانشجویی,exact,after final direct HTTP 200 and owner approval
+/thesis/engineering/electrical/,انجام پایان نامه برق,exact,after final direct HTTP 200 and owner approval
+/thesis/engineering/electrical/,پایان نامه مهندسی برق,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/electrical/,پایان نامه ارشد برق,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/electrical/,انجام پایان نامه ارشد برق,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/electrical/,رساله دکتری برق,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/electrical/,پایان نامه برق قدرت,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/electrical/,پایان نامه الکترونیک,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/mechanical/,انجام پایان نامه مکانیک,exact,after final direct HTTP 200 and owner approval
+/thesis/engineering/mechanical/,پایان نامه مهندسی مکانیک,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/mechanical/,پایان نامه ارشد مکانیک,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/mechanical/,رساله دکتری مکانیک,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/mechanical/,پایان نامه تبدیل انرژی,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/mechanical/,پایان نامه طراحی کاربردی,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/mechanical/,پایان نامه ساخت و تولید,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/civil/,انجام پایان نامه عمران,exact,after final direct HTTP 200 and owner approval
+/thesis/engineering/civil/,پایان نامه مهندسی عمران,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/civil/,پایان نامه ارشد عمران,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/civil/,رساله دکتری عمران,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/civil/,پایان نامه سازه,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/civil/,پایان نامه زلزله,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/civil/,پایان نامه ژئوتکنیک,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/industrial/,انجام پایان نامه مهندسی صنایع,exact,after final direct HTTP 200 and owner approval
+/thesis/engineering/industrial/,پایان نامه مهندسی صنایع,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/industrial/,پایان نامه ارشد صنایع,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/industrial/,رساله دکتری مهندسی صنایع,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/industrial/,پایان نامه تحقیق در عملیات,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/industrial/,پایان نامه زنجیره تامین,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/industrial/,پایان نامه مدیریت سیستم و بهره وری,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/chemical/,انجام پایان نامه مهندسی شیمی,exact,after final direct HTTP 200 and owner approval
+/thesis/engineering/chemical/,پایان نامه مهندسی شیمی,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/chemical/,پایان نامه ارشد مهندسی شیمی,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/chemical/,رساله دکتری مهندسی شیمی,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/chemical/,پایان نامه شبیه سازی فرایند,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/chemical/,پایان نامه پلیمر,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/chemical/,پایان نامه نانو,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/computer/,انجام پایان نامه کامپیوتر,exact,after final direct HTTP 200 and owner approval
+/thesis/engineering/computer/,پایان نامه مهندسی کامپیوتر,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/computer/,پایان نامه ارشد کامپیوتر,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/computer/,رساله دکتری کامپیوتر,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/computer/,پایان نامه هوش مصنوعی,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/computer/,پایان نامه یادگیری ماشین,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/computer/,پایان نامه شبکه,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/accounting/,انجام پایان نامه حسابداری,exact,after final direct HTTP 200 and owner approval
+/thesis/humanities/accounting/,پایان نامه حسابداری,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/accounting/,پایان نامه ارشد حسابداری,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/accounting/,رساله دکتری حسابداری,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/accounting/,پایان نامه حسابرسی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/accounting/,پایان نامه مدیریت مالی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/accounting/,پایان نامه مهندسی مالی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/economics/,انجام پایان نامه اقتصاد,exact,after final direct HTTP 200 and owner approval
+/thesis/humanities/economics/,پایان نامه اقتصاد,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/economics/,پایان نامه ارشد اقتصاد,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/economics/,رساله دکتری اقتصاد,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/economics/,پایان نامه اقتصاد سنجی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/economics/,پایان نامه اقتصاد انرژی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/economics/,پایان نامه اقتصاد توسعه,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/theology-islamic-studies/,انجام پایان نامه الهیات,exact,after final direct HTTP 200 and owner approval
+/thesis/humanities/theology-islamic-studies/,پایان نامه الهیات,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/theology-islamic-studies/,پایان نامه معارف اسلامی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/theology-islamic-studies/,پایان نامه علوم قرآن و حدیث,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/theology-islamic-studies/,پایان نامه فقه و مبانی حقوق اسلامی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/theology-islamic-studies/,پایان نامه فلسفه و کلام,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/theology-islamic-studies/,پایان نامه ارشد الهیات,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/education/,انجام پایان نامه علوم تربیتی,exact,after final direct HTTP 200 and owner approval
+/thesis/humanities/education/,پایان نامه علوم تربیتی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/education/,پایان نامه برنامه ریزی درسی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/education/,پایان نامه مدیریت آموزشی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/education/,پایان نامه روانشناسی تربیتی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/education/,پایان نامه تکنولوژی آموزشی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/education/,پایان نامه ارشد علوم تربیتی,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/chemical-industrial/chemical-engineering-project/,انجام پروژه مهندسی شیمی,exact,after final direct HTTP 200 and owner approval
+/project/engineering/chemical-industrial/chemical-engineering-project/,پروژه درس طراحی فرایند,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/chemical-industrial/chemical-engineering-project/,پروژه شبیه سازی فرایند شیمیایی,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/chemical-industrial/chemical-engineering-project/,پروژه برج تقطیر,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/chemical-industrial/chemical-engineering-project/,پروژه کارشناسی مهندسی شیمی,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/network/cisco-packet-tracer/,انجام پروژه سیسکو,exact,after final direct HTTP 200 and owner approval
+/project/simulation/network/cisco-packet-tracer/,پروژه شبکه با پکت تریسر,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/network/cisco-packet-tracer/,پروژه شبکه های کامپیوتری,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/network/cisco-packet-tracer/,پروژه OSPF,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/network/cisco-packet-tracer/,پروژه VLAN,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/chemical-process/aspen-hysys/,انجام پروژه هایسیس,exact,after final direct HTTP 200 and owner approval
+/project/simulation/chemical-process/aspen-hysys/,پروژه شبیه سازی HYSYS,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/chemical-process/aspen-hysys/,آموزش HYSYS برای پروژه,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/chemical-process/aspen-hysys/,پروژه Aspen Plus,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/chemical-process/aspen-hysys/,پروژه تقطیر با هایسیس,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/electrical/,انجام پروژه مهندسی برق,exact,after final direct HTTP 200 and owner approval
+/project/engineering/electrical/,پروژه درس مدار,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/electrical/,پروژه کنترل,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/electrical/,پروژه پردازش سیگنال,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/electrical/,پروژه الکترونیک,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/electrical/ees/,انجام پروژه ees,exact,after final direct HTTP 200 and owner approval
+/project/engineering/electrical/ees/,پروژه ترمودینامیک,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/electrical/ees/,پروژه چرخه رانکین,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/electrical/ees/,پروژه تحلیل اگزرژی,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/electrical/ees/,آموزش EES,lsi,after final direct HTTP 200 and owner approval
+/project/programming/hardware/hspice/,انجام پروژه hspice,exact,after final direct HTTP 200 and owner approval
+/project/programming/hardware/hspice/,پروژه شبیه سازی مدار,lsi,after final direct HTTP 200 and owner approval
+/project/programming/hardware/hspice/,آموزش HSPICE,lsi,after final direct HTTP 200 and owner approval
+/project/programming/hardware/hspice/,پروژه طراحی مدار آنالوگ,lsi,after final direct HTTP 200 and owner approval
+/project/programming/hardware/hspice/,پروژه LTspice,lsi,after final direct HTTP 200 and owner approval
+/project/programming/hardware/vhdl/,انجام پروژه vhdl,exact,after final direct HTTP 200 and owner approval
+/project/programming/hardware/vhdl/,پروژه FPGA,lsi,after final direct HTTP 200 and owner approval
+/project/programming/hardware/vhdl/,پروژه تست بنچ,lsi,after final direct HTTP 200 and owner approval
+/project/programming/hardware/vhdl/,پروژه ماشین حالت,lsi,after final direct HTTP 200 and owner approval
+/project/programming/hardware/vhdl/,آموزش VHDL,lsi,after final direct HTTP 200 and owner approval
+/project/programming/hardware/silvaco/,انجام پروژه سیلواکو,exact,after final direct HTTP 200 and owner approval
+/project/programming/hardware/silvaco/,پروژه TCAD,lsi,after final direct HTTP 200 and owner approval
+/project/programming/hardware/silvaco/,آموزش Silvaco,lsi,after final direct HTTP 200 and owner approval
+/project/programming/hardware/silvaco/,پروژه ادوات نیمه هادی,lsi,after final direct HTTP 200 and owner approval
+/project/programming/hardware/silvaco/,پروژه شبیه سازی ترانزیستور,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/hydrology/hec-ras/,انجام پروژه hec-ras,exact,after final direct HTTP 200 and owner approval
+/project/simulation/hydrology/hec-ras/,پروژه سیلاب,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/hydrology/hec-ras/,پروژه هیدرولیک رودخانه,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/hydrology/hec-ras/,آموزش HEC-RAS,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/hydrology/hec-ras/,پروژه مهندسی رودخانه,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/opensees/,انجام پروژه اپنسیس,exact,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/opensees/,پروژه تحلیل غیرخطی سازه,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/opensees/,آموزش OpenSees,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/opensees/,پروژه پوش اور,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/opensees/,پروژه تاریخچه زمانی,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/plaxis/,انجام پروژه plaxis,exact,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/plaxis/,پروژه ژئوتکنیک,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/plaxis/,پروژه پایداری شیب,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/plaxis/,آموزش PLAXIS,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/plaxis/,پروژه تحلیل گود,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/chemical-industrial/econometrics-project/,انجام پروژه اقتصاد سنجی,exact,after final direct HTTP 200 and owner approval
+/project/engineering/chemical-industrial/econometrics-project/,پروژه EViews,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/chemical-industrial/econometrics-project/,پروژه سری زمانی,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/chemical-industrial/econometrics-project/,پروژه ARDL,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/chemical-industrial/econometrics-project/,پروژه داده پانل,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/aerospace-project/,انجام پروژه هوافضا,exact,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/aerospace-project/,پروژه آیرودینامیک,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/aerospace-project/,پروژه کنترل پرواز,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/aerospace-project/,پروژه پیشرانش,lsi,after final direct HTTP 200 and owner approval
+/project/engineering/mechanical-civil/aerospace-project/,پروژه مکانیک پرواز,lsi,after final direct HTTP 200 and owner approval
+/project/assignments/computer-science/uml-diagrams/,انجام پروژه uml,exact,after final direct HTTP 200 and owner approval
+/project/assignments/computer-science/uml-diagrams/,پروژه تحلیل و طراحی سیستم,lsi,after final direct HTTP 200 and owner approval
+/project/assignments/computer-science/uml-diagrams/,پروژه مهندسی نرم افزار,lsi,after final direct HTTP 200 and owner approval
+/project/assignments/computer-science/uml-diagrams/,نمودار کلاس,lsi,after final direct HTTP 200 and owner approval
+/project/assignments/computer-science/uml-diagrams/,پروژه نمودار مورد کاربرد,lsi,after final direct HTTP 200 and owner approval
+/project/programming/ai-data/signal-processing-matlab/,انجام پروژه پردازش سیگنال,exact,after final direct HTTP 200 and owner approval
+/project/programming/ai-data/signal-processing-matlab/,پروژه فیلتر دیجیتال,lsi,after final direct HTTP 200 and owner approval
+/project/programming/ai-data/signal-processing-matlab/,پروژه تبدیل فوریه,lsi,after final direct HTTP 200 and owner approval
+/project/programming/ai-data/signal-processing-matlab/,پروژه MATLAB پردازش سیگنال,lsi,after final direct HTTP 200 and owner approval
+/project/programming/ai-data/signal-processing-matlab/,پروژه پردازش تصویر,lsi,after final direct HTTP 200 and owner approval
+/gams/,انجام پروژه گمز,exact,after final direct HTTP 200 and owner approval
+/gams/,پروژه بهینه سازی,lsi,after final direct HTTP 200 and owner approval
+/gams/,پروژه برنامه ریزی ریاضی,lsi,after final direct HTTP 200 and owner approval
+/gams/,پروژه پویایی سیستم,lsi,after final direct HTTP 200 and owner approval
+/gams/,آموزش GAMS,lsi,after final direct HTTP 200 and owner approval
+/project/programming/languages/r-programming/,انجام پروژه r,exact,after final direct HTTP 200 and owner approval
+/project/programming/languages/r-programming/,پروژه تحلیل داده با R,lsi,after final direct HTTP 200 and owner approval
+/project/programming/languages/r-programming/,پروژه پایتون,lsi,after final direct HTTP 200 and owner approval
+/project/programming/languages/r-programming/,پروژه SAS,lsi,after final direct HTTP 200 and owner approval
+/project/programming/languages/r-programming/,آموزش R برای پایان نامه,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/electrical/proteus/,انجام پروژه پروتئوس,exact,after final direct HTTP 200 and owner approval
+/project/simulation/electrical/proteus/,پروژه میکروکنترلر,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/electrical/proteus/,پروژه Multisim,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/electrical/proteus/,پروژه Arduino,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/electrical/proteus/,پروژه مدار دیجیتال,lsi,after final direct HTTP 200 and owner approval
+/project/student-research/university-projects/bachelor-project/,انجام پروژه کارشناسی,exact,after final direct HTTP 200 and owner approval
+/project/student-research/university-projects/bachelor-project/,پروژه پایانی کارشناسی,lsi,after final direct HTTP 200 and owner approval
+/project/student-research/university-projects/bachelor-project/,گزارش پروژه کارشناسی,lsi,after final direct HTTP 200 and owner approval
+/project/student-research/university-projects/bachelor-project/,موضوع پروژه کارشناسی,lsi,after final direct HTTP 200 and owner approval
+/project/statistics/general-statistics/ibm-spss-statistics/,انجام پروژه spss,exact,after final direct HTTP 200 and owner approval
+/project/statistics/general-statistics/ibm-spss-statistics/,پروژه تحلیل آماری,lsi,after final direct HTTP 200 and owner approval
+/project/statistics/general-statistics/ibm-spss-statistics/,آموزش SPSS,lsi,after final direct HTTP 200 and owner approval
+/project/statistics/general-statistics/ibm-spss-statistics/,تحلیل آماری با SPSS,lsi,after final direct HTTP 200 and owner approval
+/project/statistics/sem/amos/,انجام پروژه amos,exact,after final direct HTTP 200 and owner approval
+/project/statistics/sem/amos/,پروژه معادلات ساختاری,lsi,after final direct HTTP 200 and owner approval
+/project/statistics/sem/amos/,آموزش AMOS,lsi,after final direct HTTP 200 and owner approval
+/project/statistics/sem/amos/,تحلیل عاملی تاییدی,lsi,after final direct HTTP 200 and owner approval
+/project/statistics/sem/smart-pls/,انجام پروژه اسمارت پی ال اس,exact,after final direct HTTP 200 and owner approval
+/project/statistics/sem/smart-pls/,پروژه PLS,lsi,after final direct HTTP 200 and owner approval
+/project/statistics/sem/smart-pls/,آموزش اسمارت پی ال اس,lsi,after final direct HTTP 200 and owner approval
+/project/statistics/sem/smart-pls/,مدل سازی معادلات ساختاری,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/electrical/matlab-simulink/,انجام پروژه متلب,exact,after final direct HTTP 200 and owner approval
+/project/simulation/electrical/matlab-simulink/,پروژه Simulink,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/electrical/matlab-simulink/,آموزش MATLAB,lsi,after final direct HTTP 200 and owner approval
+/project/simulation/electrical/matlab-simulink/,پروژه شبیه سازی با متلب,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/,انجام پایان نامه مهندسی,exact,after final direct HTTP 200 and owner approval
+/thesis/engineering/,پژوهش مهندسی,lsi,after final direct HTTP 200 and owner approval
+/thesis/engineering/,پایان نامه مهندسی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/,انجام پایان نامه علوم انسانی,exact,after final direct HTTP 200 and owner approval
+/thesis/humanities/,پژوهش علوم انسانی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/,پایان نامه علوم انسانی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/management/,انجام پایان نامه مدیریت,exact,after final direct HTTP 200 and owner approval
+/thesis/humanities/management/,پژوهش مدیریت,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/management/,پایان نامه مدیریت,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/psychology/,انجام پایان نامه روان شناسی,exact,after final direct HTTP 200 and owner approval
+/thesis/humanities/psychology/,پژوهش روان شناسی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/psychology/,پایان نامه روان شناسی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/law/,انجام پایان نامه حقوق,exact,after final direct HTTP 200 and owner approval
+/thesis/humanities/law/,پژوهش حقوق,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/law/,پایان نامه حقوق,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/history/,انجام پایان نامه تاریخ,exact,after final direct HTTP 200 and owner approval
+/thesis/humanities/history/,پژوهش تاریخ,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/history/,پایان نامه تاریخ,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/philosophy/,انجام پایان نامه فلسفه,exact,after final direct HTTP 200 and owner approval
+/thesis/humanities/philosophy/,پژوهش فلسفه,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/philosophy/,پایان نامه فلسفه,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/social-sciences/,انجام پایان نامه علوم اجتماعی,exact,after final direct HTTP 200 and owner approval
+/thesis/humanities/social-sciences/,پژوهش علوم اجتماعی,lsi,after final direct HTTP 200 and owner approval
+/thesis/humanities/social-sciences/,پایان نامه علوم اجتماعی,lsi,after final direct HTTP 200 and owner approval
+/thesis/medical-health/,انجام پایان نامه پزشکی و سلامت,exact,after final direct HTTP 200 and owner approval
+/thesis/medical-health/,پژوهش پزشکی و سلامت,lsi,after final direct HTTP 200 and owner approval
+/thesis/medical-health/,پایان نامه پزشکی و سلامت,lsi,after final direct HTTP 200 and owner approval
+/thesis/pure-science/,انجام پایان نامه علوم پایه,exact,after final direct HTTP 200 and owner approval
+/thesis/pure-science/,پژوهش علوم پایه,lsi,after final direct HTTP 200 and owner approval
+/thesis/pure-science/,پایان نامه علوم پایه,lsi,after final direct HTTP 200 and owner approval
+/thesis/international/,انجام پایان نامه بین المللی,exact,after final direct HTTP 200 and owner approval
+/thesis/international/,پژوهش بین المللی,lsi,after final direct HTTP 200 and owner approval
+/thesis/international/,پایان نامه بین المللی,lsi,after final direct HTTP 200 and owner approval
+/thesis/animal-science-veterinary/,انجام پایان نامه علوم دامی و دامپزشکی,exact,after final direct HTTP 200 and owner approval
+/thesis/animal-science-veterinary/,پژوهش علوم دامی و دامپزشکی,lsi,after final direct HTTP 200 and owner approval
+/thesis/animal-science-veterinary/,پایان نامه علوم دامی و دامپزشکی,lsi,after final direct HTTP 200 and owner approval
+/thesis/art-architecture-media/,انجام پایان نامه هنر و معماری و رسانه,exact,after final direct HTTP 200 and owner approval
+/thesis/art-architecture-media/,پژوهش هنر و معماری و رسانه,lsi,after final direct HTTP 200 and owner approval
+/thesis/art-architecture-media/,پایان نامه هنر و معماری و رسانه,lsi,after final direct HTTP 200 and owner approval
+/thesis/agriculture-natural-resources/,انجام پایان نامه کشاورزی و منابع طبیعی,exact,after final direct HTTP 200 and owner approval
+/thesis/agriculture-natural-resources/,پژوهش کشاورزی و منابع طبیعی,lsi,after final direct HTTP 200 and owner approval
+/thesis/agriculture-natural-resources/,پایان نامه کشاورزی و منابع طبیعی,lsi,after final direct HTTP 200 and owner approval
+/thesis/interdisciplinary/,انجام پایان نامه میان رشته ای,exact,after final direct HTTP 200 and owner approval
+/thesis/interdisciplinary/,پژوهش میان رشته ای,lsi,after final direct HTTP 200 and owner approval
+/thesis/interdisciplinary/,پایان نامه میان رشته ای,lsi,after final direct HTTP 200 and owner approval
+/thesis/,راهنمای پایان نامه,lsi,after final direct HTTP 200 and owner approval
+/thesis/,مسیر پژوهش تا دفاع,lsi,after final direct HTTP 200 and owner approval
+/thesis/,نگارش پایان نامه,lsi,after final direct HTTP 200 and owner approval
+/proposal/,تدوین پیشنهاده پژوهشی,lsi,after final direct HTTP 200 and owner approval
+/proposal/,طراحی پیشنهاده,lsi,after final direct HTTP 200 and owner approval
+/proposal/,ساختار پروپوزال,lsi,after final direct HTTP 200 and owner approval
+/service-project/,پروژه درسی,lsi,after final direct HTTP 200 and owner approval
+/service-project/,راهنمای پروژه دانشجویی,lsi,after final direct HTTP 200 and owner approval
+/service-project/,بررسی پروژه دانشگاهی,lsi,after final direct HTTP 200 and owner approval

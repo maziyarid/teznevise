@@ -1,0 +1,55 @@
+url,pr456_requested,pr456_current,pr457,this_pr
+/thesis/,replacement body/metadata at /thesis/,page manifest entry,source-link additions,replacement body only; no live metadata
+/thesis/master/,replacement body/metadata at /thesis/master/,page manifest entry,master guide draft,replacement body only; no live metadata
+/thesis/phd/,replacement body/metadata at /thesis/phd/,page manifest entry,source-link additions,replacement body only; no live metadata
+/proposal/,replacement body/metadata at /proposal/,page manifest entry,no matching source entry reviewed,replacement body only; no live metadata
+/proposal/phd/,replacement body/metadata at /proposal/phd/,page manifest entry,source-link additions,replacement body only; no live metadata
+/service-project/,replacement body/metadata at /student-projects/,page manifest entry,no matching source entry reviewed,replacement body only; no live metadata
+/thesis/engineering/electrical/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/engineering/mechanical/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/engineering/civil/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/engineering/industrial/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/engineering/chemical/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/engineering/computer/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/humanities/accounting/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/humanities/economics/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/humanities/theology-islamic-studies/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/humanities/education/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/engineering/chemical-industrial/chemical-engineering-project/,no money-page body,legacy route row; target https://teznevise.ir/project/engineering/chemical-industrial/chemical-engineering-project/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/simulation/network/cisco-packet-tracer/,no money-page body,legacy route row; target https://teznevise.ir/service-simulation/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/simulation/chemical-process/aspen-hysys/,no money-page body,legacy route row; target https://teznevise.ir/service-simulation/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/engineering/electrical/,no money-page body,legacy route row; target https://teznevise.ir/service-project/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/engineering/electrical/ees/,no money-page body,legacy route row; target https://teznevise.ir/project/engineering/electrical/ees/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/programming/hardware/hspice/,no money-page body,legacy route row; target https://teznevise.ir/project/programming/hardware/hspice/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/programming/hardware/vhdl/,no money-page body,legacy route row; target https://teznevise.ir/project/programming/hardware/vhdl/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/programming/hardware/silvaco/,no money-page body,legacy route row; target https://teznevise.ir/project/programming/hardware/silvaco/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/simulation/hydrology/hec-ras/,no money-page body,legacy route row; target https://teznevise.ir/service-simulation/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/engineering/mechanical-civil/opensees/,no money-page body,legacy route row; target https://teznevise.ir/project/engineering/mechanical-civil/opensees/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/engineering/mechanical-civil/plaxis/,no money-page body,legacy route row; target https://teznevise.ir/project/engineering/mechanical-civil/plaxis/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/engineering/chemical-industrial/econometrics-project/,no money-page body,legacy route row; target https://teznevise.ir/project/engineering/chemical-industrial/econometrics-project/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/engineering/mechanical-civil/aerospace-project/,no money-page body,legacy route row; target https://teznevise.ir/project/engineering/mechanical-civil/aerospace-project/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/assignments/computer-science/uml-diagrams/,no money-page body,legacy route row; target https://teznevise.ir/project/assignments/computer-science/uml-diagrams/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/programming/ai-data/signal-processing-matlab/,no money-page body,legacy route row; target https://teznevise.ir/project/programming/ai-data/signal-processing-matlab/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/gams/,no money-page body,no matching entry reviewed,source-link additions,INCOMPLETE: no replacement body or WP draft
+/project/programming/languages/r-programming/,no money-page body,legacy route row; target https://teznevise.ir/project/programming/languages/r-programming/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/simulation/electrical/proteus/,no money-page body,legacy route row; target https://teznevise.ir/service-simulation/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/student-research/university-projects/bachelor-project/,no money-page body,legacy route row; target https://teznevise.ir/project/student-research/university-projects/bachelor-project/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/statistics/general-statistics/ibm-spss-statistics/,no money-page body,legacy route row; target https://teznevise.ir/service-statistics/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/statistics/sem/amos/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/statistics/sem/smart-pls/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/project/simulation/electrical/matlab-simulink/,no money-page body,legacy route row; target https://teznevise.ir/service-simulation/,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/engineering/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/humanities/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/humanities/management/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/humanities/psychology/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/humanities/law/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/humanities/history/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/humanities/philosophy/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/humanities/social-sciences/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/medical-health/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/pure-science/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/international/,no money-page body,no matching entry reviewed,source-link additions,INCOMPLETE: no replacement body or WP draft
+/thesis/animal-science-veterinary/,no money-page body,no matching entry reviewed,source-link additions,INCOMPLETE: no replacement body or WP draft
+/thesis/art-architecture-media/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft
+/thesis/agriculture-natural-resources/,no money-page body,no matching entry reviewed,source-link additions,INCOMPLETE: no replacement body or WP draft
+/thesis/interdisciplinary/,no money-page body,no matching entry reviewed,no matching source entry reviewed,INCOMPLETE: no replacement body or WP draft

@@ -1,0 +1,20 @@
+[
+  {
+    "source": "/thesis/",
+    "target": "/thesis/master/",
+    "anchor": "راهنمای پژوهش در مقطع کارشناسی ارشد",
+    "http_status": 301
+  },
+  {
+    "source": "/proposal/",
+    "target": "/thesis/master/",
+    "anchor": "راهنمای پژوهش در مقطع کارشناسی ارشد",
+    "http_status": 301
+  },
+  {
+    "source": "/service-project/",
+    "target": "/thesis/master/",
+    "anchor": "مراحل پژوهش دوره کارشناسی ارشد",
+    "http_status": 301
+  }
+]

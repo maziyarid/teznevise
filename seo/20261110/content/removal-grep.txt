@@ -1,0 +1,3 @@
+git grep -n -E "consult_copy|legal-copy" -- .
+Exclusions: CHANGELOG.md, docs/, this PR content reports
+No remaining runtime or release references.

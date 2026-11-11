@@ -125,15 +125,29 @@ def main():
     ap.add_argument('--snapshot-dir', type=Path)
     ap.add_argument('--pr456-manifest', type=Path)
     ap.add_argument('--rendered-only', action='store_true')
+    ap.add_argument('--files-only', action='store_true', help='Validate prepared files only; does not certify cluster completion')
     args = ap.parse_args()
     errors, offenders, snapshots = [], [], []
     manifest_path = CONTENT / 'manifest.json'
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {'pages': []}
     if not args.rendered_only:
         if not manifest['pages']: errors.append('No completed content drafts in manifest; content waves are incomplete')
+        plan_path = CONTENT / 'cluster-plan.json'
+        if plan_path.exists() and not args.files_only:
+            planned = {p['path'] for p in json.loads(plan_path.read_text())}
+            prepared = {p['path'] for p in manifest['pages']}
+            for missing in sorted(planned - prepared):
+                errors.append('Planned page has no full draft: ' + missing)
+            if manifest.get('incomplete_waves'):
+                errors.append('Incomplete waves: ' + ', '.join(manifest['incomplete_waves']))
         for page in manifest['pages']:
             p = CONTENT / page['file']
-            errors.extend(body_errors(page['path'], p.read_text(), page['minimum_words']))
+            text = p.read_text()
+            errors.extend(body_errors(page['path'], text, page['minimum_words']))
+            prose = re.sub(r'```.*?```', '', text, flags=re.S)
+            words = len(re.sub(r'\[([^\]]+)\]\([^)]*\)', r'\1', prose).split())
+            if page.get('maximum_words') and words > page['maximum_words']:
+                errors.append(f"{page['path']}: {words} words exceed {page['maximum_words']}")
             if page.get('status') == 'publish': errors.append('Published status forbidden: ' + page['path'])
     graph_path = CONTENT / 'link-graph.csv'
     graph = list(csv.DictReader(graph_path.open())) if graph_path.exists() else []
@@ -167,6 +181,7 @@ def main():
                 errors.extend(f"{r['url']} {r['element']}: {r['current_text']}" for r in rows)
     report = {'passed': not errors, 'errors': errors, 'offenders': offenders, 'snapshots': snapshots,
               'drafts_checked': len(manifest['pages']) if not args.rendered_only else 0,
+              'scope': 'prepared files only; not full acceptance' if args.files_only else 'full acceptance' if not args.rendered_only else 'rendered baseline only',
               'note': 'HTTP snapshots prove only the observed response bytes, not absence of all database changes.'}
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

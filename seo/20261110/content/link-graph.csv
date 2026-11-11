@@ -1,0 +1,124 @@
+source,target,anchor,anchor_type,source_exact_count
+/thesis/,/proposal/,راهنمای تدوین طرح پژوهش,lsi,0
+/thesis/,/online-calculation-tools/,ابزارهای محاسباتی پژوهش,lsi,0
+/thesis/,/downloads/,بخش منابع و فایل های پژوهشی,lsi,0
+/thesis/,/thesis/phd/,مسیر طراحی و دفاع از پژوهش دکتری,lsi,0
+/thesis/,/contact-us/,راه های تماس با مجموعه,lsi,0
+/thesis/,/thesis/engineering/,پژوهش مهندسی,lsi,0
+/thesis/,/thesis/humanities/,پژوهش علوم انسانی,lsi,0
+/thesis/,/thesis/humanities/management/,پژوهش مدیریت,lsi,0
+/thesis/,/thesis/humanities/psychology/,پژوهش روان شناسی,lsi,0
+/thesis/,/thesis/humanities/law/,پژوهش حقوق,lsi,0
+/thesis/,/thesis/humanities/history/,پژوهش تاریخ,lsi,0
+/thesis/,/thesis/humanities/philosophy/,پژوهش فلسفه,lsi,0
+/thesis/,/thesis/humanities/social-sciences/,پژوهش علوم اجتماعی,lsi,0
+/thesis/,/thesis/medical-health/,پژوهش سلامت و پزشکی,lsi,0
+/thesis/,/thesis/pure-science/,پژوهش علوم پایه,lsi,0
+/thesis/,/thesis/international/,پژوهش بین المللی,lsi,0
+/thesis/,/thesis/animal-science-veterinary/,پژوهش دام و دامپزشکی,lsi,0
+/thesis/,/thesis/art-architecture-media/,پژوهش هنر و معماری,lsi,0
+/thesis/,/thesis/agriculture-natural-resources/,پژوهش کشاورزی و منابع طبیعی,lsi,0
+/thesis/,/thesis/interdisciplinary/,پژوهش میان رشته ای,lsi,0
+/thesis/,/download/university-proposal-forms-iran/,مجموعه فرم های پیشنهاده دانشگاهی,lsi,0
+/thesis/,/download/sharif-graduate-forms/,فرم های تحصیلات تکمیلی برای بررسی نسخه,lsi,0
+/thesis/,/download/tehran-ece-graduate-forms/,فرم های پژوهشی دانشکده برق و کامپیوتر,lsi,0
+/thesis/,/download/tabriz-campus-graduate-forms/,فرم های تکمیلی تحصیلات تکمیلی,lsi,0
+/thesis/,/gams/,راهنمای مدل سازی ریاضی,lsi,0
+/thesis/,/service-statistics/,مسیر بررسی تحلیل داده,lsi,0
+/thesis/,/thesis/phd/,راهنمای پژوهش در مقطع دکتری,lsi,0
+/thesis/,/proposal/phd/,مسیر طراحی پیشنهاده دکتری,lsi,0
+/thesis/,/inquiry/,درخواست بررسی پروژه,lsi,0
+/thesis/master/,/thesis/,انجام پایان نامه,exact,1
+/thesis/master/,/thesis/phd/,راهنمای پژوهش در سطح دکتری,lsi,1
+/thesis/master/,/proposal/,راهنمای آماده سازی پروپوزال,lsi,1
+/thesis/master/,/online-calculation-tools/,محاسبه گرهای مرتبط با طراحی پژوهش,lsi,1
+/thesis/master/,/downloads/,آرشیو فرم ها و منابع پژوهش,lsi,1
+/thesis/master/,/thesis/,نقشه عمومی مسیر پایان نامه,lsi,1
+/thesis/master/,/contact-us/,صفحه تماس و پیگیری درخواست,lsi,1
+/thesis/master/,/thesis/engineering/,راهنمای پژوهش مهندسی,lsi,1
+/thesis/master/,/thesis/humanities/,مسیر پژوهش علوم انسانی,lsi,1
+/thesis/master/,/thesis/phd/,راهنمای پژوهش دکتری,lsi,1
+/thesis/master/,/proposal/,راهنمای طراحی پیشنهاده,lsi,1
+/thesis/master/,/thesis/engineering/,پژوهش مهندسی,lsi,1
+/thesis/master/,/thesis/humanities/,پژوهش علوم انسانی,lsi,1
+/thesis/master/,/thesis/humanities/management/,پژوهش مدیریت,lsi,1
+/thesis/master/,/thesis/humanities/psychology/,پژوهش روان شناسی,lsi,1
+/thesis/master/,/thesis/humanities/law/,پژوهش حقوق,lsi,1
+/thesis/master/,/thesis/humanities/history/,پژوهش تاریخ,lsi,1
+/thesis/master/,/thesis/humanities/philosophy/,پژوهش فلسفه,lsi,1
+/thesis/master/,/thesis/humanities/social-sciences/,پژوهش علوم اجتماعی,lsi,1
+/thesis/master/,/thesis/medical-health/,پژوهش سلامت و پزشکی,lsi,1
+/thesis/master/,/thesis/pure-science/,پژوهش علوم پایه,lsi,1
+/thesis/master/,/thesis/international/,پژوهش بین المللی,lsi,1
+/thesis/master/,/thesis/animal-science-veterinary/,پژوهش دام و دامپزشکی,lsi,1
+/thesis/master/,/thesis/art-architecture-media/,پژوهش هنر و معماری,lsi,1
+/thesis/master/,/thesis/agriculture-natural-resources/,پژوهش کشاورزی و منابع طبیعی,lsi,1
+/thesis/master/,/thesis/interdisciplinary/,پژوهش میان رشته ای,lsi,1
+/thesis/master/,/download/university-proposal-forms-iran/,مجموعه فرم های پیشنهاده دانشگاهی,lsi,1
+/thesis/master/,/download/sharif-graduate-forms/,فرم های تحصیلات تکمیلی برای بررسی نسخه,lsi,1
+/thesis/master/,/download/tehran-ece-graduate-forms/,فرم های پژوهشی دانشکده برق و کامپیوتر,lsi,1
+/thesis/master/,/download/tabriz-campus-graduate-forms/,فرم های تکمیلی تحصیلات تکمیلی,lsi,1
+/thesis/master/,/inquiry/,درخواست بررسی پروژه,lsi,1
+/thesis/phd/,/thesis/,انجام پایان نامه,exact,1
+/thesis/phd/,https://teznevise.ir/how-to-find-research-gap/,پیدا کردن شکاف پژوهشی,lsi,1
+/thesis/phd/,https://teznevise.ir/proposal/,راهنمایی و طراحی پروپوزال,lsi,1
+/thesis/phd/,https://teznevise.ir/thesis/chapter-three/,خدمات فصل سوم پایان نامه,lsi,1
+/thesis/phd/,https://teznevise.ir/thesis/chapter-four/,خدمات فصل چهارم پایان نامه,lsi,1
+/thesis/phd/,https://teznevise.ir/thesis/chapter-five/,خدمات فصل پنجم پایان نامه,lsi,1
+/thesis/phd/,https://teznevise.ir/thesis/,خدمات انجام پایان نامه,lsi,1
+/thesis/phd/,https://teznevise.ir/inquiry/,ثبت درخواست,lsi,1
+/thesis/phd/,https://teznevise.ir/thesis/,موسسه انجام پایان نامه,lsi,1
+/thesis/phd/,/thesis/humanities/management/,پژوهش دکتری مدیریت,lsi,1
+/thesis/phd/,/thesis/humanities/psychology/,مطالعات روان شناسی,lsi,1
+/thesis/phd/,/inquiry/,درخواست بررسی پروژه,lsi,1
+/proposal/,/online-calculation-tools/,راهنمای ابزارهای محاسبات پژوهش,lsi,0
+/proposal/,/proposal/phd/,راهنمای طراحی طرح پژوهش در دوره دکتری,lsi,0
+/proposal/,/thesis/,مسیر راهنمایی از طرح تا گزارش پژوهش,lsi,0
+/proposal/,/downloads/,مجموعه فایل های قابل دریافت پژوهشی,lsi,0
+/proposal/,/contact-us/,راه های تماس و ثبت پرسش,lsi,0
+/proposal/,/contact-us/,مسیر تماس برای گزارش و اصلاح محتوا,lsi,0
+/proposal/,/thesis/engineering/,پژوهش مهندسی,lsi,0
+/proposal/,/thesis/humanities/,پژوهش علوم انسانی,lsi,0
+/proposal/,/thesis/humanities/management/,پژوهش مدیریت,lsi,0
+/proposal/,/thesis/humanities/psychology/,پژوهش روان شناسی,lsi,0
+/proposal/,/thesis/humanities/law/,پژوهش حقوق,lsi,0
+/proposal/,/thesis/humanities/history/,پژوهش تاریخ,lsi,0
+/proposal/,/thesis/humanities/philosophy/,پژوهش فلسفه,lsi,0
+/proposal/,/thesis/humanities/social-sciences/,پژوهش علوم اجتماعی,lsi,0
+/proposal/,/thesis/medical-health/,پژوهش سلامت و پزشکی,lsi,0
+/proposal/,/thesis/pure-science/,پژوهش علوم پایه,lsi,0
+/proposal/,/thesis/international/,پژوهش بین المللی,lsi,0
+/proposal/,/thesis/animal-science-veterinary/,پژوهش دام و دامپزشکی,lsi,0
+/proposal/,/thesis/art-architecture-media/,پژوهش هنر و معماری,lsi,0
+/proposal/,/thesis/agriculture-natural-resources/,پژوهش کشاورزی و منابع طبیعی,lsi,0
+/proposal/,/thesis/interdisciplinary/,پژوهش میان رشته ای,lsi,0
+/proposal/,/download/university-proposal-forms-iran/,مجموعه فرم های پیشنهاده دانشگاهی,lsi,0
+/proposal/,/download/sharif-graduate-forms/,فرم های تحصیلات تکمیلی برای بررسی نسخه,lsi,0
+/proposal/,/download/tehran-ece-graduate-forms/,فرم های پژوهشی دانشکده برق و کامپیوتر,lsi,0
+/proposal/,/download/tabriz-campus-graduate-forms/,فرم های تکمیلی تحصیلات تکمیلی,lsi,0
+/proposal/,/gams/,راهنمای مدل سازی ریاضی,lsi,0
+/proposal/,/service-statistics/,مسیر بررسی تحلیل داده,lsi,0
+/proposal/,/thesis/phd/,راهنمای پژوهش در مقطع دکتری,lsi,0
+/proposal/,/proposal/phd/,مسیر طراحی پیشنهاده دکتری,lsi,0
+/proposal/,/inquiry/,درخواست بررسی پروژه,lsi,0
+/proposal/phd/,/proposal/,انجام پروپوزال,exact,1
+/proposal/phd/,https://teznevise.ir/proposal/,راهنمای پروپوزال,lsi,1
+/proposal/phd/,https://teznevise.ir/thesis/phd/,راهنمای رساله دکتری,lsi,1
+/proposal/phd/,https://teznevise.ir/inquiry/,ثبت درخواست,lsi,1
+/proposal/phd/,/thesis/humanities/management/,مسیر پژوهش مدیریت,lsi,1
+/proposal/phd/,/thesis/engineering/,پژوهش مهندسی,lsi,1
+/proposal/phd/,/thesis/phd/,راهنمای مسیر رساله,lsi,1
+/proposal/phd/,/online-calculation-tools/,مجموعه ابزارهای محاسباتی پژوهش,lsi,1
+/proposal/phd/,/downloads/,منابع و قالب های قابل دریافت,lsi,1
+/proposal/phd/,/inquiry/,درخواست بررسی پروژه,lsi,1
+/service-project/,/online-calculation-tools/,ابزارهای بررسی محاسبات آماری,lsi,0
+/service-project/,/service-simulation/,توضیح مسیر راهنمایی مدل سازی و شبیه سازی,lsi,0
+/service-project/,/downloads/,کتابخانه فایل های کمک پژوهشی,lsi,0
+/service-project/,/proposal/,راهنمای صورت بندی طرح پژوهش,lsi,0
+/service-project/,/thesis/,راهنمای پیوند طراحی، اجرا و گزارش علمی,lsi,0
+/service-project/,/contact-us/,راه های تماس و توضیح نیاز پروژه,lsi,0
+/service-project/,/contact-us/,مسیر تماس برای بازبینی راهنما,lsi,0
+/service-project/,/thesis/engineering/,پژوهش در رشته های مهندسی,lsi,0
+/service-project/,/thesis/humanities/,پژوهش در علوم انسانی,lsi,0
+/service-project/,/gams/,راهنمای پروژه بهینه سازی,lsi,0
+/service-project/,/inquiry/,درخواست بررسی پروژه,lsi,0

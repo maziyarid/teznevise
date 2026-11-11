@@ -1,0 +1,32 @@
+[
+  {
+    "path": "/thesis/",
+    "offenders": [],
+    "scope": "pandoc-rendered draft body only; not an integrated WordPress theme preview"
+  },
+  {
+    "path": "/thesis/master/",
+    "offenders": [],
+    "scope": "pandoc-rendered draft body only; not an integrated WordPress theme preview"
+  },
+  {
+    "path": "/thesis/phd/",
+    "offenders": [],
+    "scope": "pandoc-rendered draft body only; not an integrated WordPress theme preview"
+  },
+  {
+    "path": "/proposal/",
+    "offenders": [],
+    "scope": "pandoc-rendered draft body only; not an integrated WordPress theme preview"
+  },
+  {
+    "path": "/proposal/phd/",
+    "offenders": [],
+    "scope": "pandoc-rendered draft body only; not an integrated WordPress theme preview"
+  },
+  {
+    "path": "/service-project/",
+    "offenders": [],
+    "scope": "pandoc-rendered draft body only; not an integrated WordPress theme preview"
+  }
+]

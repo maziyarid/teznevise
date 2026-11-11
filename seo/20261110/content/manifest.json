@@ -1,0 +1,76 @@
+{
+  "origin": "https://teznevise.ir",
+  "draft_only": true,
+  "pages": [
+    {
+      "path": "/thesis/",
+      "file": "pages/thesis.md",
+      "status": "revise",
+      "minimum_words": 2000,
+      "words": 3689,
+      "wordpress_write": false,
+      "source": "PR #456 f53b21ed body + additions",
+      "review_status": "unreviewed; not publish-ready"
+    },
+    {
+      "path": "/thesis/master/",
+      "file": "pages/thesis--master.md",
+      "status": "hold",
+      "minimum_words": 3500,
+      "words": 3995,
+      "wordpress_write": false,
+      "source": "PR #456 f53b21ed body + additions",
+      "review_status": "unreviewed; not publish-ready",
+      "maximum_words": 4000
+    },
+    {
+      "path": "/thesis/phd/",
+      "file": "pages/thesis--phd.md",
+      "status": "revise",
+      "minimum_words": 2600,
+      "words": 2649,
+      "wordpress_write": false,
+      "source": "live body + selected PR #456 sections + additions",
+      "review_status": "unreviewed; not publish-ready",
+      "maximum_words": 3200
+    },
+    {
+      "path": "/proposal/",
+      "file": "pages/proposal.md",
+      "status": "revise",
+      "minimum_words": 2000,
+      "words": 4102,
+      "wordpress_write": false,
+      "source": "PR #456 f53b21ed body + additions",
+      "review_status": "unreviewed; not publish-ready"
+    },
+    {
+      "path": "/proposal/phd/",
+      "file": "pages/proposal--phd.md",
+      "status": "revise",
+      "minimum_words": 2200,
+      "words": 2279,
+      "wordpress_write": false,
+      "source": "live body + selected PR #456 sections + additions",
+      "review_status": "unreviewed; not publish-ready",
+      "maximum_words": 2800
+    },
+    {
+      "path": "/service-project/",
+      "file": "pages/service-project.md",
+      "status": "revise",
+      "minimum_words": 3800,
+      "words": 4375,
+      "wordpress_write": false,
+      "source": "PR #456 f53b21ed body + additions",
+      "review_status": "unreviewed; not publish-ready",
+      "maximum_words": 4500
+    }
+  ],
+  "incomplete_waves": [
+    "Wave 1 TOP10 new pages",
+    "Wave 2",
+    "Wave 3"
+  ],
+  "completion_status": "INCOMPLETE: six replacement bodies only; no TOP10 WordPress drafts; Waves 2 and 3 unstarted"
+}

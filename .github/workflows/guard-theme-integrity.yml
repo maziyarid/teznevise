@@ -21,6 +21,9 @@ jobs:
           php-version: '8.3'
           coverage: none
 
+      - name: Test Organization trust reference preservation
+        run: php scripts/seo-20261110/test-trust-reference.php
+
       - name: Lint every PHP file for syntax errors
         run: |
           status=0
