@@ -1,6 +1,8 @@
 # Unreleased — draft review only
 
 - Remove the public service-copy rewriting layer, hooks and runtime call sites at Maziyar's explicit request.
+- Add strict static/local gates, a report-only production crawl, a fail-closed 1.9.35 deployment floor and a legal-review import gate.
+- Keep one schema owner when Rank Math or Yoast is active.
 - Use direct service labels and request CTAs; preserve Enamad badge and hold legal/business descriptions pending trust-page verification. No theme version bump or deployment.
 
 # Changelog

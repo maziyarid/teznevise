@@ -670,6 +670,9 @@ function teznevise_builder_cta( $section, $class = 'btn-tz btn-primary-tz btn-lg
 		esc_url( teznevise_url( $url ) ),
 		esc_html( $text )
 	);
+	if ( rtrim( teznevise_url( $url ), '/' ) === rtrim( home_url( '/inquiry/' ), '/' ) ) {
+		get_template_part( 'template-parts/enamad-trust' );
+	}
 }
 
 /**

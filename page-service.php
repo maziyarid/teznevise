@@ -125,6 +125,7 @@ while ( have_posts() ) :
 				<p><?php esc_html_e( 'موضوع و وضعیت فعلی پروژه را بفرستید؛ مسیر و برآورد اولیه را با شما بررسی می‌کنیم.', 'teznevise' ); ?></p>
 			</div>
 			<a class="btn-tz btn-light-tz btn-lg-tz" href="<?php echo esc_url( teznevise_url( $cta_url ) ); ?>"><?php echo esc_html( $cta_text ); ?></a>
+			<?php get_template_part( 'template-parts/enamad-trust' ); ?>
 		</div>
 	</div>
 </section>

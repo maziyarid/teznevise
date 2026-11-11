@@ -325,6 +325,9 @@ function teznevise_single_download_content( $content ) {
 add_action( 'wp_head', 'teznevise_download_schema' );
 
 function teznevise_download_schema() {
+	if ( defined( 'RANK_MATH_VERSION' ) || defined( 'WPSEO_VERSION' ) ) {
+		return;
+	}
 
     // اسکیما برای تک‌پست دانلود
     if ( is_singular( 'download' ) ) {
