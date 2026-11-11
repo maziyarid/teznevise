@@ -213,14 +213,15 @@ def check_source_contracts() -> None:
     footer = (ROOT / "footer.php").read_text(encoding="utf-8")
     if "trustseal.enamad.ir/?id=7413817" not in footer:
         error("Exact Enamad trustseal HTML is missing from footer.php")
-    for rel in (
-        "footer.php", "page-sitemap.php", "404.php", "inc/defaults.php",
-        "inc/frontend-compat.php", "inc/setup-pages.php", "inc/builder-defaults.json",
-    ):
-        text = (ROOT / rel).read_text(encoding="utf-8")
-        for forbidden in ("مشاوره انجام", "teznevise_" + "consult" + "_copy"):
-            if forbidden in text:
-                error(f"Forbidden public copy in {rel}: {forbidden}")
+    import subprocess
+    import sys
+    gate = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/seo-20261110/verify_content.py"), "--tier", "repo"],
+        stdout=subprocess.DEVNULL,
+        check=False,
+    )
+    if gate.returncode:
+        error("Repository public-copy gate failed; run the Wave 0 verifier for every finding")
     waitlist = (ROOT / "inc" / "waitlist.php").read_text(encoding="utf-8")
     if "teznevise_tool_waitlist" not in waitlist:
         error("Waitlist table installer is missing")
