@@ -1,0 +1,13 @@
+FACT: Job 3 prepares reviewable crawl/link proposals without a deployment or WordPress write path. Branch starts at main 8b432f7dd4ea7206758e9944f4cfe34977afb354. All new tracked files are isolated here.
+
+FACT: Read TEAMLY-HANDOFF.md, then changes.csv or changes.json. live-evidence.json records bounded public GET checks on 11 November 2026 UTC; no full crawl was run. Header arrays collect all redirect hops; HTML canonical and robots fields describe the final response body. Transport CONNECT status is excluded from status_chain. No raw page bodies are stored. Reachability does not establish content quality or indexability.
+
+FACT: Current live differences from the brief: the Terms sitemap loc is already slash-normalised; gateway has noindex, nofollow; search has noindex; /search/ returns 410; root feed returns 200; statistics aliases end at the service page; electrical still redirects to its parent; biomedical/theology are still 404. All six homepages returned 200. The 13 BlueThesis href counts match the #457 inventory. Follow/nofollow and exact surrounding wording were not independently parsed; those attributes remain UNKNOWN pending editorial preflight.
+
+FACT: ownership.json pins #456/#457/#459. #457 has 258 planned rows. Its sole chapter-four target comes from a non-tool article, so the reported 26 template replacements are not in that selected plan. This does not prove runtime-wide absence: template changes require private live storage inspection. No #457 apply plan or #459 runtime is copied here.
+
+INFERENCE: project-decisions.csv proposes restoring the top 15 same slugs. Its other 69 rows are target-review holds, not an executable redirect map. Historical metrics are attributed to #456's ranked inventory, not freshly pulled GSC. field-decisions.csv distinguishes brief-confirmed paths from hypothesised routes; the three hypothesised routes must be checked against #459 before action.
+
+FACT: Run `python3 seo/20261111-job3/validate.py` from the repository root. This offline stdlib validator checks schema, approval states, rollback coverage, scope and the literal forbidden Unicode character. It performs no network calls or writes. No deployment CI was added. Existing unrelated repository gates were not changed or claimed passing.
+
+UNKNOWN: Exact current 26 tool occurrences, the nine/seven navigation set, remaining equivalent redirect destinations, the private Ella map, orphan-download impressions and sections 5 through 8 of the request are unavailable. backlog.md records counts and holds. No prices, personal data, credentials or private export bodies are included.
