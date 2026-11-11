@@ -554,22 +554,19 @@ function teznevise_filter_document_title( $title ) {
 	$core  = trim( (string) preg_replace( '/\s*[-|–]\s*' . preg_quote( $site, '/' ) . '\s*$/u', '', $title ) );
 	$short = ( function_exists( 'mb_strlen' ) ? mb_strlen( $core ) : strlen( $core ) ) < 10;
 	if ( is_front_page() && ( $short || 'خانه' === $core ) ) {
-		return 'مشاوره پایان‌نامه، پروپوزال و تحلیل آماری | ' . $site;
+		return 'گروه پژوهشی تزنویسه | راهنما، ابزار آماری و فرم دانشگاه ها';
 	}
 	if ( is_home() && ( $short || 'بلاگ' === $core ) ) {
 		return 'راهنماها و آموزش‌های پژوهشی | بلاگ ' . $site;
 	}
 	$map = array(
-		'ثبت سفارش'     => 'ثبت درخواست مشاوره پژوهشی',
+		'ثبت سفارش'     => 'ثبت درخواست پژوهشی',
 		'آزمون t'       => 'محاسبه‌گر آزمون t آنلاین',
 		'رگرسیون'       => 'محاسبه‌گر تحلیل رگرسیون آنلاین',
-		'تحلیل کیفی'    => 'مشاوره تحلیل کیفی پژوهش',
 		'تحلیل آماری'   => 'تحلیل آماری تخصصی پژوهش',
 		'شبیه‌سازی'     => 'شبیه‌سازی تخصصی مهندسی و پژوهش',
 		'دانلودها'      => 'دانلود قالب و فایل‌های پژوهشی',
 		'درباره ما'     => 'درباره تزنویسه، همراه پژوهشی دانشجویان',
-		'انجام پروژه دانشجویی' => 'مشاوره پروژه دانشجویی',
-		'انجام مقاله'   => 'مشاوره نگارش مقاله',
 	);
 	if ( isset( $map[ $core ] ) ) {
 		return $map[ $core ] . ' | ' . $site;
@@ -591,7 +588,7 @@ function teznevise_filter_metadesc( $desc ) {
 		return $desc;
 	}
 	if ( is_front_page() ) {
-		return 'تزنویسه همراه پژوهشی دانشجویان است: مشاوره پایان‌نامه و پروپوزال، تحلیل آماری و ابزارهای آنلاین رایگان.';
+		return 'گروه پژوهشی تزنویسه؛ راهنمای مسیر پژوهش، ماشین حساب های آنلاین آمار، فرم و قالب دانشگاه ها و مقاله های آموزشی برای دانشجویان تحصیلات تکمیلی.';
 	}
 	if ( is_home() ) {
 		return 'راهنماها و آموزش‌های پژوهشی تزنویسه: موضوع، پروپوزال، فصل‌های پایان‌نامه و روش تحقیق.';
@@ -819,13 +816,13 @@ function teznevise_output_service_schema() {
 	}
 	$slug = get_post_field( 'post_name', get_queried_object_id() );
 	$map  = array(
-		'thesis'              => array( 'name' => 'مشاوره انجام پایان‌نامه', 'url' => home_url( '/thesis/' ) ),
-		'proposal'            => array( 'name' => 'مشاوره انجام پروپوزال', 'url' => home_url( '/proposal/' ) ),
+		'thesis'              => array( 'name' => 'انجام پایان نامه', 'url' => home_url( '/thesis/' ) ),
+		'proposal'            => array( 'name' => 'انجام پروپوزال', 'url' => home_url( '/proposal/' ) ),
 		'service-statistics'  => array( 'name' => 'تحلیل آماری', 'url' => home_url( '/service-statistics/' ) ),
 		'service-simulation'  => array( 'name' => 'شبیه‌سازی', 'url' => home_url( '/service-simulation/' ) ),
 		'service-qualitative' => array( 'name' => 'تحلیل کیفی', 'url' => home_url( '/service-qualitative/' ) ),
-		'service-project'     => array( 'name' => 'مشاوره پروژه دانشجویی', 'url' => home_url( '/service-project/' ) ),
-		'service-article'     => array( 'name' => 'مشاوره نگارش مقاله', 'url' => home_url( '/service-article/' ) ),
+		'service-project'     => array( 'name' => 'پروژه های دانشجویی', 'url' => home_url( '/service-project/' ) ),
+		'service-article'     => array( 'name' => 'بازبینی مقاله پژوهشی', 'url' => home_url( '/service-article/' ) ),
 	);
 	if ( ! isset( $map[ $slug ] ) ) {
 		return;

@@ -39,7 +39,7 @@ while ( have_posts() ) :
 	} else {
 		$eyebrow   = teznevise_page_field( 'eyebrow', 0, __( 'تزنویسه', 'teznevise' ) );
 		$subtitle = teznevise_page_field( 'subtitle', 0, __( 'همراه پژوهشی از ایده تا دفاع', 'teznevise' ) );
-		$cta_text = teznevise_page_field( 'cta_text', 0, __( 'شروع مشاوره رایگان', 'teznevise' ) );
+		$cta_text = teznevise_page_field( 'cta_text', 0, __( 'ثبت درخواست', 'teznevise' ) );
 		$cta_url  = teznevise_page_field( 'cta_url', 0, '/inquiry/' );
 		$features = teznevise_page_field( 'features' );
 		$timeline = teznevise_page_field( 'timeline' );

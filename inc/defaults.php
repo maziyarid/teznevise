@@ -31,7 +31,7 @@ function teznevise_content_defaults() {
 		'hero_title_grad'=> 'با ابزار و مشاور',
 		'hero_title_2'   => 'پژوهش را پیش ببرید.',
 		'hero_text'      => 'تزنویسه برای دانشجویان همه رشته‌ها ابزارهای آنلاین، عامل‌های هوش مصنوعی و مشاوران متخصص فراهم می‌کند؛ مسیر پایان‌نامه، پروپوزال، تحلیل آماری و آمادگی دفاع را شفاف و قابل اتکا می‌سازد.',
-		'hero_btn_primary' => 'درخواست مشاوره رایگان',
+		'hero_btn_primary' => 'ثبت درخواست',
 		'hero_btn_primary_url' => '/inquiry/',
 		'hero_btn_secondary' => 'مشاهده خدمات',
 		'hero_point_1'   => 'مشاوره اولیه رایگان',
@@ -42,13 +42,13 @@ function teznevise_content_defaults() {
 		'services_title'   => 'هر مرحله از پروژه را با یک پل تخصصی جلو ببرید',
 		'services_text'    => 'از انتخاب موضوع تا دفاع، هر خدمت به خدمت بعدی وصل است تا مسیر پژوهش‌تان یکپارچه بماند.',
 
-		'svc1_title' => 'مشاوره انجام پایان‌نامه',
+		'svc1_title' => 'انجام پایان نامه',
 		'svc1_text'  => 'مشاوره انتخاب موضوع، ساختار فصل‌ها، تحلیل آماری و آمادگی دفاع برای ارشد و دکتری — همراه ابزارهای پژوهشی.',
 		'svc1_url'   => '/thesis/',
 		'svc1_icon'  => 'fa-solid fa-graduation-cap',
 		'svc1_color' => 'icon-indigo',
 
-		'svc2_title' => 'مشاوره انجام پروپوزال',
+		'svc2_title' => 'انجام پروپوزال',
 		'svc2_text'  => 'بیان مسئله، مرور ادبیات، اهداف، فرضیه‌ها و روش‌شناسی با ساختار علمی و منابع به‌روز.',
 		'svc2_url'   => '/proposal/',
 		'svc2_icon'  => 'fa-solid fa-file-circle-check',
@@ -84,7 +84,7 @@ function teznevise_content_defaults() {
 		'svc7_icon'  => 'fa-solid fa-comments',
 		'svc7_color' => 'icon-indigo',
 
-		'svc8_title' => 'مشاوره پروژه دانشجویی',
+		'svc8_title' => 'بررسی پروژه دانشجویی',
 		'svc8_text'  => 'راهنمایی پروژه‌های درسی، کارورزی و گزارش‌های دانشگاهی با ساختار علمی و همراهی مرحله‌ای.',
 		'svc8_url'   => '/service-project/',
 		'svc8_icon'  => 'fa-solid fa-folder-open',
@@ -132,7 +132,7 @@ function teznevise_content_defaults() {
 
 		'cta_title' => 'پروژه پژوهشی‌ات را همین امروز شروع کن',
 		'cta_text'  => 'موضوع را بفرست؛ کارشناسان تزنویسه مسیر، زمان و برآورد اولیه را با شما بررسی می‌کنند.',
-		'cta_btn'   => 'درخواست مشاوره رایگان',
+		'cta_btn'   => 'ثبت درخواست',
 		'cta_btn_url' => '/inquiry/',
 	);
 }

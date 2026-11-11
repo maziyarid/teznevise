@@ -302,8 +302,8 @@ $complete = function_exists( 'teznevise_profile_is_complete' ) && teznevise_prof
 				<label><?php esc_html_e( 'عنوان پروژه', 'teznevise' ); ?><input name="project_title" required minlength="4"></label>
 				<label><?php esc_html_e( 'خدمت', 'teznevise' ); ?>
 					<select name="project_service">
-						<option><?php esc_html_e( 'مشاوره پایان‌نامه', 'teznevise' ); ?></option>
-						<option><?php esc_html_e( 'مشاوره پروپوزال', 'teznevise' ); ?></option>
+						<option><?php esc_html_e( 'بررسی پایان نامه', 'teznevise' ); ?></option>
+						<option><?php esc_html_e( 'بررسی پروپوزال', 'teznevise' ); ?></option>
 						<option><?php esc_html_e( 'تحلیل آماری', 'teznevise' ); ?></option>
 						<option><?php esc_html_e( 'شبیه‌سازی', 'teznevise' ); ?></option>
 					</select>

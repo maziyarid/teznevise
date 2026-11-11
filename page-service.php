@@ -35,7 +35,7 @@ while ( have_posts() ) :
 	} else {
 		$eyebrow     = teznevise_page_field( 'eyebrow', 0, __( 'خدمات پژوهشی', 'teznevise' ) );
 		$subtitle   = teznevise_page_field( 'subtitle' );
-		$cta_text   = teznevise_page_field( 'cta_text', 0, __( 'شروع مشاوره رایگان', 'teznevise' ) );
+		$cta_text   = teznevise_page_field( 'cta_text', 0, __( 'ثبت درخواست', 'teznevise' ) );
 		$cta_url    = teznevise_page_field( 'cta_url', 0, '/inquiry/' );
 		$hero_note  = teznevise_page_field( 'hero_note' );
 		$icon       = function_exists( 'teznevise_get_page_icon' ) ? teznevise_get_page_icon() : teznevise_page_field( 'service_icon', 0, 'fa-solid fa-graduation-cap' );

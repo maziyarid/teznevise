@@ -69,7 +69,7 @@ while ( have_posts() ) :
 						<div class="faq-a"><?php esc_html_e( 'در ساعات کاری (شنبه تا پنجشنبه، ۹ تا ۲۱) معمولاً در کمتر از چند ساعت پاسخ اولیه داده می‌شود.', 'teznevise' ); ?></div>
 					</div>
 					<div class="faq-item">
-						<button type="button" class="faq-q" aria-expanded="false"><?php esc_html_e( 'آیا مشاوره اولیه رایگان است؟', 'teznevise' ); ?></button>
+						<button type="button" class="faq-q" aria-expanded="false"><?php esc_html_e( 'آیا گفتگوی اولیه رایگان است؟', 'teznevise' ); ?></button>
 						<div class="faq-a"><?php esc_html_e( 'بله. بررسی اولیه موضوع، مسیر و برآورد زمان بدون هزینه است.', 'teznevise' ); ?></div>
 					</div>
 					<div class="faq-item">

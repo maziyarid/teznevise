@@ -39,8 +39,8 @@ if ( is_page() && function_exists( 'teznevise_the_page_leftover_content' ) ) {
 			</div>
 			<div class="footer-col">
 				<p class="footer-heading"><?php esc_html_e( 'خدمات', 'teznevise' ); ?></p>
-				<a href="<?php echo esc_url( home_url( '/thesis/' ) ); ?>"><?php esc_html_e( 'مشاوره انجام پایان‌نامه', 'teznevise' ); ?></a>
-				<a href="<?php echo esc_url( home_url( '/proposal/' ) ); ?>"><?php esc_html_e( 'مشاوره انجام پروپوزال', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/thesis/' ) ); ?>"><?php esc_html_e( 'انجام پایان نامه', 'teznevise' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/proposal/' ) ); ?>"><?php esc_html_e( 'تدوین پیشنهاده پژوهشی', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/service-statistics/' ) ); ?>"><?php esc_html_e( 'تحلیل آماری', 'teznevise' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/online-calculation-tools/' ) ); ?>"><?php esc_html_e( 'ابزارهای آنلاین', 'teznevise' ); ?></a>
 			</div>
