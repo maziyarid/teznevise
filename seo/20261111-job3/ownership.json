@@ -1,0 +1,33 @@
+{
+  "claim_label": "FACT",
+  "main": "8b432f7dd4ea7206758e9944f4cfe34977afb354",
+  "prs": [
+    {
+      "headRefName": "seo/teznevise-onpage-20261110",
+      "headRefOid": "313d180cf3ad3335e864da240ddea8933d70d1e9",
+      "isDraft": true,
+      "state": "OPEN",
+      "title": "MAZ: Teznevise on-page SEO and 84 legacy project redirects"
+    },
+    {
+      "headRefName": "seo/internal-links-20261110",
+      "headRefOid": "34be496e0aa5946bcdbcc81c7051ca1011ddd9c9",
+      "isDraft": true,
+      "state": "OPEN",
+      "title": "Stage primary and LSI internal links with draft master page"
+    },
+    {
+      "headRefName": "codex/wave0-copy-removal-20261110",
+      "headRefOid": "107abf3b9677e921bae1725fab6dfe685f475491",
+      "isDraft": true,
+      "state": "OPEN",
+      "title": "PR-A: Wave 0 copy-filter removal, strict gates and held inputs"
+    }
+  ],
+  "link_plan_rows": 258,
+  "bluethesis_occurrences": 13,
+  "bluethesis_sources": 12,
+  "project_decisions": 84,
+  "restoration_proposals": 15,
+  "redirect_reviews_held": 69
+}

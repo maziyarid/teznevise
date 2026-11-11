@@ -1,0 +1,1490 @@
+[
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/",
+    "checked_at_utc": "2026-11-11T18:03:31.948455+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://bluethesis.ir/",
+    "checked_at_utc": "2026-11-11T18:03:31.691336+00:00",
+    "final_status": 200,
+    "final_url": "https://bluethesis.ir/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://bluethesis.ir/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/#blue-services",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/programing/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/%d8%a7%d8%b3%d8%aa%d9%86%d8%a7%d8%af-%d8%a8%d9%87-%d9%85%d9%82%d8%a7%d9%84%d9%87-%da%a9%d9%86%d9%81%d8%b1%d8%a7%d9%86%d8%b3%db%8c-%d8%af%d8%b1-apa/",
+      "https://bluethesis.ir/%d8%a7%d8%b3%d8%aa%d9%86%d8%a7%d8%af-%d8%a8%d9%87-%d9%85%d9%82%d8%a7%d9%84%d9%87-%da%a9%d9%86%d9%81%d8%b1%d8%a7%d9%86%d8%b3%db%8c-%d8%af%d8%b1-apa/",
+      "https://bluethesis.ir/rahnameh-analiz-regressyon-ljestik-python-r/",
+      "https://bluethesis.ir/rahnameh-analiz-regressyon-ljestik-python-r/",
+      "https://bluethesis.ir/rahnameh-analiz-regressyon-ljestik-python-r/",
+      "https://bluethesis.ir/analyze-mediator-modulator-variables-thesis/",
+      "https://bluethesis.ir/analyze-mediator-modulator-variables-thesis/",
+      "https://bluethesis.ir/analyze-mediator-modulator-variables-thesis/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/#blue-thesis",
+      "https://bluethesis.ir/#blue-analysis",
+      "https://bluethesis.ir/#blue-complementary",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/order/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://fasthesis.ir/",
+    "checked_at_utc": "2026-11-11T18:03:31.858565+00:00",
+    "final_status": 200,
+    "final_url": "https://fasthesis.ir/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://fasthesis.ir/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://kanoon-research.ir/",
+    "checked_at_utc": "2026-11-11T18:03:31.823414+00:00",
+    "final_status": 200,
+    "final_url": "https://kanoon-research.ir/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://kanoon-research.ir/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevisan-official.ir/",
+    "checked_at_utc": "2026-11-11T18:03:32.745398+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevisan-official.ir/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevisan-official.ir/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://tezagah.ir/",
+    "checked_at_utc": "2026-11-11T18:03:31.843188+00:00",
+    "final_status": 200,
+    "final_url": "https://tezagah.ir/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://tezagah.ir/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/robots.txt",
+    "checked_at_utc": "2026-11-11T18:03:30.687819+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/robots.txt",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [],
+    "robots_meta": [],
+    "error": "",
+    "robots_txt": "User-agent: *\n\n# Public crawler access\nAllow: /\nAllow: /robots.txt\nAllow: /sitemap_index.xml\nAllow: /*-sitemap.xml\n\n# WordPress administration\nDisallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n\n# Sensitive or non-public endpoints\nDisallow: /wp-register.php\nDisallow: /xmlrpc.php\n\n# REST/API crawler noise\nDisallow: /wp-json/\nDisallow: /*?rest_route=\nDisallow: /*&rest_route=\n\n# Internal search\n\n# Low-value duplicate URL variants\nDisallow: /*?replytocom=\nDisallow: /*&replytocom=\nDisallow: /*?share=\nDisallow: /*&share=\nDisallow: /*?print=\nDisallow: /*&print=\nDisallow: /*?doing_wp_cron\nDisallow: /*?preview=\nDisallow: /*&preview=\nDisallow: /*?utm_\nDisallow: /*&utm_\n\n# Specialty and order URLs\nDisallow: /order/\n\n# Archives\nDisallow: /date/\n\n# Feeds and trackbacks\nDisallow: /*/trackback/\n\n# WooCommerce transactional pages\nDisallow: /cart/\nDisallow: /checkout/\nDisallow: /my-account/\nDisallow: /shop/?orderby=\nDisallow: /shop/?filter_\n\n# Staging and utility paths\nDisallow: /staging/\nDisallow: /test/\nDisallow: /.git/\nDisallow: /cgi-bin/\n\nSitemap: https://teznevise.ir/sitemap_index.xml",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/sitemap_index.xml",
+    "checked_at_utc": "2026-11-11T18:03:31.697125+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/sitemap_index.xml",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [
+      "noindex"
+    ],
+    "canonical": [],
+    "robots_meta": [],
+    "error": "",
+    "terms_locations": [],
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/page-sitemap.xml",
+    "checked_at_utc": "2026-11-11T18:03:32.471214+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/page-sitemap.xml",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [
+      "noindex"
+    ],
+    "canonical": [],
+    "robots_meta": [],
+    "error": "",
+    "terms_locations": [
+      "https://teznevise.ir/terms-and-conditions/"
+    ],
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/terms-and-conditions",
+    "checked_at_utc": "2026-11-11T18:03:32.868905+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/terms-and-conditions/",
+    "status_chain": [
+      "301",
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/terms-and-conditions/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/terms-and-conditions/",
+    "checked_at_utc": "2026-11-11T18:03:33.017955+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/terms-and-conditions/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/terms-and-conditions/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/_tzgtm/?id=GTM-T32XKX5Z",
+    "checked_at_utc": "2026-11-11T18:03:32.251540+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/_tzgtm/?id=GTM-T32XKX5Z",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [
+      "noindex, nofollow"
+    ],
+    "canonical": [],
+    "robots_meta": [],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/?s=job3",
+    "checked_at_utc": "2026-11-11T18:03:33.191275+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/?s=job3",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, noindex\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/search/",
+    "checked_at_utc": "2026-11-11T18:03:33.033198+00:00",
+    "final_status": 410,
+    "final_url": "https://teznevise.ir/search/",
+    "status_chain": [
+      "410"
+    ],
+    "x_robots_tag": [
+      "noindex, follow"
+    ],
+    "canonical": [],
+    "robots_meta": [],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/wp-login.php",
+    "checked_at_utc": "2026-11-11T18:03:34.996527+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/inquiry/",
+    "status_chain": [
+      "302",
+      "302",
+      "200"
+    ],
+    "x_robots_tag": [
+      "noindex, nofollow"
+    ],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/inquiry/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/join-us/?specialty=test",
+    "checked_at_utc": "2026-11-11T18:03:34.562810+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/join-us/",
+    "status_chain": [
+      "301",
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/join-us/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/feed/",
+    "checked_at_utc": "2026-11-11T18:03:33.785611+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/feed/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [],
+    "robots_meta": [],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/account/?job3=1",
+    "checked_at_utc": "2026-11-11T18:03:35.368011+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/inquiry/",
+    "status_chain": [
+      "302",
+      "200"
+    ],
+    "x_robots_tag": [
+      "noindex, nofollow"
+    ],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/inquiry/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/statistics/spss/",
+    "checked_at_utc": "2026-11-11T18:03:34.852610+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/service-statistics/",
+    "status_chain": [
+      "301",
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/service-statistics/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/statistics/smartpls/",
+    "checked_at_utc": "2026-11-11T18:03:33.887094+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/service-statistics/",
+    "status_chain": [
+      "301",
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/service-statistics/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/thesis/engineering/biomedical/",
+    "checked_at_utc": "2026-11-11T18:03:34.473143+00:00",
+    "final_status": 404,
+    "final_url": "https://teznevise.ir/thesis/engineering/biomedical/",
+    "status_chain": [
+      "404"
+    ],
+    "x_robots_tag": [],
+    "canonical": [],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, noindex\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/thesis/humanities/theology-islamic-studies/",
+    "checked_at_utc": "2026-11-11T18:03:34.417817+00:00",
+    "final_status": 404,
+    "final_url": "https://teznevise.ir/thesis/humanities/theology-islamic-studies/",
+    "status_chain": [
+      "404"
+    ],
+    "x_robots_tag": [],
+    "canonical": [],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, noindex\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/thesis/engineering/electrical/",
+    "checked_at_utc": "2026-11-11T18:03:36.396651+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/thesis/engineering/",
+    "status_chain": [
+      "301",
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/thesis/engineering/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/service-statistics/",
+    "checked_at_utc": "2026-11-11T18:03:34.108691+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/service-statistics/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/service-statistics/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/service-project/",
+    "checked_at_utc": "2026-11-11T18:03:35.701114+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/service-project/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/service-project/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/thesis/",
+    "checked_at_utc": "2026-11-11T18:03:35.602227+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/thesis/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/thesis/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/about-us/",
+    "checked_at_utc": "2026-11-11T18:03:35.820223+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/about-us/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/about-us/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/research-gap/",
+    "checked_at_utc": "2026-11-11T18:03:36.264557+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/research-gap/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/research-gap/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/shakaf-ha-ye-nozri-o-amali/",
+    "checked_at_utc": "2026-11-11T18:03:36.265689+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/shakaf-ha-ye-nozri-o-amali/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/shakaf-ha-ye-nozri-o-amali/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/proposal/english/",
+    "checked_at_utc": "2026-11-11T18:03:36.688292+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/proposal/english/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/proposal/english/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/statistical-analysis/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/proposal/medical/",
+    "checked_at_utc": "2026-11-11T18:03:36.764703+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/proposal/medical/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/proposal/medical/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/statistical-analysis/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/thesis/phd/",
+    "checked_at_utc": "2026-11-11T18:03:36.965289+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/thesis/phd/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/thesis/phd/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/statistical-analysis/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/thesis/chapter-three/",
+    "checked_at_utc": "2026-11-11T18:03:37.448886+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/thesis/chapter-three/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/thesis/chapter-three/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/statistical-analysis/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/thesis/international/",
+    "checked_at_utc": "2026-11-11T18:03:37.120466+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/thesis/international/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/thesis/international/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/statistical-analysis/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/thesis/agriculture-natural-resources/",
+    "checked_at_utc": "2026-11-11T18:03:37.410586+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/thesis/agriculture-natural-resources/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/thesis/agriculture-natural-resources/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/statistical-analysis/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/thesis/animal-science-veterinary/",
+    "checked_at_utc": "2026-11-11T18:03:37.824526+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/thesis/animal-science-veterinary/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/thesis/animal-science-veterinary/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/statistical-analysis/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/service-qualitative/",
+    "checked_at_utc": "2026-11-11T18:03:37.722367+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/service-qualitative/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/service-qualitative/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/statistical-analysis/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/service-article/",
+    "checked_at_utc": "2026-11-11T18:03:37.994309+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/service-article/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/service-article/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/statistical-analysis/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/online-calculation-tools/cronbachs-alpha-calculator/",
+    "checked_at_utc": "2026-11-11T18:03:38.318320+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/online-calculation-tools/cronbachs-alpha-calculator/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/online-calculation-tools/cronbachs-alpha-calculator/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/statistical-analysis/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/download/thesis-chapter-three-four-sample-guide/",
+    "checked_at_utc": "2026-11-11T18:03:38.473580+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/download/thesis-chapter-three-four-sample-guide/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/download/thesis-chapter-three-four-sample-guide/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/statistical-analysis/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://teznevise.ir/thesis/chapter-four/",
+    "checked_at_utc": "2026-11-11T18:03:38.762344+00:00",
+    "final_status": 200,
+    "final_url": "https://teznevise.ir/thesis/chapter-four/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://teznevise.ir/thesis/chapter-four/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/statistical-analysis/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://bluethesis.ir/simulation/",
+    "checked_at_utc": "2026-11-11T18:03:38.527854+00:00",
+    "final_status": 200,
+    "final_url": "https://bluethesis.ir/simulation/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://bluethesis.ir/simulation/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/#blue-services",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/project-arena/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/#blue-thesis",
+      "https://bluethesis.ir/#blue-analysis",
+      "https://bluethesis.ir/#blue-complementary",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/order/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://bluethesis.ir/project-arena/",
+    "checked_at_utc": "2026-11-11T18:03:38.581206+00:00",
+    "final_status": 200,
+    "final_url": "https://bluethesis.ir/project-arena/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://bluethesis.ir/project-arena/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/#blue-services",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/wp-content/uploads/2026/09/arena.jpg",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/thesis/",
+      "https://bluethesis.ir/thesis/",
+      "https://bluethesis.ir/sim/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/#blue-thesis",
+      "https://bluethesis.ir/#blue-analysis",
+      "https://bluethesis.ir/#blue-complementary",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/order/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://bluethesis.ir/project-nvivo/",
+    "checked_at_utc": "2026-11-11T18:03:38.792065+00:00",
+    "final_status": 200,
+    "final_url": "https://bluethesis.ir/project-nvivo/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://bluethesis.ir/project-nvivo/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/#blue-services",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/research-services/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/#blue-thesis",
+      "https://bluethesis.ir/#blue-analysis",
+      "https://bluethesis.ir/#blue-complementary",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/order/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://bluethesis.ir/spss/",
+    "checked_at_utc": "2026-11-11T18:03:39.021208+00:00",
+    "final_status": 200,
+    "final_url": "https://bluethesis.ir/spss/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://bluethesis.ir/spss/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/#blue-services",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/rahnamey-jam-analiz-dadehaye-pershnameh-dar-spss/",
+      "https://bluethesis.ir/rahnamay-tahsil-amali-aktesafi-dar-spss/",
+      "https://bluethesis.ir/rahnamey-jam-analiz-rgresyon-chandgane-dar-spss-vr-r/",
+      "https://bluethesis.ir/project-nvivo/",
+      "https://bluethesis.ir/minitab/",
+      "https://bluethesis.ir/sas/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/statis/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/#blue-thesis",
+      "https://bluethesis.ir/#blue-analysis",
+      "https://bluethesis.ir/#blue-complementary",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/order/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://bluethesis.ir/minitab/",
+    "checked_at_utc": "2026-11-11T18:03:38.983712+00:00",
+    "final_status": 200,
+    "final_url": "https://bluethesis.ir/minitab/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://bluethesis.ir/minitab/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/#blue-services",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/statis/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/#blue-thesis",
+      "https://bluethesis.ir/#blue-analysis",
+      "https://bluethesis.ir/#blue-complementary",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/order/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  },
+  {
+    "claim_label": "FACT",
+    "url": "https://bluethesis.ir/sas/",
+    "checked_at_utc": "2026-11-11T18:03:39.347636+00:00",
+    "final_status": 200,
+    "final_url": "https://bluethesis.ir/sas/",
+    "status_chain": [
+      "200"
+    ],
+    "x_robots_tag": [],
+    "canonical": [
+      "<link rel=\"canonical\" href=\"https://bluethesis.ir/sas/\" />"
+    ],
+    "robots_meta": [
+      "<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large\"/>"
+    ],
+    "error": "",
+    "bluethesis_hrefs": [
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/#blue-services",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/proposal/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/master-thesis/",
+      "https://bluethesis.ir/phd-dissertation/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/simulation/",
+      "https://bluethesis.ir/matlab/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/business-plan/",
+      "https://bluethesis.ir/check-with-grammarly/",
+      "https://bluethesis.ir/plagiarism-reduce/",
+      "https://bluethesis.ir/survey/",
+      "https://bluethesis.ir/about-us/",
+      "https://bluethesis.ir/contact/",
+      "https://bluethesis.ir/questions/",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/tag/",
+      "https://bluethesis.ir/statistical-analysis-guides-fa/",
+      "https://bluethesis.ir/en/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/",
+      "https://bluethesis.ir/spss/",
+      "https://bluethesis.ir/statistical-analysis/",
+      "https://bluethesis.ir/thesis/",
+      "https://bluethesis.ir/statis/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/order/",
+      "https://bluethesis.ir/#blue-thesis",
+      "https://bluethesis.ir/#blue-analysis",
+      "https://bluethesis.ir/#blue-complementary",
+      "https://bluethesis.ir/blueblog/",
+      "https://bluethesis.ir/order/"
+    ],
+    "header_scope": "X-Robots-Tag collects all response hops; canonical and robots meta describe final body."
+  }
+]
