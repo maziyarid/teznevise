@@ -153,9 +153,7 @@ function teznevise_mod( $key, $default = null ) {
 	if ( is_array( $val ) ) {
 		$val = function_exists( 'teznevise_plain' ) ? teznevise_plain( $val, is_string( $default ) ? $default : '' ) : '';
 	}
-	if ( function_exists( 'teznevise_consult_copy' ) && is_string( $val ) ) {
-		return teznevise_consult_copy( $val );
-	}
+
 	return is_scalar( $val ) || null === $val ? (string) $val : ( is_string( $default ) ? $default : '' );
 }
 
@@ -200,8 +198,6 @@ function teznevise_page_field( $key, $post_id = 0, $default = '' ) {
 			? teznevise_plain( $value, is_string( $default ) ? $default : '' )
 			: implode( "\n", array_filter( array_map( 'strval', $value ) ) );
 	}
-	if ( function_exists( 'teznevise_consult_copy_deep' ) ) {
-		return teznevise_consult_copy_deep( $value );
-	}
+
 	return $value;
 }
